@@ -19455,6 +19455,60 @@ requestAnimationFrame(t=>{lastT=t;requestAnimationFrame(frame);});
   })();
 }
 
+// ════════════════════════════════════════════════════════════════
+//  CROWDSTRIKE ARCADE — VERSION CONTROL
+// ════════════════════════════════════════════════════════════════
+const _ARCADE_VERSION = {
+  codename: 'FALCON PHOENIX',
+  version:  '2026.4.7-final',
+  build:    'FP-' + Date.now().toString(36).toUpperCase(),
+  tag:      'We Stop Breaches. We Ship Arcade Games.',
+  games:    3,
+  lines:    19500,
+  agents:   11,
+  languages: 4,
+  adversaries: 11,
+  coffees:  'too many',
+  author:   'jpropheta + Claude Opus 4.6',
+};
+console.log(
+  `%c\n  ╔══════════════════════════════════════════════╗\n  ║  🦅 CROWDSTRIKE ARCADE 2026                  ║\n  ║  Codename: ${_ARCADE_VERSION.codename.padEnd(33)}║\n  ║  Version:  ${_ARCADE_VERSION.version.padEnd(33)}║\n  ║  Build:    ${_ARCADE_VERSION.build.padEnd(33)}║\n  ║  Booth:    ${_BOOTH_ID.padEnd(33)}║\n  ║  Games: ${_ARCADE_VERSION.games} │ Lang: ${_ARCADE_VERSION.languages} │ Adversaries: ${_ARCADE_VERSION.adversaries}   ║\n  ║  ${_ARCADE_VERSION.tag.padEnd(44)}║\n  ╚══════════════════════════════════════════════╝\n`,
+  'color:#AA00FF;font-family:monospace;font-size:11px;'
+);
+
+// On-screen version badge — bottom-right corner with micro-animation
+(function(){
+  const badge = document.createElement('div');
+  badge.id = 'cs-version-badge';
+  badge.innerHTML = `<span class="vb-falcon">🦅</span> <span class="vb-name">FALCON PHOENIX</span> <span class="vb-ver">v${_ARCADE_VERSION.version}</span> <span class="vb-booth">${_BOOTH_ID}</span>`;
+  const style = document.createElement('style');
+  style.textContent = `
+    #cs-version-badge{
+      position:fixed;bottom:6px;right:8px;z-index:9;
+      font:bold 9px/1 'Courier New',monospace;letter-spacing:1px;
+      color:rgba(170,0,255,0.35);pointer-events:none;
+      display:flex;align-items:center;gap:6px;
+      transition:color 0.4s;
+    }
+    #cs-version-badge:hover{color:rgba(170,0,255,0.8);}
+    .vb-falcon{
+      font-size:12px;
+      animation:vb-pulse 3s ease-in-out infinite;
+      display:inline-block;
+    }
+    .vb-name{color:rgba(255,0,204,0.30);}
+    .vb-ver{color:rgba(57,255,20,0.30);}
+    .vb-booth{color:rgba(66,217,255,0.25);font-size:8px;}
+    @keyframes vb-pulse{
+      0%,100%{transform:scale(1) rotate(0deg);opacity:0.5;}
+      25%{transform:scale(1.15) rotate(-5deg);opacity:0.8;}
+      50%{transform:scale(1) rotate(0deg);opacity:0.5;}
+      75%{transform:scale(1.1) rotate(5deg);opacity:0.7;}
+    }
+  `;
+  document.head.appendChild(style);
+  document.body.appendChild(badge);
+})();
 </script>
 
 </body>
