@@ -1766,7 +1766,7 @@ const TRANSLATIONS = {
     iz_comms_ngsiem:'NGSIEM: Petabyte scan complete. Correlation active. Double XP window open.',
     iz_comms_exposure:'EXPOSURE MGMT: Radar sweep active. All attack surface exposed.',
     iz_comms_dlp:'DLP: Exfil boats reversed. Data protection active. +80 pts per intercept.',
-    iz_comms_pam:'PAM SHIELD: 6s full immunity. Gate cannons and insider relays destroyed.',
+    iz_comms_pam:'JIT ACCESS: 6s full immunity. Zero standing privileges enforced. Gate cannons destroyed.',
     iz_banner_pam:'PAM SHIELD ACTIVE — 6 seconds invulnerability',
     iz_comms_schtasks:'SCHTASKS: Scheduled task re-registered — persistence active',
     iz_comms_bits:'BITS transfer intercepted — payload recovered',
@@ -7226,6 +7226,7 @@ function shutdownIncidentZeroRuntime(){
     intelOpen=false;
     _rankingShown=false;
     STATE=S.TITLE;
+    window._sgnlActive=false; window._sgnlTimer=0;
   }catch(_){}
   // Keep the unlocked AudioContext alive so attract-mode handoffs retain sound
   // across scene transitions. stopBossMusic() above handles the only continuous loop.
@@ -7744,11 +7745,17 @@ const ADV={
     intel:'MOVEit campaign (2023) hit 2,600+ organizations in 72 hours. BBC, British Airways, Shell, US DOE impacted.',
     counter:'Exposure Management identifies internet-facing file transfer systems before adversaries exploit them.',
     weakness:'exposure', hp:178,maxHp:178,w:140,h:82 },
+  'PLUMP SPIDER':{ nation:'🇧🇷 Brazil — eCrime / Grandoreiro Gang', color:'#00FF88', icon:'🕷', active:'Active since 2017',
+    targets:'PIX instant payments · Brazilian banks · Boleto fraud · LatAm financial institutions',
+    ttp:'Banking trojan overlay attacks · PIX hijack in <10s · Grandoreiro malware · Fake helpdesk vishing',
+    intel:'PLUMP SPIDER targets Brazil\'s PIX instant payment system. Transfers complete in 10 seconds — irreversible. 47 million reais stolen in a single quarter.',
+    counter:'Falcon Identity baselines detect stolen credentials before the PIX transfer completes. Signal eliminates standing privileges.',
+    weakness:'signal', hp:165,maxHp:165,w:130,h:78 },
 };
 
 // ── CrowdStrike Product Modules ───────────────────────────────────────
 const MODS={
-  'Falcon Prevent':{ col:'#e0003c', dur:14, apply:'prevent', abbr:'PREV',
+  'Falcon Prevent':{ col:'#e0003c', dur:14, apply:'prevent', abbr:'NGAV',
     tagline:'Next-Gen AV · ML-powered zero-trust binary analysis',
     real:'Prevents malware execution using AI/ML behavioral models.',
     game:'EFFECT: Destroys ALL enemies within 180px instantly. Immunity for 14s. +20% speed.',size:30 },
@@ -7764,7 +7771,7 @@ const MODS={
     tagline:'CSPM + CWPP · Runtime threat detection across AWS Azure GCP',
     real:'Detects cloud misconfigs, container escapes and workload anomalies.',
     game:'EFFECT: Lightning strikes enemies within 110px of river edges every 0.4s.',size:28 },
-  'Falcon Intelligence':{ col:'#ff8d39', dur:15, apply:'intel', abbr:'INT',
+  'Falcon Intelligence':{ col:'#ff8d39', dur:15, apply:'intel', abbr:'Intel',
     tagline:'Strategic + Tactical Threat Intelligence · Named actor profiles',
     real:'Global adversary tracking, IOC feeds, malware family analysis.',
     game:'EFFECT: Boss attacks telegraphed. Enemy spawn previews. Threat-score labels. ×1.5 intel kills.',size:30 },
@@ -7796,10 +7803,14 @@ const MODS={
     tagline:'Log-Scale SIEM · Petabyte analytics · Sub-second search',
     real:'Ingests and correlates data at petabyte scale with behavioral analytics.',
     game:'EFFECT: Wide-area scan. Correlation lines. Double XP 13s.',size:22 },
-  'Falcon Privileged Access':{ col:'#fff274', dur:11, apply:'priv', abbr:'PAM',
-    tagline:'Privileged Access Management · Just-in-time · Zero standing',
+  'Just in Time Access':{ col:'#fff274', dur:11, apply:'priv', abbr:'JIT',
+    tagline:'Just-in-Time Access · Zero Standing Privileges · Vaulted credentials',
     real:'Just-in-time access, vaulted credentials and session recording.',
     game:'EFFECT: 6s full damage immunity shield. Destroys gate cannons + insider relays.',size:26 },
+  'CrowdStrike Signal':{ col:'#00ffe0', dur:12, apply:'signal', abbr:'SGNL',
+    tagline:'Zero Standing Privileges · Identity Graph · Behavioral Baselines',
+    real:'CrowdStrike Signal eliminates standing privileges. Every access is earned, verified, and time-limited. Identity graph maps lateral movement in real time.',
+    game:'EFFECT: Tethers ALL on-screen enemies together with energy chains. Enemies dragged to center and held for 4s. Easy kills. +200 per chain kill.',size:28 },
   'Falcon Flex':{ col:'#ffffff', dur:0, apply:'flex', abbr:'FLEX',
     tagline:'Falcon Platform Unification · All modules · All domains · One platform',
     real:'The complete CrowdStrike Falcon platform — every module simultaneously active.',
@@ -8581,6 +8592,29 @@ function activateMod(name){
       FLASH('#fff274',0.14);
       COMMS(T('iz_comms_pam'),'#fff274');
       BANNER(T('iz_banner_pam'),2.8,'#fff274'); break;
+
+    case 'signal': {
+      // SGNL — Zero Standing Privileges: Tether all enemies, drag to center, hold 4s
+      const cx=VW/2, cy=VH/2;
+      let sgnlCount=0;
+      ENEMIES.forEach(e=>{
+        if(!e.alive) return;
+        const sy=w2s(e.wy);
+        if(sy<-100||sy>VH+100) return;
+        sgnlCount++;
+        // Tether visual: draw connection line (handled in render via sgnlTether state)
+        e._sgnlOx=e.x; e._sgnlOy=e.wy; e._sgnlT=0;
+        e.vx=0; e.vy=0; // freeze movement
+      });
+      // Activate global tether state
+      window._sgnlActive=true; window._sgnlTimer=4.0; window._sgnlCX=cx; window._sgnlCY=cy;
+      const bonus=sgnlCount*200; SCORE+=bonus; phScore+=bonus;
+      burst(cx,cy,60,['#00ffe0','#fff','#42d9ff','#AA00FF'],240,1.0);
+      SFX.bigExplode(); FLASH('#00ffe0',0.16);
+      COMMS('SIGNAL activated — zero standing privileges enforced. All lateral movement frozen. Identity graph locked.','#00ffe0');
+      BANNER(`⚡ SIGNAL · ${sgnlCount} TETHERED · +${bonus}`,3.2,'#00ffe0');
+      break;
+    }
   }
 }
 
@@ -9269,6 +9303,12 @@ function update(dt){
   if(PAUSED) return;
   W.scroll+=W.speed*dt; phTime+=dt;
   pamShieldT=Math.max(0,pamShieldT-dt);
+  // SGNL tether timer + enemy drag animation
+  if(window._sgnlActive&&window._sgnlTimer>0){
+    window._sgnlTimer-=dt;
+    ENEMIES.forEach(e=>{if(e._sgnlT!==undefined)e._sgnlT+=dt;});
+    if(window._sgnlTimer<=0){window._sgnlActive=false;ENEMIES.forEach(e=>{delete e._sgnlT;delete e._sgnlOx;delete e._sgnlOy;});}
+  }
   generateEnemiesAhead();
   updShake(dt); updParts(dt); updBanner(dt); updComms(dt); updActAnn(dt);
   updMods(dt); updNarrative(dt);
@@ -9404,6 +9444,37 @@ function drawPlayer(){
 }
 
 function drawEnemies(){
+  // SGNL tether effect — draw energy chains from enemies to center
+  if(window._sgnlActive&&window._sgnlTimer>0){
+    const cx=window._sgnlCX, cy=window._sgnlCY;
+    const pulse=0.5+Math.sin(Date.now()*0.01)*0.5;
+    CX.save();
+    ENEMIES.forEach(e=>{
+      if(!e.alive||e._sgnlT===undefined) return;
+      const sy=w2s(e.wy);
+      // Animate drag toward center over first 1s
+      const dragT=Math.min(1,e._sgnlT/1.0);
+      const ex=e._sgnlOx+(cx-e._sgnlOx)*dragT*0.7;
+      e.x=ex; // actually move enemy
+      // Draw tether chain (dashed energy line)
+      CX.strokeStyle=`rgba(0,255,224,${0.3+pulse*0.3})`; CX.lineWidth=1.5;
+      CX.shadowColor='#00ffe0'; CX.shadowBlur=8;
+      CX.setLineDash([4,4]); CX.lineDashOffset=-Date.now()*0.02;
+      CX.beginPath(); CX.moveTo(e.x,sy); CX.lineTo(cx,cy); CX.stroke();
+      CX.setLineDash([]);
+      // Small energy node at connection point
+      CX.fillStyle=`rgba(0,255,224,${0.4+pulse*0.4})`;
+      CX.beginPath(); CX.arc(e.x,sy,3,0,Math.PI*2); CX.fill();
+    });
+    // Central vortex
+    CX.strokeStyle=`rgba(0,255,224,${0.2+pulse*0.3})`; CX.lineWidth=2;
+    CX.shadowColor='#00ffe0'; CX.shadowBlur=16;
+    const vr=20+pulse*15;
+    CX.beginPath(); CX.arc(cx,cy,vr,0,Math.PI*2); CX.stroke();
+    CX.beginPath(); CX.arc(cx,cy,vr*0.5,0,Math.PI*2); CX.stroke();
+    CX.restore(); CX.shadowBlur=0;
+  }
+
   const itdrOn=hasMod('identity'), xdrOn=hasMod('xdr'),
         siemOn=hasMod('siem'),     intelOn=hasMod('intel');
 
@@ -16706,6 +16777,19 @@ const RADIO_MSGS={
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"The pursuit meter is everything. Stay above 50 percent and you control the hunt."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"CrowdStrike tracks over 230 named adversaries. Every one of these cases is based on real intelligence."},
     {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"OverWatch analysts hunt adversaries in real customer environments 24 hours a day. This is what they do."},
+    // GTR 2026 key findings
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"GTR 2026: 79 percent of detections in 2025 were malware-free. Adversaries live off the land. Identity is the new perimeter."},
+    {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"GTR 2026: Average eCrime breakout time is now 48 minutes. The fastest we observed was 2 minutes 7 seconds. Speed kills."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: China-nexus intrusions surged 150 percent year-over-year. VANGUARD PANDA and LIMINAL PANDA leading the charge."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"GTR 2026: GenAI-powered social engineering increased 442 percent. Adversaries use AI to craft perfect phishing at scale."},
+    {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"GTR 2026: Cloud intrusions grew 26 percent. Valid credentials are the number one initial access vector into cloud environments."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: 52 percent of vulnerabilities observed were related to initial access. Patch management is not optional."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"GTR 2026: Insider threats from North Korean IT workers — FAMOUS CHOLLIMA — hit 304 percent increase in incidents."},
+    {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"GTR 2026: Cross-domain attacks spanning endpoint, identity and cloud increased 3x. Siloed security is dead."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: Interactive intrusions increased 35 percent. Hands-on-keyboard attacks mean an operator is watching you right now."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"CrowdStrike Signal eliminates standing privileges. Every access request is earned, verified, and time-bound. Zero trust, enforced."},
+    {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"The Falcon platform now covers endpoint, cloud, identity, data, SIEM, and IT — all from a single agent. One platform to stop breaches."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Charlotte AI processes over one trillion security events per week. Every analyst now has an AI teammate working at machine speed."},
   ],
   scattered_spider:[
     {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"SCATTERED SPIDER never uses malware. Pure social engineering. There are no traditional IoCs to find."},
@@ -16781,7 +16865,7 @@ function updRadio(dt){
   } else if(RADIO.state==='showing'){
     if(RADIO.t>10){RADIO.state='fading';RADIO.t=0;}
   } else if(RADIO.state==='fading'){
-    if(RADIO.t>0.7){RADIO.state='idle';RADIO.t=0;RADIO.nextT=20+Math.random()*15;}
+    if(RADIO.t>0.7){RADIO.state='idle';RADIO.t=0;RADIO.nextT=12+Math.random()*10;}
   }
 }
 function drawRadio(){
@@ -17799,7 +17883,7 @@ function isPlayerNode(id){ return caseRoute[playerNodeIdx]===id; }
 function updPackets(dt){
   packetSpawnT-=dt;
   if(packetSpawnT<=0&&CONNECTIONS.length){
-    packetSpawnT=rnd(0.3,0.8);
+    packetSpawnT=rnd(0.12,0.35);
     const [a,b]=CONNECTIONS[ri(0,CONNECTIONS.length-1)];
     const na=NODES[a],nb=NODES[b]; if(!na||!nb) return;
     const onRoute=isOnRoute(a,b);
@@ -18420,7 +18504,7 @@ function handleDeductionClick(){
       deductionLocked=true;
       if(choice.correct){
         deductionResult='correct';
-        pursuit=Math.min(100,pursuit+22);
+        pursuit=Math.min(100,pursuit+14);
         const timeBonus=Math.floor(deductionTimeLeft*15);
         const matchBonus=calcClueMatches(choice.nodeId)*100;
         score+=500+timeBonus+matchBonus;
@@ -19460,7 +19544,7 @@ requestAnimationFrame(t=>{lastT=t;requestAnimationFrame(frame);});
 // ════════════════════════════════════════════════════════════════
 const _ARCADE_VERSION = {
   codename: 'FALCON PHOENIX',
-  version:  '2026.4.7-final',
+  version:  '2026.4.7-r2',
   build:    'FP-' + Date.now().toString(36).toUpperCase(),
   tag:      'We Stop Breaches. We Ship Arcade Games.',
   games:    3,
@@ -19480,7 +19564,7 @@ console.log(
 (function(){
   const badge = document.createElement('div');
   badge.id = 'cs-version-badge';
-  badge.innerHTML = `<span class="vb-falcon">🦅</span> <span class="vb-name">FALCON PHOENIX</span> <span class="vb-ver">v${_ARCADE_VERSION.version}</span> <span class="vb-booth">${_BOOTH_ID}</span>`;
+  badge.innerHTML = `<span class="vb-falcon">🦅</span> <span class="vb-name">FALCON PHOENIX</span> <span class="vb-ver">v${_ARCADE_VERSION.version}</span> <span class="vb-ver" style="color:rgba(255,216,77,0.3)">SGNL</span> <span class="vb-booth">${_BOOTH_ID}</span>`;
   const style = document.createElement('style');
   style.textContent = `
     #cs-version-badge{
