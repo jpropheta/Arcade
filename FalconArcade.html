@@ -7103,7 +7103,7 @@ addEventListener('keydown',e=>{
   const tag=document.activeElement?.tagName;
   if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT') return;
   if(!KEYS[e.code])JP[e.code]=true; KEYS[e.code]=true;
-  if('ArrowLeft,ArrowRight,ArrowUp,ArrowDown,Space,KeyS,KeyP,KeyM,KeyI,KeyX'
+  if('ArrowLeft,ArrowRight,ArrowUp,ArrowDown,Space,KeyS,KeyP,KeyM,KeyI,KeyX,KeyW,KeyA,KeyD'
     .split(',').includes(e.code))e.preventDefault();
 });
 addEventListener('keyup',e=>{ KEYS[e.code]=false; });
@@ -8712,10 +8712,10 @@ function updNarrative(dt){
 function updPlayer(dt){
   if(!PL.alive) return;
   const spd=PL.speed*(hasMod('prevent')?1.14:1);
-  if(KEYS.ArrowLeft)  PL.x-=spd*dt;
-  if(KEYS.ArrowRight) PL.x+=spd*dt;
-  if(KEYS.ArrowUp)    PL.y-=spd*dt;
-  if(KEYS.ArrowDown)  PL.y+=spd*dt;
+  if(KEYS.ArrowLeft||KEYS.KeyA)  PL.x-=spd*dt;
+  if(KEYS.ArrowRight||KEYS.KeyD) PL.x+=spd*dt;
+  if(KEYS.ArrowUp||KEYS.KeyW)    PL.y-=spd*dt;
+  if(KEYS.ArrowDown)              PL.y+=spd*dt;
   PL.x=clamp(PL.x,14,VW-14); PL.y=clamp(PL.y,58,VH-38);
   PL.fireCd=Math.max(0,PL.fireCd-dt);
   PL.scanCd=Math.max(0,PL.scanCd-dt);
@@ -10748,13 +10748,14 @@ function frame(ts){
       break;
 
     case S.PHASE_INTRO:
+      phTime+=dt; // Must increment for fade-in (globalAlpha = phTime/0.55)
       updShake(dt); updParts(dt); updBanner(dt); updActAnn(dt);
       if(hk('Space')){ SFX.scan(); STATE=S.PLAYING; }
       break;
 
     case S.BOSS_INTRO:
       if(hk('KeyM')) MUTED=!MUTED;
-      bossIntT+=dt;
+      phTime+=dt; bossIntT+=dt;
       updShake(dt); updParts(dt); updBanner(dt); updComms(dt); updActAnn(dt);
       if(hk('Space')||bossIntT>7.2) spawnBoss(BQUEUE.shift());
       break;
@@ -10762,7 +10763,7 @@ function frame(ts){
     case S.PLAYING:
     case S.BOSS_FIGHT:
       if(hk('KeyI')) intelOpen=!intelOpen;
-      if(hk('KeyP')) PAUSED=!PAUSED;
+      if(hk('KeyP')||(PAUSED&&hk('Space'))) PAUSED=!PAUSED;
       if(hk('Escape')){ PAUSED=false; STATE=S.TITLE; }
       if(!PAUSED){ update(dt); window._boothPing?.(); }
       break;
@@ -13564,7 +13565,7 @@ class Input{
       if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA"||e.target.isContentEditable)return;
       if(!this.#down.has(e.key))this.#pressed.add(e.key);
       this.#down.add(e.key);
-      if([" ","ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(e.key))
+      if([" ","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","a","A","d","D","w","W"].includes(e.key))
         e.preventDefault();
     });
     window.addEventListener("keyup",e=>{
@@ -15457,9 +15458,9 @@ class Game{
   }
 
   #handleInput(dt){
-    if(this.#input.isDown("ArrowRight"))
+    if(this.#input.isDown("ArrowRight")||this.#input.isDown("d")||this.#input.isDown("D"))
       this.#px=Math.min(LW-CFG.PLR_W,this.#px+CFG.PLR_SPEED*dt);
-    if(this.#input.isDown("ArrowLeft"))
+    if(this.#input.isDown("ArrowLeft")||this.#input.isDown("a")||this.#input.isDown("A"))
       this.#px=Math.max(0,this.#px-CFG.PLR_SPEED*dt);
     if(this.#input.consume(" ")&&this.#canShoot)this.#fire();
   }
@@ -16050,7 +16051,7 @@ class Game{
   #drawFalconCraft(now){
     const cx=this.#px+CFG.PLR_W/2;
     const cy=this.#py+CFG.PLR_H/2;
-    const bank=(this.#input.isDown("ArrowRight")?1:0)-(this.#input.isDown("ArrowLeft")?1:0);
+    const bank=(this.#input.isDown("ArrowRight")||this.#input.isDown("d")||this.#input.isDown("D")?1:0)-(this.#input.isDown("ArrowLeft")||this.#input.isDown("a")||this.#input.isDown("A")?1:0);
     const tilt=bank*0.18;
     const pulse=0.5+Math.sin(now*0.012)*0.5;
     const enginePulse=0.55+Math.sin(now*0.026)*0.45;
