@@ -313,7 +313,7 @@ body.arcade-loader-active { overflow:hidden; }
 /* ── DASHBOARD RETURN BUTTON ── */
 .dashboard-btn-cls {
   position:absolute; top:12px; right:12px; z-index:10000;
-  background:rgba(4,1,18,0.88); border:1px solid rgba(224,0,60,0.5);
+  background:rgba(4,1,18,0.62); border:1px solid rgba(224,0,60,0.5);
   color:#e0003c; font:bold 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   letter-spacing:2px; padding:7px 14px; cursor:pointer; text-transform:uppercase;
   border-radius:2px; transition:background 0.18s,border-color 0.18s,color 0.18s,box-shadow 0.18s;
@@ -7211,6 +7211,7 @@ function shutdownIncidentZeroRuntime(){
   stopBossMusic();
   bnTime=0; commsQ.length=0; actAnnT=0;
   try{
+    CX.globalAlpha=1;
     ['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space','KeyS'].forEach(code=>{ KEYS[code]=false; delete JP[code]; });
     PAUSED=false;
     intelOpen=false;
@@ -10208,7 +10209,7 @@ function izUiScale(){
 }
 
 function izFont(size, weight=''){
-  const px = Math.max(6, Math.round(size * izUiScale()));
+  const px = Math.max(9, Math.round(size * izUiScale()));
   return `${weight ? weight + ' ' : ''}${px}px monospace`;
 }
 
@@ -10339,11 +10340,13 @@ function drawPhaseIntro(){
     CX.fillText(T('g_press_deploy'),VW/2,VH-46);
   }
   CX.textAlign='left';
+  CX.restore();
 }
 
 // ── Screen: Boss Intro ────────────────────────────────────────────────
 function drawBossIntro(){
   drawWorld(0.04);
+  CX.save(); CX.globalAlpha=Math.min(1, phTime/0.55);
   const nm=BQUEUE[0]||'BOSS';
   const ad=ADV[nm]||{color:'#ff476a',nation:'Unknown',active:'',ttp:'',intel:'',counter:'',weakness:''};
   CX.fillStyle='rgba(0,0,0,0.93)'; CX.fillRect(68,52,VW-136,VH-104);
@@ -10383,7 +10386,7 @@ function drawBossIntro(){
     CX.strokeStyle=m.col; CX.lineWidth=1.8; CX.strokeRect(VW/2-168,356,336,48);
     CX.fillStyle=m.col; CX.font='bold 12px monospace'; CX.fillText(wmod,VW/2,374);
     CX.fillStyle='#aaaaaa'; CX.font='9px monospace'; CX.fillText(m.tagline,VW/2,390);
-    CX.fillStyle='rgba(255,255,255,0.6)'; CX.font='8px monospace'; CX.fillText(m.game.slice(0,64),VW/2,402);
+    CX.fillStyle='rgba(255,255,255,0.6)'; CX.font='9px monospace'; CX.fillText(m.game.slice(0,64),VW/2,402);
   }
 
   if(Math.floor(Date.now()/380)%2===0){
@@ -13063,7 +13066,7 @@ class SOCFeed{
     const alpha=fadeIn*fadeOut;if(alpha<0.01)return;
     ctx.save();ctx.globalAlpha=alpha;
     const barW=380,barH=28,bx=(w-barW)/2,by=h-42;
-    ctx.fillStyle="rgba(4,1,18,0.88)";ctx.strokeStyle=CS.GREEN;ctx.lineWidth=1;
+    ctx.fillStyle="rgba(4,1,18,0.90)";ctx.strokeStyle=CS.GREEN;ctx.lineWidth=1;
     ctx.shadowColor=CS.GREEN;ctx.shadowBlur=8;
     ctx.beginPath();ctx.roundRect(bx,by,barW,barH,4);ctx.fill();ctx.stroke();
     const blink=Math.sin(performance.now()*0.015)>0;
@@ -13519,7 +13522,7 @@ class ModuleNotification{
     ctx.save();
     const borderCol=isBonus?CS.GOLD:mod.color;
     ctx.shadowColor=borderCol;ctx.shadowBlur=16;
-    ctx.fillStyle="rgba(4,1,18,0.96)";ctx.strokeStyle=borderCol;ctx.lineWidth=isBonus?2.5:1.6;
+    ctx.fillStyle="rgba(4,1,18,0.90)";ctx.strokeStyle=borderCol;ctx.lineWidth=isBonus?2.5:1.6;
     ctx.beginPath();ctx.roundRect(sx,cy,CW,CH,6);ctx.fill();ctx.stroke();
     ctx.shadowBlur=0;ctx.fillStyle=isBonus?CS.GOLD:mod.color;
     ctx.beginPath();ctx.roundRect(sx,cy,CW,24,[6,6,0,0]);ctx.fill();
@@ -13584,7 +13587,7 @@ class BonusModuleDrop{
     // golden outer ring — signals this is special
     ctx.shadowColor=CS.GOLD;ctx.shadowBlur=18*pulse;
     ctx.strokeStyle=CS.GOLD;ctx.lineWidth=2.2;
-    ctx.fillStyle="rgba(4,1,18,0.92)";
+    ctx.fillStyle="rgba(4,1,18,0.90)";
     ctx.beginPath();ctx.roundRect(this.#x-this.#w/2,this.#y,this.#w,this.#h,5);
     ctx.fill();ctx.stroke();
     // inner mod colour ring
@@ -14134,7 +14137,7 @@ class HUD{
     if(this.#combo>1)this.#lbl(ctx,`🔥 x${this.#combo} ${T('def_chain')}`,10,46,12,CS.RED_GLOW);
     if(this.#env){
       ctx.save();ctx.font="bold 8px 'Courier New'";ctx.textAlign="center";
-      ctx.fillStyle="rgba(4,1,18,0.7)";ctx.fillRect(w/2-140,54,280,14);
+      ctx.fillStyle="rgba(4,1,18,0.90)";ctx.fillRect(w/2-140,54,280,14);
       ctx.fillStyle=CS.GREY;ctx.shadowBlur=0;
       ctx.fillText(`${T('def_defending')}: ${this.#env}`,w/2,64);ctx.restore();
     }
@@ -14484,7 +14487,7 @@ class Game{
             bx   = (w - barW)/2, by = h - 46;
       const blink = Math.sin(now * 0.018) > 0;
       ctx.save();
-      ctx.fillStyle = "rgba(4,1,18,0.94)";
+      ctx.fillStyle = "rgba(4,1,18,0.90)";
       ctx.strokeStyle = CS.GOLD;
       ctx.lineWidth   = 2;
       ctx.shadowColor = CS.GOLD;
@@ -16468,6 +16471,8 @@ resizeCanvas();
 window.addEventListener("resize",()=>{
   resizeCanvas();
   if(typeof rebuildNodes==='function') rebuildNodes();
+  if(typeof invalidateContinentCache==='function') invalidateContinentCache();
+  if(typeof invalidateConnCurves==='function') invalidateConnCurves();
   if(typeof STARS!=='undefined'&&STARS.length){
     STARS.length=0;
     for(let i=0;i<80;i++) STARS.push({x:rnd(0,LW),y:rnd(0,LH),s:rnd(0.8,2.2),v:rnd(3,12)});
@@ -16506,9 +16511,9 @@ function wrapText(str,maxLen){
   if(line) lines.push(line);
   return lines;
 }
-// Geo projection: lon(-135→+150) to canvas x, lat(70→-10) to canvas y
+// Geo projection: lon(-135→+150) to canvas x, lat(70→-50) to canvas y
 function gx(lon){return (lon+135)/285*(LW-60)+30;}
-function gy(lat){return (70-lat)/110*(LH-130)+55;}
+function gy(lat){return (70-lat)/120*(LH-110)+55;}
 
 
 
@@ -16769,7 +16774,7 @@ function updRadio(dt){
 }
 function drawRadio(){
   if(RADIO.state==='idle'||!RADIO.msg) return;
-  const RW=338,RH=112,rx=LW-RW-10,ry=LH-RH-62;
+  const _ru=huntUiScale(), RW=Math.round(380*_ru),RH=Math.round(148*_ru),rx=LW-RW-12,ry=LH-RH-68;
   let alpha=1,slideOff=0;
   if(RADIO.state==='incoming'){slideOff=RW*(1-Math.min(1,RADIO.t/0.45));alpha=Math.min(1,RADIO.t/0.3);}
   else if(RADIO.state==='fading'){alpha=Math.max(0,1-RADIO.t/0.7);slideOff=RW*(RADIO.t/0.7);}
@@ -16790,25 +16795,25 @@ function drawRadio(){
     ctx.fillStyle=active?col:col+'33'; ctx.fillRect(bx2,by2,6,bh);
   }
   // Callsign
-  ctx.font='bold 8px "Courier New"'; ctx.fillStyle=col; ctx.textAlign='left';
+  ctx.font=huntFont(11,'bold'); ctx.fillStyle=col; ctx.textAlign='left';
   ctx.fillText(`◈ ${RADIO.msg.cs}`,rx+58,ry+15);
   // Status label
-  ctx.font='bold 7px "Courier New"'; ctx.textAlign='right';
+  ctx.font=huntFont(10,'bold'); ctx.textAlign='right';
   if(RADIO.state==='incoming'&&Math.floor(RADIO.t*5)%2===0){
     ctx.fillStyle=col; ctx.fillText(T('g_incoming'),rx+RW-8,ry+15);
   } else {
     ctx.fillStyle='#333'; ctx.fillText(T('h_radio_feed'),rx+RW-8,ry+15);
   }
   // Operator name
-  ctx.font='bold 11px "Courier New"'; ctx.fillStyle=col; ctx.textAlign='left';
+  ctx.font=huntFont(12,'bold'); ctx.fillStyle=col; ctx.textAlign='left';
   ctx.shadowColor=col; ctx.shadowBlur=8;
   ctx.fillText(RADIO.msg.op,rx+10,ry+40); ctx.shadowBlur=0;
   // Message — wrapped
-  ctx.font='9px "Courier New"'; ctx.fillStyle='#c8d8e8';
+  ctx.font=huntFont(11); ctx.fillStyle='#c8d8e8';
   const words=RADIO.msg.msg.split(' '); let line='',ly2=ry+58;
   for(const w of words){
     const test=line+w+' ';
-    if(ctx.measureText(test).width>RW-18&&line!==''){ctx.fillText(line.trim(),rx+10,ly2);line=w+' ';ly2+=14;}
+    if(ctx.measureText(test).width>RW-18&&line!==''){ctx.fillText(line.trim(),rx+10,ly2);line=w+' ';ly2+=15;}
     else line=test;
   }
   ctx.fillText(line.trim(),rx+10,ly2);
@@ -16824,49 +16829,105 @@ const STARS=Array.from({length:80},()=>({x:rnd(0,LW),y:rnd(0,LH),s:rnd(0.8,2.2),
 function updStars(dt){for(const s of STARS){s.y+=s.v*dt*0.15;if(s.y>LH){s.y=-2;s.x=rnd(0,LW);}}}
 function drawStars(){for(const s of STARS){ctx.fillStyle=`rgba(160,200,220,${s.s>1.8?0.5:0.25})`;ctx.fillRect(s.x,s.y,s.s,s.s);}}
 
+// ─── OFFSCREEN CONTINENT CACHE ──────────────────────────────────
+let _contCache=null, _contCacheW=0, _contCacheH=0;
+function invalidateContinentCache(){_contCache=null;}
+
+// ─── BEZIER HELPERS ─────────────────────────────────────────────
+function bezierPt(ax,ay,cpx,cpy,bx,by,t){
+  const u=1-t;
+  return {x:u*u*ax+2*u*t*cpx+t*t*bx, y:u*u*ay+2*u*t*cpy+t*t*by};
+}
+const _connCurves={};
+function getConnCurve(na,nb){
+  const key=`${na.x},${na.y}-${nb.x},${nb.y}`;
+  if(_connCurves[key]) return _connCurves[key];
+  const dx=nb.x-na.x, dy=nb.y-na.y, dist=Math.hypot(dx,dy);
+  const mx=(na.x+nb.x)/2, my=(na.y+nb.y)/2;
+  const arcH=dist>LW*0.3?-dist*0.18:dist>LW*0.15?-dist*0.10:-dist*0.04;
+  const nx2=-dy/(dist||1), ny2=dx/(dist||1);
+  const r={cpx:mx+nx2*arcH, cpy:my+ny2*arcH};
+  _connCurves[key]=r;
+  return r;
+}
+function invalidateConnCurves(){for(const k in _connCurves) delete _connCurves[k];}
+
+// ─── CYBER AMBIENT PARTICLES ────────────────────────────────────
+const CYBERPARTS=Array.from({length:35},()=>({
+  x:rnd(0,1440),y:rnd(60,800),vx:rnd(-6,6),vy:rnd(-4,4),
+  sz:rnd(1,2.5),alpha:rnd(0.08,0.25),
+  col:['#42d9ff','#AA00FF','#FF62FF','#39FF14'][Math.floor(Math.random()*4)]
+}));
+function updCyberParts(dt){
+  for(const p of CYBERPARTS){
+    p.x+=p.vx*dt; p.y+=p.vy*dt;
+    if(p.x<0)p.x=LW; if(p.x>LW)p.x=0;
+    if(p.y<55)p.y=LH-60; if(p.y>LH-60)p.y=55;
+  }
+}
+function drawCyberParts(){
+  for(const p of CYBERPARTS){
+    ctx.globalAlpha=p.alpha*(0.4+Math.sin(gameT*1.8+p.x*0.008)*0.6);
+    ctx.fillStyle=p.col;
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.sz,0,TAU); ctx.fill();
+  }
+  ctx.globalAlpha=1;
+}
+
 
 
 // ════════════════════════════════════════════════════════════════
 //  GAME DATA — NETWORK NODES
 // ════════════════════════════════════════════════════════════════
 
-// Node positions on the 1080×620 canvas
-// Map area: x 60-1020, y 80-540
+// Node positions — stylized network topology that suggests geography
+// Americas left, Europe center-left, Russia center, Middle East center-right, Asia right
+// Every node has ≥55px separation on 1440×900
 const NODE_DATA={
-  seattle:       {px:0.060,py:0.242,name:'Tech Giant',          org:'Seattle, USA',           type:'tech',      sector:'Technology',      color:'#42d9ff',icon:'💻'},
-  new_york:      {px:0.190,py:0.290,name:'Media Corp',           org:'New York, USA',          type:'media',     sector:'Media',           color:'#FF62FF',icon:'📡'},
-  dc:            {px:0.181,py:0.313,name:'Pentagon',             org:'Washington DC, USA',     type:'military',  sector:'Military Intel',  color:'#FF8D39',icon:'🏛️'},
-  quantico:      {px:0.194,py:0.335,name:'FBI Cyber Div',        org:'Quantico, USA',          type:'law',       sector:'Law Enforcement', color:'#42d9ff',icon:'🔍'},
-  bogota:        {px:0.165,py:0.535,name:'LatAm Finance Hub',    org:'Bogotá, Colombia',       type:'finance',   sector:'LatAm Finance',   color:'#FF6B35',icon:'🏦'},
-  sao_paulo:     {px:0.245,py:0.681,name:'Banking Trojan Hub',   org:'São Paulo, Brazil',      type:'finance',   sector:'LatAm Banking',   color:'#00FF88',icon:'🏦'},
-  rio:           {px:0.270,py:0.661,name:'PIX Network Node',     org:'Rio de Janeiro, Brazil', type:'finance',   sector:'Payment Systems', color:'#00DD77',icon:'💳'},
-  belo_horizonte:{px:0.255,py:0.639,name:'Boleto Fraud Net',     org:'Belo Horizonte, Brazil', type:'finance',   sector:'LatAm Banking',   color:'#00BB66',icon:'💰'},
-  porto_alegre:  {px:0.230,py:0.723,name:'Financial Services',   org:'Porto Alegre, Brazil',   type:'finance',   sector:'LatAm Finance',   color:'#009955',icon:'🏛️'},
-  london:        {px:0.415,py:0.197,name:'Parliament',           org:'London, UK',             type:'government',sector:'Government',      color:'#4488FF',icon:'🏛️'},
-  london_hosp:   {px:0.402,py:0.229,name:'Hospital Network',     org:'NHS, UK',                type:'health',    sector:'Healthcare',      color:'#74ff88',icon:'🏥'},
-  amsterdam:     {px:0.446,py:0.174,name:'Supply Hub',           org:'Amsterdam, Netherlands', type:'supply',    sector:'Supply Chain',    color:'#00FFD0',icon:'⚙️'},
-  brussels:      {px:0.433,py:0.218,name:'NATO HQ',              org:'Brussels, Belgium',      type:'military',  sector:'Military',        color:'#FF8D39',icon:'🛡️'},
-  swift_node:    {px:0.424,py:0.255,name:'SWIFT Network',        org:'La Hulpe, Belgium',      type:'finance',   sector:'Global Finance',  color:'#FFE600',icon:'💰'},
-  berlin:        {px:0.483,py:0.169,name:'Parliament',           org:'Berlin, Germany',        type:'government',sector:'Government',      color:'#4488FF',icon:'🏛️'},
-  frankfurt_e:   {px:0.465,py:0.213,name:'Energy Grid',          org:'Frankfurt, Germany',     type:'energy',    sector:'Critical Infra',  color:'#00FFD0',icon:'⚡'},
-  frankfurt_b:   {px:0.476,py:0.242,name:'Central Bank',         org:'Frankfurt, Germany',     type:'finance',   sector:'Finance',         color:'#FFE600',icon:'🏦'},
-  geneva:        {px:0.444,py:0.266,name:'Nuclear Facility',     org:'Geneva, Switzerland',    type:'energy',    sector:'Nuclear',         color:'#00FFD0',icon:'☢️'},
-  athens:        {px:0.514,py:0.310,name:'Maritime Infrastructure',org:'Athens, Greece',       type:'supply',    sector:'Critical Infra',  color:'#FF9F1C',icon:'⚓'},
-  kyiv:          {px:0.539,py:0.194,name:'Defense Contractor',   org:'Kyiv, Ukraine',          type:'military',  sector:'Defense Industry',color:'#FF8D39',icon:'🎯'},
-  dubai:         {px:0.622,py:0.387,name:'DIFC Financial Centre',org:'Dubai, UAE',             type:'finance',   sector:'Global Finance',  color:'#FFD700',icon:'🏙️'},
-  gru:           {px:0.572,py:0.158,name:'GRU HQ',               org:'Moscow, Russia',         type:'adv_ru',    sector:'Military Intel',  color:'#FF1744',icon:'👾'},
-  svr:           {px:0.589,py:0.177,name:'SVR HQ',               org:'Moscow, Russia',         type:'adv_ru',    sector:'Foreign Intel',   color:'#FF8D39',icon:'👾'},
-  kremlin:       {px:0.580,py:0.200,name:'Kremlin Network',       org:'Moscow, Russia',         type:'government',sector:'Government',      color:'#FF1744',icon:'🏛️'},
-  beijing:       {px:0.789,py:0.274,name:'PLA Unit 61398',        org:'Beijing, China',         type:'adv_cn',    sector:'Cyber Ops',       color:'#FF8D39',icon:'👾'},
-  pyongyang:     {px:0.819,py:0.290,name:'RGB Bureau 121',         org:'Pyongyang, N.Korea',     type:'adv_nk',    sector:'Cyber Ops',       color:'#FFD700',icon:'👾'},
-  tokyo:         {px:0.863,py:0.306,name:'Tokyo Stock Exchange',   org:'Tokyo, Japan',           type:'finance',   sector:'Finance',         color:'#FF62FF',icon:'📈'},
-  singapore:     {px:0.780,py:0.568,name:'Crypto Exchange',        org:'Singapore',              type:'finance',   sector:'Cryptocurrency',  color:'#FFD700',icon:'₿'},
-  dark_web:      {px:0.563,py:0.261,name:'Dark Web Node',          org:'Unknown Location',       type:'darkweb',   sector:'Underground',     color:'#AA00FF',icon:'💀'},
+  // ── AMERICAS ───────────────────────────────────────────────────
+  seattle:       {px:0.045,py:0.16, name:'Tech Giant',          org:'Seattle, USA',           type:'tech',      sector:'Technology',      color:'#42d9ff',icon:'💻'},
+  new_york:      {px:0.15, py:0.22, name:'Media Corp',           org:'New York, USA',          type:'media',     sector:'Media',           color:'#FF62FF',icon:'📡'},
+  dc:            {px:0.12, py:0.30, name:'Pentagon',             org:'Washington DC, USA',     type:'military',  sector:'Military Intel',  color:'#FF8D39',icon:'🏛️'},
+  quantico:      {px:0.16, py:0.36, name:'FBI Cyber Div',        org:'Quantico, USA',          type:'law',       sector:'Law Enforcement', color:'#42d9ff',icon:'🔍'},
+  // ── LATAM ──────────────────────────────────────────────────────
+  bogota:        {px:0.13, py:0.50, name:'LatAm Finance Hub',    org:'Bogotá, Colombia',       type:'finance',   sector:'LatAm Finance',   color:'#FF6B35',icon:'🏦'},
+  sao_paulo:     {px:0.22, py:0.68, name:'Banking Trojan Hub',   org:'São Paulo, Brazil',      type:'finance',   sector:'LatAm Banking',   color:'#00FF88',icon:'🏦'},
+  rio:           {px:0.28, py:0.60, name:'PIX Network Node',     org:'Rio de Janeiro, Brazil', type:'finance',   sector:'Payment Systems', color:'#00DD77',icon:'💳'},
+  belo_horizonte:{px:0.23, py:0.54, name:'Boleto Fraud Net',     org:'Belo Horizonte, Brazil', type:'finance',   sector:'LatAm Banking',   color:'#00BB66',icon:'💰'},
+  porto_alegre:  {px:0.19, py:0.76, name:'Financial Services',   org:'Porto Alegre, Brazil',   type:'finance',   sector:'LatAm Finance',   color:'#009955',icon:'🏛️'},
+  // ── WESTERN EUROPE (spread across x 0.34–0.50) ────────────────
+  london:        {px:0.34, py:0.14, name:'Parliament',           org:'London, UK',             type:'government',sector:'Government',      color:'#4488FF',icon:'🏛️'},
+  london_hosp:   {px:0.33, py:0.22, name:'Hospital Network',     org:'NHS, UK',                type:'health',    sector:'Healthcare',      color:'#74ff88',icon:'🏥'},
+  amsterdam:     {px:0.39, py:0.10, name:'Supply Hub',           org:'Amsterdam, Netherlands', type:'supply',    sector:'Supply Chain',    color:'#00FFD0',icon:'⚙️'},
+  brussels:      {px:0.38, py:0.20, name:'NATO HQ',              org:'Brussels, Belgium',      type:'military',  sector:'Military',        color:'#FF8D39',icon:'🛡️'},
+  swift_node:    {px:0.36, py:0.30, name:'SWIFT Network',        org:'La Hulpe, Belgium',      type:'finance',   sector:'Global Finance',  color:'#FFE600',icon:'💰'},
+  // ── CENTRAL EUROPE (spread across x 0.42–0.52) ────────────────
+  berlin:        {px:0.46, py:0.12, name:'Parliament',           org:'Berlin, Germany',        type:'government',sector:'Government',      color:'#4488FF',icon:'🏛️'},
+  frankfurt_e:   {px:0.43, py:0.24, name:'Energy Grid',          org:'Frankfurt, Germany',     type:'energy',    sector:'Critical Infra',  color:'#00FFD0',icon:'⚡'},
+  frankfurt_b:   {px:0.47, py:0.30, name:'Central Bank',         org:'Frankfurt, Germany',     type:'finance',   sector:'Finance',         color:'#FFE600',icon:'🏦'},
+  geneva:        {px:0.41, py:0.34, name:'Nuclear Facility',     org:'Geneva, Switzerland',    type:'energy',    sector:'Nuclear',         color:'#00FFD0',icon:'☢️'},
+  // ── SE EUROPE + DARK WEB ───────────────────────────────────────
+  athens:        {px:0.52, py:0.38, name:'Maritime Infra',       org:'Athens, Greece',         type:'supply',    sector:'Critical Infra',  color:'#FF9F1C',icon:'⚓'},
+  dark_web:      {px:0.50, py:0.46, name:'Dark Web Node',          org:'Unknown Location',       type:'darkweb',   sector:'Underground',     color:'#AA00FF',icon:'💀'},
+  // ── EASTERN EUROPE ─────────────────────────────────────────────
+  kyiv:          {px:0.54, py:0.18, name:'Defense Contractor',   org:'Kyiv, Ukraine',          type:'military',  sector:'Defense Industry',color:'#FF8D39',icon:'🎯'},
+  // ── RUSSIA (spread, not stacked) ──────────────────────────────
+  kremlin:       {px:0.58, py:0.08, name:'Kremlin Network',       org:'Moscow, Russia',         type:'government',sector:'Government',      color:'#FF1744',icon:'🏛️'},
+  gru:           {px:0.62, py:0.14, name:'GRU HQ',               org:'Moscow, Russia',         type:'adv_ru',    sector:'Military Intel',  color:'#FF1744',icon:'👾'},
+  svr:           {px:0.60, py:0.22, name:'SVR HQ',               org:'Moscow, Russia',         type:'adv_ru',    sector:'Foreign Intel',   color:'#FF8D39',icon:'👾'},
+  // ── MIDDLE EAST ────────────────────────────────────────────────
+  dubai:         {px:0.66, py:0.42, name:'DIFC Financial Centre',org:'Dubai, UAE',             type:'finance',   sector:'Global Finance',  color:'#FFD700',icon:'🏙️'},
+  // ── EAST ASIA ──────────────────────────────────────────────────
+  beijing:       {px:0.79, py:0.22, name:'PLA Unit 61398',        org:'Beijing, China',         type:'adv_cn',    sector:'Cyber Ops',       color:'#FF8D39',icon:'👾'},
+  pyongyang:     {px:0.84, py:0.28, name:'RGB Bureau 121',         org:'Pyongyang, N.Korea',     type:'adv_nk',    sector:'Cyber Ops',       color:'#FFD700',icon:'👾'},
+  tokyo:         {px:0.90, py:0.20, name:'Tokyo Stock Exchange',   org:'Tokyo, Japan',           type:'finance',   sector:'Finance',         color:'#FF62FF',icon:'📈'},
+  // ── SE ASIA ────────────────────────────────────────────────────
+  singapore:     {px:0.78, py:0.52, name:'Crypto Exchange',        org:'Singapore',              type:'finance',   sector:'Cryptocurrency',  color:'#FFD700',icon:'₿'},
 };
 let NODES={};
 function rebuildNodes(){
   for(const[id,d] of Object.entries(NODE_DATA)){
-    NODES[id]={...d,x:Math.round(d.px*LW),y:Math.round(d.py*LH)};
+    NODES[id]={...d, x:Math.round(d.px*LW), y:Math.round(d.py*LH)};
   }
 }
 rebuildNodes();
@@ -17208,99 +17269,106 @@ let advMoveFrom=null, advMoveTo=null;
 // ════════════════════════════════════════════════════════════════
 //  WORLD MAP RENDERER
 // ════════════════════════════════════════════════════════════════
-function drawContinentOutlines(){
-  const g=(lon,lat)=>[gx(lon),gy(lat)];
-  const mapTop=52, mapBot=LH-128;
-  ctx.save();
+function _buildContinents(){
+  // No continent polygons — pure network topology map
+  // Geographic context comes from node labels (city names)
+  // Visual depth comes from region zones (soft radial glows per cluster)
+  return [];
+}
 
-  // Ocean background
-  const og=ctx.createLinearGradient(0,mapTop,LW,mapBot);
+function _renderContinentToCache(){
+  const mapTop=52, mapBot=LH-55;
+  const oc=document.createElement('canvas');
+  oc.width=LW; oc.height=LH;
+  const c=oc.getContext('2d');
+
+  // Ocean background gradient
+  const og=c.createLinearGradient(0,mapTop,0,mapBot);
   og.addColorStop(0,'rgba(3,7,20,0.99)');
   og.addColorStop(0.5,'rgba(4,10,26,0.99)');
   og.addColorStop(1,'rgba(2,5,16,0.99)');
-  ctx.fillStyle=og; ctx.fillRect(0,mapTop,LW,mapBot-mapTop);
+  c.fillStyle=og; c.fillRect(0,mapTop,LW,mapBot-mapTop);
 
-  // 16-bit pixel grid
-  ctx.strokeStyle='rgba(6,20,65,0.45)'; ctx.lineWidth=0.5;
-  for(let x=0;x<LW;x+=8){ctx.beginPath();ctx.moveTo(x,mapTop);ctx.lineTo(x,mapBot);ctx.stroke();}
-  for(let y=mapTop;y<mapBot;y+=8){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(LW,y);ctx.stroke();}
+  // Subtle grid (sparser for elegance)
+  c.strokeStyle='rgba(6,20,65,0.30)'; c.lineWidth=0.5;
+  for(let x=0;x<LW;x+=12){c.beginPath();c.moveTo(x,mapTop);c.lineTo(x,mapBot);c.stroke();}
+  for(let y=mapTop;y<mapBot;y+=12){c.beginPath();c.moveTo(0,y);c.lineTo(LW,y);c.stroke();}
 
-  // Lat/lon lines
-  ctx.strokeStyle='rgba(18,52,130,0.22)'; ctx.lineWidth=0.8; ctx.setLineDash([3,9]);
-  for(let lon=-120;lon<=150;lon+=30){
-    const x=gx(lon); if(x<0||x>LW) continue;
-    ctx.beginPath();ctx.moveTo(x,mapTop);ctx.lineTo(x,mapBot);ctx.stroke();
-  }
-  for(let lat=60;lat>=-30;lat-=15){
-    const y=gy(lat); if(y<mapTop||y>mapBot) continue;
-    ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(LW,y);ctx.stroke();
-  }
-  ctx.setLineDash([]);
+  // Subtle dashed grid overlay
+  c.strokeStyle='rgba(18,52,130,0.12)'; c.lineWidth=0.6; c.setLineDash([4,12]);
+  for(let x=Math.round(LW*0.1);x<LW;x+=Math.round(LW*0.1)){c.beginPath();c.moveTo(x,mapTop);c.lineTo(x,mapBot);c.stroke();}
+  for(let y=mapTop+Math.round(LH*0.1);y<mapBot;y+=Math.round(LH*0.1)){c.beginPath();c.moveTo(0,y);c.lineTo(LW,y);c.stroke();}
+  c.setLineDash([]);
 
-  // All continent polygons
-  const CONTINENTS=[
-    [g(-168,54),g(-160,60),g(-148,61),g(-140,60),g(-130,55),g(-125,48),g(-124,38),g(-118,34),g(-110,23),g(-88,16),g(-80,25),g(-75,35),g(-70,42),g(-67,47),g(-52,47),g(-55,53),g(-60,62),g(-80,62),g(-90,68),g(-141,68),g(-168,65)],
-    [g(-52,83),g(-18,82),g(-18,70),g(-24,65),g(-44,60),g(-52,64)],
-    [g(-82,8),g(-63,11),g(-50,5),g(-35,-5),g(-35,-23),g(-52,-33),g(-68,-40),g(-73,-40),g(-75,-10),g(-80,0)],
-    [g(-10,36),g(-5,36),g(3,44),g(8,44),g(15,38),g(18,40),g(16,37),g(24,37),g(28,41),g(36,37),g(42,38),g(50,42),g(60,42),g(60,68),g(100,72),g(141,68),g(141,46),g(131,42),g(120,48),g(80,42),g(60,42),g(38,46),g(30,62),g(28,70),g(15,69),g(8,62),g(5,58),g(8,55),g(3,50),g(-2,46),g(-9,37)],
-    [g(-5,50),g(2,51),g(0,53),g(-3,58),g(-5,57)],
-    [g(-24,64),g(-14,64),g(-13,66),g(-20,66),g(-24,65)],
-    [g(-6,36),g(10,37),g(30,33),g(42,11),g(51,11),g(42,-10),g(32,-28),g(28,-35),g(18,-35),g(15,-28),g(0,-5),g(-18,15),g(-15,25),g(-6,36)],
-    [g(36,30),g(56,22),g(60,22),g(56,12),g(45,12),g(43,15),g(43,22),g(36,30)],
-    [g(66,22),g(77,8),g(80,8),g(92,22),g(88,27),g(80,30)],
-    [g(80,42),g(88,47),g(135,48),g(135,42),g(130,32),g(122,31),g(110,20),g(105,10),g(102,2),g(100,5),g(98,8),g(100,22),g(80,30),g(75,35)],
-    [g(124,38),g(130,38),g(129,35),g(126,34),g(124,37)],
-    [g(130,34),g(131,32),g(135,35),g(141,40),g(143,44),g(140,44)],
-    [g(114,-22),g(114,-35),g(118,-38),g(130,-32),g(140,-38),g(150,-38),g(154,-28),g(148,-20),g(136,-12),g(130,-15)],
+  // Region zone glows — soft radial gradients where node clusters sit
+  // Gives geographic depth without fake continent polygons
+  const zones=[
+    {cx:0.12,cy:0.28,r:0.18, col:[30,80,180]},  // Americas
+    {cx:0.22,cy:0.65,r:0.16, col:[0,180,100]},   // Brazil/LatAm
+    {cx:0.42,cy:0.22,r:0.16, col:[40,90,200]},   // Western Europe
+    {cx:0.59,cy:0.14,r:0.12, col:[180,30,60]},    // Russia
+    {cx:0.66,cy:0.42,r:0.10, col:[200,160,30]},   // Middle East
+    {cx:0.82,cy:0.30,r:0.14, col:[180,80,40]},    // East Asia
   ];
-
-  // ── Pass 1: Fill all continents ───────────────────────────────
-  ctx.fillStyle='rgba(9,22,46,0.94)';
-  for(const pts of CONTINENTS){
-    ctx.beginPath(); ctx.moveTo(...pts[0]);
-    for(let i=1;i<pts.length;i++) ctx.lineTo(...pts[i]);
-    ctx.closePath(); ctx.fill();
+  for(const z of zones){
+    const zx=z.cx*LW, zy=z.cy*LH, zr=z.r*Math.max(LW,LH);
+    const rg=c.createRadialGradient(zx,zy,0,zx,zy,zr);
+    rg.addColorStop(0,`rgba(${z.col.join(',')},0.10)`);
+    rg.addColorStop(0.4,`rgba(${z.col.join(',')},0.05)`);
+    rg.addColorStop(1,'rgba(0,0,0,0)');
+    c.fillStyle=rg; c.fillRect(zx-zr,zy-zr,zr*2,zr*2);
   }
 
-  // ── Pass 2: Single dither over whole map (runs ONCE not 12×) ─
-  ctx.fillStyle='rgba(18,50,105,0.11)';
-  for(let dx=0;dx<LW;dx+=4){
-    for(let dy=mapTop;dy<mapBot;dy+=4){
-      if((Math.floor(dx/4)+Math.floor(dy/4))%2===0) ctx.fillRect(dx,dy,2,2);
+  // Hex grid pattern — cyberpunk aesthetic
+  c.strokeStyle='rgba(42,105,215,0.06)'; c.lineWidth=0.5;
+  const hs=60;
+  for(let hx=-hs;hx<LW+hs;hx+=hs){
+    for(let hy=mapTop;hy<mapBot;hy+=Math.round(hs*0.866)){
+      const offset=(Math.floor(hy/Math.round(hs*0.866))%2)*hs/2;
+      c.beginPath();
+      for(let i=0;i<6;i++){
+        const a=i/6*Math.PI*2-Math.PI/6;
+        const px2=hx+offset+Math.cos(a)*hs/2, py2=hy+Math.sin(a)*hs/2;
+        i===0?c.moveTo(px2,py2):c.lineTo(px2,py2);
+      }
+      c.closePath(); c.stroke();
     }
   }
 
-  // ── Pass 3: Coastlines ────────────────────────────────────────
-  ctx.strokeStyle='rgba(42,105,215,0.72)';
-  ctx.lineWidth=1.5;
-  ctx.shadowColor='rgba(55,130,255,0.55)';
-  ctx.shadowBlur=6;
-  for(const pts of CONTINENTS){
-    ctx.beginPath(); ctx.moveTo(...pts[0]);
-    for(let i=1;i<pts.length;i++) ctx.lineTo(...pts[i]);
-    ctx.closePath(); ctx.stroke();
-  }
-  ctx.shadowBlur=0;
-
   // CRT scanlines
-  ctx.globalAlpha=0.055; ctx.fillStyle='#000';
-  for(let y=mapTop;y<mapBot;y+=2) ctx.fillRect(0,y,LW,1);
-  ctx.globalAlpha=1;
+  c.globalAlpha=0.035; c.fillStyle='#000';
+  for(let y=mapTop;y<mapBot;y+=2) c.fillRect(0,y,LW,1);
+  c.globalAlpha=1;
 
-  // Coordinate labels
-  ctx.font='bold 7px "Courier New"'; ctx.fillStyle='rgba(32,72,150,0.52)';
-  ctx.textAlign='center';
-  for(let lon=-120;lon<=150;lon+=30){
-    const x=gx(lon), y=Math.min(gy(-35)+10,mapBot-4);
-    if(x>20&&x<LW-20) ctx.fillText(lon+'°',x,y);
+  return oc;
+}
+
+function drawContinentOutlines(){
+  if(!_contCache||_contCacheW!==LW||_contCacheH!==LH){
+    _contCache=_renderContinentToCache();
+    _contCacheW=LW; _contCacheH=LH;
   }
-  ctx.textAlign='right';
-  for(let lat=60;lat>=-15;lat-=15){
-    const y=gy(lat);
-    if(y>mapTop+4&&y<mapBot-4) ctx.fillText(lat+'°',gx(-135)-2,y+3);
+  ctx.drawImage(_contCache,0,0);
+}
+
+// ─── Heat zones around active nodes ─────────────────────────────
+function drawHeatZones(){
+  if(!selectedCase||!caseRoute.length) return;
+  const zones=[
+    {n:NODES[caseRoute[advNodeIdx]],    c:[255,23,68],  r:70},
+    {n:NODES[caseRoute[caseRoute.length-1]], c:[255,215,0],r:55},
+    {n:NODES[caseRoute[playerNodeIdx]], c:[0,229,255],  r:50},
+  ];
+  for(const z of zones){
+    if(!z.n) continue;
+    const pulse=0.5+Math.sin(gameT*2+z.n.x*0.01)*0.5;
+    const r=z.r*(0.8+pulse*0.4);
+    const rg=ctx.createRadialGradient(z.n.x,z.n.y,0,z.n.x,z.n.y,r);
+    rg.addColorStop(0,`rgba(${z.c.join(',')},${0.12+pulse*0.06})`);
+    rg.addColorStop(0.5,`rgba(${z.c.join(',')},0.04)`);
+    rg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=rg; ctx.fillRect(z.n.x-r,z.n.y-r,r*2,r*2);
   }
-  ctx.textAlign='left';
-  ctx.restore();
 }
 
 function drawWorldMap(){
@@ -17308,52 +17376,72 @@ function drawWorldMap(){
   ctx.fillStyle='#020308'; ctx.fillRect(0,0,LW,LH);
   drawStars();
   drawContinentOutlines();
+  drawCyberParts();
 
-  // Subtle hex grid
-    ctx.strokeStyle='rgba(170,0,255,0.04)'; ctx.lineWidth=1;
-  const hs=48;
-  for(let hx=0;hx<LW;hx+=hs) for(let hy=60;hy<LH-50;hy+=hs){
-    ctx.beginPath(); ctx.moveTo(hx,hy); ctx.lineTo(hx+hs,hy); ctx.stroke();
-  }
+  // Heat zones around active nodes
+  drawHeatZones();
 
-
-  // Draw connections
+  // ── Bezier connections ─────────────────────────────────────────
   for(const [a,b] of CONNECTIONS){
     const na=NODES[a],nb=NODES[b]; if(!na||!nb) continue;
-    ctx.save();
     const isRoute=isOnRoute(a,b);
-    ctx.strokeStyle=isRoute?'rgba(255,50,50,0.35)':'rgba(100,120,200,0.18)';
-    ctx.lineWidth=isRoute?2:1;
-    ctx.shadowColor=isRoute?'#FF1744':'transparent';
-    ctx.shadowBlur=isRoute?8:0;
-    ctx.beginPath(); ctx.moveTo(na.x,na.y); ctx.lineTo(nb.x,nb.y); ctx.stroke();
+    const cv=getConnCurve(na,nb);
+    ctx.save();
+    if(isRoute){
+      // Animated gradient for route lines
+      const grad=ctx.createLinearGradient(na.x,na.y,nb.x,nb.y);
+      grad.addColorStop(0,'rgba(255,50,50,0.55)');
+      grad.addColorStop(0.5,'rgba(255,100,80,0.35)');
+      grad.addColorStop(1,'rgba(255,50,50,0.55)');
+      ctx.strokeStyle=grad; ctx.lineWidth=2.5;
+      ctx.shadowColor='#FF1744'; ctx.shadowBlur=10;
+      // Animated dashes
+      ctx.setLineDash([8,5]); ctx.lineDashOffset=-gameT*45;
+    } else {
+      ctx.strokeStyle='rgba(100,140,220,0.06)'; ctx.lineWidth=0.8;
+    }
+    ctx.beginPath(); ctx.moveTo(na.x,na.y);
+    ctx.quadraticCurveTo(cv.cpx,cv.cpy,nb.x,nb.y);
+    ctx.stroke();
+    if(isRoute) ctx.setLineDash([]);
     ctx.restore();
   }
 
-  // Data packets
+  // ── Flow particles on Bezier paths ─────────────────────────────
   for(const p of PACKETS){
-    ctx.fillStyle=p.col; ctx.shadowColor=p.col; ctx.shadowBlur=8;
-    ctx.beginPath(); ctx.arc(p.x,p.y,3,0,TAU); ctx.fill(); ctx.shadowBlur=0;
+    // Trail effect: draw 3 previous positions
+    for(let trail=2;trail>=0;trail--){
+      const tt=clamp(p.t-trail*0.04,0,1);
+      const pt=bezierPt(p.sx,p.sy,p.cpx,p.cpy,p.tx,p.ty,tt);
+      const alpha=(1-trail*0.3)*(0.6+0.4*Math.sin(gameT*6+p.t*20));
+      ctx.globalAlpha=alpha;
+      ctx.fillStyle=p.col; ctx.shadowColor=p.col; ctx.shadowBlur=trail===0?10:4;
+      ctx.beginPath(); ctx.arc(pt.x,pt.y,trail===0?3:1.5,0,TAU); ctx.fill();
+    }
+    ctx.globalAlpha=1; ctx.shadowBlur=0;
   }
 
-  // Draw nodes
+  // Draw nodes — ALL nodes get labels for map readability
+  const _ui=huntUiScale();
   for(const[id,node] of Object.entries(NODES)){
     const isAdv=isAdvNode(id), isPlayer=isPlayerNode(id);
     const isObj=caseRoute.length&&id===caseRoute[caseRoute.length-1];
+    const onRt=caseRoute.includes(id);
     const col=node.color;
     const pulse=0.7+Math.sin(Date.now()*0.003+node.x*0.01)*0.3;
+    const important=isAdv||isObj||onRt||isPlayer;
 
     ctx.save();
     // Outer glow
-    if(isAdv){ ctx.shadowColor='#FF1744'; ctx.shadowBlur=24+Math.sin(Date.now()*0.01)*8; }
-    else if(isObj){ ctx.shadowColor='#FFD700'; ctx.shadowBlur=18; }
-    else{ ctx.shadowColor=col; ctx.shadowBlur=10*pulse; }
+    if(isAdv){ ctx.shadowColor='#FF1744'; ctx.shadowBlur=28+Math.sin(Date.now()*0.01)*10; }
+    else if(isObj){ ctx.shadowColor='#FFD700'; ctx.shadowBlur=22; }
+    else{ ctx.shadowColor=col; ctx.shadowBlur=12*pulse; }
 
-    // Hexagon node
-    const r=isAdv||isObj?14:10;
-    ctx.fillStyle='rgba(4,1,18,0.9)';
+    // Hexagon node — BIGGER sizes
+    const r=isAdv||isObj?18:important?14:12;
+    ctx.fillStyle='rgba(4,1,18,0.68)';
     ctx.strokeStyle=isAdv?'#FF1744':isObj?'#FFD700':col;
-    ctx.lineWidth=isAdv||isObj?2.5:1.5;
+    ctx.lineWidth=isAdv||isObj?3:important?2:1.5;
     ctx.beginPath();
     for(let i=0;i<6;i++){
       const a=i/6*TAU-Math.PI/6;
@@ -17361,33 +17449,57 @@ function drawWorldMap(){
     }
     ctx.closePath(); ctx.fill(); ctx.stroke();
 
-    // Icon
-    ctx.shadowBlur=0; ctx.font=`${isAdv||isObj?11:9}px serif`;
-    ctx.textAlign='center'; ctx.fillText(node.icon,node.x,node.y+4); ctx.textAlign='left';
+    // Icon — bigger
+    ctx.shadowBlur=0; ctx.font=`${Math.round((isAdv||isObj?16:important?14:12)*_ui)}px serif`;
+    ctx.textAlign='center'; ctx.fillText(node.icon,node.x,node.y+5); ctx.textAlign='left';
 
-    // Adversary pulsing ring
+    // Adversary expanding rings (radar ping effect)
     if(isAdv&&!advMoving){
-      const rr=r+8+Math.sin(Date.now()*0.008)*5;
+      for(let ring=0;ring<3;ring++){
+        const ringT=(gameT*0.7+ring*0.33)%1;
+        const ringR=r+8+ringT*40;
+        const ringAlpha=(1-ringT)*0.5;
+        ctx.strokeStyle=`rgba(255,23,68,${ringAlpha})`; ctx.lineWidth=2*(1-ringT);
+        ctx.beginPath(); ctx.arc(node.x,node.y,ringR,0,TAU); ctx.stroke();
+      }
+      const rr=r+10+Math.sin(Date.now()*0.008)*6;
       ctx.strokeStyle='rgba(255,23,68,0.6)'; ctx.lineWidth=1.5;
       ctx.beginPath(); ctx.arc(node.x,node.y,rr,0,TAU); ctx.stroke();
     }
 
-    // Objective star
+    // Objective expanding rings (gold radar)
     if(isObj){
+      for(let ring=0;ring<2;ring++){
+        const ringT=(gameT*0.5+ring*0.5)%1;
+        const ringR=r+10+ringT*32;
+        const ringAlpha=(1-ringT)*0.4;
+        ctx.strokeStyle=`rgba(255,215,0,${ringAlpha})`; ctx.lineWidth=1.5*(1-ringT);
+        ctx.beginPath(); ctx.arc(node.x,node.y,ringR,0,TAU); ctx.stroke();
+      }
       ctx.strokeStyle='rgba(255,215,0,0.5)'; ctx.lineWidth=1.5; ctx.setLineDash([4,4]);
-      ctx.beginPath(); ctx.arc(node.x,node.y,r+10+Math.sin(Date.now()*0.005)*4,0,TAU); ctx.stroke();
+      ctx.beginPath(); ctx.arc(node.x,node.y,r+12+Math.sin(Date.now()*0.005)*5,0,TAU); ctx.stroke();
       ctx.setLineDash([]);
     }
 
-    // Name label (only nearby nodes or route nodes)
-    const onRt=caseRoute.includes(id);
-    if(onRt||isAdv||isPlayer||isObj){
-      ctx.font=`bold ${onRt||isAdv?8:7}px 'Courier New'`;
-      ctx.fillStyle=isAdv?'#FF1744':isObj?'#FFD700':col;
-      ctx.textAlign='center'; ctx.shadowColor=ctx.fillStyle; ctx.shadowBlur=4;
-      ctx.fillText(node.name,node.x,node.y+r+11);
-      ctx.fillStyle='#7f8b96'; ctx.shadowBlur=0; ctx.font='9px "Courier New"';
-      ctx.fillText(node.org,node.x,node.y+r+20);
+    // Label plate — ALL nodes get a label now
+    const labelCol=isAdv?'#FF1744':isObj?'#FFD700':col;
+    const nameStr=node.name;
+    ctx.font=huntFont(important?12:10,'bold');
+    const nameW=ctx.measureText(nameStr).width;
+    const plateX=node.x-nameW/2-8, plateY=node.y+r+4;
+    const plateW=nameW+16, plateH=important?32:20;
+    // Background plate
+    ctx.fillStyle=important?'rgba(2,3,8,0.90)':'rgba(2,3,8,0.75)';
+    ctx.strokeStyle=labelCol+(important?'55':'22'); ctx.lineWidth=1;
+    ctx.beginPath(); ctx.roundRect(plateX,plateY,plateW,plateH,4); ctx.fill(); ctx.stroke();
+    // Name text
+    ctx.fillStyle=labelCol; ctx.textAlign='center';
+    if(important){ctx.shadowColor=labelCol; ctx.shadowBlur=6;}
+    ctx.fillText(nameStr,node.x,plateY+13); ctx.shadowBlur=0;
+    // Org text only on important nodes
+    if(important){
+      ctx.font=huntFont(10); ctx.fillStyle='#7f8b96';
+      ctx.fillText(node.org,node.x,plateY+26);
       ctx.textAlign='left';
     }
 
@@ -17406,18 +17518,30 @@ function drawWorldMap(){
     }
   }
 
-  // Adversary moving animation
+  // Adversary moving animation with route trace-in
   if(advMoving&&advMoveFrom&&advMoveTo){
     const fn=NODES[advMoveFrom],tn=NODES[advMoveTo]; if(fn&&tn){
       const t=clamp(advMoveT/advMoveDur,0,1);
-      const ax=lerp(fn.x,tn.x,t), ay=lerp(fn.y,tn.y,t);
-      ctx.save(); ctx.translate(ax,ay);
+      const cv=getConnCurve(fn,tn);
+      const pos=bezierPt(fn.x,fn.y,cv.cpx,cv.cpy,tn.x,tn.y,t);
+      // Route trace-in gradient
+      ctx.save();
+      const grad=ctx.createLinearGradient(fn.x,fn.y,tn.x,tn.y);
+      grad.addColorStop(Math.max(0,t-0.15),'rgba(255,23,68,0.7)');
+      grad.addColorStop(t,'rgba(255,100,100,0.3)');
+      grad.addColorStop(Math.min(1,t+0.02),'rgba(255,23,68,0)');
+      ctx.strokeStyle=grad; ctx.lineWidth=3; ctx.shadowColor='#FF1744'; ctx.shadowBlur=12;
+      ctx.beginPath(); ctx.moveTo(fn.x,fn.y);
+      ctx.quadraticCurveTo(cv.cpx,cv.cpy,tn.x,tn.y); ctx.stroke();
+      ctx.restore();
+      // Adversary icon following bezier path
+      ctx.save(); ctx.translate(pos.x,pos.y);
       ctx.fillStyle='#FF1744'; ctx.shadowColor='#FF1744'; ctx.shadowBlur=20;
       ctx.beginPath();
       ctx.moveTo(0,-10); ctx.lineTo(7,5); ctx.lineTo(-7,5); ctx.closePath(); ctx.fill();
       ctx.restore();
       // Particle trail
-      if(Math.random()<0.4) burst(ax,ay,3,[[255,23,68],[255,100,100]],{maxSpd:30,life:0.3,sz:2,szVar:1});
+      if(Math.random()<0.4) burst(pos.x,pos.y,3,[[255,23,68],[255,100,100]],{maxSpd:30,life:0.3,sz:2,szVar:1});
     }
   }
 
@@ -17437,7 +17561,7 @@ function isOnRoute(a,b){
 function isAdvNode(id){ return !advMoving&&caseRoute[advNodeIdx]===id; }
 function isPlayerNode(id){ return caseRoute[playerNodeIdx]===id; }
 
-// Data packets update
+// Data packets update — Bezier parametric paths
 function updPackets(dt){
   packetSpawnT-=dt;
   if(packetSpawnT<=0&&CONNECTIONS.length){
@@ -17445,15 +17569,14 @@ function updPackets(dt){
     const [a,b]=CONNECTIONS[ri(0,CONNECTIONS.length-1)];
     const na=NODES[a],nb=NODES[b]; if(!na||!nb) return;
     const onRoute=isOnRoute(a,b);
-    PACKETS.push({x:na.x,y:na.y,tx:nb.x,ty:nb.y,speed:rnd(60,120),prog:0,col:onRoute?'rgba(255,50,50,0.8)':'rgba(100,180,255,0.5)'});
+    const cv=getConnCurve(na,nb);
+    const speed=rnd(0.3,0.7); // t units per second
+    PACKETS.push({sx:na.x,sy:na.y,tx:nb.x,ty:nb.y,cpx:cv.cpx,cpy:cv.cpy,t:0,speed,col:onRoute?'rgba(255,50,50,0.8)':'rgba(100,180,255,0.5)'});
   }
   for(let i=PACKETS.length-1;i>=0;i--){
     const p=PACKETS[i];
-    const d=Math.hypot(p.tx-p.x,p.ty-p.y)||1;
-    const s=p.speed*dt;
-    p.x+=(p.tx-p.x)/d*s; p.y+=(p.ty-p.y)/d*s;
-    p.prog+=s/Math.hypot(p.tx-NODES[CONNECTIONS[0]?.[0]]?.x||p.x,p.ty-NODES[CONNECTIONS[0]?.[1]]?.y||p.y)||1;
-    if(Math.hypot(p.tx-p.x,p.ty-p.y)<4) PACKETS.splice(i,1);
+    p.t+=p.speed*dt;
+    if(p.t>=1) PACKETS.splice(i,1);
   }
 }
 
@@ -17475,12 +17598,25 @@ function getDifficultySettings(){
 }
 
 function huntUiScale(){
-  return clamp(Math.min(LW/1440, LH/900), 0.92, 1.28);
+  return clamp(Math.min(LW/1440, LH/900), 0.62, 1.52);
 }
 
 function huntFont(size, weight=''){
-  const px = Math.max(6, Math.round(size * huntUiScale()));
+  const px = Math.max(9, Math.round(size * huntUiScale()));
   return `${weight ? weight + ' ' : ''}${px}px "Courier New"`;
+}
+
+/* Pixel-based text wrapping — measures actual rendered width */
+function wrapTextPx(text, maxW){
+  const words=String(text||'').split(' ');
+  const lines=[]; let line='';
+  for(const w of words){
+    const test=(line?line+' ':'')+w;
+    if(ctx.measureText(test).width>maxW && line){lines.push(line);line=w;}
+    else line=test;
+  }
+  if(line) lines.push(line);
+  return lines;
 }
 
 function huntRecommendedDeploy(adv){
@@ -17559,7 +17695,7 @@ function drawInvestigation(){
     {y:LH*0.7,label:T('g_hunt_layer_cloud'),color:'#42d9ff',nodes:['AzureAD','M365','AWS','GCP']},
   ];
   layers.forEach(layer=>{
-    ctx.font=huntFont(8,'bold'); ctx.fillStyle=layer.color+'88'; ctx.textAlign='left';
+    ctx.font=huntFont(11,'bold'); ctx.fillStyle=layer.color+'88'; ctx.textAlign='left';
     ctx.fillText(layer.label,80,layer.y-14);
     ctx.strokeStyle=layer.color+'22'; ctx.lineWidth=1; ctx.setLineDash([4,8]);
     ctx.beginPath(); ctx.moveTo(70,layer.y-4); ctx.lineTo(LW-70,layer.y-4); ctx.stroke();
@@ -17568,40 +17704,40 @@ function drawInvestigation(){
       const nx=150+i*(LW-240)/4,ny=layer.y;
       ctx.fillStyle='rgba(4,1,18,0.8)'; ctx.strokeStyle=layer.color+'55'; ctx.lineWidth=1;
       ctx.fillRect(nx-24,ny-10,48,20); ctx.strokeRect(nx-24,ny-10,48,20);
-      ctx.font=huntFont(6); ctx.fillStyle=layer.color+'88'; ctx.textAlign='center';
+      ctx.font=huntFont(10); ctx.fillStyle=layer.color+'88'; ctx.textAlign='center';
       ctx.fillText(n,nx,ny+4); ctx.textAlign='left';
     });
   });
 
-  // Header
-  ctx.fillStyle='rgba(2,3,8,0.9)'; ctx.fillRect(0,0,LW,52);
-  ctx.strokeStyle=adv.color; ctx.lineWidth=1.5; ctx.shadowColor=adv.color; ctx.shadowBlur=8;
-  ctx.beginPath(); ctx.moveTo(0,52); ctx.lineTo(LW,52); ctx.stroke(); ctx.shadowBlur=0;
+  // Header — taller, bigger fonts
+  ctx.fillStyle='rgba(2,3,8,0.92)'; ctx.fillRect(0,0,LW,64);
+  ctx.strokeStyle=adv.color; ctx.lineWidth=1.5; ctx.shadowColor=adv.color; ctx.shadowBlur=10;
+  ctx.beginPath(); ctx.moveTo(0,64); ctx.lineTo(LW,64); ctx.stroke(); ctx.shadowBlur=0;
 
-  ctx.font=huntFont(10,'bold'); ctx.fillStyle='#7f8b96'; ctx.fillText(`${T('g_hunt_investigating')}: ${node.name||T('g_compromised_node')} — ${node.org||''}`,12,18);
-  ctx.font=huntFont(13,'bold'); ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=10;
-  ctx.fillText(`⚠ ${adv.name} — ${T('g_hunt_evidence_collection')}`,12,38); ctx.shadowBlur=0;
+  ctx.font=huntFont(13,'bold'); ctx.fillStyle='#7f8b96'; ctx.fillText(`${T('g_hunt_investigating')}: ${node.name||T('g_compromised_node')} — ${node.org||''}`,16,22, LW-280);
+  ctx.font=huntFont(16,'bold'); ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=12;
+  ctx.fillText(`⚠ ${adv.name} — ${T('g_hunt_evidence_collection')}`,16,48, LW-280); ctx.shadowBlur=0;
 
-  // Timer
+  // Timer — bigger bar
   const timeLeft=Math.max(0,investigationMaxTime-investigationTimer);
   const timerCol=timeLeft>15?'#39FF14':timeLeft>8?'#FFE600':'#FF1744';
-  const timerW=200*(timeLeft/investigationMaxTime);
-  ctx.fillStyle='#1a1a2e'; ctx.fillRect(LW-220,8,200,12);
-  ctx.fillStyle=timerCol; ctx.shadowColor=timerCol; ctx.shadowBlur=timeLeft<8?12:4;
-  ctx.fillRect(LW-220,8,timerW,12); ctx.shadowBlur=0;
-  ctx.font=huntFont(9,'bold'); ctx.fillStyle=timerCol; ctx.textAlign='right';
-  ctx.fillText(`⏱ ${Math.ceil(timeLeft)}s`,LW-12,18); ctx.textAlign='left';
+  const timerW=240*(timeLeft/investigationMaxTime);
+  ctx.fillStyle='#1a1a2e'; ctx.fillRect(LW-258,8,240,16);
+  ctx.fillStyle=timerCol; ctx.shadowColor=timerCol; ctx.shadowBlur=timeLeft<8?14:5;
+  ctx.fillRect(LW-258,8,timerW,16); ctx.shadowBlur=0;
+  ctx.font=huntFont(13,'bold'); ctx.fillStyle=timerCol; ctx.textAlign='right';
+  ctx.fillText(`⏱ ${Math.ceil(timeLeft)}s`,LW-14,22); ctx.textAlign='left';
 
   // Evidence node count
   const total=activeEvidenceNodes.length, collected=activeEvidenceNodes.filter(e=>e.collected).length;
-  ctx.font=huntFont(10,'bold'); ctx.fillStyle='#7f8b96'; ctx.textAlign='right';
-  ctx.fillText(`${T('g_hunt_evidence_count')}: ${collected}/${total}`,LW-12,38); ctx.textAlign='left';
+  ctx.font=huntFont(13,'bold'); ctx.fillStyle='#7f8b96'; ctx.textAlign='right';
+  ctx.fillText(`${T('g_hunt_evidence_count')}: ${collected}/${total}`,LW-14,48); ctx.textAlign='left';
 
-  // Click guide
+  // Click guide — bigger
   if(collected===0){
     const a=0.5+Math.sin(Date.now()*0.004)*0.5;
-    ctx.globalAlpha=a*0.8; ctx.font=huntFont(11,'bold'); ctx.fillStyle='#FFE600';
-    ctx.textAlign='center'; ctx.shadowColor='#FFE600'; ctx.shadowBlur=8;
+    ctx.globalAlpha=a*0.8; ctx.font=huntFont(16,'bold'); ctx.fillStyle='#FFE600';
+    ctx.textAlign='center'; ctx.shadowColor='#FFE600'; ctx.shadowBlur=12;
     ctx.fillText(T('g_click_anomaly'),LW/2,LH/2+10);
     ctx.shadowBlur=0; ctx.textAlign='left'; ctx.globalAlpha=1;
   }
@@ -17626,55 +17762,58 @@ function drawInvestigation(){
     ctx.beginPath(); ctx.arc(node2.x,node2.y,32+Math.sin(node2.pulse*2)*6,0,TAU); ctx.stroke();
 
     // Main node
-    ctx.fillStyle='rgba(4,1,18,0.92)'; ctx.strokeStyle=ec; ctx.lineWidth=2;
+    ctx.fillStyle='rgba(4,1,18,0.68)'; ctx.strokeStyle=ec; ctx.lineWidth=2;
     ctx.beginPath(); ctx.arc(node2.x,node2.y,16,0,TAU); ctx.fill(); ctx.stroke();
 
-    // Icon
-    ctx.font=`${Math.round(14*ui)}px serif`; ctx.textAlign='center'; ctx.shadowBlur=0;
-    ctx.fillText(node2.clue.icon,node2.x,node2.y+5); ctx.textAlign='left';
+    // Icon — bigger
+    ctx.font=`${Math.round(18*ui)}px serif`; ctx.textAlign='center'; ctx.shadowBlur=0;
+    ctx.fillText(node2.clue.icon,node2.x,node2.y+6); ctx.textAlign='left';
 
-    // Type badge
+    // Type badge — bigger
     ctx.fillStyle=ec+'22'; ctx.strokeStyle=ec+'66'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.roundRect(node2.x-22,node2.y-32,44,12,3); ctx.fill(); ctx.stroke();
-    ctx.font=huntFont(6,'bold'); ctx.fillStyle=ec; ctx.textAlign='center';
+    ctx.beginPath(); ctx.roundRect(node2.x-30,node2.y-36,60,16,4); ctx.fill(); ctx.stroke();
+    ctx.font=huntFont(11,'bold'); ctx.fillStyle=ec; ctx.textAlign='center';
     ctx.fillText(huntClueTypeLabel(node2.clue.type),node2.x,node2.y-23); ctx.textAlign='left';
 
-    // Hover tooltip
+    // Hover tooltip — BIGGER with glow border
     if(node2.hovered){
       canvas.style.cursor='pointer';
-      ctx.fillStyle='rgba(4,1,18,0.96)'; ctx.strokeStyle=ec; ctx.lineWidth=1.5; ctx.shadowBlur=12; ctx.shadowColor=ec;
-      const tx=Math.min(node2.x-10,LW-240), ty=Math.max(node2.y-80,70);
-      ctx.beginPath(); ctx.roundRect(tx,ty,230,58,4); ctx.fill(); ctx.stroke(); ctx.shadowBlur=0;
-      ctx.font=huntFont(9,'bold'); ctx.fillStyle=ec; ctx.fillText(node2.clue.title,tx+8,ty+16);
-      ctx.font=huntFont(8); ctx.fillStyle='#d5dde5';
-      let line=node2.clue.text,maxW=210,lx=tx+8,ly=ty+30;
+      ctx.fillStyle='rgba(4,1,18,0.70)'; ctx.strokeStyle=ec; ctx.lineWidth=2; ctx.shadowBlur=18; ctx.shadowColor=ec;
+      const tx=Math.min(node2.x-10,LW-310), ty=Math.max(node2.y-90,74);
+      ctx.beginPath(); ctx.roundRect(tx,ty,296,76,6); ctx.fill(); ctx.stroke(); ctx.shadowBlur=0;
+      ctx.font=huntFont(13,'bold'); ctx.fillStyle=ec; ctx.fillText(node2.clue.title,tx+12,ty+20, 270);
+      ctx.font=huntFont(11); ctx.fillStyle='#d5dde5';
+      let line=node2.clue.text,maxW=270,lx=tx+12,ly=ty+40;
       while(line.length>0&&ctx.measureText(line).width>maxW) line=line.slice(0,-1);
       if(line.length<node2.clue.text.length) line=line.slice(0,-1)+'…';
       ctx.fillText(line,lx,ly);
-      ctx.fillStyle='#555'; ctx.font=huntFont(7); ctx.fillText(T('g_click_collect'),lx,ly+14);
+      ctx.fillStyle='#777'; ctx.font=huntFont(11); ctx.fillText(T('g_click_collect'),lx,ly+18);
     } else {
       canvas.style.cursor='crosshair';
     }
     ctx.restore();
   }
 
-  // Collected clues sidebar
+  // Collected clues sidebar — BIGGER with glow
   if(collectedClues.length>0){
-    const sideW=Math.round(228*ui), sideX=LW-sideW-10, sideY=60;
-    ctx.fillStyle='rgba(4,1,18,0.88)'; ctx.strokeStyle='rgba(170,0,255,0.4)'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.roundRect(sideX,sideY,sideW,collectedClues.length*Math.round(40*ui)+16,4); ctx.fill(); ctx.stroke();
-    ctx.font=huntFont(8,'bold'); ctx.fillStyle='#AA00FF'; ctx.fillText(T('g_collected'),sideX+8,sideY+14);
+    const sideW=Math.round(290*ui), sideX=LW-sideW-12, sideY=72;
+    const sideRowH=Math.round(50*ui);
+    ctx.fillStyle='rgba(4,1,18,0.65)'; ctx.strokeStyle='rgba(170,0,255,0.5)'; ctx.lineWidth=1.5;
+    ctx.shadowColor='rgba(170,0,255,0.3)'; ctx.shadowBlur=12;
+    ctx.beginPath(); ctx.roundRect(sideX,sideY,sideW,collectedClues.length*sideRowH+24,6); ctx.fill(); ctx.stroke();
+    ctx.shadowBlur=0;
+    ctx.font=huntFont(12,'bold'); ctx.fillStyle='#AA00FF'; ctx.fillText(T('g_collected'),sideX+12,sideY+18);
     collectedClues.forEach((c,i)=>{
       const typeColors={CREDENTIAL:'#FFE600',MALWARE:'#FF1744',NETWORK:'#42d9ff',TIMING:'#AA00FF',LATERAL:'#FF8D39',PHISHING:'#FF62FF',CLOUD:'#00FFD0',SOCIAL:'#FF62FF',STAGING:'#C850FF',IDENTITY:'#FFE600',EXFIL:'#FF8D39',BEHAVIORAL:'#74ff88'};
       const ec=typeColors[c.type]||'#AA00FF';
-      const cy=sideY+22+i*Math.round(40*ui);
-      ctx.fillStyle='rgba(8,2,26,0.8)'; ctx.strokeStyle=ec+'55'; ctx.lineWidth=1;
-      ctx.fillRect(sideX+6,cy,sideW-12,Math.round(34*ui)); ctx.strokeRect(sideX+6,cy,sideW-12,Math.round(34*ui));
-      ctx.font=huntFont(7,'bold'); ctx.fillStyle=ec; ctx.fillText(`${c.icon} ${c.title}`,sideX+12,cy+12);
-      ctx.font=huntFont(6); ctx.fillStyle='#7f8b96';
-      let clueText=c.clue; while(clueText.length>0&&ctx.measureText(clueText).width>(sideW-28)) clueText=clueText.slice(0,-1);
+      const cy=sideY+28+i*sideRowH;
+      ctx.fillStyle='rgba(8,2,26,0.55)'; ctx.strokeStyle=ec+'55'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.roundRect(sideX+8,cy,sideW-16,sideRowH-6,4); ctx.fill(); ctx.stroke();
+      ctx.font=huntFont(12,'bold'); ctx.fillStyle=ec; ctx.fillText(`${c.icon} ${c.title}`,sideX+16,cy+18, sideW-40);
+      ctx.font=huntFont(11); ctx.fillStyle='#7f8b96';
+      let clueText=c.clue; while(clueText.length>0&&ctx.measureText(clueText).width>(sideW-40)) clueText=clueText.slice(0,-1);
       if(clueText.length<c.clue.length) clueText=clueText.slice(0,-1)+'…';
-      ctx.fillText(clueText,sideX+12,cy+24);
+      ctx.fillText(clueText,sideX+16,cy+34);
     });
   }
 
@@ -17687,29 +17826,33 @@ function drawInvestigation(){
       {label:'👁️ OVERWATCH', desc:T('g_hunt_module_overwatch')},
       {label:'🗺️ EXPOSURE', desc:T('g_hunt_module_exposure')},
     ];
-    const bx=14, by=58, panelW=Math.round(248*ui), rowH=Math.round(42*ui);
-    ctx.fillStyle='rgba(4,1,18,0.88)'; ctx.strokeStyle='rgba(170,0,255,0.4)'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.roundRect(bx,by,panelW,Math.round(68*ui)+mods.length*rowH,4); ctx.fill(); ctx.stroke();
-    ctx.font=huntFont(8,'bold'); ctx.fillStyle='#AA00FF'; ctx.fillText(T('g_deploy'),bx+10,by+16);
-    ctx.font=huntFont(6); ctx.fillStyle='#7f8b96'; ctx.fillText(T('g_hunt_module_hint'),bx+10,by+30, panelW-20);
-    ctx.font=huntFont(6,'bold'); ctx.fillStyle='#39FF14'; ctx.fillText(T('g_hunt_module_bonus'),bx+10,by+46);
+    const bx=14, by=72, panelW=Math.round(300*ui), rowH=Math.round(52*ui);
+    ctx.fillStyle='rgba(4,1,18,0.65)'; ctx.strokeStyle='rgba(170,0,255,0.5)'; ctx.lineWidth=1.5;
+    ctx.shadowColor='rgba(170,0,255,0.3)'; ctx.shadowBlur=12;
+    ctx.beginPath(); ctx.roundRect(bx,by,panelW,Math.round(80*ui)+mods.length*rowH,6); ctx.fill(); ctx.stroke();
+    ctx.shadowBlur=0;
+    ctx.font=huntFont(13,'bold'); ctx.fillStyle='#AA00FF'; ctx.fillText(T('g_deploy'),bx+14,by+20);
+    ctx.font=huntFont(11); ctx.fillStyle='#7f8b96'; ctx.fillText(T('g_hunt_module_hint'),bx+14,by+38, panelW-28);
+    ctx.font=huntFont(11,'bold'); ctx.fillStyle='#39FF14'; ctx.fillText(T('g_hunt_module_bonus'),bx+14,by+56);
     mods.forEach((m,i)=>{
-      const my=by+Math.round(60*ui)+i*rowH;
-      const hov=MOUSE.x>bx+4&&MOUSE.x<bx+panelW-4&&MOUSE.y>my-2&&MOUSE.y<my+rowH-4;
-      ctx.fillStyle=hov?'rgba(170,0,255,0.2)':'rgba(8,2,26,0.8)';
+      const my=by+Math.round(70*ui)+i*rowH;
+      const hov=MOUSE.x>bx+6&&MOUSE.x<bx+panelW-6&&MOUSE.y>my-2&&MOUSE.y<my+rowH-6;
+      ctx.fillStyle=hov?'rgba(170,0,255,0.2)':'rgba(8,2,26,0.55)';
       ctx.strokeStyle=hov?'#AA00FF':'rgba(170,0,255,0.3)'; ctx.lineWidth=1;
-      ctx.fillRect(bx+4,my-2,panelW-8,rowH-6); ctx.strokeRect(bx+4,my-2,panelW-8,rowH-6);
-      ctx.font=huntFont(8,'bold'); ctx.fillStyle=hov?'#AA00FF':'#d5dde5'; ctx.fillText(m.label,bx+10,my+12);
-      ctx.font=huntFont(6); ctx.fillStyle='#7f8b96'; ctx.fillText(m.desc,bx+10,my+26, panelW-18);
+      ctx.beginPath(); ctx.roundRect(bx+6,my-2,panelW-12,rowH-8,4); ctx.fill(); ctx.stroke();
+      ctx.font=huntFont(12,'bold'); ctx.fillStyle=hov?'#AA00FF':'#d5dde5'; ctx.fillText(m.label,bx+14,my+16);
+      ctx.font=huntFont(11); ctx.fillStyle='#7f8b96'; ctx.fillText(m.desc,bx+14,my+34, panelW-28);
     });
   } else if(selectedModule){
-    const bx=14,by=58,panelW=Math.round(248*ui);
-    ctx.fillStyle='rgba(4,1,18,0.88)'; ctx.strokeStyle='rgba(57,255,20,0.5)'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.roundRect(bx,by,panelW,Math.round(76*ui),4); ctx.fill(); ctx.stroke();
-    ctx.font=huntFont(7,'bold'); ctx.fillStyle='#39FF14'; ctx.fillText(T('g_hunt_module_active'),bx+8,by+16);
-    ctx.font=huntFont(8,'bold'); ctx.fillStyle='#d5dde5'; ctx.fillText(selectedModule,bx+8,by+34);
-    ctx.fillStyle='#39FF14'; ctx.font=huntFont(7); ctx.fillText(T('g_deployed'),bx+8,by+52);
-    ctx.fillStyle='#7f8b96'; ctx.fillText(T('h_module_pursuit_bonus'),bx+8,by+66);
+    const bx=14,by=72,panelW=Math.round(300*ui);
+    ctx.fillStyle='rgba(4,1,18,0.65)'; ctx.strokeStyle='rgba(57,255,20,0.5)'; ctx.lineWidth=1.5;
+    ctx.shadowColor='rgba(57,255,20,0.3)'; ctx.shadowBlur=12;
+    ctx.beginPath(); ctx.roundRect(bx,by,panelW,Math.round(92*ui),6); ctx.fill(); ctx.stroke();
+    ctx.shadowBlur=0;
+    ctx.font=huntFont(12,'bold'); ctx.fillStyle='#39FF14'; ctx.fillText(T('g_hunt_module_active'),bx+12,by+20);
+    ctx.font=huntFont(13,'bold'); ctx.fillStyle='#d5dde5'; ctx.fillText(selectedModule,bx+12,by+42);
+    ctx.fillStyle='#39FF14'; ctx.font=huntFont(11); ctx.fillText(T('g_deployed'),bx+12,by+62);
+    ctx.fillStyle='#7f8b96'; ctx.fillText(T('h_module_pursuit_bonus'),bx+12,by+80);
   }
 
   // Pursuit bar at bottom
@@ -17775,82 +17918,75 @@ function drawEvidenceCard(dt){
 
   const slideT=Math.min(1,t/0.4);
   const eased=1-Math.pow(1-slideT,3);
-  const cardH=420;
+  const _eu=huntUiScale();
+  const cardH=Math.round(500*_eu);
+  const _cardW=Math.round(580*_eu);
   const cardY=lerp(LH+50,LH/2-cardH/2,eased);
-  const cardX=LW/2-240;
+  const cardX=LW/2-Math.round(_cardW/2);
 
   const typeColors={CREDENTIAL:'#FFE600',MALWARE:'#FF1744',NETWORK:'#42d9ff',TIMING:'#AA00FF',LATERAL:'#FF8D39',PHISHING:'#FF62FF',CLOUD:'#00FFD0',SOCIAL:'#FF62FF',STAGING:'#C850FF',IDENTITY:'#FFE600',EXFIL:'#FF8D39',BEHAVIORAL:'#74ff88'};
   const ec=typeColors[clue.type]||'#AA00FF';
 
   ctx.save();
-  ctx.shadowColor=ec; ctx.shadowBlur=24;
-  ctx.fillStyle='rgba(4,1,18,0.98)'; ctx.strokeStyle=ec; ctx.lineWidth=2;
-  ctx.beginPath(); ctx.roundRect(cardX,cardY,480,cardH,8); ctx.fill(); ctx.stroke();
+  ctx.shadowColor=ec; ctx.shadowBlur=30;
+  ctx.fillStyle='rgba(4,1,18,0.68)'; ctx.strokeStyle=ec; ctx.lineWidth=2.5;
+  ctx.beginPath(); ctx.roundRect(cardX,cardY,_cardW,cardH,10); ctx.fill(); ctx.stroke();
 
   // Header bar
-  ctx.fillStyle=ec+'33'; ctx.fillRect(cardX,cardY,480,44);
+  ctx.fillStyle=ec+'28'; ctx.fillRect(cardX,cardY,_cardW,52);
   ctx.strokeStyle=ec+'55'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(cardX,cardY+44); ctx.lineTo(cardX+480,cardY+44); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cardX,cardY+52); ctx.lineTo(cardX+_cardW,cardY+52); ctx.stroke();
   ctx.shadowBlur=0;
 
   // Evidence number
-  ctx.font='bold 10px "Courier New"'; ctx.fillStyle=ec;
-  ctx.textAlign='right'; ctx.fillText(TF('g_hunt_evidence_number',{n:collectedClues.length}),cardX+472,cardY+16);
+  ctx.font=huntFont(13,'bold'); ctx.fillStyle=ec;
+  ctx.textAlign='right'; ctx.fillText(TF('g_hunt_evidence_number',{n:collectedClues.length}),cardX+_cardW-14,cardY+20);
 
   // Type badge
-  ctx.fillStyle=ec; ctx.font='bold 8px "Courier New"'; ctx.textAlign='left';
-  ctx.fillRect(cardX+12,cardY+8,80,14);
-  ctx.fillStyle='rgba(2,3,8,0.9)'; ctx.fillText(huntClueTypeLabel(clue.type),cardX+16,cardY+19);
+  ctx.fillStyle=ec; ctx.font=huntFont(12,'bold'); ctx.textAlign='left';
+  ctx.fillRect(cardX+14,cardY+10,96,18);
+  ctx.fillStyle='rgba(2,3,8,0.9)'; ctx.fillText(huntClueTypeLabel(clue.type),cardX+20,cardY+24);
 
   // Icon
-  ctx.font='30px serif'; ctx.textAlign='center';
-  ctx.fillText(clue.icon,cardX+50,cardY+92);
+  ctx.font=huntFont(34); ctx.textAlign='center';
+  ctx.fillText(clue.icon,cardX+56,cardY+106);
 
   // Title
-  ctx.font='bold 16px "Courier New"'; ctx.fillStyle='#f4f7fa'; ctx.textAlign='left';
-  ctx.fillText(clue.title,cardX+90,cardY+78);
+  ctx.font=huntFont(20,'bold'); ctx.fillStyle='#f4f7fa'; ctx.textAlign='left';
+  ctx.fillText(clue.title,cardX+100,cardY+90);
 
   // TTP badge
-  ctx.font='bold 8px "Courier New"'; ctx.fillStyle=ec;
-  ctx.fillText(clue.ttp,cardX+90,cardY+96);
+  ctx.font=huntFont(12,'bold'); ctx.fillStyle=ec;
+  ctx.fillText(clue.ttp,cardX+100,cardY+112);
 
   // Divider
   ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(cardX+20,cardY+112); ctx.lineTo(cardX+460,cardY+112); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cardX+24,cardY+128); ctx.lineTo(cardX+_cardW-24,cardY+128); ctx.stroke();
 
-  // Evidence text — wrapped
-  ctx.font='11px "Courier New"'; ctx.fillStyle='#d5dde5'; ctx.textAlign='left';
-  let ly=cardY+134;
-  const tWords=clue.text.split(' '); let tLine='';
-  for(const w of tWords){
-    const test=tLine+w+' ';
-    if(ctx.measureText(test).width>440&&tLine!==''){ctx.fillText(tLine.trim(),cardX+20,ly);tLine=w+' ';ly+=18;}
-    else tLine=test;
-  }
-  ctx.fillText(tLine.trim(),cardX+20,ly); ly+=26;
+  // Evidence text — wrapped bigger
+  ctx.font=huntFont(13); ctx.fillStyle='#d5dde5'; ctx.textAlign='left';
+  let ly=cardY+152;
+  const tLines=wrapTextPx(clue.text,_cardW-48);
+  tLines.forEach(l=>{ctx.fillText(l,cardX+20,ly);ly+=18;});
+  ly+=8;
 
   // Divider
   ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(cardX+20,ly); ctx.lineTo(cardX+460,ly); ctx.stroke(); ly+=18;
+  ctx.beginPath(); ctx.moveTo(cardX+24,ly); ctx.lineTo(cardX+_cardW-24,ly); ctx.stroke(); ly+=22;
 
   // Investigator note label
-  ctx.font='bold 9px "Courier New"'; ctx.fillStyle=ec;
-  ctx.fillText(`🔍 ${T('g_hunt_note')}:`,cardX+20,ly); ly+=18;
+  ctx.font=huntFont(13,'bold'); ctx.fillStyle=ec;
+  ctx.fillText(`🔍 ${T('g_hunt_note')}:`,cardX+24,ly); ly+=22;
 
-  // Clue text — wrapped
-  ctx.font='11px "Courier New"'; ctx.fillStyle='#f4f7fa';
-  const cWords=clue.clue.split(' '); let cLine='';
-  for(const w of cWords){
-    const test=cLine+w+' ';
-    if(ctx.measureText(test).width>440&&cLine!==''){ctx.fillText(cLine.trim(),cardX+20,ly);cLine=w+' ';ly+=18;}
-    else cLine=test;
-  }
-  ctx.fillText(cLine.trim(),cardX+20,ly);
+  // Clue text — wrapped bigger
+  ctx.font=huntFont(13); ctx.fillStyle='#f4f7fa';
+  const cLines=wrapTextPx(clue.clue,_cardW-48);
+  cLines.forEach(l=>{ctx.fillText(l,cardX+24,ly);ly+=20;});
 
   // Dismiss hint — only shows after 2s
   if(t>2&&Math.floor(t*2)%2===0){
-    ctx.font='bold 10px "Courier New"'; ctx.fillStyle='#555'; ctx.textAlign='center';
-    ctx.fillText(T('g_click_continue'),LW/2,cardY+cardH-12);
+    ctx.font=huntFont(13,'bold'); ctx.fillStyle='#555'; ctx.textAlign='center';
+    ctx.fillText(T('g_click_continue'),LW/2,cardY+cardH-16);
   }
 
   ctx.restore(); ctx.textAlign='left';
@@ -17910,22 +18046,22 @@ function drawDeduction(dt){
 
   // Header
   ctx.textAlign='center';
-  ctx.font='bold 11px "Courier New"'; ctx.fillStyle='#7f8b96';
+  ctx.font=huntFont(12,'bold'); ctx.fillStyle='#7f8b96';
   const dedNodeName=NODES[caseRoute[advNodeIdx]]?.name||T('g_unknown');
-  ctx.fillText(T('g_hunt_deduction_header').replace('{name}',selectedCase.name).replace('{node}',dedNodeName),LW/2,LH*0.12);
+  ctx.fillText(T('g_hunt_deduction_header').replace('{name}',selectedCase.name).replace('{node}',dedNodeName),LW/2,LH*0.12, LW-80);
 
-  ctx.font='bold 22px "Courier New"'; ctx.fillStyle=selectedCase.color; ctx.shadowColor=selectedCase.color; ctx.shadowBlur=14;
+  ctx.font=huntFont(24,'bold'); ctx.fillStyle=selectedCase.color; ctx.shadowColor=selectedCase.color; ctx.shadowBlur=14;
   ctx.fillText(T('g_deduction'),LW/2,LH*0.2); ctx.shadowBlur=0;
 
   // Clue summary
   if(collectedClues.length>0){
-    ctx.font='9px "Courier New"'; ctx.fillStyle='#555';
+    ctx.font=huntFont(11); ctx.fillStyle='#555';
     ctx.fillText(T('g_hunt_clues_collected').replace('{count}',collectedClues.length),LW/2,LH*0.27);
   }
 
   // Timer
   const timerCol=deductionTimeLeft>10?'#39FF14':deductionTimeLeft>5?'#FFE600':'#FF1744';
-  ctx.font=`bold ${deductionTimeLeft<=5?18:14}px "Courier New"`; ctx.fillStyle=timerCol; ctx.shadowColor=timerCol; ctx.shadowBlur=deductionTimeLeft<=5?12:4;
+  ctx.font=huntFont(deductionTimeLeft<=5?20:16,'bold'); ctx.fillStyle=timerCol; ctx.shadowColor=timerCol; ctx.shadowBlur=deductionTimeLeft<=5?12:4;
   ctx.fillText(`⏱ ${Math.ceil(deductionTimeLeft)}s`,LW/2,LH*0.35); ctx.shadowBlur=0;
 
   const timerW=(deductionTimeLeft/DEDUCTION_TIMER)*(LW*0.5);
@@ -17935,7 +18071,8 @@ function drawDeduction(dt){
   ctx.textAlign='left';
 
   // Choice cards
-  const cardW=280,cardH=185,gap=24;
+  const _du=huntUiScale();
+  const cardW=Math.round(280*_du),cardH=Math.round(185*_du),gap=Math.round(24*_du);
   const totalW=deductionChoices.length*(cardW+gap)-gap;
   const startX=(LW-totalW)/2;
 
@@ -17957,7 +18094,7 @@ function drawDeduction(dt){
     ctx.save();
     ctx.shadowColor=hov?choice.color:'transparent'; ctx.shadowBlur=hov?20:0;
 
-    ctx.fillStyle=hov?'rgba(8,2,26,0.98)':'rgba(4,1,18,0.92)';
+    ctx.fillStyle=hov?'rgba(8,2,26,0.98)':'rgba(4,1,18,0.68)';
     ctx.strokeStyle=borderCol; ctx.lineWidth=hov||isSelected?2.5:1.5;
     ctx.beginPath(); ctx.roundRect(finalX,cy,cardW,cardH,6); ctx.fill(); ctx.stroke();
 
@@ -17970,23 +18107,23 @@ function drawDeduction(dt){
     ctx.fillStyle=borderCol+'44'; ctx.fillRect(finalX,cy,cardW,20);
 
     // Nation/sector icon
-    ctx.font='28px serif'; ctx.textAlign='center'; ctx.shadowBlur=0;
+    ctx.font=huntFont(26); ctx.textAlign='center'; ctx.shadowBlur=0;
     ctx.fillText(choice.icon,finalX+40,cy+60);
 
     // Name
-    ctx.font=`bold ${choice.name.length>14?11:14}px "Courier New"`; ctx.fillStyle=borderCol; ctx.textAlign='left';
+    ctx.font=huntFont(choice.name.length>14?12:14,'bold'); ctx.fillStyle=borderCol; ctx.textAlign='left';
     ctx.shadowColor=borderCol; ctx.shadowBlur=hov?8:0;
     ctx.fillText(choice.name,finalX+72,cy+38); ctx.shadowBlur=0;
 
     // Org
-    ctx.font='9px "Courier New"'; ctx.fillStyle='#7f8b96';
-    ctx.fillText(choice.org,finalX+72,cy+54);
+    ctx.font=huntFont(11); ctx.fillStyle='#7f8b96';
+    ctx.fillText(choice.org,finalX+72,cy+54, cardW-80);
 
     // Sector
-    ctx.fillStyle='rgba(8,2,26,0.8)'; ctx.strokeStyle=borderCol+'44'; ctx.lineWidth=1;
+    ctx.fillStyle='rgba(8,2,26,0.50)'; ctx.strokeStyle=borderCol+'44'; ctx.lineWidth=1;
     ctx.fillRect(finalX+72,cy+62,180,16); ctx.strokeRect(finalX+72,cy+62,180,16);
-    ctx.font='8px "Courier New"'; ctx.fillStyle=borderCol+'cc';
-    ctx.fillText(choice.sector,finalX+78,cy+74);
+    ctx.font=huntFont(11); ctx.fillStyle=borderCol+'cc';
+    ctx.fillText(choice.sector,finalX+78,cy+74, 168);
 
     // Divider
     ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1;
@@ -17994,7 +18131,7 @@ function drawDeduction(dt){
 
     // Clue match count
     const matchCol=choice.clueMatches>=2?'#39FF14':choice.clueMatches===1?'#FFE600':'#555';
-    ctx.font='bold 9px "Courier New"'; ctx.fillStyle='#555';
+    ctx.font=huntFont(11,'bold'); ctx.fillStyle='#555';
     ctx.fillText(T('g_clue_matches'),finalX+12,cy+105);
     for(let m=0;m<4;m++){
       const mx=finalX+130+m*22;
@@ -18003,22 +18140,22 @@ function drawDeduction(dt){
       ctx.fillRect(mx,cy+96,16,12);
     }
     ctx.shadowBlur=0;
-    ctx.font='bold 11px "Courier New"'; ctx.fillStyle=matchCol;
+    ctx.font=huntFont(11,'bold'); ctx.fillStyle=matchCol;
     ctx.fillText(`${choice.clueMatches} ${T('g_clue_matches').toLowerCase()}`,finalX+12,cy+125);
 
     // Result badge
     if(deductionResult==='correct'&&choice.correct){
-      ctx.fillStyle='#39FF14'; ctx.font='bold 11px "Courier New"'; ctx.textAlign='center';
+      ctx.fillStyle='#39FF14'; ctx.font=huntFont(12,'bold'); ctx.textAlign='center';
       ctx.shadowColor='#39FF14'; ctx.shadowBlur=10;
       ctx.fillText(T('g_hunt_correct_close'),finalX+cardW/2,cy+152);
     } else if(deductionResult==='wrong'&&choice.correct){
-      ctx.fillStyle='#39FF14'; ctx.font='bold 9px "Courier New"'; ctx.textAlign='center';
+      ctx.fillStyle='#39FF14'; ctx.font=huntFont(11,'bold'); ctx.textAlign='center';
       ctx.fillText(T('g_hunt_was_correct'),finalX+cardW/2,cy+152);
     }
 
     // CTA on hover
     if(hov&&!deductionResult){
-      ctx.font='bold 8px "Courier New"'; ctx.fillStyle='#fff'; ctx.textAlign='center';
+      ctx.font=huntFont(11,'bold'); ctx.fillStyle='#fff'; ctx.textAlign='center';
       ctx.fillText(T('g_click_confirm'),finalX+cardW/2,cy+cardH-10);
     }
 
@@ -18027,7 +18164,7 @@ function drawDeduction(dt){
 
   // Instruction
   if(!deductionResult){
-    ctx.font='10px "Courier New"'; ctx.fillStyle='#3a3a5a'; ctx.textAlign='center';
+    ctx.font=huntFont(11); ctx.fillStyle='#3a3a5a'; ctx.textAlign='center';
     ctx.fillText(T('g_hunt_deduction_hint'),LW/2,LH*0.95);
     ctx.textAlign='left';
   }
@@ -18117,26 +18254,28 @@ function advanceAfterDeduction(){
 //  PURSUIT BAR
 // ════════════════════════════════════════════════════════════════
 function drawPursuitBar(){
-  const bx=12,by=LH-46,bw=LW/2-24,bh=14;
-  ctx.fillStyle='rgba(4,1,18,0.9)';
-  ctx.strokeStyle='rgba(170,0,255,0.3)'; ctx.lineWidth=1;
-  ctx.fillRect(bx,by-18,bw+12,36); ctx.strokeRect(bx,by-18,bw+12,36);
+  const bx=12,by=LH-50,bw=LW/2-24,bh=18;
+  ctx.fillStyle='rgba(4,1,18,0.68)';
+  ctx.strokeStyle='rgba(170,0,255,0.4)'; ctx.lineWidth=1.5;
+  ctx.shadowColor='rgba(170,0,255,0.2)'; ctx.shadowBlur=8;
+  ctx.beginPath(); ctx.roundRect(bx,by-22,bw+14,44,5); ctx.fill(); ctx.stroke();
+  ctx.shadowBlur=0;
 
-  ctx.font='bold 8px "Courier New"'; ctx.fillStyle='#7f8b96';
-  ctx.fillText(T('g_pursuit'),bx+6,by-4);
-  ctx.font='bold 8px "Courier New"'; ctx.textAlign='right';
+  ctx.font=huntFont(12,'bold'); ctx.fillStyle='#7f8b96';
+  ctx.fillText(T('g_pursuit'),bx+8,by-6);
+  ctx.font=huntFont(13,'bold'); ctx.textAlign='right';
   ctx.fillStyle=pursuit>=70?'#39FF14':pursuit>=40?'#FFE600':'#FF1744';
-  ctx.fillText(`${Math.round(pursuit)}%`,bx+bw+8,by-4); ctx.textAlign='left';
+  ctx.fillText(`${Math.round(pursuit)}%`,bx+bw+8,by-6); ctx.textAlign='left';
 
-  ctx.fillStyle='#1a1a2e'; ctx.fillRect(bx+6,by,bw,bh);
+  ctx.fillStyle='#1a1a2e'; ctx.fillRect(bx+8,by,bw-2,bh);
   const col=pursuit>=70?'#39FF14':pursuit>=40?'#FFE600':'#FF1744';
-  ctx.fillStyle=col; ctx.shadowColor=col; ctx.shadowBlur=6;
-  ctx.fillRect(bx+6,by,bw*(pursuit/100),bh); ctx.shadowBlur=0;
+  ctx.fillStyle=col; ctx.shadowColor=col; ctx.shadowBlur=8;
+  ctx.fillRect(bx+8,by,Math.round((bw-2)*(pursuit/100)),bh); ctx.shadowBlur=0;
 
   ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(bx+6+bw*0.5,by); ctx.lineTo(bx+6+bw*0.5,by+bh); ctx.stroke();
-  ctx.font='9px "Courier New"'; ctx.fillStyle='#333'; ctx.textAlign='center';
-  ctx.fillText(T('g_pursuit_intercept'),bx+6+bw,by+bh+8); ctx.fillText(T('g_pursuit_breach'),bx+6,by+bh+8);
+  ctx.beginPath(); ctx.moveTo(bx+8+(bw-2)*0.5,by); ctx.lineTo(bx+8+(bw-2)*0.5,by+bh); ctx.stroke();
+  ctx.font=huntFont(11); ctx.fillStyle='#444'; ctx.textAlign='center';
+  ctx.fillText(T('g_pursuit_intercept'),bx+8+bw-2,by+bh+10); ctx.fillText(T('g_pursuit_breach'),bx+8,by+bh+10);
   ctx.textAlign='left';
 }
 
@@ -18144,40 +18283,40 @@ function drawPursuitBar(){
 //  HUD (world map + investigation)
 // ════════════════════════════════════════════════════════════════
 function drawHUD(){
-  // Top bar
-  ctx.fillStyle='rgba(2,3,8,0.92)'; ctx.fillRect(0,0,LW,52);
+  // Top bar — taller
+  ctx.fillStyle='rgba(2,3,8,0.93)'; ctx.fillRect(0,0,LW,62);
   ctx.strokeStyle='rgba(170,0,255,0.3)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(0,52); ctx.lineTo(LW,52); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0,62); ctx.lineTo(LW,62); ctx.stroke();
 
-  // Score
-  ctx.font='bold 18px "Courier New"'; ctx.fillStyle='#AA00FF'; ctx.shadowColor='#AA00FF'; ctx.shadowBlur=8;
-  ctx.fillText(`⭐ ${formatLocaleNumber(score)}`,12,32); ctx.shadowBlur=0;
-  ctx.font='bold 9px "Courier New"'; ctx.fillStyle='#444'; ctx.fillText(`${T('g_hi_short')} ${formatLocaleNumber(hi)}`,12,46);
+  // Score — bigger
+  ctx.font=huntFont(22,'bold'); ctx.fillStyle='#AA00FF'; ctx.shadowColor='#AA00FF'; ctx.shadowBlur=10;
+  ctx.fillText(`⭐ ${formatLocaleNumber(score)}`,14,34); ctx.shadowBlur=0;
+  ctx.font=huntFont(11,'bold'); ctx.fillStyle='#444'; ctx.fillText(`${T('g_hi_short')} ${formatLocaleNumber(hi)}`,14,52);
 
-  // Case info
+  // Case info — bigger
   if(selectedCase){
-    ctx.font='bold 12px "Courier New"'; ctx.fillStyle=selectedCase.color; ctx.textAlign='center';
+    ctx.font=huntFont(15,'bold'); ctx.fillStyle=selectedCase.color; ctx.textAlign='center';
     ctx.shadowColor=selectedCase.color; ctx.shadowBlur=10;
-    ctx.fillText(`◈ ${selectedCase.name} — ${selectedCase.caseTitle}`,LW/2,22); ctx.shadowBlur=0;
-    ctx.font='9px "Courier New"'; ctx.fillStyle='#7f8b96';
-    ctx.fillText(`${T('g_hop_short')} ${advNodeIdx+1} / ${caseRoute.length}  •  ${selectedCase.target}`,LW/2,38);
+    ctx.fillText(`◈ ${selectedCase.name} — ${selectedCase.caseTitle}`,LW/2,26, LW-460); ctx.shadowBlur=0;
+    ctx.font=huntFont(12); ctx.fillStyle='#7f8b96';
+    ctx.fillText(`${T('g_hop_short')} ${advNodeIdx+1} / ${caseRoute.length}  •  ${selectedCase.target}`,LW/2,46, LW-460);
     ctx.textAlign='left';
   }
 
-  // Pursuit (top right)
+  // Pursuit (top right) — bigger bar
   const p=pursuit;
   const pc=p>=70?'#39FF14':p>=40?'#FFE600':'#FF1744';
-  ctx.font='bold 9px "Courier New"'; ctx.fillStyle=pc; ctx.textAlign='right';
-  ctx.fillText(`${T('g_pursuit')} ${Math.round(p)}%`,LW-12,18); ctx.textAlign='left';
-  ctx.fillStyle='#1a1a2e'; ctx.fillRect(LW-212,22,200,8);
-  ctx.fillStyle=pc; ctx.shadowColor=pc; ctx.shadowBlur=4;
-  ctx.fillRect(LW-212,22,200*(p/100),8); ctx.shadowBlur=0;
-  ctx.font='bold 8px "Courier New"'; ctx.fillStyle='#555'; ctx.textAlign='right';
-  ctx.fillText(T('g_abort'),LW-12,48); ctx.textAlign='left';
+  ctx.font=huntFont(12,'bold'); ctx.fillStyle=pc; ctx.textAlign='right';
+  ctx.fillText(`${T('g_pursuit')} ${Math.round(p)}%`,LW-14,22); ctx.textAlign='left';
+  ctx.fillStyle='#1a1a2e'; ctx.fillRect(LW-232,28,220,10);
+  ctx.fillStyle=pc; ctx.shadowColor=pc; ctx.shadowBlur=5;
+  ctx.fillRect(LW-232,28,220*(p/100),10); ctx.shadowBlur=0;
+  ctx.font=huntFont(11,'bold'); ctx.fillStyle='#555'; ctx.textAlign='right';
+  ctx.fillText(T('g_abort'),LW-14,54); ctx.textAlign='left';
 }
 
 function huntTitleScale(){
-  return clamp(Math.min(LW/1440, LH/900), 0.9, 1.22);
+  return clamp(Math.min(LW/1440, LH/900), 0.62, 1.52);
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -18243,56 +18382,56 @@ function drawTitle(dt){
   ctx.fillStyle='#d5dde5'; ctx.shadowBlur=0;
   ctx.fillText(T('h_title_hook'),LW/2,170+bounce*0.4);
 
-  const leftX=58, topY=210, panelW=Math.round(318*ui), panelH=Math.round(238*ui);
+  const leftX=58, topY=210, panelW=Math.round(360*ui), panelH=Math.round(268*ui);
   const rightX=LW-panelW-58;
   const bottomY=LH-190;
 
   const panel=(x,y,w,h,col,title)=>{
-    ctx.fillStyle='rgba(4,1,18,0.84)';
+    ctx.fillStyle='rgba(4,1,18,0.62)';
     ctx.strokeStyle=col; ctx.lineWidth=1.5; ctx.shadowColor=col; ctx.shadowBlur=14;
     ctx.beginPath(); ctx.roundRect(x,y,w,h,6); ctx.fill(); ctx.stroke(); ctx.shadowBlur=0;
-    ctx.fillStyle=col+'22'; ctx.fillRect(x,y,w,24);
-    ctx.font=`bold ${Math.round(9*ui)}px "Courier New"`; ctx.fillStyle=col; ctx.textAlign='left';
-    ctx.fillText(title,x+10,y+16);
+    ctx.fillStyle=col+'22'; ctx.fillRect(x,y,w,26);
+    ctx.font=`bold ${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle=col; ctx.textAlign='left';
+    ctx.fillText(title,x+12,y+18);
   };
 
   panel(leftX,topY,panelW,panelH,featured.color,T('h_title_live_cases'));
-  ctx.fillStyle=featured.color; ctx.font=`bold ${Math.round(22*ui)}px "Courier New"`; ctx.textAlign='left';
-  ctx.fillText(featured.name,leftX+14,topY+52);
-  ctx.font=`bold ${Math.round(10*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
-  ctx.fillText(featured.aka,leftX+14,topY+70);
-  ctx.fillStyle=featured.color; ctx.font=`bold ${Math.round(9*ui)}px "Courier New"`;
-  ctx.fillText(`${featured.nation}  •  ${featured.caseTitle}`,leftX+14,topY+92);
-  ctx.fillStyle='#d5dde5'; ctx.font=`${Math.round(9*ui)}px "Courier New"`;
-  wrapText(featured.brief,38).slice(0,4).forEach((line,i)=>ctx.fillText(line,leftX+14,topY+116+i*16));
-  ctx.fillStyle='#ffd84d'; ctx.font=`bold ${Math.round(9*ui)}px "Courier New"`;
-  ctx.fillText(`${T('g_objective_target')}: ${objectiveNode?.name||featured.target}`,leftX+14,topY+192);
+  ctx.fillStyle=featured.color; ctx.font=`bold ${Math.round(24*ui)}px "Courier New"`; ctx.textAlign='left';
+  ctx.fillText(featured.name,leftX+14,topY+56);
+  ctx.font=`bold ${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
+  ctx.fillText(featured.aka,leftX+14,topY+74);
+  ctx.fillStyle=featured.color; ctx.font=`bold ${Math.round(11*ui)}px "Courier New"`;
+  ctx.fillText(`${featured.nation}  •  ${featured.caseTitle}`,leftX+14,topY+96, panelW-28);
+  ctx.fillStyle='#d5dde5'; ctx.font=`${Math.round(11*ui)}px "Courier New"`;
+  wrapTextPx(featured.brief,panelW-28).slice(0,4).forEach((line,i)=>ctx.fillText(line,leftX+14,topY+120+i*18));
+  ctx.fillStyle='#ffd84d'; ctx.font=`bold ${Math.round(11*ui)}px "Courier New"`;
+  ctx.fillText(`${T('g_objective_target')}: ${objectiveNode?.name||featured.target}`,leftX+14,topY+202);
   ctx.fillStyle='#42d9ff';
-  ctx.fillText(`${T('g_counter')}${featured.counterModule}`,leftX+14,topY+212);
+  ctx.fillText(`${T('g_counter')}${featured.counterModule}`,leftX+14,topY+222);
   ctx.fillStyle='#39FF14';
-  ctx.fillText(`${T('h_title_signal')}: ${intel.cs}`,leftX+14,topY+232);
+  ctx.fillText(`${T('h_title_signal')}: ${intel.cs}`,leftX+14,topY+242, panelW-28);
 
   panel(rightX,topY,panelW,panelH,'#42d9ff',T('h_title_evidence'));
-  ctx.fillStyle='#42d9ff'; ctx.font=`bold ${Math.round(10*ui)}px "Courier New"`; ctx.textAlign='left';
-  ctx.fillText(intel.op,rightX+14,topY+46);
-  ctx.fillStyle='#d5dde5'; ctx.font=`${Math.round(9*ui)}px "Courier New"`;
-  wrapText(intel.msg,36).slice(0,3).forEach((line,i)=>ctx.fillText(line,rightX+14,topY+66+i*15));
+  ctx.fillStyle='#42d9ff'; ctx.font=`bold ${Math.round(12*ui)}px "Courier New"`; ctx.textAlign='left';
+  ctx.fillText(intel.op,rightX+14,topY+50, panelW-28);
+  ctx.fillStyle='#d5dde5'; ctx.font=`${Math.round(11*ui)}px "Courier New"`;
+  wrapTextPx(intel.msg,panelW-28).slice(0,3).forEach((line,i)=>ctx.fillText(line,rightX+14,topY+70+i*17));
   clueDeck.forEach((clue,i)=>{
-    const cy=topY+118+i*38;
-    ctx.fillStyle='rgba(255,255,255,0.03)'; ctx.fillRect(rightX+12,cy,panelW-24,30);
-    ctx.strokeStyle=featured.color+'55'; ctx.strokeRect(rightX+12,cy,panelW-24,30);
-    ctx.fillStyle=featured.color; ctx.font=`bold ${Math.round(8*ui)}px "Courier New"`;
-    ctx.fillText(`${clue.icon} ${clue.title}`,rightX+20,cy+11);
-    ctx.fillStyle='#7f8b96'; ctx.font=`${Math.round(7*ui)}px "Courier New"`;
+    const cy=topY+126+i*42;
+    ctx.fillStyle='rgba(255,255,255,0.03)'; ctx.fillRect(rightX+12,cy,panelW-24,34);
+    ctx.strokeStyle=featured.color+'55'; ctx.strokeRect(rightX+12,cy,panelW-24,34);
+    ctx.fillStyle=featured.color; ctx.font=`bold ${Math.round(12*ui)}px "Courier New"`;
+    ctx.fillText(`${clue.icon} ${clue.title}`,rightX+20,cy+14);
+    ctx.fillStyle='#7f8b96'; ctx.font=`${Math.round(10*ui)}px "Courier New"`;
     const ttp=clue.ttp.length>42?clue.ttp.slice(0,40)+'…':clue.ttp;
-    ctx.fillText(ttp,rightX+20,cy+23);
+    ctx.fillText(ttp,rightX+20,cy+28);
   });
 
-  panel(LW/2-360,bottomY,720,112,'#AA00FF',T('h_title_protocol'));
-  ctx.font=`${Math.round(10*ui)}px "Courier New"`; ctx.fillStyle='#d5dde5'; ctx.textAlign='center';
-  ctx.fillText(T('h_title_steps1'),LW/2,bottomY+42);
-  ctx.fillText(T('h_title_steps2'),LW/2,bottomY+62);
-  ctx.fillText(T('h_title_steps3'),LW/2,bottomY+82);
+  panel(LW/2-360,bottomY,720,118,'#AA00FF',T('h_title_protocol'));
+  ctx.font=`${Math.round(12*ui)}px "Courier New"`; ctx.fillStyle='#d5dde5'; ctx.textAlign='center';
+  ctx.fillText(T('h_title_steps1'),LW/2,bottomY+44);
+  ctx.fillText(T('h_title_steps2'),LW/2,bottomY+66);
+  ctx.fillText(T('h_title_steps3'),LW/2,bottomY+88);
 
   const stripY=LH-58, cardW=132, cardH=42, gap=10, speed=34;
   const totalW=ADVERSARIES.length*(cardW+gap)-gap;
@@ -18307,9 +18446,9 @@ function drawTitle(dt){
       ctx.save(); ctx.globalAlpha=active?1:0.52;
       ctx.fillStyle='rgba(4,1,18,0.9)'; ctx.strokeStyle=adv.color; ctx.lineWidth=active?2:1; ctx.shadowColor=adv.color; ctx.shadowBlur=active?12:0;
       ctx.beginPath(); ctx.roundRect(ax,stripY,cardW,cardH,4); ctx.fill(); ctx.stroke();
-      ctx.fillStyle=adv.color; ctx.font=`bold ${Math.round(8*ui)}px "Courier New"`; ctx.textAlign='center';
+      ctx.fillStyle=adv.color; ctx.font=`bold ${Math.round(10*ui)}px "Courier New"`; ctx.textAlign='center';
       ctx.fillText(adv.name,ax+cardW/2,stripY+14);
-      ctx.fillStyle='#7f8b96'; ctx.font=`${Math.round(6*ui)}px "Courier New"`;
+      ctx.fillStyle='#7f8b96'; ctx.font=`${Math.round(9*ui)}px "Courier New"`;
       ctx.fillText(adv.target.slice(0,22),ax+cardW/2,stripY+27);
       ctx.fillStyle=adv.threat==='CRITICAL'?'#FF1744':'#FF8D39';
       ctx.fillText(huntThreatLabel(adv.threat),ax+cardW/2,stripY+38);
@@ -18381,7 +18520,7 @@ function drawCaseSelect(dt){
 
     ctx.save();
     ctx.globalAlpha=sel?1:0.7;
-    ctx.fillStyle='rgba(4,1,18,0.92)';
+    ctx.fillStyle='rgba(4,1,18,0.68)';
     ctx.strokeStyle=caseFile.color;
     ctx.lineWidth=sel?2.3:1.1;
     ctx.shadowColor=caseFile.color;
@@ -18397,10 +18536,10 @@ function drawCaseSelect(dt){
 
     ctx.font=`bold ${Math.round((caseFile.name.length>14?8:10)*ui)}px "Courier New"`;
     ctx.fillStyle=caseFile.color; ctx.textAlign='left';
-    ctx.fillText(caseFile.name,cx+8,cy+16);
-    ctx.font=`${Math.round(7*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
+    ctx.fillText(caseFile.name,cx+8,cy+16, cw-16);
+    ctx.font=`${Math.round(10*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
     ctx.fillText(caseFile.nation,cx+8,cy+28);
-    ctx.font=`bold ${Math.round(8*ui)}px "Courier New"`; ctx.fillStyle=threatCol;
+    ctx.font=`bold ${Math.round(10*ui)}px "Courier New"`; ctx.fillStyle=threatCol;
     ctx.fillText(`⚠ ${huntThreatLabel(caseFile.threat)}`,cx+8,cy+42);
     ctx.fillStyle=tierCol;
     ctx.fillText('★'.repeat(ds)+'☆'.repeat(5-ds),cx+8,cy+57);
@@ -18427,79 +18566,79 @@ function drawCaseSelect(dt){
   const leftX=dossierX+18, midX=dossierX+leftW+34, rightX=dossierX+leftW+midW+52;
   const topY=dossierY+54;
 
-  ctx.font=`bold ${Math.round(24*ui)}px "Courier New"`; ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=10;
+  ctx.font=`bold ${Math.round(28*ui)}px "Courier New"`; ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=10;
   ctx.fillText(adv.name,leftX,topY); ctx.shadowBlur=0;
-  ctx.font=`bold ${Math.round(10*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
-  ctx.fillText(adv.caseTitle,leftX,topY+22);
-  ctx.font=`${Math.round(9*ui)}px "Courier New"`; ctx.fillStyle='#d5dde5';
-  ctx.fillText(`"${adv.motto}"`,leftX,topY+42);
+  ctx.font=`bold ${Math.round(12*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
+  ctx.fillText(adv.caseTitle,leftX,topY+24, leftW-20);
+  ctx.font=`${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#d5dde5';
+  ctx.fillText(`"${adv.motto}"`,leftX,topY+44, leftW-20);
 
-  ctx.font=`bold ${Math.round(9*ui)}px "Courier New"`; ctx.fillStyle='#42d9ff';
-  ctx.fillText(T('h_case_brief'),leftX,topY+76);
-  ctx.font=`${Math.round(9*ui)}px "Courier New"`; ctx.fillStyle='#d5dde5';
-  wrapText(adv.brief,44).slice(0,4).forEach((line,i)=>ctx.fillText(line,leftX,topY+96+i*16));
+  ctx.font=`bold ${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#42d9ff';
+  ctx.fillText(T('h_case_brief'),leftX,topY+78);
+  ctx.font=`${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#d5dde5';
+  wrapTextPx(adv.brief,leftW-20).slice(0,4).forEach((line,i)=>ctx.fillText(line,leftX,topY+98+i*18));
 
   const metricY=topY+172;
-  ctx.font=`bold ${Math.round(8*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
+  ctx.font=`bold ${Math.round(10*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
   ctx.fillText(T('h_case_target'),leftX,metricY);
-  ctx.fillStyle='#d5dde5'; ctx.font=`${Math.round(9*ui)}px "Courier New"`;
-  ctx.fillText(adv.target,leftX,metricY+16);
-  ctx.fillStyle='#7f8b96'; ctx.font=`bold ${Math.round(8*ui)}px "Courier New"`;
+  ctx.fillStyle='#d5dde5'; ctx.font=`${Math.round(10*ui)}px "Courier New"`;
+  ctx.fillText(adv.target,leftX,metricY+16, leftW-20);
+  ctx.fillStyle='#7f8b96'; ctx.font=`bold ${Math.round(10*ui)}px "Courier New"`;
   ctx.fillText(T('h_case_route'),leftX,metricY+42);
   ctx.fillStyle=adv.color; ctx.fillText(`${'●'.repeat(adv.difficulty||1)}${'○'.repeat(5-(adv.difficulty||1))}  ${estimatedHops} ${T('h_case_hops')}`,leftX,metricY+58);
 
-  ctx.font=`bold ${Math.round(9*ui)}px "Courier New"`; ctx.fillStyle='#FFE600';
+  ctx.font=`bold ${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#FFE600';
   ctx.fillText(T('h_case_evidence'),midX,topY+8);
   adv.clues.slice(0,3).forEach((clue,i)=>{
-    const cy=topY+26+i*52;
+    const cy=topY+28+i*56;
     ctx.fillStyle='rgba(255,255,255,0.03)'; ctx.strokeStyle=adv.color+'55'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.roundRect(midX,cy,midW-24,40,4); ctx.fill(); ctx.stroke();
-    ctx.font=`bold ${Math.round(8*ui)}px "Courier New"`; ctx.fillStyle=adv.color;
-    ctx.fillText(`${clue.icon} ${clue.title}`,midX+10,cy+14);
-    ctx.font=`${Math.round(7*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
+    ctx.beginPath(); ctx.roundRect(midX,cy,midW-24,44,4); ctx.fill(); ctx.stroke();
+    ctx.font=`bold ${Math.round(12*ui)}px "Courier New"`; ctx.fillStyle=adv.color;
+    ctx.fillText(`${clue.icon} ${clue.title}`,midX+10,cy+16);
+    ctx.font=`${Math.round(10*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
     const snippet=clue.ttp.length>40?clue.ttp.slice(0,38)+'…':clue.ttp;
-    ctx.fillText(snippet,midX+10,cy+28);
+    ctx.fillText(snippet,midX+10,cy+32);
   });
 
-  ctx.font=`bold ${Math.round(9*ui)}px "Courier New"`; ctx.fillStyle='#39FF14';
+  ctx.font=`bold ${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#39FF14';
   ctx.fillText(T('h_case_lens'),rightX,topY+8);
   ctx.fillStyle='rgba(8,2,26,0.86)'; ctx.strokeStyle='#39FF14'; ctx.lineWidth=1.2;
-  ctx.beginPath(); ctx.roundRect(rightX,topY+22,dossierW-rightX+dossierX-18,48,5); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.roundRect(rightX,topY+22,dossierW-rightX+dossierX-18,52,5); ctx.fill(); ctx.stroke();
+  ctx.font=`bold ${Math.round(14*ui)}px "Courier New"`; ctx.fillStyle='#d5dde5';
+  ctx.fillText(huntLens.label,rightX+10,topY+44);
+  ctx.font=`${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
+  ctx.fillText(huntLens.desc,rightX+10,topY+60,dossierW-rightX+dossierX-36);
+
+  ctx.font=`bold ${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#42d9ff';
+  ctx.fillText(T('h_case_module'),rightX,topY+88);
   ctx.font=`bold ${Math.round(12*ui)}px "Courier New"`; ctx.fillStyle='#d5dde5';
-  ctx.fillText(huntLens.label,rightX+10,topY+42);
-  ctx.font=`${Math.round(8*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
-  ctx.fillText(huntLens.desc,rightX+10,topY+57,dossierW-rightX+dossierX-36);
+  ctx.fillText(adv.counterModule,rightX,topY+106);
 
-  ctx.font=`bold ${Math.round(8*ui)}px "Courier New"`; ctx.fillStyle='#42d9ff';
-  ctx.fillText(T('h_case_module'),rightX,topY+84);
-  ctx.font=`bold ${Math.round(10*ui)}px "Courier New"`; ctx.fillStyle='#d5dde5';
-  ctx.fillText(adv.counterModule,rightX,topY+101);
-
-  const statsY=topY+132;
-  ctx.font=`bold ${Math.round(8*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
+  const statsY=topY+138;
+  ctx.font=`bold ${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
   ctx.fillText(T('h_case_pressure'),rightX,statsY);
-  ctx.fillStyle='#FF8D39'; ctx.font=`bold ${Math.round(14*ui)}px "Courier New"`;
-  ctx.fillText(`${pressureWindow}s`,rightX,statsY+20);
+  ctx.fillStyle='#FF8D39'; ctx.font=`bold ${Math.round(16*ui)}px "Courier New"`;
+  ctx.fillText(`${pressureWindow}s`,rightX,statsY+22);
   ctx.fillStyle='#1a1a2e'; ctx.fillRect(rightX,statsY+30,180,8);
   ctx.fillStyle='#FF8D39'; ctx.fillRect(rightX,statsY+30,180*(pressureWindow/32),8);
 
-  ctx.font=`bold ${Math.round(8*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
-  ctx.fillText(T('h_case_confidence'),rightX,statsY+58);
-  ctx.fillStyle='#42d9ff'; ctx.font=`bold ${Math.round(14*ui)}px "Courier New"`;
-  ctx.fillText(`${confidence}%`,rightX,statsY+78);
+  ctx.font=`bold ${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
+  ctx.fillText(T('h_case_confidence'),rightX,statsY+60);
+  ctx.fillStyle='#42d9ff'; ctx.font=`bold ${Math.round(16*ui)}px "Courier New"`;
+  ctx.fillText(`${confidence}%`,rightX,statsY+82);
   ctx.fillStyle='#1a1a2e'; ctx.fillRect(rightX,statsY+88,180,8);
   ctx.fillStyle='#42d9ff'; ctx.fillRect(rightX,statsY+88,180*(confidence/100),8);
 
-  ctx.font=`bold ${Math.round(8*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
-  ctx.fillText(T('h_case_posture'),rightX,statsY+118);
+  ctx.font=`bold ${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
+  ctx.fillText(T('h_case_posture'),rightX,statsY+122);
   ctx.fillStyle=adv.threat==='CRITICAL'?'#FF1744':'#FF8D39';
-  ctx.font=`bold ${Math.round(12*ui)}px "Courier New"`;
-  ctx.fillText(huntThreatLabel(adv.threat),rightX,statsY+138);
+  ctx.font=`bold ${Math.round(14*ui)}px "Courier New"`;
+  ctx.fillText(huntThreatLabel(adv.threat),rightX,statsY+142);
   ctx.fillStyle=adv.color+'22';
   ctx.fillRect(rightX+96,statsY+120,120,22);
   ctx.strokeStyle=adv.color; ctx.strokeRect(rightX+96,statsY+120,120,22);
-  ctx.fillStyle=adv.color; ctx.font=`bold ${Math.round(8*ui)}px "Courier New"`;
-  ctx.fillText(adv.nation,rightX+104,statsY+134);
+  ctx.fillStyle=adv.color; ctx.font=`bold ${Math.round(10*ui)}px "Courier New"`;
+  ctx.fillText(adv.nation,rightX+104,statsY+134, 110);
 
   const stripY=LH-50, cardW=Math.round(132*ui), cardH=Math.round(34*ui), gap2=Math.round(10*ui);
   const totalW=ADVERSARIES.length*(cardW+gap2)-gap2;
@@ -18513,11 +18652,11 @@ function drawCaseSelect(dt){
       if(ax+cardW<-10||ax>LW+10) return;
       const active=caseFile.id===adv.id;
       ctx.globalAlpha=active?1:0.44;
-      ctx.fillStyle='rgba(4,1,18,0.92)'; ctx.strokeStyle=caseFile.color; ctx.lineWidth=active?2:1;
+      ctx.fillStyle='rgba(4,1,18,0.68)'; ctx.strokeStyle=caseFile.color; ctx.lineWidth=active?2:1;
       ctx.beginPath(); ctx.roundRect(ax,stripY,cardW,cardH,4); ctx.fill(); ctx.stroke();
-      ctx.fillStyle=caseFile.color; ctx.font=`bold ${Math.round(7*ui)}px "Courier New"`; ctx.textAlign='center';
+      ctx.fillStyle=caseFile.color; ctx.font=`bold ${Math.round(9*ui)}px "Courier New"`; ctx.textAlign='center';
       ctx.fillText(caseFile.name,ax+cardW/2,stripY+13);
-      ctx.fillStyle='#7f8b96'; ctx.font=`${Math.round(6*ui)}px "Courier New"`;
+      ctx.fillStyle='#7f8b96'; ctx.font=`${Math.round(9*ui)}px "Courier New"`;
       ctx.fillText(caseFile.caseTitle.slice(0,18),ax+cardW/2,stripY+26);
     });
   }
@@ -18545,49 +18684,50 @@ function drawBriefing(dt){
   const alpha=Math.min(1,briefingT/0.5);
   ctx.save(); ctx.globalAlpha=alpha; ctx.textAlign='center';
 
-  // Wanted poster background
-  ctx.fillStyle='rgba(4,1,18,0.96)'; ctx.strokeStyle=adv.color; ctx.lineWidth=2;
-  ctx.shadowColor=adv.color; ctx.shadowBlur=20;
-  ctx.beginPath(); ctx.roundRect(LW/2-320,LH/2-230,640,460,6); ctx.fill(); ctx.stroke(); ctx.shadowBlur=0;
+  // Wanted poster background — BIGGER
+  const _brW=Math.round(740*ui),_brH=Math.round(520*ui);
+  ctx.fillStyle='rgba(4,1,18,0.68)'; ctx.strokeStyle=adv.color; ctx.lineWidth=2.5;
+  ctx.shadowColor=adv.color; ctx.shadowBlur=28;
+  ctx.beginPath(); ctx.roundRect(LW/2-_brW/2,LH/2-_brH/2,_brW,_brH,8); ctx.fill(); ctx.stroke(); ctx.shadowBlur=0;
 
   // WANTED header
-  ctx.fillStyle=adv.color+'33'; ctx.fillRect(LW/2-320,LH/2-230,640,44);
-  ctx.font=huntFont(12,'bold'); ctx.fillStyle='#7f8b96'; ctx.fillText(T('h_brief_header'),LW/2,LH/2-204);
+  ctx.fillStyle=adv.color+'28'; ctx.fillRect(LW/2-_brW/2,LH/2-_brH/2,_brW,52);
+  ctx.font=huntFont(14,'bold'); ctx.fillStyle='#7f8b96'; ctx.fillText(T('h_brief_header'),LW/2,LH/2-_brH/2+34);
 
-  ctx.font=`bold ${Math.round(38*ui)}px "Courier New",monospace`; ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=22;
-  ctx.fillText(adv.name,LW/2,LH/2-148); ctx.shadowBlur=0;
-  ctx.font=huntFont(12,'bold'); ctx.fillStyle='#7f8b96'; ctx.fillText(adv.aka,LW/2,LH/2-124);
-  ctx.font=huntFont(10,'bold'); ctx.fillStyle=adv.nation.includes('Russia')?'#FF1744':adv.nation.includes('China')?'#FF8D39':adv.nation.includes('Korea')?'#FFD700':'#4488FF';
-  ctx.fillText(adv.nation,LW/2,LH/2-105);
+  ctx.font=huntFont(42,'bold'); ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=26;
+  ctx.fillText(adv.name,LW/2,LH/2-_brH/2+96); ctx.shadowBlur=0;
+  ctx.font=huntFont(14,'bold'); ctx.fillStyle='#7f8b96'; ctx.fillText(adv.aka,LW/2,LH/2-_brH/2+120);
+  ctx.font=huntFont(12,'bold'); ctx.fillStyle=adv.nation.includes('Russia')?'#FF1744':adv.nation.includes('China')?'#FF8D39':adv.nation.includes('Korea')?'#FFD700':'#4488FF';
+  ctx.fillText(adv.nation,LW/2,LH/2-_brH/2+142);
 
   ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(LW/2-280,LH/2-90); ctx.lineTo(LW/2+280,LH/2-90); ctx.stroke();
+  const _brL=LW/2-_brW/2+40, _brR=LW/2+_brW/2-40;
+  ctx.beginPath(); ctx.moveTo(_brL,LH/2-_brH/2+156); ctx.lineTo(_brR,LH/2-_brH/2+156); ctx.stroke();
 
-  // Case details
+  // Case details — bigger fonts
   const details=[[T('h_label_case'),adv.caseTitle],[T('h_label_threat'),huntThreatLabel(adv.threat)],[T('h_label_target'),adv.target],[T('h_label_counter'),adv.counterModule]];
   details.forEach(([k,v],i)=>{
-    ctx.font=huntFont(10,'bold'); ctx.fillStyle='#555'; ctx.textAlign='left'; ctx.fillText(k,LW/2-280,LH/2-70+i*24);
-    ctx.fillStyle=i===1?(adv.threat==='CRITICAL'?'#FF1744':'#FF8D39'):'#d5dde5'; ctx.fillText(v,LW/2-200,LH/2-70+i*24);
+    ctx.font=huntFont(12,'bold'); ctx.fillStyle='#555'; ctx.textAlign='left'; ctx.fillText(k,_brL,LH/2-_brH/2+180+i*28);
+    ctx.fillStyle=i===1?(adv.threat==='CRITICAL'?'#FF1744':'#FF8D39'):'#d5dde5'; ctx.fillText(v,_brL+100,LH/2-_brH/2+180+i*28);
   });
 
   ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(LW/2-280,LH/2+32); ctx.lineTo(LW/2+280,LH/2+32); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(_brL,LH/2-_brH/2+296); ctx.lineTo(_brR,LH/2-_brH/2+296); ctx.stroke();
 
-  // Briefing text
-  ctx.font=huntFont(11); ctx.fillStyle='#d5dde5'; ctx.textAlign='center';
-  const words=adv.brief.split(' '); let line='',ly=LH/2+54;
-  for(const w of words){const test=line+w+' ';if(ctx.measureText(test).width>550&&line!==''){ctx.fillText(line,LW/2,ly);line=w+' ';ly+=17;}else line=test;}
-  ctx.fillText(line,LW/2,ly);
+  // Briefing text — bigger
+  ctx.font=huntFont(13); ctx.fillStyle='#d5dde5'; ctx.textAlign='center';
+  const briefLines=wrapTextPx(adv.brief,_brW-100); let ly=LH/2-_brH/2+320;
+  briefLines.forEach(l=>{ctx.fillText(l,LW/2,ly);ly+=20;});
 
-  ctx.font=huntFont(10,'bold'); ctx.fillStyle='#AA00FF';
-  ctx.fillText(`${T('h_brief_open')}: ${huntLens.label}`,LW/2,ly+28);
-  ctx.font=huntFont(9); ctx.fillStyle='#7f8b96';
+  ctx.font=huntFont(12,'bold'); ctx.fillStyle='#AA00FF';
+  ctx.fillText(`${T('h_brief_open')}: ${huntLens.label}`,LW/2,ly+26);
+  ctx.font=huntFont(11); ctx.fillStyle='#7f8b96';
   ctx.fillText(huntLens.desc,LW/2,ly+46);
-  ctx.font=huntFont(9,'bold'); ctx.fillStyle='#42d9ff';
-  ctx.fillText(`${T('h_brief_impact')}: ${adv.counterModule}`,LW/2,ly+64);
+  ctx.font=huntFont(11,'bold'); ctx.fillStyle='#42d9ff';
+  ctx.fillText(`${T('h_brief_impact')}: ${adv.counterModule}`,LW/2,ly+66);
 
   if(briefingT>1.5&&Math.floor(briefingT*3)%2===0){
-    ctx.font=huntFont(13,'bold'); ctx.fillStyle='#fff'; ctx.fillText(T('g_begin_hunt'),LW/2,LH/2+198);
+    ctx.font=huntFont(16,'bold'); ctx.fillStyle='#fff'; ctx.fillText(T('g_begin_hunt'),LW/2,LH/2+_brH/2-22);
   }
   ctx.restore(); ctx.textAlign='left';
 }
@@ -18603,25 +18743,26 @@ function drawIntercept(dt){
   // World map in background
   drawWorldMap();
   ctx.fillStyle='rgba(2,3,8,0.82)'; ctx.fillRect(0,0,LW,LH);
-  ctx.fillStyle='rgba(4,1,18,0.95)'; ctx.strokeStyle='#39FF14'; ctx.lineWidth=2; ctx.shadowColor='#39FF14'; ctx.shadowBlur=18;
-  ctx.beginPath(); ctx.roundRect(LW/2-360,LH/2-190,720,380,6); ctx.fill(); ctx.stroke(); ctx.shadowBlur=0;
-  ctx.fillStyle='rgba(57,255,20,0.06)'; ctx.fillRect(LW/2-360,LH/2-190,720,380);
+  ctx.fillStyle='rgba(4,1,18,0.68)'; ctx.strokeStyle='#39FF14'; ctx.lineWidth=2; ctx.shadowColor='#39FF14'; ctx.shadowBlur=18;
+  const _iw=Math.round(780*ui),_ih=Math.round(440*ui);
+  ctx.beginPath(); ctx.roundRect(LW/2-_iw/2,LH/2-_ih/2,_iw,_ih,8); ctx.fill(); ctx.stroke(); ctx.shadowBlur=0;
+  ctx.fillStyle='rgba(57,255,20,0.05)'; ctx.fillRect(LW/2-_iw/2,LH/2-_ih/2,_iw,_ih);
   ctx.textAlign='center';
-  ctx.font=`bold ${Math.round(42*ui)}px "Courier New"`; ctx.fillStyle='#39FF14'; ctx.shadowColor='#39FF14'; ctx.shadowBlur=28;
-  ctx.fillText(T('g_neutralised'),LW/2,LH/2-118); ctx.shadowBlur=0;
-  ctx.font=huntFont(14,'bold'); ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=10;
-  ctx.fillText(`${adv.name} — ${T('h_intercept_line')}`,LW/2,LH/2-78); ctx.shadowBlur=0;
-  ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(LW/2-300,LH/2-58); ctx.lineTo(LW/2+300,LH/2-58); ctx.stroke();
-  ctx.font=huntFont(11); ctx.fillStyle='#d5dde5'; ctx.fillText(`${adv.counterModule} ${T('h_intercept_module_line')}`,LW/2,LH/2-34);
-  const words=adv.brief.split(' ').slice(0,18).join(' ')+'…'; ctx.font=huntFont(10); ctx.fillStyle='#7f8b96'; ctx.fillText(words,LW/2,LH/2-14);
-  ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.beginPath(); ctx.moveTo(LW/2-300,LH/2+4); ctx.lineTo(LW/2+300,LH/2+4); ctx.stroke();
+  ctx.font=huntFont(48,'bold'); ctx.fillStyle='#39FF14'; ctx.shadowColor='#39FF14'; ctx.shadowBlur=32;
+  ctx.fillText(T('g_neutralised'),LW/2,LH/2-128); ctx.shadowBlur=0;
+  ctx.font=huntFont(16,'bold'); ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=12;
+  ctx.fillText(`${adv.name} — ${T('h_intercept_line')}`,LW/2,LH/2-84); ctx.shadowBlur=0;
+  ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(LW/2-340,LH/2-62); ctx.lineTo(LW/2+340,LH/2-62); ctx.stroke();
+  ctx.font=huntFont(13); ctx.fillStyle='#d5dde5'; ctx.fillText(`${adv.counterModule} ${T('h_intercept_module_line')}`,LW/2,LH/2-36, _iw-60);
+  const words=adv.brief.split(' ').slice(0,18).join(' ')+'…'; ctx.font=huntFont(12); ctx.fillStyle='#7f8b96'; ctx.fillText(words,LW/2,LH/2-14);
+  ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.beginPath(); ctx.moveTo(LW/2-340,LH/2+6); ctx.lineTo(LW/2+340,LH/2+6); ctx.stroke();
   const grade=huntRankLabel(score);
-  ctx.font=huntFont(18,'bold'); ctx.fillStyle='#FFD700'; ctx.shadowColor='#FFD700'; ctx.shadowBlur=10; ctx.fillText(`${T('g_score')}: ${formatLocaleNumber(score)}`,LW/2,LH/2+32); ctx.shadowBlur=0;
-  ctx.font=huntFont(13,'bold'); ctx.fillStyle='#39FF14'; ctx.shadowColor='#39FF14'; ctx.shadowBlur=8; ctx.fillText(`${T('h_rank_label')}: ${grade}`,LW/2,LH/2+55); ctx.shadowBlur=0;
-  if(score>=hi&&score>0){ctx.font=huntFont(11,'bold'); ctx.fillStyle='#39FF14'; ctx.fillText(T('g_new_record'),LW/2,LH/2+78);}
-  ctx.font=huntFont(11,'bold'); ctx.fillStyle='#fff'; ctx.fillText(T('g_new_case'),LW/2,LH/2+148);
-  ctx.font=huntFont(9); ctx.fillStyle='#AA00FF'; ctx.shadowColor='#AA00FF'; ctx.shadowBlur=8;
-  ctx.fillText(T('g_brand_tag'),LW/2,LH/2+170); ctx.shadowBlur=0;
+  ctx.font=huntFont(22,'bold'); ctx.fillStyle='#FFD700'; ctx.shadowColor='#FFD700'; ctx.shadowBlur=12; ctx.fillText(`${T('g_score')}: ${formatLocaleNumber(score)}`,LW/2,LH/2+38); ctx.shadowBlur=0;
+  ctx.font=huntFont(15,'bold'); ctx.fillStyle='#39FF14'; ctx.shadowColor='#39FF14'; ctx.shadowBlur=8; ctx.fillText(`${T('h_rank_label')}: ${grade}`,LW/2,LH/2+64); ctx.shadowBlur=0;
+  if(score>=hi&&score>0){ctx.font=huntFont(13,'bold'); ctx.fillStyle='#39FF14'; ctx.fillText(T('g_new_record'),LW/2,LH/2+88);}
+  ctx.font=huntFont(14,'bold'); ctx.fillStyle='#fff'; ctx.fillText(T('g_new_case'),LW/2,LH/2+160);
+  ctx.font=huntFont(11); ctx.fillStyle='#AA00FF'; ctx.shadowColor='#AA00FF'; ctx.shadowBlur=8;
+  ctx.fillText(T('g_brand_tag'),LW/2,LH/2+184); ctx.shadowBlur=0;
   ctx.textAlign='left';
   ctx.restore();
 }
@@ -18636,23 +18777,24 @@ function drawBreach(dt){
   ctx.save(); ctx.globalAlpha=Math.min(1, breachT/0.55);
   ctx.fillStyle='#020308'; ctx.fillRect(0,0,LW,LH); drawStars();
   drawWorldMap(); ctx.fillStyle='rgba(2,3,8,0.88)'; ctx.fillRect(0,0,LW,LH);
-  ctx.fillStyle='rgba(4,1,18,0.96)'; ctx.strokeStyle='#FF1744'; ctx.lineWidth=2; ctx.shadowColor='#FF1744'; ctx.shadowBlur=18;
-  ctx.beginPath(); ctx.roundRect(LW/2-360,LH/2-190,720,380,6); ctx.fill(); ctx.stroke(); ctx.shadowBlur=0;
+  const _bw=Math.round(780*ui),_bh=Math.round(440*ui);
+  ctx.fillStyle='rgba(4,1,18,0.68)'; ctx.strokeStyle='#FF1744'; ctx.lineWidth=2.5; ctx.shadowColor='#FF1744'; ctx.shadowBlur=24;
+  ctx.beginPath(); ctx.roundRect(LW/2-_bw/2,LH/2-_bh/2,_bw,_bh,8); ctx.fill(); ctx.stroke(); ctx.shadowBlur=0;
   ctx.textAlign='center';
-  ctx.font=`bold ${Math.round(38*ui)}px "Courier New"`; ctx.fillStyle='#FF1744'; ctx.shadowColor='#FF1744'; ctx.shadowBlur=28;
-  ctx.fillText(T('g_breach_succeeded'),LW/2,LH/2-130); ctx.shadowBlur=0;
-  ctx.font=huntFont(13,'bold'); ctx.fillStyle='#7f8b96'; ctx.fillText(T('h_breach_line1'),LW/2,LH/2-98);
-  ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(LW/2-300,LH/2-80); ctx.lineTo(LW/2+300,LH/2-80); ctx.stroke();
-  ctx.font=huntFont(12,'bold'); ctx.fillStyle='#FF8D39'; ctx.shadowColor='#FF8D39'; ctx.shadowBlur=8; ctx.fillText(T('g_what_falcon'),LW/2,LH/2-56); ctx.shadowBlur=0;
-  ctx.font=huntFont(15,'bold'); ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=10; ctx.fillText(adv.counterModule,LW/2,LH/2-28); ctx.shadowBlur=0;
-  ctx.font=huntFont(10); ctx.fillStyle='#d5dde5'; ctx.fillText(adv.brief.split('.')[0]+'.',LW/2,LH/2-4);
-  ctx.font=huntFont(9); ctx.fillStyle='#7f8b96'; ctx.fillText(`${T('h_brief_open')}: ${huntLens.label}`,LW/2,LH/2+18);
-  ctx.font=huntFont(9); ctx.fillStyle='#42d9ff'; ctx.fillText(T('h_breach_line2'),LW/2,LH/2+38);
-  ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.beginPath(); ctx.moveTo(LW/2-300,LH/2+56); ctx.lineTo(LW/2+300,LH/2+56); ctx.stroke();
-  ctx.font=huntFont(15,'bold'); ctx.fillStyle='#FFD700'; ctx.fillText(`${T('g_score')}: ${formatLocaleNumber(score)}`,LW/2,LH/2+86);
-  ctx.font=huntFont(11,'bold'); ctx.fillStyle='#fff'; ctx.fillText(T('h_breach_retry'),LW/2,LH/2+148);
-  ctx.font=huntFont(9); ctx.fillStyle='#AA00FF'; ctx.shadowColor='#AA00FF'; ctx.shadowBlur=8;
-  ctx.fillText(T('g_brand_tag'),LW/2,LH/2+170); ctx.shadowBlur=0;
+  ctx.font=huntFont(44,'bold'); ctx.fillStyle='#FF1744'; ctx.shadowColor='#FF1744'; ctx.shadowBlur=32;
+  ctx.fillText(T('g_breach_succeeded'),LW/2,LH/2-140); ctx.shadowBlur=0;
+  ctx.font=huntFont(15,'bold'); ctx.fillStyle='#7f8b96'; ctx.fillText(T('h_breach_line1'),LW/2,LH/2-104);
+  ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(LW/2-340,LH/2-84); ctx.lineTo(LW/2+340,LH/2-84); ctx.stroke();
+  ctx.font=huntFont(14,'bold'); ctx.fillStyle='#FF8D39'; ctx.shadowColor='#FF8D39'; ctx.shadowBlur=8; ctx.fillText(T('g_what_falcon'),LW/2,LH/2-58); ctx.shadowBlur=0;
+  ctx.font=huntFont(18,'bold'); ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=12; ctx.fillText(adv.counterModule,LW/2,LH/2-28); ctx.shadowBlur=0;
+  ctx.font=huntFont(12); ctx.fillStyle='#d5dde5'; ctx.fillText(adv.brief.split('.')[0]+'.',LW/2,LH/2-2, LW-200);
+  ctx.font=huntFont(11); ctx.fillStyle='#7f8b96'; ctx.fillText(`${T('h_brief_open')}: ${huntLens.label}`,LW/2,LH/2+22);
+  ctx.font=huntFont(11); ctx.fillStyle='#42d9ff'; ctx.fillText(T('h_breach_line2'),LW/2,LH/2+44);
+  ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.beginPath(); ctx.moveTo(LW/2-340,LH/2+62); ctx.lineTo(LW/2+340,LH/2+62); ctx.stroke();
+  ctx.font=huntFont(20,'bold'); ctx.fillStyle='#FFD700'; ctx.fillText(`${T('g_score')}: ${formatLocaleNumber(score)}`,LW/2,LH/2+96);
+  ctx.font=huntFont(14,'bold'); ctx.fillStyle='#fff'; ctx.fillText(T('h_breach_retry'),LW/2,LH/2+160);
+  ctx.font=huntFont(11); ctx.fillStyle='#AA00FF'; ctx.shadowColor='#AA00FF'; ctx.shadowBlur=8;
+  ctx.fillText(T('g_brand_tag'),LW/2,LH/2+184); ctx.shadowBlur=0;
   ctx.textAlign='left';
   ctx.restore();
 }
@@ -18664,40 +18806,44 @@ function drawWorldMapHUD(){
   const adv=selectedCase, node=NODES[caseRoute[advNodeIdx]];
   const DS=getDifficultySettings();
 
-  // ── Info panel (compact, above pursuit bar) ───────────────────
-  ctx.fillStyle='rgba(4,1,18,0.92)';
-  ctx.strokeStyle='rgba(170,0,255,0.35)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.roundRect(12,LH-116,350,52,4); ctx.fill(); ctx.stroke();
-
-  ctx.font='bold 7px "Courier New"'; ctx.fillStyle='#444';
-  ctx.fillText(T('g_last_pos'),18,LH-100);
-  ctx.font='bold 11px "Courier New"'; ctx.fillStyle=adv.color;
-  ctx.shadowColor=adv.color; ctx.shadowBlur=6;
-  ctx.fillText(`${node?.name||T('g_unknown')} — ${node?.org||''}`,18,LH-85);
+  // ── Info panel (above pursuit bar) ─────────────────────────────
+  ctx.fillStyle='rgba(4,1,18,0.68)';
+  ctx.strokeStyle='rgba(170,0,255,0.45)'; ctx.lineWidth=1.5;
+  ctx.shadowColor='rgba(170,0,255,0.25)'; ctx.shadowBlur=10;
+  ctx.beginPath(); ctx.roundRect(12,LH-128,400,66,6); ctx.fill(); ctx.stroke();
   ctx.shadowBlur=0;
-  ctx.font='8px "Courier New"'; ctx.fillStyle='#7f8b96';
-  ctx.fillText(`${adv.name}  ·  ${node?.sector||''}  ·  ${DS.tierLabel}`,18,LH-70);
-  ctx.font='bold 9px "Courier New"'; ctx.fillStyle='#39FF14';
-  ctx.shadowColor='#39FF14'; ctx.shadowBlur=5;
-  ctx.fillText(T('g_investigate'),18,LH-56);
+
+  ctx.font=huntFont(11,'bold'); ctx.fillStyle='#555';
+  ctx.fillText(T('g_last_pos'),20,LH-112);
+  ctx.font=huntFont(14,'bold'); ctx.fillStyle=adv.color;
+  ctx.shadowColor=adv.color; ctx.shadowBlur=8;
+  ctx.fillText(`${node?.name||T('g_unknown')} — ${node?.org||''}`,20,LH-94, 380);
+  ctx.shadowBlur=0;
+  ctx.font=huntFont(11); ctx.fillStyle='#7f8b96';
+  ctx.fillText(`${adv.name}  ·  ${node?.sector||''}  ·  ${DS.tierLabel}`,20,LH-76, 380);
+  ctx.font=huntFont(12,'bold'); ctx.fillStyle='#39FF14';
+  ctx.shadowColor='#39FF14'; ctx.shadowBlur=6;
+  ctx.fillText(T('g_investigate'),20,LH-60);
   ctx.shadowBlur=0;
 
   // ── Objective panel (compact) ─────────────────────────────────
   const objNode=NODES[caseRoute[caseRoute.length-1]];
   if(objNode){
-    ctx.fillStyle='rgba(4,1,18,0.92)';
-    ctx.strokeStyle='rgba(255,215,0,0.35)'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.roundRect(LW-222,LH-116,210,52,4); ctx.fill(); ctx.stroke();
-    ctx.font='bold 7px "Courier New"'; ctx.fillStyle='#555';
-    ctx.fillText(T('g_objective_target'),LW-216,LH-100);
-    ctx.font='bold 10px "Courier New"'; ctx.fillStyle='#FFD700';
-    ctx.shadowColor='#FFD700'; ctx.shadowBlur=6;
-    ctx.fillText(`${objNode.icon} ${objNode.name}`,LW-216,LH-84);
+    ctx.fillStyle='rgba(4,1,18,0.68)';
+    ctx.strokeStyle='rgba(255,215,0,0.45)'; ctx.lineWidth=1.5;
+    ctx.shadowColor='rgba(255,215,0,0.2)'; ctx.shadowBlur=10;
+    ctx.beginPath(); ctx.roundRect(LW-260,LH-128,248,66,6); ctx.fill(); ctx.stroke();
     ctx.shadowBlur=0;
-    ctx.font='8px "Courier New"'; ctx.fillStyle='#7f8b96';
-    ctx.fillText(objNode.org,LW-216,LH-70);
-    ctx.font='bold 7px "Courier New"'; ctx.fillStyle='#555';
-    ctx.fillText(`${T('g_sector')}: ${objNode.sector}`,LW-216,LH-58);
+    ctx.font=huntFont(11,'bold'); ctx.fillStyle='#666';
+    ctx.fillText(T('g_objective_target'),LW-252,LH-112);
+    ctx.font=huntFont(13,'bold'); ctx.fillStyle='#FFD700';
+    ctx.shadowColor='#FFD700'; ctx.shadowBlur=8;
+    ctx.fillText(`${objNode.icon} ${objNode.name}`,LW-252,LH-94);
+    ctx.shadowBlur=0;
+    ctx.font=huntFont(11); ctx.fillStyle='#7f8b96';
+    ctx.fillText(objNode.org,LW-252,LH-76);
+    ctx.font=huntFont(11,'bold'); ctx.fillStyle='#555';
+    ctx.fillText(`${T('g_sector')}: ${objNode.sector}`,LW-252,LH-60);
   }
 
   drawPursuitBar();
@@ -18931,7 +19077,7 @@ function frame(ts){
       break;
 
     case STATE.WORLD_MAP:
-      updStars(dt); updPackets(dt);
+      updStars(dt); updPackets(dt); updCyberParts(dt);
       if(advMoving){advMoveT+=dt;if(advMoveT>=advMoveDur){advMoving=false;advMoveT=0;}}
       if(hk('Space')){
         // Start investigation
