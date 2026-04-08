@@ -17176,6 +17176,23 @@ const CONNECTIONS=[
   // UK
   ['london_hosp','amsterdam'],['london_hosp','swift_node'],
   ['quantico','brussels'],['quantico','dc'],
+  // ── Cross-continental C2 corridors (nation-state routing) ─────
+  // Trans-Atlantic superhighways
+  ['seattle','london'],['seattle','amsterdam'],
+  ['new_york','frankfurt_e'],['dc','berlin'],
+  // Trans-Pacific APT corridors
+  ['seattle','tokyo'],['new_york','tokyo'],
+  ['singapore','seattle'],['singapore','new_york'],
+  // LatAm to Europe (eCrime & financial fraud routes)
+  ['bogota','london'],['sao_paulo','frankfurt_b'],['sao_paulo','dark_web'],
+  // Middle East as global relay hub
+  ['dubai','beijing'],['dubai','london'],['dubai','frankfurt_e'],
+  // Russia–DPRK axis
+  ['kremlin','pyongyang'],['gru','beijing'],
+  // Dark web global clearinghouse
+  ['dark_web','new_york'],['dark_web','london'],['dark_web','beijing'],
+  // Additional European density
+  ['london','frankfurt_b'],['london','geneva'],
 ];
 
 
@@ -17194,19 +17211,31 @@ const ADVERSARIES=[
     target:'Corporate Identity & Cloud Infrastructure',
     motto:'We are already your IT department.',
     caseTitle:'OPERATION PHANTOM HELPDESK',
-    brief:'One phone call bypassed $2 million in security technology. SCATTERED SPIDER is inside right now — no malware, just valid credentials and patience. Trace the call, follow the credential, cut them off before they reach the wire.',
+    brief:'September 2023. One phone call bypassed $2 million in security controls at MGM Resorts. SCATTERED SPIDER cold-called IT and posed as a new hire. MFA reset granted in minutes. $100 million in losses followed. The same group hit Caesars Entertainment and walked out with $15M ransom. Trace the vishing call, follow the stolen credential, cut them off before the wire clears.',
     counterModule:'🪪 Falcon Identity',
     route:['dark_web','amsterdam','london','new_york','swift_node'],
     objective:'swift_node',
+    phaseNames:['INITIAL COMPROMISE','IDENTITY PIVOT','FINANCIAL EXFILTRATION'],
+    moduleClues:{
+      identity:{phase:0,type:'MODULE',icon:'🪪',title:'Identity Graph Anomaly',text:'Falcon Identity detected impossible travel: same Okta session authenticated from London and Las Vegas within 6 minutes — physically impossible.',ttp:'T1078 — Valid Accounts',clue:'Okta session anomaly confirms corporate identity infrastructure is the primary attack vector.',hint:'finance'},
+      xdr:{phase:0,type:'MODULE',icon:'🔍',title:'Cross-Platform Correlation',text:'XDR correlated endpoint, email and cloud signals: 3 devices, 2 countries, 1 stolen credential — all active simultaneously in the same session.',ttp:'T1078.004 — Cloud Accounts',clue:'Multi-platform credential reuse confirms cloud-native attack with no malware present.',hint:'finance'},
+      pangea:{phase:0,type:'MODULE',icon:'🌍',title:'Infrastructure Overlap — Caesars',text:'Threat intel matched actor phone spoofing infrastructure to Caesars Entertainment breach 2 weeks earlier. Same vishing-as-a-service provider.',ttp:'T1598 — Phishing for Information',clue:'Cross-victim infrastructure overlap confirms SCATTERED SPIDER operating across hospitality sector.',hint:'finance'},
+      overwatch:{phase:0,type:'MODULE',icon:'👁️',title:'Operator Profile Match',text:'OverWatch observed manual enumeration of Okta admin console — keystroke cadence and flag sequence match documented UNC3944 operator profile.',ttp:'T1087.004 — Cloud Account Discovery',clue:'Manual enumeration style is UNC3944 signature in identity provider consoles.',hint:'finance'},
+      exposure:{phase:0,type:'MODULE',icon:'🗺️',title:'Legacy MFA Method Exposed',text:'Falcon Exposure identified publicly accessible Okta admin portal with legacy SMS-based MFA enabled — the exact bypass vector confirmed in investigation.',ttp:'T1595.002 — Vulnerability Scanning',clue:'Exposed legacy MFA method is the entry vector for MFA fatigue and SIM-swap campaigns.',hint:'finance'},
+    },
     clues:[
-      {type:'SOCIAL',icon:'📞',title:'Vishing Call Confirmed',text:'IT helpdesk received call claiming to be new employee. Accent: native English speaker. Requested MFA reset.',ttp:'T1598 — Phishing for Information',clue:'Social engineering via phone targeting English-speaking corporate environments.',hint:'finance'},
-      {type:'IDENTITY',icon:'🪪',title:'MFA Fatigue Attack',text:'Target received 47 push notifications in 12 minutes. On notification 48, approved.',ttp:'T1621 — MFA Request Generation',clue:'Persistence in MFA bypass suggests high-value financial account target.',hint:'finance'},
-      {type:'CLOUD',icon:'☁️',title:'OAuth App Added Silently',text:'Rogue OAuth application "MS Teams Update" granted Mail.Read permissions without user awareness.',ttp:'T1550.001 — Application Access Token',clue:'OAuth abuse targeting cloud-integrated enterprise systems.',hint:'tech'},
-      {type:'LATERAL',icon:'↔️',title:'SIM-Swap Attempt',text:'Mobile carrier received call requesting port of executive SIM to new device.',ttp:'T1539 — Steal Web Session Cookie',clue:'SIM-swap targets individuals with financial authority.',hint:'finance'},
-      {type:'NETWORK',icon:'🌐',title:'Telegram C2 Channel',text:'Actor communicating with group via private Telegram channel. Coordination in real time.',ttp:'T1102 — Web Service C2',clue:'Real-time coordination suggests targeting organisations with immediate financial access.',hint:'finance'},
-      {type:'CREDENTIAL',icon:'🔑',title:'Internal Slack Compromised',text:'Compromised Slack account spreading internal phishing messages to finance team.',ttp:'T1534 — Internal Spearphishing',clue:'Internal pivot targeting finance team confirms financial objective.',hint:'finance'},
-      {type:'TIMING',icon:'⏰',title:'Weekday Business Hours',text:'All activity within 09:00-17:00 target timezone. Mimics normal employee behaviour.',ttp:'Working Hours TTP',clue:'Operating within business hours of Western European or US financial centres.',hint:'finance'},
-      {type:'IDENTITY',icon:'🪪',title:'No Malware Detected',text:'Zero malware across entire compromise. Entirely credential and access-based intrusion.',ttp:'T1078 — Valid Accounts',clue:'Pure identity attack. No IoCs beyond behavioural anomalies.',hint:'finance'},
+      {phase:1,type:'SOCIAL',icon:'📞',title:'Vishing Call Confirmed',text:'IT helpdesk received call claiming to be new employee. Native English speaker. Requested MFA reset for remote access issues. Call lasted 4 minutes.',ttp:'T1598 — Phishing for Information',clue:'Social engineering via phone targeting English-speaking corporate IT helpdesks.',hint:'finance'},
+      {phase:1,type:'IDENTITY',icon:'🪪',title:'MFA Fatigue Attack',text:'Target received 47 MFA push notifications in 12 minutes. On push 48 they approved — assuming it was a system error.',ttp:'T1621 — MFA Request Generation',clue:'MFA push fatigue reveals target uses Okta or Duo push-based MFA without number matching.',hint:'finance'},
+      {phase:1,type:'OSINT',icon:'🔎',title:'LinkedIn Reconnaissance',text:'Actor harvested IT helpdesk procedures and new-hire names from LinkedIn for 21 days before the call. Target employee confirmed via company blog.',ttp:'T1593.001 — Social Media',clue:'LinkedIn OSINT prior to vishing confirms large corporate with publicly visible employee structure.',hint:'finance'},
+      {phase:1,type:'IDENTITY',icon:'🪪',title:'Zero Malware Confirmed',text:'Complete absence of malware across the entire intrusion. Purely credential and access-based. Traditional endpoint AV has zero detections.',ttp:'T1078 — Valid Accounts',clue:'Pure identity attack — no IoCs beyond behavioural anomalies in identity and SSO logs.',hint:'finance'},
+      {phase:2,type:'LATERAL',icon:'↔️',title:'SIM-Swap Attempt',text:'Mobile carrier received call requesting SIM port of executive number. Carrier rep socially engineered using victim name and billing address.',ttp:'T1539 — Steal Web Session Cookie',clue:'SIM-swap targets executives using SMS-based MFA for wire transfer approval authority.',hint:'finance'},
+      {phase:2,type:'CLOUD',icon:'☁️',title:'OAuth App Injected',text:'Rogue OAuth application "MS Teams Update v2.1" silently granted Mail.Read and Files.ReadWrite permissions. No user consent prompt triggered.',ttp:'T1550.001 — Application Access Token',clue:'OAuth persistence survives password reset — attacker maintains access through token.',hint:'finance'},
+      {phase:2,type:'CREDENTIAL',icon:'🔑',title:'Okta Admin Console Entered',text:'Attacker logged into Okta admin portal and added a second authenticator to the CFO account. No alert was generated.',ttp:'T1556 — Modify Authentication Process',clue:'Okta admin access enables control over all enterprise SSO authentication for every user.',hint:'finance'},
+      {phase:2,type:'NETWORK',icon:'🌐',title:'Internal Slack Weaponised',text:'Compromised Slack workspace used to send phishing links to the finance team from a trusted internal sender.',ttp:'T1534 — Internal Spearphishing',clue:'Internal comms pivot confirms attacker is inside — targeting finance team for wire approval.',hint:'finance'},
+      {phase:3,type:'NETWORK',icon:'🌐',title:'Telegram C2 Active',text:'7 operators coordinating attack in real time via private Telegram channel during business hours of the target timezone.',ttp:'T1102 — Web Service C2',clue:'Multi-operator real-time coordination targets organisations with live wire transfer capability.',hint:'finance'},
+      {phase:3,type:'TIMING',icon:'⏰',title:'Business Hours Window Only',text:'All activity within 09:00-17:00 target timezone. Zero weekend activity. Actor mimics normal employee behaviour to evade anomaly detection.',ttp:'Working Hours TTP',clue:'Business-hours-only window confirms targeting of organisations with real-time approval flows.',hint:'finance'},
+      {phase:3,type:'EXFIL',icon:'📤',title:'Wire Transfer Portal Reached',text:'Actor accessed the wire transfer portal. $30M in pending transactions visible. Approval window active. Intercept required in under 4 minutes.',ttp:'T1657 — Financial Theft',clue:'Wire portal access confirms financial exfiltration is the active objective.',hint:'finance'},
+      {phase:3,type:'IMPACT',icon:'💥',title:'$100M Impact — MGM Pattern',text:'Forensic profile matches MGM Resorts 2023. Combined losses from outages, ransom, and data breach: $100M+. Congressional testimony followed.',ttp:'T1657 — Financial Theft',clue:'$100M+ hospitality attack profile confirms SCATTERED SPIDER targeting entertainment or gaming sector.',hint:'finance'},
     ]
   },
   {
@@ -17215,19 +17244,31 @@ const ADVERSARIES=[
     target:'Retail & Finance POS Networks',
     motto:'Your defences are not designed for what we do.',
     caseTitle:'OPERATION BLACKCAT RAPIDS',
-    brief:'FIN7 has been inside the retail network for 9 days. Shadow copies deleted. ESXi enumerated. Domain admin harvested. Between you and 94 encrypted VMs is a 90-second window. Hunt it now.',
+    brief:'FIN7 has operated since 2015. Carbanak bank heists. Fileless POS attacks. Now BlackCat ransomware partnerships. They are inside the retail network — 9 days in. Shadow copies deleted. ESXi enumerated. Domain admin harvested. Between you and 94 simultaneously encrypted VMs is a 90-second window. Hunt it now before Friday 23:00.',
     counterModule:'🛡️ Falcon Prevent',
     route:['dark_web','singapore','swift_node','frankfurt_b','amsterdam'],
     objective:'amsterdam',
+    phaseNames:['INITIAL ACCESS','RANSOMWARE STAGING','FULL ENCRYPTION'],
+    moduleClues:{
+      identity:{phase:0,type:'MODULE',icon:'🪪',title:'Service Account Abuse',text:'Falcon Identity detected a service account performing interactive logon from 14 workstations simultaneously — only possible with automated tooling.',ttp:'T1078.003 — Local Accounts',clue:'Service account misuse for interactive logon is FIN7 lateral movement signature.',hint:'supply'},
+      xdr:{phase:0,type:'MODULE',icon:'🔍',title:'Fileless Execution Chain',text:'XDR process tree: explorer.exe → mshta.exe → powershell.exe (encoded) → Cobalt Strike beacon. Entirely in-memory. Zero disk writes.',ttp:'T1059.001 — PowerShell',clue:'In-memory execution chain is FIN7 trademark to avoid all signature-based endpoint detection.',hint:'supply'},
+      pangea:{phase:0,type:'MODULE',icon:'🌍',title:'FIN7 IP Infrastructure',text:'C2 IP matched to FIN7 infrastructure pool from 3 prior retail campaigns. Same ASN used in Darden Restaurants and Chipotle breaches.',ttp:'T1583 — Acquire Infrastructure',clue:'Known FIN7 IP reuse confirms same syndicate responsible for prior retail sector breaches.',hint:'supply'},
+      overwatch:{phase:0,type:'MODULE',icon:'👁️',title:'Operator Tradecraft Match',text:'OverWatch identified manual command-line enumeration style — specific WMIC flag order and timing consistent with documented FIN7 operator profile.',ttp:'T1082 — System Information Discovery',clue:'Operator-specific command style links this intrusion directly to FIN7 operational unit.',hint:'supply'},
+      exposure:{phase:0,type:'MODULE',icon:'🗺️',title:'RDP Exposed on POS Network',text:'Exposure Management found 3 POS endpoints with RDP open to the internet and CVE-2019-0708 (BlueKeep) unpatched since March 2019.',ttp:'T1190 — Exploit Public-Facing Application',clue:'Unpatched internet-facing RDP on POS network is the confirmed initial access vector.',hint:'supply'},
+    },
     clues:[
-      {type:'MALWARE',icon:'⚠️',title:'Fileless Payload in Memory',text:'No files written to disk. Ransomware running entirely in PowerShell process memory.',ttp:'T1059.001 — PowerShell',clue:'Fileless delivery avoids traditional AV. Targets endpoint infrastructure.',hint:'supply'},
-      {type:'CREDENTIAL',icon:'🔑',title:'Domain Admin Harvested',text:'Mimikatz detected in memory — domain administrator credentials extracted.',ttp:'T1003.001 — LSASS Memory',clue:'Domain admin access enables network-wide ransomware deployment.',hint:'supply'},
-      {type:'STAGING',icon:'📦',title:'Shadow Copies Deleted',text:'VSS deletion via vssadmin.exe — removing recovery paths before encryption.',ttp:'T1490 — Inhibit System Recovery',clue:'Backup destruction is pre-ransomware staging. Financial-sector attack inbound.',hint:'finance'},
-      {type:'NETWORK',icon:'🌐',title:'Cobalt Strike Beacon Active',text:'Cobalt Strike C2 channel confirmed. Encrypted traffic to Netherlands-registered VPS.',ttp:'T1219 — Remote Access Software',clue:'C2 infrastructure registered in Netherlands suggests regional targeting.',hint:'supply'},
-      {type:'LATERAL',icon:'↔️',title:'RDP Brute Force Success',text:'Unpatched POS endpoint breached via RDP brute-force from external IP.',ttp:'T1110 — Brute Force',clue:'POS network targeting indicates retail or finance sector victim.',hint:'finance'},
-      {type:'TIMING',icon:'⏰',title:'Pre-Weekend Deployment',text:'Ransomware deployment time scheduled for Friday 23:00 local time. Maximise impact window.',ttp:'T1489 — Service Stop',clue:'Weekend deployment timing targets organisations with reduced weekend staff.',hint:'supply'},
-      {type:'EXFIL',icon:'📤',title:'Data Exfiltration Confirmed',text:'2.1TB of data exfiltrated before encryption — double extortion preparation.',ttp:'T1486 — Data Encrypted for Impact',clue:'Double extortion suggests target has sensitive customer or financial data.',hint:'finance'},
-      {type:'MALWARE',icon:'⚠️',title:'ESXi Enumeration',text:'VMware ESXi hosts being enumerated. All 94 VMs at risk of simultaneous encryption.',ttp:'T1486 — Data Encrypted for Impact',clue:'ESXi targeting indicates enterprise infrastructure attack, not consumer.',hint:'supply'},
+      {phase:1,type:'MALWARE',icon:'⚠️',title:'Fileless Payload In Memory',text:'No files on disk. Ransomware precursor running entirely in PowerShell process memory. Traditional AV has zero detections across 847 endpoints.',ttp:'T1059.001 — PowerShell',clue:'Fileless delivery targets endpoint infrastructure where disk-scanning AV is the only control.',hint:'supply'},
+      {phase:1,type:'CREDENTIAL',icon:'🔑',title:'Domain Admin Extracted',text:'Mimikatz ran in process memory — domain admin credentials extracted from LSASS. All 847 domain accounts now controlled by the attacker.',ttp:'T1003.001 — LSASS Memory',clue:'Domain admin harvest enables simultaneous deployment of ransomware across all endpoints.',hint:'supply'},
+      {phase:1,type:'NETWORK',icon:'🌐',title:'Cobalt Strike Beacon Live',text:'Cobalt Strike C2 confirmed — encrypted traffic to Netherlands-registered VPS. Beacon check-in every 4 seconds for 9 days.',ttp:'T1219 — Remote Access Software',clue:'Cobalt Strike C2 in Netherlands confirms European-linked eCrime operation.',hint:'supply'},
+      {phase:1,type:'LATERAL',icon:'↔️',title:'RDP Brute Force Succeeded',text:'Unpatched POS endpoint breached via RDP brute-force from external IP. Login: PoS_Admin_03. 9-day dwell began.',ttp:'T1110 — Brute Force',clue:'RDP brute-force on POS endpoint confirms retail or finance sector network.',hint:'finance'},
+      {phase:2,type:'STAGING',icon:'📦',title:'Shadow Copies Eliminated',text:'VSS deletion via vssadmin.exe ran 3 hours before scheduled encryption. All restore points removed. Recovery now impossible.',ttp:'T1490 — Inhibit System Recovery',clue:'Backup destruction before encryption is standard — target relies on shadow-copy recovery.',hint:'finance'},
+      {phase:2,type:'STAGING',icon:'📦',title:'94 ESXi Hosts Mapped',text:'All 94 VMware ESXi hosts enumerated and configs exported. Simultaneous encryption of all VMs will take 8 minutes.',ttp:'T1018 — Remote System Discovery',clue:'ESXi enumeration enables simultaneous total virtualisation infrastructure encryption.',hint:'supply'},
+      {phase:2,type:'CREDENTIAL',icon:'🔑',title:'Veeam Backup Compromised',text:'Veeam backup server admin credentials obtained. All offsite backup jobs silently paused 48 hours ago.',ttp:'T1490 — Inhibit System Recovery',clue:'Backup server compromise eliminates the last recovery path before encryption.',hint:'supply'},
+      {phase:2,type:'TIMING',icon:'⏰',title:'Friday 23:00 Scheduled',text:'Ransomware deployment timer set for Friday 23:00 local time. Maximises weekend impact window before Monday morning response.',ttp:'T1489 — Service Stop',clue:'Friday-night deployment targets organisations with reduced weekend security staffing.',hint:'supply'},
+      {phase:3,type:'EXFIL',icon:'📤',title:'2.1TB Customer Data Stolen',text:'2.1TB of customer PII and card data exfiltrated to BLACKCAT infrastructure before encryption. Leak site updated with victim branding.',ttp:'T1567 — Exfiltration to Cloud Storage',clue:'Double extortion: pay or customer data is published. Target holds extensive financial PII.',hint:'finance'},
+      {phase:3,type:'MALWARE',icon:'⚠️',title:'$4.5M Ransom — 72 Hour Timer',text:'Ransom demand: $4.5M in cryptocurrency. 72-hour countdown on leak site. Three files decrypted as proof of capability.',ttp:'T1657 — Financial Theft',clue:'$4.5M demand confirms mid-to-large enterprise victim with significant data sensitivity.',hint:'finance'},
+      {phase:3,type:'TIMING',icon:'⏰',title:'847 Alerts in 4 Minutes',text:'Alert volume exceeded analyst capacity within 4 minutes of deployment. SOC triage was impossible at human speed.',ttp:'T1562.001 — Impair Defenses',clue:'Deliberate alert flood confirms target relies on manual analyst SOC without automation.',hint:'supply'},
+      {phase:3,type:'IMPACT',icon:'💥',title:'94 VMs Encrypted Simultaneously',text:'All 94 ESXi VMs encrypted within 8 minutes of deployment. 100% of virtualised infrastructure offline. Recovery timeline: weeks.',ttp:'T1486 — Data Encrypted for Impact',clue:'Simultaneous ESXi encryption confirms enterprise infrastructure attack at maximum scale.',hint:'supply'},
     ]
   },
   // ── TIER 2 — MEDIUM ───────────────────────────────────────────
@@ -17237,19 +17278,31 @@ const ADVERSARIES=[
     target:'Brazilian Banking & PIX Payment Network',
     motto:'In Brazil, every bank account is a target.',
     caseTitle:'OPERATION PIX HEIST',
-    brief:'12,000 fraudulent PIX payments. 10 seconds per transfer. Irreversible. PLUMP SPIDER is inside three Brazilian banks right now and every transfer that clears is gone forever. Find the route before the final wire.',
+    brief:'January 2024: Interpol arrested the Grandoreiro operators. They resumed within weeks. 12,000 fraudulent PIX payments. 10 seconds per transfer. Completely irreversible. PLUMP SPIDER is inside Bradesco, Itau, and Nubank simultaneously. Every transfer that clears is gone forever. The Central Bank is watching 47 accounts. Find the route before the final wire.',
     counterModule:'🪪 Falcon Identity',
     route:['sao_paulo','rio','bogota','new_york','swift_node'],
     objective:'swift_node',
+    phaseNames:['TROJAN DEPLOYMENT','CREDENTIAL HARVEST','PIX FRAUD WAVE'],
+    moduleClues:{
+      identity:{phase:0,type:'MODULE',icon:'🪪',title:'CPF Mass Validation',text:'Falcon Identity detected automated CPF and CNPJ validation queries against the Receita Federal API — 4,700 requests in 8 minutes from one endpoint.',ttp:'T1078 — Valid Accounts',clue:'Mass CPF validation is a prerequisite to opening mule accounts for PIX fraud at scale.',hint:'finance'},
+      xdr:{phase:0,type:'MODULE',icon:'🔍',title:'Grandoreiro Overlay Detected',text:'XDR caught Grandoreiro overlay technique: transparent phishing window positioned over banking app at pixel-perfect coordinates for each bank.',ttp:'T1055 — Process Injection',clue:'Pixel-perfect overlay confirms Grandoreiro variant with Brazil-specific bank templates loaded.',hint:'finance'},
+      pangea:{phase:0,type:'MODULE',icon:'🌍',title:'Grandoreiro C2 Infrastructure',text:'Threat intel matched C2 server SSL certificate chain to known Grandoreiro infrastructure from 3 prior campaigns targeting Banco do Brasil.',ttp:'T1583 — Acquire Infrastructure',clue:'Grandoreiro infrastructure exclusively targets Brazilian and Portuguese-speaking financial institutions.',hint:'finance'},
+      overwatch:{phase:0,type:'MODULE',icon:'👁️',title:'Live Operator in UTC-3',text:'OverWatch observed manual operator interaction with compromised devices during 09:00-17:00 Brasilia time. Transfers initiated manually, not automated.',ttp:'T1657 — Financial Theft',clue:'Manual operator in Brasilia timezone confirms Sao Paulo or Rio de Janeiro-based operation.',hint:'finance'},
+      exposure:{phase:0,type:'MODULE',icon:'🗺️',title:'Banking App Deep Link Exploit',text:'Exposure identified banking app version 4.2.1 with a deep link hijacking vulnerability allowing Grandoreiro to intercept OTP codes at delivery.',ttp:'T1411 — Input Prompt',clue:'Deep link OTP interception enables account takeover without device unlock or malware installation.',hint:'finance'},
+    },
     clues:[
-      {type:'MALWARE',icon:'⚠️',title:'Grandoreiro Banking Trojan',text:'Grandoreiro variant detected — Brazilian banking trojan with overlay attack capability targeting 900+ financial institutions.',ttp:'T1055 — Process Injection',clue:'Grandoreiro exclusively targets Latin American banking infrastructure.',hint:'finance'},
-      {type:'CREDENTIAL',icon:'🔑',title:'PIX Key Harvesting',text:'Attacker harvesting PIX keys (CPF, CNPJ, phone numbers) from compromised devices. PIX transfers are instant and irreversible.',ttp:'T1056 — Input Capture',clue:'PIX key theft targets Brazilian financial institutions and payment processors.',hint:'finance'},
-      {type:'NETWORK',icon:'🌐',title:'Boleto Fraud Infrastructure',text:'Fake boleto generation infrastructure detected. 12,000 fraudulent payment slips created in 48 hours.',ttp:'T1583 — Acquire Infrastructure',clue:'Boleto fraud is exclusive to the Brazilian financial ecosystem.',hint:'finance'},
-      {type:'LATERAL',icon:'↔️',title:'WhatsApp Business Impersonation',text:'Attacker impersonating bank fraud departments via WhatsApp Business API. Native Portuguese speaker confirmed.',ttp:'T1598 — Phishing for Information',clue:'WhatsApp-based social engineering targets Portuguese-speaking financial customers.',hint:'finance'},
-      {type:'TIMING',icon:'⏰',title:'UTC-3 Operating Hours',text:'All activity within 08:00-18:00 Brasília time. Zero activity on Brazilian public holidays.',ttp:'Working Hours TTP',clue:'Actor operates in Brazilian Standard Time. Target is in South American financial sector.',hint:'finance'},
-      {type:'IDENTITY',icon:'🪪',title:'CPF/CNPJ Identity Theft',text:'Brazilian tax identification numbers (CPF/CNPJ) being harvested for account takeover at scale.',ttp:'T1078 — Valid Accounts',clue:'CPF/CNPJ targeting is specific to Brazilian financial and government systems.',hint:'finance'},
-      {type:'EXFIL',icon:'📤',title:'PIX Transfer Chain',text:'Stolen funds moved through 47 PIX transfers in 8 minutes. Each transfer under R$5,000 to avoid monitoring thresholds.',ttp:'T1657 — Financial Theft',clue:'Rapid PIX transfer chains indicate Brazilian banking system as primary target.',hint:'finance'},
-      {type:'STAGING',icon:'📦',title:'Fake Banking App on Play Store',text:'Trojanized banking app with 50,000+ downloads detected. Requests accessibility permissions on install.',ttp:'T1475 — Deliver Malicious App',clue:'Mobile banking trojan targets customers of major Brazilian financial institutions.',hint:'finance'},
+      {phase:1,type:'MALWARE',icon:'⚠️',title:'Grandoreiro Trojan Active',text:'Grandoreiro banking trojan with overlay attack capability confirmed — targets 900+ Brazilian financial institutions with real-time screen capture.',ttp:'T1055 — Process Injection',clue:'Grandoreiro exclusively targets Latin American banking infrastructure.',hint:'finance'},
+      {phase:1,type:'STAGING',icon:'📦',title:'Trojanised Bank App on Play Store',text:'Fake Bradesco banking app with 50,000+ downloads on Google Play. Requests Accessibility permission on install for overlay attacks.',ttp:'T1475 — Deliver Malicious App',clue:'Fake banking app targets customers of Brazil major financial institutions.',hint:'finance'},
+      {phase:1,type:'NETWORK',icon:'🌐',title:'Receita Federal Phishing Wave',text:'2.4 million phishing emails sent with fake Brazilian IRS notices. Attachment installs Grandoreiro silently in under 3 seconds.',ttp:'T1566.001 — Spearphishing Attachment',clue:'IRS-themed lure confirms targeting of Brazilian taxpayers and banking customers.',hint:'finance'},
+      {phase:1,type:'TIMING',icon:'⏰',title:'Brasilia Business Hours Only',text:'All activity within 08:00-18:00 Brasilia time. Zero activity on Brazilian public holidays — Tiradentes and Corpus Christi both blank.',ttp:'Working Hours TTP',clue:'Brazilian holiday calendar followed confirms Sao Paulo-based operation targeting domestic banks.',hint:'finance'},
+      {phase:2,type:'CREDENTIAL',icon:'🔑',title:'PIX Key Harvesting',text:'Attacker harvesting PIX keys — CPF, CNPJ, phone numbers — from compromised devices. PIX transfers are instant and irreversible once sent.',ttp:'T1056 — Input Capture',clue:'PIX key harvest targets Brazilian financial institutions and instant payment processors.',hint:'finance'},
+      {phase:2,type:'IDENTITY',icon:'🪪',title:'47,000 CPF Numbers Collected',text:'Brazilian tax IDs harvested for mule account creation. Each CPF used to open a verified account capable of receiving PIX transfers.',ttp:'T1078 — Valid Accounts',clue:'CPF-scale identity theft is exclusive to Brazilian financial and government systems.',hint:'finance'},
+      {phase:2,type:'LATERAL',icon:'↔️',title:'WhatsApp Bank Impersonation',text:'Attacker impersonating fraud departments of 3 major banks via WhatsApp Business API. Native Portuguese speaker with bank-specific scripting.',ttp:'T1598 — Phishing for Information',clue:'WhatsApp impersonation of fraud departments targets banking customers to authorise transfers.',hint:'finance'},
+      {phase:2,type:'STAGING',icon:'📦',title:'127 Mule Accounts Ready',text:'127 verified mule accounts opened using stolen CPF data. Each under R$5,000 daily limit to avoid Central Bank monitoring thresholds.',ttp:'T1583 — Acquire Infrastructure',clue:'Sub-threshold mule account network is ready for high-volume PIX fraud operations.',hint:'finance'},
+      {phase:3,type:'EXFIL',icon:'📤',title:'12,000 PIX Transfers Active',text:'12,000 fraudulent PIX transfers initiated simultaneously across 3 banks. Each under R$5,000. Total exposure: R$47 million.',ttp:'T1657 — Financial Theft',clue:'Sub-threshold simultaneous PIX fraud confirms Brazilian banking sector is the target.',hint:'finance'},
+      {phase:3,type:'NETWORK',icon:'🌐',title:'11,000 Boleto Slips Generated',text:'11,000 fraudulent boleto payment slips sent to corporate victims. Average value R$8,400. Payment window: 24 hours.',ttp:'T1583 — Acquire Infrastructure',clue:'Boleto fraud infrastructure exists exclusively within the Brazilian financial ecosystem.',hint:'finance'},
+      {phase:3,type:'EXFIL',icon:'📤',title:'BRL Converted to USDT',text:'Stolen R$47M converted to USDT via 6 Brazilian crypto exchanges within 35 minutes. Exchange accounts pre-created using stolen CPF data.',ttp:'T1657 — Financial Theft',clue:'Rapid BRL-to-stablecoin conversion confirms established laundering infrastructure.',hint:'finance'},
+      {phase:3,type:'IMPACT',icon:'💥',title:'Three Banks — Simultaneous',text:'PLUMP SPIDER is inside Bradesco, Itau, and Nubank simultaneously. Central Bank alert triggered but transfers are already clearing.',ttp:'T1657 — Financial Theft',clue:'Multi-bank simultaneous PIX attack is PLUMP SPIDER signature. Intercept before final clearing.',hint:'finance'},
     ]
   },
   {
@@ -17257,20 +17310,32 @@ const ADVERSARIES=[
     nation:'🌐 Colombia — eCrime',color:'#FF6B35',threat:'HIGH',difficulty:2,
     target:'LatAm Financial Institutions & SWIFT Network',
     motto:'We speak your language. We know your bank.',
-    caseTitle:'OPERATION BOGOTÁ WIRE',
-    brief:'$47 million redirected through 23 operators coordinating in real time via Telegram. Six months. Zero arrests. BLIND SPIDER is targeting LatAm SWIFT infrastructure right now. Find the objective before the next wire clears.',
+    caseTitle:'OPERATION BOGOTA WIRE',
+    brief:'$47 million redirected through 23 operators coordinating in real time on Telegram. Six months. Zero arrests. Their methodology mirrors the 2016 Bangladesh Bank SWIFT heist that netted $81M. BLIND SPIDER is probing LatAm SWIFT infrastructure right now. Find the objective before the next wire transfer clears.',
     counterModule:'🪪 Falcon Identity',
     route:['bogota','sao_paulo','new_york','swift_node','frankfurt_b'],
     objective:'frankfurt_b',
+    phaseNames:['SOCIAL ENGINEERING','BEC OPERATION','SWIFT TARGETING'],
+    moduleClues:{
+      identity:{phase:0,type:'MODULE',icon:'🪪',title:'CFO Account Impossible Travel',text:'Falcon Identity detected CFO email account authenticated from Colombia and New York simultaneously — same session, 8 minutes apart.',ttp:'T1078 — Valid Accounts',clue:'CFO account compromise is the pivot point enabling BEC wire fraud operations at scale.',hint:'finance'},
+      xdr:{phase:0,type:'MODULE',icon:'🔍',title:'AsyncRAT Process Chain',text:'XDR traced AsyncRAT installation to malicious Excel macro opened by a finance team member. Full keylogging and screen capture confirmed.',ttp:'T1219 — Remote Access Software',clue:'AsyncRAT on finance workstations confirms direct access to wire transfer approval systems.',hint:'finance'},
+      pangea:{phase:0,type:'MODULE',icon:'🌍',title:'Known LatAm BEC Actor',text:'Threat intel matched AsyncRAT C2 to known Colombian BEC operator responsible for $12M theft from a local bank in 2022.',ttp:'T1583.003 — Virtual Private Server',clue:'Prior attribution to known LatAm BEC actor confirms regional targeting pattern.',hint:'finance'},
+      overwatch:{phase:0,type:'MODULE',icon:'👁️',title:'Colombian Operator Confirmed',text:'OverWatch confirmed Spanish-language commands with Colombian dialect. Local knowledge of the target bank wire approval procedures is evident.',ttp:'T1598 — Phishing for Information',clue:'Native Colombian Spanish with insider bank procedure knowledge confirms local threat actor.',hint:'finance'},
+      exposure:{phase:0,type:'MODULE',icon:'🗺️',title:'SWIFT Server Not Segmented',text:'Exposure found legacy SWIFT Alliance Access server with no network segmentation from the corporate email network — direct traversal possible.',ttp:'T1590 — Gather Victim Network Information',clue:'Unsegmented SWIFT server provides a direct path from BEC to wire transfer manipulation.',hint:'finance'},
+    },
     clues:[
-      {type:'SOCIAL',icon:'📞',title:'WhatsApp Vishing Campaign',text:'Victims receiving WhatsApp calls from numbers spoofing their bank. Callers speak fluent Spanish and Portuguese.',ttp:'T1598 — Phishing for Information',clue:'Spanish/Portuguese vishing targets LatAm financial institutions and their corporate clients.',hint:'finance'},
-      {type:'CREDENTIAL',icon:'🔑',title:'BEC Invoice Fraud',text:'47 fraudulent wire transfer requests sent from compromised CFO email accounts. Average request: $340,000.',ttp:'T1534 — Internal Spearphishing',clue:'BEC targeting CFO accounts indicates large financial institution or multinational corporation.',hint:'finance'},
-      {type:'NETWORK',icon:'🌐',title:'LatAm C2 Infrastructure',text:'Command infrastructure hosted across Colombia, Panama, and Costa Rica. Rotating IPs every 6 hours.',ttp:'T1583.003 — Virtual Private Server',clue:'LatAm-hosted C2 infrastructure indicates regional targeting of South American financial sector.',hint:'finance'},
-      {type:'LATERAL',icon:'↔️',title:'Telegram Coordination Channel',text:'Real-time coordination via encrypted Telegram channel. 23 operators active simultaneously.',ttp:'T1102 — Web Service C2',clue:'Large operator count suggests targeting of multiple financial institutions simultaneously.',hint:'finance'},
-      {type:'TIMING',icon:'⏰',title:'UTC-5 Business Hours',text:'All fraud attempts during 09:00-17:00 Colombia time. Mimics legitimate banking operations perfectly.',ttp:'Working Hours TTP',clue:'Colombian timezone operations target financial institutions in the Americas.',hint:'finance'},
-      {type:'IDENTITY',icon:'🪪',title:'SWIFT Targeting Behaviour',text:'Attacker probing SWIFT messaging system. Transaction patterns match Bangladesh Bank heist methodology.',ttp:'T1491 — Defacement',clue:'SWIFT probe methodology indicates targeting of international wire transfer infrastructure.',hint:'finance'},
-      {type:'EXFIL',icon:'📤',title:'Cryptocurrency Laundering Chain',text:'Stolen funds converted to USDT via 12 exchanges across 6 countries within 90 minutes of theft.',ttp:'T1657 — Financial Theft',clue:'Rapid crypto conversion indicates actor with established money laundering infrastructure.',hint:'finance'},
-      {type:'MALWARE',icon:'⚠️',title:'AsyncRAT Deployment',text:'AsyncRAT deployed on finance team workstations. Full keylogging and screen capture active.',ttp:'T1219 — Remote Access Software',clue:'RAT on finance workstations confirms targeting of wire transfer authorization systems.',hint:'finance'},
+      {phase:1,type:'SOCIAL',icon:'📞',title:'WhatsApp Vishing Wave',text:'Corporate clients receiving WhatsApp calls from spoofed bank numbers. Callers speak fluent Spanish and Portuguese with accurate banking terminology.',ttp:'T1598 — Phishing for Information',clue:'Spanish and Portuguese vishing targets LatAm financial institutions and corporate clients.',hint:'finance'},
+      {phase:1,type:'MALWARE',icon:'⚠️',title:'AsyncRAT on Finance Workstations',text:'AsyncRAT installed on 3 finance team machines. Full keylogging and screen capture active. Wire portal credentials recorded in 48 hours.',ttp:'T1219 — Remote Access Software',clue:'AsyncRAT on finance machines confirms targeting of wire transfer authorisation systems.',hint:'finance'},
+      {phase:1,type:'STAGING',icon:'📦',title:'Org Chart Reconstructed',text:'Finance team LinkedIn profiles scraped. Payment approval hierarchy mapped. CFO email address and direct line confirmed through OSINT.',ttp:'T1593.001 — Social Media',clue:'Approval hierarchy mapping is the prerequisite for CFO impersonation in BEC campaigns.',hint:'finance'},
+      {phase:1,type:'NETWORK',icon:'🌐',title:'C2 in Colombia and Panama',text:'Command infrastructure hosted across Colombia, Panama, and Costa Rica. IP rotation every 6 hours across 3 countries.',ttp:'T1583.003 — Virtual Private Server',clue:'LatAm-hosted rotating infrastructure indicates regional targeting of South American banks.',hint:'finance'},
+      {phase:2,type:'CREDENTIAL',icon:'🔑',title:'47 Fraudulent Wire Requests',text:'47 wire transfer requests sent from the compromised CFO email. Each crafted to match existing vendor relationships. Average value: $340,000.',ttp:'T1534 — Internal Spearphishing',clue:'CFO impersonation at wire-transfer scale confirms large financial institution or multinational target.',hint:'finance'},
+      {phase:2,type:'LATERAL',icon:'↔️',title:'23 Operators on Telegram',text:'Real-time coordination across 23 operators in 6 countries via encrypted Telegram. Separate channels per target institution.',ttp:'T1102 — Web Service C2',clue:'23 simultaneous operators confirms targeting of multiple LatAm financial institutions.',hint:'finance'},
+      {phase:2,type:'TIMING',icon:'⏰',title:'Colombia Business Hours',text:'All fraud attempts during 09:00-17:00 Colombia time. Mimics legitimate banking operations window exactly.',ttp:'Working Hours TTP',clue:'Colombian timezone operation confirms targeting of Americas financial institutions.',hint:'finance'},
+      {phase:2,type:'CREDENTIAL',icon:'🔑',title:'Wire Portal Credentials Logged',text:'AsyncRAT keylogger captured wire transfer portal credentials, approval PINs, and out-of-band authentication codes for 3 accounts.',ttp:'T1056.001 — Keylogging',clue:'Complete credential set for wire approval confirms actor can initiate transfers independently.',hint:'finance'},
+      {phase:3,type:'IDENTITY',icon:'🪪',title:'SWIFT Probe — Bangladesh Pattern',text:'Attacker probing SWIFT Alliance Access. Transaction pattern and timing match the Bangladesh Bank heist methodology from 2016.',ttp:'T1491 — Defacement',clue:'Bangladesh-pattern SWIFT probe confirms targeting of international wire transfer infrastructure.',hint:'finance'},
+      {phase:3,type:'EXFIL',icon:'📤',title:'Crypto Laundering — 12 Exchanges',text:'Stolen funds converted to USDT via 12 exchanges across 6 countries within 90 minutes. Blockchain shows Huobi exit point.',ttp:'T1657 — Financial Theft',clue:'Rapid multi-exchange conversion confirms established professional laundering infrastructure.',hint:'finance'},
+      {phase:3,type:'NETWORK',icon:'🌐',title:'SWIFT Routing Altered',text:'Correspondent bank routing instructions altered in SWIFT messages. $8.2M redirected to accounts in the Philippines — identical to Bangladesh 2016.',ttp:'T1565 — Data Manipulation',clue:'SWIFT routing manipulation matching Bangladesh heist confirms the same eCrime methodology.',hint:'finance'},
+      {phase:3,type:'IMPACT',icon:'💥',title:'$47M — 6 Banks Targeted',text:'Total BEC exposure: $47M across 6 LatAm financial institutions. Three wire transfers already cleared. Intercept window is closing.',ttp:'T1657 — Financial Theft',clue:'Simultaneous multi-institution BEC confirms coordinated LatAm financial crime operation.',hint:'finance'},
     ]
   },
   {
@@ -17279,19 +17344,31 @@ const ADVERSARIES=[
     target:'Enterprise Infrastructure — Triple Extortion',
     motto:'Encrypt. Publish. Destroy. In that order.',
     caseTitle:'OPERATION TRIPLE THREAT',
-    brief:'RaaS affiliate. $800 initial access purchase. $4.5M ransom inbound. Rust ransomware deploying simultaneously across Windows, Linux and ESXi. 847 alerts in 4 minutes will overwhelm your team. Find the node first.',
+    brief:'February 2024: Change Healthcare. ALPHV BlackCat hit the largest US medical claims processor. $22 million ransom paid. 6TB stolen. 100 million Americans exposed. The affiliate bought access for $800 via Citrix Bleed. ALPHV then exit-scammed their own affiliate and kept the ransom. 94 ESXi hosts are in scope. Find the node before the timer expires.',
     counterModule:'🤖 Charlotte AI',
     route:['dark_web','singapore','amsterdam','frankfurt_b','swift_node'],
     objective:'swift_node',
+    phaseNames:['INITIAL ACCESS','INFRASTRUCTURE TAKEOVER','TRIPLE EXTORTION'],
+    moduleClues:{
+      identity:{phase:0,type:'MODULE',icon:'🪪',title:'IAB Credential Chain',text:'Falcon Identity confirmed: credentials purchased from IAB came from prior infostealer infection on a contractor laptop. Reused across 4 cloud services.',ttp:'T1078 — Valid Accounts',clue:'Infostealer-to-RaaS pipeline confirms no MFA on critical cloud access points.',hint:'finance'},
+      xdr:{phase:0,type:'MODULE',icon:'🔍',title:'Rust Payload Characteristics',text:'XDR memory analysis identified ALPHV Rust binary: custom memory allocator, cross-platform crypto routines, no debug symbols.',ttp:'T1486 — Data Encrypted for Impact',clue:'ALPHV Rust binary confirms BlackCat RaaS — simultaneous Windows, Linux, and ESXi encryption.',hint:'supply'},
+      pangea:{phase:0,type:'MODULE',icon:'🌍',title:'Affiliate from MGM Attack',text:'Threat intel matched C2 infrastructure to ALPHV affiliate active in MGM Resorts September 2023. SCATTERED SPIDER collaboration confirmed.',ttp:'T1583 — Acquire Infrastructure',clue:'Same MGM affiliate confirms SCATTERED SPIDER social engineering plus ALPHV ransomware combination.',hint:'finance'},
+      overwatch:{phase:0,type:'MODULE',icon:'👁️',title:'Hands-On Keyboard Operator',text:'OverWatch confirmed manual hands-on-keyboard operator — custom enumeration commands not matching any known automated tool sequence.',ttp:'T1082 — System Information Discovery',clue:'Manual operator conducting deliberate reconnaissance confirms experienced, high-skill affiliate.',hint:'supply'},
+      exposure:{phase:0,type:'MODULE',icon:'🗺️',title:'Citrix Bleed Unpatched',text:'Exposure found Citrix NetScaler ADC vulnerable to CVE-2023-4966 (Citrix Bleed) — allows session token theft without authentication.',ttp:'T1190 — Exploit Public-Facing Application',clue:'Citrix Bleed is the confirmed initial access vector in Change Healthcare 2024.',hint:'finance'},
+    },
     clues:[
-      {type:'MALWARE',icon:'⚠️',title:'Rust-Based Payload',text:'BLACKCAT malware written in Rust — cross-platform, no language-specific analysis tools available.',ttp:'T1486 — Data Encrypted for Impact',clue:'Cross-platform ransomware targets organisations with mixed Windows/Linux/ESXi environments.',hint:'supply'},
-      {type:'STAGING',icon:'📦',title:'ESXi Enumeration Complete',text:'All 94 VMware ESXi hosts enumerated. Simultaneous encryption scheduled.',ttp:'T1018 — Remote System Discovery',clue:'ESXi targeting indicates enterprise infrastructure. Financial or supply chain target.',hint:'finance'},
-      {type:'CREDENTIAL',icon:'🔑',title:'Initial Access Broker Purchase',text:'Forensics confirm credentials purchased from access broker 3 weeks prior for $800.',ttp:'T1199 — Trusted Relationship',clue:'Purchased access means affiliate model. Target selected for maximum ransom potential.',hint:'finance'},
-      {type:'NETWORK',icon:'🌐',title:'Intermittent Encryption',text:'Partial file encryption to maximise speed and minimise detection window.',ttp:'T1486 — Data Encrypted for Impact',clue:'Speed optimisation suggests target with extensive backup monitoring.',hint:'supply'},
-      {type:'EXFIL',icon:'📤',title:'2.1TB Exfiltrated',text:'2.1TB data sent to BLACKCAT infrastructure before encryption. Leak site updated.',ttp:'T1567 — Exfiltration to Cloud Storage',clue:'Data volume and leak site suggests target has extensive sensitive customer data.',hint:'finance'},
-      {type:'LATERAL',icon:'↔️',title:'Backup Systems Targeted First',text:'Backup servers and VSS copies deleted before ransomware deployment.',ttp:'T1490 — Inhibit System Recovery',clue:'Backup destruction as first action indicates sophisticated understanding of target architecture.',hint:'supply'},
-      {type:'TIMING',icon:'⏰',title:'847 Alerts in 4 Minutes',text:'Alert volume exceeded analyst capacity within 4 minutes of deployment.',ttp:'T1562.001 — Impair Defenses',clue:'Alert flood tactics target organisations without automated response capabilities.',hint:'finance'},
-      {type:'MALWARE',icon:'⚠️',title:'$4.5M Ransom Demand',text:'Ransom demand: $4.5M cryptocurrency. 72-hour timer active on leak site.',ttp:'T1657 — Financial Theft',clue:'$4.5M demand indicates target has significant financial resources and critical dependencies.',hint:'finance'},
+      {phase:1,type:'CREDENTIAL',icon:'🔑',title:'IAB Access — $800',text:'Credentials purchased from Initial Access Broker 3 weeks prior for $800. Target selected for maximum ransom potential based on revenue and data class.',ttp:'T1199 — Trusted Relationship',clue:'IAB purchase confirms affiliate model. Target chosen for revenue and data sensitivity.',hint:'finance'},
+      {phase:1,type:'MALWARE',icon:'⚠️',title:'Rust Cross-Platform Ransomware',text:'BLACKCAT Rust binary encrypts Windows, Linux, and ESXi simultaneously. No language-specific analysis tools apply. Detection requires behavioural analysis.',ttp:'T1486 — Data Encrypted for Impact',clue:'Cross-platform ransomware targets enterprises with mixed OS and virtualisation environments.',hint:'supply'},
+      {phase:1,type:'NETWORK',icon:'🌐',title:'Cobalt Strike and Brute Ratel',text:'Two C2 frameworks deployed simultaneously — Cobalt Strike for lateral movement, Brute Ratel for EDR evasion. Both active from day one.',ttp:'T1219 — Remote Access Software',clue:'Dual-framework deployment confirms sophisticated operator with dedicated EDR evasion budget.',hint:'supply'},
+      {phase:1,type:'STAGING',icon:'📦',title:'Intermittent File Encryption',text:'Partial file encryption mode enabled — only first 4MB per file. Maximises speed and minimises detection window before full deployment.',ttp:'T1486 — Data Encrypted for Impact',clue:'Speed-optimised partial encryption confirms target with large storage footprint and monitoring.',hint:'supply'},
+      {phase:2,type:'STAGING',icon:'📦',title:'94 ESXi Hosts Enumerated',text:'All 94 VMware ESXi hosts enumerated. Simultaneous encryption prepared. Projected completion: 8 minutes from trigger.',ttp:'T1018 — Remote System Discovery',clue:'Full ESXi enumeration confirms enterprise infrastructure attack at total-virtualisation scale.',hint:'supply'},
+      {phase:2,type:'CREDENTIAL',icon:'🔑',title:'Domain Admin via LSASS',text:'Mimikatz ran in process memory. Domain admin credentials extracted. Complete network access confirmed including backup servers.',ttp:'T1003.001 — LSASS Memory',clue:'Domain admin harvest enables total network deployment of ransomware payload.',hint:'supply'},
+      {phase:2,type:'STAGING',icon:'📦',title:'Backups Destroyed First',text:'Veeam backup server admin credentials obtained. All backup jobs paused. VSS deleted. No recovery path remains.',ttp:'T1490 — Inhibit System Recovery',clue:'Backup elimination before encryption is standard ALPHV BlackCat procedure.',hint:'supply'},
+      {phase:2,type:'TIMING',icon:'⏰',title:'Alert Flood: 847 in 4 Minutes',text:'Alert volume exceeded analyst capacity within 4 minutes of deployment. Manual SOC triage is impossible at this velocity.',ttp:'T1562.001 — Impair Defenses',clue:'Deliberate alert flood confirms target lacks SOAR or automated incident response.',hint:'finance'},
+      {phase:3,type:'EXFIL',icon:'📤',title:'6TB Stolen — Leak Site Live',text:'6TB of patient health records and PII uploaded to ALPHV leak site. 100 million patient records exposed. Site updated with victim logo.',ttp:'T1567 — Exfiltration to Cloud Storage',clue:'6TB healthcare exfil confirms Change Healthcare scale — largest US healthcare breach in history.',hint:'finance'},
+      {phase:3,type:'MALWARE',icon:'⚠️',title:'$22M Ransom — Then Exit Scam',text:'$22M ransom paid by victim. ALPHV then shut down their leak site and claimed FBI seizure — keeping the $22M and denying the affiliate their share.',ttp:'T1657 — Financial Theft',clue:'RaaS exit-scam post-payment is ALPHV BlackCat signature in ultra-high-value campaigns.',hint:'finance'},
+      {phase:3,type:'IMPACT',icon:'💥',title:'100M Americans Exposed',text:'100 million Americans healthcare records exposed. Largest healthcare breach in US history. Prescription delays nationwide. Congressional hearing called.',ttp:'T1486 — Data Encrypted for Impact',clue:'National-scale healthcare disruption confirms ALPHV targeting critical healthcare infrastructure.',hint:'finance'},
+      {phase:3,type:'NETWORK',icon:'🌐',title:'Affiliate Betrayal Pattern',text:'ALPHV took the $22M ransom, shut down infrastructure, blamed FBI — affiliate received nothing, victim received no decryptor. Pure criminal fraud.',ttp:'T1657 — Financial Theft',clue:'RaaS exit-scam after record ransom confirms ALPHV operational end-of-life strategy.',hint:'supply'},
     ]
   },
   // ── TIER 3 — HARD ─────────────────────────────────────────────
@@ -17301,19 +17378,31 @@ const ADVERSARIES=[
     target:'Cryptocurrency & Financial Systems',
     motto:'We fund a weapons programme. Every dollar matters.',
     caseTitle:'OPERATION CRYPTO THUNDER',
-    brief:'$3 billion stolen. Every dollar funds North Korea\'s weapons programme. Move too slow and LAZARUS activates the wiper — destroying every shred of forensic evidence. Find them before they know you are watching.',
+    brief:'March 2022: Ronin Network. One engineer clicked a fake LinkedIn job offer. LAZARUS compromised 5 of 9 validator nodes. $625 million stolen in 6 seconds. The FBI confirmed the attribution. Every dollar funds the North Korean weapons programme. Dwell time: 14 months. Move too slow and the wiper activates and destroys all evidence. Find them.',
     counterModule:'🦅 Falcon Complete MDR',
     route:['pyongyang','dark_web','singapore','swift_node','frankfurt_b'],
     objective:'frankfurt_b',
+    phaseNames:['SPEARPHISH DELIVERY','NETWORK INFILTRATION','FUNDS EXTRACTION'],
+    moduleClues:{
+      identity:{phase:0,type:'MODULE',icon:'🪪',title:'Developer Account Pivot',text:'Falcon Identity traced compromised senior developer account used to authenticate to 4 validator nodes simultaneously — impossible without credential theft.',ttp:'T1078 — Valid Accounts',clue:'Developer account compromise is the initial pivot in all LAZARUS blockchain bridge attacks.',hint:'finance'},
+      xdr:{phase:0,type:'MODULE',icon:'🔍',title:'Custom Implant Decoded',text:'XDR memory forensics decoded LAZARUS custom implant — zero threat intel matches anywhere globally. Built exclusively for this target.',ttp:'T1587.001 — Develop Malware',clue:'Zero-detection custom implant confirms nation-state investment in a specific high-value target.',hint:'finance'},
+      pangea:{phase:0,type:'MODULE',icon:'🌍',title:'North Korean IP Range',text:'Threat intel flagged direct C2 communications from North Korean BGP range — LAZARUS rarely uses DPRK IPs, indicating operational urgency.',ttp:'T1036 — Masquerading',clue:'Direct DPRK IP use suggests the operation is under political pressure to deliver funds quickly.',hint:'finance'},
+      overwatch:{phase:0,type:'MODULE',icon:'👁️',title:'Bangladesh SWIFT Scan Pattern',text:'OverWatch identified SWIFT Alliance Access port scanning identical to pre-attack reconnaissance seen 6 hours before the Bangladesh Bank 2016 heist.',ttp:'T1046 — Network Service Scanning',clue:'Bangladesh SWIFT scan pattern confirms LAZARUS is targeting international wire infrastructure.',hint:'finance'},
+      exposure:{phase:0,type:'MODULE',icon:'🗺️',title:'Unpatched Validator Node',text:'Exposure found Ronin bridge validator running 26-month-old software with an unpatched remote code execution vulnerability in the consensus layer.',ttp:'T1190 — Exploit Public-Facing Application',clue:'Unpatched validator node is the direct code execution access vector for bridge compromise.',hint:'finance'},
+    },
     clues:[
-      {type:'MALWARE',icon:'⚠️',title:'Custom Implant Deployed',text:'Novel malware variant detected — no matches in any global threat database. Built for this target.',ttp:'T1587.001 — Develop Malware',clue:'Custom tooling means significant investment. Target is a high-value financial system.',hint:'finance'},
-      {type:'CREDENTIAL',icon:'🔑',title:'Fake Job Offer Vector',text:'LinkedIn message sent to blockchain developer offering $450,000 role. Contains trojanized PDF.',ttp:'T1566.003 — Spearphishing via Service',clue:'Developer targeting indicates cryptocurrency or DeFi platform as victim.',hint:'finance'},
-      {type:'NETWORK',icon:'🌐',title:'Crypto Mixer Infrastructure',text:'Stolen funds traced through known North Korean crypto mixing infrastructure.',ttp:'T1036 — Masquerading',clue:'Crypto mixing infrastructure is LAZARUS signature. Crypto exchange or DeFi target.',hint:'finance'},
-      {type:'STAGING',icon:'📦',title:'SWIFT Targeting Behaviour',text:'Attacker scanning for SWIFT messaging system access patterns seen in Bangladesh Bank heist.',ttp:'T1491 — Defacement',clue:'SWIFT scanning indicates targeting of banking and international transfer systems.',hint:'finance'},
-      {type:'MALWARE',icon:'⚠️',title:'Wiper Staged as Contingency',text:'Destructive wiper payload placed on staging server — activated if investigators get close.',ttp:'T1485 — Data Destruction',clue:'Wiper contingency means actor expects discovery and will destroy evidence.',hint:'finance'},
-      {type:'LATERAL',icon:'↔️',title:'Custom RAT on CFO Workstation',text:'Custom Remote Access Trojan confirmed on Chief Financial Officer workstation.',ttp:'T1219 — Remote Access Software',clue:'CFO targeting confirms financial theft objective in banking or corporate finance.',hint:'finance'},
-      {type:'EXFIL',icon:'📤',title:'$625M Theft Pattern',text:'Transaction pattern matches Ronin Network heist — $625M stolen via single employee click.',ttp:'T1657 — Financial Theft',clue:'Ronin-style attack targets blockchain bridge or exchange infrastructure.',hint:'finance'},
-      {type:'TIMING',icon:'⏰',title:'14-Month Operation',text:'Forensics estimate operation began 14 months ago. Multi-phase: theft, stealth, destruction.',ttp:'Dwell Time',clue:'Three-phase operation. Theft complete. Stealth active. Destruction imminent.',hint:'finance'},
+      {phase:1,type:'CREDENTIAL',icon:'🔑',title:'Fake LinkedIn Job Offer',text:'Senior blockchain developer received LinkedIn message from fake NEXON Games recruiter offering $450,000 salary. Trojanised PDF with custom zero-day payload.',ttp:'T1566.003 — Spearphishing via Service',clue:'Developer targeting via LinkedIn job offer confirms cryptocurrency or DeFi bridge platform target.',hint:'finance'},
+      {phase:1,type:'MALWARE',icon:'⚠️',title:'Zero-Match Custom Implant',text:'Novel malware variant confirmed — zero matches in any global threat intelligence database. Custom-built for this specific target. Significant investment.',ttp:'T1587.001 — Develop Malware',clue:'Custom zero-detection tooling confirms DPRK state investment — target is of strategic financial value.',hint:'finance'},
+      {phase:1,type:'STAGING',icon:'📦',title:'Wiper Pre-Staged',text:'Destructive wiper payload on staging server — auto-activates if forensic tools or CrowdStrike services are detected on the network.',ttp:'T1485 — Data Destruction',clue:'Auto-wipe on detection confirms actor expects discovery and will eliminate all forensic evidence.',hint:'finance'},
+      {phase:1,type:'TIMING',icon:'⏰',title:'14-Month Full Operation',text:'Forensics estimate full operation: 14 months. Phase 1 access, Phase 2 enumeration and waiting, Phase 3 theft and exit. Methodical.',ttp:'Dwell Time',clue:'14-month operation timeline confirms DPRK state-level resources and deliberate patience.',hint:'finance'},
+      {phase:2,type:'NETWORK',icon:'🌐',title:'5 of 9 Validator Nodes Owned',text:'5 of 9 Ronin bridge validator nodes compromised using stolen developer credentials. Quorum achieved. All bridge transactions can now be fraudulently signed.',ttp:'T1078 — Valid Accounts',clue:'Validator quorum enables unlimited fraudulent bridge transaction approval.',hint:'finance'},
+      {phase:2,type:'STAGING',icon:'📦',title:'SWIFT Probe Running in Parallel',text:'Parallel track: SWIFT Alliance Access probed in 3 financial institutions. Pattern matches 2016 Bangladesh Bank pre-attack reconnaissance.',ttp:'T1046 — Network Service Scanning',clue:'Simultaneous crypto and SWIFT targeting confirms LAZARUS dual-track financial attack strategy.',hint:'finance'},
+      {phase:2,type:'LATERAL',icon:'↔️',title:'CFO Workstation RAT Active',text:'Custom Remote Access Trojan confirmed on the Chief Financial Officer workstation. Real-time screen capture of wire approval dashboard active.',ttp:'T1219 — Remote Access Software',clue:'CFO access confirms financial theft objective spanning both crypto and traditional banking.',hint:'finance'},
+      {phase:2,type:'NETWORK',icon:'🌐',title:'North Korean Mixer Infrastructure',text:'Stolen funds pre-routed through Tornado Cash and Blender.io — North Korean crypto mixing services used across $1.7B in prior LAZARUS operations.',ttp:'T1036 — Masquerading',clue:'DPRK crypto mixer infrastructure is LAZARUS signature across every major theft.',hint:'finance'},
+      {phase:3,type:'EXFIL',icon:'📤',title:'$625M Stolen in 6 Seconds',text:'Two fraudulent transactions signed by 5 compromised validator nodes. $625M in ETH and USDC drained from the Ronin bridge. Largest crypto theft in history.',ttp:'T1657 — Financial Theft',clue:'$625M blockchain bridge theft — target is DeFi bridge or cryptocurrency exchange infrastructure.',hint:'finance'},
+      {phase:3,type:'CREDENTIAL',icon:'🔑',title:'6 Days Before Discovery',text:'Theft was not discovered for 6 days after execution. Axie Infinity users noticed when withdrawal requests failed. Zero monitoring was in place.',ttp:'Dwell Time',clue:'6-day undetected theft confirms no transaction anomaly monitoring on the blockchain bridge.',hint:'finance'},
+      {phase:3,type:'MALWARE',icon:'⚠️',title:'Wiper Activated on Discovery',text:'On discovery, LAZARUS activated the wiper across 4 systems. All forensic artefacts destroyed. Attribution achieved only via blockchain tracing.',ttp:'T1485 — Data Destruction',clue:'Forensic evidence destruction on discovery confirms DPRK counter-forensics protocol.',hint:'finance'},
+      {phase:3,type:'IMPACT',icon:'💥',title:'Weapons Programme Funded',text:'US Treasury confirmed: LAZARUS Group funds North Korean ICBM development. $625M funds an estimated 6 intercontinental ballistic missile development cycles.',ttp:'T1657 — Financial Theft',clue:'DPRK weapons funding confirms every LAZARUS theft is simultaneously a national security incident.',hint:'finance'},
     ]
   },
   {
@@ -17322,19 +17411,31 @@ const ADVERSARIES=[
     target:'Cloud Infrastructure & Identity Providers',
     motto:'We do not break in. We log in.',
     caseTitle:'OPERATION SILENT OAUTH',
-    brief:'287-day average dwell time. No malware. No signatures. COZY BEAR logs in with valid stolen tokens and reads classified documents for months before anyone notices. Find the pattern in the silence. Break the chain.',
+    brief:'January 2024: COZY BEAR accessed Microsoft senior leadership email for weeks using only valid OAuth tokens. No malware. No alerts. SUNBURST 2020: 18,000 organisations infected via trojanised update — 9 US Federal agencies deeply compromised. 287-day average dwell time. The SVR logs in and reads in silence. Find the pattern before 9 months of intelligence is lost.',
     counterModule:'☁️ Falcon Cloud Security',
     route:['svr','kremlin','kyiv','frankfurt_e','amsterdam'],
     objective:'amsterdam',
+    phaseNames:['CLOUD INFILTRATION','IDENTITY PERSISTENCE','SILENT COLLECTION'],
+    moduleClues:{
+      identity:{phase:0,type:'MODULE',icon:'🪪',title:'OAuth Token — 4 Continents',text:'Falcon Identity flagged same OAuth token authenticated from London, Moscow, Singapore, and Toronto within 18 minutes — physically impossible.',ttp:'T1550.001 — Application Access Token',clue:'4-continent OAuth reuse confirms token theft and shared use across SVR operator team.',hint:'supply'},
+      xdr:{phase:0,type:'MODULE',icon:'🔍',title:'Expired Certificate Accepted',text:'XDR cloud telemetry found SAML assertion signed with certificate expired 6 months ago — accepted by legacy IdP without revocation checking.',ttp:'T1606.002 — SAML Tokens',clue:'Expired certificate acceptance confirms legacy identity infrastructure without revocation validation.',hint:'supply'},
+      pangea:{phase:0,type:'MODULE',icon:'🌍',title:'SVR Domain Pattern Match',text:'Threat intel matched C2 domain registration cadence and naming pattern to SVR campaigns in Microsoft 2024 and SolarWinds 2020.',ttp:'T1583.001 — Domain Acquisition',clue:'SVR domain pattern links directly to Russian Foreign Intelligence Service operations.',hint:'energy'},
+      overwatch:{phase:0,type:'MODULE',icon:'👁️',title:'Deliberate Sub-Threshold Pacing',text:'OverWatch confirmed: one authentication attempt per account per 8 hours across 34 days — deliberately below every enterprise lockout threshold.',ttp:'T1110.003 — Password Spraying',clue:'Below-threshold pacing over 34 days is APT29 signature for sustained cloud access without detection.',hint:'supply'},
+      exposure:{phase:0,type:'MODULE',icon:'🗺️',title:'Legacy Test Tenant — No MFA',text:'Exposure identified a forgotten Microsoft 365 test tenant with no MFA — the exact initial access vector confirmed in the Microsoft 2024 breach.',ttp:'T1078.004 — Cloud Accounts',clue:'Forgotten no-MFA test tenant is APT29 known entry point into Microsoft cloud infrastructure.',hint:'supply'},
+    },
     clues:[
-      {type:'CLOUD',icon:'☁️',title:'OAuth Token Theft',text:'Cloud tenant shows OAuth tokens being used from 4 countries simultaneously — impossible travel.',ttp:'T1550.001 — Application Access Token',clue:'OAuth abuse enables cloud access without passwords or MFA.',hint:'supply'},
-      {type:'IDENTITY',icon:'🪪',title:'SAML Token Forged',text:'Identity provider logs show SAML assertions signed with certificate stolen 6 months ago.',ttp:'T1606.002 — SAML Tokens',clue:'SAML forgery indicates targeting of federated identity infrastructure.',hint:'supply'},
-      {type:'CREDENTIAL',icon:'🔑',title:'Password Spray: One Per Account',text:'One attempt per account across 18,000 accounts. No lockouts triggered.',ttp:'T1110.003 — Password Spraying',clue:'Low-and-slow pattern designed for extended cloud access without detection.',hint:'energy'},
-      {type:'NETWORK',icon:'🌐',title:'Trusted SaaS as C2',text:'Command communications channelled through legitimate cloud storage provider.',ttp:'T1102 — Web Service C2',clue:'Legitimate service as C2 evades perimeter security completely.',hint:'supply'},
-      {type:'LATERAL',icon:'↔️',title:'Privileged Role Assigned',text:'Azure AD Global Admin role silently assigned to attacker-controlled account.',ttp:'T1078.004 — Cloud Accounts',clue:'Privilege escalation to Global Admin enables complete tenant takeover.',hint:'supply'},
-      {type:'TIMING',icon:'⏰',title:'287-Day Dwell Time',text:'Forensic analysis estimates attacker has been present for 287 days undetected.',ttp:'Dwell Time',clue:'Long dwell time is SVR trademark — patience over speed.',hint:'supply'},
-      {type:'EXFIL',icon:'📤',title:'Email Archive Accessed',text:'Senior leadership email archives accessed. Security team mailboxes specifically targeted.',ttp:'T1114 — Email Collection',clue:'Security leadership email targeting suggests intelligence on defensive capabilities.',hint:'energy'},
-      {type:'CLOUD',icon:'☁️',title:'API Key Rotation by Attacker',text:'Attacker rotated API keys to lock out legitimate team from their own cloud.',ttp:'T1098 — Account Manipulation',clue:'Persistence through key rotation — targets organisations with critical cloud dependencies.',hint:'supply'},
+      {phase:1,type:'CREDENTIAL',icon:'🔑',title:'Password Spray — One Per Account',text:'One authentication attempt per account across 18,000 cloud accounts over 34 days. Zero lockouts. All attempts from residential proxy pool.',ttp:'T1110.003 — Password Spraying',clue:'Low-and-slow spray over 34 days is designed for cloud access without any detection threshold.',hint:'energy'},
+      {phase:1,type:'CLOUD',icon:'☁️',title:'OAuth Token Theft Confirmed',text:'Cloud tenant shows valid OAuth tokens in use from 4 countries simultaneously — physical impossibility. Token theft confirmed via impossible travel.',ttp:'T1550.001 — Application Access Token',clue:'OAuth theft enables cloud access without password or MFA — bypasses all traditional controls.',hint:'supply'},
+      {phase:1,type:'NETWORK',icon:'🌐',title:'SaaS as C2 Infrastructure',text:'All command communications routed through legitimate Microsoft OneDrive and Dropbox accounts. No custom C2 infrastructure to block or identify.',ttp:'T1102 — Web Service C2',clue:'Legitimate cloud storage as C2 evades all perimeter filtering, proxy inspection, and DLP.',hint:'supply'},
+      {phase:1,type:'TIMING',icon:'⏰',title:'Moscow Hours With Holiday Blank',text:'All activity 07:00-19:00 Moscow Standard Time. Zero activity on Russian public holidays — FSO security calendar including Victory Day observed precisely.',ttp:'Working Hours TTP',clue:'Holiday-observing Moscow hours confirms SVR professional intelligence officers, not contractors.',hint:'supply'},
+      {phase:2,type:'IDENTITY',icon:'🪪',title:'SAML Token Forged',text:'Identity provider logs show SAML assertions signed with stolen certificate. Legacy IdP accepted without checking certificate revocation list.',ttp:'T1606.002 — SAML Tokens',clue:'SAML forgery enables persistent access independent of password reset or MFA state changes.',hint:'supply'},
+      {phase:2,type:'LATERAL',icon:'↔️',title:'Global Admin Role Claimed',text:'Azure AD Global Admin role silently assigned to attacker-controlled service account. Complete tenant access. Zero alerts generated.',ttp:'T1078.004 — Cloud Accounts',clue:'Global Admin escalation enables complete Microsoft 365 tenant takeover for all users.',hint:'supply'},
+      {phase:2,type:'CLOUD',icon:'☁️',title:'API Keys Rotated by Attacker',text:'Attacker rotated API keys and service principal secrets — locking the legitimate security team out of their own cloud environment.',ttp:'T1098 — Account Manipulation',clue:'Key rotation as lockout confirms actor is transitioning from passive espionage to active persistence.',hint:'supply'},
+      {phase:2,type:'TIMING',icon:'⏰',title:'287-Day Dwell Confirmed',text:'Forensic analysis: attacker present for 287 days before discovery. During this period an estimated 34TB of email was silently read.',ttp:'Dwell Time',clue:'287-day dwell confirms SVR patience doctrine — observe without disturbing until objective complete.',hint:'supply'},
+      {phase:3,type:'EXFIL',icon:'📤',title:'Microsoft Leadership Email Read',text:'SVR accessed Microsoft senior leadership email for weeks in January 2024 — including emails about the ongoing SVR investigation itself.',ttp:'T1114 — Email Collection',clue:'Targeting security leadership email means the actor knows what defences are deployed against them.',hint:'energy'},
+      {phase:3,type:'CLOUD',icon:'☁️',title:'18,000 Networks via SolarWinds',text:'SUNBURST: 18,000 organisations installed the trojanised update. SVR activated access in 100 — selected by intelligence value, not random.',ttp:'T1195 — Supply Chain Compromise',clue:'Selective activation from mass infection confirms intelligence mission — not financial gain.',hint:'supply'},
+      {phase:3,type:'EXFIL',icon:'📤',title:'Security Vendor Comms Collected',text:'Security companies among SUNBURST victims had their threat intelligence reports and incident response communications systematically collected.',ttp:'T1114 — Email Collection',clue:'Security vendor targeting confirms SVR wants visibility into all defensive capabilities.',hint:'energy'},
+      {phase:3,type:'IMPACT',icon:'💥',title:'9 US Agencies — 3 Year Investigation',text:'9 US Federal agencies including Treasury, Commerce, and Homeland Security deeply compromised. Investigation ran for over 3 years.',ttp:'Historical TTP',clue:'US Federal agency deep compromise confirms APT29 SVR Russian Foreign Intelligence espionage.',hint:'supply'},
     ]
   },
   // ── TIER 4 — EXPERT ───────────────────────────────────────────
@@ -17344,19 +17445,31 @@ const ADVERSARIES=[
     target:'NATO & Government Networks',
     motto:'We harvest what you trust.',
     caseTitle:'OPERATION IRON HARVEST',
-    brief:'GRU Unit 26165. 18 months inside NATO networks. Defence attaché credentials are the target — a major summit is 72 hours away. The X-Agent fingerprint is your only lead. UTC+3. Expert-level. Hunt it.',
+    brief:'GRU Unit 26165. DNC 2016 — 50,000 emails published. Bundestag 2015 — 16GB stolen. X-Agent confirmed active. A NATO summit is 72 hours away. Defence attache credentials are the objective. Seven compromised nodes between GRU origin and Brussels. Expert-level adversary operating UTC+3. Hunt it.',
     counterModule:'🪪 Falcon Identity',
-    route:['gru','kremlin','kyiv','berlin','brussels'],
-    objective:'brussels',
+    route:['gru','kremlin','svr','kyiv','berlin','brussels','amsterdam'],
+    objective:'amsterdam',
+    phaseNames:['SPEARPHISH CAMPAIGN','NETWORK COMPROMISE','INTELLIGENCE EXTRACTION'],
+    moduleClues:{
+      identity:{phase:0,type:'MODULE',icon:'🪪',title:'Defence Attache Impossible Travel',text:'Falcon Identity detected NATO defence attache account authenticated from three countries in 4 hours — credential shared across APT28 operator team.',ttp:'T1078 — Valid Accounts',clue:'Defence attache credential sharing confirms APT28 targeting the NATO diplomatic-military nexus.',hint:'military'},
+      xdr:{phase:0,type:'MODULE',icon:'🔍',title:'X-Agent Memory Strings',text:'XDR memory scan found X-Agent string artefacts — GRU-exclusive framework never publicly leaked or sold on any criminal market.',ttp:'T1055 — Process Injection',clue:'X-Agent is used exclusively by GRU Unit 26165. Attribution is definitive.',hint:'government'},
+      pangea:{phase:0,type:'MODULE',icon:'🌍',title:'APT28 Domain Registration Pattern',text:'Threat intel matched C2 domain to APT28 pattern — [legitimate-agency]-[action].com — consistent across DNC 2016, Bundestag 2015, and current operation.',ttp:'T1583.001 — Domain Acquisition',clue:'APT28 domain naming continuity across 3 campaigns confirms same GRU unit operating.',hint:'government'},
+      overwatch:{phase:0,type:'MODULE',icon:'👁️',title:'Bundestag Tradecraft Match',text:'OverWatch confirmed: specific WMIC flag order and command timing matches APT28 operator tradecraft documented in the Bundestag 2015 investigation.',ttp:'T1047 — Windows Management Instrumentation',clue:'Tradecraft continuity between Bundestag 2015 and current confirms same GRU operator team.',hint:'government'},
+      exposure:{phase:0,type:'MODULE',icon:'🗺️',title:'ProxyLogon Exchange Unpatched',text:'Exposure found Exchange Server vulnerable to ProxyLogon CVE-2021-26855 — unpatched since March 2021. APT28 actively exploits this vector.',ttp:'T1190 — Exploit Public-Facing Application',clue:'Unpatched Exchange ProxyLogon is the confirmed APT28 initial access vector for NATO targets.',hint:'government'},
+    },
     clues:[
-      {type:'CREDENTIAL',icon:'🔑',title:'Credential Spray',text:'847 failed login attempts across 23 accounts. One-per-account pattern avoids lockout policies.',ttp:'T1110.003 — Password Spraying',clue:'Pattern consistent with NATO-sector credential targeting.',hint:'government'},
-      {type:'MALWARE',icon:'⚠️',title:'X-Agent Implant',text:'Memory forensics confirms X-Agent v4.0 — GRU-exclusive tooling. Never sold or leaked.',ttp:'T1055 — Process Injection',clue:'X-Agent exclusively targets defence and government organisations.',hint:'military'},
-      {type:'NETWORK',icon:'🌐',title:'C2 Domain Mimicry',text:'Command domains mimic legitimate .gov and .mil FQDNs. Pattern: [legit-domain]-update.com',ttp:'T1583.001 — Domain Acquisition',clue:'Mimicry targets organisations with .gov or .mil web presence.',hint:'government'},
-      {type:'TIMING',icon:'⏰',title:'UTC+3 Operating Hours',text:'Activity window 09:00–18:00 Moscow time. Zero activity on Russian public holidays.',ttp:'Working Hours TTP',clue:'Actor is in Moscow timezone. Target likely within 2 timezone offsets.',hint:'government'},
-      {type:'PHISHING',icon:'📧',title:'Spear-Phish: Defence Attachés',text:'Weaponised Word doc targeting NATO defence attachés. Subject: "Classified briefing Q4".',ttp:'T1566.001 — Spearphishing Attachment',clue:'Document crafted for military diplomatic staff. NATO-adjacent target.',hint:'military'},
-      {type:'IDENTITY',icon:'🪪',title:'Impossible Travel Alert',text:'Same credential used from Warsaw and Moscow within 4 minutes. VPN through Ukrainian ISP.',ttp:'T1078 — Valid Accounts',clue:'Impossible travel suggests pivot through Eastern European infrastructure.',hint:'government'},
-      {type:'LATERAL',icon:'↔️',title:'LOLBin Lateral Movement',text:'WMIC.exe used to query remote hosts. Living-off-the-land — no custom malware on disk.',ttp:'T1047 — Windows Management Instrumentation',clue:'LOTL movement toward higher-value administrative accounts.',hint:'government'},
-      {type:'EXFIL',icon:'📤',title:'Stagewise Exfiltration',text:'Data compressed and staged in %TEMP% before encrypted upload to cloud storage.',ttp:'T1002 — Data Compressed',clue:'Exfiltration pattern consistent with long-term intelligence collection.',hint:'government'},
+      {phase:1,type:'CREDENTIAL',icon:'🔑',title:'Credential Spray — 847 Attempts',text:'847 failed login attempts across 23 accounts. One-per-account to avoid lockout. Source: Tor exit nodes mixed with Ukrainian ISP addresses.',ttp:'T1110.003 — Password Spraying',clue:'NATO credential spray via Ukrainian ISP confirms APT28 proxy routing through Eastern Europe.',hint:'government'},
+      {phase:1,type:'MALWARE',icon:'⚠️',title:'X-Agent v4.0 Confirmed',text:'Memory forensics confirms X-Agent v4.0 — GRU Unit 26165 exclusive. Never sold or leaked to non-state actors. Attribution is certain.',ttp:'T1055 — Process Injection',clue:'X-Agent exclusively targets defence and government organisations. GRU Unit 26165 confirmed.',hint:'military'},
+      {phase:1,type:'PHISHING',icon:'📧',title:'Defence Attache Spearphish',text:'Weaponised Word document with CVE-2017-0199 OLE exploit targeting NATO defence attaches. Subject: Classified Q4 Summit Briefing.',ttp:'T1566.001 — Spearphishing Attachment',clue:'Defence attache targeting confirms military-diplomatic intelligence as the objective.',hint:'military'},
+      {phase:1,type:'OSINT',icon:'🔎',title:'Summit Delegation OSINT',text:'Open-source intelligence collected on NATO member delegation composition, hotel bookings, and summit schedule from LinkedIn and conference sites.',ttp:'T1593.001 — Social Media',clue:'Summit-specific OSINT confirms time-critical intelligence need before the meeting.',hint:'government'},
+      {phase:2,type:'NETWORK',icon:'🌐',title:'C2 Mimics .gov and .mil',text:'Command domains mimic legitimate .gov and .mil FQDNs. Pattern: [legit-agency]-update.com — identical to the Bundestag 2015 campaign C2.',ttp:'T1583.001 — Domain Acquisition',clue:'Domain mimicry of .gov and .mil targets government and military organisations exclusively.',hint:'government'},
+      {phase:2,type:'TIMING',icon:'⏰',title:'Moscow Hours — Holiday Blank',text:'All activity 09:00-18:00 Moscow Standard Time. No activity on Russian public holidays — Defender of the Fatherland Day blank confirmed.',ttp:'Working Hours TTP',clue:'Russian official holiday blank confirms GRU professional intelligence officers, not contractors.',hint:'government'},
+      {phase:2,type:'IDENTITY',icon:'🪪',title:'Impossible Travel via Ukraine VPN',text:'Same credential used from Warsaw and Moscow within 4 minutes. VPN routed through Ukrainian ISP to mask GRU origin.',ttp:'T1078 — Valid Accounts',clue:'Ukrainian VPN routing for impossible travel masking is APT28 standard counter-forensics.',hint:'government'},
+      {phase:2,type:'LATERAL',icon:'↔️',title:'WMIC Living-off-the-Land',text:'WMIC.exe used for remote process creation across 14 hosts. Pure living-off-the-land. Zero custom malware written to disk.',ttp:'T1047 — Windows Management Instrumentation',clue:'LOTL via WMIC targets environments where malware detection is the primary security control.',hint:'government'},
+      {phase:3,type:'EXFIL',icon:'📤',title:'Data Staged and Chunked',text:'Data compressed using certutil, staged in AppData, encrypted with AES, then uploaded in 4MB chunks to avoid DLP size thresholds.',ttp:'T1002 — Data Compressed',clue:'Chunk-based upload under DLP threshold confirms target has data loss prevention on outbound.',hint:'government'},
+      {phase:3,type:'EXFIL',icon:'📤',title:'16GB of NATO Documents',text:'16GB of government communications, delegation files, and classified summit briefings staged for exfiltration. Summit security now compromised.',ttp:'T1041 — Exfiltration Over C2 Channel',clue:'16GB volume matches the Bundestag 2015 exfil. Target is a national parliament or NATO institution.',hint:'government'},
+      {phase:3,type:'STAGING',icon:'📦',title:'72-Hour Summit Window',text:'Summit is 72 hours away. Intelligence value of delegation communications peaks at the meeting time. GRU is accelerating extraction.',ttp:'T1589 — Gather Victim Identity Information',clue:'Time-critical extraction confirms GRU requires intelligence before a specific diplomatic event.',hint:'military'},
+      {phase:3,type:'IMPACT',icon:'💥',title:'DNC — Bundestag — NATO Trilogy',text:'TTP continuity across DNC 2016, Bundestag 2015, and this operation confirms GRU Unit 26165 systematic targeting of Western democratic institutions.',ttp:'Historical TTP',clue:'Three-operation TTP continuity confirms the same GRU unit — this is a campaign, not an incident.',hint:'government'},
     ]
   },
   {
@@ -17365,19 +17478,31 @@ const ADVERSARIES=[
     target:'Software Supply Chain & Vendor Networks',
     motto:'We compromised the vendor. Now we own the customer.',
     caseTitle:'OPERATION SUNBURST ECHO',
-    brief:'The code-signing certificate was stolen 6 months before the attack. 18,000 organisations installed the trojanised update. MIDNIGHT BLIZZARD is in their networks right now. The supply chain is the weapon. Find the objective.',
+    brief:'The SolarWinds code-signing certificate was stolen 6 months before the attack. 18,000 organisations installed the trojanised Orion update. 9 US Federal agencies deeply compromised. NOBELIUM — the most sophisticated supply chain operation in history — is running again. Seven nodes. Persistent cloud access is the objective. Find the breach before they embed deeper.',
     counterModule:'🦅 Falcon Complete MDR',
-    route:['svr','dark_web','amsterdam','berlin','brussels'],
-    objective:'brussels',
+    route:['svr','dark_web','amsterdam','berlin','brussels','frankfurt_e','london'],
+    objective:'london',
+    phaseNames:['SUPPLY CHAIN PLANT','DOWNSTREAM EXPLOITATION','SILENT PERSISTENCE'],
+    moduleClues:{
+      identity:{phase:0,type:'MODULE',icon:'🪪',title:'Developer Credential Reuse',text:'Falcon Identity traced stolen code-signing certificate to a developer workstation — same credentials used for dev laptop and production build server.',ttp:'T1552.004 — Private Keys',clue:'Developer credential reuse between workstation and production enabled certificate theft.',hint:'supply'},
+      xdr:{phase:0,type:'MODULE',icon:'🔍',title:'Signed DLL in Orion Update',text:'XDR detected DLL sideloading within SolarWinds Orion — malicious DLL loaded at application startup, signed with a valid SolarWinds certificate.',ttp:'T1574.002 — DLL Side-Loading',clue:'Valid-certificate signed DLL in trusted update bypasses all code-signing validation controls.',hint:'supply'},
+      pangea:{phase:0,type:'MODULE',icon:'🌍',title:'SUNBURST C2 Pre-Registered',text:'Threat intel identified avsvmcloud[.]com — the SUNBURST C2 domain registered by NOBELIUM 8 months before deployment began.',ttp:'T1583.001 — Domain Acquisition',clue:'8-month pre-deployment C2 registration confirms meticulous long-term SVR planning.',hint:'supply'},
+      overwatch:{phase:0,type:'MODULE',icon:'👁️',title:'Selective Activation in 100 of 18,000',text:'OverWatch: SUNBURST dormant in 17,900 installations — manually activated in 100 based on intelligence value assessment.',ttp:'T1036 — Masquerading',clue:'Selective activation confirms intelligence mission — adversary is not seeking financial gain.',hint:'government'},
+      exposure:{phase:0,type:'MODULE',icon:'🗺️',title:'Build Server Has No EDR',text:'Exposure found SolarWinds CI/CD build server with no EDR installed and no network monitoring — zero visibility into build process.',ttp:'T1195.002 — Compromise Software Supply Chain',clue:'Unmonitored build server is the entry point for supply chain compromise at software vendors.',hint:'supply'},
+    },
     clues:[
-      {type:'STAGING',icon:'📦',title:'Build Pipeline Anomaly',text:'Software build server shows unsigned artefact injected 3 minutes before official build.',ttp:'T1195.002 — Compromise Software Supply Chain',clue:'Build pipeline compromise enables mass distribution via trusted update mechanism.',hint:'supply'},
-      {type:'MALWARE',icon:'⚠️',title:'DLL Sideloading in Update',text:'Malicious DLL injected into legitimate software update package. Signed with stolen certificate.',ttp:'T1574.002 — DLL Side-Loading',clue:'Signed malware bypasses all code-signing security controls.',hint:'supply'},
-      {type:'NETWORK',icon:'🌐',title:'18,000 Customers Exposed',text:'Update pushed to 18,000 downstream customers. Security vendor among recipients.',ttp:'T1195 — Supply Chain Compromise',clue:'Scale of impact consistent with SolarWinds-style supply chain attack.',hint:'supply'},
-      {type:'CREDENTIAL',icon:'🔑',title:'Developer Certificate Stolen',text:'Code-signing certificate stolen from developer workstation 6 months prior.',ttp:'T1552.004 — Private Keys',clue:'Certificate theft months in advance indicates long-term planned supply chain attack.',hint:'supply'},
-      {type:'CLOUD',icon:'☁️',title:'OAuth App Backdoor',text:'Malicious OAuth application added to victims\' Azure tenants post-infection.',ttp:'T1098.001 — Additional Cloud Credentials',clue:'Persistent cloud access via OAuth ensures long-term intelligence collection.',hint:'supply'},
-      {type:'TIMING',icon:'⏰',title:'6-Month Pre-Positioning',text:'Attack began 6 months ago via a test environment. Went entirely undetected.',ttp:'Dwell Time',clue:'Extreme patience and sophistication indicates nation-state with specific intelligence requirements.',hint:'government'},
-      {type:'LATERAL',icon:'↔️',title:'Security Vendor Targeted',text:'Security company among compromised downstream customers. Email of security leadership read.',ttp:'T1114 — Email Collection',clue:'Targeting security vendors indicates adversary wants to understand defensive capabilities.',hint:'government'},
-      {type:'IDENTITY',icon:'🪪',title:'Password Spray Detected Later',text:'Post-compromise password spray: one attempt per account across 17 tenants.',ttp:'T1110.003 — Password Spraying',clue:'Password spray post-compromise confirms goal is persistent intelligence collection.',hint:'government'},
+      {phase:1,type:'STAGING',icon:'📦',title:'Build Pipeline Injection',text:'Build server shows unsigned artefact injected 3 minutes before the official signed build across 173 build logs spanning 3 months.',ttp:'T1195.002 — Compromise Software Supply Chain',clue:'Build pipeline compromise enables mass distribution via trusted software update channel.',hint:'supply'},
+      {phase:1,type:'MALWARE',icon:'⚠️',title:'SUNBURST — Signed Malicious DLL',text:'SUNBURST DLL embedded in SolarWinds Orion updates 2019.4 and 2020.2. Signed with valid stolen SolarWinds certificate. Looks completely legitimate.',ttp:'T1574.002 — DLL Side-Loading',clue:'Stolen code-signing certificate makes malicious update indistinguishable from legitimate updates.',hint:'supply'},
+      {phase:1,type:'CREDENTIAL',icon:'🔑',title:'Certificate Stolen 6 Months Prior',text:'Code-signing certificate exfiltrated from developer workstation 6 months before first infected update was shipped. Not noticed during that period.',ttp:'T1552.004 — Private Keys',clue:'6-month certificate-to-deployment timeline confirms planned operation targeting specific organisations.',hint:'supply'},
+      {phase:1,type:'TIMING',icon:'⏰',title:'12-Month Preparation Phase',text:'NOBELIUM spent 12 months pre-positioning: vendor research, build environment mapping, certificate extraction, and test deployment.',ttp:'Dwell Time',clue:'12-month preparation confirms SVR Tier-1 resources targeting specific strategic intelligence objectives.',hint:'supply'},
+      {phase:2,type:'NETWORK',icon:'🌐',title:'18,000 Organisations Infected',text:'Trojanised Orion update installed by 18,000 organisations. NOBELIUM manually selected 100 for active exploitation based on intelligence value.',ttp:'T1195 — Supply Chain Compromise',clue:'Selective exploitation from mass infection confirms intelligence-driven targeting, not ransomware.',hint:'supply'},
+      {phase:2,type:'CLOUD',icon:'☁️',title:'OAuth Backdoor in Azure',text:'Malicious OAuth application added to all 100 targeted Azure tenants post-infection. Persists through password changes and MFA resets.',ttp:'T1098.001 — Additional Cloud Credentials',clue:'Azure OAuth backdoor ensures cloud persistence even after Orion malware is fully removed.',hint:'supply'},
+      {phase:2,type:'LATERAL',icon:'↔️',title:'Security Vendors Targeted',text:'CrowdStrike, FireEye, and Malwarebytes were among downstream targets. Security leadership email collections initiated.',ttp:'T1114 — Email Collection',clue:'Security vendor targeting confirms SVR wants to map all defensive capabilities and counter-operations.',hint:'government'},
+      {phase:2,type:'CREDENTIAL',icon:'🔑',title:'Downstream Password Spray',text:'Post-infection: password spray against 17 targeted tenants. One attempt per account across 18,000 accounts over 28 days.',ttp:'T1110.003 — Password Spraying',clue:'Post-infection credential spray confirms persistent intelligence collection as the sole mission.',hint:'supply'},
+      {phase:3,type:'STAGING',icon:'📦',title:'6-Month Test Environment',text:'NOBELIUM began with a siloed test environment 6 months before the first victim was infected. Operational security was absolute throughout.',ttp:'Dwell Time',clue:'6-month test phase confirms SVR Tier-1 operational discipline and long-game strategic patience.',hint:'government'},
+      {phase:3,type:'EXFIL',icon:'📤',title:'34TB Email Collected',text:'Across all SUNBURST targets, an estimated 34TB of email communications collected over 9 months before discovery by FireEye.',ttp:'T1114 — Email Collection',clue:'34TB email collection over 9 months confirms mass intelligence gathering operation.',hint:'supply'},
+      {phase:3,type:'IDENTITY',icon:'🪪',title:'Direct Spray After Discovery',text:'After SUNBURST was discovered, NOBELIUM pivoted directly to low-and-slow password spray against Microsoft 365 — confirming operational continuity.',ttp:'T1110.003 — Password Spraying',clue:'Operational continuity post-attribution confirms SVR persistence despite being named publicly.',hint:'government'},
+      {phase:3,type:'IMPACT',icon:'💥',title:'9 Agencies — 3-Year Investigation',text:'US Treasury, Commerce, Homeland Security, State Department and 5 other agencies deeply compromised. Investigation ran for over 3 years.',ttp:'Historical TTP',clue:'US Federal agency compromise at this scale confirms NOBELIUM SVR strategic intelligence mission.',hint:'government'},
     ]
   },
   // ── TIER 5 — ELITE ────────────────────────────────────────────
@@ -17387,19 +17512,31 @@ const ADVERSARIES=[
     target:'Critical Infrastructure & OT Networks',
     motto:'We will be there before you know you need to look.',
     caseTitle:'OPERATION SILENT PRE-POSITION',
-    brief:'300 days. No malware. Only Windows built-in tools. VOLT TYPHOON is inside critical infrastructure, pre-positioned and waiting for the order. The only evidence is behavioural. This is the hardest hunt you will run.',
+    brief:'May 2023: US, UK, Australia, Canada, and New Zealand jointly confirmed VOLT TYPHOON has been inside US critical infrastructure for 5 or more years. 300-day dwell. No malware — only Windows built-in tools. Power. Water. Communications. Transportation. Pre-positioned and waiting for the order. 8 compromised nodes across the Pacific. This is the hardest hunt you will ever run.',
     counterModule:'🗺️ Falcon Exposure Mgmt',
-    route:['beijing','dark_web','kyiv','frankfurt_e','geneva'],
+    route:['beijing','singapore','tokyo','dark_web','seattle','new_york','dc','geneva'],
     objective:'geneva',
+    phaseNames:['SILENT PRE-POSITIONING','OT INFILTRATION','CONTINGENCY READINESS'],
+    moduleClues:{
+      identity:{phase:0,type:'MODULE',icon:'🪪',title:'LSASS via Task Manager',text:'Falcon Identity detected Task Manager process accessing LSASS — credential dumping using a legitimate Windows tool. Malware signature: zero.',ttp:'T1003.001 — LSASS Memory',clue:'Credential theft via Task Manager is VOLT TYPHOON zero-malware credential access doctrine.',hint:'energy'},
+      xdr:{phase:0,type:'MODULE',icon:'🔍',title:'VOLT TYPHOON Command Sequence',text:'XDR behavioural analysis: netsh portproxy + certutil -encode + WMIC remote query — exact command sequence documented across all confirmed VOLT TYPHOON intrusions.',ttp:'T1047 — WMI',clue:'Specific LOTL command sequence is VOLT TYPHOON operator signature across all confirmed campaigns.',hint:'energy'},
+      pangea:{phase:0,type:'MODULE',icon:'🌍',title:'SOHO Router Relay Network',text:'Threat intel matched Netgear and Cisco SOHO router compromise pattern to VOLT TYPHOON infrastructure used in Guam military base campaign.',ttp:'T1090 — Proxy',clue:'SOHO router relay network makes VOLT TYPHOON traffic appear as legitimate US-origin traffic.',hint:'energy'},
+      overwatch:{phase:0,type:'MODULE',icon:'👁️',title:'5+ Year Dwell Confirmed',text:'OverWatch forensic timeline: earliest VOLT TYPHOON artefact dated to 2019. 5-plus years of undetected access to critical infrastructure.',ttp:'Dwell Time',clue:'5-year undetected dwell is the longest confirmed APT presence in critical infrastructure history.',hint:'energy'},
+      exposure:{phase:0,type:'MODULE',icon:'🗺️',title:'Ghost OT Asset — 2011',text:'Exposure Management found SCADA controller installed in 2011, never registered in any asset inventory, connected to corporate network via legacy bridge.',ttp:'T1592 — Gather Victim Host Information',clue:'Unregistered OT assets invisible to security teams are VOLT TYPHOON primary access entry points.',hint:'energy'},
+    },
     clues:[
-      {type:'LATERAL',icon:'↔️',title:'Living-off-the-Land Confirmed',text:'Only built-in Windows tools used. WMIC, netsh, certutil. Zero custom tooling or malware.',ttp:'T1047 — WMI',clue:'LOTL movement evades all signature-based detection. Targets OT-adjacent systems.',hint:'energy'},
-      {type:'NETWORK',icon:'🌐',title:'SCADA Data Exfiltrated via DNS',text:'OT historian queried. Data exfiltrated encoded in DNS TXT records.',ttp:'T1048.003 — DNS Exfiltration',clue:'SCADA targeting indicates critical infrastructure — power, water, or nuclear.',hint:'energy'},
-      {type:'STAGING',icon:'📦',title:'Persistent Scheduled Task',text:'Scheduled task named "WindowsDefenderUpdate" created for persistence. Certificate-signed.',ttp:'T1053.005 — Scheduled Task',clue:'Long-term persistence with signed certificate suggests patient state-sponsored actor.',hint:'energy'},
-      {type:'CREDENTIAL',icon:'🔑',title:'Legacy Asset Discovered',text:'Attacker found an unpatched legacy SCADA controller unregistered in any asset inventory.',ttp:'T1592 — Gather Victim Host Information',clue:'Unknown legacy assets are Exposure Management blind spots. OT sector target.',hint:'energy'},
-      {type:'NETWORK',icon:'🌐',title:'Fortinet Device as Relay',text:'Compromised Fortinet VPN device being used as covert relay node.',ttp:'T1090 — Proxy',clue:'Edge device compromise indicates targeting of organisations with perimeter infrastructure.',hint:'energy'},
-      {type:'TIMING',icon:'⏰',title:'300-Day Dwell Estimate',text:'Forensics estimate pre-positioning began over 300 days ago. Actor has been waiting.',ttp:'Dwell Time',clue:'Extreme patience indicates preparation for a specific trigger event.',hint:'energy'},
-      {type:'LATERAL',icon:'↔️',title:'IT-OT Bridge Confirmed',text:'Lateral movement confirmed through IT-OT bridge to industrial control network.',ttp:'T1011 — Exfiltration Over Other Network Medium',clue:'IT-OT bridge crossing confirms critical infrastructure is the objective.',hint:'energy'},
-      {type:'IDENTITY',icon:'🪪',title:'LSASS Memory Access via Task Manager',text:'LSASS credentials dumped using Task Manager — a legitimate Windows tool.',ttp:'T1003.001 — LSASS Memory',clue:'Credential theft using legitimate tools maintains zero-malware profile.',hint:'energy'},
+      {phase:1,type:'LATERAL',icon:'↔️',title:'Zero Malware — LOTL Only',text:'300-day intrusion using only Windows built-ins: WMIC, netsh, certutil, ntdsutil, PowerShell ISE. Traditional AV has zero detections across all endpoints.',ttp:'T1047 — WMI',clue:'LOTL exclusively targets environments where signature-based detection is the primary defence.',hint:'energy'},
+      {phase:1,type:'NETWORK',icon:'🌐',title:'Fortinet VPN Used as Relay',text:'Compromised Fortinet FortiGate appliance used as covert relay. All traffic appears as legitimate VPN activity from trusted IP ranges.',ttp:'T1090 — Proxy',clue:'Edge device relay confirms targeting of organisations with perimeter-only security architecture.',hint:'energy'},
+      {phase:1,type:'CREDENTIAL',icon:'🔑',title:'Ghost SCADA Asset Found',text:'Actor discovered unregistered SCADA controller from 2011 with default factory credentials — not in any asset inventory or security monitoring scope.',ttp:'T1592 — Gather Victim Host Information',clue:'Unknown legacy OT assets are Exposure Management blind spots common in critical infrastructure.',hint:'energy'},
+      {phase:1,type:'TIMING',icon:'⏰',title:'Beijing Hours — PRC Holidays Blank',text:'All activity during 08:00-18:00 Beijing time UTC+8. Zero activity on PRC public holidays — National Day Golden Week blank across all 7 days.',ttp:'Working Hours TTP',clue:'PLA operating hours with PRC holiday observance confirms Chinese military intelligence operation.',hint:'energy'},
+      {phase:2,type:'NETWORK',icon:'🌐',title:'SCADA Data Tunnelled via DNS',text:'OT historian database queried. Operational data encoded in DNS TXT records and exfiltrated via DNS to external resolver — no HTTP required.',ttp:'T1048.003 — DNS Exfiltration',clue:'DNS-based SCADA data exfil confirms OT network access — power grid or water infrastructure.',hint:'energy'},
+      {phase:2,type:'STAGING',icon:'📦',title:'IT-OT Bridge Crossed',text:'Lateral movement confirmed: corporate IT network to OT industrial control network via unmonitored engineering workstation with dual network interface.',ttp:'T1011 — Exfiltration Over Other Network',clue:'IT-OT bridge crossing is the critical escalation confirming physical infrastructure is now at risk.',hint:'energy'},
+      {phase:2,type:'STAGING',icon:'📦',title:'Persistence via WindowsDefenderUpdate',text:'Scheduled task named WindowsDefenderUpdate created on OT historian. Signed with stolen certificate. Survives reboots and patch cycles.',ttp:'T1053.005 — Scheduled Task',clue:'OT-layer persistence confirms VOLT TYPHOON establishing long-term pre-positioned access.',hint:'energy'},
+      {phase:2,type:'IDENTITY',icon:'🪪',title:'LSASS Dumped via Task Manager',text:'Credentials extracted from LSASS using only Task Manager — a legitimate Windows tool. Behavioural detection is the only detection path.',ttp:'T1003.001 — LSASS Memory',clue:'Zero-malware credential theft confirms VOLT TYPHOON doctrine across the entire intrusion.',hint:'energy'},
+      {phase:3,type:'TIMING',icon:'⏰',title:'300-Day Dwell — Still Waiting',text:'Estimated 300-plus day pre-positioning across 5-plus years. Actor has not yet activated. Waiting for a strategic geopolitical trigger event.',ttp:'Dwell Time',clue:'Multi-year dwell without activation confirms VOLT TYPHOON is pre-positioned, not conducting espionage.',hint:'energy'},
+      {phase:3,type:'NETWORK',icon:'🌐',title:'150+ SOHO Router Relay Chain',text:'150-plus compromised SOHO routers and VPN devices form a relay chain. All VOLT TYPHOON traffic appears to originate within US borders.',ttp:'T1090.003 — Multi-hop Proxy',clue:'US-IP relay chain makes attribution and blocking extremely difficult for network defenders.',hint:'energy'},
+      {phase:3,type:'STAGING',icon:'📦',title:'Grid Disruption Capability Mapped',text:'VOLT TYPHOON has mapped power grid switching infrastructure. Specific OT commands identified to cause localised outages on demand.',ttp:'T0816 — Device Restart or Shutdown',clue:'Mapped disruption capability confirms contingency pre-positioning for conflict scenario activation.',hint:'energy'},
+      {phase:3,type:'IMPACT',icon:'💥',title:'Five Eyes Joint Advisory',text:'US, UK, Australia, Canada, and New Zealand issued a joint advisory in May 2023: VOLT TYPHOON is pre-positioned in critical infrastructure across all five nations.',ttp:'Historical TTP',clue:'Five Eyes joint attribution confirms PLA state-sponsored pre-positioning across all allied infrastructure.',hint:'energy'},
     ]
   },
   {
@@ -17408,19 +17545,31 @@ const ADVERSARIES=[
     target:'Industrial Control Systems & Power Grid',
     motto:'We do not steal. We destroy.',
     caseTitle:'OPERATION DARK GRID',
-    brief:'They caused the first confirmed power outage via cyberattack. NotPetya cost the world $10 billion. SANDWORM is pre-positioning again — wiper staged, MBR overwrite scheduled, grid HMI terminals accessed. Find them. Now.',
+    brief:'GRU Unit 74455. December 2015: first confirmed cyberattack to cause a power outage — 225,000 Ukrainians in darkness. December 2016: Kyiv goes dark again. June 2017: NotPetya causes $10 billion in global damage. April 2022: Industroyer2 thwarted by ESET and CERT-UA. SANDWORM is pre-positioning for a third grid attack. Wiper staged. HMI terminals accessed. Find them. Now.',
     counterModule:'🛡️ Falcon Prevent',
-    route:['gru','kremlin','kyiv','frankfurt_e','geneva'],
+    route:['gru','kremlin','dark_web','kyiv','frankfurt_e','berlin','brussels','geneva'],
     objective:'geneva',
+    phaseNames:['INFRASTRUCTURE INFILTRATION','ICS TARGETING','DESTRUCTIVE PAYLOAD'],
+    moduleClues:{
+      identity:{phase:0,type:'MODULE',icon:'🪪',title:'OT Admin Credential Reuse',text:'Falcon Identity detected domain admin credentials from the IT network now active on the OT network — stolen 3 weeks earlier via SANDWORM spearphish.',ttp:'T1078 — Valid Accounts',clue:'IT-domain credentials on OT network is SANDWORM lateral movement technique for grid attacks.',hint:'energy'},
+      xdr:{phase:0,type:'MODULE',icon:'🔍',title:'Industroyer2 Memory Strings',text:'XDR memory scan found IEC 104 command strings and substation XML configuration in process memory — Industroyer2 variant confirmed.',ttp:'T0832 — Manipulate I/O Image',clue:'IEC 104 attack strings confirm Industroyer2 targeting European power grid substation controllers.',hint:'energy'},
+      pangea:{phase:0,type:'MODULE',icon:'🌍',title:'GRU Unit 74455 Attribution',text:'Threat intel matched malware lineage to GRU Unit 74455 — same code base as NotPetya 2017, Industroyer 2016, and Industroyer2 2022.',ttp:'Historical TTP',clue:'GRU 74455 code lineage confirms SANDWORM — Russia most destructive cyberwarfare unit.',hint:'energy'},
+      overwatch:{phase:0,type:'MODULE',icon:'👁️',title:'Manual ICS Command Testing',text:'OverWatch detected manual entry of IEC 104 commands — not automated. Operator is testing substation response before final deployment.',ttp:'T0832 — Manipulate I/O Image',clue:'Manual ICS command testing confirms operator familiarising with target substation layout.',hint:'energy'},
+      exposure:{phase:0,type:'MODULE',icon:'🗺️',title:'3 HMI Terminals Internet-Facing',text:'Exposure found 3 Human-Machine Interface terminals with direct internet connectivity and default credentials. Physical substation controls exposed.',ttp:'T0883 — Internet Accessible Device',clue:'Internet-accessible HMI terminals are SANDWORM confirmed initial OT access vector.',hint:'energy'},
+    },
     clues:[
-      {type:'MALWARE',icon:'⚠️',title:'Wiper Staging Confirmed',text:'INDUSTROYER2 variant detected in memory — industrial control system wiper. No ransom. Pure destruction.',ttp:'T1485 — Data Destruction',clue:'Wiper with ICS capabilities targets power grid or nuclear infrastructure.',hint:'energy'},
-      {type:'NETWORK',icon:'🌐',title:'SCADA Protocol Targeting',text:'Attacker querying IEC 104 protocol commands — targeting electrical substation controls.',ttp:'T0832 — Manipulate I/O Image',clue:'IEC 104 protocol is used in European power grid infrastructure.',hint:'energy'},
-      {type:'STAGING',icon:'📦',title:'MBR Overwrite Scheduled',text:'Master boot record overwrite scheduled via task at 02:00 local time. Rollback impossible.',ttp:'T1561.002 — Disk Structure Wipe',clue:'MBR destruction prevents recovery. Target must be a critical system.',hint:'energy'},
-      {type:'LATERAL',icon:'↔️',title:'IT-OT Bridge Crossed',text:'Lateral movement confirmed: IT network → OT industrial control network via unguarded bridge.',ttp:'T1011 — Exfiltration Over Other Network',clue:'IT-OT crossing is the critical step before physical infrastructure attack.',hint:'energy'},
-      {type:'TIMING',icon:'⏰',title:'Ukraine Pattern Match',text:'TTP pattern matches attacks that caused power outages in Ukraine 2015 and 2016.',ttp:'Historical TTP',clue:'Ukraine-adjacent nations and NATO energy infrastructure are primary targets.',hint:'energy'},
-      {type:'MALWARE',icon:'⚠️',title:'NotPetya Lineage',text:'Code analysis shows evolutionary lineage from NotPetya. $10B in damage in 2017.',ttp:'T1485 — Data Destruction',clue:'NotPetya caused global industrial disruption. Target is industrial or manufacturing sector.',hint:'energy'},
-      {type:'NETWORK',icon:'🌐',title:'HMI Terminal Access',text:'Human-Machine Interface terminals accessed remotely. Physical substation controls at risk.',ttp:'T0883 — Internet Accessible Device',clue:'HMI access means physical consequences are possible. Nuclear or power target.',hint:'energy'},
-      {type:'IDENTITY',icon:'🪪',title:'Admin Credentials Active',text:'Domain admin credentials confirmed active on OT network. No malware — credentials only.',ttp:'T1078 — Valid Accounts',clue:'Credential-based OT access is SANDWORM signature. European energy target.',hint:'energy'},
+      {phase:1,type:'MALWARE',icon:'⚠️',title:'VPNFilter on 500K Routers',text:'SANDWORM VPNFilter malware confirmed on 500,000 SOHO routers globally. Stage 1 loader survives factory reset. Pre-positions for OT network observation.',ttp:'T1542.004 — ROMMONkit',clue:'VPNFilter on network edge devices confirms SANDWORM infrastructure preparation phase.',hint:'energy'},
+      {phase:1,type:'CREDENTIAL',icon:'🔑',title:'Energy Staff Spearphished',text:'Weaponised Excel with macro targeting Ukrainian energy company IT administrators. Payload: Black Energy 3 backdoor. Subject: Q4 Grid Maintenance Schedule.',ttp:'T1566.001 — Spearphishing Attachment',clue:'Ukrainian energy sector IT administrator targeting is SANDWORM established initial access pattern.',hint:'energy'},
+      {phase:1,type:'LATERAL',icon:'↔️',title:'Full IT Network Owned',text:'Domain admin credentials harvested. All 247 corporate workstations accessible. IT-OT boundary is the only remaining obstacle.',ttp:'T1003.001 — LSASS Memory',clue:'Full IT network control is the precondition for SANDWORM IT-OT bridge crossing.',hint:'energy'},
+      {phase:1,type:'TIMING',icon:'⏰',title:'December Winter Pattern',text:'Attack timing analysis: December deployment maximises civilian impact during peak heating and lighting demand. Ukraine December 2015 and December 2016 confirmed.',ttp:'Historical TTP',clue:'December timing for grid attacks follows SANDWORM civilian impact maximisation doctrine.',hint:'energy'},
+      {phase:2,type:'LATERAL',icon:'↔️',title:'IT-OT Bridge Crossed',text:'Confirmed: corporate IT network to OT industrial control network via engineering workstation with dual network interface card.',ttp:'T1011 — Exfiltration Over Other Network',clue:'IT-OT bridge crossing confirms physical infrastructure attack is the operational objective.',hint:'energy'},
+      {phase:2,type:'NETWORK',icon:'🌐',title:'IEC 104 Commands Issued',text:'Attacker querying IEC 104 protocol commands targeting electrical substation remote terminal units. Circuit breaker control being mapped.',ttp:'T0832 — Manipulate I/O Image',clue:'IEC 104 protocol is used exclusively in European power grid substation infrastructure.',hint:'energy'},
+      {phase:2,type:'STAGING',icon:'📦',title:'Industroyer2 in Process Memory',text:'Industroyer2 variant confirmed in process memory. ICS-specific wiper targeting ABB-manufactured relay protection systems at 3 substations.',ttp:'T1485 — Data Destruction',clue:'ABB relay targeting confirms SANDWORM knowledge of the specific Ukrainian grid vendor infrastructure.',hint:'energy'},
+      {phase:2,type:'NETWORK',icon:'🌐',title:'HMI Terminals Active',text:'Human-Machine Interface terminals at 3 regional substations accessed remotely. Physical circuit breaker override confirmed. Outage capability ready.',ttp:'T0883 — Internet Accessible Device',clue:'Active HMI access means physical power outage capability is ready — attack can execute now.',hint:'energy'},
+      {phase:3,type:'MALWARE',icon:'⚠️',title:'MBR Overwrite at 02:00',text:'Master boot record overwrite scheduled for 02:00 local time across 12 systems. Execution: grid outage + wiper + MBR = zero recovery path.',ttp:'T1561.002 — Disk Structure Wipe',clue:'MBR overwrite at 02:00 local time is SANDWORM timed anti-forensics deployment signature.',hint:'energy'},
+      {phase:3,type:'MALWARE',icon:'⚠️',title:'NotPetya Code Lineage',text:'Code analysis shows evolutionary lineage from NotPetya 2017. Same MBR encryption routine. NotPetya caused $10B in global collateral damage.',ttp:'T1485 — Data Destruction',clue:'NotPetya lineage confirms GRU Unit 74455 industrial destruction capability.',hint:'energy'},
+      {phase:3,type:'TIMING',icon:'⏰',title:'Ukraine Grid Attack Pattern',text:'TTP pattern matches December 2015 with 225,000 without power and December 2016 Kyiv capital outage. Pattern confirmed active for current operation.',ttp:'Historical TTP',clue:'Ukraine confirmed grid attack pattern confirms SANDWORM targeting European energy infrastructure.',hint:'energy'},
+      {phase:3,type:'IMPACT',icon:'💥',title:'Industroyer2 — Second Attempt',text:'April 2022: Industroyer2 stopped by ESET and CERT-UA 2 hours before activation. Current operation is the second deployment attempt against the same grid.',ttp:'Historical TTP',clue:'Second attempt post-thwart confirms SANDWORM mission persistence against Ukrainian power grid.',hint:'energy'},
     ]
   },
 ];
@@ -17835,16 +17984,19 @@ function drawWorldMap(){
     ctx.restore();
   }
 
-  // ── Flow particles on Bezier paths ─────────────────────────────
+  // ── Flow particles on Bezier paths — cinematic C2 comms ────────
   for(const p of PACKETS){
-    // Trail effect: draw 3 previous positions
-    for(let trail=2;trail>=0;trail--){
-      const tt=clamp(p.t-trail*0.04,0,1);
+    const sz=p.sz||1.8;
+    // 4-step trail: head + 3 ghost positions for comet effect
+    for(let trail=3;trail>=0;trail--){
+      const tt=clamp(p.t-trail*0.032,0,1);
       const pt=bezierPt(p.sx,p.sy,p.cpx,p.cpy,p.tx,p.ty,tt);
-      const alpha=(1-trail*0.3)*(0.6+0.4*Math.sin(gameT*6+p.t*20));
+      const alpha=(1-trail*0.28)*(0.65+0.35*Math.sin(gameT*7+p.t*22));
       ctx.globalAlpha=alpha;
-      ctx.fillStyle=p.col; ctx.shadowColor=p.col; ctx.shadowBlur=trail===0?10:4;
-      ctx.beginPath(); ctx.arc(pt.x,pt.y,trail===0?3:1.5,0,TAU); ctx.fill();
+      ctx.fillStyle=p.col; ctx.shadowColor=p.col;
+      ctx.shadowBlur=trail===0?8+sz*4:trail===1?5:2;
+      const r=trail===0?sz:sz*(0.6-trail*0.12);
+      ctx.beginPath(); ctx.arc(pt.x,pt.y,Math.max(0.5,r),0,TAU); ctx.fill();
     }
     ctx.globalAlpha=1; ctx.shadowBlur=0;
   }
@@ -17993,14 +18145,35 @@ function isPlayerNode(id){ return caseRoute[playerNodeIdx]===id; }
 function updPackets(dt){
   packetSpawnT-=dt;
   if(packetSpawnT<=0&&CONNECTIONS.length){
-    packetSpawnT=rnd(0.12,0.35);
+    packetSpawnT=rnd(0.06,0.16); // faster baseline spawn
+    // 25% chance of C2 burst — adversaries exchanging large payloads
+    const burst=Math.random()<0.25?ri(2,4):1;
     const [a,b]=CONNECTIONS[ri(0,CONNECTIONS.length-1)];
     const na=NODES[a],nb=NODES[b]; if(!na||!nb) return;
     const onRoute=isOnRoute(a,b);
     const cv=getConnCurve(na,nb);
-    const speed=rnd(0.3,0.7); // t units per second
-    PACKETS.push({sx:na.x,sy:na.y,tx:nb.x,ty:nb.y,cpx:cv.cpx,cpy:cv.cpy,t:0,speed,col:onRoute?'rgba(255,50,50,0.8)':'rgba(100,180,255,0.5)'});
+    for(let bk=0;bk<burst;bk++){
+      const speed=rnd(0.25,0.85);
+      // Size: most are small telemetry dots; some are larger "payload" transfers
+      const sz=Math.random()<0.12?4.5:Math.random()<0.35?2.2:1.6;
+      // Color: route=red threat; dark_web/pyongyang/gru=purple; else blue comms
+      const isDark=a==='dark_web'||b==='dark_web'||a==='pyongyang'||b==='pyongyang'||a==='gru'||b==='gru';
+      const col=onRoute
+        ?`rgba(255,${ri(30,70)},${ri(30,60)},0.88)`
+        :isDark
+          ?`rgba(${ri(160,220)},${ri(0,60)},255,0.70)`
+          :`rgba(${ri(70,130)},${ri(150,220)},255,${rnd(0.38,0.62)})`;
+      PACKETS.push({sx:na.x,sy:na.y,tx:nb.x,ty:nb.y,cpx:cv.cpx,cpy:cv.cpy,t:bk*0.06,speed,col,sz});
+    }
+    // 35% chance of bidirectional ACK — feels like adversaries talking back
+    if(Math.random()<0.35){
+      const rcv=getConnCurve(nb,na);
+      const ackcol=onRoute?'rgba(255,80,50,0.65)':'rgba(100,200,255,0.42)';
+      PACKETS.push({sx:nb.x,sy:nb.y,tx:na.x,ty:na.y,cpx:rcv.cpx,cpy:rcv.cpy,t:rnd(0.02,0.18),speed:rnd(0.28,0.65),col:ackcol,sz:1.4});
+    }
   }
+  // Cap pool — prevent perf issues on long sessions
+  while(PACKETS.length>140) PACKETS.shift();
   for(let i=PACKETS.length-1;i>=0;i--){
     const p=PACKETS[i];
     p.t+=p.speed*dt;
@@ -18076,22 +18249,41 @@ function huntThreatLabel(level){
   return level||'';
 }
 
+// Returns 0, 1, or 2 — the current operation phase based on adversary node progress
+function getCurrentPhase(){
+  if(!selectedCase||!caseRoute.length) return 0;
+  const third=Math.ceil(caseRoute.length/3);
+  return Math.min(2,Math.floor(advNodeIdx/third));
+}
+
 function buildInvestigationNodes(){
   if(!selectedCase) return;
   activeEvidenceNodes=[];
   const DS=getDifficultySettings();
   investigationMaxTime=DS.invTime;
-  const deck=[...selectedCase.clues];
+  // Filter clues by current operation phase — delivers phase-appropriate intelligence
+  const phase=getCurrentPhase()+1; // converts 0-index to 1, 2, or 3
+  const allClues=[...selectedCase.clues];
+  const phaseClues=allClues.filter(c=>c.phase===phase);
+  // Use phase-specific pool if it has enough clues; otherwise fall back to full pool
+  const pool=phaseClues.length>=DS.clueCount?phaseClues:allClues;
+  const deck=[...pool];
   for(let i=deck.length-1;i>0;i--){const j=ri(0,i);[deck[i],deck[j]]=[deck[j],deck[i]];}
   const chosen=deck.slice(0,DS.clueCount);
 
+  // Expanded position pool (9 slots) — shuffled each session so
+  // no two players see the same clue layout for the same adversary
   const positions=[
-    {x:LW*0.22,y:LH*0.32},{x:LW*0.68,y:LH*0.28},{x:LW*0.45,y:LH*0.58},
-    {x:LW*0.78,y:LH*0.52},{x:LW*0.18,y:LH*0.62},{x:LW*0.55,y:LH*0.72},
+    {x:LW*0.18,y:LH*0.28},{x:LW*0.54,y:LH*0.22},{x:LW*0.82,y:LH*0.30},
+    {x:LW*0.32,y:LH*0.48},{x:LW*0.68,y:LH*0.44},{x:LW*0.20,y:LH*0.64},
+    {x:LW*0.50,y:LH*0.66},{x:LW*0.76,y:LH*0.58},{x:LW*0.62,y:LH*0.76},
   ];
+  // Fisher-Yates shuffle positions each investigation
+  for(let i=positions.length-1;i>0;i--){const j=ri(0,i);[positions[i],positions[j]]=[positions[j],positions[i]];}
   chosen.forEach((clue,i)=>{
     const pos=positions[i%positions.length];
-    activeEvidenceNodes.push({x:pos.x+rnd(-20,20),y:pos.y+rnd(-10,10),clue,collected:false,pulse:Math.random()*TAU,hovered:false});
+    // Larger jitter (±38, ±22) increases session-to-session visual variance
+    activeEvidenceNodes.push({x:pos.x+rnd(-38,38),y:pos.y+rnd(-22,22),clue,collected:false,pulse:Math.random()*TAU,hovered:false});
   });
   usedModuleThisInvestigation=false;
   selectedModule=null;
@@ -18146,6 +18338,16 @@ function drawInvestigation(){
   ctx.font=huntFont(16,'bold'); ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=12;
   ctx.fillText(`⚠ ${adv.name} — ${T('g_hunt_evidence_collection')}`,16,48, LW-280); ctx.shadowBlur=0;
 
+  // Phase indicator — centered at bottom of header
+  const _phIdx=getCurrentPhase();
+  const _phName=adv.phaseNames?.[_phIdx]||('PHASE '+(_phIdx+1));
+  const _phColors=['#39FF14','#FFE600','#FF1744'];
+  const _phColor=_phColors[_phIdx]||'#39FF14';
+  ctx.font=huntFont(10,'bold'); ctx.fillStyle=_phColor; ctx.shadowColor=_phColor; ctx.shadowBlur=7;
+  ctx.textAlign='center';
+  ctx.fillText('\u25C8 PHASE '+(_phIdx+1)+'/3  \u00B7  '+_phName, LW/2, 60);
+  ctx.shadowBlur=0; ctx.textAlign='left';
+
   // Timer — bigger bar
   const timeLeft=Math.max(0,investigationMaxTime-investigationTimer);
   const timerCol=timeLeft>15?'#39FF14':timeLeft>8?'#FFE600':'#FF1744';
@@ -18177,7 +18379,7 @@ function drawInvestigation(){
     const dist=Math.hypot(MOUSE.x-node2.x,MOUSE.y-node2.y);
     node2.hovered=dist<28;
     const p=0.7+Math.sin(node2.pulse*4)*0.3;
-    const typeColors={CREDENTIAL:'#FFE600',MALWARE:'#FF1744',NETWORK:'#42d9ff',TIMING:'#AA00FF',LATERAL:'#FF8D39',PHISHING:'#FF62FF',CLOUD:'#00FFD0',SOCIAL:'#FF62FF',STAGING:'#C850FF',IDENTITY:'#FFE600',EXFIL:'#FF8D39',BEHAVIORAL:'#74ff88'};
+    const typeColors={CREDENTIAL:'#FFE600',MALWARE:'#FF1744',NETWORK:'#42d9ff',TIMING:'#AA00FF',LATERAL:'#FF8D39',PHISHING:'#FF62FF',CLOUD:'#00FFD0',SOCIAL:'#FF62FF',STAGING:'#C850FF',IDENTITY:'#FFE600',EXFIL:'#FF8D39',BEHAVIORAL:'#74ff88',IMPACT:'#FF1744',OSINT:'#74ff88',MODULE:'#39FF14'};
     const ec=typeColors[node2.clue.type]||'#AA00FF';
 
     ctx.save();
@@ -18232,7 +18434,7 @@ function drawInvestigation(){
     ctx.shadowBlur=0;
     ctx.font=huntFont(12,'bold'); ctx.fillStyle='#AA00FF'; ctx.fillText(T('g_collected'),sideX+12,sideY+18);
     collectedClues.forEach((c,i)=>{
-      const typeColors={CREDENTIAL:'#FFE600',MALWARE:'#FF1744',NETWORK:'#42d9ff',TIMING:'#AA00FF',LATERAL:'#FF8D39',PHISHING:'#FF62FF',CLOUD:'#00FFD0',SOCIAL:'#FF62FF',STAGING:'#C850FF',IDENTITY:'#FFE600',EXFIL:'#FF8D39',BEHAVIORAL:'#74ff88'};
+      const typeColors={CREDENTIAL:'#FFE600',MALWARE:'#FF1744',NETWORK:'#42d9ff',TIMING:'#AA00FF',LATERAL:'#FF8D39',PHISHING:'#FF62FF',CLOUD:'#00FFD0',SOCIAL:'#FF62FF',STAGING:'#C850FF',IDENTITY:'#FFE600',EXFIL:'#FF8D39',BEHAVIORAL:'#74ff88',IMPACT:'#FF1744',OSINT:'#74ff88',MODULE:'#39FF14'};
       const ec=typeColors[c.type]||'#AA00FF';
       const cy=sideY+28+i*sideRowH;
       ctx.fillStyle='rgba(8,2,26,0.55)'; ctx.strokeStyle=ec+'55'; ctx.lineWidth=1;
@@ -18318,13 +18520,14 @@ function handleInvestigationClick(){
         pursuit=Math.min(100,pursuit+10);
         SFX.deploy();
         flash(170,0,255,0.3); floatSpawn(LW/2,LH/2-30,`${m} ${T('g_hunt_module_deployed')}`,'#AA00FF',14);
-        // Add a bonus clue if deck has more
-        const remaining=[...selectedCase.clues].filter(c=>!collectedClues.includes(c));
-        if(remaining.length>0){
-          const bonus=remaining[ri(0,remaining.length-1)];
+        // Deploy module-specific bonus clue — unique per module, never repeats from main pool
+        const modKeys=['identity','xdr','pangea','overwatch','exposure'];
+        const mKey=modKeys[i];
+        const moduleClue=selectedCase.moduleClues?.[mKey];
+        if(moduleClue){
           const positions=[{x:LW*0.35,y:LH*0.45},{x:LW*0.6,y:LH*0.38}];
           const pos=positions[ri(0,1)];
-          activeEvidenceNodes.push({x:pos.x+rnd(-15,15),y:pos.y+rnd(-10,10),clue:bonus,collected:false,pulse:Math.random()*TAU,hovered:false});
+          activeEvidenceNodes.push({x:pos.x+rnd(-15,15),y:pos.y+rnd(-10,10),clue:moduleClue,collected:false,pulse:Math.random()*TAU,hovered:false});
           floatSpawn(pos.x,pos.y-24,T('g_hunt_new_evidence'),'#39FF14',12);
         }
         score+=200; floatSpawn(LW/2,LH/2,T('g_hunt_module_bonus_pts'),'#AA00FF',14);
@@ -18352,7 +18555,7 @@ function drawEvidenceCard(dt){
   const cardY=lerp(LH+50,LH/2-cardH/2,eased);
   const cardX=LW/2-Math.round(_cardW/2);
 
-  const typeColors={CREDENTIAL:'#FFE600',MALWARE:'#FF1744',NETWORK:'#42d9ff',TIMING:'#AA00FF',LATERAL:'#FF8D39',PHISHING:'#FF62FF',CLOUD:'#00FFD0',SOCIAL:'#FF62FF',STAGING:'#C850FF',IDENTITY:'#FFE600',EXFIL:'#FF8D39',BEHAVIORAL:'#74ff88'};
+  const typeColors={CREDENTIAL:'#FFE600',MALWARE:'#FF1744',NETWORK:'#42d9ff',TIMING:'#AA00FF',LATERAL:'#FF8D39',PHISHING:'#FF62FF',CLOUD:'#00FFD0',SOCIAL:'#FF62FF',STAGING:'#C850FF',IDENTITY:'#FFE600',EXFIL:'#FF8D39',BEHAVIORAL:'#74ff88',IMPACT:'#FF1744',OSINT:'#74ff88',MODULE:'#39FF14'};
   const ec=typeColors[clue.type]||'#AA00FF';
 
   ctx.save();
@@ -18682,7 +18885,9 @@ function advanceAfterDeduction(){
 //  PURSUIT BAR
 // ════════════════════════════════════════════════════════════════
 function drawPursuitBar(){
-  const bx=12,by=LH-50,bw=LW/2-24,bh=18;
+  // by=LH-38 → bar at LH-38 to LH-20; bg panel LH-60 to LH-16
+  // Info panels end at LH-64, leaving a 4px gap above the bg panel
+  const bx=12,by=LH-38,bw=LW/2-24,bh=18;
   ctx.fillStyle='rgba(4,1,18,0.68)';
   ctx.strokeStyle='rgba(170,0,255,0.4)'; ctx.lineWidth=1.5;
   ctx.shadowColor='rgba(170,0,255,0.2)'; ctx.shadowBlur=8;
@@ -18731,16 +18936,14 @@ function drawHUD(){
     ctx.textAlign='left';
   }
 
-  // Pursuit (top right) — bigger bar
+  // Pursuit (top right) — compact text BELOW the ◈ MISSION SELECT button
+  // Button is position:absolute top:12 right:12 ~40px tall, so y=46+ is safe
   const p=pursuit;
   const pc=p>=70?'#39FF14':p>=40?'#FFE600':'#FF1744';
   ctx.font=huntFont(12,'bold'); ctx.fillStyle=pc; ctx.textAlign='right';
-  ctx.fillText(`${T('g_pursuit')} ${Math.round(p)}%`,LW-14,22); ctx.textAlign='left';
-  ctx.fillStyle='#1a1a2e'; ctx.fillRect(LW-232,28,220,10);
-  ctx.fillStyle=pc; ctx.shadowColor=pc; ctx.shadowBlur=5;
-  ctx.fillRect(LW-232,28,220*(p/100),10); ctx.shadowBlur=0;
-  ctx.font=huntFont(11,'bold'); ctx.fillStyle='#555'; ctx.textAlign='right';
-  ctx.fillText(T('g_abort'),LW-14,54); ctx.textAlign='left';
+  ctx.fillText(`${T('g_pursuit')} ${Math.round(p)}%`,LW-14,44); ctx.textAlign='left';
+  ctx.font=huntFont(11,'bold'); ctx.fillStyle='#444'; ctx.textAlign='right';
+  ctx.fillText(T('g_abort'),LW-14,58); ctx.textAlign='left';
 }
 
 function huntTitleScale(){
@@ -18968,14 +19171,14 @@ function drawCaseSelect(dt){
     ctx.font=`${Math.round(10*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
     ctx.fillText(caseFile.nation,cx+8,cy+28);
     ctx.font=`bold ${Math.round(10*ui)}px "Courier New"`; ctx.fillStyle=threatCol;
-    ctx.fillText(`⚠ ${huntThreatLabel(caseFile.threat)}`,cx+8,cy+42);
+    ctx.fillText(`! ${huntThreatLabel(caseFile.threat)}`,cx+8,cy+42);
     ctx.fillStyle=tierCol;
     ctx.fillText('★'.repeat(ds)+'☆'.repeat(5-ds),cx+8,cy+57);
     ctx.fillStyle='#d5dde5';
     const targetText=caseFile.target.length>24?caseFile.target.slice(0,22)+'…':caseFile.target;
     ctx.fillText(targetText,cx+8,cy+70);
-    ctx.fillStyle='#2a2a4a';
-    const moduleText=caseFile.counterModule.length>20?caseFile.counterModule.slice(0,18)+'…':caseFile.counterModule;
+    ctx.fillStyle='#7f8b96';
+    const moduleText=caseFile.counterModule.length>22?caseFile.counterModule.slice(0,20)+'…':caseFile.counterModule;
     ctx.fillText(moduleText,cx+8,cy+82);
     ctx.restore();
   });
@@ -19147,6 +19350,19 @@ function drawBriefing(dt){
   const briefLines=wrapTextPx(adv.brief,_brW-100); let ly=LH/2-_brH/2+320;
   briefLines.forEach(l=>{ctx.fillText(l,LW/2,ly);ly+=20;});
 
+  // Phase roadmap — shows the 3 operation phases as a cinematic preview
+  if(adv.phaseNames){
+    const pCols=['#39FF14','#FFE600','#FF1744'];
+    ctx.font=huntFont(9,'bold'); ctx.fillStyle='#3a3a5a'; ctx.textAlign='center';
+    ctx.fillText('\u25A0\u25A0\u25A0 OPERATION PHASES \u25A0\u25A0\u25A0',LW/2,ly+14);
+    adv.phaseNames.forEach((pn,pi)=>{
+      ctx.font=huntFont(10,'bold'); ctx.fillStyle=pCols[pi]; ctx.shadowColor=pCols[pi]; ctx.shadowBlur=5;
+      ctx.fillText('\u25C8 '+('0'+(pi+1)).slice(-2)+' '+pn, LW/2-180+pi*180, ly+30);
+    });
+    ctx.shadowBlur=0;
+    ly+=34;
+  }
+
   ctx.font=huntFont(12,'bold'); ctx.fillStyle='#AA00FF';
   ctx.fillText(`${T('h_brief_open')}: ${huntLens.label}`,LW/2,ly+26);
   ctx.font=huntFont(11); ctx.fillStyle='#7f8b96';
@@ -19182,7 +19398,7 @@ function drawIntercept(dt){
   ctx.fillText(`${adv.name} — ${T('h_intercept_line')}`,LW/2,LH/2-84); ctx.shadowBlur=0;
   ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(LW/2-340,LH/2-62); ctx.lineTo(LW/2+340,LH/2-62); ctx.stroke();
   ctx.font=huntFont(13); ctx.fillStyle='#d5dde5'; ctx.fillText(`${adv.counterModule} ${T('h_intercept_module_line')}`,LW/2,LH/2-36, _iw-60);
-  const words=adv.brief.split(' ').slice(0,18).join(' ')+'…'; ctx.font=huntFont(12); ctx.fillStyle='#7f8b96'; ctx.fillText(words,LW/2,LH/2-14);
+  ctx.font=huntFont(12,'italic'); ctx.fillStyle='#7f8b96'; ctx.fillText(`"${adv.motto}"`,LW/2,LH/2-14, _iw-80);
   ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.beginPath(); ctx.moveTo(LW/2-340,LH/2+6); ctx.lineTo(LW/2+340,LH/2+6); ctx.stroke();
   const grade=huntRankLabel(score);
   ctx.font=huntFont(22,'bold'); ctx.fillStyle='#FFD700'; ctx.shadowColor='#FFD700'; ctx.shadowBlur=12; ctx.fillText(`${T('g_score')}: ${formatLocaleNumber(score)}`,LW/2,LH/2+38); ctx.shadowBlur=0;
@@ -19215,7 +19431,7 @@ function drawBreach(dt){
   ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(LW/2-340,LH/2-84); ctx.lineTo(LW/2+340,LH/2-84); ctx.stroke();
   ctx.font=huntFont(14,'bold'); ctx.fillStyle='#FF8D39'; ctx.shadowColor='#FF8D39'; ctx.shadowBlur=8; ctx.fillText(T('g_what_falcon'),LW/2,LH/2-58); ctx.shadowBlur=0;
   ctx.font=huntFont(18,'bold'); ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=12; ctx.fillText(adv.counterModule,LW/2,LH/2-28); ctx.shadowBlur=0;
-  ctx.font=huntFont(12); ctx.fillStyle='#d5dde5'; ctx.fillText(adv.brief.split('.')[0]+'.',LW/2,LH/2-2, LW-200);
+  ctx.font=huntFont(13,'italic'); ctx.fillStyle='#d5dde5'; ctx.fillText(`"${adv.motto}"`,LW/2,LH/2-2, LW-200);
   ctx.font=huntFont(11); ctx.fillStyle='#7f8b96'; ctx.fillText(`${T('h_brief_open')}: ${huntLens.label}`,LW/2,LH/2+22);
   ctx.font=huntFont(11); ctx.fillStyle='#42d9ff'; ctx.fillText(T('h_breach_line2'),LW/2,LH/2+44);
   ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.beginPath(); ctx.moveTo(LW/2-340,LH/2+62); ctx.lineTo(LW/2+340,LH/2+62); ctx.stroke();
@@ -19235,43 +19451,44 @@ function drawWorldMapHUD(){
   const DS=getDifficultySettings();
 
   // ── Info panel (above pursuit bar) ─────────────────────────────
+  // Panel: LH-148 to LH-64 (84px) — pursuit bar bg starts at LH-60 (4px gap)
   ctx.fillStyle='rgba(4,1,18,0.68)';
   ctx.strokeStyle='rgba(170,0,255,0.45)'; ctx.lineWidth=1.5;
   ctx.shadowColor='rgba(170,0,255,0.25)'; ctx.shadowBlur=10;
-  ctx.beginPath(); ctx.roundRect(12,LH-128,400,66,6); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.roundRect(12,LH-148,400,84,6); ctx.fill(); ctx.stroke();
   ctx.shadowBlur=0;
 
   ctx.font=huntFont(11,'bold'); ctx.fillStyle='#555';
-  ctx.fillText(T('g_last_pos'),20,LH-112);
+  ctx.fillText(T('g_last_pos'),20,LH-132);
   ctx.font=huntFont(14,'bold'); ctx.fillStyle=adv.color;
   ctx.shadowColor=adv.color; ctx.shadowBlur=8;
-  ctx.fillText(`${node?.name||T('g_unknown')} — ${node?.org||''}`,20,LH-94, 380);
+  ctx.fillText(`${node?.name||T('g_unknown')} — ${node?.org||''}`,20,LH-114, 380);
   ctx.shadowBlur=0;
   ctx.font=huntFont(11); ctx.fillStyle='#7f8b96';
-  ctx.fillText(`${adv.name}  ·  ${node?.sector||''}  ·  ${DS.tierLabel}`,20,LH-76, 380);
+  ctx.fillText(`${adv.name}  ·  ${node?.sector||''}  ·  ${DS.tierLabel}`,20,LH-96, 380);
   ctx.font=huntFont(12,'bold'); ctx.fillStyle='#39FF14';
   ctx.shadowColor='#39FF14'; ctx.shadowBlur=6;
-  ctx.fillText(T('g_investigate'),20,LH-60);
+  ctx.fillText(T('g_investigate'),20,LH-76);  // inside panel ✓
   ctx.shadowBlur=0;
 
-  // ── Objective panel (compact) ─────────────────────────────────
+  // ── Objective panel (compact, matches info panel height) ──────
   const objNode=NODES[caseRoute[caseRoute.length-1]];
   if(objNode){
     ctx.fillStyle='rgba(4,1,18,0.68)';
     ctx.strokeStyle='rgba(255,215,0,0.45)'; ctx.lineWidth=1.5;
     ctx.shadowColor='rgba(255,215,0,0.2)'; ctx.shadowBlur=10;
-    ctx.beginPath(); ctx.roundRect(LW-260,LH-128,248,66,6); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(LW-260,LH-148,248,84,6); ctx.fill(); ctx.stroke();
     ctx.shadowBlur=0;
     ctx.font=huntFont(11,'bold'); ctx.fillStyle='#666';
-    ctx.fillText(T('g_objective_target'),LW-252,LH-112);
+    ctx.fillText(T('g_objective_target'),LW-252,LH-132);
     ctx.font=huntFont(13,'bold'); ctx.fillStyle='#FFD700';
     ctx.shadowColor='#FFD700'; ctx.shadowBlur=8;
-    ctx.fillText(`${objNode.icon} ${objNode.name}`,LW-252,LH-94);
+    ctx.fillText(`${objNode.icon} ${objNode.name}`,LW-252,LH-114);
     ctx.shadowBlur=0;
     ctx.font=huntFont(11); ctx.fillStyle='#7f8b96';
-    ctx.fillText(objNode.org,LW-252,LH-76);
+    ctx.fillText(objNode.org,LW-252,LH-96);
     ctx.font=huntFont(11,'bold'); ctx.fillStyle='#555';
-    ctx.fillText(`${T('g_sector')}: ${objNode.sector}`,LW-252,LH-60);
+    ctx.fillText(`${T('g_sector')}: ${objNode.sector}`,LW-252,LH-76);
   }
 
   drawPursuitBar();
@@ -19553,7 +19770,7 @@ function frame(ts){
 
     case STATE.EVIDENCE_CARD:
       if(activeEvidenceCard) activeEvidenceCard.t+=dt;
-      if(hk('Space')||(MOUSE.clicked&&activeEvidenceCard&&activeEvidenceCard.t>2.5)||(activeEvidenceCard&&activeEvidenceCard.t>20)){
+      if(hk('Space')||(MOUSE.clicked&&activeEvidenceCard&&activeEvidenceCard.t>2.5)||(activeEvidenceCard&&activeEvidenceCard.t>40)){
 
 
         gameState=STATE.INVESTIGATION;
