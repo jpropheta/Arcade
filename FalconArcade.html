@@ -16719,7 +16719,7 @@ function resetThreatHuntRuntimeState(opts={}){
   deductionTimeLeft=DEDUCTION_TIMER;
   score=0;
   briefingT=0;
-  interceptT=0;
+  interceptT=0; interceptFiredAt=[-1,-1,-1]; interceptMsg=null; phaseTransState=null; nodeArrivalState=null;
   breachT=0;
   caseSel=0;
   rankingShown=false;
@@ -16828,132 +16828,132 @@ const RADIO={state:'idle',t:0,nextT:22+Math.random()*10,msg:null};
 const RADIO_MSGS={
   generic:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"Every adversary leaves a pattern. Your job is to find it before they reach their objective."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Check the clue match indicators on deduction cards. More blue bars means higher confidence in your target."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Check the clue match indicators on deduction cards. More blue bars means higher confidence in your target."},
     {op:'OVERWATCH ANALYST',cs:'OW-ANALYST',col:'#AA00FF',msg:"Deploy your Falcon module early. It reveals bonus evidence and boosts your pursuit meter by 10 percent."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"Wrong deductions cost pursuit distance. Use all collected evidence before committing to a target node."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"Nation-state actors operate in their home timezone. Timing clues narrow the geography significantly."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"The objective node is marked with a gold ring. Everything the adversary does points toward it."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"The objective node is marked with a gold ring. Everything the adversary does points toward it."},
     {op:'OVERWATCH ANALYST',cs:'OW-ANALYST',col:'#AA00FF',msg:"Collect all evidence nodes before advancing to deduction. More clues means more confidence."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"The pursuit meter is everything. Stay above 50 percent and you control the hunt."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"CrowdStrike tracks over 230 named adversaries. Every one of these cases is based on real intelligence."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"OverWatch analysts hunt adversaries in real customer environments 24 hours a day. This is what they do."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"OverWatch analysts hunt adversaries in real customer environments 24 hours a day. This is what they do."},
     // GTR 2026 key findings
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"GTR 2026: 79 percent of detections in 2025 were malware-free. Adversaries live off the land. Identity is the new perimeter."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"GTR 2026: Average eCrime breakout time is now 48 minutes. The fastest we observed was 2 minutes 7 seconds. Speed kills."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: China-nexus intrusions surged 150 percent year-over-year. VANGUARD PANDA and LIMINAL PANDA leading the charge."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: China-nexus intrusions surged 150 percent year-over-year. VANGUARD PANDA and LIMINAL PANDA leading the charge."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"GTR 2026: GenAI-powered social engineering increased 442 percent. Adversaries use AI to craft perfect phishing at scale."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"GTR 2026: Cloud intrusions grew 26 percent. Valid credentials are the number one initial access vector into cloud environments."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: 52 percent of vulnerabilities observed were related to initial access. Patch management is not optional."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: 52 percent of vulnerabilities observed were related to initial access. Patch management is not optional."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"GTR 2026: Insider threats from North Korean IT workers — FAMOUS CHOLLIMA — hit 304 percent increase in incidents."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"GTR 2026: Cross-domain attacks spanning endpoint, identity and cloud increased 3x. Siloed security is dead."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: Interactive intrusions increased 35 percent. Hands-on-keyboard attacks mean an operator is watching you right now."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: Interactive intrusions increased 35 percent. Hands-on-keyboard attacks mean an operator is watching you right now."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"CrowdStrike Signal eliminates standing privileges. Every access request is earned, verified, and time-bound. Zero trust, enforced."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"The Falcon platform now covers endpoint, cloud, identity, data, SIEM, and IT — all from a single agent. One platform to stop breaches."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Charlotte AI processes over one trillion security events per week. Every analyst now has an AI teammate working at machine speed."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Charlotte AI processes over one trillion security events per week. Every analyst now has an AI teammate working at machine speed."},
     // LOLbin intelligence — each tied to detecting module
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"powershell.exe is the most abused LOLBin we track. OverWatch hunts encoded commands, nested executions, and injection chains — without a single malware signature."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"wmiExec abuse is invisible to legacy antivirus. XDR sees lateral movement as a correlated chain — not isolated events. That chain is exactly what catches them."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"wmiExec abuse is invisible to legacy antivirus. XDR sees lateral movement as a correlated chain — not isolated events. That chain is exactly what catches them."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"bitsAdmin drops payloads because every Windows machine trusts BITS transfers. Adversaries hide their downloads inside a service your IT team considers safe. OverWatch sees the delivery chain."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"certutil.exe is a certificate management tool. APT10, VOLT TYPHOON, FANCY BEAR — all use it to download and decode payloads. OverWatch flags that parent-child process pattern instantly."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"certutil.exe is a certificate management tool. APT10, VOLT TYPHOON, FANCY BEAR — all use it to download and decode payloads. OverWatch flags that parent-child process pattern instantly."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"schtasks establishes persistence that survives reboots. When you neutralise it and it comes back — the adversary re-registered the task. XDR sees both events. That sequence is the fingerprint."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"mshta.exe executes remote HTML applications from a URL. STAR KITTEN used it in the NokNok campaign. One click. Full device access. Identity Protection sees the process tree before the payload runs."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"mshta.exe executes remote HTML applications from a URL. STAR KITTEN used it in the NokNok campaign. One click. Full device access. Identity Protection sees the process tree before the payload runs."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"rundll32 can load arbitrary DLL code from a path the adversary controls. FANCY BEAR, COZY BEAR, Lazarus — all use it. OverWatch hunts the abnormal parent-child relationship, not the binary."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"cloneVM is cloud-native tradecraft. Adversaries clone a VM to dump credentials offline without touching the live system. Falcon Cloud Security sees the API call that no legitimate admin makes at 3am."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"cloneVM is cloud-native tradecraft. Adversaries clone a VM to dump credentials offline without touching the live system. Falcon Cloud Security sees the API call that no legitimate admin makes at 3am."},
     // Identity, OverWatch, SGNL deep dives
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"CrowdStrike OverWatch interrupted SANDWORM inside a Ukrainian power grid 72 hours before the attack would have taken down the eastern grid. Human hunters. That is the difference."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Identity is the new perimeter. 79 percent of intrusions use no malware — just stolen credentials and living-off-the-land binaries. Every signature-based tool in your stack is blind to this class of attack."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Identity is the new perimeter. 79 percent of intrusions use no malware — just stolen credentials and living-off-the-land binaries. Every signature-based tool in your stack is blind to this class of attack."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"CrowdStrike Signal enforces zero standing privileges. No session is pre-authorised. Every access is earned, verified, and time-bound. COZY BEAR's golden SAML tokens become worthless in this model."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Telemetry is the foundation of everything we do. One trillion security events per week. Without that volume, the statistical patterns that expose nation-state actors simply do not emerge."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Telemetry is the foundation of everything we do. One trillion security events per week. Without that volume, the statistical patterns that expose nation-state actors simply do not emerge."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"ITDR monitors every Active Directory query, every Okta authentication, every Azure AD token issuance. Lateral movement in the identity layer has nowhere to hide from this visibility."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"The fastest eCrime breakout we recorded was two minutes and seven seconds. Initial access to lateral movement before most teams can open a ticket. Speed is an adversary capability. Automation is ours."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"The fastest eCrime breakout we recorded was two minutes and seven seconds. Initial access to lateral movement before most teams can open a ticket. Speed is an adversary capability. Automation is ours."},
     // GTR 2026 expansion
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"GTR 2026: Voice phishing surged as GenAI lowered the barrier to perfect voice cloning. SCATTERED SPIDER pioneered vishing at scale. Every eCrime group now runs the same playbook."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: North Korean IT workers submitted over 300 fake applications to Fortune 500 companies in 2025. FAMOUS CHOLLIMA and LABYRINTH CHOLLIMA both running this insider threat playbook simultaneously."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: North Korean IT workers submitted over 300 fake applications to Fortune 500 companies in 2025. FAMOUS CHOLLIMA and LABYRINTH CHOLLIMA both running this insider threat playbook simultaneously."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"GTR 2026: VOLT TYPHOON's pre-positioning inside US critical infrastructure is not espionage. This is preparation for the opening move of a kinetic conflict. The systems they are in control power and water."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: Supply chain attacks increased 200 percent year-over-year. One compromised vendor library becomes a simultaneous weapon against every downstream organisation that trusts it."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: Supply chain attacks increased 200 percent year-over-year. One compromised vendor library becomes a simultaneous weapon against every downstream organisation that trusts it."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"GTR 2026: Charlotte AI reduced alert triage time by 80 percent in enterprise SOC environments. At one trillion events per week, human-only triage is not a failure mode — it is a mathematical impossibility."},
     // Cinematic/dramatic closes
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"The adversaries in this corridor are real. Every TTP you are seeing — the LOLBins, the credential theft, the OAuth abuse — these techniques were caught in live customer networks by the CrowdStrike OverWatch team."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"The adversaries in this corridor are real. Every TTP you are seeing — the LOLBins, the credential theft, the OAuth abuse — these techniques were caught in live customer networks by the CrowdStrike OverWatch team."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"The adversary does not know they have been detected. That asymmetry is your greatest advantage. OverWatch maintains it. Use it before they change their tradecraft."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"You are operating on intelligence gathered from 230 named adversaries across 29 countries. This is not a simulation of the threat landscape. This is CrowdStrike's actual order of battle."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"You are operating on intelligence gathered from 230 named adversaries across 29 countries. This is not a simulation of the threat landscape. This is CrowdStrike's actual order of battle."},
   ],
   scattered_spider:[
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"SCATTERED SPIDER never uses malware. Pure social engineering. There are no traditional IoCs to find."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"SCATTERED SPIDER never uses malware. Pure social engineering. There are no traditional IoCs to find."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"They call your IT helpdesk. They sound exactly like your employees. That is the entire threat model."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"MFA fatigue is their signature. 47 push notifications before the victim approves. Watch for that pattern."},
   ],
   carbon_spider:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"CARBON SPIDER is FIN7. Active since 2015. Ransomware is always the endgame. Watch for staging behaviour."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Cobalt Strike beacon on a Netherlands-registered VPS. That is their C2 signature. Follow the traffic."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Cobalt Strike beacon on a Netherlands-registered VPS. That is their C2 signature. Follow the traffic."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"Shadow copy deletion is pre-ransomware staging. If you see VSS deletion, encryption is minutes away."},
   ],
   plump_spider:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"PLUMP SPIDER targets PIX — Brazil's instant payment system. Transfers complete in 10 seconds. Irreversible."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Grandoreiro uses overlay attacks. The victim sees their real banking app. The attacker sees everything."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Grandoreiro uses overlay attacks. The victim sees their real banking app. The attacker sees everything."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"They operate in UTC-3. Brazilian business hours. Follow the financial connections south through São Paulo."},
   ],
   blind_spider:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"BLIND SPIDER uses WhatsApp for vishing. They sound exactly like your bank's fraud prevention department."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"BEC fraud targeting LatAm SWIFT transfers. They have moved $47M through Bogotá in the past 6 months."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"BEC fraud targeting LatAm SWIFT transfers. They have moved $47M through Bogotá in the past 6 months."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"23 operators coordinating in real-time via Telegram. They are watching your response as you investigate."},
   ],
   blackcat:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"BLACKCAT is written in Rust. Cross-platform. Windows, Linux, ESXi — all encrypted simultaneously."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"847 alerts in 4 minutes. They flood your SOC deliberately. Charlotte AI is the only way to keep up."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"847 alerts in 4 minutes. They flood your SOC deliberately. Charlotte AI is the only way to keep up."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"Backup systems are targeted first. VSS deletion before ransomware deployment. Watch for that sequence."},
   ],
   lazarus:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"LAZARUS funds North Korea's weapons programme. Every dollar they steal has strategic military significance."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"They will activate the wiper if you get too close. Speed matters here. Do not let them cover their tracks."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"They will activate the wiper if you get too close. Speed matters here. Do not let them cover their tracks."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"Fake LinkedIn job offers are their initial access vector. $450,000 roles that do not exist. Classic LAZARUS."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"LAZARUS launders stolen crypto through mixing services. The financial trail evaporates in minutes. Act before the transaction confirms. Identity analytics sees the velocity anomaly before it clears."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"TraderTraitor is their crypto-targeting campaign. They researched Ronin for months. The job offer PDF was the final step of an operation that started with open-source intelligence gathering."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"TraderTraitor is their crypto-targeting campaign. They researched Ronin for months. The job offer PDF was the final step of an operation that started with open-source intelligence gathering."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"LAZARUS uses mshta.exe and rundll32 for payload delivery. OverWatch sees the process chain. An employee downloaded a PDF — and three days later validator keys were in attacker hands."},
   ],
   cozy_bear:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"COZY BEAR does not break in. They log in. Stolen OAuth tokens, forged SAML assertions. No malware at all."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"287 days average dwell time. They have been in the network longer than anyone realises. Check timestamps."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"287 days average dwell time. They have been in the network longer than anyone realises. Check timestamps."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"SVR patience is their weapon. They wait months before acting. Long dwell time is the key indicator."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"COZY BEAR abused the OAuth device code flow — a legitimate authentication mechanism designed for smart TVs. They weaponised a protocol your identity team considers safe. CrowdStrike Signal stops the token before it lands."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Golden SAML forged by COZY BEAR bypasses every MFA control you have. The assertion looks valid because the signing certificate was real. ITDR detects the behavioural anomaly — the token is valid, the behaviour is not."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Golden SAML forged by COZY BEAR bypasses every MFA control you have. The assertion looks valid because the signing certificate was real. ITDR detects the behavioural anomaly — the token is valid, the behaviour is not."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"SVR considers 287 days dwell time a success. They read classified documents for nine months before anyone noticed. Zero standing privileges via CrowdStrike Signal means nine months becomes nine minutes before the token expires."},
   ],
   famous_chollima:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"FAMOUS CHOLLIMA submitted fabricated resumes, passed technical interviews, and worked legitimate remote jobs for months before the exfiltration began. Identity analytics detected the behavioural anomaly — human fingerprints don't match the Pyongyang IP."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"TraderTraitor is FAMOUS CHOLLIMA's crypto campaign. They researched the Ronin bridge validators for months. The LinkedIn job offer was the final step of an operation built entirely on open-source intelligence gathering."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"TraderTraitor is FAMOUS CHOLLIMA's crypto campaign. They researched the Ronin bridge validators for months. The LinkedIn job offer was the final step of an operation built entirely on open-source intelligence gathering."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"GTR 2026: FAMOUS CHOLLIMA insider threat incidents up 304 percent. One adversary group. One playbook. Fake identity. Legitimate job. Real access. Exfiltrate. Fund weapons. Repeat. Identity is the only control that stops this."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"mshta.exe and wmiExec were the LOLBins FAMOUS CHOLLIMA used inside Ronin. No malware dropped. No signature to catch. OverWatch saw the process chain — a developer tool spawning a network connection to a DPRK-attributed IP at 2am."},
   ],
   fancy_bear:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"FANCY BEAR is GRU Unit 26165. They never operate outside Moscow business hours. UTC+3 is your anchor."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"X-Agent is GRU-exclusive tooling. Never sold, never leaked. If forensics finds it, you know exactly who."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"X-Agent is GRU-exclusive tooling. Never sold, never leaked. If forensics finds it, you know exactly who."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"FANCY BEAR targets NATO infrastructure. Follow the military and government node connections on the map."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"FANCY BEAR used powershell.exe with base64-encoded payloads in the DNC breach. XDR sees encoded PowerShell as an immediate red flag — legitimate administrators do not base64-encode their management commands."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GRU Unit 26165 does their operational planning before 5pm Moscow time. If you see X-Agent beaconing after 17:00 UTC+3 on a workday, it is automated infrastructure — the operator has gone home. Hunt the morning shift."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GRU Unit 26165 does their operational planning before 5pm Moscow time. If you see X-Agent beaconing after 17:00 UTC+3 on a workday, it is automated infrastructure — the operator has gone home. Hunt the morning shift."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"FANCY BEAR spear-phished with a trojanised NATO conference invite. The certificate looked legitimate because they stole a real contractor's credentials. ITDR would have flagged the identity anomaly before the payload ran."},
   ],
   midnight_blizzard:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"They compromised the build server. Every customer who installed the update is now infected. 18,000 targets."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"NOBELIUM is SVR Tier-1. The most sophisticated supply chain attack ever documented. Treat it accordingly."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"NOBELIUM is SVR Tier-1. The most sophisticated supply chain attack ever documented. Treat it accordingly."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"The code-signing certificate was stolen 6 months before the attack. This was planned for over a year."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"MIDNIGHT BLIZZARD used schtasks.exe and rundll32 to maintain persistence inside the SolarWinds build environment for months. OverWatch would have detected the anomalous scheduled task creation pattern."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"SUNBURST was dormant for 12 to 14 days after installation before it called home. That waiting period is designed to defeat behavioural analysis. XDR correlates the delayed beacon to the build event anyway."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"SUNBURST was dormant for 12 to 14 days after installation before it called home. That waiting period is designed to defeat behavioural analysis. XDR correlates the delayed beacon to the build event anyway."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"18,000 organisations installed the trojanised update. 100 were actively compromised. Supply chain visibility is not optional. Exposure Management sees every third-party dependency as a potential attack vector."},
   ],
   volt_typhoon:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"VOLT TYPHOON uses only Windows built-in tools. WMIC, netsh, certutil. No malware signatures exist for this."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"They have been pre-positioning for 300 days. This is not an attack. It is preparation for something larger."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"They have been pre-positioning for 300 days. This is not an attack. It is preparation for something larger."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"IT-OT bridge crossing is the critical indicator. That is when physical consequences become possible."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"VOLT TYPHOON does not want to cause damage now. They want the ability to cause damage the moment the geopolitical situation demands it. Pre-positioned. Waiting. Patient."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"certutil, wmiexec, netsh — every LOLBin they use is already trusted by your infrastructure. OverWatch identifies the behavioural chain. 300 days of normal traffic, then one lateral move too many."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"certutil, wmiexec, netsh — every LOLBin they use is already trusted by your infrastructure. OverWatch identifies the behavioural chain. 300 days of normal traffic, then one lateral move too many."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"They map the network from inside. Power grids, water treatment, telecommunications. XDR sees cross-domain telemetry. That is how you find a threat that uses no malware and leaves almost no trace."},
   ],
   sandworm:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"SANDWORM caused the first confirmed power outage via cyberattack. Ukraine, 2015. They will do it again."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"INDUSTROYER2 targets ICS directly. This is not ransomware. They want to destroy physical infrastructure."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"INDUSTROYER2 targets ICS directly. This is not ransomware. They want to destroy physical infrastructure."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"IEC 104 protocol queries mean they are targeting electrical substations. This is a critical infrastructure event."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"NotPetya cost the global economy $10 billion in 72 hours. SANDWORM had no financial motive. No ransom. No negotiation. Pure, deliberate, state-sponsored destruction. OverWatch is the only human-speed answer."},
-    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"WhisperGate overwrites the master boot record. The machine boots to a ransom note — but there is no decryption key. It was never ransomware. The note is theatre. OverWatch caught the MBR write in pre-detonation."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"WhisperGate overwrites the master boot record. The machine boots to a ransom note — but there is no decryption key. It was never ransomware. The note is theatre. OverWatch caught the MBR write in pre-detonation."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"SANDWORM pre-positions implants months in advance. 72 hours before the attack we found them in an OT network. OverWatch doesn't wait for the detonation. They hunt the preparation phase."},
   ],
 };
@@ -17236,6 +17236,14 @@ const ADVERSARIES=[
       {phase:3,type:'TIMING',icon:'⏰',title:'Business Hours Window Only',text:'All activity within 09:00-17:00 target timezone. Zero weekend activity. Actor mimics normal employee behaviour to evade anomaly detection.',ttp:'Working Hours TTP',clue:'Business-hours-only window confirms targeting of organisations with real-time approval flows.',hint:'finance'},
       {phase:3,type:'EXFIL',icon:'📤',title:'Wire Transfer Portal Reached',text:'Actor accessed the wire transfer portal. $30M in pending transactions visible. Approval window active. Intercept required in under 4 minutes.',ttp:'T1657 — Financial Theft',clue:'Wire portal access confirms financial exfiltration is the active objective.',hint:'finance'},
       {phase:3,type:'IMPACT',icon:'💥',title:'$100M Impact — MGM Pattern',text:'Forensic profile matches MGM Resorts 2023. Combined losses from outages, ransom, and data breach: $100M+. Congressional testimony followed.',ttp:'T1657 — Financial Theft',clue:'$100M+ hospitality attack profile confirms SCATTERED SPIDER targeting entertainment or gaming sector.',hint:'finance'},
+    ],
+    intercepts:[
+      'We are already your IT department.
+The helpdesk believed us. They always do.',
+      'You\'re reading our tracks. The wire window is open.
+Approval in four minutes.',
+      'Four minutes. That\'s all we need.
+Can you stop it in four minutes?'
     ]
   },
   {
@@ -17269,6 +17277,14 @@ const ADVERSARIES=[
       {phase:3,type:'MALWARE',icon:'⚠️',title:'$4.5M Ransom — 72 Hour Timer',text:'Ransom demand: $4.5M in cryptocurrency. 72-hour countdown on leak site. Three files decrypted as proof of capability.',ttp:'T1657 — Financial Theft',clue:'$4.5M demand confirms mid-to-large enterprise victim with significant data sensitivity.',hint:'finance'},
       {phase:3,type:'TIMING',icon:'⏰',title:'847 Alerts in 4 Minutes',text:'Alert volume exceeded analyst capacity within 4 minutes of deployment. SOC triage was impossible at human speed.',ttp:'T1562.001 — Impair Defenses',clue:'Deliberate alert flood confirms target relies on manual analyst SOC without automation.',hint:'supply'},
       {phase:3,type:'IMPACT',icon:'💥',title:'94 VMs Encrypted Simultaneously',text:'All 94 ESXi VMs encrypted within 8 minutes of deployment. 100% of virtualised infrastructure offline. Recovery timeline: weeks.',ttp:'T1486 — Data Encrypted for Impact',clue:'Simultaneous ESXi encryption confirms enterprise infrastructure attack at maximum scale.',hint:'supply'},
+    ],
+    intercepts:[
+      'Nine days. You just started looking.
+The timer was set before you opened this case.',
+      'Friday night. Your team goes home. Ours stays.
+ESXi is ready.',
+      '94 VMs. 8 minutes. You cannot stop all of them.
+The clock is running.'
     ]
   },
   // ── TIER 2 — MEDIUM ───────────────────────────────────────────
@@ -17303,6 +17319,14 @@ const ADVERSARIES=[
       {phase:3,type:'NETWORK',icon:'🌐',title:'11,000 Boleto Slips Generated',text:'11,000 fraudulent boleto payment slips sent to corporate victims. Average value R$8,400. Payment window: 24 hours.',ttp:'T1583 — Acquire Infrastructure',clue:'Boleto fraud infrastructure exists exclusively within the Brazilian financial ecosystem.',hint:'finance'},
       {phase:3,type:'EXFIL',icon:'📤',title:'BRL Converted to USDT',text:'Stolen R$47M converted to USDT via 6 Brazilian crypto exchanges within 35 minutes. Exchange accounts pre-created using stolen CPF data.',ttp:'T1657 — Financial Theft',clue:'Rapid BRL-to-stablecoin conversion confirms established laundering infrastructure.',hint:'finance'},
       {phase:3,type:'IMPACT',icon:'💥',title:'Three Banks — Simultaneous',text:'PLUMP SPIDER is inside Bradesco, Itau, and Nubank simultaneously. Central Bank alert triggered but transfers are already clearing.',ttp:'T1657 — Financial Theft',clue:'Multi-bank simultaneous PIX attack is PLUMP SPIDER signature. Intercept before final clearing.',hint:'finance'},
+    ],
+    intercepts:[
+      '12,000 PIX. 10 seconds each. Irreversible.
+Do the math.',
+      'The Central Bank monitors 47 accounts.
+We operate 127.',
+      'The first wave cleared. The BRL is converting to USDT.
+You\'re watching the trail we left.'
     ]
   },
   {
@@ -17336,6 +17360,14 @@ const ADVERSARIES=[
       {phase:3,type:'EXFIL',icon:'📤',title:'Crypto Laundering — 12 Exchanges',text:'Stolen funds converted to USDT via 12 exchanges across 6 countries within 90 minutes. Blockchain shows Huobi exit point.',ttp:'T1657 — Financial Theft',clue:'Rapid multi-exchange conversion confirms established professional laundering infrastructure.',hint:'finance'},
       {phase:3,type:'NETWORK',icon:'🌐',title:'SWIFT Routing Altered',text:'Correspondent bank routing instructions altered in SWIFT messages. $8.2M redirected to accounts in the Philippines — identical to Bangladesh 2016.',ttp:'T1565 — Data Manipulation',clue:'SWIFT routing manipulation matching Bangladesh heist confirms the same eCrime methodology.',hint:'finance'},
       {phase:3,type:'IMPACT',icon:'💥',title:'$47M — 6 Banks Targeted',text:'Total BEC exposure: $47M across 6 LatAm financial institutions. Three wire transfers already cleared. Intercept window is closing.',ttp:'T1657 — Financial Theft',clue:'Simultaneous multi-institution BEC confirms coordinated LatAm financial crime operation.',hint:'finance'},
+    ],
+    intercepts:[
+      'Hablamos su idioma. Conocemos su banco.
+Sus empleados ya confiaron en nosotros.',
+      '23 operators. 6 countries.
+Each watching a different institution.',
+      'The wire cleared. The next one clears in 4 minutes.
+Which institution do you save?'
     ]
   },
   {
@@ -17369,6 +17401,14 @@ const ADVERSARIES=[
       {phase:3,type:'MALWARE',icon:'⚠️',title:'$22M Ransom — Then Exit Scam',text:'$22M ransom paid by victim. ALPHV then shut down their leak site and claimed FBI seizure — keeping the $22M and denying the affiliate their share.',ttp:'T1657 — Financial Theft',clue:'RaaS exit-scam post-payment is ALPHV BlackCat signature in ultra-high-value campaigns.',hint:'finance'},
       {phase:3,type:'IMPACT',icon:'💥',title:'100M Americans Exposed',text:'100 million Americans healthcare records exposed. Largest healthcare breach in US history. Prescription delays nationwide. Congressional hearing called.',ttp:'T1486 — Data Encrypted for Impact',clue:'National-scale healthcare disruption confirms ALPHV targeting critical healthcare infrastructure.',hint:'finance'},
       {phase:3,type:'NETWORK',icon:'🌐',title:'Affiliate Betrayal Pattern',text:'ALPHV took the $22M ransom, shut down infrastructure, blamed FBI — affiliate received nothing, victim received no decryptor. Pure criminal fraud.',ttp:'T1657 — Financial Theft',clue:'RaaS exit-scam after record ransom confirms ALPHV operational end-of-life strategy.',hint:'supply'},
+    ],
+    intercepts:[
+      'Citrix Bleed. $800. That\'s what your entire
+security perimeter was worth.',
+      'We took $22M. Then we claimed FBI seizure.
+The affiliate got nothing. We kept everything.',
+      '6TB. 100 million patients. You stopped the binary.
+You did not stop the data leaving.'
     ]
   },
   // ── TIER 3 — HARD ─────────────────────────────────────────────
@@ -17403,6 +17443,14 @@ const ADVERSARIES=[
       {phase:3,type:'CREDENTIAL',icon:'🔑',title:'6 Days Before Discovery',text:'Theft was not discovered for 6 days after execution. Axie Infinity users noticed when withdrawal requests failed. Zero monitoring was in place.',ttp:'Dwell Time',clue:'6-day undetected theft confirms no transaction anomaly monitoring on the blockchain bridge.',hint:'finance'},
       {phase:3,type:'MALWARE',icon:'⚠️',title:'Wiper Activated on Discovery',text:'On discovery, LAZARUS activated the wiper across 4 systems. All forensic artefacts destroyed. Attribution achieved only via blockchain tracing.',ttp:'T1485 — Data Destruction',clue:'Forensic evidence destruction on discovery confirms DPRK counter-forensics protocol.',hint:'finance'},
       {phase:3,type:'IMPACT',icon:'💥',title:'Weapons Programme Funded',text:'US Treasury confirmed: LAZARUS Group funds North Korean ICBM development. $625M funds an estimated 6 intercontinental ballistic missile development cycles.',ttp:'T1657 — Financial Theft',clue:'DPRK weapons funding confirms every LAZARUS theft is simultaneously a national security incident.',hint:'finance'},
+    ],
+    intercepts:[
+      'The LinkedIn message looked real.
+That\'s not a flaw in our operation. It\'s a flaw in yours.',
+      'Five of nine validator nodes. Quorum achieved.
+We can sign any transaction now.',
+      'Six seconds. $625 million.
+You are not stopping a theft. You are stopping a missile.'
     ]
   },
   {
@@ -17436,6 +17484,14 @@ const ADVERSARIES=[
       {phase:3,type:'CLOUD',icon:'☁️',title:'18,000 Networks via SolarWinds',text:'SUNBURST: 18,000 organisations installed the trojanised update. SVR activated access in 100 — selected by intelligence value, not random.',ttp:'T1195 — Supply Chain Compromise',clue:'Selective activation from mass infection confirms intelligence mission — not financial gain.',hint:'supply'},
       {phase:3,type:'EXFIL',icon:'📤',title:'Security Vendor Comms Collected',text:'Security companies among SUNBURST victims had their threat intelligence reports and incident response communications systematically collected.',ttp:'T1114 — Email Collection',clue:'Security vendor targeting confirms SVR wants visibility into all defensive capabilities.',hint:'energy'},
       {phase:3,type:'IMPACT',icon:'💥',title:'9 US Agencies — 3 Year Investigation',text:'9 US Federal agencies including Treasury, Commerce, and Homeland Security deeply compromised. Investigation ran for over 3 years.',ttp:'Historical TTP',clue:'US Federal agency deep compromise confirms APT29 SVR Russian Foreign Intelligence espionage.',hint:'supply'},
+    ],
+    intercepts:[
+      'We don\'t break in. We log in.
+Can you block a valid token?',
+      '287 days. That\'s how long we read before anyone noticed.
+We read everything.',
+      'We accessed the email about the investigation into us.
+While it was being written.'
     ]
   },
   // ── TIER 4 — EXPERT ───────────────────────────────────────────
@@ -17470,6 +17526,14 @@ const ADVERSARIES=[
       {phase:3,type:'EXFIL',icon:'📤',title:'16GB of NATO Documents',text:'16GB of government communications, delegation files, and classified summit briefings staged for exfiltration. Summit security now compromised.',ttp:'T1041 — Exfiltration Over C2 Channel',clue:'16GB volume matches the Bundestag 2015 exfil. Target is a national parliament or NATO institution.',hint:'government'},
       {phase:3,type:'STAGING',icon:'📦',title:'72-Hour Summit Window',text:'Summit is 72 hours away. Intelligence value of delegation communications peaks at the meeting time. GRU is accelerating extraction.',ttp:'T1589 — Gather Victim Identity Information',clue:'Time-critical extraction confirms GRU requires intelligence before a specific diplomatic event.',hint:'military'},
       {phase:3,type:'IMPACT',icon:'💥',title:'DNC — Bundestag — NATO Trilogy',text:'TTP continuity across DNC 2016, Bundestag 2015, and this operation confirms GRU Unit 26165 systematic targeting of Western democratic institutions.',ttp:'Historical TTP',clue:'Three-operation TTP continuity confirms the same GRU unit — this is a campaign, not an incident.',hint:'government'},
+    ],
+    intercepts:[
+      'The summit is in 72 hours.
+The intelligence is worth more before the meeting.',
+      'X-Agent. We never sold it. We never leaked it.
+You know exactly who we are.',
+      'The delegation credentials are staged.
+What are you going to tell NATO?'
     ]
   },
   {
@@ -17503,6 +17567,14 @@ const ADVERSARIES=[
       {phase:3,type:'EXFIL',icon:'📤',title:'34TB Email Collected',text:'Across all SUNBURST targets, an estimated 34TB of email communications collected over 9 months before discovery by FireEye.',ttp:'T1114 — Email Collection',clue:'34TB email collection over 9 months confirms mass intelligence gathering operation.',hint:'supply'},
       {phase:3,type:'IDENTITY',icon:'🪪',title:'Direct Spray After Discovery',text:'After SUNBURST was discovered, NOBELIUM pivoted directly to low-and-slow password spray against Microsoft 365 — confirming operational continuity.',ttp:'T1110.003 — Password Spraying',clue:'Operational continuity post-attribution confirms SVR persistence despite being named publicly.',hint:'government'},
       {phase:3,type:'IMPACT',icon:'💥',title:'9 Agencies — 3-Year Investigation',text:'US Treasury, Commerce, Homeland Security, State Department and 5 other agencies deeply compromised. Investigation ran for over 3 years.',ttp:'Historical TTP',clue:'US Federal agency compromise at this scale confirms NOBELIUM SVR strategic intelligence mission.',hint:'government'},
+    ],
+    intercepts:[
+      '18,000 organisations. All installed it. All trusted it.
+The certificate was valid.',
+      'We activated 100 of 18,000.
+The other 17,900 are still dormant. If we want them.',
+      'We read the security team\'s email about our methods.
+They documented their own countermeasures. We adapted.'
     ]
   },
   // ── TIER 5 — ELITE ────────────────────────────────────────────
@@ -17537,6 +17609,14 @@ const ADVERSARIES=[
       {phase:3,type:'NETWORK',icon:'🌐',title:'150+ SOHO Router Relay Chain',text:'150-plus compromised SOHO routers and VPN devices form a relay chain. All VOLT TYPHOON traffic appears to originate within US borders.',ttp:'T1090.003 — Multi-hop Proxy',clue:'US-IP relay chain makes attribution and blocking extremely difficult for network defenders.',hint:'energy'},
       {phase:3,type:'STAGING',icon:'📦',title:'Grid Disruption Capability Mapped',text:'VOLT TYPHOON has mapped power grid switching infrastructure. Specific OT commands identified to cause localised outages on demand.',ttp:'T0816 — Device Restart or Shutdown',clue:'Mapped disruption capability confirms contingency pre-positioning for conflict scenario activation.',hint:'energy'},
       {phase:3,type:'IMPACT',icon:'💥',title:'Five Eyes Joint Advisory',text:'US, UK, Australia, Canada, and New Zealand issued a joint advisory in May 2023: VOLT TYPHOON is pre-positioned in critical infrastructure across all five nations.',ttp:'Historical TTP',clue:'Five Eyes joint attribution confirms PLA state-sponsored pre-positioning across all allied infrastructure.',hint:'energy'},
+    ],
+    intercepts:[
+      'We have been here for five years.
+We do not steal. We wait.',
+      'The activation order has not come yet.
+When it does — one signal reaches everything.',
+      'You cannot evict us. Every remediation
+creates a new foothold. The infrastructure is ours.'
     ]
   },
   {
@@ -17570,6 +17650,14 @@ const ADVERSARIES=[
       {phase:3,type:'MALWARE',icon:'⚠️',title:'NotPetya Code Lineage',text:'Code analysis shows evolutionary lineage from NotPetya 2017. Same MBR encryption routine. NotPetya caused $10B in global collateral damage.',ttp:'T1485 — Data Destruction',clue:'NotPetya lineage confirms GRU Unit 74455 industrial destruction capability.',hint:'energy'},
       {phase:3,type:'TIMING',icon:'⏰',title:'Ukraine Grid Attack Pattern',text:'TTP pattern matches December 2015 with 225,000 without power and December 2016 Kyiv capital outage. Pattern confirmed active for current operation.',ttp:'Historical TTP',clue:'Ukraine confirmed grid attack pattern confirms SANDWORM targeting European energy infrastructure.',hint:'energy'},
       {phase:3,type:'IMPACT',icon:'💥',title:'Industroyer2 — Second Attempt',text:'April 2022: Industroyer2 stopped by ESET and CERT-UA 2 hours before activation. Current operation is the second deployment attempt against the same grid.',ttp:'Historical TTP',clue:'Second attempt post-thwart confirms SANDWORM mission persistence against Ukrainian power grid.',hint:'energy'},
+    ],
+    intercepts:[
+      'December. We chose December.
+Do you know how cold Ukraine is without power?',
+      'The HMI terminals respond to us now.
+The circuit breakers do not know the difference.',
+      '02:00 local time. The wiper activates.
+The grid goes dark. You have minutes.'
     ]
   },
 ];
@@ -17583,6 +17671,7 @@ const STATE=Object.freeze({
   WORLD_MAP:'WORLD_MAP',INVESTIGATION:'INVESTIGATION',
   EVIDENCE_CARD:'EVIDENCE_CARD',DEDUCTION:'DEDUCTION',
   INTERCEPT:'INTERCEPT',BREACH:'BREACH',
+  PHASE_TRANS:'PHASE_TRANS',NODE_ARRIVAL:'NODE_ARRIVAL',
 });
 
 let gameState=STATE.TITLE;
@@ -17613,6 +17702,12 @@ let rankingShown=false;
 let usedModuleThisInvestigation=false;
 let selectedModule=null;
 
+
+// ── Cinematic overlays ─────────────────────────────────────────
+let interceptMsg=null;        // {t,lines,adv,phase} — adversary intercept overlay
+let phaseTransState=null;     // {t,phase,adv}
+let nodeArrivalState=null;    // {t,nodeId}
+let interceptFiredAt=[-1,-1,-1]; // which milestones (2,6,10 clues) have fired
 // Data packets on world map
 const PACKETS=[];
 let packetSpawnT=0;
@@ -18499,7 +18594,7 @@ function handleInvestigationClick(){
     if(node2.collected) continue;
     if(Math.hypot(cx-node2.x,cy-node2.y)<22){
       node2.collected=true;
-      collectedClues.push(node2.clue);
+      collectedClues.push(node2.clue); maybeFireIntercept();
       activeEvidenceCard={clue:node2.clue,t:0,showing:true};
       gameState=STATE.EVIDENCE_CARD;
       SFX.collect();
@@ -18558,25 +18653,41 @@ function drawEvidenceCard(dt){
   const typeColors={CREDENTIAL:'#FFE600',MALWARE:'#FF1744',NETWORK:'#42d9ff',TIMING:'#AA00FF',LATERAL:'#FF8D39',PHISHING:'#FF62FF',CLOUD:'#00FFD0',SOCIAL:'#FF62FF',STAGING:'#C850FF',IDENTITY:'#FFE600',EXFIL:'#FF8D39',BEHAVIORAL:'#74ff88',IMPACT:'#FF1744',OSINT:'#74ff88',MODULE:'#39FF14'};
   const ec=typeColors[clue.type]||'#AA00FF';
 
+  const _phase=getCurrentPhase(); // 0,1,2
+  const _phaseUrgency=_phase===2;  // Phase 3 = critical
+  const _cardBorder=_phaseUrgency?'#FF1744':ec;
+  const _glowIntensity=_phaseUrgency?48:30;
+
   ctx.save();
-  ctx.shadowColor=ec; ctx.shadowBlur=30;
-  ctx.fillStyle='rgba(4,1,18,0.68)'; ctx.strokeStyle=ec; ctx.lineWidth=2.5;
+  ctx.shadowColor=_cardBorder; ctx.shadowBlur=_glowIntensity;
+  ctx.fillStyle='rgba(4,1,18,0.68)'; ctx.strokeStyle=_cardBorder; ctx.lineWidth=_phaseUrgency?3:2.5;
   ctx.beginPath(); ctx.roundRect(cardX,cardY,_cardW,cardH,10); ctx.fill(); ctx.stroke();
 
-  // Header bar
-  ctx.fillStyle=ec+'28'; ctx.fillRect(cardX,cardY,_cardW,52);
-  ctx.strokeStyle=ec+'55'; ctx.lineWidth=1;
+  // Header bar — red pulse on Phase 3
+  ctx.fillStyle=_phaseUrgency?'rgba(255,23,68,0.22)':ec+'28';
+  ctx.fillRect(cardX,cardY,_cardW,52);
+  ctx.strokeStyle=(_phaseUrgency?'#FF1744':ec)+'55'; ctx.lineWidth=1;
   ctx.beginPath(); ctx.moveTo(cardX,cardY+52); ctx.lineTo(cardX+_cardW,cardY+52); ctx.stroke();
   ctx.shadowBlur=0;
 
+  // Classification tag
+  ctx.font=huntFont(8,'bold'); ctx.fillStyle='#3a3a5a'; ctx.textAlign='left';
+  ctx.fillText('U//FOUO — FALCON INTELLIGENCE — '+selectedCase?.name,cardX+14,cardY+8);
+
   // Evidence number
-  ctx.font=huntFont(13,'bold'); ctx.fillStyle=ec;
+  ctx.font=huntFont(13,'bold'); ctx.fillStyle=_phaseUrgency?'#FF1744':ec;
   ctx.textAlign='right'; ctx.fillText(TF('g_hunt_evidence_number',{n:collectedClues.length}),cardX+_cardW-14,cardY+20);
 
+  // Phase urgency flash on Phase 3
+  if(_phaseUrgency){
+    ctx.font=huntFont(9,'bold'); ctx.fillStyle='#FF1744'; ctx.textAlign='left';
+    ctx.fillText('⚡ CRITICAL INTELLIGENCE — PHASE 3 ACTIVE',cardX+14,cardY+20);
+  }
+
   // Type badge
-  ctx.fillStyle=ec; ctx.font=huntFont(12,'bold'); ctx.textAlign='left';
-  ctx.fillRect(cardX+14,cardY+10,96,18);
-  ctx.fillStyle='rgba(2,3,8,0.9)'; ctx.fillText(huntClueTypeLabel(clue.type),cardX+20,cardY+24);
+  ctx.fillStyle=_phaseUrgency?'#FF1744':ec; ctx.font=huntFont(12,'bold'); ctx.textAlign='left';
+  ctx.fillRect(cardX+14,cardY+28,_phaseUrgency?142:96,18);
+  ctx.fillStyle='rgba(2,3,8,0.9)'; ctx.fillText(_phaseUrgency?'⚠ '+huntClueTypeLabel(clue.type):huntClueTypeLabel(clue.type),cardX+20,cardY+42);
 
   // Icon
   ctx.font=huntFont(34); ctx.textAlign='center';
@@ -18605,9 +18716,11 @@ function drawEvidenceCard(dt){
   ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
   ctx.beginPath(); ctx.moveTo(cardX+24,ly); ctx.lineTo(cardX+_cardW-24,ly); ctx.stroke(); ly+=22;
 
-  // Investigator note label
-  ctx.font=huntFont(13,'bold'); ctx.fillStyle=ec;
-  ctx.fillText(`🔍 ${T('g_hunt_note')}:`,cardX+24,ly); ly+=22;
+  // Investigator note label — phase-sensitive urgency
+  const _noteLabel=_phaseUrgency?`⚡ ANALYST ALERT — ACT NOW:`:`🔍 ${T('g_hunt_note')}:`;
+  ctx.font=huntFont(13,'bold'); ctx.fillStyle=_phaseUrgency?'#FF1744':ec;
+  if(_phaseUrgency){ctx.shadowColor='#FF1744';ctx.shadowBlur=8;}
+  ctx.fillText(_noteLabel,cardX+24,ly); ctx.shadowBlur=0; ly+=22;
 
   // Clue text — wrapped bigger
   ctx.font=huntFont(13); ctx.fillStyle='#f4f7fa';
@@ -18853,7 +18966,15 @@ function advanceAfterDeduction(){
     advMoving=true; advMoveT=0;
     advMoveFrom=caseRoute[advNodeIdx];
     if(deductionResult==='correct'){
-      advNodeIdx++; advMoveTo=caseRoute[advNodeIdx];
+      const _prevPhase=getCurrentPhase();
+        advNodeIdx++;
+        const _nextPhase=getCurrentPhase();
+        nodeArrivalState={t:0,nodeId:caseRoute[advNodeIdx]};
+        if(_nextPhase>_prevPhase&&advNodeIdx<caseRoute.length-1){
+          phaseTransState={t:0,phase:_nextPhase,adv:selectedCase};
+          interceptFiredAt=[-1,-1,-1];
+          gameState=STATE.PHASE_TRANS;
+        } advMoveTo=caseRoute[advNodeIdx];
     } else {
       advNodeIdx=Math.min(advNodeIdx+2,caseRoute.length-1);
       advMoveTo=caseRoute[advNodeIdx];
@@ -18871,14 +18992,28 @@ function advanceAfterDeduction(){
     return;
   }
 
+  // If phase transition is playing, defer investigation start until after it completes
+  if(phaseTransState){
+    // drawPhaseTransition will call startPostPhaseInvestigation() when done
+    return;
+  }
   setTimeout(()=>{
     playerNodeIdx=advNodeIdx;
     collectedClues=[];
     buildInvestigationNodes();
     investigationTimer=0;
     _invTimerWarnFired=false;
-    gameState=STATE.INVESTIGATION;
+    if(gameState!==STATE.INTERCEPT&&gameState!==STATE.BREACH) gameState=STATE.INVESTIGATION;
   },1200);
+}
+
+function startPostPhaseInvestigation(){
+  playerNodeIdx=advNodeIdx;
+  collectedClues=[];
+  buildInvestigationNodes();
+  investigationTimer=0;
+  _invTimerWarnFired=false;
+  gameState=STATE.WORLD_MAP; // show world map briefly, player presses space to investigate
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -19443,6 +19578,156 @@ function drawBreach(dt){
   ctx.restore();
 }
 
+
+// ════════════════════════════════════════════════════════════════
+//  PHASE TRANSITION SCREEN
+// ════════════════════════════════════════════════════════════════
+const PHASE_TRANS_DURATION=2.9;
+function drawPhaseTransition(dt){
+  if(!phaseTransState) return;
+  phaseTransState.t+=dt;
+  const tt=phaseTransState.t;
+  const adv=phaseTransState.adv;
+  const ph=phaseTransState.phase; // 1 or 2 (entering phase 2 or 3)
+  const phIdx=ph; // 0-based index: ph=1 means entering phase 2 (index 1)
+  const phaseName=adv.phaseNames?.[phIdx]||('PHASE '+(phIdx+1));
+  const phColors=['#39FF14','#FFE600','#FF1744'];
+  const col=phColors[phIdx]||adv.color;
+  const fadeIn=Math.min(1,tt*4);
+  const fadeOut=tt>2.2?Math.max(0,1-(tt-2.2)*4):1;
+  const alpha=fadeIn*fadeOut;
+  const ui=huntUiScale();
+
+  ctx.save();
+  ctx.globalAlpha=alpha*0.96;
+  ctx.fillStyle='#020308'; ctx.fillRect(0,0,LW,LH);
+  drawStars();
+  ctx.fillStyle='rgba(2,3,8,0.82)'; ctx.fillRect(0,0,LW,LH);
+
+  // Horizontal scan line
+  const scanY=LH/2+Math.sin(tt*6)*14;
+  ctx.fillStyle=col+'18'; ctx.fillRect(0,scanY-1,LW,3);
+
+  ctx.textAlign='center';
+  // PHASE LABEL
+  ctx.font=huntFont(11,'bold'); ctx.fillStyle='#3a3a5a';
+  ctx.fillText('◈ ◈ ◈  OPERATION PHASE ESCALATION  ◈ ◈ ◈',LW/2,LH/2-88);
+  // Phase number big
+  ctx.font=huntFont(58,'bold'); ctx.fillStyle=col; ctx.shadowColor=col; ctx.shadowBlur=48;
+  ctx.fillText('PHASE '+(phIdx+1)+' / 3',LW/2,LH/2-18); ctx.shadowBlur=0;
+  // Phase name
+  ctx.font=huntFont(22,'bold'); ctx.fillStyle='#f4f7fa'; ctx.shadowColor=col; ctx.shadowBlur=18;
+  ctx.fillText(phaseName,LW/2,LH/2+38); ctx.shadowBlur=0;
+  // Divider
+  ctx.strokeStyle=col+'44'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(LW/2-280,LH/2+60); ctx.lineTo(LW/2+280,LH/2+60); ctx.stroke();
+  // Adversary motto
+  ctx.font=huntFont(13,'italic'); ctx.fillStyle='#7f8b96';
+  ctx.fillText('"'+adv.motto+'"',LW/2,LH/2+84);
+  // Adversary name
+  ctx.font=huntFont(11,'bold'); ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=8;
+  ctx.fillText('── '+adv.name+' ──',LW/2,LH/2+104); ctx.shadowBlur=0;
+
+  ctx.textAlign='left';
+  ctx.restore();
+
+  if(tt>=PHASE_TRANS_DURATION){
+    phaseTransState=null;
+    startPostPhaseInvestigation();
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+//  ADVERSARY SIGNAL INTERCEPT OVERLAY (non-blocking)
+// ════════════════════════════════════════════════════════════════
+const INTERCEPT_OVERLAY_DURATION=4.8;
+function drawInterceptOverlay(){
+  if(!interceptMsg) return;
+  const tt=interceptMsg.t;
+  const slideIn=Math.min(1,tt*5);
+  const eIn=1-Math.pow(1-slideIn,3);
+  const fadeOut=tt>3.8?Math.max(0,1-(tt-3.8)*5):1;
+  const adv=interceptMsg.adv;
+  const col=adv.color;
+  const ui=huntUiScale();
+
+  const panW=Math.round(420*ui), panH=Math.round(90*ui);
+  const panX=lerp(-panW-20,18,eIn);
+  const panY=Math.round(LH*0.66);
+
+  ctx.save();
+  ctx.globalAlpha=fadeOut*0.94;
+  ctx.shadowColor=col; ctx.shadowBlur=22;
+  ctx.fillStyle='rgba(2,3,8,0.92)'; ctx.strokeStyle=col; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.roundRect(panX,panY,panW,panH,6); ctx.fill(); ctx.stroke();
+  ctx.shadowBlur=0;
+  // Header bar
+  ctx.fillStyle=col+'22'; ctx.fillRect(panX,panY,panW,22);
+  ctx.font=huntFont(9,'bold'); ctx.fillStyle=col; ctx.textAlign='left';
+  ctx.fillText('◈ SIGNAL INTERCEPTED — '+adv.name,panX+10,panY+14);
+  ctx.font=huntFont(9); ctx.fillStyle='#444'; ctx.textAlign='right';
+  ctx.fillText('[ENCRYPTED RELAY]',panX+panW-10,panY+14);
+  // Message lines
+  ctx.textAlign='left'; ctx.fillStyle='#d5dde5';
+  const lines=interceptMsg.lines;
+  const lineH=Math.round(17*ui);
+  const startY=panY+34;
+  ctx.font=huntFont(11);
+  lines.forEach((ln,i)=>ctx.fillText(ln,panX+12,startY+i*lineH));
+  ctx.textAlign='left';
+  ctx.restore();
+}
+
+// ════════════════════════════════════════════════════════════════
+//  NODE ARRIVAL FLASH
+// ════════════════════════════════════════════════════════════════
+const NODE_ARRIVAL_DURATION=1.8;
+function drawNodeArrival(dt){
+  if(!nodeArrivalState) return;
+  nodeArrivalState.t+=dt;
+  const tt=nodeArrivalState.t;
+  const fadeIn=Math.min(1,tt*8);
+  const fadeOut=tt>1.2?Math.max(0,1-(tt-1.2)*4):1;
+  const alpha=fadeIn*fadeOut;
+  const node=NODES[nodeArrivalState.nodeId];
+  if(!node){nodeArrivalState=null;return;}
+  const col=selectedCase?selectedCase.color:'#39FF14';
+  const ui=huntUiScale();
+
+  ctx.save();
+  ctx.globalAlpha=alpha*0.92;
+  ctx.textAlign='center';
+  const cy=Math.round(LH*0.18);
+  // Glow flash at top
+  ctx.font=huntFont(9,'bold'); ctx.fillStyle='#3a3a5a';
+  ctx.fillText('◈ ◈ ◈  ADVERSARY SIGNAL LOCATED  ◈ ◈ ◈',LW/2,cy-8);
+  ctx.font=huntFont(26,'bold'); ctx.fillStyle=col; ctx.shadowColor=col; ctx.shadowBlur=26;
+  ctx.fillText(node.name,LW/2,cy+22); ctx.shadowBlur=0;
+  ctx.font=huntFont(11); ctx.fillStyle='#7f8b96';
+  ctx.fillText(node.org+' · '+node.sector,LW/2,cy+40);
+  ctx.textAlign='left';
+  ctx.restore();
+
+  if(tt>=NODE_ARRIVAL_DURATION) nodeArrivalState=null;
+}
+
+// ── Intercept trigger (call after clue collected) ────────────────
+function maybeFireIntercept(){
+  if(!selectedCase||!selectedCase.intercepts) return;
+  const n=collectedClues.length;
+  const milestones=[2,6,10];
+  milestones.forEach((m,i)=>{
+    if(n>=m&&interceptFiredAt[i]<advNodeIdx){
+      interceptFiredAt[i]=advNodeIdx;
+      const msg=selectedCase.intercepts[i];
+      if(msg){
+        const rawLines=msg.split('\n');
+        interceptMsg={t:0,lines:rawLines,adv:selectedCase,phase:i};
+      }
+    }
+  });
+}
+
 // ════════════════════════════════════════════════════════════════
 //  WORLD MAP SCREEN HUD EXTRAS
 // ════════════════════════════════════════════════════════════════
@@ -19797,6 +20082,10 @@ function frame(ts){
       if(hk('Escape')){gameState=STATE.TITLE;FalconRanking.startIdleWatch();}
       break;
 
+    case STATE.PHASE_TRANS: drawPhaseTransition(dt); break;
+    case STATE.PHASE_TRANS:
+      // auto-handled in drawPhaseTransition; ignore input
+      break;
     case STATE.BREACH:
       breachT+=dt;
       if(hk('Space')){gameState=STATE.CASE_SELECT;caseSel=0;caseSelectEntryT=0;score=0;}
@@ -19818,22 +20107,30 @@ function frame(ts){
       drawWorldMapHUD();
       drawParts(); drawFloats();
       drawRadio();
+      if(nodeArrivalState) drawNodeArrival(dt);
+      if(interceptMsg){interceptMsg.t+=dt;if(interceptMsg.t>=INTERCEPT_OVERLAY_DURATION)interceptMsg=null;else drawInterceptOverlay();}
       break;
     case STATE.INVESTIGATION:
       drawInvestigation();
       drawHUD();
       drawRadio();
+      if(nodeArrivalState) drawNodeArrival(dt);
+      if(interceptMsg){interceptMsg.t+=dt;if(interceptMsg.t>=INTERCEPT_OVERLAY_DURATION)interceptMsg=null;else drawInterceptOverlay();}
       break;
     case STATE.EVIDENCE_CARD:
       drawInvestigation();
       drawHUD();
       if(activeEvidenceCard) drawEvidenceCard(dt);
       drawRadio();
+      if(interceptMsg){interceptMsg.t+=dt;if(interceptMsg.t>=INTERCEPT_OVERLAY_DURATION)interceptMsg=null;else drawInterceptOverlay();}
       break;
     case STATE.DEDUCTION:
       drawDeduction(dt);
       drawHUD();
       drawRadio();
+      break;
+    case STATE.PHASE_TRANS:
+      drawPhaseTransition(dt);
       break;
 
     case STATE.INTERCEPT:
