@@ -1310,7 +1310,6 @@ body.arcade-loader-active { overflow:hidden; }
   <a class="dashboard-btn-cls" data-i18n="dash_return" href="#" onclick="returnToDashboard();return false;">◈ MISSION SELECT</a>
 </div>
 <div id="game-hunt-container">
-  <img id="cyber-map-asset" src="world_map_cyber.png" style="display:none;" alt="cyber map"/>
   <canvas id="g-hunt"></canvas>
   <a class="dashboard-btn-cls" data-i18n="dash_return" href="#" onclick="returnToDashboard();return false;">◈ MISSION SELECT</a>
 </div>
@@ -1820,11 +1819,11 @@ const TRANSLATIONS = {
   pt: {
     eyebrow:'◈ CrowdStrike Série Arcade 2026', title:'SELEÇÃO DE MISSÃO',
     subtitle:'Escolha sua operação · Inteligência real de adversários · Plataforma Falcon unificada',
-    deploy:'IMPLANTAR AGORA',
+    deploy:'ATIVAR AGORA',
     c1eye:'Operação 01 · Corredor do Rio', c1name:'CrowdStrike:<br>Incidente Zero',
     c1desc:'Pilote o Falcon em 10 campanhas de adversários. Detecte · Contenha · Mitigue · Elimine.',
     c2eye:'Operação 02 · Defesa de Ondas', c2name:'CrowdStrike:<br>Falcon Defense',
-    c2desc:'Defenda o perímetro contra 10 ondas de ameaças. Implante módulos Falcon.',
+    c2desc:'Defenda o perímetro contra 10 ondas de ameaças. Acione módulos Falcon.',
     c3eye:'Operação 03 · Caça na Rede Global', c3name:'CrowdStrike:<br>Threat Hunt',
     c3desc:'Você É o caçador OverWatch. Persiga 9 adversários em uma rede cibernética global ao vivo.',
     podZero:'INCIDENTE ZERO', podDef:'DEFESA', podHunt:'CAÇA A AMEAÇAS',
@@ -1910,13 +1909,13 @@ const TRANSLATIONS = {
     g_scan:'VARREDURA',          g_scan_ready:'VARREDURA pronta [S]',
     g_mission:'MISSÃO',          g_objectives:'OBJETIVOS',
     g_controls:'CONTROLES',      g_mute:'MUDO',
-    g_deploy:'IMPLANTAR MÓDULO', g_deployed:'MÓDULO IMPLANTADO ✓',
+    g_deploy:'ACIONAR MÓDULO', g_deployed:'MÓDULO ACIONADO ✓',
     g_press_space:'ESPAÇO PARA JOGAR',
     g_press_retry:'ESPAÇO PARA TENTAR NOVAMENTE',
     g_press_again:'ESPAÇO PARA JOGAR NOVAMENTE',
     g_press_engage:'ESPAÇO PARA INICIAR',
-    g_press_deploy:'ESPAÇO PARA IMPLANTAR',
-    g_press_deploy_arr:'▶  ESPAÇO PARA IMPLANTAR  ◀',
+    g_press_deploy:'ESPAÇO PARA ACIONAR',
+    g_press_deploy_arr:'▶  ESPAÇO PARA ACIONAR  ◀',
     g_corridor_secured:'CORREDOR PROTEGIDO',
     g_breach_contained:'VIOLAÇÃO CONTIDA',
     g_breach_succeeded:'VIOLAÇÃO OCORRIDA',
@@ -1981,8 +1980,8 @@ const TRANSLATIONS = {
     g_controls_scan:'S — pulso de varredura (custa 10% de combustível, revela todas as ameaças furtivas)',
     g_controls_intel:'I — painel intel (TTPs do adversário, módulos ativos, objetivos)',
     g_controls_leaderboard:'L — ver placar   Ctrl+Shift+E — exportar CSV',
-    brief_auto_deploy:'IMPLANTAÇÃO AUTOMÁTICA EM',
-    brief_confirm_now:'IMPLANTAR AGORA',
+    brief_auto_deploy:'ACIONAMENTO AUTOMÁTICO EM',
+    brief_confirm_now:'ATIVAR AGORA',
     g_begin_hunt_nav:'[ ESPAÇO ] INICIAR CAÇA    ← → ↑ ↓ SELECIONAR    [ ESC ] VOLTAR',
     iz_subtitle:'Protocolo de Resposta a Violações  ·  Edição de Inteligência Adversária  ·  2026',
     iz_title_line1:'Você pilota o Falcon por 10 campanhas reais de adversários baseadas na Inteligência Global de Ameaças da CrowdStrike.',
@@ -2037,7 +2036,7 @@ const TRANSLATIONS = {
     h_title_evidence:'FLUXO DE EVIDÊNCIAS',
     h_title_protocol:'PROTOCOLO DE CAÇA',
     h_title_steps1:'1. Leia o padrão do adversário',
-    h_title_steps2:'2. Colete evidências e implante o módulo Falcon correto',
+    h_title_steps2:'2. Colete evidências e acione o módulo Falcon correto',
     h_title_steps3:'3. Preveja o próximo movimento antes que a violação aconteça',
     h_title_best:'MELHOR PONTUAÇÃO DE CAÇA',
     h_title_signal:'SINAL AO VIVO',
@@ -2056,21 +2055,21 @@ const TRANSLATIONS = {
     h_case_hops:'saltos',
     h_case_nav:'[←][→] Alternar casos   [ESPAÇO] travar alvo',
     h_case_launch:'▶  ESPAÇO PARA INICIAR A CAÇA AO VIVO  ◀',
-    h_brief_open:'Abrir com',
+    h_brief_open:'Iniciar com',
     h_brief_impact:'Módulo de impacto',
     h_brief_header:'◈ CROWDSTRIKE THREAT INTELLIGENCE — ARQUIVO DE CASO ATIVO',
     h_label_case:'CASO:',
     h_label_threat:'AMEAÇA:',
     h_label_target:'ALVO:',
-    h_label_counter:'RESPOSTA:',
+    h_label_counter:'CONTRAMEDIDA:',
     h_intercept_line:'OPERADOR EXPULSO — TODAS AS REDES PROTEGIDAS',
     h_intercept_module_line:'foi decisivo neste confronto.',
     h_rank_label:'RANKING',
     h_breach_line1:'O adversário concluiu a operação. O objetivo caiu antes de sua perseguição ser fechada.',
-    h_breach_line2:'Implante o módulo recomendado mais cedo. Colete todas as evidências antes da dedução. O adversário esperou meses — sua janela eram minutos.',
+    h_breach_line2:'Acione o módulo recomendado mais cedo. Colete todas as evidências antes da dedução. O adversário esperou meses — sua janela eram minutos.',
     h_breach_retry:'[ ESPAÇO ] novo caso   [ R ] repetir mesmo caso   [ ESC ] selecionar missão',
     h_module_pursuit_bonus:'+10% perseguição',
-    g_hunt_module_hint:'Implante uma vez por investigação. Cada módulo revela um tipo de pista e concede +10% de perseguição.',
+    g_hunt_module_hint:'Acione uma vez por investigação. Cada módulo revela um tipo de pista e concede +10% de perseguição.',
     g_hunt_module_identity:'Destaca abuso de identidade e evidências de credenciais.',
     g_hunt_module_xdr:'Correlaciona comportamento de endpoint e rede.',
     g_hunt_module_pangea:'Mapeia infraestrutura adversária e mudanças de rota.',
@@ -2087,7 +2086,7 @@ const TRANSLATIONS = {
     g_hunt_investigating:'INVESTIGANDO',
     g_hunt_evidence_collection:'COLETA DE EVIDÊNCIAS',
     g_hunt_evidence_count:'EVIDÊNCIAS',
-    g_hunt_module_deployed:'IMPLANTADO',
+    g_hunt_module_deployed:'ACIONADO',
     g_hunt_module_bonus_pts:'+200 BÔNUS DE MÓDULO',
     g_hunt_note:'NOTA DO INVESTIGADOR',
     g_hunt_deduction_header:'{name} deixou {node} para trás — PARA ONDE FOI?',
@@ -2106,8 +2105,8 @@ const TRANSLATIONS = {
     g_rank_analyst:'ANALISTA',
     g_rank_junior_analyst:'ANALISTA JÚNIOR',
     g_rank_cs_elite:'CROWDSTRIKE ELITE',
-    g_rank_breach_stopper:'CONTENTOR DE VIOLAÇÕES',
-    g_rank_responder:'RESPONDEDOR',
+    g_rank_breach_stopper:'BLOQUEADOR DE INCIDENTES',
+    g_rank_responder:'RESPONDENTE',
     g_rank_elite_analyst:'ANALISTA ELITE',
     g_rank_senior_analyst:'ANALISTA SÊNIOR',
     g_pursuit_intercept:'INTERCEPTAR',
@@ -2118,15 +2117,15 @@ const TRANSLATIONS = {
     def_adv_persist:'VIOLAÇÃO COMPLETA — ADVERSÁRIO ESTABELECEU PERSISTÊNCIA',
     def_new_record:'✨ NOVO RECORDE — ANALISTA ELITE',
     def_record:'RECORDE',
-    def_redeploy:'[ R ]  REIMPLANTAR',
+    def_redeploy:'[ R ]  REATIVAR',
     def_play_again:'[ R ]  JOGAR NOVAMENTE',
     def_advance:'[ ESPAÇO ] AVANÇAR PARA A PRÓXIMA AMEAÇA',
     def_rank:'CLASSIFICAÇÃO',
-    def_modules_wave:'MÓDULOS IMPLANTADOS NESTA ONDA',
+    def_modules_wave:'MÓDULOS ACIONADOS NESTA ONDA',
     def_threat_analysis:'⚠  ANÁLISE DE AMEAÇA — O QUE ACONTECEU',
     def_boss_incoming:'CHEGANDO!',
     def_high_threat:'AMEAÇA CRÍTICA — CROWDSTRIKE RESPONDENDO',
-    def_falcon_deployed:'FALCON IMPLANTADO — DEFENDER A REDE',
+    def_falcon_deployed:'FALCON ACIONADO — DEFENDER A REDE',
     def_neutralized:'10 adversários reais. 10 ameaças reais. Todos detidos. A rede resistiu.',
     def_falcon_breadth:'O CrowdStrike Falcon unificou endpoint, identidade, cloud e dados —',
     def_falcon_breadth2:'uma plataforma, um grafo de adversários, uma equipe que impede violações.',
@@ -2139,7 +2138,7 @@ const TRANSLATIONS = {
     fc_soc_engaging_primary:'ANALISTAS SOC ENFRENTANDO AMEAÇA PRINCIPAL',
     fc_soc_neutralizing:'ANALISTAS SOC NEUTRALIZANDO AMEAÇAS ATIVAS',
     fc_boss_hp_reduced:'⚔️ HP DO BOSS REDUZIDO 40% — CONCLUA O COMBATE',
-    fc_deploying:'IMPLANTANDO… {pct}%',
+    fc_deploying:'ATIVANDO… {pct}%',
     fc_contained:'CONTIDOS: {killed} / {total}',
     fc_mdr_strike:'⚔️ ATAQUE MDR REALIZADO',
     fc_breach_contained:'✅ VIOLAÇÃO CONTIDA',
@@ -2150,7 +2149,7 @@ const TRANSLATIONS = {
     def_status_cred_ghost:'CREDENCIAL FANTASMA', def_status_side_vector:'VETOR LATERAL',
     def_game_title:'FALCON ARCADE DEFENSE',
     def_known_actors_header:'— AGENTES DE AMEAÇA CONHECIDOS —', def_modules_header:'— MÓDULOS FALCON —',
-    def_module_controls:'← → selecionar   ESPAÇO para implantar', def_module_selected:'▶ SELECIONADO',
+    def_module_controls:'← → selecionar   ESPAÇO para acionar', def_module_selected:'▶ SELECIONADO',
     def_soc_label:'SOC ▶',
     def_fatality:'FATALIDADE!', def_marquinhos_success:'MARQUINHOS CHAMADO — ADVERSÁRIOS ELIMINADOS',
     def_bonus_multiplier:'🦅  BÔNUS 3x DE PONTUAÇÃO APLICADO',
@@ -2180,7 +2179,7 @@ const TRANSLATIONS = {
     def_phase_stealth:'👻 FURTIVIDADE',
     def_phase_destruction:'💀 DESTRUIÇÃO',
     def_phase_rage:'FÚRIA',
-    def_unprotected_headline:'AMBIENTE DESPROTEGIDO — NENHUM FALCON IMPLANTADO',
+    def_unprotected_headline:'AMBIENTE DESPROTEGIDO — NENHUM FALCON ATIVO',
     def_unprotected_body:'Este sistema não executava CrowdStrike Falcon. Sem proteção unificada de endpoint, identidade e nuvem, os adversários operam sem resistência.',
     def_unprotected_cta:'crowdstrike.com — Veja como o Falcon interrompe violações antes que elas comecem.',
     def_unchecked_headline:'{name} OPEROU SEM RESISTÊNCIA',
@@ -2237,13 +2236,13 @@ const TRANSLATIONS = {
     iz_comms_stealth_identity:'INTEL: {adversary} não usa malware — as ameaças operam na camada de identidade',
     iz_banner_falcon_flex:'⚡ FALCON FLEX — TODOS OS MÓDULOS ATIVOS — PLATAFORMA TOTAL UNIFICADA ⚡',
     iz_comms_falcon_flex:'FALCON FLEX: plataforma CrowdStrike completa online — todas as capacidades ativas ao mesmo tempo',
-    iz_banner_module_active:'{name} — MÓDULO IMPLANTADO',
+    iz_banner_module_active:'{name} — MÓDULO ACIONADO',
     iz_comms_module_active:'MÓDULO ATIVO: {name} online',
     iz_banner_complete_mdr:'FALCON COMPLETE MDR — {count} ameaças neutralizadas · +{bonus} pts · Integridade +1',
     iz_comms_cloud_perimeter:'Perímetro cloud ativo — patrulha elétrica de borda engajada',
     iz_comms_itdr:'ITDR: todas as identidades expostas. Ameaças enfraquecidas em -30%. Tiros causam ×1.5 de dano.',
     iz_banner_itdr:'ITDR ATIVO — inimigos identificados e enfraquecidos',
-    iz_comms_charlotte:'CHARLOTTE AI: duas alas de IA implantadas. Todas as ameaças visíveis. Queda tripla.',
+    iz_comms_charlotte:'CHARLOTTE AI: duas alas de IA ativadas. Todas as ameaças visíveis. Queda tripla.',
     iz_comms_xdr:'XDR: correlação entre domínios ativa. Cadeias de ameaça visualizadas.',
     iz_comms_intel:'INTEL: perfis de adversários carregados. Padrões do chefe telegrafados. ×1.5 em eliminações de intel.',
     iz_comms_overwatch:'OVERWATCH: todas as ameaças reveladas. Hunters de elite ativos. Mísseis teleguiados a cada 1.8s.',
@@ -2263,9 +2262,9 @@ const TRANSLATIONS = {
     iz_comms_low_telemetry:'Limite crítico de telemetria. Abandone linhas arriscadas e intercepte barcaças de combustível agora.',
     iz_banner_telemetry_emergency:'⚠ EMERGÊNCIA DE TELEMETRIA — reserva final ativa',
     iz_comms_telemetry_emergency:'Reserva de emergência ativa. Mais uma falha e o Falcon começa a sofrer dano.',
-    iz_comms_emergency_supply_final:'Suprimento emergencial de telemetria implantado — janela final de reserva',
-    iz_comms_emergency_supply_critical:'Suprimento emergencial de telemetria implantado — nível crítico',
-    iz_comms_fuel_critical:'COMBUSTÍVEL CRÍTICO — barcaça de suprimento emergencial implantada',
+    iz_comms_emergency_supply_final:'Suprimento emergencial de telemetria lançado — janela final de reserva',
+    iz_comms_emergency_supply_critical:'Suprimento emergencial de telemetria lançado — nível crítico',
+    iz_comms_fuel_critical:'COMBUSTÍVEL CRÍTICO — barcaça de suprimento emergencial lançada',
     iz_banner_data_exfil:'DADOS EXFILTRADOS — −280 pts',
     h_radio_feed:'FEED DE INTEL CROWDSTRIKE',
     g_incident_report_title:'🦅  RELATÓRIO DE INCIDENTE CROWDSTRIKE',
@@ -2588,12 +2587,12 @@ const TRANSLATIONS = {
     g_rank_elite_hunter:'CAZADOR DE ÉLITE',
     g_rank_threat_hunter:'CAZADOR DE AMENAZAS',
     g_rank_analyst:'ANALISTA',
-    g_rank_junior_analyst:'ANALISTA JUNIOR',
+    g_rank_junior_analyst:'ANALISTA JÚNIOR',
     g_rank_cs_elite:'CROWDSTRIKE ÉLITE',
-    g_rank_breach_stopper:'BLOQUEADOR DE BRECHAS',
-    g_rank_responder:'RESPONDEDOR',
+    g_rank_breach_stopper:'BLOQUEADOR',
+    g_rank_responder:'AGENTE DE RESPUESTA',
     g_rank_elite_analyst:'ANALISTA ÉLITE',
-    g_rank_senior_analyst:'ANALISTA SENIOR',
+    g_rank_senior_analyst:'ANALISTA SÉNIOR',
     g_pursuit_intercept:'INTERCEPTAR',
     g_pursuit_breach:'BRECHA',
     def_wave_score:'PUNTUACIÓN DE OLA',
@@ -3244,16 +3243,16 @@ const TRANSLATIONS = {
     g_crowdstrike_tagline_short:'🦅  crowdstrike.com  |  侵害を阻止',
     g_apt_label:'⚠APT',
     g_falcon_defense_title:'🦅  FALCONアーケードディフェンス',
-    g_hunt_type_credential:'認証',
+    g_hunt_type_credential:'認証情報',
     g_hunt_type_malware:'マルウェア',
     g_hunt_type_network:'ネットワーク',
-    g_hunt_type_timing:'時刻',
+    g_hunt_type_timing:'タイミング',
     g_hunt_type_lateral:'横移動',
     g_hunt_type_phishing:'フィッシング',
     g_hunt_type_cloud:'クラウド',
     g_hunt_type_social:'ソーシャル',
     g_hunt_type_staging:'ステージング',
-    g_hunt_type_identity:'ID',
+    g_hunt_type_identity:'アイデンティティ',
     g_hunt_type_exfil:'流出',
     g_hunt_type_behavioral:'振る舞い',
     g_hunt_threat_high:'高',
@@ -17248,12 +17247,9 @@ const ADVERSARIES=[
       {phase:3,type:'IMPACT',icon:'💥',title:'$100M Impact — MGM Pattern',text:'Forensic profile matches MGM Resorts 2023. Combined losses from outages, ransom, and data breach: $100M+. Congressional testimony followed.',ttp:'T1657 — Financial Theft',clue:'$100M+ hospitality attack profile confirms SCATTERED SPIDER targeting entertainment or gaming sector.',hint:'finance'},
     ],
     intercepts:[
-      'We are already your IT department.
-The helpdesk believed us. They always do.',
-      'You\'re reading our tracks. The wire window is open.
-Approval in four minutes.',
-      'Four minutes. That\'s all we need.
-Can you stop it in four minutes?'
+      'We are already your IT department.\nThe helpdesk believed us. They always do.',
+      'You\'re reading our tracks. The wire window is open.\nApproval in four minutes.',
+      'Four minutes. That\'s all we need.\nCan you stop it in four minutes?'
     ]
   },
   {
@@ -17289,12 +17285,9 @@ Can you stop it in four minutes?'
       {phase:3,type:'IMPACT',icon:'💥',title:'94 VMs Encrypted Simultaneously',text:'All 94 ESXi VMs encrypted within 8 minutes of deployment. 100% of virtualised infrastructure offline. Recovery timeline: weeks.',ttp:'T1486 — Data Encrypted for Impact',clue:'Simultaneous ESXi encryption confirms enterprise infrastructure attack at maximum scale.',hint:'supply'},
     ],
     intercepts:[
-      'Nine days. You just started looking.
-The timer was set before you opened this case.',
-      'Friday night. Your team goes home. Ours stays.
-ESXi is ready.',
-      '94 VMs. 8 minutes. You cannot stop all of them.
-The clock is running.'
+      'Nine days. You just started looking.\nThe timer was set before you opened this case.',
+      'Friday night. Your team goes home. Ours stays.\nESXi is ready.',
+      '94 VMs. 8 minutes. You cannot stop all of them.\nThe clock is running.'
     ]
   },
   // ── TIER 2 — MEDIUM ───────────────────────────────────────────
@@ -17331,12 +17324,9 @@ The clock is running.'
       {phase:3,type:'IMPACT',icon:'💥',title:'Three Banks — Simultaneous',text:'PLUMP SPIDER is inside Bradesco, Itau, and Nubank simultaneously. Central Bank alert triggered but transfers are already clearing.',ttp:'T1657 — Financial Theft',clue:'Multi-bank simultaneous PIX attack is PLUMP SPIDER signature. Intercept before final clearing.',hint:'finance'},
     ],
     intercepts:[
-      '12,000 PIX. 10 seconds each. Irreversible.
-Do the math.',
-      'The Central Bank monitors 47 accounts.
-We operate 127.',
-      'The first wave cleared. The BRL is converting to USDT.
-You\'re watching the trail we left.'
+      '12,000 PIX. 10 seconds each. Irreversible.\nDo the math.',
+      'The Central Bank monitors 47 accounts.\nWe operate 127.',
+      'The first wave cleared. The BRL is converting to USDT.\nYou\'re watching the trail we left.'
     ]
   },
   {
@@ -17372,12 +17362,9 @@ You\'re watching the trail we left.'
       {phase:3,type:'IMPACT',icon:'💥',title:'$47M — 6 Banks Targeted',text:'Total BEC exposure: $47M across 6 LatAm financial institutions. Three wire transfers already cleared. Intercept window is closing.',ttp:'T1657 — Financial Theft',clue:'Simultaneous multi-institution BEC confirms coordinated LatAm financial crime operation.',hint:'finance'},
     ],
     intercepts:[
-      'Hablamos su idioma. Conocemos su banco.
-Sus empleados ya confiaron en nosotros.',
-      '23 operators. 6 countries.
-Each watching a different institution.',
-      'The wire cleared. The next one clears in 4 minutes.
-Which institution do you save?'
+      'Hablamos su idioma. Conocemos su banco.\nSus empleados ya confiaron en nosotros.',
+      '23 operators. 6 countries.\nEach watching a different institution.',
+      'The wire cleared. The next one clears in 4 minutes.\nWhich institution do you save?'
     ]
   },
   {
@@ -17413,12 +17400,9 @@ Which institution do you save?'
       {phase:3,type:'NETWORK',icon:'🌐',title:'Affiliate Betrayal Pattern',text:'ALPHV took the $22M ransom, shut down infrastructure, blamed FBI — affiliate received nothing, victim received no decryptor. Pure criminal fraud.',ttp:'T1657 — Financial Theft',clue:'RaaS exit-scam after record ransom confirms ALPHV operational end-of-life strategy.',hint:'supply'},
     ],
     intercepts:[
-      'Citrix Bleed. $800. That\'s what your entire
-security perimeter was worth.',
-      'We took $22M. Then we claimed FBI seizure.
-The affiliate got nothing. We kept everything.',
-      '6TB. 100 million patients. You stopped the binary.
-You did not stop the data leaving.'
+      'Citrix Bleed. $800. That\'s what your entire\nsecurity perimeter was worth.',
+      'We took $22M. Then we claimed FBI seizure.\nThe affiliate got nothing. We kept everything.',
+      '6TB. 100 million patients. You stopped the binary.\nYou did not stop the data leaving.'
     ]
   },
   // ── TIER 3 — HARD ─────────────────────────────────────────────
@@ -17455,12 +17439,9 @@ You did not stop the data leaving.'
       {phase:3,type:'IMPACT',icon:'💥',title:'Weapons Programme Funded',text:'US Treasury confirmed: LAZARUS Group funds North Korean ICBM development. $625M funds an estimated 6 intercontinental ballistic missile development cycles.',ttp:'T1657 — Financial Theft',clue:'DPRK weapons funding confirms every LAZARUS theft is simultaneously a national security incident.',hint:'finance'},
     ],
     intercepts:[
-      'The LinkedIn message looked real.
-That\'s not a flaw in our operation. It\'s a flaw in yours.',
-      'Five of nine validator nodes. Quorum achieved.
-We can sign any transaction now.',
-      'Six seconds. $625 million.
-You are not stopping a theft. You are stopping a missile.'
+      'The LinkedIn message looked real.\nThat\'s not a flaw in our operation. It\'s a flaw in yours.',
+      'Five of nine validator nodes. Quorum achieved.\nWe can sign any transaction now.',
+      'Six seconds. $625 million.\nYou are not stopping a theft. You are stopping a missile.'
     ]
   },
   {
@@ -17496,12 +17477,9 @@ You are not stopping a theft. You are stopping a missile.'
       {phase:3,type:'IMPACT',icon:'💥',title:'9 US Agencies — 3 Year Investigation',text:'9 US Federal agencies including Treasury, Commerce, and Homeland Security deeply compromised. Investigation ran for over 3 years.',ttp:'Historical TTP',clue:'US Federal agency deep compromise confirms APT29 SVR Russian Foreign Intelligence espionage.',hint:'supply'},
     ],
     intercepts:[
-      'We don\'t break in. We log in.
-Can you block a valid token?',
-      '287 days. That\'s how long we read before anyone noticed.
-We read everything.',
-      'We accessed the email about the investigation into us.
-While it was being written.'
+      'We don\'t break in. We log in.\nCan you block a valid token?',
+      '287 days. That\'s how long we read before anyone noticed.\nWe read everything.',
+      'We accessed the email about the investigation into us.\nWhile it was being written.'
     ]
   },
   // ── TIER 4 — EXPERT ───────────────────────────────────────────
@@ -17538,12 +17516,9 @@ While it was being written.'
       {phase:3,type:'IMPACT',icon:'💥',title:'DNC — Bundestag — NATO Trilogy',text:'TTP continuity across DNC 2016, Bundestag 2015, and this operation confirms GRU Unit 26165 systematic targeting of Western democratic institutions.',ttp:'Historical TTP',clue:'Three-operation TTP continuity confirms the same GRU unit — this is a campaign, not an incident.',hint:'government'},
     ],
     intercepts:[
-      'The summit is in 72 hours.
-The intelligence is worth more before the meeting.',
-      'X-Agent. We never sold it. We never leaked it.
-You know exactly who we are.',
-      'The delegation credentials are staged.
-What are you going to tell NATO?'
+      'The summit is in 72 hours.\nThe intelligence is worth more before the meeting.',
+      'X-Agent. We never sold it. We never leaked it.\nYou know exactly who we are.',
+      'The delegation credentials are staged.\nWhat are you going to tell NATO?'
     ]
   },
   {
@@ -17579,12 +17554,9 @@ What are you going to tell NATO?'
       {phase:3,type:'IMPACT',icon:'💥',title:'9 Agencies — 3-Year Investigation',text:'US Treasury, Commerce, Homeland Security, State Department and 5 other agencies deeply compromised. Investigation ran for over 3 years.',ttp:'Historical TTP',clue:'US Federal agency compromise at this scale confirms NOBELIUM SVR strategic intelligence mission.',hint:'government'},
     ],
     intercepts:[
-      '18,000 organisations. All installed it. All trusted it.
-The certificate was valid.',
-      'We activated 100 of 18,000.
-The other 17,900 are still dormant. If we want them.',
-      'We read the security team\'s email about our methods.
-They documented their own countermeasures. We adapted.'
+      '18,000 organisations. All installed it. All trusted it.\nThe certificate was valid.',
+      'We activated 100 of 18,000.\nThe other 17,900 are still dormant. If we want them.',
+      'We read the security team\'s email about our methods.\nThey documented their own countermeasures. We adapted.'
     ]
   },
   // ── TIER 5 — ELITE ────────────────────────────────────────────
@@ -17621,12 +17593,9 @@ They documented their own countermeasures. We adapted.'
       {phase:3,type:'IMPACT',icon:'💥',title:'Five Eyes Joint Advisory',text:'US, UK, Australia, Canada, and New Zealand issued a joint advisory in May 2023: VOLT TYPHOON is pre-positioned in critical infrastructure across all five nations.',ttp:'Historical TTP',clue:'Five Eyes joint attribution confirms PLA state-sponsored pre-positioning across all allied infrastructure.',hint:'energy'},
     ],
     intercepts:[
-      'We have been here for five years.
-We do not steal. We wait.',
-      'The activation order has not come yet.
-When it does — one signal reaches everything.',
-      'You cannot evict us. Every remediation
-creates a new foothold. The infrastructure is ours.'
+      'We have been here for five years.\nWe do not steal. We wait.',
+      'The activation order has not come yet.\nWhen it does — one signal reaches everything.',
+      'You cannot evict us. Every remediation\ncreates a new foothold. The infrastructure is ours.'
     ]
   },
   {
@@ -17662,15 +17631,2203 @@ creates a new foothold. The infrastructure is ours.'
       {phase:3,type:'IMPACT',icon:'💥',title:'Industroyer2 — Second Attempt',text:'April 2022: Industroyer2 stopped by ESET and CERT-UA 2 hours before activation. Current operation is the second deployment attempt against the same grid.',ttp:'Historical TTP',clue:'Second attempt post-thwart confirms SANDWORM mission persistence against Ukrainian power grid.',hint:'energy'},
     ],
     intercepts:[
-      'December. We chose December.
-Do you know how cold Ukraine is without power?',
-      'The HMI terminals respond to us now.
-The circuit breakers do not know the difference.',
-      '02:00 local time. The wiper activates.
-The grid goes dark. You have minutes.'
+      'December. We chose December.\nDo you know how cold Ukraine is without power?',
+      'The HMI terminals respond to us now.\nThe circuit breakers do not know the difference.',
+      '02:00 local time. The wiper activates.\nThe grid goes dark. You have minutes.'
     ]
   },
 ];
+
+// ════════════════════════════════════════════════════════════════
+//  ADVERSARY LOCALIZATION (i18n)
+// ════════════════════════════════════════════════════════════════
+const ADVERSARIES_I18N = {
+  "pt": {
+    "scattered_spider": {
+      "target": "IDENTIDADE CORPORATIVA & INFRAESTRUTURA CLOUD",
+      "motto": "Nós já somos o seu departamento de TI.",
+      "brief": "Setembro de 2023. Uma ligação bypass em $2 milhões de controles de segurança na MGM Resorts. SCATTERED SPIDER ligou para TI e se passou por novo funcionário. Reset de MFA concedido em minutos. $100 milhões em perdas seguiram. O mesmo grupo atingiu Caesars Entertainment e saiu com $15M de resgate. Rastreie a chamada de vishing, siga a credencial roubada, corte-os antes do wire ser processado.",
+      "phaseNames": [
+        "COMPROMETIMENTO INICIAL",
+        "PIVÔ DE IDENTIDADE",
+        "EXFILTRAÇÃO FINANCEIRA"
+      ],
+      "intercepts": [
+        "Nós já somos o seu departamento de TI.\nO helpdesk acreditou em nós. Eles sempre acreditam.",
+        "Você está lendo nossos rastros. A janela do wire está aberta.\nAprovação em quatro minutos.",
+        "Quatro minutos. É tudo que precisamos.\nVocê consegue parar em quatro minutos?"
+      ],
+      "clues": [
+        {
+          "title": "Chamada de Vishing Confirmada",
+          "text": "Helpdesk de TI recebeu ligação alegando ser novo funcionário. Falante de inglês nativo. Solicitou reset de MFA para problemas de acesso remoto. Ligação durou 4 minutos."
+        },
+        {
+          "title": "Ataque de Fadiga MFA",
+          "text": "Alvo recebeu 47 notificações push de MFA em 12 minutos. No push 48 aprovaram — assumindo que era um erro de sistema."
+        },
+        {
+          "title": "Reconhecimento LinkedIn",
+          "text": "Ator colheu procedimentos de helpdesk e nomes de novos funcionários do LinkedIn por 21 dias antes da ligação. Funcionário alvo confirmado via blog da empresa."
+        },
+        {
+          "title": "Zero Malware Confirmado",
+          "text": "Ausência completa de malware em toda a intrusão. Puramente baseado em credenciais e acesso. AV tradicional de endpoint tem zero detecções."
+        },
+        {
+          "title": "Tentativa de SIM-Swap",
+          "text": "Operadora móvel recebeu ligação solicitando port de SIM de número executivo. Rep da operadora foi socialmente engineered usando nome da vítima e endereço de cobrança."
+        },
+        {
+          "title": "App OAuth Injetado",
+          "text": "Aplicação OAuth rogue 'MS Teams Update v2.1' concedeu silenciosamente permissões Mail.Read e Files.ReadWrite. Nenhum prompt de consentimento do usuário foi acionado."
+        },
+        {
+          "title": "Console Admin Okta Acessado",
+          "text": "Atacante fez login no portal admin Okta e adicionou segundo autenticador à conta do CFO. Nenhum alerta foi gerado."
+        },
+        {
+          "title": "Slack Interno Weaponizado",
+          "text": "Workspace Slack comprometido usado para enviar links de phishing para o time de finanças de um remetente interno confiável."
+        },
+        {
+          "title": "Telegram C2 Ativo",
+          "text": "7 operadores coordenando ataque em tempo real via canal Telegram privado durante horário comercial do timezone alvo."
+        },
+        {
+          "title": "Apenas Janela de Horário Comercial",
+          "text": "Toda atividade dentro de 09:00-17:00 timezone alvo. Zero atividade de fim de semana. Ator imita comportamento de funcionário normal para evitar detecção por anomalia."
+        },
+        {
+          "title": "Wire Transfer Portal Alcançado",
+          "text": "Ator acessou o portal de transferência. $30M em transações pendentes visíveis. Janela de aprovação ativa. Interceptação necessária em menos de 4 minutos."
+        },
+        {
+          "title": "Impacto de $100M — Padrão MGM",
+          "text": "Perfil forense corresponde a MGM Resorts 2023. Perdas combinadas de outages, resgate e breach: $100M+. Depoimento no Congresso seguido."
+        }
+      ]
+    },
+    "carbon_spider": {
+      "target": "REDES POS DE VAREJO & FINANÇAS",
+      "motto": "Suas defesas não foram projetadas para o que fazemos.",
+      "brief": "FIN7 opera desde 2015. Ataques bancários Carbanak. Ataques POS fileless. Agora parcerias BlackCat ransomware. Eles estão dentro da rede de varejo — 9 dias dentro. Cópias de sombra deletadas. ESXi enumerado. Admin de domínio colhido. Entre você e 94 VMs criptografadas simultaneamente há uma janela de 90 segundos. Caçue agora antes de sexta 23:00.",
+      "phaseNames": [
+        "ACESSO INICIAL",
+        "STAGING DE RANSOMWARE",
+        "CRIPTOGRAFIA COMPLETA"
+      ],
+      "intercepts": [
+        "Nove dias. Você acabou de começar a procurar.\nO timer foi setado antes de você abrir este caso.",
+        "Sexta-feira à noite. Seu time vai para casa. O nosso fica.\nESXi está pronto.",
+        "94 VMs. 8 minutos. Você não consegue parar todos.\nO relógio está correndo."
+      ],
+      "clues": [
+        {
+          "title": "Payload Fileless em Memória",
+          "text": "Sem arquivos em disco. Precursor de ransomware rodando inteiramente em memória de processo PowerShell. AV tradicional tem zero detecções em 847 endpoints."
+        },
+        {
+          "title": "Admin de Domínio Extraído",
+          "text": "Mimikatz rodou em memória de processo — credenciais de admin de domínio extraídas do LSASS. Todas as 847 contas de domínio agora controladas pelo atacante."
+        },
+        {
+          "title": "Cobalt Strike Beacon Live",
+          "text": "C2 Cobalt Strike confirmado — tráfego criptografado para VPS registrada na Holanda. Check-in Beacon a cada 4 segundos por 9 dias."
+        },
+        {
+          "title": "RDP Brute Force Bem-Sucedido",
+          "text": "Endpoint POS não-patcheado breached via RDP brute-force de IP externo. Login: PoS_Admin_03. Dwell de 9 dias começou."
+        },
+        {
+          "title": "Cópias de Sombra Eliminadas",
+          "text": "Deleção VSS via vssadmin.exe rodou 3 horas antes de criptografia agendada. Todos os restore points removidos. Recuperação agora impossível."
+        },
+        {
+          "title": "94 Hosts ESXi Mapeados",
+          "text": "Todos os 94 hosts VMware ESXi enumerados e configs exportadas. Criptografia simultânea de todos os VMs levará 8 minutos."
+        },
+        {
+          "title": "Veeam Backup Comprometido",
+          "text": "Credenciais de admin de servidor Veeam backup obtidas. Todos os jobs de backup offsite pausados silenciosamente 48 horas atrás."
+        },
+        {
+          "title": "Sexta-Feira 23:00 Agendada",
+          "text": "Timer de deploy de ransomware setado para sexta 23:00 hora local. Maximiza janela de impacto de fim de semana antes de resposta segunda-feira de manhã."
+        },
+        {
+          "title": "2.1TB Dados de Cliente Roubados",
+          "text": "2.1TB de PII de cliente e dados de cartão exfiltrados para infraestrutura BLACKCAT antes de criptografia. Site de leak atualizado com branding da vítima."
+        },
+        {
+          "title": "$4.5M Resgate — Timer de 72 Horas",
+          "text": "Demanda de resgate: $4.5M em criptomoeda. Countdown de 72 horas no site de leak. Três arquivos descriptografados como prova de capacidade."
+        },
+        {
+          "title": "847 Alertas em 4 Minutos",
+          "text": "Volume de alertas excedeu capacidade de analista em 4 minutos de deploy. Triagem de SOC foi impossível em velocidade humana."
+        },
+        {
+          "title": "94 VMs Criptografadas Simultaneamente",
+          "text": "Todos os 94 VMs ESXi criptografados em 8 minutos de deploy. 100% da infraestrutura virtualizada offline. Timeline de recuperação: semanas."
+        }
+      ]
+    },
+    "plump_spider": {
+      "target": "BANKING BRASILEIRO & REDE PIX",
+      "motto": "No Brasil, toda conta bancária é um alvo.",
+      "brief": "Janeiro de 2024: Interpol prendeu operadores Grandoreiro. Eles retomaram em semanas. 12.000 pagamentos PIX fraudulentos. 10 segundos por transferência. Completamente irreversível. PLUMP SPIDER está dentro de Bradesco, Itaú, e Nubank simultaneamente. Cada transferência que cleia é perdida para sempre. Banco Central monitorando 47 contas. Encontre a rota antes do wire final.",
+      "phaseNames": [
+        "DEPLOY TROJAN",
+        "COLHEITA DE CREDENCIAL",
+        "ONDA PIX FRAUDULENTA"
+      ],
+      "intercepts": [
+        "12.000 PIX. 10 segundos cada. Irreversível.\nFaça a matemática.",
+        "Banco Central monitora 47 contas.\nNós operamos 127.",
+        "A primeira onda cleiou. O BRL está convertendo para USDT.\nVocê está observando o rastro que deixamos."
+      ],
+      "clues": [
+        {
+          "title": "Trojan Grandoreiro Ativo",
+          "text": "Trojan bancário Grandoreiro com capacidade de ataque overlay confirmado — targets 900+ instituições financeiras brasileiras com captura de tela em tempo real."
+        },
+        {
+          "title": "App Bancário Trojanzado no Play Store",
+          "text": "App bancário Bradesco falso com 50.000+ downloads no Google Play. Solicita permissão Accessibility no install para ataques overlay."
+        },
+        {
+          "title": "Onda Phishing Receita Federal",
+          "text": "2.4 milhões de emails phishing enviados com avisos fake da Receita Federal brasileira. Anexo instala Grandoreiro silenciosamente em menos de 3 segundos."
+        },
+        {
+          "title": "Apenas Horário Comercial Brasília",
+          "text": "Toda atividade dentro de 08:00-18:00 horário Brasília. Zero atividade em feriados públicos brasileiros — Tiradentes e Corpus Christi ambos em branco."
+        },
+        {
+          "title": "Colheita de Chave PIX",
+          "text": "Atacante colhendo chaves PIX — CPF, CNPJ, números de telefone — de dispositivos comprometidos. Transferências PIX são instantâneas e irreversíveis uma vez enviadas."
+        },
+        {
+          "title": "47.000 Números CPF Coletados",
+          "text": "IDs de imposto brasileiro colhidos para criação de conta mula. Cada CPF usado para abrir conta verificada capaz de receber transferências PIX."
+        },
+        {
+          "title": "Personificação de Banco WhatsApp",
+          "text": "Atacante personificando departamentos de fraude de 3 grandes bancos via WhatsApp Business API. Falante nativo de português com scripts específicos do banco."
+        },
+        {
+          "title": "127 Contas Mula Prontas",
+          "text": "127 contas mula verificadas abertas usando dados CPF roubados. Cada uma sob limite diário de R$5.000 para evitar limites de monitoramento do Banco Central."
+        },
+        {
+          "title": "12.000 Transferências PIX Ativas",
+          "text": "12.000 transferências PIX fraudulentas iniciadas simultaneamente em 3 bancos. Cada uma sob R$5.000. Exposição total: R$47 milhões."
+        },
+        {
+          "title": "11.000 Boletos Gerados",
+          "text": "11.000 boletos de pagamento fraudulentos enviados para vítimas corporativas. Valor médio R$8.400. Janela de pagamento: 24 horas."
+        },
+        {
+          "title": "BRL Convertido para USDT",
+          "text": "R$47M roubados convertidos para USDT via 6 exchanges de cripto brasileiras em 35 minutos. Contas de exchange pré-criadas usando dados CPF roubados."
+        },
+        {
+          "title": "Três Bancos — Simultâneos",
+          "text": "PLUMP SPIDER está dentro de Bradesco, Itaú, e Nubank simultaneamente. Alerta do Banco Central acionado mas transferências já estão cleiando."
+        }
+      ]
+    },
+    "blind_spider": {
+      "target": "Instituições Financeiras da América Latina & Rede SWIFT",
+      "motto": "Falamos sua língua. Conhecemos seu banco.",
+      "brief": "$47 milhões redirecionados através de 23 operadores coordenando em tempo real no Telegram. Seis meses. Zero prisões. Sua metodologia espelha o roubo SWIFT do Bangladesh de 2016 que rendeu $81M. BLIND SPIDER está sondando a infraestrutura SWIFT da América Latina AGORA. Encontre o objetivo antes da próxima transferência eletrônica ser processada.",
+      "phaseNames": [
+        "ENGENHARIA SOCIAL",
+        "OPERAÇÃO BEC",
+        "ALVO SWIFT"
+      ],
+      "intercepts": [
+        "Falamos sua língua. Conhecemos seu banco.\nSeus funcionários já confiaram em nós.",
+        "23 operadores. 6 países.\nCada um observando uma instituição diferente.",
+        "A transferência foi processada. A próxima será processada em 4 minutos.\nQual instituição você salva?"
+      ],
+      "clues": [
+        {
+          "title": "Onda de Vishing no WhatsApp",
+          "text": "Clientes corporativos recebendo chamadas WhatsApp de números de banco falsificados. Os chamadores falam espanhol fluente e português com terminologia bancária precisa."
+        },
+        {
+          "title": "AsyncRAT nas Estações de Finanças",
+          "text": "AsyncRAT instalado em 3 máquinas da equipe de finanças. Keylogging completo e captura de tela ativa. Credenciais do portal de transferências registradas em 48 horas."
+        },
+        {
+          "title": "Organograma Reconstruído",
+          "text": "Perfis LinkedIn da equipe de finanças raspados. Hierarquia de aprovação de pagamentos mapeada. Endereço de email do CFO e linha direta confirmados através de OSINT."
+        },
+        {
+          "title": "C2 na Colômbia e Panamá",
+          "text": "Infraestrutura de comando hospedada na Colômbia, Panamá e Costa Rica. Rotação de IP a cada 6 horas em 3 países."
+        },
+        {
+          "title": "47 Solicitações de Transferência Fraudulentas",
+          "text": "47 solicitações de transferência eletrônica enviadas do email do CFO comprometido. Cada uma elaborada para corresponder aos relacionamentos de fornecedores existentes. Valor médio: $340.000."
+        },
+        {
+          "title": "23 Operadores no Telegram",
+          "text": "Coordenação em tempo real em 23 operadores em 6 países via Telegram criptografado. Canais separados por instituição alvo."
+        },
+        {
+          "title": "Horário Comercial da Colômbia",
+          "text": "Todas as tentativas de fraude durante 09:00-17:00 hora da Colômbia. Imita exatamente a janela de operações bancárias legítimas."
+        },
+        {
+          "title": "Credenciais do Portal de Transferências Registradas",
+          "text": "AsyncRAT keylogger capturou credenciais do portal de transferências, PINs de aprovação e códigos de autenticação out-of-band para 3 contas."
+        },
+        {
+          "title": "Sonda SWIFT — Padrão do Bangladesh",
+          "text": "Ator sondando SWIFT Alliance Access. Padrão de transação e tempo coincidem com a metodologia do roubo do Bangladesh Bank de 2016."
+        },
+        {
+          "title": "Lavagem de Criptografia — 12 Exchanges",
+          "text": "Fundos roubados convertidos em USDT através de 12 exchanges em 6 países em 90 minutos. Blockchain mostra ponto de saída Huobi."
+        },
+        {
+          "title": "Roteamento SWIFT Alterado",
+          "text": "Instruções de roteamento de banco correspondente alteradas em mensagens SWIFT. $8,2M redirecionados para contas nas Filipinas — idêntico ao Bangladesh 2016."
+        },
+        {
+          "title": "$47M — 6 Bancos Alvo",
+          "text": "Exposição total BEC: $47M em 6 instituições financeiras da América Latina. Três transferências eletrônicas já foram processadas. A janela de interceptação está fechando."
+        }
+      ]
+    },
+    "blackcat": {
+      "target": "Infraestrutura Corporativa — Extorsão Tripla",
+      "motto": "Criptografe. Publique. Destrua. Nessa ordem.",
+      "brief": "Fevereiro de 2024: Change Healthcare. ALPHV BlackCat atingiu o maior processador de sinistros médicos dos EUA. $22 milhões de resgate pagos. 6TB roubados. 100 milhões de americanos expostos. O afiliado comprou acesso por $800 via Citrix Bleed. ALPHV então exit-scammeou seu próprio afiliado e ficou com o resgate. 94 hosts ESXi estão em escopo. Encontre o nó antes do cronômetro expirar.",
+      "phaseNames": [
+        "ACESSO INICIAL",
+        "TOMADA DE INFRAESTRUTURA",
+        "EXTORSÃO TRIPLA"
+      ],
+      "intercepts": [
+        "Citrix Bleed. $800. Isso é o que seu perímetro\nde segurança inteiro valia.",
+        "Pegamos $22M. Depois reclamamos apreensão do FBI.\nO afiliado não recebeu nada. Ficamos com tudo.",
+        "6TB. 100 milhões de pacientes. Você parou o binário.\nVocê não parou os dados saindo."
+      ],
+      "clues": [
+        {
+          "title": "Acesso IAB — $800",
+          "text": "Credenciais compradas de Initial Access Broker 3 semanas antes por $800. Alvo selecionado para máximo potencial de resgate baseado em receita e classe de dados."
+        },
+        {
+          "title": "Ransomware Rust Multiplataforma",
+          "text": "Binário BLACKCAT Rust criptografa Windows, Linux e ESXi simultaneamente. Nenhuma ferramenta de análise específica de linguagem se aplica. Detecção requer análise comportamental."
+        },
+        {
+          "title": "Cobalt Strike e Brute Ratel",
+          "text": "Dois frameworks C2 implantados simultaneamente — Cobalt Strike para movimento lateral, Brute Ratel para evasão EDR. Ambos ativos desde o primeiro dia."
+        },
+        {
+          "title": "Criptografia de Arquivo Intermitente",
+          "text": "Modo de criptografia de arquivo parcial ativado — apenas primeiros 4MB por arquivo. Maximiza velocidade e minimiza janela de detecção antes da implantação total."
+        },
+        {
+          "title": "94 Hosts ESXi Enumerados",
+          "text": "Todos os 94 hosts VMware ESXi enumerados. Criptografia simultânea preparada. Conclusão projetada: 8 minutos do gatilho."
+        },
+        {
+          "title": "Admin de Domínio via LSASS",
+          "text": "Mimikatz executado na memória do processo. Credenciais de admin de domínio extraídas. Acesso completo à rede confirmado incluindo servidores de backup."
+        },
+        {
+          "title": "Backups Destruídos Primeiro",
+          "text": "Credenciais de admin do servidor de backup Veeam obtidas. Todos os trabalhos de backup pausados. VSS deletado. Nenhum caminho de recuperação permanece."
+        },
+        {
+          "title": "Enchente de Alerta: 847 em 4 Minutos",
+          "text": "Volume de alerta excedeu a capacidade do analista em 4 minutos da implantação. Triagem manual do SOC é impossível nessa velocidade."
+        },
+        {
+          "title": "6TB Roubados — Leak Site Online",
+          "text": "6TB de registros de saúde de pacientes e PII enviados para o leak site ALPHV. 100 milhões de registros de pacientes expostos. Site atualizado com logo da vítima."
+        },
+        {
+          "title": "$22M Resgate — Depois Exit Scam",
+          "text": "$22M de resgate pagos pela vítima. ALPHV então desligou seu leak site e reclamou apreensão do FBI — ficando com os $22M e negando ao afiliado sua parte."
+        },
+        {
+          "title": "100M Americanos Expostos",
+          "text": "100 milhões de americanos registros de saúde expostos. Maior violação de saúde na história dos EUA. Atrasos de prescrição em todo o país. Audiência no Congresso convocada."
+        },
+        {
+          "title": "Padrão de Traição de Afiliado",
+          "text": "ALPHV pegou os $22M de resgate, desligou a infraestrutura, culpou o FBI — afiliado não recebeu nada, vítima não recebeu nenhum descriptografador. Fraude criminal pura."
+        }
+      ]
+    },
+    "lazarus": {
+      "target": "Criptografia & Sistemas Financeiros",
+      "motto": "Financiamos um programa de armas. Cada dólar importa.",
+      "brief": "Março de 2022: Ronin Network. Um engenheiro clicou em uma oferta de emprego fake no LinkedIn. LAZARUS comprometeu 5 de 9 nós validadores. $625 milhões roubados em 6 segundos. O FBI confirmou a atribuição. Cada dólar financia o programa de armas da Coreia do Norte. Tempo de permanência: 14 meses. Mova-se lentamente e o wiper é ativado e destrói todas as evidências. Encontre-os.",
+      "phaseNames": [
+        "ENTREGA DE SPEARPHISH",
+        "INFILTRAÇÃO DE REDE",
+        "EXTRAÇÃO DE FUNDOS"
+      ],
+      "intercepts": [
+        "A mensagem do LinkedIn parecia real.\nEsse não é um flaw na nossa operação. É um flaw na sua.",
+        "Cinco de nove nós validadores. Quórum alcançado.\nPodemos assinar qualquer transação agora.",
+        "Seis segundos. $625 milhões.\nVocê não está parando um roubo. Você está parando um míssil."
+      ],
+      "clues": [
+        {
+          "title": "Oferta de Emprego Fake no LinkedIn",
+          "text": "Desenvolvedor blockchain sênior recebeu mensagem LinkedIn de recrutador fake NEXON Games oferecendo $450.000 de salário. PDF trojanizado com payload zero-day personalizado."
+        },
+        {
+          "title": "Implante Personalizado Zero-Match",
+          "text": "Variante de malware novel confirmada — zero matches em qualquer banco de dados global de inteligência de ameaça. Custom-built para esse alvo específico. Investimento significativo."
+        },
+        {
+          "title": "Wiper Pré-Encenado",
+          "text": "Payload wiper destrutivo no servidor de staging — auto-ativa se ferramentas forenses ou serviços CrowdStrike forem detectados na rede."
+        },
+        {
+          "title": "Operação Completa de 14 Meses",
+          "text": "Perícia estima operação completa: 14 meses. Fase 1 acesso, Fase 2 enumeração e espera, Fase 3 roubo e saída. Metódica."
+        },
+        {
+          "title": "5 de 9 Nós Validadores Controlados",
+          "text": "5 de 9 nós validadores Ronin bridge comprometidos usando credenciais de desenvolvedor roubadas. Quórum alcançado. Todas as transações bridge agora podem ser fraudulentamente assinadas."
+        },
+        {
+          "title": "Sonda SWIFT Rodando em Paralelo",
+          "text": "Rastreamento paralelo: SWIFT Alliance Access sondado em 3 instituições financeiras. Padrão combina com reconhecimento pré-ataque do Bangladesh Bank 2016."
+        },
+        {
+          "title": "RAT na Estação de Trabalho do CFO Ativo",
+          "text": "Trojan de Acesso Remoto personalizado confirmado na estação de trabalho do Chief Financial Officer. Captura de tela em tempo real do dashboard de aprovação de transferência ativa."
+        },
+        {
+          "title": "Infraestrutura de Mixer da Coreia do Norte",
+          "text": "Fundos roubados pré-roteados através de Tornado Cash e Blender.io — serviços de mixing de cripto da Coreia do Norte usados em $1,7B em operações LAZARUS anteriores."
+        },
+        {
+          "title": "$625M Roubados em 6 Segundos",
+          "text": "Duas transações fraudulentas assinadas por 5 nós validadores comprometidos. $625M em ETH e USDC drenados da Ronin bridge. Maior roubo cripto na história."
+        },
+        {
+          "title": "6 Dias Antes da Descoberta",
+          "text": "Roubo não foi descoberto por 6 dias após execução. Usuários Axie Infinity notaram quando solicitações de retirada falharam. Zero monitoramento estava em lugar."
+        },
+        {
+          "title": "Wiper Ativado na Descoberta",
+          "text": "Na descoberta, LAZARUS ativou o wiper em 4 sistemas. Todos os artefatos forenses destruídos. Atribuição alcançada apenas via rastreamento blockchain."
+        },
+        {
+          "title": "Programa de Armas Financiado",
+          "text": "Tesouro dos EUA confirmou: LAZARUS Group financia desenvolvimento de ICBM da Coreia do Norte. $625M financia um estimado 6 ciclos de desenvolvimento de mísseis balísticos intercontinentais."
+        }
+      ]
+    },
+    "cozy_bear": {
+      "target": "Infraestrutura em Nuvem e Provedores de Identidade",
+      "motto": "Não arrombamos. Fazemos login.",
+      "brief": "Janeiro de 2024: COZY BEAR acessou email da liderança sênior da Microsoft por semanas usando apenas tokens OAuth válidos. Sem malware. Sem alertas. SUNBURST 2020: 18.000 organizações infectadas via update trojanizado — 9 agências federais dos EUA profundamente comprometidas. Tempo de permanência médio de 287 dias. O SVR faz login e lê em silêncio. Encontre o padrão antes que 9 meses de inteligência sejam perdidos.",
+      "phaseNames": [
+        "INFILTRAÇÃO EM NUVEM",
+        "PERSISTÊNCIA DE IDENTIDADE",
+        "COLETA SILENCIOSA"
+      ],
+      "intercepts": [
+        "Não arrombamos. Fazemos login.\nVocê consegue bloquear um token válido?",
+        "287 dias. Esse é o tempo que lemos antes de alguém perceber.\nLemos tudo.",
+        "Acessamos o email sobre a investigação contra nós.\nEnquanto estava sendo escrito."
+      ],
+      "clues": [
+        {
+          "title": "Spray de Senha — Um Por Conta",
+          "text": "Uma tentativa de autenticação por conta em 18.000 contas em nuvem durante 34 dias. Zero travamentos. Todas as tentativas de um pool de proxy residencial."
+        },
+        {
+          "title": "Roubo de Token OAuth Confirmado",
+          "text": "Tenant de nuvem mostra tokens OAuth válidos em uso de 4 países simultaneamente — impossibilidade física. Roubo de token confirmado via viagem impossível."
+        },
+        {
+          "title": "SaaS como Infraestrutura C2",
+          "text": "Todas as comunicações de comando roteadas por contas legítimas do Microsoft OneDrive e Dropbox. Nenhuma infraestrutura C2 customizada para bloquear ou identificar."
+        },
+        {
+          "title": "Horas de Moscou Com Pausa Feriada",
+          "text": "Toda atividade 07:00-19:00 Horário Padrão de Moscou. Zero atividade em feriados públicos russos — calendário de segurança da FSO incluindo Dia da Vitória observado precisamente."
+        },
+        {
+          "title": "Token SAML Forjado",
+          "text": "Logs do provedor de identidade mostram asserções SAML assinadas com certificado roubado. IdP legado aceitou sem verificar lista de revogação de certificado."
+        },
+        {
+          "title": "Função de Administrador Global Reivindicada",
+          "text": "Função de Administrador Global do Azure AD silenciosamente atribuída a conta de serviço controlada por atacante. Acesso total a tenant. Zero alertas gerados."
+        },
+        {
+          "title": "Chaves de API Rotacionadas por Atacante",
+          "text": "Atacante rotacionou chaves de API e segredos de principal de serviço — bloqueando a equipe de segurança legítima de seu próprio ambiente em nuvem."
+        },
+        {
+          "title": "Permanência de 287 Dias Confirmada",
+          "text": "Análise forense: atacante presente por 287 dias antes da descoberta. Durante esse período, aproximadamente 34TB de email foram lidos silenciosamente."
+        },
+        {
+          "title": "Email da Liderança Microsoft Lido",
+          "text": "SVR acessou email da liderança sênior da Microsoft por semanas em janeiro de 2024 — incluindo emails sobre a investigação em curso do próprio SVR."
+        },
+        {
+          "title": "18.000 Redes via SolarWinds",
+          "text": "SUNBURST: 18.000 organizações instalaram o update trojanizado. SVR ativou acesso em 100 — selecionadas por valor de inteligência, não aleatoriamente."
+        },
+        {
+          "title": "Comunicações de Fornecedor de Segurança Coletadas",
+          "text": "Empresas de segurança entre vítimas da SUNBURST tiveram seus relatórios de inteligência de ameaças e comunicações de resposta a incidente sistematicamente coletados."
+        },
+        {
+          "title": "9 Agências dos EUA — Investigação de 3 Anos",
+          "text": "9 agências federais dos EUA incluindo Tesouro, Comércio e Segurança Interna profundamente comprometidas. Investigação durou mais de 3 anos."
+        }
+      ]
+    },
+    "fancy_bear": {
+      "target": "Redes da OTAN e do Governo",
+      "motto": "Colhemos o que você confia.",
+      "brief": "Unidade GRU 26165. DNC 2016 — 50.000 emails publicados. Bundestag 2015 — 16GB roubados. X-Agent confirmado ativo. Uma cúpula da OTAN é daqui a 72 horas. Credenciais do adido de defesa são o objetivo. Sete nós comprometidos entre origem GRU e Bruxelas. Adversário nível especialista operando UTC+3. Rastreie.",
+      "phaseNames": [
+        "CAMPANHA SPEARPHISH",
+        "COMPROMETIMENTO DE REDE",
+        "EXTRAÇÃO DE INTELIGÊNCIA"
+      ],
+      "intercepts": [
+        "A cúpula é em 72 horas.\nA inteligência vale mais antes da reunião.",
+        "X-Agent. Nunca vendemos. Nunca vazamos.\nVocê sabe exatamente quem somos.",
+        "As credenciais da delegação estão encenadas.\nO que você vai dizer à OTAN?"
+      ],
+      "clues": [
+        {
+          "title": "Spray de Credenciais — 847 Tentativas",
+          "text": "Entradas falhadas 847 tentativas de login em 23 contas. Uma por conta para evitar travamento. Fonte: Nós de saída Tor misturados com endereços ISP ucranianos."
+        },
+        {
+          "title": "X-Agent v4.0 Confirmado",
+          "text": "Análise forense de memória confirma X-Agent v4.0 — exclusivo da Unidade GRU 26165. Nunca vendido ou vazado para atores não-estatais. Atribuição é certa."
+        },
+        {
+          "title": "Spearphish de Adido de Defesa",
+          "text": "Documento Word armado com exploit OLE CVE-2017-0199 direcionado a adidos de defesa da OTAN. Assunto: Classified Q4 Summit Briefing."
+        },
+        {
+          "title": "OSINT de Delegação de Cúpula",
+          "text": "Inteligência de código aberto coletada sobre composição de delegação de membro OTAN, reservas de hotel e cronograma de cúpula do LinkedIn e sites de conferência."
+        },
+        {
+          "title": "C2 Imita .gov e .mil",
+          "text": "Domínios de comando imitam nomes de domínio completamente qualificados legítimos .gov e .mil. Padrão: [legit-agency]-update.com — idêntico à campanha C2 do Bundestag 2015."
+        },
+        {
+          "title": "Horas de Moscou — Pausa Feriada",
+          "text": "Toda atividade 09:00-18:00 Horário Padrão de Moscou. Sem atividade em feriados públicos russos — Defender of the Fatherland Day em branco confirmado."
+        },
+        {
+          "title": "Viagem Impossível via VPN Ucraniana",
+          "text": "Mesma credencial usada de Varsóvia e Moscou em 4 minutos. VPN roteada por ISP ucraniano para mascarar origem GRU."
+        },
+        {
+          "title": "WMIC Living-off-the-Land",
+          "text": "WMIC.exe usado para criação de processo remoto em 14 hosts. Puramente living-off-the-land. Zero malware customizado escrito em disco."
+        },
+        {
+          "title": "Dados Encenados e Particionados",
+          "text": "Dados comprimidos usando certutil, encenados em AppData, criptografados com AES, depois carregados em chunks de 4MB para evitar limites de tamanho DLP."
+        },
+        {
+          "title": "16GB de Documentos da OTAN",
+          "text": "16GB de comunicações governamentais, arquivos de delegação e briefings de cúpula classificados encenados para exfiltração. Segurança da cúpula agora comprometida."
+        },
+        {
+          "title": "Janela de Cúpula de 72 Horas",
+          "text": "Cúpula é daqui a 72 horas. Valor de inteligência das comunicações de delegação atinge pico no horário da reunião. GRU está acelerando extração."
+        },
+        {
+          "title": "DNC — Bundestag — Trilogia OTAN",
+          "text": "Continuidade TTP em DNC 2016, Bundestag 2015 e esta operação confirma direcionamento sistemático da Unidade GRU 26165 das instituições democráticas ocidentais."
+        }
+      ]
+    },
+    "midnight_blizzard": {
+      "target": "Cadeia de Fornecimento de Software e Redes de Fornecedor",
+      "motto": "Comprometemos o fornecedor. Agora somos donos do cliente.",
+      "brief": "O certificado de assinatura de código da SolarWinds foi roubado 6 meses antes do ataque. 18.000 organizações instalaram o update Orion trojanizado. 9 agências federais dos EUA profundamente comprometidas. NOBELIUM — a operação de cadeia de fornecimento mais sofisticada da história — está em execução novamente. Sete nós. Acesso persistente em nuvem é o objetivo. Encontre a violação antes que eles se embutem mais profundamente.",
+      "phaseNames": [
+        "PLANTAÇÃO DE CADEIA DE FORNECIMENTO",
+        "EXPLORAÇÃO A JUSANTE",
+        "PERSISTÊNCIA SILENCIOSA"
+      ],
+      "intercepts": [
+        "18.000 organizações. Todas instalaram. Todas confiaram.\nO certificado era válido.",
+        "Ativamos 100 de 18.000.\nOs outros 17.900 ainda estão adormecidos. Se quisermos.",
+        "Lemos o email da equipe de segurança sobre nossos métodos.\nEles documentaram suas próprias contramedidas. Nos adaptamos."
+      ],
+      "clues": [
+        {
+          "title": "Injeção de Pipeline de Build",
+          "text": "Servidor de build mostra artefato não assinado injetado 3 minutos antes do build assinado oficial em 173 logs de build durante 3 meses."
+        },
+        {
+          "title": "SUNBURST — DLL Malicioso Assinado",
+          "text": "DLL SUNBURST incorporado em updates SolarWinds Orion 2019.4 e 2020.2. Assinado com certificado SolarWinds roubado válido. Parece completamente legítimo."
+        },
+        {
+          "title": "Certificado Roubado 6 Meses Antes",
+          "text": "Certificado de assinatura de código exfiltrado da estação de trabalho do desenvolvedor 6 meses antes do primeiro update infectado ser enviado. Não notado durante esse período."
+        },
+        {
+          "title": "Fase de Preparação de 12 Meses",
+          "text": "NOBELIUM gastou 12 meses pré-posicionando: pesquisa de fornecedor, mapeamento de ambiente de build, extração de certificado e implantação de teste."
+        },
+        {
+          "title": "18.000 Organizações Infectadas",
+          "text": "Update Orion trojanizado instalado por 18.000 organizações. NOBELIUM selecionou manualmente 100 para exploração ativa baseada em valor de inteligência."
+        },
+        {
+          "title": "Backdoor OAuth em Azure",
+          "text": "Aplicação OAuth maliciosa adicionada a todos os 100 tenants Azure alvo pós-infecção. Persiste através de mudanças de senha e resets de MFA."
+        },
+        {
+          "title": "Fornecedores de Segurança Direcionados",
+          "text": "CrowdStrike, FireEye e Malwarebytes estavam entre alvos a jusante. Coleções de email de liderança de segurança iniciadas."
+        },
+        {
+          "title": "Spray de Senha a Jusante",
+          "text": "Pós-infecção: spray de senha contra 17 tenants alvo. Uma tentativa por conta em 18.000 contas durante 28 dias."
+        },
+        {
+          "title": "Ambiente de Teste de 6 Meses",
+          "text": "NOBELIUM começou com um ambiente de teste isolado 6 meses antes da primeira vítima ser infectada. Segurança operacional foi absoluta durante todo tempo."
+        },
+        {
+          "title": "34TB de Email Coletado",
+          "text": "Em todos os alvos SUNBURST, aproximadamente 34TB de comunicações de email coletadas durante 9 meses antes da descoberta pela FireEye."
+        },
+        {
+          "title": "Spray Direto Após Descoberta",
+          "text": "Após SUNBURST ser descoberto, NOBELIUM pivotou diretamente para spray de senha baixo e lento contra Microsoft 365 — confirmando continuidade operacional."
+        },
+        {
+          "title": "9 Agências — Investigação de 3 Anos",
+          "text": "US Treasury, Comércio, Segurança Interna, Departamento de Estado e 5 outras agências profundamente comprometidas. Investigação durou mais de 3 anos."
+        }
+      ]
+    },
+    "volt_typhoon": {
+      "target": "Infraestrutura Crítica e Redes OT",
+      "motto": "Estaremos lá antes de você saber que precisa procurar.",
+      "brief": "Maio 2023: EUA, Reino Unido, Austrália, Canadá e Nova Zelândia confirmam conjuntamente que VOLT TYPHOON está dentro da infraestrutura crítica dos EUA há 5 ou mais anos. 300 dias de permanência. Sem malware — apenas ferramentas integradas do Windows. Energia. Água. Comunicações. Transportes. Pré-posicionado e aguardando a ordem. 8 nós comprometidos através do Pacífico. Esta é a caçada mais difícil que você jamais executará.",
+      "phaseNames": [
+        "PRÉ-POSICIONAMENTO SILENCIOSO",
+        "INFILTRAÇÃO OT",
+        "PRONTIDÃO CONTINGENCIAL"
+      ],
+      "intercepts": [
+        "Estamos aqui há cinco anos.\nNão roubamos. Esperamos.",
+        "A ordem de ativação ainda não chegou.\nQuando chegar — um sinal alcança tudo.",
+        "Você não pode nos expulsar. Toda remediação\ncria um novo ponto de apoio. A infraestrutura é nossa."
+      ],
+      "clues": [
+        {
+          "title": "Sem Malware — Apenas LOTL",
+          "text": "Intrusão de 300 dias usando apenas ferramentas integradas do Windows: WMIC, netsh, certutil, ntdsutil, PowerShell ISE. Antivírus tradicional não tem detecções em todos os endpoints."
+        },
+        {
+          "title": "VPN Fortinet Usada como Retransmissor",
+          "text": "Appliance Fortinet FortiGate comprometido usado como retransmissor encoberto. Todo o tráfego aparece como atividade VPN legítima de intervalos IP confiáveis."
+        },
+        {
+          "title": "Ativo SCADA Fantasma Encontrado",
+          "text": "Controlador SCADA não registrado descoberto de 2011 com credenciais de fábrica padrão — não está em nenhum inventário de ativos ou escopo de monitoramento de segurança."
+        },
+        {
+          "title": "Horário Beijing — Feriados da RPC em Branco",
+          "text": "Toda atividade durante 08:00-18:00 hora de Beijing UTC+8. Zero atividade em feriados públicos da RPC — Semana Dourada do Dia Nacional completamente em branco em todos os 7 dias."
+        },
+        {
+          "title": "Dados SCADA Tunelizados via DNS",
+          "text": "Banco de dados historiador OT consultado. Dados operacionais codificados em registros DNS TXT e exfiltrados via DNS para resolvedor externo — sem HTTP necessário."
+        },
+        {
+          "title": "Ponte IT-OT Atravessada",
+          "text": "Movimento lateral confirmado: rede IT corporativa para rede industrial de controle OT via estação de trabalho de engenharia não monitorada com interface de rede dupla."
+        },
+        {
+          "title": "Persistência via WindowsDefenderUpdate",
+          "text": "Tarefa agendada nomeada WindowsDefenderUpdate criada no historiador OT. Assinada com certificado roubado. Sobrevive a reinicializações e ciclos de patch."
+        },
+        {
+          "title": "LSASS Despejado via Gerenciador de Tarefas",
+          "text": "Credenciais extraídas de LSASS usando apenas Gerenciador de Tarefas — uma ferramenta Windows legítima. Detecção comportamental é o único caminho de detecção."
+        },
+        {
+          "title": "300 Dias de Permanência — Ainda Aguardando",
+          "text": "Pré-posicionamento estimado de 300 ou mais dias ao longo de 5 ou mais anos. Ator ainda não ativou. Aguardando um evento de gatilho geopolítico estratégico."
+        },
+        {
+          "title": "Cadeia de Retransmissão de 150+ Roteadores SOHO",
+          "text": "Mais de 150 roteadores SOHO e dispositivos VPN comprometidos formam uma cadeia de retransmissão. Todo tráfego de VOLT TYPHOON aparenta se originar dentro das fronteiras dos EUA."
+        },
+        {
+          "title": "Capacidade de Disrupção de Grid Mapeada",
+          "text": "VOLT TYPHOON mapeou infraestrutura de comutação de rede elétrica. Comandos OT específicos identificados para causar interrupções localizadas sob demanda."
+        },
+        {
+          "title": "Parecer Conjunto Five Eyes",
+          "text": "EUA, Reino Unido, Austrália, Canadá e Nova Zelândia emitiram parecer conjunto em maio de 2023: VOLT TYPHOON está pré-posicionado em infraestrutura crítica em todas as cinco nações."
+        }
+      ]
+    },
+    "sandworm": {
+      "target": "Sistemas de Controle Industrial e Rede Elétrica",
+      "motto": "Não roubamos. Destruímos.",
+      "brief": "Unidade 74455 do GRU. Dezembro 2015: primeiro ataque cibernético confirmado que causa queda de energia — 225 mil ucranianos no escuro. Dezembro 2016: Kiev apaga novamente. Junho 2017: NotPetya causa $10 bilhões em danos globais. Abril 2022: Industroyer2 bloqueado por ESET e CERT-UA. SANDWORM está se pré-posicionando para um terceiro ataque à rede. Wiper encenado. Terminais HMI acessados. Encontre-os. Agora.",
+      "phaseNames": [
+        "INFILTRAÇÃO DE INFRAESTRUTURA",
+        "DIRECIONAMENTO ICS",
+        "CARGA DESTRUTIVA"
+      ],
+      "intercepts": [
+        "Dezembro. Escolhemos dezembro.\nVocê sabe como é a Ucrânia fria sem energia?",
+        "Os terminais HMI respondem a nós agora.\nOs disjuntores não conhecem a diferença.",
+        "02:00 hora local. O wiper se ativa.\nA rede apaga. Você tem minutos."
+      ],
+      "clues": [
+        {
+          "title": "VPNFilter em 500K Roteadores",
+          "text": "Malware VPNFilter de SANDWORM confirmado em 500 mil roteadores SOHO globalmente. Loader Estágio 1 sobrevive à redefinição de fábrica. Pré-posiciona para observação de rede OT."
+        },
+        {
+          "title": "Equipe de Energia Vítima de Spearphishing",
+          "text": "Excel weaponizado com macro direcionado a administradores IT de empresa de energia ucraniana. Carga: backdoor Black Energy 3. Assunto: Cronograma de Manutenção de Grid Q4."
+        },
+        {
+          "title": "Rede IT Completamente Comprometida",
+          "text": "Credenciais de administrador de domínio colhidas. Todas as 247 estações de trabalho corporativas acessíveis. A fronteira IT-OT é o único obstáculo restante."
+        },
+        {
+          "title": "Padrão de Inverno em Dezembro",
+          "text": "Análise de cronograma de ataque: implantação de dezembro maximiza impacto civil durante demanda máxima de aquecimento e iluminação. Ucrânia dezembro 2015 e dezembro 2016 confirmados."
+        },
+        {
+          "title": "Ponte IT-OT Atravessada",
+          "text": "Confirmado: rede IT corporativa para rede de controle industrial OT via estação de trabalho de engenharia com placa de interface de rede dupla."
+        },
+        {
+          "title": "Comandos IEC 104 Emitidos",
+          "text": "Invasor consultando comandos do protocolo IEC 104 direcionados a unidades terminais remotas de subestação elétrica. Controle de disjuntor sendo mapeado."
+        },
+        {
+          "title": "Industroyer2 em Memória de Processo",
+          "text": "Variante Industroyer2 confirmada em memória de processo. Wiper específico para ICS direcionado a sistemas de proteção de relés fabricados pela ABB em 3 subestações."
+        },
+        {
+          "title": "Terminais HMI Ativos",
+          "text": "Terminais de Interface Homem-Máquina em 3 subestações regionais acessados remotamente. Sobreposição de disjuntor físico confirmada. Capacidade de interrupção pronta."
+        },
+        {
+          "title": "Sobreposição de MBR às 02:00",
+          "text": "Sobreposição de registro de inicialização mestre agendada para 02:00 hora local em 12 sistemas. Execução: queda de rede + wiper + MBR = zero caminho de recuperação."
+        },
+        {
+          "title": "Linhagem de Código NotPetya",
+          "text": "Análise de código mostra linhagem evolutiva de NotPetya 2017. Mesma rotina de criptografia de MBR. NotPetya causou $10B em danos colaterais globais."
+        },
+        {
+          "title": "Padrão de Ataque à Rede Ucraniana",
+          "text": "Padrão TTP corresponde a dezembro 2015 com 225 mil sem energia e apagão de capital de Kiev em dezembro 2016. Padrão confirmado ativo para operação atual."
+        },
+        {
+          "title": "Industroyer2 — Segunda Tentativa",
+          "text": "Abril 2022: Industroyer2 parado por ESET e CERT-UA 2 horas antes da ativação. Operação atual é a segunda tentativa de implantação contra a mesma rede."
+        }
+      ]
+    }
+  },
+  "es": {
+    "scattered_spider": {
+      "target": "IDENTIDAD CORPORATIVA & INFRAESTRUCTURA EN LA NUBE",
+      "motto": "Ya somos tu departamento de TI.",
+      "brief": "Septiembre de 2023. Una llamada telefónica burló $2 millones en controles de seguridad en MGM Resorts. SCATTERED SPIDER llamó a TI y se hizo pasar por empleado nuevo. Reset de MFA otorgado en minutos. $100 millones en pérdidas posteriores. El mismo grupo atacó Caesars Entertainment y se llevó $15M de rescate. Rastrea la llamada de vishing, sigue la credencial robada, córtalos antes de que se procese la transferencia.",
+      "phaseNames": [
+        "COMPROMISO INICIAL",
+        "PIVOTE DE IDENTIDAD",
+        "EXFILTRACIÓN FINANCIERA"
+      ],
+      "intercepts": [
+        "Ya somos tu departamento de TI.\nLa mesa de ayuda nos creyó. Siempre lo hacen.",
+        "Estás leyendo nuestras huellas. La ventana de transferencia está abierta.\nAprobación en cuatro minutos.",
+        "Cuatro minutos. Eso es todo lo que necesitamos.\n¿Puedes detenerlo en cuatro minutos?"
+      ],
+      "clues": [
+        {
+          "title": "Llamada de Vishing Confirmada",
+          "text": "La mesa de ayuda de TI recibió una llamada alegando ser empleado nuevo. Hablante nativo de inglés. Solicitó reset de MFA para problemas de acceso remoto. La llamada duró 4 minutos."
+        },
+        {
+          "title": "Ataque de Fatiga MFA",
+          "text": "El objetivo recibió 47 notificaciones push de MFA en 12 minutos. En el push 48 aprobaron — asumiendo que era un error del sistema."
+        },
+        {
+          "title": "Reconocimiento de LinkedIn",
+          "text": "El actor cosechó procedimientos de mesa de ayuda y nombres de nuevos empleados de LinkedIn durante 21 días antes de la llamada. Empleado objetivo confirmado a través del blog de la empresa."
+        },
+        {
+          "title": "Cero Malware Confirmado",
+          "text": "Ausencia completa de malware en toda la intrusión. Puramente basado en credenciales y acceso. El antivirus tradicional de punto de conexión tiene cero detecciones."
+        },
+        {
+          "title": "Intento de Intercambio de SIM",
+          "text": "El operador móvil recibió una llamada solicitando cambio de SIM del número ejecutivo. El representante del operador fue manipulado socialmente utilizando el nombre de la víctima y la dirección de facturación."
+        },
+        {
+          "title": "Aplicación OAuth Inyectada",
+          "text": "Aplicación OAuth maliciosa 'MS Teams Update v2.1' otorgó silenciosamente permisos Mail.Read y Files.ReadWrite. Ningún aviso de consentimiento del usuario fue activado."
+        },
+        {
+          "title": "Consola Administrativa Okta Accedida",
+          "text": "El atacante inició sesión en el portal administrativo Okta y agregó un segundo autenticador a la cuenta del CFO. No se generó ninguna alerta."
+        },
+        {
+          "title": "Slack Interno Armado",
+          "text": "Workspace Slack comprometido usado para enviar enlaces de phishing al equipo de finanzas desde un remitente interno confiable."
+        },
+        {
+          "title": "Telegram C2 Activo",
+          "text": "7 operadores coordinando el ataque en tiempo real a través de un canal privado de Telegram durante el horario comercial de la zona horaria objetivo."
+        },
+        {
+          "title": "Solo Ventana de Horario Comercial",
+          "text": "Toda actividad dentro de 09:00-17:00 zona horaria objetivo. Cero actividad de fin de semana. El actor imita comportamiento de empleado normal para evadir detección de anomalías."
+        },
+        {
+          "title": "Portal de Transferencia Alcanzado",
+          "text": "El actor accedió al portal de transferencia. $30M en transacciones pendientes visibles. Ventana de aprobación activa. Interceptación requerida en menos de 4 minutos."
+        },
+        {
+          "title": "Impacto de $100M — Patrón MGM",
+          "text": "El perfil forense coincide con MGM Resorts 2023. Pérdidas combinadas de interrupciones, rescate y violación de datos: $100M+. Testimonio ante el Congreso posterior."
+        }
+      ]
+    },
+    "carbon_spider": {
+      "target": "REDES POS DE MINORISTA & FINANZAS",
+      "motto": "Tus defensas no están diseñadas para lo que hacemos.",
+      "brief": "FIN7 ha operado desde 2015. Robos bancarios Carbanak. Ataques POS sin archivos. Ahora asociaciones de ransomware BlackCat. Están dentro de la red minorista — 9 días adentro. Copias de sombra eliminadas. ESXi enumerado. Admin de dominio cosechado. Entre tú y 94 VM cifradas simultáneamente hay una ventana de 90 segundos. Caza ahora antes del viernes 23:00.",
+      "phaseNames": [
+        "ACCESO INICIAL",
+        "PREPARACIÓN DE RANSOMWARE",
+        "CIFRADO COMPLETO"
+      ],
+      "intercepts": [
+        "Nueve días. Acabas de empezar a buscar.\nEl temporizador se estableció antes de que abrieras este caso.",
+        "Viernes por la noche. Tu equipo se va a casa. El nuestro se queda.\nESXi está listo.",
+        "94 VM. 8 minutos. No puedes detener a todos.\nEl reloj está corriendo."
+      ],
+      "clues": [
+        {
+          "title": "Carga Útil Sin Archivo en Memoria",
+          "text": "Sin archivos en disco. Precursor de ransomware ejecutándose completamente en la memoria del proceso de PowerShell. El antivirus tradicional tiene cero detecciones en 847 puntos finales."
+        },
+        {
+          "title": "Admin de Dominio Extraído",
+          "text": "Mimikatz ejecutado en la memoria del proceso — credenciales de admin de dominio extraídas del LSASS. Las 847 cuentas de dominio ahora controladas por el atacante."
+        },
+        {
+          "title": "Baliza Cobalt Strike Activa",
+          "text": "C2 Cobalt Strike confirmado — tráfico cifrado a VPS registrado en Países Bajos. Verificación de baliza cada 4 segundos durante 9 días."
+        },
+        {
+          "title": "Ataque de Fuerza Bruta RDP Exitoso",
+          "text": "Punto final POS sin parches violado a través de ataque de fuerza bruta RDP desde IP externo. Inicio de sesión: PoS_Admin_03. Permanencia de 9 días comenzó."
+        },
+        {
+          "title": "Copias de Sombra Eliminadas",
+          "text": "Eliminación de VSS a través de vssadmin.exe ejecutada 3 horas antes del cifrado programado. Todos los puntos de restauración eliminados. Recuperación ahora imposible."
+        },
+        {
+          "title": "94 Hosts ESXi Mapeados",
+          "text": "Los 94 hosts VMware ESXi enumerados y configuraciones exportadas. El cifrado simultáneo de todas las VM llevará 8 minutos."
+        },
+        {
+          "title": "Copia de Seguridad Veeam Comprometida",
+          "text": "Credenciales de administrador del servidor de copia de seguridad Veeam obtenidas. Todos los trabajos de copia de seguridad fuera del sitio pausados silenciosamente hace 48 horas."
+        },
+        {
+          "title": "Viernes 23:00 Programado",
+          "text": "Temporizador de implementación de ransomware establecido para viernes 23:00 hora local. Maximiza la ventana de impacto de fin de semana antes de la respuesta del lunes por la mañana."
+        },
+        {
+          "title": "2.1TB Datos de Cliente Robados",
+          "text": "2.1TB de PII de cliente y datos de tarjeta exfiltrados a la infraestructura BLACKCAT antes del cifrado. Sitio de filtración actualizado con marca de la víctima."
+        },
+        {
+          "title": "$4.5M Rescate — Temporizador de 72 Horas",
+          "text": "Demanda de rescate: $4.5M en criptomoneda. Cuenta atrás de 72 horas en el sitio de filtración. Tres archivos descifrados como prueba de capacidad."
+        },
+        {
+          "title": "847 Alertas en 4 Minutos",
+          "text": "El volumen de alertas excedió la capacidad del analista en 4 minutos de la implementación. La clasificación del SOC fue imposible a velocidad humana."
+        },
+        {
+          "title": "94 VM Cifradas Simultáneamente",
+          "text": "Todas las 94 VM ESXi cifradas en 8 minutos de implementación. 100% de la infraestructura virtualizada fuera de línea. Cronología de recuperación: semanas."
+        }
+      ]
+    },
+    "plump_spider": {
+      "target": "BANCA BRASILEÑA & RED PIX",
+      "motto": "En Brasil, toda cuenta bancaria es un objetivo.",
+      "brief": "Enero de 2024: Interpol arrestó a los operadores de Grandoreiro. Reanudaron en semanas. 12.000 pagos PIX fraudulentos. 10 segundos por transferencia. Completamente irreversible. PLUMP SPIDER está dentro de Bradesco, Itaú y Nubank simultáneamente. Cada transferencia que se liquida se pierde para siempre. El Banco Central está monitoreando 47 cuentas. Encuentra la ruta antes de la transferencia final.",
+      "phaseNames": [
+        "DESPLIEGUE TROYANO",
+        "COSECHA DE CREDENCIALES",
+        "OLA DE FRAUDE PIX"
+      ],
+      "intercepts": [
+        "12.000 PIX. 10 segundos cada uno. Irreversible.\nHaz los cálculos.",
+        "El Banco Central monitorea 47 cuentas.\nNosotros operamos 127.",
+        "La primera ola se liquidó. El BRL se convierte a USDT.\nEstás viendo el rastro que dejamos."
+      ],
+      "clues": [
+        {
+          "title": "Troyano Grandoreiro Activo",
+          "text": "Troyano bancario Grandoreiro con capacidad de ataque superpuesto confirmado — se dirige a 900+ instituciones financieras brasileñas con captura de pantalla en tiempo real."
+        },
+        {
+          "title": "Aplicación Bancaria Trojanzada en Play Store",
+          "text": "Aplicación bancaria falsa Bradesco con 50.000+ descargas en Google Play. Solicita permiso de Accesibilidad en la instalación para ataques superpuestos."
+        },
+        {
+          "title": "Onda de Phishing de la Receita Federal",
+          "text": "2.4 millones de correos electrónicos de phishing enviados con avisos falsos de la Receita Federal brasileña. El adjunto instala Grandoreiro silenciosamente en menos de 3 segundos."
+        },
+        {
+          "title": "Solo Horario Comercial de Brasilia",
+          "text": "Toda actividad dentro de 08:00-18:00 hora de Brasilia. Cero actividad en días festivos públicos brasileños — Tiradentes y Corpus Christi ambos en blanco."
+        },
+        {
+          "title": "Cosecha de Clave PIX",
+          "text": "El atacante está cosechando claves PIX — CPF, CNPJ, números de teléfono — de dispositivos comprometidos. Las transferencias PIX son instantáneas e irreversibles una vez enviadas."
+        },
+        {
+          "title": "47.000 Números CPF Recopilados",
+          "text": "ID de impuestos brasileños cosechados para la creación de cuentas de envío. Cada CPF usado para abrir una cuenta verificada capaz de recibir transferencias PIX."
+        },
+        {
+          "title": "Suplantación de Banco WhatsApp",
+          "text": "El atacante suplantando departamentos de fraude de 3 grandes bancos a través de WhatsApp Business API. Hablante de portugués nativo con guiones específicos del banco."
+        },
+        {
+          "title": "127 Cuentas de Envío Listas",
+          "text": "127 cuentas de envío verificadas abiertas utilizando datos CPF robados. Cada una bajo un límite diario de R$5.000 para evitar umbrales de monitoreo del Banco Central."
+        },
+        {
+          "title": "12.000 Transferencias PIX Activas",
+          "text": "12.000 transferencias PIX fraudulentas iniciadas simultáneamente en 3 bancos. Cada una por debajo de R$5.000. Exposición total: R$47 millones."
+        },
+        {
+          "title": "11.000 Boletos Generados",
+          "text": "11.000 boletos de pago fraudulentos enviados a víctimas corporativas. Valor promedio R$8.400. Ventana de pago: 24 horas."
+        },
+        {
+          "title": "BRL Convertido a USDT",
+          "text": "R$47M robados convertidos a USDT a través de 6 casas de cambio de criptomonedas brasileñas en 35 minutos. Cuentas de casas de cambio pre-creadas usando datos CPF robados."
+        },
+        {
+          "title": "Tres Bancos — Simultáneamente",
+          "text": "PLUMP SPIDER está dentro de Bradesco, Itaú y Nubank simultáneamente. Se activó la alerta del Banco Central pero las transferencias ya se están liquidando."
+        }
+      ]
+    },
+    "blind_spider": {
+      "target": "Instituciones Financieras de LatAm y Red SWIFT",
+      "motto": "Hablamos tu idioma. Conocemos tu banco.",
+      "brief": "$47 millones redirigidos a través de 23 operadores coordinando en tiempo real en Telegram. Seis meses. Cero arrestos. Su metodología refleja el robo SWIFT de Bangladesh 2016 que recaudó $81M. BLIND SPIDER está sondando la infraestructura SWIFT de LatAm EN ESTE MOMENTO. Encuentra el objetivo antes de que se procese la siguiente transferencia.",
+      "phaseNames": [
+        "INGENIERÍA SOCIAL",
+        "OPERACIÓN BEC",
+        "ATAQUE SWIFT"
+      ],
+      "intercepts": [
+        "Hablamos tu idioma. Conocemos tu banco.\nTus empleados ya confiaron en nosotros.",
+        "23 operadores. 6 países.\nCada uno observando una institución diferente.",
+        "La transferencia se procesó. La siguiente se procesa en 4 minutos.\n¿Qué institución salvas?"
+      ],
+      "clues": [
+        {
+          "title": "Oleada de Vishing en WhatsApp",
+          "text": "Clientes corporativos recibiendo llamadas WhatsApp desde números bancarios falsificados. Los llamadores hablan español fluido y portugués con terminología bancaria precisa."
+        },
+        {
+          "title": "AsyncRAT en Estaciones Financieras",
+          "text": "AsyncRAT instalado en 3 máquinas del equipo de finanzas. Keylogging completo y captura de pantalla activa. Credenciales del portal de transferencias registradas en 48 horas."
+        },
+        {
+          "title": "Organigrama Reconstruido",
+          "text": "Perfiles LinkedIn del equipo de finanzas raspados. Jerarquía de aprobación de pagos mapeada. Dirección de correo del CFO y línea directa confirmadas a través de OSINT."
+        },
+        {
+          "title": "C2 en Colombia y Panamá",
+          "text": "Infraestructura de comando alojada en Colombia, Panamá y Costa Rica. Rotación de IP cada 6 horas en 3 países."
+        },
+        {
+          "title": "47 Solicitudes de Transferencia Fraudulentas",
+          "text": "47 solicitudes de transferencia enviadas desde el correo comprometido del CFO. Cada una elaborada para coincidir con relaciones de proveedores existentes. Valor promedio: $340.000."
+        },
+        {
+          "title": "23 Operadores en Telegram",
+          "text": "Coordinación en tiempo real entre 23 operadores en 6 países a través de Telegram cifrado. Canales separados por institución objetivo."
+        },
+        {
+          "title": "Horario Comercial de Colombia",
+          "text": "Todos los intentos de fraude durante 09:00-17:00 hora de Colombia. Imita exactamente la ventana de operaciones bancarias legítimas."
+        },
+        {
+          "title": "Credenciales del Portal de Transferencias Registradas",
+          "text": "AsyncRAT keylogger capturó credenciales del portal de transferencias, PINs de aprobación y códigos de autenticación out-of-band para 3 cuentas."
+        },
+        {
+          "title": "Sonda SWIFT — Patrón de Bangladesh",
+          "text": "Atacante sondando SWIFT Alliance Access. Patrón de transacción y tiempo coinciden con la metodología del robo del Banco de Bangladesh de 2016."
+        },
+        {
+          "title": "Lavado de Criptomonedas — 12 Exchanges",
+          "text": "Fondos robados convertidos a USDT a través de 12 exchanges en 6 países en 90 minutos. Blockchain muestra punto de salida Huobi."
+        },
+        {
+          "title": "Enrutamiento SWIFT Alterado",
+          "text": "Instrucciones de enrutamiento de banco corresponsal alteradas en mensajes SWIFT. $8,2M redirigidos a cuentas en Filipinas — idéntico a Bangladesh 2016."
+        },
+        {
+          "title": "$47M — 6 Bancos Objetivo",
+          "text": "Exposición total BEC: $47M en 6 instituciones financieras de LatAm. Tres transferencias ya se han procesado. La ventana de intercepción se está cerrando."
+        }
+      ]
+    },
+    "blackcat": {
+      "target": "Infraestructura Empresarial — Extorsión Triple",
+      "motto": "Encripta. Publica. Destruye. En ese orden.",
+      "brief": "Febrero de 2024: Change Healthcare. ALPHV BlackCat golpeó el procesador de reclamaciones médicas más grande de EE.UU. Se pagó un rescate de $22 millones. 6TB robados. 100 millones de estadounidenses expuestos. El afiliado compró acceso por $800 a través de Citrix Bleed. ALPHV luego estafó a su propio afiliado y se quedó con el rescate. 94 hosts ESXi están en alcance. Encuentra el nodo antes de que expire el cronómetro.",
+      "phaseNames": [
+        "ACCESO INICIAL",
+        "TOMA DE INFRAESTRUCTURA",
+        "EXTORSIÓN TRIPLE"
+      ],
+      "intercepts": [
+        "Citrix Bleed. $800. Eso es lo que tu perímetro\nde seguridad completo valía.",
+        "Tomamos $22M. Luego reclamamos incautación del FBI.\nEl afiliado no recibió nada. Nos quedamos con todo.",
+        "6TB. 100 millones de pacientes. Detuviste el binario.\nNo detuviste los datos saliendo."
+      ],
+      "clues": [
+        {
+          "title": "Acceso IAB — $800",
+          "text": "Credenciales compradas de Initial Access Broker 3 semanas antes por $800. Objetivo seleccionado para máximo potencial de rescate basado en ingresos y clase de datos."
+        },
+        {
+          "title": "Ransomware Rust Multiplataforma",
+          "text": "Binario BLACKCAT Rust encripta Windows, Linux y ESXi simultáneamente. Ninguna herramienta de análisis específica del lenguaje aplica. La detección requiere análisis comportamental."
+        },
+        {
+          "title": "Cobalt Strike y Brute Ratel",
+          "text": "Dos marcos C2 desplegados simultáneamente — Cobalt Strike para movimiento lateral, Brute Ratel para evasión EDR. Ambos activos desde el primer día."
+        },
+        {
+          "title": "Encriptación Intermitente de Archivos",
+          "text": "Modo de encriptación de archivo parcial habilitado — solo los primeros 4MB por archivo. Maximiza velocidad y minimiza ventana de detección antes del despliegue completo."
+        },
+        {
+          "title": "94 Hosts ESXi Enumerados",
+          "text": "Los 94 hosts VMware ESXi enumerados. Encriptación simultánea preparada. Finalización proyectada: 8 minutos desde el trigger."
+        },
+        {
+          "title": "Admin de Dominio vía LSASS",
+          "text": "Mimikatz se ejecutó en memoria del proceso. Credenciales de admin de dominio extraídas. Acceso completo a la red confirmado incluyendo servidores de backup."
+        },
+        {
+          "title": "Backups Destruidos Primero",
+          "text": "Credenciales de administrador del servidor de backup Veeam obtenidas. Todos los trabajos de backup pausados. VSS eliminado. Ninguna ruta de recuperación permanece."
+        },
+        {
+          "title": "Inundación de Alertas: 847 en 4 Minutos",
+          "text": "El volumen de alerta excedió la capacidad del analista en 4 minutos del despliegue. La triaje manual del SOC es imposible a esta velocidad."
+        },
+        {
+          "title": "6TB Robados — Leak Site Online",
+          "text": "6TB de registros de salud de pacientes y PII cargados en el sitio de filtración ALPHV. 100 millones de registros de pacientes expuestos. Sitio actualizado con logo de la víctima."
+        },
+        {
+          "title": "$22M Rescate — Luego Exit Scam",
+          "text": "$22M de rescate pagado por la víctima. ALPHV luego cerró su sitio de filtración y reclamó incautación del FBI — manteniéndose los $22M y negando al afiliado su parte."
+        },
+        {
+          "title": "100M Estadounidenses Expuestos",
+          "text": "100 millones de estadounidenses registros de salud expuestos. La mayor violación de salud en la historia de EE.UU. Retrasos de prescripciones en todo el país. Se convocó audiencia del Congreso."
+        },
+        {
+          "title": "Patrón de Traición del Afiliado",
+          "text": "ALPHV tomó los $22M de rescate, cerró la infraestructura, culpó al FBI — afiliado no recibió nada, víctima no recibió desencriptador. Fraude criminal puro."
+        }
+      ]
+    },
+    "lazarus": {
+      "target": "Criptografía & Sistemas Financieros",
+      "motto": "Financiamos un programa de armas. Cada dólar importa.",
+      "brief": "Marzo de 2022: Ronin Network. Un ingeniero hizo clic en una oferta de trabajo falsa de LinkedIn. LAZARUS comprometió 5 de 9 nodos validadores. $625 millones robados en 6 segundos. El FBI confirmó la atribución. Cada dólar financia el programa de armas de Corea del Norte. Tiempo de permanencia: 14 meses. Muévete lentamente y se activa el wiper y destruye todas las evidencias. Encuéntralos.",
+      "phaseNames": [
+        "ENTREGA SPEARPHISH",
+        "INFILTRACIÓN DE RED",
+        "EXTRACCIÓN DE FONDOS"
+      ],
+      "intercepts": [
+        "El mensaje de LinkedIn se veía real.\nEso no es un defecto en nuestra operación. Es un defecto en la tuya.",
+        "Cinco de nueve nodos validadores. Quórum alcanzado.\nAhora podemos firmar cualquier transacción.",
+        "Seis segundos. $625 millones.\nNo estás deteniendo un robo. Estás deteniendo un misil."
+      ],
+      "clues": [
+        {
+          "title": "Oferta de Trabajo Falsa en LinkedIn",
+          "text": "Desarrollador blockchain senior recibió mensaje de LinkedIn de reclutador falso de NEXON Games ofreciendo $450.000 de salario. PDF troyanizado con payload zero-day personalizado."
+        },
+        {
+          "title": "Implante Personalizado Zero-Match",
+          "text": "Variante de malware novel confirmada — cero coincidencias en cualquier base de datos global de inteligencia de amenazas. Construido a medida para este objetivo específico. Inversión significativa."
+        },
+        {
+          "title": "Wiper Pre-Escenificado",
+          "text": "Payload wiper destructivo en servidor de staging — auto-activa si herramientas forenses o servicios CrowdStrike se detectan en la red."
+        },
+        {
+          "title": "Operación Completa de 14 Meses",
+          "text": "Análisis forense estima operación completa: 14 meses. Fase 1 acceso, Fase 2 enumeración y espera, Fase 3 robo y salida. Metódica."
+        },
+        {
+          "title": "5 de 9 Nodos Validadores Comprometidos",
+          "text": "5 de 9 nodos validadores de puente Ronin comprometidos usando credenciales de desarrollador robadas. Quórum alcanzado. Todas las transacciones de puente ahora pueden ser fraudulentamente firmadas."
+        },
+        {
+          "title": "Sonda SWIFT Ejecutándose en Paralelo",
+          "text": "Pista paralela: SWIFT Alliance Access sondado en 3 instituciones financieras. Patrón coincide con reconocimiento pre-ataque del Banco de Bangladesh 2016."
+        },
+        {
+          "title": "RAT en Estación de Trabajo del CFO Activa",
+          "text": "Troyano de Acceso Remoto personalizado confirmado en la estación de trabajo del Chief Financial Officer. Captura de pantalla en tiempo real del panel de aprobación de transferencias activa."
+        },
+        {
+          "title": "Infraestructura Mixer de Corea del Norte",
+          "text": "Fondos robados pre-enrutados a través de Tornado Cash y Blender.io — servicios de mezclado de criptomonedas de Corea del Norte usados en $1,7B en operaciones LAZARUS anteriores."
+        },
+        {
+          "title": "$625M Robados en 6 Segundos",
+          "text": "Dos transacciones fraudulentas firmadas por 5 nodos validadores comprometidos. $625M en ETH y USDC drenados del puente Ronin. El mayor robo de criptomonedas en la historia."
+        },
+        {
+          "title": "6 Días Antes del Descubrimiento",
+          "text": "El robo no fue descubierto por 6 días después de la ejecución. Los usuarios de Axie Infinity notaron cuando las solicitudes de retiro fallaron. Cero monitoreo estaba en lugar."
+        },
+        {
+          "title": "Wiper Activado en Descubrimiento",
+          "text": "En el descubrimiento, LAZARUS activó el wiper en 4 sistemas. Todos los artefactos forenses destruidos. Atribución lograda solo a través del rastreo de blockchain."
+        },
+        {
+          "title": "Programa de Armas Financiado",
+          "text": "Tesorería de EE.UU. confirmó: LAZARUS Group financia desarrollo de ICBM de Corea del Norte. $625M financia un estimado 6 ciclos de desarrollo de misiles balísticos intercontinentales."
+        }
+      ]
+    },
+    "cozy_bear": {
+      "target": "Infraestructura en la Nube y Proveedores de Identidad",
+      "motto": "No irrumpimos. Iniciamos sesión.",
+      "brief": "Enero de 2024: COZY BEAR accedió al correo electrónico de la lideranza senior de Microsoft durante semanas utilizando solo tokens OAuth válidos. Sin malware. Sin alertas. SUNBURST 2020: 18.000 organizaciones infectadas a través de actualización trojanizada — 9 agencias federales de EE.UU. profundamente comprometidas. Tiempo medio de permanencia de 287 días. El SVR inicia sesión y lee en silencio. Encuentra el patrón antes de que se pierdan 9 meses de inteligencia.",
+      "phaseNames": [
+        "INFILTRACIÓN EN LA NUBE",
+        "PERSISTENCIA DE IDENTIDAD",
+        "RECOPILACIÓN SILENCIOSA"
+      ],
+      "intercepts": [
+        "No irrumpimos. Iniciamos sesión.\n¿Puedes bloquear un token válido?",
+        "287 días. Ese es el tiempo que leímos antes de que alguien se diera cuenta.\nLeímos todo.",
+        "Accedimos al correo electrónico sobre la investigación en nuestra contra.\nMientras se estaba escribiendo."
+      ],
+      "clues": [
+        {
+          "title": "Spray de Contraseña — Uno Por Cuenta",
+          "text": "Un intento de autenticación por cuenta en 18.000 cuentas en la nube durante 34 días. Cero bloqueos. Todos los intentos desde un grupo de proxy residencial."
+        },
+        {
+          "title": "Robo de Token OAuth Confirmado",
+          "text": "Tenant de nube muestra tokens OAuth válidos en uso de 4 países simultáneamente — imposibilidad física. Robo de token confirmado a través de viaje imposible."
+        },
+        {
+          "title": "SaaS como Infraestructura C2",
+          "text": "Todas las comunicaciones de comando enrutadas a través de cuentas legítimas de Microsoft OneDrive y Dropbox. Sin infraestructura C2 personalizada para bloquear o identificar."
+        },
+        {
+          "title": "Horas de Moscú Con Brecha de Feriado",
+          "text": "Toda la actividad de 07:00-19:00 Hora Estándar de Moscú. Sin actividad en los días festivos públicos rusos — calendario de seguridad FSO incluyendo Día de la Victoria observado con precisión."
+        },
+        {
+          "title": "Token SAML Falsificado",
+          "text": "Los registros del proveedor de identidad muestran aserciones SAML firmadas con certificado robado. IdP heredado aceptado sin verificar la lista de revocación de certificados."
+        },
+        {
+          "title": "Función de Administrador Global Reclamada",
+          "text": "Rol de Administrador Global de Azure AD asignado silenciosamente a cuenta de servicio controlada por atacante. Acceso completo al tenant. Cero alertas generados."
+        },
+        {
+          "title": "Claves de API Rotadas por el Atacante",
+          "text": "El atacante rotó claves de API y secretos principales de servicio — bloqueando al equipo de seguridad legítimo de su propio entorno de nube."
+        },
+        {
+          "title": "Permanencia de 287 Días Confirmada",
+          "text": "Análisis forense: atacante presente durante 287 días antes del descubrimiento. Durante este período, se leyeron silenciosamente aproximadamente 34TB de correo electrónico."
+        },
+        {
+          "title": "Correo Electrónico de Lideranza de Microsoft Leído",
+          "text": "SVR accedió al correo electrónico de la lideranza senior de Microsoft durante semanas en enero de 2024 — incluyendo correos electrónicos sobre la investigación en curso del propio SVR."
+        },
+        {
+          "title": "18.000 Redes a través de SolarWinds",
+          "text": "SUNBURST: 18.000 organizaciones instalaron la actualización trojanizada. SVR activó acceso en 100 — seleccionadas por valor de inteligencia, no aleatoriamente."
+        },
+        {
+          "title": "Comunicaciones de Proveedor de Seguridad Recopiladas",
+          "text": "Las empresas de seguridad entre las víctimas de SUNBURST tuvieron sus informes de inteligencia de amenazas y comunicaciones de respuesta a incidentes sistémicamente recopiladas."
+        },
+        {
+          "title": "9 Agencias de EE.UU. — Investigación de 3 Años",
+          "text": "9 agencias federales de EE.UU. incluyendo Tesorería, Comercio y Seguridad Nacional profundamente comprometidas. La investigación duró más de 3 años."
+        }
+      ]
+    },
+    "fancy_bear": {
+      "target": "Redes de la OTAN y del Gobierno",
+      "motto": "Cosechamos lo que confías.",
+      "brief": "Unidad GRU 26165. DNC 2016 — 50.000 correos electrónicos publicados. Bundestag 2015 — 16GB robados. X-Agent confirmado activo. Una cumbre de la OTAN es en 72 horas. Las credenciales del agregado de defensa son el objetivo. Siete nodos comprometidos entre el origen de GRU y Bruselas. Adversario de nivel experto operando UTC+3. Cazalo.",
+      "phaseNames": [
+        "CAMPAÑA SPEARPHISH",
+        "COMPROMISO DE RED",
+        "EXTRACCIÓN DE INTELIGENCIA"
+      ],
+      "intercepts": [
+        "La cumbre es en 72 horas.\nLa inteligencia vale más antes de la reunión.",
+        "X-Agent. Nunca lo vendimos. Nunca fue filtrado.\nSabes exactamente quiénes somos.",
+        "Las credenciales de la delegación están preparadas.\n¿Qué vas a decirle a la OTAN?"
+      ],
+      "clues": [
+        {
+          "title": "Spray de Credenciales — 847 Intentos",
+          "text": "Entradas fallidas de 847 intentos de inicio de sesión en 23 cuentas. Uno por cuenta para evitar bloqueo. Fuente: Nodos de salida Tor mezclados con direcciones ISP ucranianas."
+        },
+        {
+          "title": "X-Agent v4.0 Confirmado",
+          "text": "El análisis forense de memoria confirma X-Agent v4.0 — exclusivo de la Unidad GRU 26165. Nunca vendido o filtrado a actores no estatales. La atribución es segura."
+        },
+        {
+          "title": "Spearphish del Agregado de Defensa",
+          "text": "Documento Word armado con exploit OLE CVE-2017-0199 dirigido a agregados de defensa de la OTAN. Asunto: Classified Q4 Summit Briefing."
+        },
+        {
+          "title": "OSINT de Delegación de Cumbre",
+          "text": "Inteligencia de código abierto recopilada sobre composición de delegación de miembro de la OTAN, reservas de hotel y cronograma de cumbre desde LinkedIn y sitios de conferencias."
+        },
+        {
+          "title": "C2 Imita .gov y .mil",
+          "text": "Los dominios de comando imitan nombres de dominio completamente calificados legítimos .gov y .mil. Patrón: [legit-agency]-update.com — idéntico a la campaña C2 de Bundestag 2015."
+        },
+        {
+          "title": "Horas de Moscú — Brecha de Feriado",
+          "text": "Toda la actividad de 09:00-18:00 Hora Estándar de Moscú. Sin actividad en días festivos públicos rusos — Defender of the Fatherland Day confirmado en blanco."
+        },
+        {
+          "title": "Viaje Imposible a través de VPN Ucraniana",
+          "text": "La misma credencial utilizada desde Varsovia y Moscú en 4 minutos. VPN enrutada a través de ISP ucraniano para enmascarar el origen de GRU."
+        },
+        {
+          "title": "WMIC Living-off-the-Land",
+          "text": "WMIC.exe utilizado para creación de proceso remoto en 14 hosts. Puro living-off-the-land. Cero malware personalizado escrito en disco."
+        },
+        {
+          "title": "Datos Preparados y Fragmentados",
+          "text": "Datos comprimidos usando certutil, preparados en AppData, encriptados con AES, luego cargados en fragmentos de 4MB para evitar umbrales de tamaño DLP."
+        },
+        {
+          "title": "16GB de Documentos de la OTAN",
+          "text": "16GB de comunicaciones gubernamentales, archivos de delegación y briefings de cumbre clasificados preparados para exfiltración. Seguridad de la cumbre ahora comprometida."
+        },
+        {
+          "title": "Ventana de Cumbre de 72 Horas",
+          "text": "La cumbre es en 72 horas. El valor de inteligencia de las comunicaciones de delegación alcanza su pico en la hora de la reunión. GRU está acelerando la extracción."
+        },
+        {
+          "title": "DNC — Bundestag — Trilogía de la OTAN",
+          "text": "Continuidad TTP en DNC 2016, Bundestag 2015 y esta operación confirma el direccionamiento sistemático de la Unidad GRU 26165 a las instituciones democráticas occidentales."
+        }
+      ]
+    },
+    "midnight_blizzard": {
+      "target": "Cadena de Suministro de Software y Redes de Proveedor",
+      "motto": "Comprometimos el proveedor. Ahora somos dueños del cliente.",
+      "brief": "El certificado de firma de código de SolarWinds fue robado 6 meses antes del ataque. 18.000 organizaciones instalaron la actualización Orion trojanizada. 9 agencias federales de EE.UU. profundamente comprometidas. NOBELIUM — la operación de cadena de suministro más sofisticada de la historia — se está ejecutando nuevamente. Siete nodos. El acceso persistente en la nube es el objetivo. Encuentra la violación antes de que se incrusten más profundamente.",
+      "phaseNames": [
+        "PLANTACIÓN DE CADENA DE SUMINISTRO",
+        "EXPLOTACIÓN DESCENDENTE",
+        "PERSISTENCIA SILENCIOSA"
+      ],
+      "intercepts": [
+        "18.000 organizaciones. Todas la instalaron. Todas confiaron.\nEl certificado era válido.",
+        "Activamos 100 de 18.000.\nLos otros 17.900 todavía están latentes. Si los queremos.",
+        "Leímos el correo electrónico del equipo de seguridad sobre nuestros métodos.\nDocumentaron sus propias contramedidas. Nos adaptamos."
+      ],
+      "clues": [
+        {
+          "title": "Inyección de Tubería de Compilación",
+          "text": "El servidor de compilación muestra artefacto sin firmar inyectado 3 minutos antes de la compilación firmada oficial en 173 registros de compilación durante 3 meses."
+        },
+        {
+          "title": "SUNBURST — DLL Malicioso Firmado",
+          "text": "DLL SUNBURST incorporado en las actualizaciones SolarWinds Orion 2019.4 y 2020.2. Firmado con certificado SolarWinds válido robado. Se ve completamente legítimo."
+        },
+        {
+          "title": "Certificado Robado 6 Meses Antes",
+          "text": "Certificado de firma de código exfiltrado de la estación de trabajo del desarrollador 6 meses antes de que se enviara la primera actualización infectada. No notado durante ese período."
+        },
+        {
+          "title": "Fase de Preparación de 12 Meses",
+          "text": "NOBELIUM pasó 12 meses pre-posicionándose: investigación de proveedores, mapeo de ambiente de compilación, extracción de certificados e implementación de prueba."
+        },
+        {
+          "title": "18.000 Organizaciones Infectadas",
+          "text": "Actualización Orion trojanizada instalada por 18.000 organizaciones. NOBELIUM seleccionó manualmente 100 para explotación activa basada en valor de inteligencia."
+        },
+        {
+          "title": "Puerta Trasera OAuth en Azure",
+          "text": "Aplicación OAuth maliciosa agregada a los 100 tenants de Azure objetivo post-infección. Persiste a través de cambios de contraseña y restablecimientos de MFA."
+        },
+        {
+          "title": "Proveedores de Seguridad Objetivo",
+          "text": "CrowdStrike, FireEye y Malwarebytes estaban entre objetivos descendentes. Recopilaciones de correo electrónico de liderazgo de seguridad iniciadas."
+        },
+        {
+          "title": "Spray de Contraseña Descendente",
+          "text": "Post-infección: spray de contraseña contra 17 tenants objetivo. Un intento por cuenta en 18.000 cuentas durante 28 días."
+        },
+        {
+          "title": "Ambiente de Prueba de 6 Meses",
+          "text": "NOBELIUM comenzó con un ambiente de prueba aislado 6 meses antes de que la primera víctima fuera infectada. La seguridad operativa fue absoluta en todo momento."
+        },
+        {
+          "title": "34TB de Correo Electrónico Recopilado",
+          "text": "En todos los objetivos SUNBURST, aproximadamente 34TB de comunicaciones de correo electrónico recopiladas durante 9 meses antes del descubrimiento por FireEye."
+        },
+        {
+          "title": "Spray Directo Después del Descubrimiento",
+          "text": "Después de que SUNBURST fue descubierto, NOBELIUM pasó directamente a spray de contraseña bajo y lento contra Microsoft 365 — confirmando continuidad operativa."
+        },
+        {
+          "title": "9 Agencias — Investigación de 3 Años",
+          "text": "Tesorería de EE.UU., Comercio, Seguridad Nacional, Departamento de Estado y 5 agencias más profundamente comprometidas. La investigación duró más de 3 años."
+        }
+      ]
+    },
+    "volt_typhoon": {
+      "target": "Infraestructura Crítica y Redes OT",
+      "motto": "Estaremos ahí antes de que sepas que necesitas mirar.",
+      "brief": "Mayo 2023: EE.UU., Reino Unido, Australia, Canadá y Nueva Zelanda confirman conjuntamente que VOLT TYPHOON ha estado dentro de la infraestructura crítica estadounidense durante 5 o más años. Permanencia de 300 días. Sin malware — solo herramientas integradas de Windows. Energía. Agua. Comunicaciones. Transporte. Preposicionado y esperando la orden. 8 nodos comprometidos en el Pacífico. Esta es la búsqueda más difícil que jamás ejecutarás.",
+      "phaseNames": [
+        "PREPOSICIONAMIENTO SILENCIOSO",
+        "INFILTRACIÓN OT",
+        "PREPARACIÓN CONTINGENTE"
+      ],
+      "intercepts": [
+        "Hemos estado aquí durante cinco años.\nNo robamos. Esperamos.",
+        "La orden de activación aún no ha llegado.\nCuando lo haga — una sola señal lo alcanza todo.",
+        "No puedes expulsarnos. Toda remediación\ncrea un nuevo punto de apoyo. La infraestructura es nuestra."
+      ],
+      "clues": [
+        {
+          "title": "Sin Malware — Solo LOTL",
+          "text": "Intrusión de 300 días usando solo herramientas integradas de Windows: WMIC, netsh, certutil, ntdsutil, PowerShell ISE. El antivirus tradicional no tiene detecciones en todos los endpoints."
+        },
+        {
+          "title": "VPN Fortinet Usada como Retransmisor",
+          "text": "Dispositivo Fortinet FortiGate comprometido usado como retransmisor encubierto. Todo el tráfico aparece como actividad VPN legítima desde rangos IP confiables."
+        },
+        {
+          "title": "Activo SCADA Fantasma Encontrado",
+          "text": "Controlador SCADA no registrado de 2011 descubierto con credenciales de fábrica predeterminadas — no está en ningún inventario de activos ni alcance de monitoreo de seguridad."
+        },
+        {
+          "title": "Horario Beijing — Feriados PRC en Blanco",
+          "text": "Toda actividad durante 08:00-18:00 hora de Beijing UTC+8. Cero actividad en feriados públicos de la RPC — Semana Dorada del Día Nacional completamente en blanco en los 7 días."
+        },
+        {
+          "title": "Datos SCADA Tunelizados vía DNS",
+          "text": "Base de datos historiador OT consultada. Datos operacionales codificados en registros DNS TXT y exfiltrados vía DNS a resolvedor externo — sin HTTP requerido."
+        },
+        {
+          "title": "Puente IT-OT Cruzado",
+          "text": "Movimiento lateral confirmado: red IT corporativa a red de control industrial OT vía estación de trabajo de ingeniería sin monitoreo con interfaz de red dual."
+        },
+        {
+          "title": "Persistencia vía WindowsDefenderUpdate",
+          "text": "Tarea programada llamada WindowsDefenderUpdate creada en historiador OT. Firmada con certificado robado. Sobrevive reinicios y ciclos de parches."
+        },
+        {
+          "title": "LSASS Volcado vía Administrador de Tareas",
+          "text": "Credenciales extraídas de LSASS usando solo Administrador de Tareas — una herramienta legítima de Windows. La detección de comportamiento es la única ruta de detección."
+        },
+        {
+          "title": "300 Días de Permanencia — Aún Esperando",
+          "text": "Preposicionamiento estimado de 300+ días durante 5+ años. El actor aún no ha activado. Esperando un evento disparador geopolítico estratégico."
+        },
+        {
+          "title": "Cadena de Retransmisor de 150+ Routers SOHO",
+          "text": "150+ routers SOHO y dispositivos VPN comprometidos forman una cadena de retransmisor. Todo tráfico de VOLT TYPHOON aparenta originarse dentro de las fronteras de EE.UU."
+        },
+        {
+          "title": "Capacidad de Disrupción de Red Mapeada",
+          "text": "VOLT TYPHOON ha mapeado infraestructura de conmutación de red eléctrica. Comandos OT específicos identificados para causar interrupciones localizadas bajo demanda."
+        },
+        {
+          "title": "Asesoramiento Conjunto Five Eyes",
+          "text": "EE.UU., Reino Unido, Australia, Canadá y Nueva Zelanda emitieron asesoramiento conjunto en mayo 2023: VOLT TYPHOON está preposicionado en infraestructura crítica en las cinco naciones."
+        }
+      ]
+    },
+    "sandworm": {
+      "target": "Sistemas de Control Industrial y Red Eléctrica",
+      "motto": "No robamos. Destruimos.",
+      "brief": "Unidad 74455 de GRU. Diciembre 2015: primer ataque cibernético confirmado que causa apagón — 225 mil ucranianos en la oscuridad. Diciembre 2016: Kiev se apaga de nuevo. Junio 2017: NotPetya causa $10 mil millones en daños globales. Abril 2022: Industroyer2 bloqueado por ESET y CERT-UA. SANDWORM se está preposicionando para un tercer ataque a la red. Wiper activado. Terminales HMI accedidas. Encuéntralos. Ahora.",
+      "phaseNames": [
+        "INFILTRACIÓN DE INFRAESTRUCTURA",
+        "ORIENTACIÓN ICS",
+        "CARGA DESTRUCTIVA"
+      ],
+      "intercepts": [
+        "Diciembre. Elegimos diciembre.\n¿Sabes cuán fría está Ucrania sin energía?",
+        "Los terminales HMI nos responden ahora.\nLos interruptores de circuito no conocen la diferencia.",
+        "02:00 hora local. El wiper se activa.\nLa red se apaga. Tienes minutos."
+      ],
+      "clues": [
+        {
+          "title": "VPNFilter en 500K Routers",
+          "text": "Malware VPNFilter de SANDWORM confirmado en 500 mil routers SOHO globalmente. Cargador Etapa 1 sobrevive a reinicio de fábrica. Preposiciona para observación de red OT."
+        },
+        {
+          "title": "Personal de Energía Víctima de Suplantación",
+          "text": "Excel armado con macro dirigido a administradores IT de empresa energética ucraniana. Carga: puerta trasera Black Energy 3. Asunto: Cronograma de Mantenimiento de Red Q4."
+        },
+        {
+          "title": "Red IT Completamente Comprometida",
+          "text": "Credenciales de administrador de dominio recopiladas. Las 247 estaciones de trabajo corporativas accesibles. El límite IT-OT es el único obstáculo restante."
+        },
+        {
+          "title": "Patrón de Invierno de Diciembre",
+          "text": "Análisis de cronograma de ataque: despliegue de diciembre maximiza impacto civil durante demanda máxima de calefacción e iluminación. Diciembre 2015 y diciembre 2016 de Ucrania confirmados."
+        },
+        {
+          "title": "Puente IT-OT Cruzado",
+          "text": "Confirmado: red IT corporativa a red de control industrial OT vía estación de trabajo de ingeniería con tarjeta de interfaz de red dual."
+        },
+        {
+          "title": "Comandos IEC 104 Emitidos",
+          "text": "Atacante consultando comandos del protocolo IEC 104 dirigidos a unidades terminales remotas de subestación eléctrica. Control de interruptor de circuito siendo mapeado."
+        },
+        {
+          "title": "Industroyer2 en Memoria de Proceso",
+          "text": "Variante Industroyer2 confirmada en memoria de proceso. Wiper específico de ICS dirigido a sistemas de protección de relés fabricados por ABB en 3 subestaciones."
+        },
+        {
+          "title": "Terminales HMI Activos",
+          "text": "Terminales de Interfaz Hombre-Máquina en 3 subestaciones regionales accedidas remotamente. Anulación de interruptor de circuito físico confirmada. Capacidad de apagón lista."
+        },
+        {
+          "title": "Sobrescritura de MBR a las 02:00",
+          "text": "Sobrescritura de registro de arranque maestro programada para 02:00 hora local en 12 sistemas. Ejecución: apagón de red + wiper + MBR = cero ruta de recuperación."
+        },
+        {
+          "title": "Linaje de Código NotPetya",
+          "text": "Análisis de código muestra linaje evolutivo de NotPetya 2017. Misma rutina de encriptación de MBR. NotPetya causó $10B en daños colaterales globales."
+        },
+        {
+          "title": "Patrón de Ataque a Red de Ucrania",
+          "text": "Patrón TTP coincide con diciembre 2015 con 225 mil sin energía y apagón de capital de Kiev en diciembre 2016. Patrón confirmado activo para operación actual."
+        },
+        {
+          "title": "Industroyer2 — Segundo Intento",
+          "text": "Abril 2022: Industroyer2 detenido por ESET y CERT-UA 2 horas antes de activación. Operación actual es el segundo intento de despliegue contra la misma red."
+        }
+      ]
+    }
+  },
+  "jp": {
+    "scattered_spider": {
+      "target": "企業ID & クラウドインフラ",
+      "motto": "我々はもうあなたのIT部門だ。",
+      "brief": "2023年9月。MGM Resortsで200万ドルのセキュリティコントロールをバイパスした1本の電話。SCATTERED SPIDERがITに電話し、新入社員になりすまし、MFAリセットが数分で認可された。その後、1億ドルの損失。同じグループがCaesars Entertainmentを攻撃し、1,500万ドルの身代金を獲得。フィッシング電話を追跡し、盗まれた認証情報をたどり、送金が処理される前に遮断。",
+      "phaseNames": [
+        "初期侵害",
+        "ID経由",
+        "財務流出"
+      ],
+      "intercepts": [
+        "我々はもうあなたのITだ。\nヘルプデスクは我々を信じた。常に信じる。",
+        "おまえは我々の痕跡を読んでいる。送金ウインドウは開いている。\n承認まであと4分。",
+        "4分だ。それが全てだ。\n4分で止められるか？"
+      ],
+      "clues": [
+        {
+          "title": "フィッシング電話確認",
+          "text": "ITヘルプデスクが新入社員と称する者から電話を受信。英語ネイティブスピーカー。リモートアクセス問題でMFAリセットを要求。通話時間4分。"
+        },
+        {
+          "title": "MFA疲労攻撃",
+          "text": "ターゲットが12分間に47件のMFAプッシュ通知を受信。48番目のプッシュで承認 — システムエラーと判断。"
+        },
+        {
+          "title": "LinkedIn偵察",
+          "text": "攻撃者が電話の21日前から、LinkedInでITヘルプデスク手順と新入社員名を収集。対象従業員が企業ブログで確認。"
+        },
+        {
+          "title": "マルウェアなし確認",
+          "text": "侵害全体を通じてマルウェアなし。純粋に認証情報とアクセスベース。従来のエンドポイントAVは検出ゼロ。"
+        },
+        {
+          "title": "SIM-スワップ試行",
+          "text": "通信事業者が経営幹部の番号のSIMポート要求の電話を受信。事業者代表者が被害者の名前と請求住所を使用して社会工学的操作。"
+        },
+        {
+          "title": "OAuth アプリ注入",
+          "text": "不正なOAuthアプリ「MS Teams Update v2.1」がMail.ReadおよびFiles.ReadWriteパーミッションを無断で付与。ユーザー同意プロンプトなし。"
+        },
+        {
+          "title": "Okta管理者コンソール侵入",
+          "text": "攻撃者がOkta管理ポータルにログインし、CFOアカウントに2番目の認証器を追加。アラートなし。"
+        },
+        {
+          "title": "内部Slack悪用",
+          "text": "侵害されたSlackワークスペースが、信頼できる内部送信者からの金融チーム向けフィッシングリンクの送信に使用。"
+        },
+        {
+          "title": "Telegram C2 稼働",
+          "text": "7人のオペレータがターゲットタイムゾーンのビジネス時間中に、プライベートTelegramチャネル経由でリアルタイム攻撃を調整。"
+        },
+        {
+          "title": "営業時間帯のみ",
+          "text": "全活動が09:00-17:00ターゲットタイムゾーン内。週末活動ゼロ。攻撃者が通常従業員の行動を模倣し異常検出を回避。"
+        },
+        {
+          "title": "送金ポータル到達",
+          "text": "攻撃者が送金ポータルにアクセス。3,000万ドルの保留中トランザクション表示。承認ウインドウ有効。4分以内に遮断必須。"
+        },
+        {
+          "title": "$1億インパクト — MGMパターン",
+          "text": "フォレンジック分析が2023年MGM Resortsと一致。停止、身代金、データ侵害による合計損失：1億ドル以上。その後、議会証言。"
+        }
+      ]
+    },
+    "carbon_spider": {
+      "target": "小売 & 金融POSネットワーク",
+      "motto": "おまえらの防御は我々のやり方には対応していない。",
+      "brief": "FIN7は2015年から活動中。Carbanak銀行強盗。ファイルレスPOS攻撃。BlackCat身代金パートナーシップ。小売ネットワーク内部に9日間侵入。シャドウコピー削除済み。ESXi列挙済み。ドメイン管理者収集済み。おまえと94台の同時暗号化VM間の90秒のウインドウ。金曜23:00前に狩りを開始。",
+      "phaseNames": [
+        "初期アクセス",
+        "身代金準備",
+        "完全暗号化"
+      ],
+      "intercepts": [
+        "9日間だ。おまえはやっと探し始めた。\nタイマーはこのケースを開く前にセット済み。",
+        "金曜夜。おまえのチームは家に帰る。我々は残る。\nESXiは準備完了。",
+        "94台のVM。8分。全て止めることはできない。\n時計は進む。"
+      ],
+      "clues": [
+        {
+          "title": "ファイルレスペイロード メモリ内",
+          "text": "ディスク上にファイルなし。身代金ソフトプリカーサがPowerShellプロセスメモリ内で完全実行。従来のAVは847エンドポイント全体で検出ゼロ。"
+        },
+        {
+          "title": "ドメイン管理者抽出",
+          "text": "Mimikatzがプロセスメモリで実行 — LSASSからドメイン管理者認証情報を抽出。847すべてのドメインアカウントが攻撃者により管理。"
+        },
+        {
+          "title": "Cobalt Strike ビーコン稼働",
+          "text": "Cobalt Strike C2確認 — オランダ登録VPSへの暗号化トラフィック。ビーコンチェックイン4秒間隔で9日間継続。"
+        },
+        {
+          "title": "RDP ブルートフォース成功",
+          "text": "パッチなしのPOSエンドポイントが外部IPからのRDPブルートフォースで侵害。ログイン: PoS_Admin_03。9日間の潜伏開始。"
+        },
+        {
+          "title": "シャドウコピー削除",
+          "text": "vssadmin.exeによるVSS削除が予定暗号化の3時間前に実行。全リストアポイント削除。回復不可能。"
+        },
+        {
+          "title": "94 ESXi ホスト マップ",
+          "text": "94台全VMware ESXiホスト列挙、設定をエクスポート。全VM同時暗号化に8分要す。"
+        },
+        {
+          "title": "Veeam バックアップ侵害",
+          "text": "Veeamバックアップサーバー管理認証情報を取得。オフサイトバックアップジョブ全て48時間前に無断一時停止。"
+        },
+        {
+          "title": "金曜 23:00 予定",
+          "text": "身代金ソフト配置タイマーを金曜23:00ローカル時刻にセット。月曜朝の対応前に週末インパクトを最大化。"
+        },
+        {
+          "title": "2.1TB 顧客データ盗難",
+          "text": "顧客PII2.1TBとカードデータをBLACKCAT基盤へ暗号化前に流出。リークサイトが被害者ブランド名で更新。"
+        },
+        {
+          "title": "$450万 身代金 — 72時間カウント",
+          "text": "身代金要求：仮想通貨で450万ドル。リークサイトで72時間カウントダウン。能力証明として3ファイルを復号。"
+        },
+        {
+          "title": "847 アラート 4分内",
+          "text": "配置4分以内にアラート数が分析能力超過。SOC分類は人間速度では不可能。"
+        },
+        {
+          "title": "94 VM 同時暗号化",
+          "text": "配置8分以内に94台全ESXi VM暗号化。仮想化基盤100%オフライン。復旧タイムライン：週単位。"
+        }
+      ]
+    },
+    "plump_spider": {
+      "target": "ブラジル銀行 & PIXネットワーク",
+      "motto": "ブラジルでは、全銀行口座がターゲットだ。",
+      "brief": "2024年1月：Interpolがグランドレイロオペレータを逮捕。数週間で再開。1万2千件の不正PIX送金。1送金あたり10秒。完全に不可逆。PLUMP SPIDERがBradesco、Itaú、Nubankに同時侵入。処理完了した送金は永遠に消失。中央銀行が47口座を監視中。最終送金前にルートを特定。",
+      "phaseNames": [
+        "トロイ配置",
+        "認証情報収集",
+        "PIX詐欺波"
+      ],
+      "intercepts": [
+        "1万2千PIX。10秒ずつ。不可逆。\n計算しろ。",
+        "中央銀行は47口座を監視。\n我々は127を操作する。",
+        "第一波は清算済み。BRLがUSDTへ転換。\nおまえは我々が残した痕跡を見ている。"
+      ],
+      "clues": [
+        {
+          "title": "グランドレイロ トロイ稼働",
+          "text": "グランドレイロ銀行トロイ — オーバーレイ攻撃能力確認。900以上のブラジル金融機関を標的、リアルタイム画面キャプチャ。"
+        },
+        {
+          "title": "トロイ化 銀行アプリ Google Play",
+          "text": "偽Bradesco銀行アプリがGoogle Playで5万件以上ダウンロード。インストール時にアクセシビリティパーミッション要求（オーバーレイ攻撃用）。"
+        },
+        {
+          "title": "税務庁 フィッシング波",
+          "text": "ブラジル国税庁の偽通知を含むフィッシングメール240万件送信。添付ファイルが3秒以内にグランドレイロを無断インストール。"
+        },
+        {
+          "title": "ブラジリア営業時間のみ",
+          "text": "全活動が08:00-18:00ブラジリア時間。公式祝日（ティラデンテス、聖体祭）はゼロ活動。"
+        },
+        {
+          "title": "PIX キー収集",
+          "text": "攻撃者がPIXキー — CPF、CNPJ、電話番号 — を侵害デバイスから収集。PIX送金は瞬時で不可逆。"
+        },
+        {
+          "title": "47,000 CPF 番号収集",
+          "text": "ブラジル税務ID4万7千件を収集、闇アカ作成用。各CPFがPIX受取可能な認証済みアカウント開設に使用。"
+        },
+        {
+          "title": "WhatsApp 銀行になりすまし",
+          "text": "3大銀行の詐欺部門になりすまし（WhatsApp Business API経由）。ネイティブポルトガル語話者、銀行固有スクリプト使用。"
+        },
+        {
+          "title": "127 闇アカ 準備完了",
+          "text": "盗まれたCPFデータで127個の認証済み闇アカを開設。各アカウントが中央銀行監視閾値を避けるため日上限R$5,000。"
+        },
+        {
+          "title": "1万2千 PIX送金 稼働",
+          "text": "不正PIX送金1万2千件を3銀行で同時開始。各送金R$5,000以下。総露呈額：R$4,700万。"
+        },
+        {
+          "title": "1万1千 ボレト 生成",
+          "text": "不正ボレト支払伝票1万1千件を企業被害者に送信。平均額R$8,400。支払ウインドウ：24時間。"
+        },
+        {
+          "title": "BRL を USDT へ転換",
+          "text": "盗まれたR$4,700万をブラジル暗号取引所6社経由でUSDTに転換（35分以内）。取引所アカウントは盗まれたCPFで事前作成。"
+        },
+        {
+          "title": "3銀行 — 同時",
+          "text": "PLUMP SPIDERがBradesco、Itaú、Nubankに同時侵入。中央銀行アラート発動も送金は既に清算中。"
+        }
+      ]
+    },
+    "blind_spider": {
+      "target": "ラテンアメリカ金融機関およびSWIFTネットワーク",
+      "motto": "我々はあなたの言語を話す。我々はあなたの銀行を知っている。",
+      "brief": "4,700万ドルが23人のオペレーターによってTelegramでリアルタイム調整され転送。6ヶ月間。逮捕ゼロ。その方法論は2016年バングラデシュ銀行SWIFT盗難と一致し、8,100万ドルを獲得した。BLIND SPIDERは現在、ラテンアメリカSWIFTインフラを調査している。次の送金が処理される前に目的を見つけろ。",
+      "phaseNames": [
+        "ソーシャルエンジニアリング",
+        "BEC作戦",
+        "SWIFT攻撃"
+      ],
+      "intercepts": [
+        "我々はあなたの言語を話す。我々はあなたの銀行を知っている。\nあなたの従業員は既に私たちを信頼していた。",
+        "23人のオペレーター。6ヶ国。\n各々が異なる機関を監視している。",
+        "送金が処理された。次の送金は4分後に処理される。\nあなたはどの機関を救う?"
+      ],
+      "clues": [
+        {
+          "title": "WhatsAppヴィッシング波",
+          "text": "なりすまし銀行番号からのWhatsApp通話を受け取るコーポレートクライアント。呼び手は正確な銀行用語を用いて流暢なスペイン語とポルトガル語を話す。"
+        },
+        {
+          "title": "財務ワークステーション上のAsyncRAT",
+          "text": "3台の財務チームマシンにAsyncRATがインストール。完全なキーログ記録とスクリーンキャプチャが活動中。送金ポータル認証情報が48時間で記録。"
+        },
+        {
+          "title": "再構築された組織図",
+          "text": "財務チームのLinkedinプロフィールがスクレイピング。支払い承認階層がマッピング。CFOのメールアドレスと直通電話がOSINTで確認。"
+        },
+        {
+          "title": "コロンビアおよびパナマのC2",
+          "text": "コロンビア、パナマ、コスタリカでホストされたコマンド構造。3ヶ国にわたって6時間ごとのIP回転。"
+        },
+        {
+          "title": "47件の不正送金要求",
+          "text": "侵害されたCFOメールから47件の送金要求を送信。各々は既存のベンダー関係と一致するよう調整。平均値：34万ドル。"
+        },
+        {
+          "title": "Telegram上の23人のオペレーター",
+          "text": "6ヶ国の23人のオペレーター間でTelegram暗号化を通じたリアルタイム調整。対象機関ごとの別チャネル。"
+        },
+        {
+          "title": "コロンビアビジネスアワー",
+          "text": "すべての詐欺試行がコロンビア時間の09:00-17:00に発生。合法的な銀行操業ウィンドウを正確に模倣。"
+        },
+        {
+          "title": "送金ポータル認証情報がログ記録",
+          "text": "AsyncRATキーロガーが送金ポータル認証情報、承認PIN、3つのアカウント用の帯域外認証コードを取得。"
+        },
+        {
+          "title": "SWIFT探査 — バングラデシュパターン",
+          "text": "攻撃者がSWIFT Alliance Accessを調査中。トランザクションパターンとタイミングが2016年バングラデシュ銀行盗難方法論と一致。"
+        },
+        {
+          "title": "暗号ロンダリング — 12の取引所",
+          "text": "盗まれた資金が6ヶ国の12の取引所を通じて90分以内にUSDTに変換。ブロックチェーンはHuobi出口ポイントを示す。"
+        },
+        {
+          "title": "SWIFT経路が変更",
+          "text": "コルレス銀行経路指示がSWIFTメッセージで変更。820万ドルがフィリピンのアカウントへ転送 — バングラデシュ2016と同一。"
+        },
+        {
+          "title": "$4,700万 — 6銀行が対象",
+          "text": "総BEC露出：ラテンアメリカ6金融機関で4,700万ドル。3件の送金が既に処理。傍受ウィンドウが閉じている。"
+        }
+      ]
+    },
+    "blackcat": {
+      "target": "エンタープライズインフラストラクチャ — トリプル恐喝",
+      "motto": "暗号化。公開。破壊。その順で。",
+      "brief": "2024年2月：Change Healthcare。ALPHV BlackCatが米国最大の医療請求プロセッサーを攻撃。2,200万ドルの身代金が支払われた。6TB盗まれた。1億人のアメリカ人が露出。アフィリエイトがCitrix Bleedを通じて800ドルでアクセスを購入。ALPHVその後自らのアフィリエイトをexit-scamして身代金を保持。94個のESXiホストが対象。タイマーが切れる前にノードを見つけろ。",
+      "phaseNames": [
+        "初期アクセス",
+        "インフラ乗っ取り",
+        "トリプル恐喝"
+      ],
+      "intercepts": [
+        "Citrix Bleed。800ドル。あなたの全体的な\nセキュリティペリメータはそれだけの価値があった。",
+        "我々は2,200万ドルを獲得した。その後FBI差押えを主張した。\nアフィリエイトは何も得なかった。我々はすべてを保持した。",
+        "6TB。1億人の患者。あなたはバイナリを停止した。\nあなたはデータの流出を停止しなかった。"
+      ],
+      "clues": [
+        {
+          "title": "IABアクセス — 800ドル",
+          "text": "初期アクセスブローカーから3週間前に800ドルで購入した認証情報。収益とデータクラスに基づいた最大身代金ポテンシャル対象を選択。"
+        },
+        {
+          "title": "Rust クロスプラットフォームランサムウェア",
+          "text": "BLACKCAT RustバイナリはWindows、Linux、ESXiを同時に暗号化。言語固有の分析ツールは適用されない。検出は動作分析が必要。"
+        },
+        {
+          "title": "Cobalt StrikeおよびBrute Ratel",
+          "text": "2つのC2フレームワークが同時にデプロイ — 横移動用Cobalt Strike、EDR回避用Brute Ratel。初日から両方が活動中。"
+        },
+        {
+          "title": "断続的なファイル暗号化",
+          "text": "部分的なファイル暗号化モードが有効 — ファイルごとに最初の4MBのみ。速度を最大化し、完全なデプロイ前の検出ウィンドウを最小化。"
+        },
+        {
+          "title": "94個のESXiホストが列挙",
+          "text": "すべての94個のVMware ESXiホストが列挙。同時暗号化が準備。予想完了時間：トリガーから8分。"
+        },
+        {
+          "title": "LSASSを通じたドメイン管理者",
+          "text": "プロセスメモリでMimikatzを実行。ドメイン管理者認証情報が抽出。バックアップサーバーを含む完全なネットワークアクセスが確認。"
+        },
+        {
+          "title": "バックアップが最初に破壊",
+          "text": "Veeamバックアップサーバー管理者認証情報を取得。すべてのバックアップジョブが一時停止。VSSが削除。回復パスが残されない。"
+        },
+        {
+          "title": "アラートの洪水：4分で847件",
+          "text": "アラート量がデプロイから4分以内にアナリスト容量を超過。この速度では手動SOCトリアージは不可能。"
+        },
+        {
+          "title": "6TB盗まれた — リークサイトオンライン",
+          "text": "患者健康記録およびPIIの6TBがALPHVリークサイトにアップロード。1億人の患者記録が露出。サイトが被害者ロゴで更新。"
+        },
+        {
+          "title": "$2,200万身代金 — その後exit scam",
+          "text": "被害者により2,200万ドルの身代金が支払われ。ALPHVその後リークサイトをシャットダウンしFBI差押えを主張 — 2,200万ドルを保持しアフィリエイトの取り分を否定。"
+        },
+        {
+          "title": "1億人のアメリカ人が露出",
+          "text": "1億人のアメリカ人の医療記録が露出。米国史上最大の医療違反。全国で処方箋遅延。議会聴聞会が招集。"
+        },
+        {
+          "title": "アフィリエイト背信パターン",
+          "text": "ALPHVが2,200万ドルの身代金を獲得し、インフラをシャットダウンしFBIを非難 — アフィリエイトは何も受け取らず、被害者は復号化ツールを受け取らず。純粋な犯罪詐欺。"
+        }
+      ]
+    },
+    "lazarus": {
+      "target": "暗号資産および金融システム",
+      "motto": "我々は兵器プログラムに資金提供する。すべての金銭が重要。",
+      "brief": "2022年3月：Ronin Network。1人のエンジニアが偽のLinkedIn求人を クリック。LAZARUSが9個の検証ノードの5個を侵害。6,250万ドルが6秒で盗まれた。FBIが属性を確認した。すべての金銭が北朝鮮の兵器プログラムに資金提供する。滞在時間：14ヶ月。ゆっくり動くとワイパーが起動してすべての証拠を破壊。奴らを見つけろ。",
+      "phaseNames": [
+        "スピアフィッシング配信",
+        "ネットワーク浸透",
+        "資金抽出"
+      ],
+      "intercepts": [
+        "LinkedInメッセージが本当に見えた。\nこれは我々の操作の欠陥ではない。それはあなたの欠陥。",
+        "9個の検証ノード中5個。定足数達成。\n我々はこれからすべてのトランザクションに署名できる。",
+        "6秒。6,250万ドル。\nあなたは盗難を停止していない。あなたはミサイルを停止している。"
+      ],
+      "clues": [
+        {
+          "title": "偽のLinkedIn求人",
+          "text": "シニアブロックチェーン開発者が偽NEXON Games採用担当者からのLinkedinメッセージを受け取り、45万ドルのサラリーを提供。カスタムゼロデイペイロード付きトロイの木馬PDF。"
+        },
+        {
+          "title": "ゼロマッチカスタム インプラント",
+          "text": "確認されたノベルマルウェア変種 — グローバル脅威インテリジェンスデータベースのどれにも一致なし。この特定の対象用にカスタムビルド。大きな投資。"
+        },
+        {
+          "title": "ワイパーが事前にステージ",
+          "text": "破壊的なワイパーペイロードがステージングサーバーに — ネットワーク上でフォレンジックツールまたはCrowdStrikeサービスが検出されたら自動起動。"
+        },
+        {
+          "title": "14ヶ月の全操作",
+          "text": "フォレンジック推定フル操作：14ヶ月。フェーズ1アクセス、フェーズ2列挙および待機、フェーズ3盗難および離脱。計画的。"
+        },
+        {
+          "title": "5個中9個の検証ノード支配",
+          "text": "盗まれた開発者認証情報を使用して5個のRoninブリッジ検証ノードを侵害。定足数達成。すべてのブリッジトランザクションを不正に署名可能。"
+        },
+        {
+          "title": "並行してSWIFT探査実行中",
+          "text": "並行トラック：3つの金融機関でSWIFT Alliance Accessを調査。パターンが2016年バングラデシュ銀行前攻撃偵察と一致。"
+        },
+        {
+          "title": "CFOワークステーション上のRAT活動中",
+          "text": "最高財務責任者ワークステーション上でカスタムリモートアクセストロイの木馬が確認。送金承認ダッシュボードのリアルタイムスクリーンキャプチャが活動中。"
+        },
+        {
+          "title": "北朝鮮ミキサー インフラストラクチャ",
+          "text": "盗まれた資金がTornado CashおよびBlender.ioを通じて事前ルーティング — 北朝鮮暗号ミキシングサービスが前LAZARUSオペレーション17億ドルで使用。"
+        },
+        {
+          "title": "$6,250万が6秒で盗まれた",
+          "text": "5つの侵害された検証ノードによって署名された2つの不正トランザクション。RoninブリッジからETHおよびUSDCで6,250万ドルが排出。暗号資産史上最大の盗難。"
+        },
+        {
+          "title": "発見までの6日間",
+          "text": "盗難は実行から6日後に発見されず。Axie Infinityユーザーが引き出し要求が失敗したときに気づいた。ゼロの監視が実施されていた。"
+        },
+        {
+          "title": "発見時にワイパー起動",
+          "text": "発見時にLAZARUSが4つのシステムでワイパーを起動。すべてのフォレンジック人工物が破壊。属性はブロックチェーン追跡を通じてのみ達成。"
+        },
+        {
+          "title": "兵器プログラムに資金提供",
+          "text": "米国財務省が確認：LAZARUS Groupが北朝鮮ICBM開発に資金提供。6,250万ドルが推定6サイクルの大陸間弾道ミサイル開発に資金提供。"
+        }
+      ]
+    },
+    "cozy_bear": {
+      "target": "クラウドインフラとIDプロバイダ",
+      "motto": "我々は侵入しない。ログインする。",
+      "brief": "2024年1月：COZY BEARはMicrosoft幹部メールに数週間アクセス。有効なOAuthトークンのみ使用。マルウェアなし。アラートなし。SUNBURST 2020：不正更新経由で18,000組織に感染—米連邦機関9社が深く侵害。平均潜伏期間287日。SVRはログインして沈黙のうちに読む。9か月の情報が失われる前にパターンを見つけよ。",
+      "phaseNames": [
+        "クラウド侵入",
+        "ID永続化",
+        "静かな情報収集"
+      ],
+      "intercepts": [
+        "我々は侵入しない。ログインする。\n有効なトークンをブロックできるか?",
+        "287日。誰かが気づくまで読んだ時間。\n我々はすべてを読んだ。",
+        "我々に対する調査メールにアクセスした。\nそれが書かれている最中に。"
+      ],
+      "clues": [
+        {
+          "title": "パスワードスプレー—アカウント1回",
+          "text": "34日間で18,000クラウドアカウント全体で1アカウントあたり認証試行1回。ロックアウトゼロ。すべての試行は住宅プロキシプールから。"
+        },
+        {
+          "title": "OAuthトークン窃取確認",
+          "text": "クラウドテナントが同時に4か国から有効なOAuthトークン使用を表示—物理的不可能。不可能な移動経由でトークン窃取確認。"
+        },
+        {
+          "title": "SaaSをC2インフラとして",
+          "text": "すべてのコマンド通信は正当なMicrosoft OneDriveおよびDropboxアカウント経由。ブロックまたは特定するカスタムC2インフラなし。"
+        },
+        {
+          "title": "モスクワ時間 休日ブランク",
+          "text": "すべて活動07:00-19:00モスクワ標準時。ロシア祝日ゼロ活動—勝利記念日を含むFSOセキュリティカレンダー厳密に遵守。"
+        },
+        {
+          "title": "SAMLトークン偽造",
+          "text": "IDプロバイダログが盗用証明書で署名されたSMLアサーション表示。従来型IdPが証明書失効リストチェックなしで受諾。"
+        },
+        {
+          "title": "グローバル管理者ロール主張",
+          "text": "Azure ADグローバル管理者ロールが静かに攻撃者制御サービスアカウントに割り当て。テナント全体アクセス。ゼロアラート生成。"
+        },
+        {
+          "title": "APIキー攻撃者が回転",
+          "text": "攻撃者がAPIキーとサービスプリンシパルシークレットを回転—正当なセキュリティチームを自身クラウド環境から排除。"
+        },
+        {
+          "title": "287日潜伏確認",
+          "text": "フォレンジック分析：発見前287日間攻撃者存在。この期間中推定34TBメールが静かに読まれた。"
+        },
+        {
+          "title": "Microsoft幹部メール読取",
+          "text": "SVRがMicrosoft幹部メールに2024年1月数週間アクセス—SVR自身に対する調査メール含む。"
+        },
+        {
+          "title": "18,000ネットワークSolarWinds経由",
+          "text": "SUNBURST：18,000組織が不正更新をインストール。SVRが100で活動化—ランダムではなく情報価値で選抜。"
+        },
+        {
+          "title": "セキュリティベンダー通信収集",
+          "text": "SUNBURST被害者のセキュリティ企業が脅威インテリジェンス報告とインシデント対応通信を系統的に収集。"
+        },
+        {
+          "title": "米国機関9社—3年調査",
+          "text": "米国財務省、商務省、国土安全保障省を含む連邦機関9社が深く侵害。調査は3年以上継続。"
+        }
+      ]
+    },
+    "fancy_bear": {
+      "target": "NATOと政府ネットワーク",
+      "motto": "我々は信頼するものを収穫する。",
+      "brief": "GRU部隊26165。DNC 2016—50,000メール公開。ドイツ連邦議会2015—16GB盗難。X-Agent確認稼働中。NATO首脳会談72時間後。防衛官のクレデンシャルが目標。GRUオリジンとブリュッセル間に7ノード侵害。UTC+3運用エキスパートレベル敵対者。追跡せよ。",
+      "phaseNames": [
+        "スピアフィッシング作戦",
+        "ネットワーク侵害",
+        "情報抽出"
+      ],
+      "intercepts": [
+        "首脳会談72時間後。\n会議前の情報がより価値高い。",
+        "X-Agent。売却せず。流出せず。\n我々が何者かを正確に知っている。",
+        "代表団クレデンシャルはステージ中。\nNATOに何と告げるつもりか?"
+      ],
+      "clues": [
+        {
+          "title": "クレデンシャルスプレー—847試行",
+          "text": "23アカウント全体で失敗ログイン試行847回。ロックアウト回避のためアカウント1回。ソース：Tor出口ノード混合ウクライナISPアドレス。"
+        },
+        {
+          "title": "X-Agent v4.0確認",
+          "text": "メモリフォレンジック確認X-Agent v4.0—GRU部隊26165専用。非国家主体に売却または流出なし。帰属は確実。"
+        },
+        {
+          "title": "防衛官スピアフィッシング",
+          "text": "NATO防衛官対象CVE-2017-0199 OLEエクスプロイト武装Word文書。件名：Classified Q4 Summit Briefing。"
+        },
+        {
+          "title": "首脳会談代表団OSINT",
+          "text": "NATO加盟国代表団構成、ホテル予約、首脳会談スケジュールについてLinkedInと会議サイトから収集されたオープンソース情報。"
+        },
+        {
+          "title": "C2が.govと.milを模倣",
+          "text": "コマンドドメインが正当な.govと.mil FQDN模倣。パターン：[legit-agency]-update.com—2015年ドイツ連邦議会キャンペーンC2と同じ。"
+        },
+        {
+          "title": "モスクワ時間—休日ブランク",
+          "text": "すべて活動09:00-18:00モスクワ標準時。ロシア祝日ゼロ活動—祖国防衛者の日ブランク確認。"
+        },
+        {
+          "title": "ウクライナVPN経由の不可能な移動",
+          "text": "同じクレデンシャルをワルシャワとモスクワから4分で使用。ウクライナISP経由VPN GRUオリジンをマスク。"
+        },
+        {
+          "title": "WMICリビングオフザランド",
+          "text": "14ホスト全体でリモートプロセス生成にWMIC.exe使用。純粋なリビングオフザランド。カスタムマルウェアディスク書き込みゼロ。"
+        },
+        {
+          "title": "データステージングとチャンク化",
+          "text": "certutilを使用データ圧縮、AppDataでステージング、AESで暗号化、DLPサイズしきい値回避のため4MBチャンクでアップロード。"
+        },
+        {
+          "title": "NATO文書16GB",
+          "text": "政府通信、代表団ファイル、分類首脳会談ブリーフィング16GB流出ステージング。首脳会談セキュリティ現在侵害。"
+        },
+        {
+          "title": "首脳会談72時間ウィンドウ",
+          "text": "首脳会談72時間後。代表団通信の情報価値は会議時間でピーク。GRUが抽出加速中。"
+        },
+        {
+          "title": "DNC—ドイツ連邦議会—NATO三部作",
+          "text": "DNC 2016、ドイツ連邦議会2015、本作戦全体のTTP継続がGRU部隊26165の西側民主主義機関への体系的攻撃確認。"
+        }
+      ]
+    },
+    "midnight_blizzard": {
+      "target": "ソフトウェアサプライチェーンとベンダーネットワーク",
+      "motto": "我々はベンダーを侵害した。今、顧客を所有する。",
+      "brief": "SolarWindsコード署名証明書が攻撃6か月前に盗難。18,000組織がOrion不正更新をインストール。米連邦機関9社が深く侵害。NOBELIUM—歴史上最も洗練されたサプライチェーン作戦—再び稼働中。7ノード。永続クラウドアクセスが目標。違反をさらに深く埋設される前に見つけよ。",
+      "phaseNames": [
+        "サプライチェーン植林",
+        "ダウンストリーム悪用",
+        "静かな永続化"
+      ],
+      "intercepts": [
+        "18,000組織。すべてインストール。すべて信頼。\n証明書は有効だった。",
+        "18,000中100を活動化。\n他の17,900はまだ不稼働状態。必要なら。",
+        "セキュリティチームメール我々の方法について読んだ。\n彼らは自身の対策を文書化。我々は適応した。"
+      ],
+      "clues": [
+        {
+          "title": "ビルドパイプライン注入",
+          "text": "公式署名ビルド3分前に未署名成果物注入をビルドサーバーが表示、3か月間173ビルドログ。"
+        },
+        {
+          "title": "SUNBURST—署名マルウェアDLL",
+          "text": "SUNBURST DLLがSolarWinds Orion更新2019.4および2020.2に埋設。盗用SolarWinds証明書で署名。完全に正当に見える。"
+        },
+        {
+          "title": "証明書6か月前に盗用",
+          "text": "コード署名証明書が開発者ワークステーションから流出、最初の感染更新出荷6か月前。その期間ずっと検出されず。"
+        },
+        {
+          "title": "12か月準備段階",
+          "text": "NOBELIUMが12か月間事前配置：ベンダー研究、ビルド環境マッピング、証明書抽出、テスト展開。"
+        },
+        {
+          "title": "18,000組織感染",
+          "text": "Orion不正更新が18,000組織でインストール。NOBELIUMが100を情報価値に基づき手動で選抜し活動悪用。"
+        },
+        {
+          "title": "Azure OAuthバックドア",
+          "text": "悪意あるOAuthアプリケーションが感染後100ターゲットAzureテナント全体に追加。パスワード変更およびMFAリセット後も永続。"
+        },
+        {
+          "title": "セキュリティベンダー対象",
+          "text": "CrowdStrike、FireEye、Malwarebytesがダウンストリームターゲット間。セキュリティリーダーシップメール収集開始。"
+        },
+        {
+          "title": "ダウンストリームパスワードスプレー",
+          "text": "感染後：17ターゲットテナントに対するパスワードスプレー。18,000アカウント全体で28日間アカウント1回試行。"
+        },
+        {
+          "title": "6か月テスト環境",
+          "text": "NOBELIUMが最初の被害者感染6か月前に隔離テスト環境で開始。全期間を通じ運用セキュリティは絶対。"
+        },
+        {
+          "title": "34TBメール収集",
+          "text": "すべてのSUNBURST対象全体で推定34TBメール通信が9か月間収集、FireEye発見前。"
+        },
+        {
+          "title": "発見後直接スプレー",
+          "text": "SUNBURST発見後、NOBELIUMがMicrosoft 365に対する低速パスワードスプレーに直進—運用継続確認。"
+        },
+        {
+          "title": "機関9社—3年調査",
+          "text": "米国財務省、商務省、国土安全保障省、国務省および5その他機関が深く侵害。調査は3年以上継続。"
+        }
+      ]
+    },
+    "volt_typhoon": {
+      "target": "重要インフラとOTネットワーク",
+      "motto": "あなたが探す必要があることに気付く前に、われわれはそこにいる。",
+      "brief": "2023年5月：米国、英国、オーストラリア、カナダ、ニュージーランドが共同で、VOLT TYPHOONが米国の重要インフラに5年以上存在していることを確認。300日間の潜伏。マルウェアなし — Windows組み込みツールのみ使用。電力。水。通信。輸送。事前配置されて命令を待機中。太平洋を跨ぐ8つの侵害済みノード。これはあなたが実行する最も困難な追跡作戦だ。",
+      "phaseNames": [
+        "静寂の事前配置",
+        "OT侵入",
+        "有事対応準備"
+      ],
+      "intercepts": [
+        "5年間ここにいた。\n盗まない。待つだけだ。",
+        "起動命令はまだ来ていない。\n来たとき — 1つの信号がすべてに到達する。",
+        "我々を排除できない。すべての修復が\n新しい足がかりを生む。インフラはわれわれのものだ。"
+      ],
+      "clues": [
+        {
+          "title": "マルウェアなし — LOTLのみ",
+          "text": "Windows組み込みツールのみを使用した300日間の侵入：WMIC、netsh、certutil、ntdsutil、PowerShell ISE。従来のアンチウイルスはすべてのエンドポイントで検出なし。"
+        },
+        {
+          "title": "リレーとして使用されたFortinet VPN",
+          "text": "侵害されたFortinet FortiGateアプライアンスが秘密リレーとして使用される。すべてのトラフィックが信頼できるIPレンジからの正当なVPN活動に見える。"
+        },
+        {
+          "title": "発見されたゴーストSCADAアセット",
+          "text": "2011年の未登録SCADAコントローラが発見され、デフォルトの工場出荷時認証情報を保有 — 資産インベントリやセキュリティ監視の対象外。"
+        },
+        {
+          "title": "北京時間 — 中国公式休日は空白",
+          "text": "北京時間UTC+8の08:00-18:00中のすべての活動。中国の祝日にはゼロ活動 — 国慶節ゴールデンウィークは全7日間完全に空白。"
+        },
+        {
+          "title": "SCADAデータをDNS経由でトンネル化",
+          "text": "OT履歴データベースをクエリ。運用データをDNS TXTレコードにエンコードし、DNS経由で外部リゾルバーに流出 — HTTPは不要。"
+        },
+        {
+          "title": "IT-OTブリッジ越境",
+          "text": "確認：デュアルネットワークインターフェースを備えた未監視のエンジニアリングワークステーション経由で、企業ITネットワークから産業制御OTネットワークへのラテラルムーブメント。"
+        },
+        {
+          "title": "WindowsDefenderUpdate経由の永続性",
+          "text": "OT履歴上にWindowsDefenderUpdateという名前のスケジュール済みタスクを作成。盗まれた証明書で署名。再起動とパッチサイクルを乗り越える。"
+        },
+        {
+          "title": "タスクマネージャー経由のLSASS ダンプ",
+          "text": "正当なWindowsツールであるタスクマネージャーのみを使用してLSASSから認証情報を抽出。行動検出が唯一の検出経路。"
+        },
+        {
+          "title": "300日潜伏 — 依然として待機中",
+          "text": "5年以上にわたって推定300日以上の事前配置。行為者はまだ起動していない。戦略的地政学的トリガーイベントを待機中。"
+        },
+        {
+          "title": "150以上のSOHOルーターリレーチェーン",
+          "text": "150以上の侵害されたSOHOルーターとVPNデバイスがリレーチェーンを構成。すべてのVOLT TYPHOONトラフィックが米国国内から発生しているように見える。"
+        },
+        {
+          "title": "グリッド破壊能力のマッピング",
+          "text": "VOLT TYPHOONが電力網の切替インフラをマッピング。要求に応じてローカライズされた停電を引き起こすための特定のOTコマンドを識別。"
+        },
+        {
+          "title": "Five Eyesの共同警告",
+          "text": "米国、英国、オーストラリア、カナダ、ニュージーランドが2023年5月に共同警告を発行：VOLT TYPHOONは5つの国すべての重要インフラに事前配置されている。"
+        }
+      ]
+    },
+    "sandworm": {
+      "target": "産業制御システムと電力網",
+      "motto": "盗まない。破壊する。",
+      "brief": "GRU部隊74455。2015年12月：停電を引き起こす確認済み初のサイバー攻撃 — 225,000人のウクライナ人が暗闇の中。2016年12月：キエフが再び停電。2017年6月：NotPetya が世界的に100億ドルの損害を引き起こす。2022年4月：IndustroyerⅡがESETとCERT-UAによってブロック。SANDWORMは3番目のグリッド攻撃に向けて事前配置中。ワイパーステージング済み。HMI端末にアクセス済み。発見して。今。",
+      "phaseNames": [
+        "インフラ侵入",
+        "ICS標的化",
+        "破壊的ペイロード"
+      ],
+      "intercepts": [
+        "12月。われわれは12月を選んだ。\n電力なしのウクライナがどれほど寒いか知っているか？",
+        "HMI端末が今われわれに応答している。\n遮断器は違いを知らない。",
+        "現地時間02:00。ワイパーが起動する。\nグリッドが暗くなる。分単位で対応を。"
+      ],
+      "clues": [
+        {
+          "title": "500KのルーターにおけるVPNFilter",
+          "text": "SANDWORMのVPNFilterマルウェアが世界中で500,000のSOHOルーターで確認される。ステージ1ローダーが工場出荷時リセットを乗り越える。OTネットワーク観察のために事前配置。"
+        },
+        {
+          "title": "エネルギー職員がスピアフィッシングの被害に",
+          "text": "ウクライナのエネルギー企業IT管理者を標的にしたマクロ付きのWeaponized Excel。ペイロード：Black Energy 3バックドア。件名：Q4グリッドメンテナンススケジュール。"
+        },
+        {
+          "title": "ITネットワーク完全侵害",
+          "text": "ドメイン管理者認証情報を収集。247台の企業ワークステーションすべてにアクセス可能。IT-OT境界が唯一の残された障害。"
+        },
+        {
+          "title": "12月の冬パターン",
+          "text": "攻撃タイミング分析：12月の展開は暖房と照明の最大需要時に民間人への影響を最大化。ウクライナ2015年12月と2016年12月が確認される。"
+        },
+        {
+          "title": "IT-OTブリッジ越境",
+          "text": "確認：デュアルネットワークインターフェースカード付きエンジニアリングワークステーション経由で、企業ITネットワークから産業制御OTネットワークへ。"
+        },
+        {
+          "title": "IEC 104コマンド発行",
+          "text": "攻撃者が電力変電所遠隔終了装置を標的にするIEC 104プロトコルコマンドをクエリ。遮断器制御がマッピング中。"
+        },
+        {
+          "title": "プロセスメモリ内のIndustroyer2",
+          "text": "プロセスメモリで確認されたIndustroyer2変種。3つの変電所でABB製リレー保護システムを標的にするICS固有ワイパー。"
+        },
+        {
+          "title": "HMI端末がアクティブ",
+          "text": "3つの地域変電所のヒューマンマシンインターフェース端末が遠隔アクセス可能。物理遮断器オーバーライド確認。停電能力準備完了。"
+        },
+        {
+          "title": "02:00のMBR上書き",
+          "text": "マスターブートレコード上書きが12システムで現地時間02:00にスケジュール。実行：グリッド停電+ワイパー+MBR=復旧不可。"
+        },
+        {
+          "title": "NotPetya コード系統",
+          "text": "コード分析がNotPetya 2017からの進化系統を示す。同じMBR暗号化ルーチン。NotPetya は世界的に100億ドルの巻き添え損害を引き起こした。"
+        },
+        {
+          "title": "ウクライナ電力網攻撃パターン",
+          "text": "2015年12月（225,000人が停電）と2016年12月キエフ停電と一致するTTPパターン。パターンが現在の作戦でアクティブと確認。"
+        },
+        {
+          "title": "Industroyer2 — 第2次試行",
+          "text": "2022年4月：Industroyer2がESETとCERT-UAによって起動2時間前に阻止。現在の作戦は同じグリッドに対する第2次展開試行。"
+        }
+      ]
+    }
+  }
+};
+// ── Adversary localization helper ─────────────────────────────────────────
+// Returns a shallow-merged copy of the adversary with locale overrides applied.
+// Falls back gracefully to English for any missing locale data.
+function getAdvLocale(adv) {
+  const lang = activeLangCode();
+  if (lang === 'en') return adv;
+  const locale = ADVERSARIES_I18N[lang];
+  if (!locale) return adv;
+  const overrides = locale[adv.id];
+  if (!overrides) return adv;
+
+  // Build localized clues array: merge title/text from locale, keep rest from EN
+  let localClues = adv.clues;
+  if (overrides.clues && overrides.clues.length === adv.clues.length) {
+    localClues = adv.clues.map((c, i) => {
+      const ov = overrides.clues[i] || {};
+      return Object.assign({}, c, {
+        title: ov.title || c.title,
+        text:  ov.text  || c.text,
+      });
+    });
+  }
+
+  return Object.assign({}, adv, {
+    target:     overrides.target     || adv.target,
+    motto:      overrides.motto      || adv.motto,
+    brief:      overrides.brief      || adv.brief,
+    phaseNames: overrides.phaseNames || adv.phaseNames,
+    intercepts: overrides.intercepts || adv.intercepts,
+    clues:      localClues,
+  });
+}
+
+
 
 
 // ════════════════════════════════════════════════════════════════
@@ -18397,7 +20554,7 @@ function buildInvestigationNodes(){
 function drawInvestigation(){
   const ui = huntUiScale();
 
-  const adv=selectedCase;
+  const adv=getAdvLocale(selectedCase);
   const node=NODES[caseRoute[advNodeIdx]]||{};
 
   // Background - circuit board aesthetic
@@ -18663,7 +20820,11 @@ function handleInvestigationClick(){
 function drawEvidenceCard(dt){
   activeEvidenceCard.t+=dt;
   const t=activeEvidenceCard.t;
-  const clue=activeEvidenceCard.clue;
+  // Localize clue title/text if a non-EN language is active
+  const _rawClue=activeEvidenceCard.clue;
+  const _lcAdv=getAdvLocale(selectedCase);
+  const _clueIdx=selectedCase&&selectedCase.clues?selectedCase.clues.indexOf(_rawClue):-1;
+  const clue=(_clueIdx>=0&&_lcAdv&&_lcAdv.clues&&_lcAdv.clues[_clueIdx])?_lcAdv.clues[_clueIdx]:_rawClue;
 
   const alpha=Math.min(0.75,t*3);
   ctx.fillStyle=`rgba(2,3,8,${alpha})`; ctx.fillRect(0,0,LW,LH);
@@ -19303,7 +21464,7 @@ function drawCaseSelect(dt){
   caseSelectEntryT+=dt;
   const ui=huntTitleScale();
   ctx.save(); ctx.globalAlpha=Math.min(1, caseSelectEntryT/0.65);
-  const adv=ADVERSARIES[caseSel];
+  const adv=getAdvLocale(ADVERSARIES[caseSel]);
   const huntLens=huntRecommendedDeploy(adv);
   const estimatedHops=3+(adv.difficulty||1);
   const pressureWindow=Math.max(12, 36-(adv.difficulty||1)*4);
@@ -19515,7 +21676,7 @@ function drawCaseSelect(dt){
 // ════════════════════════════════════════════════════════════════
 function drawBriefing(dt){
   const ui = huntUiScale();
-  const adv=selectedCase;
+  const adv=getAdvLocale(selectedCase);
   const huntLens=huntRecommendedDeploy(adv);
   ctx.fillStyle='#020308'; ctx.fillRect(0,0,LW,LH); drawStars();
   const alpha=Math.min(1,briefingT/0.5);
@@ -19615,7 +21776,7 @@ function drawBriefing(dt){
 //  INTERCEPT SCREEN
 // ════════════════════════════════════════════════════════════════
 function drawIntercept(dt){
-  const adv=selectedCase;
+  const adv=getAdvLocale(selectedCase);
   const ui = huntUiScale();
   ctx.save(); ctx.globalAlpha=Math.min(1, interceptT/0.55);
   ctx.fillStyle='#020308'; ctx.fillRect(0,0,LW,LH); drawStars();
@@ -19650,7 +21811,7 @@ function drawIntercept(dt){
 //  BREACH SCREEN
 // ════════════════════════════════════════════════════════════════
 function drawBreach(dt){
-  const adv=selectedCase;
+  const adv=getAdvLocale(selectedCase);
   const ui = huntUiScale();
   const huntLens=huntRecommendedDeploy(adv);
   ctx.save(); ctx.globalAlpha=Math.min(1, breachT/0.55);
@@ -19687,7 +21848,7 @@ function drawPhaseTransition(dt){
   if(!phaseTransState) return;
   phaseTransState.t+=dt;
   const tt=phaseTransState.t;
-  const adv=phaseTransState.adv;
+  const adv=getAdvLocale(phaseTransState.adv);
   const ph=phaseTransState.phase; // 1 or 2 (entering phase 2 or 3)
   const phIdx=ph; // 0-based index: ph=1 means entering phase 2 (index 1)
   const phaseName=adv.phaseNames?.[phIdx]||('PHASE '+(phIdx+1));
@@ -19819,10 +21980,11 @@ function maybeFireIntercept(){
   milestones.forEach((m,i)=>{
     if(n>=m&&interceptFiredAt[i]<advNodeIdx){
       interceptFiredAt[i]=advNodeIdx;
-      const msg=selectedCase.intercepts[i];
+      const _lAdv=getAdvLocale(selectedCase);
+      const msg=(_lAdv.intercepts&&_lAdv.intercepts[i])||selectedCase.intercepts[i];
       if(msg){
         const rawLines=msg.split('\n');
-        interceptMsg={t:0,lines:rawLines,adv:selectedCase,phase:i};
+        interceptMsg={t:0,lines:rawLines,adv:_lAdv,phase:i};
       }
     }
   });
@@ -19832,7 +21994,7 @@ function maybeFireIntercept(){
 //  WORLD MAP SCREEN HUD EXTRAS
 // ════════════════════════════════════════════════════════════════
 function drawWorldMapHUD(){
-  const adv=selectedCase, node=NODES[caseRoute[advNodeIdx]];
+  const adv=getAdvLocale(selectedCase), node=NODES[caseRoute[advNodeIdx]];
   const DS=getDifficultySettings();
 
   // ── Info panel (above pursuit bar) ─────────────────────────────
