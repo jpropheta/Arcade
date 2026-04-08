@@ -16980,7 +16980,21 @@ function updRadio(dt){
 }
 function drawRadio(){
   if(RADIO.state==='idle'||!RADIO.msg) return;
-  const _ru=huntUiScale(), RW=Math.round(380*_ru),RH=Math.round(148*_ru),rx=LW-RW-12,ry=LH-RH-68;
+  const _ru=huntUiScale();
+  const _rp=Math.round(10*_ru); // scaled padding
+  const _rlh=Math.round(15*_ru); // scaled line height
+  // Dynamic panel height: measure wrapped message first
+  ctx.font=huntFont(11);
+  const _rmaxW=Math.round(358*_ru); // usable text width inside panel
+  const _rwords=RADIO.msg.msg.split(' ');
+  let _rline='',_rlines=[];
+  for(const w of _rwords){const test=_rline+w+' ';if(ctx.measureText(test).width>_rmaxW&&_rline!==''){_rlines.push(_rline.trim());_rline=w+' ';}else _rline=test;}
+  if(_rline.trim()) _rlines.push(_rline.trim());
+  const _rheaderH=Math.round(28*_ru);
+  const _ropNameH=Math.round(24*_ru);
+  const RH=Math.round((_rheaderH+_ropNameH+_rlines.length*_rlh+_rp*2+8)*_ru*0+1)+_rheaderH+_ropNameH+_rlines.length*_rlh+_rp*2+8;
+  const RW=Math.round(380*_ru);
+  const rx=LW-RW-Math.round(12*_ru), ry=LH-RH-Math.round(68*_ru);
   let alpha=1,slideOff=0;
   if(RADIO.state==='incoming'){slideOff=RW*(1-Math.min(1,RADIO.t/0.45));alpha=Math.min(1,RADIO.t/0.3);}
   else if(RADIO.state==='fading'){alpha=Math.max(0,1-RADIO.t/0.7);slideOff=RW*(RADIO.t/0.7);}
@@ -16991,38 +17005,34 @@ function drawRadio(){
   ctx.shadowColor=col; ctx.shadowBlur=14;
   ctx.beginPath(); ctx.roundRect(rx,ry,RW,RH,4); ctx.fill(); ctx.stroke(); ctx.shadowBlur=0;
   // Header
-  ctx.fillStyle=col+'22'; ctx.fillRect(rx,ry,RW,24);
+  ctx.fillStyle=col+'22'; ctx.fillRect(rx,ry,RW,_rheaderH);
   ctx.strokeStyle=col+'44'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(rx,ry+24); ctx.lineTo(rx+RW,ry+24); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(rx,ry+_rheaderH); ctx.lineTo(rx+RW,ry+_rheaderH); ctx.stroke();
   // Signal bars
+  const _bstart=rx+_rp, _bspace=Math.round(9*_ru), _bw=Math.max(4,Math.round(6*_ru));
   for(let b=0;b<5;b++){
-    const bh=3+b*3,bx2=rx+10+b*9,by2=ry+12-bh/2;
+    const bh=3+b*3,bx2=_bstart+b*_bspace,by2=ry+Math.round(_rheaderH/2)-bh/2;
     const active=RADIO.state==='showing'&&b<=Math.floor((Math.sin(RADIO.t*7)+1)*2.5);
-    ctx.fillStyle=active?col:col+'33'; ctx.fillRect(bx2,by2,6,bh);
+    ctx.fillStyle=active?col:col+'33'; ctx.fillRect(bx2,by2,_bw,bh);
   }
   // Callsign
   ctx.font=huntFont(11,'bold'); ctx.fillStyle=col; ctx.textAlign='left';
-  ctx.fillText(`◈ ${RADIO.msg.cs}`,rx+58,ry+15);
+  ctx.fillText(`◈ ${RADIO.msg.cs}`,rx+_bstart+5*_bspace+_rp,ry+Math.round(_rheaderH*0.6));
   // Status label
   ctx.font=huntFont(10,'bold'); ctx.textAlign='right';
   if(RADIO.state==='incoming'&&Math.floor(RADIO.t*5)%2===0){
-    ctx.fillStyle=col; ctx.fillText(T('g_incoming'),rx+RW-8,ry+15);
+    ctx.fillStyle=col; ctx.fillText(T('g_incoming'),rx+RW-_rp,ry+Math.round(_rheaderH*0.6));
   } else {
-    ctx.fillStyle='#333'; ctx.fillText(T('h_radio_feed'),rx+RW-8,ry+15);
+    ctx.fillStyle='#333'; ctx.fillText(T('h_radio_feed'),rx+RW-_rp,ry+Math.round(_rheaderH*0.6));
   }
   // Operator name
   ctx.font=huntFont(12,'bold'); ctx.fillStyle=col; ctx.textAlign='left';
   ctx.shadowColor=col; ctx.shadowBlur=8;
-  ctx.fillText(RADIO.msg.op,rx+10,ry+40); ctx.shadowBlur=0;
-  // Message — wrapped
+  ctx.fillText(RADIO.msg.op,rx+_rp,ry+_rheaderH+Math.round(_ropNameH*0.75)); ctx.shadowBlur=0;
+  // Message — pre-wrapped
   ctx.font=huntFont(11); ctx.fillStyle='#c8d8e8';
-  const words=RADIO.msg.msg.split(' '); let line='',ly2=ry+58;
-  for(const w of words){
-    const test=line+w+' ';
-    if(ctx.measureText(test).width>RW-18&&line!==''){ctx.fillText(line.trim(),rx+10,ly2);line=w+' ';ly2+=15;}
-    else line=test;
-  }
-  ctx.fillText(line.trim(),rx+10,ly2);
+  let ly2=ry+_rheaderH+_ropNameH+_rp;
+  _rlines.forEach(l=>{ctx.fillText(l,rx+_rp,ly2);ly2+=_rlh;});
   // Scan line
   const scanY=((RADIO.t*55)%RH);
   ctx.fillStyle='rgba(255,255,255,0.025)'; ctx.fillRect(rx,ry+scanY,RW,2);
@@ -18411,9 +18421,9 @@ function drawInvestigation(){
   ];
   layers.forEach(layer=>{
     ctx.font=huntFont(11,'bold'); ctx.fillStyle=layer.color+'88'; ctx.textAlign='left';
-    ctx.fillText(layer.label,80,layer.y-14);
+    ctx.fillText(layer.label,Math.round(80*ui),layer.y-Math.round(14*ui));
     ctx.strokeStyle=layer.color+'22'; ctx.lineWidth=1; ctx.setLineDash([4,8]);
-    ctx.beginPath(); ctx.moveTo(70,layer.y-4); ctx.lineTo(LW-70,layer.y-4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(Math.round(70*ui),layer.y-Math.round(4*ui)); ctx.lineTo(LW-Math.round(70*ui),layer.y-Math.round(4*ui)); ctx.stroke();
     ctx.setLineDash([]);
     layer.nodes.forEach((n,i)=>{
       const nx=150+i*(LW-240)/4,ny=layer.y;
@@ -18424,14 +18434,17 @@ function drawInvestigation(){
     });
   });
 
-  // Header — taller, bigger fonts
-  ctx.fillStyle='rgba(2,3,8,0.92)'; ctx.fillRect(0,0,LW,64);
+  // Header — scales with UI
+  const _hdrH=Math.max(58, Math.round(64*ui));
+  ctx.fillStyle='rgba(2,3,8,0.92)'; ctx.fillRect(0,0,LW,_hdrH);
   ctx.strokeStyle=adv.color; ctx.lineWidth=1.5; ctx.shadowColor=adv.color; ctx.shadowBlur=10;
-  ctx.beginPath(); ctx.moveTo(0,64); ctx.lineTo(LW,64); ctx.stroke(); ctx.shadowBlur=0;
+  ctx.beginPath(); ctx.moveTo(0,_hdrH); ctx.lineTo(LW,_hdrH); ctx.stroke(); ctx.shadowBlur=0;
 
-  ctx.font=huntFont(13,'bold'); ctx.fillStyle='#7f8b96'; ctx.fillText(`${T('g_hunt_investigating')}: ${node.name||T('g_compromised_node')} — ${node.org||''}`,16,22, LW-280);
+  const _hdrRow1=Math.round(_hdrH*0.34), _hdrRow2=Math.round(_hdrH*0.72), _hdrRow3=Math.round(_hdrH*0.94);
+  const _hdrTextMaxW=Math.max(200, LW*0.55); // left text max width — leaves room for right-side controls
+  ctx.font=huntFont(13,'bold'); ctx.fillStyle='#7f8b96'; ctx.fillText(`${T('g_hunt_investigating')}: ${node.name||T('g_compromised_node')} — ${node.org||''}`,Math.round(16*ui),_hdrRow1, _hdrTextMaxW);
   ctx.font=huntFont(16,'bold'); ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=12;
-  ctx.fillText(`⚠ ${adv.name} — ${T('g_hunt_evidence_collection')}`,16,48, LW-280); ctx.shadowBlur=0;
+  ctx.fillText(`⚠ ${adv.name} — ${T('g_hunt_evidence_collection')}`,Math.round(16*ui),_hdrRow2, _hdrTextMaxW); ctx.shadowBlur=0;
 
   // Phase indicator — centered at bottom of header
   const _phIdx=getCurrentPhase();
@@ -18440,23 +18453,25 @@ function drawInvestigation(){
   const _phColor=_phColors[_phIdx]||'#39FF14';
   ctx.font=huntFont(10,'bold'); ctx.fillStyle=_phColor; ctx.shadowColor=_phColor; ctx.shadowBlur=7;
   ctx.textAlign='center';
-  ctx.fillText('\u25C8 PHASE '+(_phIdx+1)+'/3  \u00B7  '+_phName, LW/2, 60);
+  ctx.fillText('\u25C8 PHASE '+(_phIdx+1)+'/3  \u00B7  '+_phName, LW/2, _hdrRow3);
   ctx.shadowBlur=0; ctx.textAlign='left';
 
-  // Timer — bigger bar
+  // Timer — scaled bar, right side of header
   const timeLeft=Math.max(0,investigationMaxTime-investigationTimer);
   const timerCol=timeLeft>15?'#39FF14':timeLeft>8?'#FFE600':'#FF1744';
-  const timerW=240*(timeLeft/investigationMaxTime);
-  ctx.fillStyle='#1a1a2e'; ctx.fillRect(LW-258,8,240,16);
+  const _timerBarW=Math.round(200*ui), _timerBarH=Math.round(14*ui);
+  const _timerBarX=LW-_timerBarW-Math.round(14*ui), _timerBarY=Math.round(8*ui);
+  const timerW=_timerBarW*(timeLeft/investigationMaxTime);
+  ctx.fillStyle='#1a1a2e'; ctx.fillRect(_timerBarX,_timerBarY,_timerBarW,_timerBarH);
   ctx.fillStyle=timerCol; ctx.shadowColor=timerCol; ctx.shadowBlur=timeLeft<8?14:5;
-  ctx.fillRect(LW-258,8,timerW,16); ctx.shadowBlur=0;
+  ctx.fillRect(_timerBarX,_timerBarY,timerW,_timerBarH); ctx.shadowBlur=0;
   ctx.font=huntFont(13,'bold'); ctx.fillStyle=timerCol; ctx.textAlign='right';
-  ctx.fillText(`⏱ ${Math.ceil(timeLeft)}s`,LW-14,22); ctx.textAlign='left';
+  ctx.fillText(`⏱ ${Math.ceil(timeLeft)}s`,LW-Math.round(14*ui),_hdrRow1); ctx.textAlign='left';
 
   // Evidence node count
   const total=activeEvidenceNodes.length, collected=activeEvidenceNodes.filter(e=>e.collected).length;
   ctx.font=huntFont(13,'bold'); ctx.fillStyle='#7f8b96'; ctx.textAlign='right';
-  ctx.fillText(`${T('g_hunt_evidence_count')}: ${collected}/${total}`,LW-14,48); ctx.textAlign='left';
+  ctx.fillText(`${T('g_hunt_evidence_count')}: ${collected}/${total}`,LW-Math.round(14*ui),_hdrRow2); ctx.textAlign='left';
 
   // Click guide — bigger
   if(collected===0){
@@ -18504,7 +18519,7 @@ function drawInvestigation(){
     if(node2.hovered){
       canvas.style.cursor='pointer';
       ctx.fillStyle='rgba(4,1,18,0.70)'; ctx.strokeStyle=ec; ctx.lineWidth=2; ctx.shadowBlur=18; ctx.shadowColor=ec;
-      const tx=Math.min(node2.x-10,LW-310), ty=Math.max(node2.y-90,74);
+      const tx=Math.max(4,Math.min(node2.x-10,LW-310)), ty=Math.max(node2.y-90,_hdrH+4);
       ctx.beginPath(); ctx.roundRect(tx,ty,296,76,6); ctx.fill(); ctx.stroke(); ctx.shadowBlur=0;
       ctx.font=huntFont(13,'bold'); ctx.fillStyle=ec; ctx.fillText(node2.clue.title,tx+12,ty+20, 270);
       ctx.font=huntFont(11); ctx.fillStyle='#d5dde5';
@@ -18519,30 +18534,39 @@ function drawInvestigation(){
     ctx.restore();
   }
 
-  // Collected clues sidebar — BIGGER with glow
+  // Collected clues sidebar — anchored below header, fully scaled
   if(collectedClues.length>0){
-    const sideW=Math.round(290*ui), sideX=LW-sideW-12, sideY=72;
-    const sideRowH=Math.round(50*ui);
+    const sideW=Math.round(290*ui), sideX=LW-sideW-Math.round(12*ui);
+    const sideY=_hdrH+Math.round(8*ui);
+    const _sideHdrH=Math.max(22, Math.round(26*ui));
+    const sideRowH=Math.max(44, Math.round(52*ui));
+    const _sideL1=Math.round(sideRowH*0.40);   // title line baseline inside row
+    const _sideL2=Math.round(sideRowH*0.78);   // body line baseline inside row
+    const sidePanelH=_sideHdrH+collectedClues.length*sideRowH+Math.round(10*ui);
     ctx.fillStyle='rgba(4,1,18,0.65)'; ctx.strokeStyle='rgba(170,0,255,0.5)'; ctx.lineWidth=1.5;
     ctx.shadowColor='rgba(170,0,255,0.3)'; ctx.shadowBlur=12;
-    ctx.beginPath(); ctx.roundRect(sideX,sideY,sideW,collectedClues.length*sideRowH+24,6); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(sideX,sideY,sideW,sidePanelH,6); ctx.fill(); ctx.stroke();
     ctx.shadowBlur=0;
-    ctx.font=huntFont(12,'bold'); ctx.fillStyle='#AA00FF'; ctx.fillText(T('g_collected'),sideX+12,sideY+18);
+    ctx.font=huntFont(12,'bold'); ctx.fillStyle='#AA00FF';
+    ctx.fillText(T('g_collected'),sideX+Math.round(12*ui),sideY+Math.round(_sideHdrH*0.76));
     collectedClues.forEach((c,i)=>{
       const typeColors={CREDENTIAL:'#FFE600',MALWARE:'#FF1744',NETWORK:'#42d9ff',TIMING:'#AA00FF',LATERAL:'#FF8D39',PHISHING:'#FF62FF',CLOUD:'#00FFD0',SOCIAL:'#FF62FF',STAGING:'#C850FF',IDENTITY:'#FFE600',EXFIL:'#FF8D39',BEHAVIORAL:'#74ff88',IMPACT:'#FF1744',OSINT:'#74ff88',MODULE:'#39FF14'};
       const ec=typeColors[c.type]||'#AA00FF';
-      const cy=sideY+28+i*sideRowH;
+      const cy=sideY+_sideHdrH+i*sideRowH;
+      const _sx=sideX+Math.round(8*ui), _sw=sideW-Math.round(16*ui);
       ctx.fillStyle='rgba(8,2,26,0.55)'; ctx.strokeStyle=ec+'55'; ctx.lineWidth=1;
-      ctx.beginPath(); ctx.roundRect(sideX+8,cy,sideW-16,sideRowH-6,4); ctx.fill(); ctx.stroke();
-      ctx.font=huntFont(12,'bold'); ctx.fillStyle=ec; ctx.fillText(`${c.icon} ${c.title}`,sideX+16,cy+18, sideW-40);
+      ctx.beginPath(); ctx.roundRect(_sx,cy,_sw,sideRowH-Math.round(6*ui),4); ctx.fill(); ctx.stroke();
+      const _tx=_sx+Math.round(8*ui), _tw=_sw-Math.round(16*ui);
+      ctx.font=huntFont(12,'bold'); ctx.fillStyle=ec; ctx.fillText(`${c.icon} ${c.title}`,_tx,cy+_sideL1,_tw);
       ctx.font=huntFont(11); ctx.fillStyle='#7f8b96';
-      let clueText=c.clue; while(clueText.length>0&&ctx.measureText(clueText).width>(sideW-40)) clueText=clueText.slice(0,-1);
+      let clueText=c.clue; while(clueText.length>0&&ctx.measureText(clueText).width>_tw) clueText=clueText.slice(0,-1);
       if(clueText.length<c.clue.length) clueText=clueText.slice(0,-1)+'…';
-      ctx.fillText(clueText,sideX+16,cy+34);
+      ctx.fillText(clueText,_tx,cy+_sideL2);
     });
   }
 
-  // Module deploy button (right side)
+  // Module deploy / active panel — anchored below header
+  const _modBy=_hdrH+Math.round(8*ui);
   if(!usedModuleThisInvestigation){
     const mods=[
       {label:'🪪 IDENTITY', desc:T('g_hunt_module_identity')},
@@ -18551,33 +18575,35 @@ function drawInvestigation(){
       {label:'👁️ OVERWATCH', desc:T('g_hunt_module_overwatch')},
       {label:'🗺️ EXPOSURE', desc:T('g_hunt_module_exposure')},
     ];
-    const bx=14, by=72, panelW=Math.round(300*ui), rowH=Math.round(52*ui);
+    const bx=Math.round(14*ui), by=_modBy, panelW=Math.round(300*ui), rowH=Math.max(40,Math.round(52*ui));
+    const _mHdrH=Math.max(60,Math.round(72*ui));
     ctx.fillStyle='rgba(4,1,18,0.65)'; ctx.strokeStyle='rgba(170,0,255,0.5)'; ctx.lineWidth=1.5;
     ctx.shadowColor='rgba(170,0,255,0.3)'; ctx.shadowBlur=12;
-    ctx.beginPath(); ctx.roundRect(bx,by,panelW,Math.round(80*ui)+mods.length*rowH,6); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(bx,by,panelW,_mHdrH+mods.length*rowH,6); ctx.fill(); ctx.stroke();
     ctx.shadowBlur=0;
-    ctx.font=huntFont(13,'bold'); ctx.fillStyle='#AA00FF'; ctx.fillText(T('g_deploy'),bx+14,by+20);
-    ctx.font=huntFont(11); ctx.fillStyle='#7f8b96'; ctx.fillText(T('g_hunt_module_hint'),bx+14,by+38, panelW-28);
-    ctx.font=huntFont(11,'bold'); ctx.fillStyle='#39FF14'; ctx.fillText(T('g_hunt_module_bonus'),bx+14,by+56);
+    ctx.font=huntFont(13,'bold'); ctx.fillStyle='#AA00FF'; ctx.fillText(T('g_deploy'),bx+Math.round(14*ui),by+Math.round(_mHdrH*0.26));
+    ctx.font=huntFont(11); ctx.fillStyle='#7f8b96'; ctx.fillText(T('g_hunt_module_hint'),bx+Math.round(14*ui),by+Math.round(_mHdrH*0.55),panelW-Math.round(28*ui));
+    ctx.font=huntFont(11,'bold'); ctx.fillStyle='#39FF14'; ctx.fillText(T('g_hunt_module_bonus'),bx+Math.round(14*ui),by+Math.round(_mHdrH*0.82));
     mods.forEach((m,i)=>{
-      const my=by+Math.round(70*ui)+i*rowH;
+      const my=by+_mHdrH+i*rowH;
       const hov=MOUSE.x>bx+6&&MOUSE.x<bx+panelW-6&&MOUSE.y>my-2&&MOUSE.y<my+rowH-6;
       ctx.fillStyle=hov?'rgba(170,0,255,0.2)':'rgba(8,2,26,0.55)';
       ctx.strokeStyle=hov?'#AA00FF':'rgba(170,0,255,0.3)'; ctx.lineWidth=1;
-      ctx.beginPath(); ctx.roundRect(bx+6,my-2,panelW-12,rowH-8,4); ctx.fill(); ctx.stroke();
-      ctx.font=huntFont(12,'bold'); ctx.fillStyle=hov?'#AA00FF':'#d5dde5'; ctx.fillText(m.label,bx+14,my+16);
-      ctx.font=huntFont(11); ctx.fillStyle='#7f8b96'; ctx.fillText(m.desc,bx+14,my+34, panelW-28);
+      ctx.beginPath(); ctx.roundRect(bx+Math.round(6*ui),my-2,panelW-Math.round(12*ui),rowH-Math.round(8*ui),4); ctx.fill(); ctx.stroke();
+      ctx.font=huntFont(12,'bold'); ctx.fillStyle=hov?'#AA00FF':'#d5dde5'; ctx.fillText(m.label,bx+Math.round(14*ui),my+Math.round(rowH*0.40));
+      ctx.font=huntFont(11); ctx.fillStyle='#7f8b96'; ctx.fillText(m.desc,bx+Math.round(14*ui),my+Math.round(rowH*0.76),panelW-Math.round(28*ui));
     });
   } else if(selectedModule){
-    const bx=14,by=72,panelW=Math.round(300*ui);
+    const bx=Math.round(14*ui),by=_modBy,panelW=Math.round(300*ui);
+    const _mH=Math.max(80,Math.round(92*ui));
     ctx.fillStyle='rgba(4,1,18,0.65)'; ctx.strokeStyle='rgba(57,255,20,0.5)'; ctx.lineWidth=1.5;
     ctx.shadowColor='rgba(57,255,20,0.3)'; ctx.shadowBlur=12;
-    ctx.beginPath(); ctx.roundRect(bx,by,panelW,Math.round(92*ui),6); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(bx,by,panelW,_mH,6); ctx.fill(); ctx.stroke();
     ctx.shadowBlur=0;
-    ctx.font=huntFont(12,'bold'); ctx.fillStyle='#39FF14'; ctx.fillText(T('g_hunt_module_active'),bx+12,by+20);
-    ctx.font=huntFont(13,'bold'); ctx.fillStyle='#d5dde5'; ctx.fillText(selectedModule,bx+12,by+42);
-    ctx.fillStyle='#39FF14'; ctx.font=huntFont(11); ctx.fillText(T('g_deployed'),bx+12,by+62);
-    ctx.fillStyle='#7f8b96'; ctx.fillText(T('h_module_pursuit_bonus'),bx+12,by+80);
+    ctx.font=huntFont(12,'bold'); ctx.fillStyle='#39FF14'; ctx.fillText(T('g_hunt_module_active'),bx+Math.round(12*ui),by+Math.round(_mH*0.22));
+    ctx.font=huntFont(13,'bold'); ctx.fillStyle='#d5dde5'; ctx.fillText(selectedModule,bx+Math.round(12*ui),by+Math.round(_mH*0.46));
+    ctx.fillStyle='#39FF14'; ctx.font=huntFont(11); ctx.fillText(T('g_deployed'),bx+Math.round(12*ui),by+Math.round(_mH*0.68));
+    ctx.fillStyle='#7f8b96'; ctx.fillText(T('h_module_pursuit_bonus'),bx+Math.round(12*ui),by+Math.round(_mH*0.88));
   }
 
   // Pursuit bar at bottom
@@ -18645,92 +18671,116 @@ function drawEvidenceCard(dt){
   const slideT=Math.min(1,t/0.4);
   const eased=1-Math.pow(1-slideT,3);
   const _eu=huntUiScale();
-  const cardH=Math.round(500*_eu);
-  const _cardW=Math.round(580*_eu);
-  const cardY=lerp(LH+50,LH/2-cardH/2,eased);
-  const cardX=LW/2-Math.round(_cardW/2);
+  const _cardW=Math.min(LW-40, Math.round(580*_eu));
+  const _cardPad=Math.round(20*_eu);
+  const _innerW=_cardW-_cardPad*2;
 
   const typeColors={CREDENTIAL:'#FFE600',MALWARE:'#FF1744',NETWORK:'#42d9ff',TIMING:'#AA00FF',LATERAL:'#FF8D39',PHISHING:'#FF62FF',CLOUD:'#00FFD0',SOCIAL:'#FF62FF',STAGING:'#C850FF',IDENTITY:'#FFE600',EXFIL:'#FF8D39',BEHAVIORAL:'#74ff88',IMPACT:'#FF1744',OSINT:'#74ff88',MODULE:'#39FF14'};
   const ec=typeColors[clue.type]||'#AA00FF';
 
-  const _phase=getCurrentPhase(); // 0,1,2
-  const _phaseUrgency=_phase===2;  // Phase 3 = critical
+  const _phase=getCurrentPhase();
+  const _phaseUrgency=_phase===2;
   const _cardBorder=_phaseUrgency?'#FF1744':ec;
   const _glowIntensity=_phaseUrgency?48:30;
+
+  // Pre-wrap text to compute dynamic card height
+  ctx.font=huntFont(13);
+  const tLines=wrapTextPx(clue.text,_innerW);
+  const cLines=wrapTextPx(clue.clue,_innerW);
+  const _lnH=Math.max(16, Math.round(18*_eu));   // text line height
+  const _clnH=Math.max(17, Math.round(20*_eu));  // clue line height
+
+  // Layout constants (all scaled)
+  const _hdrH   =Math.max(44, Math.round(52*_eu));   // header band
+  const _iconBlk =Math.max(60, Math.round(76*_eu));  // icon+title block height (below header)
+  const _divH   =Math.round(14*_eu);                 // divider spacing
+  const _textH  =tLines.length*_lnH+Math.round(8*_eu);
+  const _noteH  =Math.round(26*_eu);                 // note label row
+  const _clueH  =cLines.length*_clnH;
+  const _footH  =Math.round(28*_eu);                 // dismiss hint
+  const cardH=_hdrH+_iconBlk+_divH+_textH+_divH+_noteH+_clueH+_footH+Math.round(16*_eu);
+
+  const cardY=lerp(LH+50,LH/2-cardH/2,eased);
+  const cardX=LW/2-Math.round(_cardW/2);
 
   ctx.save();
   ctx.shadowColor=_cardBorder; ctx.shadowBlur=_glowIntensity;
   ctx.fillStyle='rgba(4,1,18,0.68)'; ctx.strokeStyle=_cardBorder; ctx.lineWidth=_phaseUrgency?3:2.5;
   ctx.beginPath(); ctx.roundRect(cardX,cardY,_cardW,cardH,10); ctx.fill(); ctx.stroke();
 
-  // Header bar — red pulse on Phase 3
+  // Header bar
   ctx.fillStyle=_phaseUrgency?'rgba(255,23,68,0.22)':ec+'28';
-  ctx.fillRect(cardX,cardY,_cardW,52);
+  ctx.fillRect(cardX,cardY,_cardW,_hdrH);
   ctx.strokeStyle=(_phaseUrgency?'#FF1744':ec)+'55'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(cardX,cardY+52); ctx.lineTo(cardX+_cardW,cardY+52); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cardX,cardY+_hdrH); ctx.lineTo(cardX+_cardW,cardY+_hdrH); ctx.stroke();
   ctx.shadowBlur=0;
 
   // Classification tag
+  const _tagY=cardY+Math.round(_hdrH*0.22);
   ctx.font=huntFont(8,'bold'); ctx.fillStyle='#3a3a5a'; ctx.textAlign='left';
-  ctx.fillText('U//FOUO — FALCON INTELLIGENCE — '+selectedCase?.name,cardX+14,cardY+8);
+  ctx.fillText('U//FOUO — FALCON INTELLIGENCE — '+selectedCase?.name,cardX+Math.round(14*_eu),_tagY);
 
-  // Evidence number
+  // Evidence number / phase flash
   ctx.font=huntFont(13,'bold'); ctx.fillStyle=_phaseUrgency?'#FF1744':ec;
-  ctx.textAlign='right'; ctx.fillText(TF('g_hunt_evidence_number',{n:collectedClues.length}),cardX+_cardW-14,cardY+20);
-
-  // Phase urgency flash on Phase 3
+  const _midHdr=cardY+Math.round(_hdrH*0.52);
+  ctx.textAlign='right'; ctx.fillText(TF('g_hunt_evidence_number',{n:collectedClues.length}),cardX+_cardW-Math.round(14*_eu),_midHdr);
   if(_phaseUrgency){
     ctx.font=huntFont(9,'bold'); ctx.fillStyle='#FF1744'; ctx.textAlign='left';
-    ctx.fillText('⚡ CRITICAL INTELLIGENCE — PHASE 3 ACTIVE',cardX+14,cardY+20);
+    ctx.fillText('⚡ CRITICAL INTELLIGENCE — PHASE 3 ACTIVE',cardX+Math.round(14*_eu),_midHdr);
   }
 
   // Type badge
-  ctx.fillStyle=_phaseUrgency?'#FF1744':ec; ctx.font=huntFont(12,'bold'); ctx.textAlign='left';
-  ctx.fillRect(cardX+14,cardY+28,_phaseUrgency?142:96,18);
-  ctx.fillStyle='rgba(2,3,8,0.9)'; ctx.fillText(_phaseUrgency?'⚠ '+huntClueTypeLabel(clue.type):huntClueTypeLabel(clue.type),cardX+20,cardY+42);
+  const _badgeY=cardY+Math.round(_hdrH*0.58);
+  const _badgeLabel=_phaseUrgency?'⚠ '+huntClueTypeLabel(clue.type):huntClueTypeLabel(clue.type);
+  ctx.font=huntFont(12,'bold'); ctx.textAlign='left';
+  ctx.fillStyle=_phaseUrgency?'#FF1744':ec;
+  const _badgeW=Math.max(80, ctx.measureText(_badgeLabel).width+Math.round(12*_eu));
+  const _badgeH=Math.round(18*_eu);
+  ctx.fillRect(cardX+Math.round(14*_eu),_badgeY,_badgeW,_badgeH);
+  ctx.fillStyle='rgba(2,3,8,0.9)'; ctx.fillText(_badgeLabel,cardX+Math.round(20*_eu),_badgeY+Math.round(_badgeH*0.78));
 
-  // Icon
+  // Icon + title block
+  const _iconAreaTop=cardY+_hdrH;
+  const _iconCX=cardX+Math.round(44*_eu);
+  const _iconCY=_iconAreaTop+Math.round(_iconBlk*0.62);
   ctx.font=huntFont(34); ctx.textAlign='center';
-  ctx.fillText(clue.icon,cardX+56,cardY+106);
+  ctx.fillText(clue.icon,_iconCX,_iconCY);
 
-  // Title
+  const _titleX=cardX+Math.round(94*_eu);
   ctx.font=huntFont(20,'bold'); ctx.fillStyle='#f4f7fa'; ctx.textAlign='left';
-  ctx.fillText(clue.title,cardX+100,cardY+90);
-
-  // TTP badge
+  ctx.fillText(clue.title,_titleX,_iconAreaTop+Math.round(_iconBlk*0.46),_innerW-Math.round(74*_eu));
   ctx.font=huntFont(12,'bold'); ctx.fillStyle=ec;
-  ctx.fillText(clue.ttp,cardX+100,cardY+112);
+  ctx.fillText(clue.ttp,_titleX,_iconAreaTop+Math.round(_iconBlk*0.76));
 
-  // Divider
+  // Divider 1
+  let ly=_iconAreaTop+_iconBlk;
   ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(cardX+24,cardY+128); ctx.lineTo(cardX+_cardW-24,cardY+128); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cardX+_cardPad,ly); ctx.lineTo(cardX+_cardW-_cardPad,ly); ctx.stroke();
+  ly+=_divH;
 
-  // Evidence text — wrapped bigger
+  // Evidence text
   ctx.font=huntFont(13); ctx.fillStyle='#d5dde5'; ctx.textAlign='left';
-  let ly=cardY+152;
-  const tLines=wrapTextPx(clue.text,_cardW-48);
-  tLines.forEach(l=>{ctx.fillText(l,cardX+20,ly);ly+=18;});
-  ly+=8;
+  tLines.forEach(l=>{ctx.fillText(l,cardX+_cardPad,ly,_innerW);ly+=_lnH;}); ly+=Math.round(8*_eu);
 
-  // Divider
+  // Divider 2
   ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(cardX+24,ly); ctx.lineTo(cardX+_cardW-24,ly); ctx.stroke(); ly+=22;
+  ctx.beginPath(); ctx.moveTo(cardX+_cardPad,ly); ctx.lineTo(cardX+_cardW-_cardPad,ly); ctx.stroke();
+  ly+=_divH;
 
-  // Investigator note label — phase-sensitive urgency
+  // Investigator note label
   const _noteLabel=_phaseUrgency?`⚡ ANALYST ALERT — ACT NOW:`:`🔍 ${T('g_hunt_note')}:`;
   ctx.font=huntFont(13,'bold'); ctx.fillStyle=_phaseUrgency?'#FF1744':ec;
   if(_phaseUrgency){ctx.shadowColor='#FF1744';ctx.shadowBlur=8;}
-  ctx.fillText(_noteLabel,cardX+24,ly); ctx.shadowBlur=0; ly+=22;
+  ctx.fillText(_noteLabel,cardX+_cardPad,ly); ctx.shadowBlur=0; ly+=_noteH;
 
-  // Clue text — wrapped bigger
+  // Clue text
   ctx.font=huntFont(13); ctx.fillStyle='#f4f7fa';
-  const cLines=wrapTextPx(clue.clue,_cardW-48);
-  cLines.forEach(l=>{ctx.fillText(l,cardX+24,ly);ly+=20;});
+  cLines.forEach(l=>{ctx.fillText(l,cardX+_cardPad,ly,_innerW);ly+=_clnH;});
 
-  // Dismiss hint — only shows after 2s
+  // Dismiss hint
   if(t>2&&Math.floor(t*2)%2===0){
     ctx.font=huntFont(13,'bold'); ctx.fillStyle='#555'; ctx.textAlign='center';
-    ctx.fillText(T('g_click_continue'),LW/2,cardY+cardH-16);
+    ctx.fillText(T('g_click_continue'),LW/2,cardY+cardH-Math.round(10*_eu));
   }
 
   ctx.restore(); ctx.textAlign='left';
@@ -18848,59 +18898,65 @@ function drawDeduction(dt){
     if(deductionResult&&!choice.correct){ctx.fillStyle='rgba(0,0,0,0.4)';ctx.fillRect(finalX,cy,cardW,cardH);}
 
     // Top accent
-    ctx.fillStyle=borderCol+'44'; ctx.fillRect(finalX,cy,cardW,20);
+    ctx.fillStyle=borderCol+'44'; ctx.fillRect(finalX,cy,cardW,Math.round(20*_du));
 
+    // Icon + Name + Org block — scale all offsets with _du
+    const _di=Math.round(40*_du), _dn=Math.round(72*_du);
     // Nation/sector icon
     ctx.font=huntFont(26); ctx.textAlign='center'; ctx.shadowBlur=0;
-    ctx.fillText(choice.icon,finalX+40,cy+60);
+    ctx.fillText(choice.icon,finalX+_di,cy+Math.round(60*_du));
 
     // Name
     ctx.font=huntFont(choice.name.length>14?12:14,'bold'); ctx.fillStyle=borderCol; ctx.textAlign='left';
     ctx.shadowColor=borderCol; ctx.shadowBlur=hov?8:0;
-    ctx.fillText(choice.name,finalX+72,cy+38); ctx.shadowBlur=0;
+    ctx.fillText(choice.name,finalX+_dn,cy+Math.round(38*_du)); ctx.shadowBlur=0;
 
     // Org
     ctx.font=huntFont(11); ctx.fillStyle='#7f8b96';
-    ctx.fillText(choice.org,finalX+72,cy+54, cardW-80);
+    ctx.fillText(choice.org,finalX+_dn,cy+Math.round(54*_du),cardW-_dn-Math.round(8*_du));
 
     // Sector
+    const _secY=cy+Math.round(62*_du), _secH=Math.round(16*_du), _secW=Math.round(180*_du);
     ctx.fillStyle='rgba(8,2,26,0.50)'; ctx.strokeStyle=borderCol+'44'; ctx.lineWidth=1;
-    ctx.fillRect(finalX+72,cy+62,180,16); ctx.strokeRect(finalX+72,cy+62,180,16);
+    ctx.fillRect(finalX+_dn,_secY,_secW,_secH); ctx.strokeRect(finalX+_dn,_secY,_secW,_secH);
     ctx.font=huntFont(11); ctx.fillStyle=borderCol+'cc';
-    ctx.fillText(choice.sector,finalX+78,cy+74, 168);
+    ctx.fillText(choice.sector,finalX+_dn+Math.round(6*_du),_secY+Math.round(_secH*0.78),_secW-Math.round(8*_du));
 
     // Divider
+    const _divY=cy+Math.round(88*_du);
     ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.moveTo(finalX+12,cy+88); ctx.lineTo(finalX+cardW-12,cy+88); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(finalX+Math.round(12*_du),_divY); ctx.lineTo(finalX+cardW-Math.round(12*_du),_divY); ctx.stroke();
 
     // Clue match count
     const matchCol=choice.clueMatches>=2?'#39FF14':choice.clueMatches===1?'#FFE600':'#555';
+    const _cmLabelY=cy+Math.round(105*_du), _cmBarY=cy+Math.round(96*_du);
+    const _cmBarW=Math.round(16*_du), _cmBarH=Math.round(12*_du), _cmGap=Math.round(22*_du);
     ctx.font=huntFont(11,'bold'); ctx.fillStyle='#555';
-    ctx.fillText(T('g_clue_matches'),finalX+12,cy+105);
+    ctx.fillText(T('g_clue_matches'),finalX+Math.round(12*_du),_cmLabelY);
     for(let m=0;m<4;m++){
-      const mx=finalX+130+m*22;
+      const mx=finalX+Math.round(130*_du)+m*_cmGap;
       ctx.fillStyle=m<choice.clueMatches?matchCol:'#222';
       ctx.shadowColor=m<choice.clueMatches?matchCol:'transparent'; ctx.shadowBlur=m<choice.clueMatches?6:0;
-      ctx.fillRect(mx,cy+96,16,12);
+      ctx.fillRect(mx,_cmBarY,_cmBarW,_cmBarH);
     }
     ctx.shadowBlur=0;
     ctx.font=huntFont(11,'bold'); ctx.fillStyle=matchCol;
-    ctx.fillText(`${choice.clueMatches} ${T('g_clue_matches').toLowerCase()}`,finalX+12,cy+125);
+    ctx.fillText(`${choice.clueMatches} ${T('g_clue_matches').toLowerCase()}`,finalX+Math.round(12*_du),cy+Math.round(125*_du));
 
     // Result badge
     if(deductionResult==='correct'&&choice.correct){
       ctx.fillStyle='#39FF14'; ctx.font=huntFont(12,'bold'); ctx.textAlign='center';
       ctx.shadowColor='#39FF14'; ctx.shadowBlur=10;
-      ctx.fillText(T('g_hunt_correct_close'),finalX+cardW/2,cy+152);
+      ctx.fillText(T('g_hunt_correct_close'),finalX+cardW/2,cy+Math.round(152*_du));
     } else if(deductionResult==='wrong'&&choice.correct){
       ctx.fillStyle='#39FF14'; ctx.font=huntFont(11,'bold'); ctx.textAlign='center';
-      ctx.fillText(T('g_hunt_was_correct'),finalX+cardW/2,cy+152);
+      ctx.fillText(T('g_hunt_was_correct'),finalX+cardW/2,cy+Math.round(152*_du));
     }
 
     // CTA on hover
     if(hov&&!deductionResult){
       ctx.font=huntFont(11,'bold'); ctx.fillStyle='#fff'; ctx.textAlign='center';
-      ctx.fillText(T('g_click_confirm'),finalX+cardW/2,cy+cardH-10);
+      ctx.fillText(T('g_click_confirm'),finalX+cardW/2,cy+cardH-Math.round(10*_du));
     }
 
     ctx.restore(); ctx.textAlign='left';
@@ -18919,7 +18975,8 @@ function drawDeduction(dt){
 function handleDeductionClick(){
   if(deductionLocked) return;
   const {clickX:cx,clickY:cy}=MOUSE;
-  const cardW=280,cardH=185,gap=24;
+  const _dcu=huntUiScale();
+  const cardW=Math.round(280*_dcu),cardH=Math.round(185*_dcu),gap=Math.round(24*_dcu);
   const totalW=deductionChoices.length*(cardW+gap)-gap;
   const startX=(LW-totalW)/2;
 
@@ -19051,34 +19108,38 @@ function drawPursuitBar(){
 //  HUD (world map + investigation)
 // ════════════════════════════════════════════════════════════════
 function drawHUD(){
-  // Top bar — taller
-  ctx.fillStyle='rgba(2,3,8,0.93)'; ctx.fillRect(0,0,LW,62);
+  const ui=huntUiScale();
+  // Top bar — height scales with UI
+  const _hudH=Math.max(52, Math.round(62*ui));
+  ctx.fillStyle='rgba(2,3,8,0.93)'; ctx.fillRect(0,0,LW,_hudH);
   ctx.strokeStyle='rgba(170,0,255,0.3)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(0,62); ctx.lineTo(LW,62); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0,_hudH); ctx.lineTo(LW,_hudH); ctx.stroke();
 
-  // Score — bigger
+  // Score
+  const _row1=Math.round(_hudH*0.54), _row2=Math.round(_hudH*0.86);
   ctx.font=huntFont(22,'bold'); ctx.fillStyle='#AA00FF'; ctx.shadowColor='#AA00FF'; ctx.shadowBlur=10;
-  ctx.fillText(`⭐ ${formatLocaleNumber(score)}`,14,34); ctx.shadowBlur=0;
-  ctx.font=huntFont(11,'bold'); ctx.fillStyle='#444'; ctx.fillText(`${T('g_hi_short')} ${formatLocaleNumber(hi)}`,14,52);
+  ctx.fillText(`⭐ ${formatLocaleNumber(score)}`,Math.round(14*ui),_row1); ctx.shadowBlur=0;
+  ctx.font=huntFont(11,'bold'); ctx.fillStyle='#444';
+  ctx.fillText(`${T('g_hi_short')} ${formatLocaleNumber(hi)}`,Math.round(14*ui),_row2);
 
-  // Case info — bigger
+  // Case info
   if(selectedCase){
+    const _caseMaxW=Math.max(200, LW-Math.round(460*ui));
     ctx.font=huntFont(15,'bold'); ctx.fillStyle=selectedCase.color; ctx.textAlign='center';
     ctx.shadowColor=selectedCase.color; ctx.shadowBlur=10;
-    ctx.fillText(`◈ ${selectedCase.name} — ${selectedCase.caseTitle}`,LW/2,26, LW-460); ctx.shadowBlur=0;
+    ctx.fillText(`◈ ${selectedCase.name} — ${selectedCase.caseTitle}`,LW/2,Math.round(_hudH*0.42),_caseMaxW); ctx.shadowBlur=0;
     ctx.font=huntFont(12); ctx.fillStyle='#7f8b96';
-    ctx.fillText(`${T('g_hop_short')} ${advNodeIdx+1} / ${caseRoute.length}  •  ${selectedCase.target}`,LW/2,46, LW-460);
+    ctx.fillText(`${T('g_hop_short')} ${advNodeIdx+1} / ${caseRoute.length}  •  ${selectedCase.target}`,LW/2,Math.round(_hudH*0.76),_caseMaxW);
     ctx.textAlign='left';
   }
 
-  // Pursuit (top right) — compact text BELOW the ◈ MISSION SELECT button
-  // Button is position:absolute top:12 right:12 ~40px tall, so y=46+ is safe
+  // Pursuit (top right)
   const p=pursuit;
   const pc=p>=70?'#39FF14':p>=40?'#FFE600':'#FF1744';
   ctx.font=huntFont(12,'bold'); ctx.fillStyle=pc; ctx.textAlign='right';
-  ctx.fillText(`${T('g_pursuit')} ${Math.round(p)}%`,LW-14,44); ctx.textAlign='left';
+  ctx.fillText(`${T('g_pursuit')} ${Math.round(p)}%`,LW-Math.round(14*ui),_row1); ctx.textAlign='left';
   ctx.font=huntFont(11,'bold'); ctx.fillStyle='#444'; ctx.textAlign='right';
-  ctx.fillText(T('g_abort'),LW-14,58); ctx.textAlign='left';
+  ctx.fillText(T('g_abort'),LW-Math.round(14*ui),_row2); ctx.textAlign='left';
 }
 
 function huntTitleScale(){
@@ -19262,18 +19323,24 @@ function drawCaseSelect(dt){
   ctx.fillStyle='rgba(0,229,255,0.04)';
   ctx.fillRect(sweepX-26,58,52,LH-130);
 
+  // Header — all Y positions scaled
+  const _csL1=Math.max(20,Math.round(28*ui));
+  const _csL2=Math.max(36,Math.round(52*ui));
+  const _csL3=Math.max(48,Math.round(70*ui));
+  const _csL4=Math.max(58,Math.round(88*ui));
   ctx.textAlign='center';
   ctx.font=`bold ${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#555';
-  ctx.fillText(T('g_select_case'),LW/2,28);
+  ctx.fillText(T('g_select_case'),LW/2,_csL1);
   ctx.font=`bold ${Math.round(22*ui)}px "Courier New"`; ctx.fillStyle='#AA00FF'; ctx.shadowColor='#AA00FF'; ctx.shadowBlur=14;
-  ctx.fillText(T('h_case_board'),LW/2,54); ctx.shadowBlur=0;
+  ctx.fillText(T('h_case_board'),LW/2,_csL2); ctx.shadowBlur=0;
   ctx.font=`${Math.round(10*ui)}px "Courier New"`; ctx.fillStyle='#d5dde5';
-  ctx.fillText(T('h_title_hook'),LW/2,74);
+  ctx.fillText(T('h_title_hook'),LW/2,_csL3);
   ctx.font=`${Math.round(9*ui)}px "Courier New"`; ctx.fillStyle='#42d9ff';
-  ctx.fillText(T('h_case_nav'),LW/2,92);
+  ctx.fillText(T('h_case_nav'),LW/2,_csL4);
 
   const cols=5, cw=Math.round(196*ui), ch=Math.round(86*ui), gap=Math.round(10*ui);
-  const sx=(LW-(cols*cw+(cols-1)*gap))/2, sy=112;
+  const sy=Math.round(_csL4+Math.round(16*ui));  // grid starts below header
+  const sx=(LW-(cols*cw+(cols-1)*gap))/2;
 
   ADVERSARIES.forEach((caseFile,i)=>{
     const col=i%cols, row=Math.floor(i/cols);
@@ -19318,7 +19385,10 @@ function drawCaseSelect(dt){
     ctx.restore();
   });
 
-  const dossierX=Math.round(72*ui), dossierY=Math.round(314*ui), dossierW=LW-dossierX*2, dossierH=LH-dossierY-94;
+  const _gridRows=Math.ceil(ADVERSARIES.length/cols);
+  const _gridBottom=sy+_gridRows*(ch+gap)-gap;
+  const dossierX=Math.round(72*ui), dossierY=Math.round(_gridBottom+Math.round(10*ui));
+  const dossierW=LW-dossierX*2, dossierH=Math.max(180, LH-dossierY-Math.round(56*ui));
   ctx.fillStyle='rgba(4,1,18,0.9)';
   ctx.strokeStyle=adv.color; ctx.lineWidth=1.5; ctx.shadowColor=adv.color; ctx.shadowBlur=18;
   ctx.beginPath(); ctx.roundRect(dossierX,dossierY,dossierW,dossierH,8); ctx.fill(); ctx.stroke(); ctx.shadowBlur=0;
@@ -19342,7 +19412,7 @@ function drawCaseSelect(dt){
   ctx.font=`bold ${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#42d9ff';
   ctx.fillText(T('h_case_brief'),leftX,topY+78);
   ctx.font=`${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#d5dde5';
-  wrapTextPx(adv.brief,leftW-20).slice(0,4).forEach((line,i)=>ctx.fillText(line,leftX,topY+98+i*18));
+  wrapTextPx(adv.brief,leftW-20).slice(0,4).forEach((line,i)=>ctx.fillText(line,leftX,topY+98+i*Math.max(15,Math.round(18*ui))));
 
   const metricY=topY+172;
   ctx.font=`bold ${Math.round(10*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
@@ -19385,15 +19455,16 @@ function drawCaseSelect(dt){
   ctx.fillText(T('h_case_pressure'),rightX,statsY);
   ctx.fillStyle='#FF8D39'; ctx.font=`bold ${Math.round(16*ui)}px "Courier New"`;
   ctx.fillText(`${pressureWindow}s`,rightX,statsY+22);
-  ctx.fillStyle='#1a1a2e'; ctx.fillRect(rightX,statsY+30,180,8);
-  ctx.fillStyle='#FF8D39'; ctx.fillRect(rightX,statsY+30,180*(pressureWindow/32),8);
+  const _statBarW=Math.round(180*ui);
+  ctx.fillStyle='#1a1a2e'; ctx.fillRect(rightX,statsY+30,_statBarW,Math.round(8*ui));
+  ctx.fillStyle='#FF8D39'; ctx.fillRect(rightX,statsY+30,_statBarW*(pressureWindow/32),Math.round(8*ui));
 
   ctx.font=`bold ${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
   ctx.fillText(T('h_case_confidence'),rightX,statsY+60);
   ctx.fillStyle='#42d9ff'; ctx.font=`bold ${Math.round(16*ui)}px "Courier New"`;
   ctx.fillText(`${confidence}%`,rightX,statsY+82);
-  ctx.fillStyle='#1a1a2e'; ctx.fillRect(rightX,statsY+88,180,8);
-  ctx.fillStyle='#42d9ff'; ctx.fillRect(rightX,statsY+88,180*(confidence/100),8);
+  ctx.fillStyle='#1a1a2e'; ctx.fillRect(rightX,statsY+88,_statBarW,Math.round(8*ui));
+  ctx.fillStyle='#42d9ff'; ctx.fillRect(rightX,statsY+88,_statBarW*(confidence/100),Math.round(8*ui));
 
   ctx.font=`bold ${Math.round(11*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
   ctx.fillText(T('h_case_posture'),rightX,statsY+122);
@@ -19450,63 +19521,92 @@ function drawBriefing(dt){
   const alpha=Math.min(1,briefingT/0.5);
   ctx.save(); ctx.globalAlpha=alpha; ctx.textAlign='center';
 
-  // Wanted poster background — BIGGER
-  const _brW=Math.round(740*ui),_brH=Math.round(520*ui);
+  // Wanted poster background — scales with UI
+  const _brW=Math.min(LW-40, Math.round(740*ui));
+  const _brPad=Math.round(40*ui);
+  const _brL=LW/2-_brW/2+_brPad, _brR=LW/2+_brW/2-_brPad;
+  const _brInW=_brW-_brPad*2;   // usable content width
+
+  // Pre-calculate briefing text lines to size panel dynamically
+  ctx.font=huntFont(13);
+  const briefLines=wrapTextPx(adv.brief,_brInW);
+  const _lnH=Math.max(17, Math.round(20*ui));              // line height scaled
+  const _hdrBlock =Math.round(150*ui);                     // name / aka / nation block
+  const _detBlock =Math.round(148*ui);                     // 4 detail rows × 37px each
+  const _briefH   =briefLines.length*_lnH;
+  const _phaseH   =adv.phaseNames?Math.round(46*ui):0;
+  const _footH    =Math.round(90*ui);                      // open with / impact / flash
+  const _panelPad =Math.round(24*ui);                      // top + bottom padding
+  const _brH=Math.max(Math.round(400*ui), _panelPad+_hdrBlock+_detBlock+_briefH+_phaseH+_footH+_panelPad);
+  const _pt=LH/2-_brH/2;  // panel top
+
   ctx.fillStyle='rgba(4,1,18,0.68)'; ctx.strokeStyle=adv.color; ctx.lineWidth=2.5;
   ctx.shadowColor=adv.color; ctx.shadowBlur=28;
-  ctx.beginPath(); ctx.roundRect(LW/2-_brW/2,LH/2-_brH/2,_brW,_brH,8); ctx.fill(); ctx.stroke(); ctx.shadowBlur=0;
+  ctx.beginPath(); ctx.roundRect(LW/2-_brW/2,_pt,_brW,_brH,8); ctx.fill(); ctx.stroke(); ctx.shadowBlur=0;
 
-  // WANTED header
-  ctx.fillStyle=adv.color+'28'; ctx.fillRect(LW/2-_brW/2,LH/2-_brH/2,_brW,52);
-  ctx.font=huntFont(14,'bold'); ctx.fillStyle='#7f8b96'; ctx.fillText(T('h_brief_header'),LW/2,LH/2-_brH/2+34);
+  // WANTED header band
+  const _hdrBandH=Math.round(48*ui);
+  ctx.fillStyle=adv.color+'28'; ctx.fillRect(LW/2-_brW/2,_pt,_brW,_hdrBandH);
+  ctx.font=huntFont(14,'bold'); ctx.fillStyle='#7f8b96';
+  ctx.fillText(T('h_brief_header'),LW/2,_pt+Math.round(_hdrBandH*0.72));
 
+  // Adversary name / aka / nation
+  const _nameY=_pt+_hdrBandH+Math.round(42*ui);
   ctx.font=huntFont(42,'bold'); ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=26;
-  ctx.fillText(adv.name,LW/2,LH/2-_brH/2+96); ctx.shadowBlur=0;
-  ctx.font=huntFont(14,'bold'); ctx.fillStyle='#7f8b96'; ctx.fillText(adv.aka,LW/2,LH/2-_brH/2+120);
+  ctx.fillText(adv.name,LW/2,_nameY); ctx.shadowBlur=0;
+  ctx.font=huntFont(14,'bold'); ctx.fillStyle='#7f8b96'; ctx.fillText(adv.aka,LW/2,_nameY+Math.round(26*ui));
   ctx.font=huntFont(12,'bold'); ctx.fillStyle=adv.nation.includes('Russia')?'#FF1744':adv.nation.includes('China')?'#FF8D39':adv.nation.includes('Korea')?'#FFD700':'#4488FF';
-  ctx.fillText(adv.nation,LW/2,LH/2-_brH/2+142);
+  ctx.fillText(adv.nation,LW/2,_nameY+Math.round(48*ui));
 
+  // Divider
+  const _div1Y=_pt+_hdrBandH+_hdrBlock;
   ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1;
-  const _brL=LW/2-_brW/2+40, _brR=LW/2+_brW/2-40;
-  ctx.beginPath(); ctx.moveTo(_brL,LH/2-_brH/2+156); ctx.lineTo(_brR,LH/2-_brH/2+156); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(_brL,_div1Y); ctx.lineTo(_brR,_div1Y); ctx.stroke();
 
-  // Case details — bigger fonts
+  // Case detail rows — 4 rows with scaled spacing
+  const _detRowH=Math.max(24, Math.round(37*ui));
+  const _detStartY=_div1Y+Math.round(10*ui);
   const details=[[T('h_label_case'),adv.caseTitle],[T('h_label_threat'),huntThreatLabel(adv.threat)],[T('h_label_target'),adv.target],[T('h_label_counter'),adv.counterModule]];
   details.forEach(([k,v],i)=>{
-    ctx.font=huntFont(12,'bold'); ctx.fillStyle='#555'; ctx.textAlign='left'; ctx.fillText(k,_brL,LH/2-_brH/2+180+i*28);
-    ctx.fillStyle=i===1?(adv.threat==='CRITICAL'?'#FF1744':'#FF8D39'):'#d5dde5'; ctx.fillText(v,_brL+100,LH/2-_brH/2+180+i*28);
+    const ry=_detStartY+i*_detRowH+Math.round(_detRowH*0.72);
+    ctx.font=huntFont(12,'bold'); ctx.fillStyle='#555'; ctx.textAlign='left'; ctx.fillText(k,_brL,ry);
+    ctx.fillStyle=i===1?(adv.threat==='CRITICAL'?'#FF1744':'#FF8D39'):'#d5dde5'; ctx.fillText(v,_brL+Math.round(100*ui),ry,_brInW-Math.round(104*ui));
   });
 
+  // Divider
+  const _div2Y=_detStartY+4*_detRowH+Math.round(6*ui);
   ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(_brL,LH/2-_brH/2+296); ctx.lineTo(_brR,LH/2-_brH/2+296); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(_brL,_div2Y); ctx.lineTo(_brR,_div2Y); ctx.stroke();
 
-  // Briefing text — bigger
+  // Briefing text — scaled line height
   ctx.font=huntFont(13); ctx.fillStyle='#d5dde5'; ctx.textAlign='center';
-  const briefLines=wrapTextPx(adv.brief,_brW-100); let ly=LH/2-_brH/2+320;
-  briefLines.forEach(l=>{ctx.fillText(l,LW/2,ly);ly+=20;});
+  let ly=_div2Y+Math.round(22*ui);
+  briefLines.forEach(l=>{ctx.fillText(l,LW/2,ly,_brInW);ly+=_lnH;});
 
-  // Phase roadmap — shows the 3 operation phases as a cinematic preview
+  // Phase roadmap
   if(adv.phaseNames){
     const pCols=['#39FF14','#FFE600','#FF1744'];
+    const _pColW=Math.round(160*ui);
+    const _pTotalW=_pColW*3;
     ctx.font=huntFont(9,'bold'); ctx.fillStyle='#3a3a5a'; ctx.textAlign='center';
-    ctx.fillText('\u25A0\u25A0\u25A0 OPERATION PHASES \u25A0\u25A0\u25A0',LW/2,ly+14);
+    ctx.fillText('\u25A0\u25A0\u25A0 OPERATION PHASES \u25A0\u25A0\u25A0',LW/2,ly+Math.round(14*ui));
     adv.phaseNames.forEach((pn,pi)=>{
       ctx.font=huntFont(10,'bold'); ctx.fillStyle=pCols[pi]; ctx.shadowColor=pCols[pi]; ctx.shadowBlur=5;
-      ctx.fillText('\u25C8 '+('0'+(pi+1)).slice(-2)+' '+pn, LW/2-180+pi*180, ly+30);
+      ctx.fillText('\u25C8 '+('0'+(pi+1)).slice(-2)+' '+pn, LW/2-_pTotalW/2+pi*_pColW+_pColW/2, ly+Math.round(30*ui));
     });
     ctx.shadowBlur=0;
-    ly+=34;
+    ly+=Math.round(46*ui);
   }
 
   ctx.font=huntFont(12,'bold'); ctx.fillStyle='#AA00FF';
-  ctx.fillText(`${T('h_brief_open')}: ${huntLens.label}`,LW/2,ly+26);
+  ctx.fillText(`${T('h_brief_open')}: ${huntLens.label}`,LW/2,ly+Math.round(22*ui));
   ctx.font=huntFont(11); ctx.fillStyle='#7f8b96';
-  ctx.fillText(huntLens.desc,LW/2,ly+46);
+  ctx.fillText(huntLens.desc,LW/2,ly+Math.round(40*ui),_brInW);
   ctx.font=huntFont(11,'bold'); ctx.fillStyle='#42d9ff';
-  ctx.fillText(`${T('h_brief_impact')}: ${adv.counterModule}`,LW/2,ly+66);
+  ctx.fillText(`${T('h_brief_impact')}: ${adv.counterModule}`,LW/2,ly+Math.round(58*ui));
 
   if(briefingT>1.5&&Math.floor(briefingT*3)%2===0){
-    ctx.font=huntFont(16,'bold'); ctx.fillStyle='#fff'; ctx.fillText(T('g_begin_hunt'),LW/2,LH/2+_brH/2-22);
+    ctx.font=huntFont(16,'bold'); ctx.fillStyle='#fff'; ctx.fillText(T('g_begin_hunt'),LW/2,_pt+_brH-Math.round(20*ui));
   }
   ctx.restore(); ctx.textAlign='left';
 }
