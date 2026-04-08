@@ -1577,11 +1577,11 @@ const TRANSLATIONS = {
     h_label_threat:'THREAT:',
     h_label_target:'TARGET:',
     h_label_counter:'COUNTER:',
-    h_intercept_line:'EVICTED FROM ALL NETWORKS',
-    h_intercept_module_line:'was decisive in this engagement.',
+    h_intercept_line:'OPERATOR EVICTED — ALL NETWORKS SECURED',
+    h_intercept_module_line:'was the decisive capability in this engagement.',
     h_rank_label:'RANK',
-    h_breach_line1:'The adversary reached the objective before your pursuit closed.',
-    h_breach_line2:'Use the recommended hunt lens earlier, collect more evidence, and lock the next move faster.',
+    h_breach_line1:'The adversary completed their operation. The objective fell before your pursuit closed.',
+    h_breach_line2:'Deploy the recommended module earlier. Collect all evidence before deduction. The adversary waited months — your window was minutes.',
     h_breach_retry:'[ SPACE ] new case   [ R ] retry same case   [ ESC ] mission select',
     h_module_pursuit_bonus:'+10% pursuit',
     g_hunt_module_hint:'Deploy once per investigation. Each module reveals a different kind of lead and gives +10% pursuit.',
@@ -1630,7 +1630,7 @@ const TRANSLATIONS = {
     def_wave_score:'WAVE SCORE',
     def_breach_score:'BREACH PREVENTION SCORE',
     def_breach_prevented:'🦅 BREACH PREVENTED',
-    def_adv_persist:'ADVERSARY ACHIEVED PERSISTENCE',
+    def_adv_persist:'BREACH COMPLETE — ADVERSARY ACHIEVED PERSISTENCE',
     def_new_record:'✨ NEW RECORD — ELITE ANALYST',
     def_record:'RECORD',
     def_redeploy:'[ R ]  REDEPLOY',
@@ -1642,9 +1642,9 @@ const TRANSLATIONS = {
     def_boss_incoming:'INCOMING!',
     def_high_threat:'HIGH-PRIORITY THREAT — CROWDSTRIKE RESPONDING',
     def_falcon_deployed:'FALCON DEPLOYED — DEFEND THE NETWORK',
-    def_neutralized:'All adversaries neutralized. Network secured.',
-    def_falcon_breadth:'Falcon delivered visibility, detection and response',
-    def_falcon_breadth2:'across every endpoint, identity and cloud workload.',
+    def_neutralized:'10 named adversaries. 10 real threats. All stopped. The network held.',
+    def_falcon_breadth:'CrowdStrike Falcon unified endpoint, identity, cloud, and data —',
+    def_falcon_breadth2:'one platform, one adversary graph, one team that stops breaches.',
     fc_incoming_transmission:'INCOMING TRANSMISSION — CROWDSTRIKE SOC OPS',
     fc_falcon_complete:'🦅 FALCON COMPLETE', fc_falcon_complete_active:'🦅 FALCON COMPLETE — ACTIVE',
     fc_mdr_boss:'MANAGED DETECTION & RESPONSE — DIRECT ENGAGEMENT',
@@ -1768,8 +1768,8 @@ const TRANSLATIONS = {
     iz_comms_dlp:'DLP: Exfil boats reversed. Data protection active. +80 pts per intercept.',
     iz_comms_pam:'JIT ACCESS: 6s full immunity. Zero standing privileges enforced. Gate cannons destroyed.',
     iz_banner_pam:'PAM SHIELD ACTIVE — 6 seconds invulnerability',
-    iz_comms_schtasks:'SCHTASKS: Scheduled task re-registered — persistence active',
-    iz_comms_bits:'BITS transfer intercepted — payload recovered',
+    iz_comms_schtasks:'OVERWATCH: schtasks.exe re-registered — adversary persistence survived first kill. OverWatch on it.',
+    iz_comms_bits:'OVERWATCH: bitsAdmin.exe LOLBin intercepted — covert BITS transfer blocked, payload recovered',
     iz_banner_objective_complete:'OBJECTIVE COMPLETE: {objective}',
     iz_banner_telemetry_full:'TELEMETRY FULLY RECHARGED',
     iz_banner_scan_pulse:'SCAN PULSE — all threats revealed',
@@ -1784,6 +1784,14 @@ const TRANSLATIONS = {
     iz_comms_fuel_critical:'FUEL CRITICAL — emergency supply barge deployed',
     iz_banner_data_exfil:'DATA EXFILTRATED — −280 pts',
     h_radio_feed:'CROWDSTRIKE INTEL FEED',
+    g_incident_report_title:'🦅  CROWDSTRIKE INCIDENT REPORT',
+    g_ally_label:'ALLY',
+    g_threats_eliminated:'✅  THREATS ELIMINATED — OVERWATCH STANDS DOWN',
+    g_overwatch_stands_down:'✅  THREATS ELIMINATED — OVERWATCH STANDS DOWN',
+    g_crowdstrike_tagline:'🦅  crowdstrike.com  |  We Stop Breaches — Guaranteed.',
+    g_crowdstrike_tagline_short:'🦅  crowdstrike.com  |  We Stop Breaches',
+    g_apt_label:'⚠APT',
+    g_falcon_defense_title:'🦅  FALCON ARCADE DEFENSE',
     g_hunt_type_credential:'CREDENTIAL',
     g_hunt_type_malware:'MALWARE',
     g_hunt_type_network:'NETWORK',
@@ -2055,11 +2063,11 @@ const TRANSLATIONS = {
     h_label_threat:'AMEAÇA:',
     h_label_target:'ALVO:',
     h_label_counter:'RESPOSTA:',
-    h_intercept_line:'EXPULSO DE TODAS AS REDES',
+    h_intercept_line:'OPERADOR EXPULSO — TODAS AS REDES PROTEGIDAS',
     h_intercept_module_line:'foi decisivo neste confronto.',
     h_rank_label:'RANKING',
-    h_breach_line1:'O adversário alcançou o objetivo antes de sua perseguição fechar o cerco.',
-    h_breach_line2:'Use a lente recomendada mais cedo, colete mais evidências e trave o próximo movimento mais rápido.',
+    h_breach_line1:'O adversário concluiu a operação. O objetivo caiu antes de sua perseguição ser fechada.',
+    h_breach_line2:'Implante o módulo recomendado mais cedo. Colete todas as evidências antes da dedução. O adversário esperou meses — sua janela eram minutos.',
     h_breach_retry:'[ ESPAÇO ] novo caso   [ R ] repetir mesmo caso   [ ESC ] selecionar missão',
     h_module_pursuit_bonus:'+10% perseguição',
     g_hunt_module_hint:'Implante uma vez por investigação. Cada módulo revela um tipo de pista e concede +10% de perseguição.',
@@ -2107,7 +2115,7 @@ const TRANSLATIONS = {
     def_wave_score:'PONTUAÇÃO DA ONDA',
     def_breach_score:'PONTUAÇÃO DE PREVENÇÃO DE VIOLAÇÃO',
     def_breach_prevented:'🦅 VIOLAÇÃO IMPEDIDA',
-    def_adv_persist:'ADVERSÁRIO ESTABELECEU PERSISTÊNCIA',
+    def_adv_persist:'VIOLAÇÃO COMPLETA — ADVERSÁRIO ESTABELECEU PERSISTÊNCIA',
     def_new_record:'✨ NOVO RECORDE — ANALISTA ELITE',
     def_record:'RECORDE',
     def_redeploy:'[ R ]  REIMPLANTAR',
@@ -2119,9 +2127,9 @@ const TRANSLATIONS = {
     def_boss_incoming:'CHEGANDO!',
     def_high_threat:'AMEAÇA CRÍTICA — CROWDSTRIKE RESPONDENDO',
     def_falcon_deployed:'FALCON IMPLANTADO — DEFENDER A REDE',
-    def_neutralized:'Todos os adversários neutralizados. Rede protegida.',
-    def_falcon_breadth:'O Falcon entregou visibilidade, detecção e resposta',
-    def_falcon_breadth2:'em cada endpoint, identidade e carga de trabalho na nuvem.',
+    def_neutralized:'10 adversários reais. 10 ameaças reais. Todos detidos. A rede resistiu.',
+    def_falcon_breadth:'O CrowdStrike Falcon unificou endpoint, identidade, cloud e dados —',
+    def_falcon_breadth2:'uma plataforma, um grafo de adversários, uma equipe que impede violações.',
     fc_incoming_transmission:'TRANSMISSÃO RECEBIDA — CROWDSTRIKE SOC OPS',
     fc_falcon_complete:'🦅 FALCON COMPLETE', fc_falcon_complete_active:'🦅 FALCON COMPLETE — ATIVO',
     fc_mdr_boss:'DETECÇÃO E RESPOSTA GERENCIADA — ENGAJAMENTO DIRETO',
@@ -2244,8 +2252,8 @@ const TRANSLATIONS = {
     iz_comms_dlp:'DLP: barcos de exfiltração revertidos. Proteção de dados ativa. +80 pts por interceptação.',
     iz_comms_pam:'PAM SHIELD: 6 s de imunidade total. Canhões de portão e relés internos destruídos.',
     iz_banner_pam:'PAM SHIELD ATIVO — 6 segundos de invulnerabilidade',
-    iz_comms_schtasks:'SCHTASKS: tarefa agendada registrada novamente — persistência ativa',
-    iz_comms_bits:'Transferência BITS interceptada — payload recuperado',
+    iz_comms_schtasks:'OVERWATCH: schtasks.exe re-registrado — persistência do adversário sobreviveu ao primeiro neutralização. OverWatch ativo.',
+    iz_comms_bits:'OVERWATCH: LOLBin bitsAdmin.exe interceptado — transferência BITS bloqueada, payload recuperado',
     iz_banner_objective_complete:'OBJETIVO CONCLUÍDO: {objective}',
     iz_banner_telemetry_full:'TELEMETRIA TOTALMENTE RECARREGADA',
     iz_banner_scan_pulse:'PULSO DE VARREDURA — todas as ameaças reveladas',
@@ -2260,6 +2268,14 @@ const TRANSLATIONS = {
     iz_comms_fuel_critical:'COMBUSTÍVEL CRÍTICO — barcaça de suprimento emergencial implantada',
     iz_banner_data_exfil:'DADOS EXFILTRADOS — −280 pts',
     h_radio_feed:'FEED DE INTEL CROWDSTRIKE',
+    g_incident_report_title:'🦅  RELATÓRIO DE INCIDENTE CROWDSTRIKE',
+    g_ally_label:'ALIADO',
+    g_threats_eliminated:'✅  AMEAÇAS ELIMINADAS — OVERWATCH ENCERRA OPERAÇÃO',
+    g_overwatch_stands_down:'✅  AMEAÇAS ELIMINADAS — OVERWATCH ENCERRA OPERAÇÃO',
+    g_crowdstrike_tagline:'🦅  crowdstrike.com  |  Paramos Violações — Garantido.',
+    g_crowdstrike_tagline_short:'🦅  crowdstrike.com  |  Paramos Violações',
+    g_apt_label:'⚠APT',
+    g_falcon_defense_title:'🦅  FALCON ARCADE DEFESA',
     g_hunt_type_credential:'CREDENCIAL',
     g_hunt_type_malware:'MALWARE',
     g_hunt_type_network:'REDE',
@@ -2531,11 +2547,11 @@ const TRANSLATIONS = {
     h_label_threat:'AMENAZA:',
     h_label_target:'OBJETIVO:',
     h_label_counter:'RESPUESTA:',
-    h_intercept_line:'EXPULSADO DE TODAS LAS REDES',
+    h_intercept_line:'OPERADOR EXPULSADO — TODAS LAS REDES ASEGURADAS',
     h_intercept_module_line:'fue decisivo en este enfrentamiento.',
     h_rank_label:'RANGO',
-    h_breach_line1:'El adversario alcanzó el objetivo antes de que tu persecución cerrara la brecha.',
-    h_breach_line2:'Usa la lente recomendada antes, reúne más evidencia y fija el siguiente movimiento con mayor rapidez.',
+    h_breach_line1:'El adversario completó su operación. El objetivo cayó antes de que tu persecución cerrara el cerco.',
+    h_breach_line2:'Despliega el módulo recomendado antes. Reúne todas las evidencias antes de deducir. El adversario esperó meses — tu ventana eran minutos.',
     h_breach_retry:'[ ESPACIO ] nuevo caso   [ R ] repetir caso   [ ESC ] selección de misión',
     h_module_pursuit_bonus:'+10% persecución',
     g_hunt_module_hint:'Despliega una vez por investigación. Cada módulo revela un tipo distinto de pista y da +10% de persecución.',
@@ -2583,7 +2599,7 @@ const TRANSLATIONS = {
     def_wave_score:'PUNTUACIÓN DE OLA',
     def_breach_score:'PUNTUACIÓN DE PREVENCIÓN DE BRECHAS',
     def_breach_prevented:'🦅 BRECHA PREVENIDA',
-    def_adv_persist:'EL ADVERSARIO LOGRÓ PERSISTENCIA',
+    def_adv_persist:'BRECHA COMPLETA — EL ADVERSARIO LOGRÓ PERSISTENCIA',
     def_new_record:'✨ NUEVO RÉCORD — ANALISTA ÉLITE',
     def_record:'RÉCORD',
     def_redeploy:'[ R ]  VOLVER A DESPLEGAR',
@@ -2595,9 +2611,9 @@ const TRANSLATIONS = {
     def_boss_incoming:'¡EN CAMINO!',
     def_high_threat:'AMENAZA CRÍTICA — CROWDSTRIKE RESPONDIENDO',
     def_falcon_deployed:'FALCON DESPLEGADO — DEFENDER LA RED',
-    def_neutralized:'Todos los adversarios neutralizados. Red asegurada.',
-    def_falcon_breadth:'Falcon entregó visibilidad, detección y respuesta',
-    def_falcon_breadth2:'en cada endpoint, identidad y carga de trabajo en la nube.',
+    def_neutralized:'10 adversarios reales. 10 amenazas reales. Todos detenidos. La red resistió.',
+    def_falcon_breadth:'CrowdStrike Falcon unificó endpoint, identidad, nube y datos —',
+    def_falcon_breadth2:'una plataforma, un grafo de adversarios, un equipo que detiene brechas.',
     fc_incoming_transmission:'TRANSMISIÓN ENTRANTE — CROWDSTRIKE SOC OPS',
     fc_falcon_complete:'🦅 FALCON COMPLETE', fc_falcon_complete_active:'🦅 FALCON COMPLETE — ACTIVO',
     fc_mdr_boss:'DETECCIÓN Y RESPUESTA GESTIONADA — COMPROMISO DIRECTO',
@@ -2720,8 +2736,8 @@ const TRANSLATIONS = {
     iz_comms_dlp:'DLP: barcas de exfiltración invertidas. Protección de datos activa. +80 pts por interceptación.',
     iz_comms_pam:'PAM SHIELD: 6 s de inmunidad total. Cañones de puerta y relés internos destruidos.',
     iz_banner_pam:'PAM SHIELD ACTIVO — 6 segundos de invulnerabilidad',
-    iz_comms_schtasks:'SCHTASKS: tarea programada registrada otra vez — persistencia activa',
-    iz_comms_bits:'Transferencia BITS interceptada — payload recuperado',
+    iz_comms_schtasks:'OVERWATCH: schtasks.exe re-registrado — persistencia del adversario sobrevivió al primer neutralización. OverWatch activo.',
+    iz_comms_bits:'OVERWATCH: LOLBin bitsAdmin.exe interceptado — transferencia BITS bloqueada, payload recuperado',
     iz_banner_objective_complete:'OBJETIVO COMPLETADO: {objective}',
     iz_banner_telemetry_full:'TELEMETRÍA COMPLETAMENTE RECARGADA',
     iz_banner_scan_pulse:'PULSO DE ESCANEO — todas las amenazas reveladas',
@@ -2736,6 +2752,14 @@ const TRANSLATIONS = {
     iz_comms_fuel_critical:'COMBUSTIBLE CRÍTICO — barcaza de suministro de emergencia desplegada',
     iz_banner_data_exfil:'DATOS EXFILTRADOS — −280 pts',
     h_radio_feed:'FEED DE INTEL CROWDSTRIKE',
+    g_incident_report_title:'🦅  INFORME DE INCIDENTE CROWDSTRIKE',
+    g_ally_label:'ALIADO',
+    g_threats_eliminated:'✅  AMENAZAS ELIMINADAS — OVERWATCH SE RETIRA',
+    g_overwatch_stands_down:'✅  AMENAZAS ELIMINADAS — OVERWATCH SE RETIRA',
+    g_crowdstrike_tagline:'🦅  crowdstrike.com  |  Detenemos Brechas — Garantizado.',
+    g_crowdstrike_tagline_short:'🦅  crowdstrike.com  |  Detenemos Brechas',
+    g_apt_label:'⚠APT',
+    g_falcon_defense_title:'🦅  FALCON ARCADE DEFENSA',
     g_hunt_type_credential:'CREDENCIAL',
     g_hunt_type_malware:'MALWARE',
     g_hunt_type_network:'RED',
@@ -3007,11 +3031,11 @@ const TRANSLATIONS = {
     h_label_threat:'脅威:',
     h_label_target:'標的:',
     h_label_counter:'対抗策:',
-    h_intercept_line:'すべてのネットワークから排除完了',
+    h_intercept_line:'オペレーター排除完了 — 全ネットワーク確保',
     h_intercept_module_line:'がこの対処で決定打となりました。',
     h_rank_label:'ランク',
-    h_breach_line1:'追跡が詰め切る前に、敵対者が目的地へ到達しました。',
-    h_breach_line2:'推奨レンズを早めに使い、証拠を多く集め、次の動きをより早く特定してください。',
+    h_breach_line1:'敵対者が作戦を完了しました。追跡が間に合う前に目標が陥落しました。',
+    h_breach_line2:'推奨モジュールをより早く展開してください。演繹前に全証拠を収集してください。敵は数ヶ月待った — あなたの窓は数分でした。',
     h_module_pursuit_bonus:'+10% 追跡',
     h_breach_retry:'[ スペース ] 新しいケース   [ R ] 同じケース再試行   [ ESC ] ミッション選択',
     g_hunt_module_hint:'各調査で一度だけ展開できます。モジュールごとに異なる手がかりを明らかにし、追跡率が+10%上がります。',
@@ -3059,7 +3083,7 @@ const TRANSLATIONS = {
     def_wave_score:'ウェーブスコア',
     def_breach_score:'侵害防止スコア',
     def_breach_prevented:'🦅 侵害を阻止しました',
-    def_adv_persist:'敵対者が持続性を確立しました',
+    def_adv_persist:'侵害完了 — 敵対者が永続性を確立しました',
     def_new_record:'✨ 新記録 — エリートアナリスト',
     def_record:'記録',
     def_redeploy:'[ R ]   再展開',
@@ -3071,9 +3095,9 @@ const TRANSLATIONS = {
     def_boss_incoming:'接近中！',
     def_high_threat:'最優先脅威 — CrowdStrike対応中',
     def_falcon_deployed:'FALCON展開済み — ネットワークを防衛',
-    def_neutralized:'全ての敵対者を無力化しました。ネットワークは安全です。',
-    def_falcon_breadth:'Falconはすべてのエンドポイント、ID、クラウドワークロードにわたって',
-    def_falcon_breadth2:'可視性、検知、対応を提供しました。',
+    def_neutralized:'10の実在する敵対者。10の実際の脅威。全て阻止。ネットワークは持ちこたえた。',
+    def_falcon_breadth:'CrowdStrike Falconはエンドポイント、ID、クラウド、データを統合 —',
+    def_falcon_breadth2:'1つのプラットフォーム、1つの敵対者グラフ、侵害を止めるチーム。',
     fc_incoming_transmission:'着信送信 — CROWDSTRIKE SOC OPS',
     fc_falcon_complete:'🦅 FALCON COMPLETE', fc_falcon_complete_active:'🦅 FALCON COMPLETE — 稼働中',
     fc_mdr_boss:'マネージド検知＆対応 — 直接対峙',
@@ -3196,8 +3220,8 @@ const TRANSLATIONS = {
     iz_comms_dlp:'DLP: 送出ボートを逆走。データ保護が有効。迎撃ごとに +80 pts。',
     iz_comms_pam:'PAM SHIELD: 6秒間完全無敵。ゲート砲台と内部リレーを破壊。',
     iz_banner_pam:'PAM SHIELD 起動 — 6秒間無敵',
-    iz_comms_schtasks:'SCHTASKS: スケジュールタスクが再登録 — 永続化が有効',
-    iz_comms_bits:'BITS 転送を阻止 — ペイロードを回収',
+    iz_comms_schtasks:'OVERWATCH: schtasks.exe 再登録 — 敵の永続化が最初の排除を生き残った。OverWatch 追跡中。',
+    iz_comms_bits:'OVERWATCH: bitsAdmin.exe LOLBin を阻止 — 秘密のBITS転送をブロック、ペイロードを回収',
     iz_banner_objective_complete:'目標達成: {objective}',
     iz_banner_telemetry_full:'テレメトリ完全回復',
     iz_banner_scan_pulse:'スキャンパルス — 全脅威を可視化',
@@ -3212,6 +3236,14 @@ const TRANSLATIONS = {
     iz_comms_fuel_critical:'燃料危機 — 緊急補給バージを展開',
     iz_banner_data_exfil:'データ流出 — −280 pts',
     h_radio_feed:'CROWDSTRIKE インテルフィード',
+    g_incident_report_title:'🦅  CROWDSTRIKEインシデントレポート',
+    g_ally_label:'味方',
+    g_threats_eliminated:'✅  脅威排除 — OVERWATCHが撤退',
+    g_overwatch_stands_down:'✅  脅威排除 — OVERWATCHが撤退',
+    g_crowdstrike_tagline:'🦅  crowdstrike.com  |  侵害を阻止 — 保証付き',
+    g_crowdstrike_tagline_short:'🦅  crowdstrike.com  |  侵害を阻止',
+    g_apt_label:'⚠APT',
+    g_falcon_defense_title:'🦅  FALCONアーケードディフェンス',
     g_hunt_type_credential:'認証',
     g_hunt_type_malware:'マルウェア',
     g_hunt_type_network:'ネットワーク',
@@ -3328,7 +3360,7 @@ const MISSION_BRIEF_COPY = Object.freeze({
       defense: {
         color:'#ff8d39',
         eyebrow:'Operation 02 · Wave Defense',
-        title:'Falcon Arcade Defesa',
+        title:'Falcon Arcade Defense',
         subtitle:'Named adversaries stack pressure wave by wave. Your job is to hold the network long enough for Falcon breadth to take over the board.',
         scenes:[
           { pill:'Hold', title:'Hold the line', body:'Defend the perimeter through ten escalating waves. Enemy behaviors stack, corrupted assets fire back, and each boss forces a sharper module decision.' },
@@ -3350,7 +3382,7 @@ const MISSION_BRIEF_COPY = Object.freeze({
       hunt: {
         color:'#AA00FF',
         eyebrow:'Operation 03 · Global Network Hunt',
-        title:'Falcon: Caça a Ameaças',
+        title:'Falcon: Threat Hunt',
         subtitle:'This is the pursuit operation: gather evidence, read the route, and cut off the operator before the breach sequence completes.',
         scenes:[
           { pill:'Track', title:'Track the operator', body:'Chase named adversaries across a live world map. Each case gives you a brief, target profile, clue trail, and one best Falcon lens for the hunt.' },
@@ -5867,6 +5899,21 @@ document.addEventListener('DOMContentLoaded', () => {
   requestAnimationFrame(frame);
 })();
 
+// ── Global utility: pixel-based text wrapping (used by IZ, Defense, Hunt) ──
+// Defined here so all three deferred game scripts can call it regardless
+// of which game was launched first.
+function wrapTextPx(ctx, text, maxW){
+  const words=String(text||'').split(' ');
+  const lines=[]; let line='';
+  for(const w of words){
+    const test=(line?line+' ':'')+w;
+    if(ctx.measureText(test).width>maxW && line){lines.push(line);line=w;}
+    else line=test;
+  }
+  if(line) lines.push(line);
+  return lines;
+}
+
 </script>
 
 <!-- ═══ INCIDENT ZERO (deferred init) ═══ -->
@@ -7156,6 +7203,7 @@ function _dest(){ return _masterGain||(AC(),_masterGain); }
 
 function beep(f,d=0.08,type='square',g=0.055,sl=null){
   if(MUTED) return;
+  if (_activeGameId !== 'zero') return;
   try{
     const ac=AC(),o=ac.createOscillator(),gn=ac.createGain();
     o.type=type; o.frequency.setValueAtTime(f,ac.currentTime);
@@ -7167,6 +7215,7 @@ function beep(f,d=0.08,type='square',g=0.055,sl=null){
 }
 function noise(d=0.15,g=0.10,lpf=4000){
   if(MUTED) return;
+  if (_activeGameId !== 'zero') return;
   try{
     const ac=AC();
     // ARCH: renamed local 'sr' → 'sampleRate' — same fix as _buildReverbImpulse
@@ -7185,6 +7234,7 @@ function noise(d=0.15,g=0.10,lpf=4000){
 }
 function phrase(notes,baseTime=0){
   if(MUTED) return;
+  if (_activeGameId !== 'zero') return;
   const ac=AC(); let t=ac.currentTime+0.02+baseTime;
   for(const n of notes){
     const o=ac.createOscillator(),gn=ac.createGain();
@@ -7198,6 +7248,7 @@ function phrase(notes,baseTime=0){
 let _bossOsc=null,_bossGain=null,_bossLFO=null;
 function startBossMusic(){
   if(MUTED||!_masterGain) return;
+  if (_activeGameId !== 'zero') return;
   stopBossMusic();
   try{
     const ac=AC();
@@ -7213,6 +7264,7 @@ function startBossMusic(){
   }catch(_){}
 }
 function stopBossMusic(){
+  if (_activeGameId !== 'zero') return;
   try{ if(_bossOsc){_bossOsc.stop();_bossOsc=null;}
        if(_bossLFO){_bossLFO.stop();_bossLFO=null;} }catch(_){}
 }
@@ -7509,7 +7561,7 @@ function drawWingmen(){
     CX.fillStyle=`rgba(232,200,255,${pulse})`; CX.beginPath(); CX.arc(0,-2,2,0,TAU); CX.fill();
     CX.strokeStyle='rgba(255,255,255,0.18)'; CX.lineWidth=1;
     CX.beginPath(); CX.moveTo(0,-18); CX.lineTo(7,-5); CX.lineTo(9,9); CX.lineTo(4,12); CX.lineTo(0,9); CX.lineTo(-4,12); CX.lineTo(-9,9); CX.lineTo(-7,-5); CX.closePath(); CX.stroke();
-    CX.fillStyle='rgba(232,200,255,0.82)'; CX.font='bold 7px monospace'; CX.textAlign='center';
+    CX.fillStyle='rgba(232,200,255,0.82)'; CX.font='bold 9px monospace'; CX.textAlign='center';
     CX.fillText('AI',0,-22); CX.textAlign='left'; CX.restore();
   }
 }
@@ -7594,7 +7646,7 @@ function drawExposureRadar(){
     if(ping.fresh){
       CX.fillStyle='rgba(0,0,0,0.78)'; CX.fillRect(e.x-36,sy-bh/2-26,72,18);
       CX.strokeStyle='#ff9a48'; CX.lineWidth=1; CX.strokeRect(e.x-36,sy-bh/2-26,72,18);
-      CX.fillStyle='#ff9a48'; CX.font='bold 8px monospace'; CX.textAlign='center';
+      CX.fillStyle='#ff9a48'; CX.font='bold 9px monospace'; CX.textAlign='center';
       CX.fillText(e.type.toUpperCase()+' HP:'+e.hp,e.x,sy-bh/2-13);
     }
     CX.restore();
@@ -7851,10 +7903,11 @@ const PHASES=[
       {text:'Destroy 4 comms relays',type:'groundKills',target:4,current:0,done:false},
     ],
     narrative:[
-      {t:6, msg:'SIGINT: FANCY BEAR establishing X-Agent C2 in corridor',col:'#e03030'},
-      {t:16,msg:'INTEL: Stolen NATO contractor cert detected in traffic',col:'#ff8d39'},
-      {t:28,msg:'OVERWATCH: LOLBin execution on compromised endpoint',col:'#74ff88'},
-      {t:38,msg:'ALERT: GRU exfil node activated — 90 seconds to data loss',col:'#ff5a4d'},
+      {t:6, msg:'SIGINT: GRU Unit 26165 establishing X-Agent C2 — spear-phish deployed against NATO contractors',col:'#e03030'},
+      {t:16,msg:'INTEL: Stolen NATO contractor cert detected in outbound traffic — credential exfil imminent',col:'#ff8d39'},
+      {t:28,msg:'OVERWATCH: powershell.exe LOLBin — encoded payload executing on compromised endpoint. Hands-on-keyboard confirmed.',col:'#74ff88'},
+      {t:38,msg:'ALERT: GRU exfil node activated — XDR cross-domain correlation active — 90 seconds to data loss',col:'#ff5a4d'},
+      {t:44,msg:'XDR: X-Agent C2 channels severed across all endpoints — FANCY BEAR evicted from corridor',col:'#42d9ff'},
     ],
   },
   { id:1, key:'OPERATION PHANTOM HELPDESK', adversary:'SCATTERED SPIDER',
@@ -7867,14 +7920,14 @@ const PHASES=[
     air:['vishDrone','phishDrone'], river:['idSkiff','skiff'], land:['vishRelay','fuelDepot'], boss:'SCATTERED SPIDER',
     objectives:[
       {text:'Destroy 5 vishing relay towers',type:'groundKills',target:5,current:0,done:false},
-      {text:'Intercept 10 identity skiffs',type:'typeKills',target:10,current:0,done:false,eType:'idSkiff'},
+      {text:'Intercept 10 CredSkiff identity harvesters',type:'typeKills',target:10,current:0,done:false,eType:'idSkiff'},
     ],
     narrative:[
-      {t:5, msg:'SCATTERED SPIDER: "Hi, this is IT support — need to verify your account."',col:'#ff62ff'},
-      {t:14,msg:'IDENTITY ALERT: MFA reset from unrecognised ASN — Iowa region',col:'#ff5a4d'},
-      {t:22,msg:'SIM SWAP: Mobile carrier social-engineered, number ported',col:'#ff62ff'},
-      {t:34,msg:'COMMS: Three C-suite accounts compromised. Lateral movement active.',col:'#ffd84d'},
-      {t:42,msg:'IDENTITY PROTECTION: Impossible travel — credential reuse from 4 continents',col:'#74ff88'},
+      {t:5, msg:'SCATTERED SPIDER: "Hi, this is IT support — I need to verify your account." Pure vishing. No malware.',col:'#ff62ff'},
+      {t:14,msg:'IDENTITY ALERT: 47 MFA push notifications — victim approved on attempt 48. Fatigue attack succeeded.',col:'#ff5a4d'},
+      {t:22,msg:'SIM SWAP: Mobile carrier social-engineered — victim number ported to attacker device. MFA bypassed.',col:'#ff62ff'},
+      {t:34,msg:'IDENTITY: Three C-suite accounts compromised. Impossible travel — NYC, London, Tokyo simultaneously.',col:'#ffd84d'},
+      {t:42,msg:'ITDR: Behavioural baseline deviation flagged — identity anomaly detected before lateral movement completed',col:'#74ff88'},
     ],
   },
   { id:2, key:'OPERATION JADE PIPELINE', adversary:'WICKED PANDA',
@@ -7886,14 +7939,15 @@ const PHASES=[
     module:'Falcon Cloud Security', dur:50, speed:94,
     air:['supplyDrone','stealthJet'], river:['poisonBarge','skiff'], land:['supplyRelay','fuelDepot'], boss:'WICKED PANDA',
     objectives:[
-      {text:'Sink 3 poisoned supply barges',type:'typeKills',target:3,current:0,done:false,eType:'poisonBarge'},
+      {text:'Sink 3 PoisonBarge supply chain carriers',type:'typeKills',target:3,current:0,done:false,eType:'poisonBarge'},
       {text:'Destroy 5 software relay towers',type:'groundKills',target:5,current:0,done:false},
     ],
     narrative:[
-      {t:7, msg:'CLOUD ALERT: Unsigned build artifact in CI/CD pipeline',col:'#88ff55'},
-      {t:18,msg:'WICKED PANDA: PlugX variant in legitimate update — hash mismatch',col:'#ff8d39'},
-      {t:30,msg:'THREAT INTEL: 847 downstream organisations receiving compromised update',col:'#ff5a4d'},
-      {t:44,msg:'CLOUD SECURITY: Runtime process injection from updater binary detected',col:'#4ab6ff'},
+      {t:7, msg:'CLOUD ALERT: Unsigned build artifact in CI/CD pipeline — APT41 supply chain insertion confirmed',col:'#88ff55'},
+      {t:18,msg:'WICKED PANDA: PlugX variant embedded in legitimate software update — hash mismatch. 847 orgs at risk.',col:'#ff8d39'},
+      {t:30,msg:'INTEL: Trojanised update distributed. 847 downstream organisations now compromised simultaneously.',col:'#ff5a4d'},
+      {t:40,msg:'CLOUD SECURITY: Runtime process injection intercepted — bitsAdmin LOLBin staging payload post-install',col:'#4ab6ff'},
+      {t:50,msg:'CLOUD: Build pipeline integrity restored — wmiExec lateral movement chain terminated before propagation',col:'#88ff55'},
     ],
   },
   { id:3, key:'OPERATION SILENT OAUTH', adversary:'COZY BEAR',
@@ -7909,10 +7963,11 @@ const PHASES=[
       {text:'Intercept 15 token drones',type:'typeKills',target:15,current:0,done:false,eType:'tokenDrone'},
     ],
     narrative:[
-      {t:6, msg:'COZY BEAR: Device code auth phishing link sent to cloud admin',col:'#ff8d39'},
-      {t:16,msg:'IDENTITY ALERT: OAuth token reused from 4 countries simultaneously',col:'#ff5a4d'},
-      {t:28,msg:'SVR TACTIC: Golden SAML token forged — bypasses all MFA controls',col:'#ff8d39'},
-      {t:40,msg:'INTEL: 287-day average dwell — COZY BEAR prefers patience over speed',col:'#7f8b96'},
+      {t:6, msg:'COZY BEAR: OAuth device code phishing link — cloud admin is authenticating to SVR infrastructure',col:'#ff8d39'},
+      {t:16,msg:'IDENTITY ALERT: OAuth bearer token active from four countries — same session, 287-day-old credential',col:'#ff5a4d'},
+      {t:28,msg:'SVR TACTIC: Golden SAML assertion forged — all MFA controls bypassed. No password needed. Ever.',col:'#ff8d39'},
+      {t:40,msg:'SIGNAL: Zero standing privileges enforced — stolen token has no permissions to inherit or escalate',col:'#4ab6ff'},
+      {t:50,msg:'INTEL: COZY BEAR dwell neutralised — SVR patience is no match for behavioural identity baselines',col:'#74ff88'},
     ],
   },
   { id:4, key:'OPERATION LABYRINTH INSIDER', adversary:'LABYRINTH CHOLLIMA',
@@ -7925,13 +7980,14 @@ const PHASES=[
     air:['idGhost','lolBin'], river:['runnerBoat','idSkiff'], land:['insiderRelay','fuelDepot'], boss:'LABYRINTH CHOLLIMA',
     objectives:[
       {text:'Destroy 4 insider relay nodes',type:'groundKills',target:4,current:0,done:false},
-      {text:'Stop 8 exfil boats',type:'typeKills',target:8,current:0,done:false,eType:'runnerBoat'},
+      {text:'Stop 8 ExfilRunner data couriers',type:'typeKills',target:8,current:0,done:false,eType:'runnerBoat'},
     ],
     narrative:[
-      {t:5, msg:'LABYRINTH CHOLLIMA: "John Smith" — Pyongyang IP on corporate VPN',col:'#4ab6ff'},
-      {t:14,msg:'INTEL: GitHub commit pattern matches known DPRK developer fingerprint',col:'#ff8d39'},
-      {t:26,msg:'IDENTITY: Impossible travel — badge-in NYC while VPN shows Seoul',col:'#ff5a4d'},
-      {t:38,msg:'EXFIL ALERT: 40GB to external S3 bucket — funds ICBM programme',col:'#ff5a4d'},
+      {t:5, msg:'LABYRINTH CHOLLIMA: "John Smith" hired remotely. Resume is fabricated. IP is Pyongyang.',col:'#4ab6ff'},
+      {t:14,msg:'INTEL: GitHub commit pattern fingerprints known DPRK developer cell — identity mask slipping',col:'#ff8d39'},
+      {t:26,msg:'IDENTITY: Impossible travel — badge-in NYC office while VPN login shows Seoul simultaneously',col:'#ff5a4d'},
+      {t:38,msg:'OVERWATCH: rundll32.exe exfil routine staging 40GB to external S3 — ICBM programme funding detected',col:'#74ff88'},
+      {t:50,msg:'SIGNAL: Zero standing privileges blocked S3 access escalation — insider exfil chain terminated',col:'#4ab6ff'},
     ],
   },
   { id:5, key:'OPERATION BLACKCAT RAPIDS', adversary:'CARBON SPIDER',
@@ -7943,15 +7999,15 @@ const PHASES=[
     module:'Fusion SOAR', dur:56, speed:108,
     air:['cryptoJet','tokenDrone'], river:['armoredBarge','mine','runnerBoat'], land:['edgeTurret','fuelDepot'], boss:'CARBON SPIDER',
     objectives:[
-      {text:'Sink 4 armoured ransomware barges',type:'typeKills',target:4,current:0,done:false,eType:'armoredBarge'},
-      {text:'Defuse 8 encryption mines',type:'typeKills',target:8,current:0,done:false,eType:'mine'},
+      {text:'Sink 4 CryptoBarge armoured ransomware carriers',type:'typeKills',target:4,current:0,done:false,eType:'armoredBarge'},
+      {text:'Defuse 8 ZeroDayMine detonators',type:'typeKills',target:8,current:0,done:false,eType:'mine'},
     ],
     narrative:[
-      {t:5, msg:'CARBON SPIDER: ALPHV affiliate — initial access broker purchase $800',col:'#ff5a4d'},
-      {t:15,msg:'SOAR ALERT: Lateral movement detected — 9-minute containment window',col:'#ffd84d'},
-      {t:25,msg:'RANSOMWARE: BlackCat Rust variant — 847 endpoints in 90 seconds',col:'#ff5a4d'},
-      {t:38,msg:'Change Healthcare offline: $22B impact to US healthcare payments',col:'#ff5a4d'},
-      {t:48,msg:'FUSION SOAR: Automated playbook isolated 340 hosts — breach contained',col:'#74ff88'},
+      {t:5, msg:'CARBON SPIDER: Initial access broker purchase — $800 buys full network access. They are inside.',col:'#ff5a4d'},
+      {t:15,msg:'SOAR ALERT: Lateral movement confirmed — 9-minute automated containment window. FUSION SOAR activated.',col:'#ffd84d'},
+      {t:25,msg:'RANSOMWARE: BlackCat Rust variant deploying — 847 endpoints encrypted in 90 seconds. VSS destroyed first.',col:'#ff5a4d'},
+      {t:38,msg:'Change Healthcare OFFLINE — $22B impact. 190M patient records. wmiExec used for cross-domain spread.',col:'#ff5a4d'},
+      {t:48,msg:'FUSION SOAR: Automated playbook — 340 hosts isolated in 4 minutes. Breach boundary held. Barely.',col:'#74ff88'},
     ],
   },
   { id:6, key:'OPERATION AXIE HEIST', adversary:'FAMOUS CHOLLIMA',
@@ -7963,14 +8019,15 @@ const PHASES=[
     module:'Next-Gen SIEM', dur:54, speed:112,
     air:['aiMirage','cryptoJet'], river:['tokenSkiff','runnerBoat'], land:['cryptoRelay','fuelDepot'], boss:'FAMOUS CHOLLIMA',
     objectives:[
-      {text:'Stop 10 crypto exfil skiffs',type:'typeKills',target:10,current:0,done:false,eType:'tokenSkiff'},
+      {text:'Stop 10 OAuthSkiff token exfil runners',type:'typeKills',target:10,current:0,done:false,eType:'tokenSkiff'},
       {text:'Destroy 5 crypto relay towers',type:'groundKills',target:5,current:0,done:false},
     ],
     narrative:[
-      {t:6, msg:'FAMOUS CHOLLIMA: LinkedIn DM — "Senior Dev role at DeFi startup"',col:'#2af0d0'},
-      {t:15,msg:'SIEM: PDF macro execution — AppleJeus variant loading',col:'#ffd84d'},
-      {t:26,msg:'SESSION HIJACK: Ronin bridge validator key extracted from memory',col:'#ff5a4d'},
-      {t:36,msg:'BLOCKCHAIN: 173,600 ETH + 25.5M USDC transferred — $625M total',col:'#ff5a4d'},
+      {t:6, msg:'FAMOUS CHOLLIMA: LinkedIn DM — "Senior Dev role at DeFi startup." The company does not exist.',col:'#2af0d0'},
+      {t:15,msg:'SIEM: PDF macro detonation — AppleJeus variant loading. mshta.exe spawned from PDF reader.',col:'#ffd84d'},
+      {t:26,msg:'SESSION HIJACK: Ronin bridge validator private key extracted from memory via LOLBin memory scrape',col:'#ff5a4d'},
+      {t:36,msg:'BLOCKCHAIN: 173,600 ETH + 25.5M USDC in transit — $625M. 6 days from LinkedIn DM to detonation.',col:'#ff5a4d'},
+      {t:46,msg:'SIEM: Behavioural baseline — transaction velocity 4,000x normal. Alert fired. $625M already gone.',col:'#ffd84d'},
     ],
   },
   { id:7, key:'OPERATION SANDSTORM ZERO', adversary:'VOODOO BEAR',
@@ -7982,15 +8039,15 @@ const PHASES=[
     module:'Falcon OverWatch', dur:58, speed:118,
     air:['wiperJet','stealthJet'], river:['armoredBarge','mine'], land:['wiperRelay','edgeTurret'], boss:'VOODOO BEAR',
     objectives:[
-      {text:'Destroy 5 wiper relay stations',type:'groundKills',target:5,current:0,done:false},
-      {text:'Neutralise 3 wiper jets',type:'typeKills',target:3,current:0,done:false,eType:'wiperJet'},
+      {text:'Destroy 5 INDUSTROYER wiper relay stations',type:'groundKills',target:5,current:0,done:false},
+      {text:'Neutralise 3 WhisperGate wiper jets',type:'typeKills',target:3,current:0,done:false,eType:'wiperJet'},
     ],
     narrative:[
-      {t:5, msg:'SANDWORM: WhisperGate deployed to Ukrainian gov systems — MBR overwrite',col:'#c850ff'},
-      {t:16,msg:'OVERWATCH HUNTER: Pre-positioned implant detected — 72h before activation',col:'#74ff88'},
-      {t:28,msg:'INDUSTROYER2: Power grid OT protocol targeting — SCADA systems at risk',col:'#ff5a4d'},
-      {t:40,msg:'VOODOO BEAR: No ransom demand. No decryption key. Pure annihilation.',col:'#c850ff'},
-      {t:52,msg:'OVERWATCH: Hands-on-keyboard activity stopped — adversary evicted',col:'#74ff88'},
+      {t:5, msg:'SANDWORM: WhisperGate deployed — MBR overwrite across Ukrainian government systems. No decryption key.',col:'#c850ff'},
+      {t:16,msg:'OVERWATCH HUNTER: Pre-positioned OT implant detected — 72 hours before scheduled power grid detonation',col:'#74ff88'},
+      {t:28,msg:'INDUSTROYER2: IEC 104 protocol queries active — electrical substation SCADA control systems targeted',col:'#ff5a4d'},
+      {t:40,msg:'VOODOO BEAR: No ransom. No negotiation. No decryption key. Destruction is the only mission.',col:'#c850ff'},
+      {t:52,msg:'OVERWATCH: Hands-on-keyboard operator evicted — grid stays online. Human hunters. That is the answer.',col:'#74ff88'},
     ],
   },
   { id:8, key:'OPERATION KITTEN SPRINT', adversary:'STAR KITTEN',
@@ -8006,10 +8063,11 @@ const PHASES=[
       {text:'Intercept 12 surveillance drones',type:'kills',target:12,current:0,done:false},
     ],
     narrative:[
-      {t:5, msg:'STAR KITTEN: WhatsApp — "Join our Middle East Security Forum on Zoom"',col:'#ffaa00'},
-      {t:14,msg:'INTEL: NokNok backdoor — full file access, mic, camera on iOS device',col:'#ff8d39'},
-      {t:24,msg:'ATTRIBUTION: Infrastructure overlaps known IRGC cyber contractor',col:'#ffaa00'},
-      {t:36,msg:'TARGET: US nuclear negotiator device compromised — JCPOA talks at risk',col:'#ff5a4d'},
+      {t:5, msg:'STAR KITTEN: WhatsApp — "Join our Middle East Security Forum on Zoom." The link is NokNok.',col:'#ffaa00'},
+      {t:14,msg:'INTEL: NokNok iOS backdoor — full file access, live microphone, camera. IRGC operator is watching.',col:'#ff8d39'},
+      {t:24,msg:'ATTRIBUTION: Infrastructure overlaps three known IRGC cyber contractor networks — mshta.exe payload chain',col:'#ffaa00'},
+      {t:36,msg:'TARGET COMPROMISED: US nuclear negotiator device exfiltrating JCPOA strategy documents in real time',col:'#ff5a4d'},
+      {t:44,msg:'IDENTITY: Process chain flagged — think-tank impersonation plus LOLBin delivery equals IRGC signature',col:'#74ff88'},
     ],
   },
   { id:9, key:'OPERATION ECLIPSE ZERO — FINAL', adversary:'ECLIPSE SPIDER',
@@ -8025,14 +8083,14 @@ const PHASES=[
     boss:'ECLIPSE SPIDER',
     objectives:[
       {text:'Destroy 5 edge exploitation turrets',type:'groundKills',target:5,current:0,done:false},
-      {text:'Sink 5 exfil barges',type:'typeKills',target:5,current:0,done:false,eType:'armoredBarge'},
+      {text:'Sink 5 MOVEit exfil CryptoBarge carriers',type:'typeKills',target:5,current:0,done:false,eType:'armoredBarge'},
     ],
     narrative:[
-      {t:5, msg:'ECLIPSE SPIDER: MOVEit zero-day CVE-2023-34362 — SQL injection, no auth',col:'#ff9060'},
-      {t:14,msg:'EXPOSURE MGMT: 2,847 internet-facing MOVEit instances identified and alerted',col:'#ff9a48'},
-      {t:22,msg:'MASS EXFIL: 160GB/minute across 2,600 organisations — automated pipeline',col:'#ff5a4d'},
-      {t:34,msg:'ALL MODULES: Cross-domain attack requires unified platform response',col:'#ffd84d'},
-      {t:48,msg:'BREACH CONTAINED — only via unified Falcon visibility across all domains',col:'#74ff88'},
+      {t:5, msg:'ECLIPSE SPIDER: CVE-2023-34362 SQL injection — MOVEit authentication bypassed. No malware. No noise.',col:'#ff9060'},
+      {t:14,msg:'EXPOSURE MGMT: 2,847 internet-facing MOVEit instances identified — emergency containment alerts dispatched',col:'#ff9a48'},
+      {t:22,msg:'MASS EXFIL: 160 gigabytes per minute across 2,600 organisations — automated pipeline, zero human operators',col:'#ff5a4d'},
+      {t:34,msg:'ALL MODULES: Endpoint. Identity. Cloud. Data. Unified Falcon platform or the corridor falls. Final stand.',col:'#ffd84d'},
+      {t:48,msg:'BREACH CONTAINED — single unified platform. 2,847 instances patched. Cross-domain correlation wins.',col:'#74ff88'},
     ],
   },
 ];
@@ -9134,16 +9192,16 @@ function bossPhase(ph){
   if(!BOSS) return;
   SFX.alarm(); SHAKE(11,0.58);
   const n=BOSS.name,col=BOSS.color;
-  if(n==='FANCY BEAR')         { for(let i=0;i<3+ph;i++) addEnemy(ph===2?'stealthJet':'lolBin',W.scroll+210+i*46,rnd(VW*0.34,VW*0.66),'air'); COMMS('FANCY BEAR phase '+ph+': LOLBin wave — cross-domain pivot escalated',col); }
-  else if(n==='SCATTERED SPIDER'){ for(let i=0;i<3+ph;i++) addEnemy(ph===2?'idGhost':'vishDrone',W.scroll+200+i*44,rnd(VW*0.33,VW*0.67),'air'); COMMS('SCATTERED SPIDER: SIM-swap wave — exec accounts compromised',col); }
-  else if(n==='WICKED PANDA')  { for(let i=0;i<2+ph;i++) addEnemy('poisonBarge',W.scroll+210+i*62,rnd(VW*0.37,VW*0.63),'river'); COMMS('WICKED PANDA phase '+ph+': Secondary supply-chain payload deployed',col); }
-  else if(n==='COZY BEAR')     { for(let i=0;i<4+ph;i++) addEnemy('tokenDrone',W.scroll+200+i*38,rnd(VW*0.34,VW*0.66),'air'); COMMS('COZY BEAR: Golden SAML wave — all cloud tenants targeted',col); }
-  else if(n==='LABYRINTH CHOLLIMA'){ for(let i=0;i<4+ph;i++) addEnemy('runnerBoat',W.scroll+200+i*36,rnd(VW*0.36,VW*0.64),'river'); COMMS('LABYRINTH CHOLLIMA: Mass exfil boats — DPRK weapons funding at stake',col); }
-  else if(n==='CARBON SPIDER')  { for(let i=0;i<5+ph;i++) addEnemy('mine',W.scroll+180+i*30,rnd(VW*0.36,VW*0.64),'river'); COMMS('CARBON SPIDER: BlackCat encryption mines — 90-second corridor close',col); }
-  else if(n==='FAMOUS CHOLLIMA'){ for(let i=0;i<4+ph;i++) addEnemy('tokenSkiff',W.scroll+200+i*40,rnd(VW*0.37,VW*0.63),'river'); COMMS('FAMOUS CHOLLIMA: Crypto drain fleet — $625M in 6 minutes',col); }
-  else if(n==='VOODOO BEAR')   { for(let i=0;i<3+ph;i++) addEnemy('wiperJet',W.scroll+190+i*46,rnd(VW*0.34,VW*0.66),'air'); COMMS('VOODOO BEAR: Wiper payload wave — no ransom, no recovery',col); }
-  else if(n==='STAR KITTEN')   { for(let i=0;i<3+ph;i++) addEnemy('nokNok',W.scroll+200+i*44,rnd(VW*0.34,VW*0.66),'air'); COMMS('STAR KITTEN: NokNok surveillance wave — all targets monitored',col); }
-  else                          { for(let i=0;i<4+ph;i++) addEnemy(ph===2?'wiperJet':'cryptoJet',W.scroll+180+i*40,rnd(VW*0.33,VW*0.67),'air'); addEnemy('armoredBarge',W.scroll+200,getRivW(W.scroll+200).cx,'river'); COMMS('ECLIPSE SPIDER: MOVEit mass exfil — all sectors, machine speed',col); }
+  if(n==='FANCY BEAR')         { for(let i=0;i<3+ph;i++) addEnemy(ph===2?'stealthJet':'lolBin',W.scroll+210+i*46,rnd(VW*0.34,VW*0.66),'air'); COMMS(ph===2?'FANCY BEAR: Final assault — stealthJet carrying stolen NATO cert. X-Agent C2 is live. 60 seconds.':ph===1?'FANCY BEAR escalating — X-Agent lateral pivot to NATO finance nodes. OverWatch operator active.':'FANCY BEAR: powershell.exe LOLBin wave deploying — GRU cross-domain pivot. XDR sees the chain.',col); }
+  else if(n==='SCATTERED SPIDER'){ for(let i=0;i<3+ph;i++) addEnemy(ph===2?'idGhost':'vishDrone',W.scroll+200+i*44,rnd(VW*0.33,VW*0.67),'air'); COMMS('SCATTERED SPIDER: SIM-swap complete. C-suite MFA is gone. Social engineering — no malware, just access.',col); }
+  else if(n==='WICKED PANDA')  { for(let i=0;i<2+ph;i++) addEnemy('poisonBarge',W.scroll+210+i*62,rnd(VW*0.37,VW*0.63),'river'); COMMS(ph>=1?'WICKED PANDA escalating — cloneVM cloud lateral movement detected. 847 downstream orgs. Stop every barge.':'WICKED PANDA: Second PoisonBarge wave — bitsAdmin LOLBin staging payload. 847 orgs downstream.',col); }
+  else if(n==='COZY BEAR')     { for(let i=0;i<4+ph;i++) addEnemy('tokenDrone',W.scroll+200+i*38,rnd(VW*0.34,VW*0.66),'air'); COMMS('COZY BEAR: Golden SAML forgery wave — every cloud tenant is now exposed. Signal — enforce zero privileges.',col); }
+  else if(n==='LABYRINTH CHOLLIMA'){ for(let i=0;i<4+ph;i++) addEnemy('runnerBoat',W.scroll+200+i*36,rnd(VW*0.36,VW*0.64),'river'); COMMS('LABYRINTH CHOLLIMA: ExfilRunner fleet deploying — rundll32.exe active. Every boat that clears funds DPRK weapons.',col); }
+  else if(n==='CARBON SPIDER')  { for(let i=0;i<5+ph;i++) addEnemy('mine',W.scroll+180+i*30,rnd(VW*0.36,VW*0.64),'river'); COMMS('CARBON SPIDER: ZeroDayMine field live — BlackCat Rust variant deploying. 90 seconds to full corridor encryption.',col); }
+  else if(n==='FAMOUS CHOLLIMA'){ for(let i=0;i<4+ph;i++) addEnemy('tokenSkiff',W.scroll+200+i*40,rnd(VW*0.37,VW*0.63),'river'); COMMS('FAMOUS CHOLLIMA: OAuthSkiff drain fleet — mshta.exe active on all validators. $625M clearing in 6 minutes.',col); }
+  else if(n==='VOODOO BEAR')   { for(let i=0;i<3+ph;i++) addEnemy('wiperJet',W.scroll+190+i*46,rnd(VW*0.34,VW*0.66),'air'); COMMS('VOODOO BEAR: WhisperGate wiper wave. No ransom. No decryption key. Stop them or the grid goes dark forever.',col); }
+  else if(n==='STAR KITTEN')   { for(let i=0;i<3+ph;i++) addEnemy('nokNok',W.scroll+200+i*44,rnd(VW*0.34,VW*0.66),'air'); COMMS('STAR KITTEN: NokNok surveillance wave — mshta.exe on nuclear negotiator devices. IRGC watching in real time.',col); }
+  else                          { for(let i=0;i<4+ph;i++) addEnemy(ph===2?'wiperJet':'cryptoJet',W.scroll+180+i*40,rnd(VW*0.33,VW*0.67),'air'); addEnemy('armoredBarge',W.scroll+200,getRivW(W.scroll+200).cx,'river'); COMMS('ECLIPSE SPIDER: MOVEit zero-day — 160GB/minute across 2,600 orgs. Machine speed. Full platform or the corridor falls.',col); }
   BANNER(TF('def_boss_phase',{name:BOSS.name,phase:ph+1}),2.2,BOSS.color);
   FLASH(BOSS.color,0.11);
   spawnBossFuelWave(true,2);
@@ -9553,7 +9611,7 @@ function drawEnemies(){
         CX.fillRect(-14,-5,28,9); CX.fillRect(-22,-10,10,4); CX.fillRect(12,-10,10,4);
         CX.fillRect(-22,5,10,4);  CX.fillRect(12,5,10,4);
         CX.fillStyle='#ffd84d'; CX.fillRect(-5,-4,10,7);
-        CX.fillStyle='#222'; CX.font='bold 7px monospace'; CX.textAlign='center';
+        CX.fillStyle='#222'; CX.font='bold 9px monospace'; CX.textAlign='center';
         CX.fillText('@',0,2); break;
 
       case 'vishDrone':
@@ -9561,14 +9619,14 @@ function drawEnemies(){
         CX.fillRect(-13,-5,26,9); CX.fillRect(-21,-10,9,4); CX.fillRect(12,-10,9,4);
         CX.fillRect(-21,5,9,4);   CX.fillRect(12,5,9,4);
         CX.fillStyle='#ffc8ff'; CX.fillRect(-4,-3,8,6);
-        CX.fillStyle='#220022'; CX.font='bold 8px monospace'; CX.textAlign='center';
+        CX.fillStyle='#220022'; CX.font='bold 9px monospace'; CX.textAlign='center';
         CX.fillText('☎',0,3); break;
 
       case 'nokNok':
         CX.fillStyle=fc||'#ffaa00';
         CX.beginPath(); CX.arc(0,0,12,0,TAU); CX.fill();
         CX.strokeStyle='#ffe080'; CX.lineWidth=2; CX.stroke();
-        CX.fillStyle='#1a1000'; CX.font='bold 8px monospace'; CX.textAlign='center';
+        CX.fillStyle='#1a1000'; CX.font='bold 9px monospace'; CX.textAlign='center';
         CX.fillText('🐱',0,3); break;
 
       case 'stealthJet':
@@ -9583,11 +9641,11 @@ function drawEnemies(){
         if(!vis){
           CX.fillStyle='#74ff88'; CX.beginPath(); CX.arc(0,0,14,0,TAU); CX.fill();
           CX.strokeStyle='#d8ffb6'; CX.lineWidth=2; CX.stroke();
-          CX.fillStyle='#000'; CX.font='bold 7px monospace'; CX.textAlign='center'; CX.fillText('OK',0,3);
+          CX.fillStyle='#000'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('OK',0,3);
         } else {
           CX.fillStyle=fc||'#b86bff'; CX.beginPath(); CX.arc(0,0,14,0,TAU); CX.fill();
           CX.strokeStyle='#e0b0ff'; CX.lineWidth=2; CX.stroke();
-          CX.fillStyle='#fff'; CX.font='bold 6px monospace'; CX.textAlign='center'; CX.fillText('FAKE',0,3);
+          CX.fillStyle='#fff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('FAKE',0,3);
         }
         break;
 
@@ -9606,20 +9664,20 @@ function drawEnemies(){
       case 'supplyDrone':
         CX.fillStyle=fc||'#88ff55'; CX.beginPath(); CX.arc(0,0,11,0,TAU); CX.fill();
         CX.strokeStyle='#c8ffa4'; CX.lineWidth=2; CX.stroke();
-        CX.fillStyle='#0a1a02'; CX.font='bold 8px monospace'; CX.textAlign='center'; CX.fillText('S',0,3); break;
+        CX.fillStyle='#0a1a02'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('S',0,3); break;
 
       case 'cryptoJet':
         CX.fillStyle=fc||'#2af0d0';
         CX.beginPath(); CX.moveTo(0,-16); CX.lineTo(12,1); CX.lineTo(9,14);
         CX.lineTo(0,10); CX.lineTo(-9,14); CX.lineTo(-12,1); CX.closePath(); CX.fill();
-        CX.fillStyle='#fff'; CX.font='bold 8px monospace'; CX.textAlign='center'; CX.fillText('₿',0,3); break;
+        CX.fillStyle='#fff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('₿',0,3); break;
 
       case 'wiperJet':
         CX.fillStyle=fc||'#c850ff';
         CX.beginPath(); CX.moveTo(0,-17); CX.lineTo(14,2); CX.lineTo(11,15);
         CX.lineTo(0,11); CX.lineTo(-11,15); CX.lineTo(-14,2); CX.closePath(); CX.fill();
         CX.strokeStyle='#e090ff'; CX.lineWidth=2; CX.beginPath(); CX.ellipse(0,0,17,20,0,0,TAU); CX.stroke();
-        CX.fillStyle='#fff'; CX.font='bold 7px monospace'; CX.textAlign='center'; CX.fillText('⚡',0,3); break;
+        CX.fillStyle='#fff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('⚡',0,3); break;
 
       // ── Standard river threats ────────────────────────────────────
       case 'skiff':
@@ -9631,25 +9689,25 @@ function drawEnemies(){
         CX.fillStyle=fc||'#ff62ff';
         CX.beginPath(); CX.moveTo(-14,6); CX.lineTo(-6,-8); CX.lineTo(8,-8); CX.lineTo(14,6); CX.closePath(); CX.fill();
         CX.fillStyle='#2a0030'; CX.fillRect(-4,-4,8,7);
-        CX.fillStyle='#ffc8ff'; CX.font='bold 6px monospace'; CX.textAlign='center'; CX.fillText('ID',0,2); break;
+        CX.fillStyle='#ffc8ff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('ID',0,2); break;
 
       case 'tokenSkiff':
         CX.fillStyle=fc||'#ffd84d';
         CX.beginPath(); CX.moveTo(-15,6); CX.lineTo(-6,-8); CX.lineTo(9,-8); CX.lineTo(15,6); CX.closePath(); CX.fill();
         CX.fillStyle='#2a2000'; CX.fillRect(-4,-4,8,7);
-        CX.fillStyle='#fff1a6'; CX.font='bold 6px monospace'; CX.textAlign='center'; CX.fillText('TK',0,2); break;
+        CX.fillStyle='#fff1a6'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('TK',0,2); break;
 
       case 'runnerBoat':
         CX.fillStyle=fc||'#74ff88';
         CX.beginPath(); CX.moveTo(-18,7); CX.lineTo(0,-10); CX.lineTo(18,7); CX.closePath(); CX.fill();
         CX.fillStyle='#0f2614'; CX.fillRect(-5,-4,10,8);
-        CX.fillStyle='#caffb2'; CX.font='bold 6px monospace'; CX.textAlign='center'; CX.fillText('EX',0,2); break;
+        CX.fillStyle='#caffb2'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('EX',0,2); break;
 
       case 'poisonBarge':
         CX.fillStyle=fc||'#88ff55';
         CX.fillRect(-31,-12,62,23); CX.fillRect(-22,-19,44,9);
         CX.fillStyle='#1a3808'; CX.fillRect(-25,-7,50,14);
-        CX.fillStyle='#aaffaa'; CX.font='bold 7px monospace'; CX.textAlign='center'; CX.fillText('SUPPLY',0,3);
+        CX.fillStyle='#aaffaa'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('SUPPLY',0,3);
         CX.fillStyle='rgba(200,255,120,0.42)';
         CX.beginPath(); CX.arc(-16,0,4,0,TAU); CX.fill();
         CX.beginPath(); CX.arc(16,0,4,0,TAU);  CX.fill(); break;
@@ -9659,7 +9717,7 @@ function drawEnemies(){
         CX.fillRect(-33,-12,66,24); CX.fillRect(-23,-20,46,9);
         CX.fillStyle='#6e1a18'; CX.fillRect(-27,-8,54,16);
         CX.strokeStyle='#ffd84d'; CX.lineWidth=2; CX.strokeRect(-9,-11,18,22);
-        CX.fillStyle='#ffd84d'; CX.font='bold 7px monospace'; CX.textAlign='center'; CX.fillText('RANSOM',0,3); break;
+        CX.fillStyle='#ffd84d'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('RANSOM',0,3); break;
 
       case 'mine': {
         const md=Math.hypot(e.x-PL.x,sy-PL.y);
@@ -9762,7 +9820,7 @@ function drawEnemies(){
       const label=e.type.toUpperCase(), tagW=label.length*5.8+10;
       CX.fillStyle='rgba(80,0,80,0.82)';   CX.fillRect(-tagW/2,by-17,tagW,13);
       CX.strokeStyle='#ff62ff'; CX.lineWidth=1; CX.strokeRect(-tagW/2,by-17,tagW,13);
-      CX.fillStyle='#ffc8ff'; CX.font='bold 7px monospace'; CX.textAlign='center'; CX.fillText(label,0,by-7);
+      CX.fillStyle='#ffc8ff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText(label,0,by-7);
       CX.fillStyle='#0d1114'; CX.fillRect(-17,by+bh+2,34,5);
       const hpCol=e.hp/e.maxHp>0.5?'#74ff88':e.hp/e.maxHp>0.25?'#ffd84d':'#ff5a4d';
       CX.fillStyle=hpCol; CX.fillRect(-17,by+bh+2,34*(e.hp/e.maxHp),5);
@@ -9776,7 +9834,7 @@ function drawEnemies(){
     if(intelOn&&vis){
       CX.globalAlpha=0.88;
       CX.fillStyle='rgba(255,141,57,0.18)'; CX.fillRect(-e.w/2,-e.h/2,e.w,e.h);
-      CX.fillStyle='#ff8d39'; CX.font='bold 7px monospace'; CX.textAlign='center';
+      CX.fillStyle='#ff8d39'; CX.font='bold 9px monospace'; CX.textAlign='center';
       CX.fillText('★'+e.score,0,-e.h/2-6);
     }
 
@@ -9798,42 +9856,42 @@ function drawGround(){
         CX.shadowBlur=near?20:0; CX.shadowColor='#74ff88';
         CX.fillStyle=fc||(near?'#a0ffb0':'#3a7a40'); CX.fillRect(-16,-13,32,25);
         CX.fillStyle='#1a3a20'; CX.fillRect(-12,-9,24,17);
-        CX.fillStyle='#caffb2'; CX.font='bold 7px monospace'; CX.textAlign='center'; CX.fillText(T('g_fuel'),0,3);
+        CX.fillStyle='#caffb2'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText(T('g_fuel'),0,3);
         CX.strokeStyle=near?'#74ff88':'#2a5530'; CX.lineWidth=1.8; CX.strokeRect(-16,-13,32,25);
         CX.shadowBlur=0; break;
       }
       case 'certRelay':
         CX.fillStyle=fc||'#ff8d39'; CX.fillRect(-4,-21,8,36); CX.fillRect(-15,-3,30,6);
         CX.strokeStyle='#ffd2ae'; CX.lineWidth=1.5; CX.strokeRect(-11,-20,22,18);
-        CX.fillStyle='#ff8d39'; CX.font='bold 6px monospace'; CX.textAlign='center'; CX.fillText('CERT',0,-9); break;
+        CX.fillStyle='#ff8d39'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('CERT',0,-9); break;
       case 'vishRelay':
         CX.fillStyle=fc||(!vis?'#74ff88':'#ff62ff'); CX.fillRect(-13,-15,26,29);
         CX.fillStyle=vis?'#2a0035':'#0a1a10'; CX.fillRect(-9,-11,18,21);
-        CX.fillStyle=vis?'#ffc8ff':'#caffb2'; CX.font='bold 6px monospace'; CX.textAlign='center';
+        CX.fillStyle=vis?'#ffc8ff':'#caffb2'; CX.font='bold 9px monospace'; CX.textAlign='center';
         CX.fillText(vis?'VISH':'HELP',0,3); break;
       case 'supplyRelay':
         CX.fillStyle=fc||'#88ff55'; CX.fillRect(-14,-18,28,33);
         CX.fillStyle='#1a3010'; CX.fillRect(-10,-14,20,25);
-        CX.fillStyle='#caffb2'; CX.font='bold 6px monospace'; CX.textAlign='center'; CX.fillText('SUPP',0,3); break;
+        CX.fillStyle='#caffb2'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('SUPP',0,3); break;
       case 'oauthRelay':
         CX.fillStyle=fc||(!vis?'#aaaaaa':'#ff8d39'); CX.fillRect(-13,-15,26,29);
         CX.fillStyle=vis?'#2a1800':'#222'; CX.fillRect(-9,-11,18,21);
-        CX.fillStyle=vis?'#ffd2ae':'#888'; CX.font='bold 6px monospace'; CX.textAlign='center'; CX.fillText('OATH',0,3); break;
+        CX.fillStyle=vis?'#ffd2ae':'#888'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('OATH',0,3); break;
       case 'insiderRelay':
         CX.fillStyle=fc||(!vis?'#aaaaaa':'#4ab6ff'); CX.fillRect(-13,-19,26,35);
         CX.strokeStyle=vis?'#b0e8ff':'rgba(180,180,180,0.3)'; CX.lineWidth=1.8;
         CX.beginPath(); CX.arc(0,-7,7,0,TAU); CX.stroke();
         CX.fillStyle=vis?'#0a1828':'#222'; CX.fillRect(-4,-13,8,23);
-        CX.fillStyle=vis?'#b0e8ff':'#888'; CX.font='bold 6px monospace'; CX.textAlign='center'; CX.fillText('INSR',0,4); break;
+        CX.fillStyle=vis?'#b0e8ff':'#888'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('INSR',0,4); break;
       case 'cryptoRelay':
         CX.fillStyle=fc||'#2af0d0'; CX.fillRect(-13,-18,26,33);
         CX.fillStyle='#082018'; CX.fillRect(-9,-14,18,25);
-        CX.fillStyle='#b0fff0'; CX.font='bold 8px monospace'; CX.textAlign='center'; CX.fillText('₿',0,4); break;
+        CX.fillStyle='#b0fff0'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('₿',0,4); break;
       case 'wiperRelay':
         CX.fillStyle=fc||'#c850ff'; CX.fillRect(-14,-20,28,37);
         CX.fillStyle='#1a0030'; CX.fillRect(-10,-16,20,29);
         CX.strokeStyle='#e090ff'; CX.lineWidth=1.5; CX.strokeRect(-14,-20,28,37);
-        CX.fillStyle='#e090ff'; CX.font='bold 7px monospace'; CX.textAlign='center'; CX.fillText('WIPE',0,4); break;
+        CX.fillStyle='#e090ff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('WIPE',0,4); break;
       case 'edgeTurret':
         CX.fillStyle=fc||'#ff8d39'; CX.fillRect(-14,-14,28,28);
         CX.fillStyle='#7d3914'; CX.fillRect(-10,-10,20,20);
@@ -9919,7 +9977,7 @@ function drawPickups(){
       CX.shadowBlur=14; CX.shadowColor=`hsl(${textHue},100%,70%)`;
       CX.fillStyle='#ffffff'; CX.font='bold 11px monospace'; CX.textAlign='center'; CX.fillText('FLEX',0,4);
       CX.shadowBlur=0;
-      CX.fillStyle=`hsla(${(textHue+60)%360},100%,80%,0.9)`; CX.font='bold 6px monospace';
+      CX.fillStyle=`hsla(${(textHue+60)%360},100%,80%,0.9)`; CX.font='bold 9px monospace';
       CX.fillText(T('g_all_modules'),0,sz+14);
       for(let d=0;d<8;d++){
         const da=d/8*TAU+t*2.2,dr=sz+5,dHue=(hueOff+d*45)%360;
@@ -9942,7 +10000,7 @@ function drawPickups(){
     CX.closePath(); CX.fill();
     CX.fillStyle='#ffffff'; CX.textAlign='center';
     if(isEmoji)          { CX.font=(sz>26?'18':'15')+'px sans-serif'; CX.fillText(abbr,0,6); }
-    else if(abbr.length>=6){ CX.font='bold 6px monospace'; CX.fillText(abbr,0,3); }
+    else if(abbr.length>=6){ CX.font='bold 9px monospace'; CX.fillText(abbr,0,3); }
     else                 { CX.font='bold '+(sz>26?'8':'7')+'px monospace'; CX.fillText(abbr,0,3); }
     CX.globalAlpha=0.5+0.45*Math.sin(p.bob*2.4); CX.strokeStyle=col; CX.lineWidth=1.6;
     CX.beginPath(); CX.arc(0,0,sz+5,0,TAU); CX.stroke(); CX.globalAlpha=1;
@@ -9951,8 +10009,8 @@ function drawPickups(){
       const alpha=clamp((92-dist)/64,0,1); CX.globalAlpha=alpha;
       CX.fillStyle='rgba(0,0,0,0.86)'; CX.fillRect(-58,sz+4,116,30);
       CX.strokeStyle=col; CX.lineWidth=1; CX.strokeRect(-58,sz+4,116,30);
-      CX.fillStyle=col; CX.font='bold 7px monospace'; CX.textAlign='center'; CX.fillText(p.data||'Module',0,sz+18);
-      CX.fillStyle='#aaaaaa'; CX.font='7px monospace'; CX.fillText(m.tagline.slice(0,28),0,sz+28);
+      CX.fillStyle=col; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText(p.data||'Module',0,sz+18);
+      CX.fillStyle='#aaaaaa'; CX.font='9px monospace'; CX.fillText(m.tagline.slice(0,28),0,sz+28);
       CX.globalAlpha=1;
     }
     CX.shadowBlur=0; CX.textAlign='left'; CX.restore();
@@ -10000,7 +10058,7 @@ function drawBoss(){
       CX.fillStyle='#7a1010'; CX.fillRect(-47,-21,94,42);
       CX.fillStyle='#fff'; CX.beginPath(); CX.ellipse(-20,6,12,10,0,0,TAU); CX.fill(); CX.beginPath(); CX.ellipse(20,6,12,10,0,0,TAU); CX.fill();
       CX.fillStyle='#e03030'; CX.beginPath(); CX.arc(-20,6,5,0,TAU); CX.fill(); CX.beginPath(); CX.arc(20,6,5,0,TAU); CX.fill();
-      CX.fillStyle='#fff'; CX.font='bold 8px monospace'; CX.textAlign='center'; CX.fillText('GRU/APT28',0,-8);
+      CX.fillStyle='#fff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('GRU/APT28',0,-8);
       CX.strokeStyle=c; CX.lineWidth=2; CX.beginPath(); CX.moveTo(-22,-31); CX.lineTo(-22,-52); CX.moveTo(0,-31); CX.lineTo(0,-56); CX.moveTo(22,-31); CX.lineTo(22,-52); CX.stroke(); break;
 
     case 'COZY BEAR':
@@ -10009,7 +10067,7 @@ function drawBoss(){
       CX.fillStyle='#f0c8a0'; CX.beginPath(); CX.ellipse(0,6,29,21,0,0,TAU); CX.fill();
       CX.fillStyle='#000'; CX.beginPath(); CX.arc(-11,4,4,0,TAU); CX.fill(); CX.beginPath(); CX.arc(11,4,4,0,TAU); CX.fill();
       CX.fillStyle='#fff'; CX.beginPath(); CX.arc(-11,4,2,0,TAU); CX.fill(); CX.beginPath(); CX.arc(11,4,2,0,TAU); CX.fill();
-      CX.fillStyle='#ff8d39'; CX.font='bold 8px monospace'; CX.textAlign='center'; CX.fillText('SVR/APT29',0,-10);
+      CX.fillStyle='#ff8d39'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('SVR/APT29',0,-10);
       CX.strokeStyle='rgba(255,141,57,0.32)'; CX.lineWidth=1.5; CX.setLineDash([4,4]);
       CX.beginPath(); CX.ellipse(0,0,BOSS.w/2+12,BOSS.h/2+9,0,0,TAU); CX.stroke(); CX.setLineDash([]); break;
 
@@ -10020,7 +10078,7 @@ function drawBoss(){
       CX.fillStyle='#ffc8ff';
       for(let i=-3;i<=3;i+=1.5){ CX.beginPath(); CX.arc(i*7,-5,2.8,0,TAU); CX.fill(); }
       CX.fillStyle='rgba(0,0,0,0.72)'; CX.fillRect(-24,-11,48,23);
-      CX.fillStyle='#ff62ff'; CX.font='bold 8px monospace'; CX.textAlign='center'; CX.fillText('IT SUPPORT',0,5); break;
+      CX.fillStyle='#ff62ff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('IT SUPPORT',0,5); break;
 
     case 'WICKED PANDA':
       CX.fillStyle=c; CX.fillRect(-65,-31,130,62); CX.fillRect(-71,-41,25,23); CX.fillRect(46,-41,25,23);
@@ -10028,7 +10086,7 @@ function drawBoss(){
       CX.fillStyle='#000'; CX.beginPath(); CX.ellipse(-21,4,16,13,0,0,TAU); CX.fill(); CX.beginPath(); CX.ellipse(21,4,16,13,0,0,TAU); CX.fill();
       CX.fillStyle='#fff'; CX.beginPath(); CX.arc(-21,4,9,0,TAU); CX.fill(); CX.beginPath(); CX.arc(21,4,9,0,TAU); CX.fill();
       CX.fillStyle='#000'; CX.beginPath(); CX.arc(-21,4,4,0,TAU); CX.fill(); CX.beginPath(); CX.arc(21,4,4,0,TAU); CX.fill();
-      CX.fillStyle='#88ff55'; CX.font='bold 8px monospace'; CX.textAlign='center'; CX.fillText('APT41/MSS',0,-10);
+      CX.fillStyle='#88ff55'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('APT41/MSS',0,-10);
       CX.strokeStyle='rgba(136,255,85,0.36)'; CX.lineWidth=2; CX.strokeRect(-32,-27,64,54); break;
 
     case 'LABYRINTH CHOLLIMA':
@@ -10038,7 +10096,7 @@ function drawBoss(){
       CX.beginPath(); CX.moveTo(39,8);  CX.quadraticCurveTo(72,-29,84,-21);   CX.lineTo(60,23);  CX.closePath(); CX.fill();
       CX.fillStyle=c; CX.beginPath(); CX.ellipse(0,-4,19,23,0,0,TAU); CX.fill();
       CX.fillStyle='rgba(0,0,0,0.72)'; CX.fillRect(-30,6,60,17);
-      CX.fillStyle='#4ab6ff'; CX.font='bold 8px monospace'; CX.textAlign='center'; CX.fillText('DPRK/IT',0,18); break;
+      CX.fillStyle='#4ab6ff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('DPRK/IT',0,18); break;
 
     case 'CARBON SPIDER':
       CX.fillStyle=c; CX.fillRect(-72,-23,144,46); CX.fillRect(-56,-39,112,17);
@@ -10076,7 +10134,7 @@ function drawBoss(){
       CX.beginPath(); CX.moveTo(-8,4); CX.lineTo(-50,-2); CX.moveTo(-8,8); CX.lineTo(-46,13); CX.moveTo(8,4); CX.lineTo(50,-2); CX.moveTo(8,8); CX.lineTo(46,13); CX.stroke();
       CX.fillStyle='#ffaa00'; CX.beginPath(); CX.ellipse(-17,2,8,6,0,0,TAU); CX.fill(); CX.beginPath(); CX.ellipse(17,2,8,6,0,0,TAU); CX.fill();
       CX.fillStyle='#000'; CX.fillRect(-18,-2,2,8); CX.fillRect(15,-2,2,8);
-      CX.fillStyle='#ffaa00'; CX.font='bold 8px monospace'; CX.textAlign='center'; CX.fillText('IRGC/APT35',0,-8); break;
+      CX.fillStyle='#ffaa00'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('IRGC/APT35',0,-8); break;
 
     case 'ECLIPSE SPIDER':
       CX.fillStyle=c; CX.beginPath(); CX.ellipse(0,0,54,36,0,0,TAU); CX.fill();
@@ -10120,7 +10178,7 @@ function drawIntelPanel(){
   let iy=72;
   CX.fillStyle=act.col; CX.font='bold 10px monospace'; CX.fillText(T('g_act')+act.num+': '+locAct.title+' — '+ph.season,VW-pw+4,iy); iy+=16;
   CX.fillStyle='#d5dde5'; CX.font='10px monospace';
-  const sumLines=wrapText(ph.summary,42);
+  const sumLines=wrapTextPx(CX, ph.summary, 300);
   for(const l of sumLines){ CX.fillText(l,VW-pw+4,iy); iy+=13; } iy+=5;
   if(ad){
     CX.strokeStyle='rgba(255,255,255,0.06)'; CX.beginPath(); CX.moveTo(VW-pw-10,iy); CX.lineTo(VW-10,iy); CX.stroke(); iy+=12;
@@ -10128,9 +10186,9 @@ function drawIntelPanel(){
     CX.fillStyle='#aaaaaa'; CX.font='10px monospace'; CX.fillText(ad.nation,VW-pw+4,iy); iy+=13;
     CX.fillStyle='#888'; CX.fillText(ad.active,VW-pw+4,iy); iy+=15;
     CX.fillStyle='#7f8b96'; CX.fillText(T('g_targets'),VW-pw+4,iy); iy+=12;
-    wrapText(ad.targets,44).forEach(l=>{ CX.fillStyle='#d5dde5'; CX.fillText(l,VW-pw+4,iy); iy+=13; }); iy+=4;
+    wrapTextPx(CX, ad.targets, 300).forEach(l=>{ CX.fillStyle='#d5dde5'; CX.fillText(l,VW-pw+4,iy); iy+=13; }); iy+=4;
     CX.fillStyle='#7f8b96'; CX.fillText(T('iz_ttps'),VW-pw+4,iy); iy+=12;
-    wrapText(ad.ttp,44).forEach(l=>{ CX.fillStyle='#ff8d39'; CX.fillText(l,VW-pw+4,iy); iy+=13; }); iy+=4;
+    wrapTextPx(CX, ad.ttp, 300).forEach(l=>{ CX.fillStyle='#ff8d39'; CX.fillText(l,VW-pw+4,iy); iy+=13; }); iy+=4;
     CX.fillStyle='#42d9ff'; CX.font='bold 10px monospace'; CX.fillText('◆ '+ad.counter.slice(0,46),VW-pw+4,iy); iy+=14;
     if(ad.weakness){
       const wmod=MKEYS.find(k=>MODS[k].apply===ad.weakness);
@@ -10138,8 +10196,8 @@ function drawIntelPanel(){
         const m=MODS[wmod];
         CX.fillStyle='rgba(0,0,0,0.5)'; CX.fillRect(VW-pw+4,iy,pw-18,28);
         CX.strokeStyle=m.col; CX.lineWidth=1; CX.strokeRect(VW-pw+4,iy,pw-18,28);
-        CX.fillStyle=m.col; CX.font='bold 8px monospace'; CX.fillText(T('iz_counter_module')+wmod,VW-pw+8,iy+12);
-        CX.fillStyle='#aaaaaa'; CX.font='8px monospace'; CX.fillText(m.game.slice(0,50),VW-pw+8,iy+24);
+        CX.fillStyle=m.col; CX.font='bold 9px monospace'; CX.fillText(T('iz_counter_module')+wmod,VW-pw+8,iy+12);
+        CX.fillStyle='#aaaaaa'; CX.font='9px monospace'; CX.fillText(m.game.slice(0,50),VW-pw+8,iy+24);
         iy+=32;
       }
     }
@@ -10241,7 +10299,7 @@ function drawHUD(){
       const bw=142, bx=18;
       CX.fillStyle='#1a2020'; CX.fillRect(bx,oy+30+i*24,bw,6);
       CX.fillStyle=ph.col;   CX.fillRect(bx,oy+30+i*24,bw*(o.current/o.target),6);
-      CX.fillStyle='#555'; CX.font='8px monospace'; CX.fillText(o.current+'/'+o.target,bx+bw+4,oy+37+i*24);
+      CX.fillStyle='#555'; CX.font='9px monospace'; CX.fillText(o.current+'/'+o.target,bx+bw+4,oy+37+i*24);
     }
   }
 
@@ -10262,7 +10320,7 @@ function drawHUD(){
         CX.fillStyle='rgba(0,0,0,0.52)'; CX.fillRect(px,py,pW,pH);
         CX.fillStyle=m.col; CX.fillRect(px,py,2,pH);
         CX.fillStyle=m.col; CX.fillRect(px,py+pH-2,pW*(AMODS[k]/m.dur),2);
-        CX.fillStyle='#f4f7fa'; CX.font='bold 6px monospace'; CX.textAlign='left';
+        CX.fillStyle='#f4f7fa'; CX.font='bold 9px monospace'; CX.textAlign='left';
         CX.fillText(m.abbr,px+5,py+10);
       });
       CX.textAlign='left';
@@ -10274,8 +10332,8 @@ function drawHUD(){
         CX.fillStyle='rgba(0,0,0,0.42)'; CX.fillRect(VW-222,my,212,18);
         CX.fillStyle=m.col; CX.fillRect(VW-222,my,2,18);
         CX.fillStyle=m.col; CX.fillRect(VW-222,my+16,212*(AMODS[k]/m.dur),2);
-        CX.fillStyle='#f4f7fa'; CX.font='bold 8px monospace'; CX.textAlign='left'; CX.fillText(nm.toUpperCase(),VW-216,my+12);
-        CX.fillStyle=m.col;  CX.font='7px monospace'; CX.textAlign='right'; CX.fillText(AMODS[k].toFixed(1)+'s',VW-12,my+12);
+        CX.fillStyle='#f4f7fa'; CX.font='bold 9px monospace'; CX.textAlign='left'; CX.fillText(nm.toUpperCase(),VW-216,my+12);
+        CX.fillStyle=m.col;  CX.font='9px monospace'; CX.textAlign='right'; CX.fillText(AMODS[k].toFixed(1)+'s',VW-12,my+12);
       }
       CX.textAlign='left';
     }
@@ -10378,14 +10436,14 @@ function drawPhaseIntro(){
   CX.beginPath(); CX.moveTo(88,162); CX.lineTo(VW-88,162); CX.stroke();
 
   CX.fillStyle='#ffd84d'; CX.font=izFont(10,'bold'); CX.fillText(T('g_situation'),VW/2,178);
-  const sumLines=wrapText(phaseSummary,74);
+  const sumLines=wrapTextPx(CX, phaseSummary, 500);
   CX.fillStyle='#d5dde5'; CX.font=izFont(10);
   sumLines.forEach((l,i)=>CX.fillText(l,VW/2,192+i*14));
 
   const mBase=192+sumLines.length*14+10;
   CX.fillStyle='#ffd84d'; CX.font=izFont(10,'bold'); CX.fillText(T('g_mission'),VW/2,mBase);
   CX.fillStyle='#74ff88'; CX.font=izFont(10);
-  wrapText(phaseMission,74).forEach((l,i)=>CX.fillText(l,VW/2,mBase+15+i*14));
+  wrapTextPx(CX, phaseMission, 500).forEach((l,i)=>CX.fillText(l,VW/2,mBase+15+i*14));
 
   const oBase=mBase+15+Math.ceil(phaseMission.length/74)*14+12;
   CX.fillStyle='#ffd84d'; CX.font=izFont(10,'bold'); CX.fillText(T('g_objectives'),VW/2,oBase);
@@ -10447,15 +10505,15 @@ function drawBossIntro(){
 
   CX.fillStyle='rgba(255,255,255,0.03)'; CX.fillRect(98,194,VW-196,62);
   CX.fillStyle='#d5dde5'; CX.font='10px monospace';
-  wrapText(T('iz_boss_ttps')+ad.ttp,82).slice(0,2).forEach((l,i)=>CX.fillText(l,VW/2,212+i*14));
-  wrapText(ad.intel,84).slice(0,2).forEach((l,i)=>CX.fillText(l,VW/2,240+i*13));
+  wrapTextPx(CX, T('iz_boss_ttps')+ad.ttp, 560).slice(0,2).forEach((l,i)=>CX.fillText(l,VW/2,212+i*14));
+  wrapTextPx(CX, ad.intel, 560).slice(0,2).forEach((l,i)=>CX.fillText(l,VW/2,240+i*13));
 
   CX.strokeStyle='rgba(255,255,255,0.06)'; CX.lineWidth=1;
   CX.beginPath(); CX.moveTo(98,268); CX.lineTo(VW-98,268); CX.stroke();
 
   CX.fillStyle='#42d9ff'; CX.font='bold 12px monospace'; CX.fillText(T('g_recommended'),VW/2,290);
   CX.fillStyle='#74ff88'; CX.font='11px monospace';
-  wrapText(ad.counter,76).slice(0,2).forEach((l,i)=>CX.fillText(l,VW/2,308+i*14));
+  wrapTextPx(CX, ad.counter, 520).slice(0,2).forEach((l,i)=>CX.fillText(l,VW/2,308+i*14));
   CX.fillStyle='#ffd84d'; CX.font='10px monospace';
   CX.fillText(T('iz_boss_module'),VW/2,338);
 
@@ -10523,12 +10581,12 @@ function drawPhaseEnd(){
   CX.beginPath(); CX.moveTo(96,dbBase-4); CX.lineTo(VW-96,dbBase-4); CX.stroke();
   CX.fillStyle='#ffd84d'; CX.font='bold 10px monospace'; CX.fillText(T('g_threat_debrief'),VW/2,dbBase+12);
   CX.fillStyle='#7f8b96'; CX.font='10px monospace';
-  wrapText(ph.debrief,82).slice(0,2).forEach((l,i)=>CX.fillText(l,VW/2,dbBase+26+i*14));
+  wrapTextPx(CX, ph.debrief, 560).slice(0,2).forEach((l,i)=>CX.fillText(l,VW/2,dbBase+26+i*14));
 
   if(ph.adversary&&ADV[ph.adversary]){
     const ad=ADV[ph.adversary];
     CX.fillStyle=ad.color; CX.font='9px monospace';
-    wrapText(ad.intel,88).slice(0,2).forEach((l,i)=>CX.fillText(l,VW/2,dbBase+52+i*13));
+    wrapTextPx(CX, ad.intel, 560).slice(0,2).forEach((l,i)=>CX.fillText(l,VW/2,dbBase+52+i*13));
   }
 
   const nextAct=phIdx<PHASES.length-1?getAct(phIdx+1):null;
@@ -10674,7 +10732,7 @@ function drawPause(){
     CX.fillStyle=ad.color; CX.font='bold 11px monospace'; CX.fillText(T('g_active_adversary')+ph.adversary,VW/2,338);
     CX.fillStyle='#aaaaaa'; CX.font='10px monospace'; CX.fillText(ad.nation,VW/2,354);
     CX.fillStyle='#42d9ff'; CX.font='10px monospace';
-    wrapText(T('g_counter')+ad.counter,82).slice(0,2).forEach((l,i)=>CX.fillText(l,VW/2,372+i*14));
+    wrapTextPx(CX,T('g_counter')+ad.counter,560).slice(0,2).forEach((l,i)=>CX.fillText(l,VW/2,372+i*14));
     const wmod=MKEYS.find(k=>MODS[k].apply===ad.weakness);
     if(wmod){ CX.fillStyle=MODS[wmod].col; CX.fillText(T('g_best_module')+wmod+T('iz_best_module_bonus'),VW/2,402); }
   }
@@ -12527,8 +12585,8 @@ const PHASES = [
     },
     incidentReport:{
       title:"IDENTITY INTRUSION ATTEMPT",
-      stopped:"Credential theft campaign disrupted before lateral movement.",
-      keyLesson:"Valid credentials are not proof of legitimate access — behaviour is.",
+      stopped:"X-Agent C2 severed. FANCY BEAR credential harvest stopped 47 seconds before NATO network penetration.",
+      keyLesson:"FANCY BEAR never breaks in — they log in. Stolen credentials look legitimate. Only behavioural baselines catch them.",
       moduleHighlight:"IDENTITY",
     },
   },
@@ -12570,8 +12628,8 @@ const PHASES = [
     },
     incidentReport:{
       title:"AI-AUGMENTED ATTACK CAMPAIGN",
-      stopped:"LLM-generated malware campaign neutralised before finance system access.",
-      keyLesson:"AI-generated threats require AI-native defence — signatures are obsolete.",
+      stopped:"LLM-generated malware variants neutralised in real time — finance systems never breached.",
+      keyLesson:"AI creates novel malware faster than signatures can be written. Only AI can analyse and respond at that speed.",
       moduleHighlight:"CHARLOTTE",
     },
   },
@@ -12613,8 +12671,8 @@ const PHASES = [
     },
     incidentReport:{
       title:"RANSOMWARE STAGING DISRUPTED",
-      stopped:"Pre-ransomware staging detected and neutralised before encryption phase.",
-      keyLesson:"Ransomware is stoppable — but only if you detect the staging, not the encryption.",
+      stopped:"BlackCat detected in memory during staging — encryption phase never initiated. 190 million records protected.",
+      keyLesson:"VSS deletion and shadow copy destruction are the warning signs. Stop the staging and you stop the breach.",
       moduleHighlight:"PREVENT",
     },
   },
@@ -12656,8 +12714,8 @@ const PHASES = [
     },
     incidentReport:{
       title:"CLOUD INFRASTRUCTURE PIVOT BLOCKED",
-      stopped:"OAuth token abuse detected and cloud lateral movement contained.",
-      keyLesson:"Endpoint tools are blind to cloud-native attacks. You need cloud-native defence.",
+      stopped:"Golden SAML forgery detected mid-flight. SVR cloud pivot severed — all tenant access revoked before privilege escalation.",
+      keyLesson:"COZY BEAR operated for 287 days in cloud environments. Cloud-native runtime protection ended that dwell in seconds.",
       moduleHighlight:"CLOUD",
     },
   },
@@ -12699,8 +12757,8 @@ const PHASES = [
     },
     incidentReport:{
       title:"SOCIAL ENGINEERING CAMPAIGN NEUTRALISED",
-      stopped:"MFA bypass attempt detected. Impostor account isolated before lateral movement.",
-      keyLesson:"No malware was used. Identity analytics stopped what endpoint tools cannot see.",
+      stopped:"Vishing-to-MFA-bypass chain detected. Impostor account isolated 6 minutes after the initial helpdesk call.",
+      keyLesson:"They called the helpdesk. They sounded exactly like your employee. Behavioural identity analytics is the only control.",
       moduleHighlight:"IDENTITY",
     },
   },
@@ -12742,8 +12800,8 @@ const PHASES = [
     },
     incidentReport:{
       title:"OT PRE-POSITIONING DISRUPTED",
-      stopped:"Hidden infrastructure staging detected before activation. OT systems protected.",
-      keyLesson:"The most dangerous adversaries make no noise. Visibility requires active hunting.",
+      stopped:"Pre-positioned OT implants neutralised 72 hours before scheduled activation. VOLT TYPHOON interrupted mid-preparation.",
+      keyLesson:"certutil, netsh, wmiexec — all legitimate Windows tools. No signatures. Only behavioural baselines expose 300-day pre-positioning.",
       moduleHighlight:"FEM",
     },
   },
@@ -12786,8 +12844,8 @@ const PHASES = [
     },
     incidentReport:{
       title:"SUPPLY CHAIN COMPROMISE CONTAINED",
-      stopped:"Malicious vendor update detected before downstream propagation.",
-      keyLesson:"Supply chain attacks bypass perimeter defences entirely. Behavioural detection is the only answer.",
+      stopped:"Trojanised build detected at pipeline insertion point — 18,000 downstream customers protected before update propagated.",
+      keyLesson:"The update was signed with a real certificate stolen 6 months earlier. Behaviour is the only fingerprint that remains.",
       moduleHighlight:"COMPLETE",
     },
   },
@@ -12829,8 +12887,8 @@ const PHASES = [
     },
     incidentReport:{
       title:"DESTRUCTIVE WIPER CAMPAIGN STOPPED",
-      stopped:"Wiper malware execution blocked before OT systems were reached.",
-      keyLesson:"Destructive attacks cannot be remediated — only prevented. Behavioural AI is the only defence.",
+      stopped:"WhisperGate execution halted before MBR overwrite. Industrial control systems remained operational. Grid survived.",
+      keyLesson:"SANDWORM had no ransom demand and no decryption key. There is no recovery — only prevention. Behavioural AI is the line.",
       moduleHighlight:"PREVENT",
     },
   },
@@ -12873,8 +12931,8 @@ const PHASES = [
     },
     incidentReport:{
       title:"MULTI-VECTOR RANSOMWARE CONTAINED",
-      stopped:"Simultaneous endpoint, server and ESXi encryption attempt blocked.",
-      keyLesson:"RaaS attacks are designed to overwhelm. Autonomous AI response is not optional.",
+      stopped:"847 alerts in 4 minutes. Rust ransomware across Windows, Linux and ESXi — autonomously contained before backup destruction completed.",
+      keyLesson:"BLACKCAT affiliates paid $800 for initial access. Autonomous AI prevented $22 billion in potential damage across the estate.",
       moduleHighlight:"CHARLOTTE",
     },
   },
@@ -12918,8 +12976,8 @@ const PHASES = [
     },
     incidentReport:{
       title:"NATION-STATE OPERATION NEUTRALISED",
-      stopped:"Multi-phase LAZARUS operation disrupted across all three stages.",
-      keyLesson:"Nation-state actors require the full platform — no single tool is sufficient.",
+      stopped:"All three phases disrupted: THEFT blocked, STEALTH exposed, DESTRUCTION prevented. LAZARUS fully evicted.",
+      keyLesson:"LAZARUS operated across crypto, endpoints, identity and cloud simultaneously. One unified platform stopped all of it.",
       moduleHighlight:"COMPLETE",
     },
   },
@@ -13273,7 +13331,7 @@ class ModuleChoiceScreen{
       ctx.fillText(viewModule.name,x+CW/2,cy+(isSelected?74:64));
       ctx.font="9px 'Courier New'";ctx.fillStyle=CS.GREY;ctx.shadowBlur=0;
       ctx.fillText(viewModule.tagline,x+CW/2,cy+(isSelected?88:78));
-      ctx.font="8px 'Courier New'";ctx.fillStyle=CS.LTGREY;
+      ctx.font="9px 'Courier New'";ctx.fillStyle=CS.LTGREY;
       const mwords=viewModule.mechanic.split(" ");let ml="",mly=cy+(isSelected?104:94);
       for(const mw of mwords){
         const mt=ml+mw+" ";
@@ -13284,7 +13342,7 @@ class ModuleChoiceScreen{
       ctx.fillText(ml,x+CW/2,mly);
       const narr=viewPhase.moduleNarrative?.[m.id];
       if(narr&&isSelected){
-        ctx.font="italic 8px 'Courier New'";ctx.fillStyle=CS.GREEN;
+        ctx.font="italic 9px 'Courier New'";ctx.fillStyle=CS.GREEN;
         ctx.shadowColor=CS.GREEN;ctx.shadowBlur=4;
         const nwords=narr.split(" ");let nl="",nly=mly+16;
         for(const nw of nwords){
@@ -13317,7 +13375,7 @@ function drawIncidentReport(ctx,w,h,phase,score,modulesCollected,t,totalT,skipBl
   ctx.fillStyle=CS.GREEN;ctx.fillRect(0,0,w,4);ctx.fillRect(0,h-4,w,4);
   ctx.textAlign="center";
   ctx.font="bold 10px 'Courier New'";ctx.fillStyle=CS.GREY;ctx.shadowBlur=0;
-  ctx.fillText("🦅  CROWDSTRIKE INCIDENT REPORT",w/2,22);
+  ctx.fillText(T('g_incident_report_title'),w/2,22);
   ctx.font="bold 28px 'Courier New'";
   ctx.fillStyle=CS.GREEN;ctx.shadowColor=CS.GREEN;ctx.shadowBlur=22;
   ctx.fillText(`✅ ${viewPhase.incidentReport.title}`,w/2,54);
@@ -13335,7 +13393,7 @@ function drawIncidentReport(ctx,w,h,phase,score,modulesCollected,t,totalT,skipBl
     ctx.beginPath();ctx.roundRect(x,cy,CW,110,5);ctx.fill();ctx.stroke();
     ctx.fillStyle=c.col;ctx.shadowBlur=0;
     ctx.beginPath();ctx.roundRect(x,cy,CW,20,[5,5,0,0]);ctx.fill();
-    ctx.font="bold 8px 'Courier New'";ctx.fillStyle=CS.WHITE;ctx.textAlign="left";
+    ctx.font="bold 9px 'Courier New'";ctx.fillStyle=CS.WHITE;ctx.textAlign="left";
     ctx.fillText(c.label,x+8,cy+14);
     ctx.font="10px 'Courier New'";ctx.fillStyle=CS.LTGREY;
     const words=c.val.split(" ");let line="",ly=cy+34;
@@ -13355,7 +13413,7 @@ function drawIncidentReport(ctx,w,h,phase,score,modulesCollected,t,totalT,skipBl
     let mx=w/2-(collected.length*44)/2;
     collected.forEach(m=>{
       ctx.font="16px serif";ctx.fillText(m.emoji,mx+16,cy+148);
-      ctx.font="bold 7px 'Courier New'";ctx.fillStyle=m.color;
+      ctx.font="bold 9px 'Courier New'";ctx.fillStyle=m.color;
       ctx.fillText(m.shortName,mx+16,cy+160);mx+=44;
     });
   }
@@ -13615,7 +13673,7 @@ class ModuleNotification{
     ctx.fillText(`${viewMod.emoji}  ${viewMod.name}`,sx+8,cy+44);
     ctx.font="10px 'Courier New'";ctx.fillStyle=CS.GREY;ctx.shadowBlur=0;
     ctx.fillText(viewMod.tagline,sx+8,cy+58);
-    ctx.font="8px 'Courier New'";ctx.fillStyle=CS.WHITE;
+    ctx.font="9px 'Courier New'";ctx.fillStyle=CS.WHITE;
     const words=viewMod.mechanic.split(" ");let line="",ly=cy+72;
     for(const word of words){
       const test=line+word+" ";
@@ -13667,7 +13725,7 @@ class BonusModuleDrop{
     const fade=Math.min(1,1-this.#life/this.#maxLife*0.4);
     ctx.save();ctx.globalAlpha=fade*pulse;
     // golden outer ring — signals this is special
-    ctx.shadowColor=CS.GOLD;ctx.shadowBlur=18*pulse;
+    ctx.shadowColor=CS.GOLD;ctx.shadowBlur=Math.max(10,18*pulse);
     ctx.strokeStyle=CS.GOLD;ctx.lineWidth=2.2;
     ctx.fillStyle="rgba(4,1,18,0.90)";
     ctx.beginPath();ctx.roundRect(this.#x-this.#w/2,this.#y,this.#w,this.#h,5);
@@ -13682,7 +13740,7 @@ class BonusModuleDrop{
     // "ALLY" label
     ctx.font="bold 9px 'Courier New'";ctx.fillStyle=CS.GOLD;
     ctx.shadowColor=CS.GOLD;ctx.shadowBlur=6;
-    ctx.fillText("ALLY",this.#x,this.#y-3);
+    ctx.fillText(T('g_ally_label'),this.#x,this.#y-3);
     ctx.restore();
   }
 }
@@ -13738,7 +13796,7 @@ class OverWatchSystem{
       const pulse=Math.sin(now*0.008)*0.4+0.6;
       const r=this.#phase===1?20:26+Math.sin(now*0.01)*4;
       ctx.save();ctx.strokeStyle=CS.ORANGE;ctx.lineWidth=2;
-      ctx.shadowColor=CS.ORANGE;ctx.shadowBlur=12*pulse;ctx.globalAlpha=0.9;
+      ctx.shadowColor=CS.ORANGE;ctx.shadowBlur=Math.max(10,12*pulse);ctx.globalAlpha=0.9;
       const rot=now*0.003*(this.#phase===1?2:1);
       ctx.translate(x,y);ctx.rotate(rot);
       ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.stroke();
@@ -13752,7 +13810,7 @@ class OverWatchSystem{
       ctx.beginPath();ctx.moveTo(-r,0);ctx.lineTo(r,0);ctx.stroke();
       ctx.beginPath();ctx.moveTo(0,-r);ctx.lineTo(0,r);ctx.stroke();
       if(this.#phase>=1){
-        ctx.globalAlpha=1;ctx.font="bold 8px 'Courier New'";
+        ctx.globalAlpha=1;ctx.font="bold 9px 'Courier New'";
         ctx.textAlign="center";ctx.fillStyle=CS.ORANGE;ctx.shadowBlur=6;
         ctx.fillText(T('def_locked'),0,r+16);
       }
@@ -13776,7 +13834,7 @@ class OverWatchSystem{
       ctx.save();ctx.globalAlpha=a;ctx.textAlign="center";
       ctx.font="bold 17px 'Courier New'";
       ctx.fillStyle=CS.ORANGE;ctx.shadowColor=CS.ORANGE;ctx.shadowBlur=20;
-      ctx.fillText("✅  THREATS ELIMINATED — OVERWATCH STANDS DOWN",LW/2,LH/2-30);
+      ctx.fillText(T('g_threats_eliminated'),LW/2,LH/2-30);
       ctx.restore();
     }
   }
@@ -13885,7 +13943,7 @@ class FalconCompleteSystem{
         w/2,h*0.44);
       ctx.font="bold 10px 'Courier New'";ctx.fillStyle=CS.RED;
       ctx.shadowColor=CS.RED;ctx.shadowBlur=10;
-      ctx.fillText("🦅  crowdstrike.com  |  We Stop Breaches — Guaranteed.",w/2,h*0.60);
+      ctx.fillText(T('g_crowdstrike_tagline'),w/2,h*0.60);
       ctx.restore();
     }
   }
@@ -13926,7 +13984,7 @@ class CharlotteAI{
       ctx.shadowColor=CS.GREEN;ctx.shadowBlur=16;
       ctx.beginPath();
       ctx.moveTo(LW/2,LH/2);ctx.lineTo(x,y);ctx.stroke();
-      ctx.font="bold 8px 'Courier New'";ctx.textAlign="center";
+      ctx.font="bold 9px 'Courier New'";ctx.textAlign="center";
       ctx.fillStyle=CS.GREEN;ctx.fillText(T('def_ai_neutralized'),x,y-12);
       ctx.restore();
     }
@@ -14072,12 +14130,12 @@ class PowerUp{
       ?`hsl(${350+Math.sin(now*0.008)*20},90%,${50+Math.sin(now*0.012)*10}%)`
       :displayMod.color;
     ctx.strokeStyle=borderCol;ctx.lineWidth=1.6;
-    ctx.shadowColor=borderCol;ctx.shadowBlur=12*pulse;
+    ctx.shadowColor=borderCol;ctx.shadowBlur=Math.max(10,12*pulse);
     ctx.beginPath();ctx.roundRect(this.x,this.y,this.w,this.h,4);ctx.fill();ctx.stroke();
     ctx.font="15px serif";ctx.textAlign="center";ctx.shadowBlur=0;
     ctx.fillText(displayMod.emoji,this.x+this.w/2,this.y+this.h*0.78);
     if(this.isFake){
-      ctx.font="bold 7px 'Courier New'";ctx.fillStyle="rgba(255,100,100,0.7)";
+      ctx.font="bold 9px 'Courier New'";ctx.fillStyle="rgba(255,100,100,0.7)";
       ctx.fillText("?",this.x+this.w-4,this.y+6);
     }
     ctx.restore();
@@ -14103,7 +14161,7 @@ class UFO{
   draw(ctx,img){
     if(!this.alive)return;
     const now=performance.now(),pulse=Math.sin(now*0.006)*0.4+0.6;
-    ctx.save();ctx.shadowColor=CS.RED;ctx.shadowBlur=18*pulse;
+    ctx.save();ctx.shadowColor=CS.RED;ctx.shadowBlur=Math.max(10,18*pulse);
     if(img){ctx.drawImage(img,this.x,this.y,this.w,this.h);}
     else{
       ctx.fillStyle=CS.RED;
@@ -14111,10 +14169,10 @@ class UFO{
       ctx.fillStyle=CS.ORANGE;
       ctx.beginPath();ctx.ellipse(this.x+this.w/2,this.y+this.h*0.38,this.w*0.28,this.h*0.28,0,0,Math.PI*2);ctx.fill();
     }
-    ctx.font="bold 8px 'Courier New'";ctx.textAlign="center";
+    ctx.font="bold 9px 'Courier New'";ctx.textAlign="center";
     ctx.fillStyle=CS.RED;ctx.shadowColor=CS.RED;ctx.shadowBlur=8;
     ctx.fillText(`⚠ ${this.label}`,this.x+this.w/2,this.y-5);
-    ctx.font="8px 'Courier New'";ctx.fillStyle=CS.YELLOW;ctx.shadowBlur=0;
+    ctx.font="9px 'Courier New'";ctx.fillStyle=CS.YELLOW;ctx.shadowBlur=0;
     ctx.fillText(`${this.pts} ${T('def_points_short')}`,this.x+this.w/2,this.y+this.h+12);
     ctx.restore();
   }
@@ -14218,7 +14276,7 @@ class HUD{
     this.#lbl(ctx,`${T('def_wave_label')} ${this.#wave}`,w-12,46,10,CS.RED,"right");
     if(this.#combo>1)this.#lbl(ctx,`🔥 x${this.#combo} ${T('def_chain')}`,10,46,12,CS.RED_GLOW);
     if(this.#env){
-      ctx.save();ctx.font="bold 8px 'Courier New'";ctx.textAlign="center";
+      ctx.save();ctx.font="bold 9px 'Courier New'";ctx.textAlign="center";
       ctx.fillStyle="rgba(4,1,18,0.90)";ctx.fillRect(w/2-140,54,280,14);
       ctx.fillStyle=CS.GREY;ctx.shadowBlur=0;
       ctx.fillText(`${T('def_defending')}: ${this.#env}`,w/2,64);ctx.restore();
@@ -14230,7 +14288,7 @@ class HUD{
       ctx.fillStyle="rgba(0,229,255,0.12)";ctx.fillRect(0,0,w,3);
       ctx.fillStyle=CS.CYAN;ctx.shadowColor=CS.CYAN;ctx.shadowBlur=6;
       ctx.fillRect(0,0,w*prog,3);
-      ctx.font="bold 8px 'Courier New'";ctx.textAlign="center";
+      ctx.font="bold 9px 'Courier New'";ctx.textAlign="center";
       ctx.fillStyle=CS.CYAN;ctx.fillText(`⚡ ${T('def_network_initializing')} — ${this.#grace.toFixed(1)}s`,w/2,14);
       ctx.restore();
     }
@@ -14324,12 +14382,12 @@ class TitleScreen{
         ctx.shadowBlur=isCenter?12:6;
         ctx.beginPath();ctx.roundRect(x,y+bob,EW,EH,4);ctx.fill();ctx.stroke();
         const nl=viewPhase.shortName.length;
-        ctx.font=`bold ${nl>12?7:nl>9?8:9}px 'Courier New'`;
+        ctx.font=`bold ${Math.max(9,nl>12?7:nl>9?8:9)}px 'Courier New'`;
         ctx.fillStyle=phase.color;ctx.shadowBlur=isCenter?8:4;
         ctx.fillText(viewPhase.shortName,x+EW/2,y+bob+15);
-        ctx.font="7px 'Courier New'";ctx.fillStyle=CS.GREY;ctx.shadowBlur=0;
+        ctx.font="9px 'Courier New'";ctx.fillStyle=CS.GREY;ctx.shadowBlur=0;
         ctx.fillText(viewPhase.shortNation,x+EW/2,y+bob+27);
-        ctx.font="7px 'Courier New'";ctx.fillStyle=CS.LTGREY;
+        ctx.font="9px 'Courier New'";ctx.fillStyle=CS.LTGREY;
         const vec=viewPhase.vector.length>18?viewPhase.vector.slice(0,16)+"…":viewPhase.vector;
         ctx.fillText(vec,x+EW/2,y+bob+38);
         ctx.restore();
@@ -14370,7 +14428,7 @@ class TitleScreen{
         ctx.beginPath();ctx.roundRect(x,y,EW,EH,4);ctx.fill();ctx.stroke();
         ctx.font="16px serif";ctx.textAlign="center";ctx.shadowBlur=0;
         ctx.fillText(m.emoji,x+EW/2,y+22);
-        ctx.font=`bold ${m.shortName.length>8?6:7}px 'Courier New'`;
+        ctx.font=`bold ${Math.max(9,m.shortName.length>8?6:7)}px 'Courier New'`;
         ctx.fillStyle=m.color;
         ctx.shadowColor=isCenter?m.color:"transparent";
         ctx.shadowBlur=isCenter?8:0;
@@ -14769,6 +14827,7 @@ class Game{
     this.#stars.update(dt);this.#parts.update(dt);
     this.#fx.update(dt);this.#floats.update(dt);this.#notify.update(dt);
     this.#blinkT+=dt;if(this.#blinkT>0.5){this.#blinkSkip=!this.#blinkSkip;this.#blinkT=0;}
+    if(this.#input.consume("Escape")&&this.#state!==STATE.TITLE){this.#backToTitle();return;}
     switch(this.#state){
         case STATE.TITLE:
   this.#title.update(dt);
@@ -15951,7 +16010,7 @@ class Game{
             ctx.save();ctx.globalAlpha=0.28;ctx.strokeStyle=CS.TEAL;ctx.lineWidth=1.5;
             ctx.shadowColor=CS.TEAL;ctx.shadowBlur=8;
             ctx.beginPath();ctx.roundRect(a.x,a.y,CFG.ATK_W,CFG.ATK_H,3);ctx.stroke();
-            ctx.font="7px 'Courier New'";ctx.textAlign="center";
+            ctx.font="9px 'Courier New'";ctx.textAlign="center";
             ctx.fillStyle=CS.TEAL;ctx.fillText(T('def_status_hidden'),a.x+CFG.ATK_W/2,a.y+CFG.ATK_H/2+3);
             ctx.restore();
           }
@@ -15978,7 +16037,7 @@ class Game{
             ctx.shadowColor=CS.RED;ctx.shadowBlur=12;
             if(img)ctx.drawImage(img,a.x,a.y+bob,CFG.ATK_W,CFG.ATK_H);
             else{ctx.fillStyle=CS.RED;ctx.fillRect(a.x,a.y+bob,CFG.ATK_W,CFG.ATK_H);}
-            ctx.font="bold 7px 'Courier New'";ctx.textAlign="center";
+            ctx.font="bold 9px 'Courier New'";ctx.textAlign="center";
             ctx.fillStyle=CS.RED;ctx.shadowColor=CS.RED;ctx.shadowBlur=6;
             ctx.fillText(T('def_status_impostor'),a.x+CFG.ATK_W/2,a.y+bob-3);
           }
@@ -15996,22 +16055,22 @@ class Game{
         if(img)ctx.drawImage(img,a.x,a.y+bob,CFG.ATK_W,CFG.ATK_H);
         else{ctx.fillStyle=a.isTrusted?CS.GREEN:`hsl(${hue},80%,55%)`;ctx.fillRect(a.x,a.y+bob,CFG.ATK_W,CFG.ATK_H);}
         if(this.#mods.INSIGHT>0&&!a.vanished){
-          ctx.font="bold 7px 'Courier New'";ctx.textAlign="center";
+          ctx.font="bold 9px 'Courier New'";ctx.textAlign="center";
           ctx.fillStyle=CS.BLUE;ctx.shadowColor=CS.BLUE;ctx.shadowBlur=5;
-          ctx.fillText("⚠APT",a.x+CFG.ATK_W/2,a.y+bob-3);
+          ctx.fillText(T('g_apt_label'),a.x+CFG.ATK_W/2,a.y+bob-3);
         }
         if(this.#mods.FEM>0){
-          ctx.font="7px 'Courier New'";ctx.textAlign="center";
+          ctx.font="9px 'Courier New'";ctx.textAlign="center";
           ctx.fillStyle=CS.TEAL;ctx.shadowColor=CS.TEAL;ctx.shadowBlur=4;
           ctx.fillText(T('def_status_exposed'),a.x+CFG.ATK_W/2,a.y+bob+CFG.ATK_H+10);
         }
         if(this.#currentPhase?.behavior?.stagingPhase&&!this.#stagingComplete){
-          ctx.font="7px 'Courier New'";ctx.textAlign="center";
+          ctx.font="9px 'Courier New'";ctx.textAlign="center";
           ctx.fillStyle=CS.ORANGE;ctx.shadowBlur=0;
           ctx.fillText(T('def_status_staging'),a.x+CFG.ATK_W/2,a.y+bob-3);
         }
         if(a.isTrusted){
-          ctx.font="bold 7px 'Courier New'";ctx.textAlign="center";
+          ctx.font="bold 9px 'Courier New'";ctx.textAlign="center";
           ctx.fillStyle=CS.GREEN;ctx.shadowColor=CS.GREEN;ctx.shadowBlur=6;
           ctx.fillText(T('def_status_trusted'),a.x+CFG.ATK_W/2,a.y+bob-3);
           if(this.#mods.INSIGHT>0||this.#mods.IDENTITY>0){
@@ -16041,7 +16100,7 @@ class Game{
       ctx.save();ctx.shadowColor=CS.PURPLE;ctx.shadowBlur=12+Math.sin(now*0.005)*4;
       if(img)ctx.drawImage(img,e.x,e.y+bob,CFG.ATK_W,CFG.ATK_H);
       else{ctx.fillStyle=CS.PURPLE;ctx.fillRect(e.x,e.y+bob,CFG.ATK_W,CFG.ATK_H);}
-      ctx.font="bold 7px 'Courier New'";ctx.textAlign="center";
+      ctx.font="bold 9px 'Courier New'";ctx.textAlign="center";
       ctx.fillStyle=CS.PURPLE;ctx.shadowColor=CS.PURPLE;ctx.shadowBlur=6;
       ctx.fillText(T('def_status_side_vector'),e.x+CFG.ATK_W/2,e.y+bob-4);
       ctx.restore();
@@ -16344,7 +16403,7 @@ class Game{
     ctx.fillText(T('def_redeploy'),w/2,h*0.88);
     ctx.font="bold 10px 'Courier New'";
     ctx.fillStyle=CS.RED;ctx.shadowColor=CS.RED;ctx.shadowBlur=8;
-    ctx.fillText("🦅  crowdstrike.com  |  We Stop Breaches",w/2,h*0.94);
+    ctx.fillText(T('g_crowdstrike_tagline_short'),w/2,h*0.94);
     ctx.restore(); // close textAlign save
     ctx.restore(); // close fade-in globalAlpha
   }
@@ -16391,7 +16450,7 @@ class Game{
     ctx.fillText(T('def_play_again'),w/2,h*0.77);
     ctx.font="bold 11px 'Courier New'";
     ctx.fillStyle=CS.RED;ctx.shadowColor=CS.RED;ctx.shadowBlur=8;
-    ctx.fillText("🦅  crowdstrike.com  |  We Stop Breaches — Guaranteed.",w/2,h*0.87);
+    ctx.fillText(T('g_crowdstrike_tagline'),w/2,h*0.87);
     ctx.restore();
     ctx.restore(); // close fade-in alpha
   }
@@ -16404,7 +16463,7 @@ class Game{
     const pulse=Math.sin(now*0.004);
     ctx.font="bold 30px 'Courier New'";
     ctx.fillStyle=CS.RED;ctx.shadowColor=CS.RED;ctx.shadowBlur=20+pulse*10;
-    ctx.fillText("🦅  FALCON ARCADE DEFENSE",W/2,H*0.30);
+    ctx.fillText(T('g_falcon_defense_title'),W/2,H*0.30);
     ctx.font="bold 11px 'Courier New'";
     ctx.fillStyle=CS.ORANGE;ctx.shadowColor=CS.ORANGE;ctx.shadowBlur=8;
     ctx.fillText(T('iz_loading_title'),W/2,H*0.38);
@@ -16791,6 +16850,32 @@ const RADIO_MSGS={
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"CrowdStrike Signal eliminates standing privileges. Every access request is earned, verified, and time-bound. Zero trust, enforced."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"The Falcon platform now covers endpoint, cloud, identity, data, SIEM, and IT — all from a single agent. One platform to stop breaches."},
     {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Charlotte AI processes over one trillion security events per week. Every analyst now has an AI teammate working at machine speed."},
+    // LOLbin intelligence — each tied to detecting module
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"powershell.exe is the most abused LOLBin we track. OverWatch hunts encoded commands, nested executions, and injection chains — without a single malware signature."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"wmiExec abuse is invisible to legacy antivirus. XDR sees lateral movement as a correlated chain — not isolated events. That chain is exactly what catches them."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"bitsAdmin drops payloads because every Windows machine trusts BITS transfers. Adversaries hide their downloads inside a service your IT team considers safe. OverWatch sees the delivery chain."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"certutil.exe is a certificate management tool. APT10, VOLT TYPHOON, FANCY BEAR — all use it to download and decode payloads. OverWatch flags that parent-child process pattern instantly."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"schtasks establishes persistence that survives reboots. When you neutralise it and it comes back — the adversary re-registered the task. XDR sees both events. That sequence is the fingerprint."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"mshta.exe executes remote HTML applications from a URL. STAR KITTEN used it in the NokNok campaign. One click. Full device access. Identity Protection sees the process tree before the payload runs."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"rundll32 can load arbitrary DLL code from a path the adversary controls. FANCY BEAR, COZY BEAR, Lazarus — all use it. OverWatch hunts the abnormal parent-child relationship, not the binary."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"cloneVM is cloud-native tradecraft. Adversaries clone a VM to dump credentials offline without touching the live system. Falcon Cloud Security sees the API call that no legitimate admin makes at 3am."},
+    // Identity, OverWatch, SGNL deep dives
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"CrowdStrike OverWatch interrupted SANDWORM inside a Ukrainian power grid 72 hours before the attack would have taken down the eastern grid. Human hunters. That is the difference."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Identity is the new perimeter. 79 percent of intrusions use no malware — just stolen credentials and living-off-the-land binaries. Every signature-based tool in your stack is blind to this class of attack."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"CrowdStrike Signal enforces zero standing privileges. No session is pre-authorised. Every access is earned, verified, and time-bound. COZY BEAR's golden SAML tokens become worthless in this model."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Telemetry is the foundation of everything we do. One trillion security events per week. Without that volume, the statistical patterns that expose nation-state actors simply do not emerge."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"ITDR monitors every Active Directory query, every Okta authentication, every Azure AD token issuance. Lateral movement in the identity layer has nowhere to hide from this visibility."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"The fastest eCrime breakout we recorded was two minutes and seven seconds. Initial access to lateral movement before most teams can open a ticket. Speed is an adversary capability. Automation is ours."},
+    // GTR 2026 expansion
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"GTR 2026: Voice phishing surged as GenAI lowered the barrier to perfect voice cloning. SCATTERED SPIDER pioneered vishing at scale. Every eCrime group now runs the same playbook."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: North Korean IT workers submitted over 300 fake applications to Fortune 500 companies in 2025. FAMOUS CHOLLIMA and LABYRINTH CHOLLIMA both running this insider threat playbook simultaneously."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"GTR 2026: VOLT TYPHOON's pre-positioning inside US critical infrastructure is not espionage. This is preparation for the opening move of a kinetic conflict. The systems they are in control power and water."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: Supply chain attacks increased 200 percent year-over-year. One compromised vendor library becomes a simultaneous weapon against every downstream organisation that trusts it."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"GTR 2026: Charlotte AI reduced alert triage time by 80 percent in enterprise SOC environments. At one trillion events per week, human-only triage is not a failure mode — it is a mathematical impossibility."},
+    // Cinematic/dramatic closes
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"The adversaries in this corridor are real. Every TTP you are seeing — the LOLBins, the credential theft, the OAuth abuse — these techniques were caught in live customer networks by the CrowdStrike OverWatch team."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"The adversary does not know they have been detected. That asymmetry is your greatest advantage. OverWatch maintains it. Use it before they change their tradecraft."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"You are operating on intelligence gathered from 230 named adversaries across 29 countries. This is not a simulation of the threat landscape. This is CrowdStrike's actual order of battle."},
   ],
   scattered_spider:[
     {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"SCATTERED SPIDER never uses malware. Pure social engineering. There are no traditional IoCs to find."},
@@ -16821,31 +16906,55 @@ const RADIO_MSGS={
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"LAZARUS funds North Korea's weapons programme. Every dollar they steal has strategic military significance."},
     {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"They will activate the wiper if you get too close. Speed matters here. Do not let them cover their tracks."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"Fake LinkedIn job offers are their initial access vector. $450,000 roles that do not exist. Classic LAZARUS."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"LAZARUS launders stolen crypto through mixing services. The financial trail evaporates in minutes. Act before the transaction confirms. Identity analytics sees the velocity anomaly before it clears."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"TraderTraitor is their crypto-targeting campaign. They researched Ronin for months. The job offer PDF was the final step of an operation that started with open-source intelligence gathering."},
+    {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"LAZARUS uses mshta.exe and rundll32 for payload delivery. OverWatch sees the process chain. An employee downloaded a PDF — and three days later validator keys were in attacker hands."},
   ],
   cozy_bear:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"COZY BEAR does not break in. They log in. Stolen OAuth tokens, forged SAML assertions. No malware at all."},
     {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"287 days average dwell time. They have been in the network longer than anyone realises. Check timestamps."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"SVR patience is their weapon. They wait months before acting. Long dwell time is the key indicator."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"COZY BEAR abused the OAuth device code flow — a legitimate authentication mechanism designed for smart TVs. They weaponised a protocol your identity team considers safe. CrowdStrike Signal stops the token before it lands."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Golden SAML forged by COZY BEAR bypasses every MFA control you have. The assertion looks valid because the signing certificate was real. ITDR detects the behavioural anomaly — the token is valid, the behaviour is not."},
+    {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"SVR considers 287 days dwell time a success. They read classified documents for nine months before anyone noticed. Zero standing privileges via CrowdStrike Signal means nine months becomes nine minutes before the token expires."},
+  ],
+  famous_chollima:[
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"FAMOUS CHOLLIMA submitted fabricated resumes, passed technical interviews, and worked legitimate remote jobs for months before the exfiltration began. Identity analytics detected the behavioural anomaly — human fingerprints don't match the Pyongyang IP."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"TraderTraitor is FAMOUS CHOLLIMA's crypto campaign. They researched the Ronin bridge validators for months. The LinkedIn job offer was the final step of an operation built entirely on open-source intelligence gathering."},
+    {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"GTR 2026: FAMOUS CHOLLIMA insider threat incidents up 304 percent. One adversary group. One playbook. Fake identity. Legitimate job. Real access. Exfiltrate. Fund weapons. Repeat. Identity is the only control that stops this."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"mshta.exe and wmiExec were the LOLBins FAMOUS CHOLLIMA used inside Ronin. No malware dropped. No signature to catch. OverWatch saw the process chain — a developer tool spawning a network connection to a DPRK-attributed IP at 2am."},
   ],
   fancy_bear:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"FANCY BEAR is GRU Unit 26165. They never operate outside Moscow business hours. UTC+3 is your anchor."},
     {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"X-Agent is GRU-exclusive tooling. Never sold, never leaked. If forensics finds it, you know exactly who."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"FANCY BEAR targets NATO infrastructure. Follow the military and government node connections on the map."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"FANCY BEAR used powershell.exe with base64-encoded payloads in the DNC breach. XDR sees encoded PowerShell as an immediate red flag — legitimate administrators do not base64-encode their management commands."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GRU Unit 26165 does their operational planning before 5pm Moscow time. If you see X-Agent beaconing after 17:00 UTC+3 on a workday, it is automated infrastructure — the operator has gone home. Hunt the morning shift."},
+    {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"FANCY BEAR spear-phished with a trojanised NATO conference invite. The certificate looked legitimate because they stole a real contractor's credentials. ITDR would have flagged the identity anomaly before the payload ran."},
   ],
   midnight_blizzard:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"They compromised the build server. Every customer who installed the update is now infected. 18,000 targets."},
     {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"NOBELIUM is SVR Tier-1. The most sophisticated supply chain attack ever documented. Treat it accordingly."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"The code-signing certificate was stolen 6 months before the attack. This was planned for over a year."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"MIDNIGHT BLIZZARD used schtasks.exe and rundll32 to maintain persistence inside the SolarWinds build environment for months. OverWatch would have detected the anomalous scheduled task creation pattern."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"SUNBURST was dormant for 12 to 14 days after installation before it called home. That waiting period is designed to defeat behavioural analysis. XDR correlates the delayed beacon to the build event anyway."},
+    {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"18,000 organisations installed the trojanised update. 100 were actively compromised. Supply chain visibility is not optional. Exposure Management sees every third-party dependency as a potential attack vector."},
   ],
   volt_typhoon:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"VOLT TYPHOON uses only Windows built-in tools. WMIC, netsh, certutil. No malware signatures exist for this."},
     {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"They have been pre-positioning for 300 days. This is not an attack. It is preparation for something larger."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"IT-OT bridge crossing is the critical indicator. That is when physical consequences become possible."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"VOLT TYPHOON does not want to cause damage now. They want the ability to cause damage the moment the geopolitical situation demands it. Pre-positioned. Waiting. Patient."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"certutil, wmiexec, netsh — every LOLBin they use is already trusted by your infrastructure. OverWatch identifies the behavioural chain. 300 days of normal traffic, then one lateral move too many."},
+    {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"They map the network from inside. Power grids, water treatment, telecommunications. XDR sees cross-domain telemetry. That is how you find a threat that uses no malware and leaves almost no trace."},
   ],
   sandworm:[
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"SANDWORM caused the first confirmed power outage via cyberattack. Ukraine, 2015. They will do it again."},
     {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"INDUSTROYER2 targets ICS directly. This is not ransomware. They want to destroy physical infrastructure."},
     {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"IEC 104 protocol queries mean they are targeting electrical substations. This is a critical infrastructure event."},
+    {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"NotPetya cost the global economy $10 billion in 72 hours. SANDWORM had no financial motive. No ransom. No negotiation. Pure, deliberate, state-sponsored destruction. OverWatch is the only human-speed answer."},
+    {op:'BRODY NISBET',cs:'OVERWATCH-1',col:'#42d9ff',msg:"WhisperGate overwrites the master boot record. The machine boots to a ransom note — but there is no decryption key. It was never ransomware. The note is theatre. OverWatch caught the MBR write in pre-detonation."},
+    {op:'INTEL TEAM',cs:'INTEL-TEAM',col:'#74ff88',msg:"SANDWORM pre-positions implants months in advance. 72 hours before the attack we found them in an OT network. OverWatch doesn't wait for the detonation. They hunt the preparation phase."},
   ],
 };
 function updRadio(dt){
@@ -17085,7 +17194,7 @@ const ADVERSARIES=[
     target:'Corporate Identity & Cloud Infrastructure',
     motto:'We are already your IT department.',
     caseTitle:'OPERATION PHANTOM HELPDESK',
-    brief:'SCATTERED SPIDER is moving through corporate networks using social engineering. They have never deployed malware — just phone calls and patience. Your first hunt.',
+    brief:'One phone call bypassed $2 million in security technology. SCATTERED SPIDER is inside right now — no malware, just valid credentials and patience. Trace the call, follow the credential, cut them off before they reach the wire.',
     counterModule:'🪪 Falcon Identity',
     route:['dark_web','amsterdam','london','new_york','swift_node'],
     objective:'swift_node',
@@ -17106,7 +17215,7 @@ const ADVERSARIES=[
     target:'Retail & Finance POS Networks',
     motto:'Your defences are not designed for what we do.',
     caseTitle:'OPERATION BLACKCAT RAPIDS',
-    brief:'CARBON SPIDER is staging ransomware across a global retail network. They are slow now — but once staging completes, encryption begins in 90 seconds.',
+    brief:'FIN7 has been inside the retail network for 9 days. Shadow copies deleted. ESXi enumerated. Domain admin harvested. Between you and 94 encrypted VMs is a 90-second window. Hunt it now.',
     counterModule:'🛡️ Falcon Prevent',
     route:['dark_web','singapore','swift_node','frankfurt_b','amsterdam'],
     objective:'amsterdam',
@@ -17128,7 +17237,7 @@ const ADVERSARIES=[
     target:'Brazilian Banking & PIX Payment Network',
     motto:'In Brazil, every bank account is a target.',
     caseTitle:'OPERATION PIX HEIST',
-    brief:'PLUMP SPIDER is a Brazilian eCrime group deploying Grandoreiro banking trojans across South America. They are targeting the PIX instant payment system — transfers complete in 10 seconds, making recovery impossible.',
+    brief:'12,000 fraudulent PIX payments. 10 seconds per transfer. Irreversible. PLUMP SPIDER is inside three Brazilian banks right now and every transfer that clears is gone forever. Find the route before the final wire.',
     counterModule:'🪪 Falcon Identity',
     route:['sao_paulo','rio','bogota','new_york','swift_node'],
     objective:'swift_node',
@@ -17149,7 +17258,7 @@ const ADVERSARIES=[
     target:'LatAm Financial Institutions & SWIFT Network',
     motto:'We speak your language. We know your bank.',
     caseTitle:'OPERATION BOGOTÁ WIRE',
-    brief:'BLIND SPIDER is a Colombian eCrime collective specialising in Business Email Compromise targeting Latin American financial institutions. They have redirected $47M in SWIFT transfers in the past 6 months.',
+    brief:'$47 million redirected through 23 operators coordinating in real time via Telegram. Six months. Zero arrests. BLIND SPIDER is targeting LatAm SWIFT infrastructure right now. Find the objective before the next wire clears.',
     counterModule:'🪪 Falcon Identity',
     route:['bogota','sao_paulo','new_york','swift_node','frankfurt_b'],
     objective:'frankfurt_b',
@@ -17170,7 +17279,7 @@ const ADVERSARIES=[
     target:'Enterprise Infrastructure — Triple Extortion',
     motto:'Encrypt. Publish. Destroy. In that order.',
     caseTitle:'OPERATION TRIPLE THREAT',
-    brief:'BLACKCAT affiliates are deploying the most technically sophisticated ransomware ever observed — simultaneously targeting Windows, Linux and ESXi. 847 alerts in 4 minutes.',
+    brief:'RaaS affiliate. $800 initial access purchase. $4.5M ransom inbound. Rust ransomware deploying simultaneously across Windows, Linux and ESXi. 847 alerts in 4 minutes will overwhelm your team. Find the node first.',
     counterModule:'🤖 Charlotte AI',
     route:['dark_web','singapore','amsterdam','frankfurt_b','swift_node'],
     objective:'swift_node',
@@ -17192,7 +17301,7 @@ const ADVERSARIES=[
     target:'Cryptocurrency & Financial Systems',
     motto:'We fund a weapons programme. Every dollar matters.',
     caseTitle:'OPERATION CRYPTO THUNDER',
-    brief:'LAZARUS GROUP has stolen $3B+ in cryptocurrency. They are moving now toward a major financial target — and when discovered, they will activate a wiper to cover their tracks.',
+    brief:'$3 billion stolen. Every dollar funds North Korea\'s weapons programme. Move too slow and LAZARUS activates the wiper — destroying every shred of forensic evidence. Find them before they know you are watching.',
     counterModule:'🦅 Falcon Complete MDR',
     route:['pyongyang','dark_web','singapore','swift_node','frankfurt_b'],
     objective:'frankfurt_b',
@@ -17213,7 +17322,7 @@ const ADVERSARIES=[
     target:'Cloud Infrastructure & Identity Providers',
     motto:'We do not break in. We log in.',
     caseTitle:'OPERATION SILENT OAUTH',
-    brief:'SVR foreign intelligence has been dwelling in cloud environments for months. They authenticate using stolen tokens — no malware, no signatures. Harder to find than anything you have hunted before.',
+    brief:'287-day average dwell time. No malware. No signatures. COZY BEAR logs in with valid stolen tokens and reads classified documents for months before anyone notices. Find the pattern in the silence. Break the chain.',
     counterModule:'☁️ Falcon Cloud Security',
     route:['svr','kremlin','kyiv','frankfurt_e','amsterdam'],
     objective:'amsterdam',
@@ -17235,7 +17344,7 @@ const ADVERSARIES=[
     target:'NATO & Government Networks',
     motto:'We harvest what you trust.',
     caseTitle:'OPERATION IRON HARVEST',
-    brief:'GRU military intelligence has been active in NATO networks for 18 months. They are moving now — collecting defence attaché credentials ahead of a major summit. Expert-level hunt.',
+    brief:'GRU Unit 26165. 18 months inside NATO networks. Defence attaché credentials are the target — a major summit is 72 hours away. The X-Agent fingerprint is your only lead. UTC+3. Expert-level. Hunt it.',
     counterModule:'🪪 Falcon Identity',
     route:['gru','kremlin','kyiv','berlin','brussels'],
     objective:'brussels',
@@ -17256,7 +17365,7 @@ const ADVERSARIES=[
     target:'Software Supply Chain & Vendor Networks',
     motto:'We compromised the vendor. Now we own the customer.',
     caseTitle:'OPERATION SUNBURST ECHO',
-    brief:'MIDNIGHT BLIZZARD has compromised a trusted software vendor and is pushing malicious updates to 18,000 downstream customers. One of the most complex hunts in this series.',
+    brief:'The code-signing certificate was stolen 6 months before the attack. 18,000 organisations installed the trojanised update. MIDNIGHT BLIZZARD is in their networks right now. The supply chain is the weapon. Find the objective.',
     counterModule:'🦅 Falcon Complete MDR',
     route:['svr','dark_web','amsterdam','berlin','brussels'],
     objective:'brussels',
@@ -17278,7 +17387,7 @@ const ADVERSARIES=[
     target:'Critical Infrastructure & OT Networks',
     motto:'We will be there before you know you need to look.',
     caseTitle:'OPERATION SILENT PRE-POSITION',
-    brief:'VOLT TYPHOON has been silently pre-positioning in critical infrastructure for 300 days. They use only built-in Windows tools — no malware signatures exist. Elite-level hunt.',
+    brief:'300 days. No malware. Only Windows built-in tools. VOLT TYPHOON is inside critical infrastructure, pre-positioned and waiting for the order. The only evidence is behavioural. This is the hardest hunt you will run.',
     counterModule:'🗺️ Falcon Exposure Mgmt',
     route:['beijing','dark_web','kyiv','frankfurt_e','geneva'],
     objective:'geneva',
@@ -17299,7 +17408,7 @@ const ADVERSARIES=[
     target:'Industrial Control Systems & Power Grid',
     motto:'We do not steal. We destroy.',
     caseTitle:'OPERATION DARK GRID',
-    brief:'The most destructive threat actor ever documented. SANDWORM caused the first confirmed power outage via cyberattack. The hardest hunt in this series. Good luck.',
+    brief:'They caused the first confirmed power outage via cyberattack. NotPetya cost the world $10 billion. SANDWORM is pre-positioning again — wiper staged, MBR overwrite scheduled, grid HMI terminals accessed. Find them. Now.',
     counterModule:'🛡️ Falcon Prevent',
     route:['gru','kremlin','kyiv','frankfurt_e','geneva'],
     objective:'geneva',
@@ -17754,7 +17863,7 @@ function drawWorldMap(){
     // Outer glow
     if(isAdv){ ctx.shadowColor='#FF1744'; ctx.shadowBlur=28+Math.sin(Date.now()*0.01)*10; }
     else if(isObj){ ctx.shadowColor='#FFD700'; ctx.shadowBlur=22; }
-    else{ ctx.shadowColor=col; ctx.shadowBlur=12*pulse; }
+    else{ ctx.shadowColor=col; ctx.shadowBlur=Math.max(10,12*pulse); }
 
     // Hexagon node — BIGGER sizes
     const r=isAdv||isObj?18:important?14:12;
@@ -17925,7 +18034,7 @@ function huntFont(size, weight=''){
   return `${weight ? weight + ' ' : ''}${px}px "Courier New"`;
 }
 
-/* Pixel-based text wrapping — measures actual rendered width */
+/* Pixel-based text wrapping — 2-arg local version uses closure ctx */
 function wrapTextPx(text, maxW){
   const words=String(text||'').split(' ');
   const lines=[]; let line='';
@@ -18671,7 +18780,7 @@ function drawTitle(dt){
   }
   for(const[,node] of Object.entries(NODES)){
     const pulse=0.5+Math.sin(Date.now()*0.003+node.x*0.02)*0.3;
-    ctx.fillStyle=node.color+'66'; ctx.shadowColor=node.color; ctx.shadowBlur=8*pulse;
+    ctx.fillStyle=node.color+'66'; ctx.shadowColor=node.color; ctx.shadowBlur=Math.max(10,8*pulse);
     ctx.beginPath(); ctx.arc(node.x,node.y,5,0,TAU); ctx.fill(); ctx.shadowBlur=0;
   }
   if(objectiveNode){
