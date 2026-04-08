@@ -17706,7 +17706,32 @@ const ADVERSARIES_I18N = {
           "title": "Impacto de $100M — Padrão MGM",
           "text": "Perfil forense corresponde a MGM Resorts 2023. Perdas combinadas de outages, resgate e breach: $100M+. Depoimento no Congresso seguido."
         }
-      ]
+      ],
+      "nation": "🌐 Cibercrime Ocidental",
+      "aka": "UNC3944 · Muddled Libra",
+      "caseTitle": "OPERAÇÃO PHANTOM HELPDESK",
+      "moduleClues": {
+        "identity": {
+          "title": "Anomalia no Gráfico de Identidade",
+          "text": "Falcon Identity detectou viagem impossível: mesma sessão Okta autenticada de Londres e Las Vegas em 6 minutos — fisicamente impossível."
+        },
+        "xdr": {
+          "title": "Correlação Entre Plataformas",
+          "text": "XDR correlacionou sinais de endpoint, email e nuvem: 3 dispositivos, 2 países, 1 credencial roubada — todos ativos simultaneamente na mesma sessão."
+        },
+        "pangea": {
+          "title": "Sobreposição de Infraestrutura — Caesars",
+          "text": "Inteligência de ameaça correspondeu infraestrutura de falsificação de telefone do ator com violação Caesars Entertainment 2 semanas antes. Mesmo provedor de vishing-as-a-service."
+        },
+        "overwatch": {
+          "title": "Correspondência de Perfil do Operador",
+          "text": "OverWatch observou enumeração manual do console admin Okta — cadência de digitação e sequência de flags correspondem ao perfil documentado do operador UNC3944."
+        },
+        "exposure": {
+          "title": "Método MFA Legado Exposto",
+          "text": "Falcon Exposure identificou portal admin Okta publicamente acessível com MFA legado baseado em SMS habilitado — o vetor de bypass exato confirmado na investigação."
+        }
+      }
     },
     "carbon_spider": {
       "target": "REDES POS DE VAREJO & FINANÇAS",
@@ -17771,7 +17796,32 @@ const ADVERSARIES_I18N = {
           "title": "94 VMs Criptografadas Simultaneamente",
           "text": "Todos os 94 VMs ESXi criptografados em 8 minutos de deploy. 100% da infraestrutura virtualizada offline. Timeline de recuperação: semanas."
         }
-      ]
+      ],
+      "nation": "🌐 Sindicato de Cibercrime",
+      "aka": "FIN7 · Sangria Tempest",
+      "caseTitle": "OPERAÇÃO BLACKCAT RAPIDS",
+      "moduleClues": {
+        "identity": {
+          "title": "Abuso de Conta de Serviço",
+          "text": "Falcon Identity detectou conta de serviço realizando logon interativo de 14 estações de trabalho simultaneamente — apenas possível com tooling automatizado."
+        },
+        "xdr": {
+          "title": "Cadeia de Execução Sem Arquivo",
+          "text": "Árvore de processo XDR: explorer.exe → mshta.exe → powershell.exe (codificado) → beacon Cobalt Strike. Inteiramente em memória. Zero gravações em disco."
+        },
+        "pangea": {
+          "title": "Infraestrutura IP FIN7",
+          "text": "IP C2 correspondeu ao pool de infraestrutura FIN7 de 3 campanhas varejistas anteriores. Mesmo ASN usado em violações Darden Restaurants e Chipotle."
+        },
+        "overwatch": {
+          "title": "Correspondência de Tradecraft do Operador",
+          "text": "OverWatch identificou estilo de enumeração manual da linha de comando — ordem de flags WMIC específica e timing consistentes com perfil de operador FIN7 documentado."
+        },
+        "exposure": {
+          "title": "RDP Exposto na Rede POS",
+          "text": "Exposure Management encontrou 3 endpoints POS com RDP aberto à internet e CVE-2019-0708 (BlueKeep) sem patches desde março de 2019."
+        }
+      }
     },
     "plump_spider": {
       "target": "BANKING BRASILEIRO & REDE PIX",
@@ -17836,7 +17886,32 @@ const ADVERSARIES_I18N = {
           "title": "Três Bancos — Simultâneos",
           "text": "PLUMP SPIDER está dentro de Bradesco, Itaú, e Nubank simultaneamente. Alerta do Banco Central acionado mas transferências já estão cleiando."
         }
-      ]
+      ],
+      "nation": "🇧🇷 Brasil — Cibercrime",
+      "aka": "Gangue Grandoreiro · PIX Bandits",
+      "caseTitle": "OPERAÇÃO PIX HEIST",
+      "moduleClues": {
+        "identity": {
+          "title": "Validação em Massa de CPF",
+          "text": "Falcon Identity detectou consultas automatizadas de validação de CPF e CNPJ contra a API Receita Federal — 4.700 requisições em 8 minutos de um endpoint."
+        },
+        "xdr": {
+          "title": "Técnica Overlay Grandoreiro Detectada",
+          "text": "XDR capturou técnica overlay Grandoreiro: janela de phishing transparente posicionada sobre app bancário em coordenadas perfeitas para cada banco."
+        },
+        "pangea": {
+          "title": "Infraestrutura C2 Grandoreiro",
+          "text": "Inteligência de ameaça correspondeu servidor C2 cadeia de certificados SSL com infraestrutura Grandoreiro conhecida de 3 campanhas anteriores direcionadas ao Banco do Brasil."
+        },
+        "overwatch": {
+          "title": "Operador Ao Vivo em UTC-3",
+          "text": "OverWatch observou interação manual do operador com dispositivos comprometidos durante 09:00-17:00 horário de Brasília. Transferências iniciadas manualmente, não automatizadas."
+        },
+        "exposure": {
+          "title": "Exploração de Deep Link de App Bancário",
+          "text": "Exposure identificou versão 4.2.1 do app bancário com vulnerabilidade de sequestro de deep link permitindo Grandoreiro interceptar códigos OTP na entrega."
+        }
+      }
     },
     "blind_spider": {
       "target": "Instituições Financeiras da América Latina & Rede SWIFT",
@@ -17901,7 +17976,32 @@ const ADVERSARIES_I18N = {
           "title": "$47M — 6 Bancos Alvo",
           "text": "Exposição total BEC: $47M em 6 instituições financeiras da América Latina. Três transferências eletrônicas já foram processadas. A janela de interceptação está fechando."
         }
-      ]
+      ],
+      "nation": "🌐 Colômbia — Cibercrime",
+      "aka": "Coletivo BEC LatAm",
+      "caseTitle": "OPERAÇÃO BOGOTA WIRE",
+      "moduleClues": {
+        "identity": {
+          "title": "Viagem Impossível da Conta CFO",
+          "text": "Falcon Identity detectou conta de email CFO autenticada da Colômbia e Nova York simultaneamente — mesma sessão, 8 minutos de intervalo."
+        },
+        "xdr": {
+          "title": "Cadeia de Processo AsyncRAT",
+          "text": "XDR rastreou instalação AsyncRAT para macro Excel maliciosa aberta por membro da equipe de finanças. Keylogging e captura de tela completos confirmados."
+        },
+        "pangea": {
+          "title": "Ator BEC Conhecido LatAm",
+          "text": "Inteligência de ameaça correspondeu AsyncRAT C2 com ator BEC colombiano conhecido responsável por roubo de $12M de banco local em 2022."
+        },
+        "overwatch": {
+          "title": "Operador Colombiano Confirmado",
+          "text": "OverWatch confirmou comandos em idioma espanhol com dialeto colombiano. Conhecimento local dos procedimentos de aprovação de wire do banco-alvo é evidente."
+        },
+        "exposure": {
+          "title": "Servidor SWIFT Não Segmentado",
+          "text": "Exposure encontrou servidor legado SWIFT Alliance Access sem segmentação de rede da rede de email corporativa — travessia direta possível."
+        }
+      }
     },
     "blackcat": {
       "target": "Infraestrutura Corporativa — Extorsão Tripla",
@@ -17966,7 +18066,32 @@ const ADVERSARIES_I18N = {
           "title": "Padrão de Traição de Afiliado",
           "text": "ALPHV pegou os $22M de resgate, desligou a infraestrutura, culpou o FBI — afiliado não recebeu nada, vítima não recebeu nenhum descriptografador. Fraude criminal pura."
         }
-      ]
+      ],
+      "nation": "🌐 Operador RaaS",
+      "aka": "ALPHV · Noberus RaaS",
+      "caseTitle": "OPERAÇÃO TRIPLE THREAT",
+      "moduleClues": {
+        "identity": {
+          "title": "Cadeia de Credenciais IAB",
+          "text": "Falcon Identity confirmou: credenciais adquiridas do IAB vieram de infecção anterior por infostealer em notebook de contratante. Reutilizadas em 4 serviços em nuvem."
+        },
+        "xdr": {
+          "title": "Características do Payload em Rust",
+          "text": "Análise de memória XDR identificou binário Rust do ALPHV: alocador de memória customizado, rotinas de criptografia multiplataforma, sem símbolos de debug."
+        },
+        "pangea": {
+          "title": "Afiliado do Ataque MGM",
+          "text": "Inteligência de ameaça correlacionou infraestrutura C2 com afiliado ALPHV ativo no MGM Resorts em setembro de 2023. Colaboração SCATTERED SPIDER confirmada."
+        },
+        "overwatch": {
+          "title": "Operador Manual Hands-On-Keyboard",
+          "text": "OverWatch confirmou operador manual hands-on-keyboard — comandos de enumeração customizados não correspondem a nenhuma sequência de ferramenta automatizada conhecida."
+        },
+        "exposure": {
+          "title": "Citrix Bleed Não Corrigida",
+          "text": "Exposure encontrou Citrix NetScaler ADC vulnerável a CVE-2023-4966 (Citrix Bleed) — permite roubo de token de sessão sem autenticação."
+        }
+      }
     },
     "lazarus": {
       "target": "Criptografia & Sistemas Financeiros",
@@ -18031,7 +18156,32 @@ const ADVERSARIES_I18N = {
           "title": "Programa de Armas Financiado",
           "text": "Tesouro dos EUA confirmou: LAZARUS Group financia desenvolvimento de ICBM da Coreia do Norte. $625M financia um estimado 6 ciclos de desenvolvimento de mísseis balísticos intercontinentais."
         }
-      ]
+      ],
+      "nation": "🇰🇵 Coreia do Norte — RGB",
+      "aka": "Hidden Cobra · Bureau RGB 121",
+      "caseTitle": "OPERAÇÃO CRYPTO THUNDER",
+      "moduleClues": {
+        "identity": {
+          "title": "Pivô da Conta de Desenvolvedor",
+          "text": "Falcon Identity rastreou conta de desenvolvedor sênior comprometida usada para autenticar em 4 nós validadores simultaneamente — impossível sem roubo de credenciais."
+        },
+        "xdr": {
+          "title": "Implante Customizado Decodificado",
+          "text": "Análise forense de memória XDR decodificou implante customizado LAZARUS — nenhuma correlação com inteligência de ameaça em nível global. Construído exclusivamente para este alvo."
+        },
+        "pangea": {
+          "title": "Faixa de IP da Coreia do Norte",
+          "text": "Inteligência de ameaça sinalizou comunicações diretas C2 de faixa BGP da Coreia do Norte — LAZARUS raramente usa IPs da RPDC, indicando urgência operacional."
+        },
+        "overwatch": {
+          "title": "Padrão de Scan SWIFT de Bangladesh",
+          "text": "OverWatch identificou varredura de porta SWIFT Alliance Access idêntica ao reconhecimento pré-ataque observado 6 horas antes do roubo do Bangladesh Bank em 2016."
+        },
+        "exposure": {
+          "title": "Nó Validador Não Corrigido",
+          "text": "Exposure encontrou validador da ponte Ronin executando software com 26 meses de atraso com vulnerabilidade de execução remota de código não corrigida na camada de consenso."
+        }
+      }
     },
     "cozy_bear": {
       "target": "Infraestrutura em Nuvem e Provedores de Identidade",
@@ -18096,7 +18246,32 @@ const ADVERSARIES_I18N = {
           "title": "9 Agências dos EUA — Investigação de 3 Anos",
           "text": "9 agências federais dos EUA incluindo Tesouro, Comércio e Segurança Interna profundamente comprometidas. Investigação durou mais de 3 anos."
         }
-      ]
+      ],
+      "nation": "🇷🇺 Rússia — SVR",
+      "aka": "APT29 · Midnight Blizzard",
+      "caseTitle": "OPERAÇÃO SILENT OAUTH",
+      "moduleClues": {
+        "identity": {
+          "title": "Token OAuth — 4 Continentes",
+          "text": "Falcon Identity sinalizou mesmo token OAuth autenticado de Londres, Moscou, Singapura e Toronto em 18 minutos — fisicamente impossível."
+        },
+        "xdr": {
+          "title": "Certificado Expirado Aceito",
+          "text": "Telemetria de nuvem XDR encontrou asserção SAML assinada com certificado expirado há 6 meses — aceita por IdP legado sem verificação de revogação."
+        },
+        "pangea": {
+          "title": "Correspondência de Padrão de Domínio SVR",
+          "text": "Inteligência de ameaça correlacionou cadência de registro de domínio C2 e padrão de nomenclatura com campanhas SVR em Microsoft 2024 e SolarWinds 2020."
+        },
+        "overwatch": {
+          "title": "Ritmo Deliberadamente Abaixo do Limite",
+          "text": "OverWatch confirmou: uma tentativa de autenticação por conta a cada 8 horas ao longo de 34 dias — deliberadamente abaixo de todos os limites de bloqueio empresarial."
+        },
+        "exposure": {
+          "title": "Tenant de Teste Legado — Sem MFA",
+          "text": "Exposure identificou tenant Microsoft 365 de teste esquecido sem MFA — o vetor exato de acesso inicial confirmado na violação Microsoft 2024."
+        }
+      }
     },
     "fancy_bear": {
       "target": "Redes da OTAN e do Governo",
@@ -18161,7 +18336,32 @@ const ADVERSARIES_I18N = {
           "title": "DNC — Bundestag — Trilogia OTAN",
           "text": "Continuidade TTP em DNC 2016, Bundestag 2015 e esta operação confirma direcionamento sistemático da Unidade GRU 26165 das instituições democráticas ocidentais."
         }
-      ]
+      ],
+      "nation": "🇷🇺 Rússia — GRU",
+      "aka": "APT28 · Forest Blizzard",
+      "caseTitle": "OPERAÇÃO IRON HARVEST",
+      "moduleClues": {
+        "identity": {
+          "title": "Viagem Impossível do Adido de Defesa",
+          "text": "Falcon Identity detectou conta de adido de defesa NATO autenticada de três países em 4 horas — credencial compartilhada pela equipe de operadores APT28."
+        },
+        "xdr": {
+          "title": "Artefatos de String X-Agent em Memória",
+          "text": "Varredura de memória XDR encontrou artefatos de string X-Agent — framework exclusivo do GRU nunca vazado publicamente ou vendido em nenhum mercado criminoso."
+        },
+        "pangea": {
+          "title": "Padrão de Registro de Domínio APT28",
+          "text": "Inteligência de ameaça correlacionou C2 de domínio com padrão APT28 — [agência-legítima]-[ação].com — consistente em DNC 2016, Bundestag 2015 e operação atual."
+        },
+        "overwatch": {
+          "title": "Correspondência de Tradecraft do Bundestag",
+          "text": "OverWatch confirmou: ordem específica de flag WMIC e timing de comando correspondem ao tradecraft do operador APT28 documentado na investigação Bundestag 2015."
+        },
+        "exposure": {
+          "title": "Exchange ProxyLogon Não Corrigido",
+          "text": "Exposure encontrou Exchange Server vulnerável a ProxyLogon CVE-2021-26855 — não corrigido desde março de 2021. APT28 explora ativamente este vetor."
+        }
+      }
     },
     "midnight_blizzard": {
       "target": "Cadeia de Fornecimento de Software e Redes de Fornecedor",
@@ -18226,7 +18426,32 @@ const ADVERSARIES_I18N = {
           "title": "9 Agências — Investigação de 3 Anos",
           "text": "US Treasury, Comércio, Segurança Interna, Departamento de Estado e 5 outras agências profundamente comprometidas. Investigação durou mais de 3 anos."
         }
-      ]
+      ],
+      "nation": "🇷🇺 Rússia — SVR Tier-1",
+      "aka": "NOBELIUM · APT29 Elite",
+      "caseTitle": "OPERAÇÃO SUNBURST ECHO",
+      "moduleClues": {
+        "identity": {
+          "title": "Reutilização de Credencial de Desenvolvedor",
+          "text": "Falcon Identity rastreou certificado de assinatura de código roubado para uma estação de trabalho de desenvolvedor — mesmas credenciais usadas para laptop de desenvolvimento e servidor de build de produção."
+        },
+        "xdr": {
+          "title": "DLL Assinada em Orion Update",
+          "text": "XDR detectou sideloading de DLL dentro do SolarWinds Orion — DLL maliciosa carregada na inicialização da aplicação, assinada com um certificado SolarWinds válido."
+        },
+        "pangea": {
+          "title": "SUNBURST C2 Pré-Registrado",
+          "text": "Inteligência de ameaça identificou avsvmcloud[.]com — o domínio SUNBURST C2 registrado por NOBELIUM 8 meses antes do deployment começar."
+        },
+        "overwatch": {
+          "title": "Ativação Seletiva em 100 de 18.000",
+          "text": "OverWatch: SUNBURST dormant em 17.900 instalações — manualmente ativado em 100 baseado em avaliação de valor de inteligência."
+        },
+        "exposure": {
+          "title": "Servidor Build Sem EDR",
+          "text": "Exposure encontrou servidor CI/CD SolarWinds build sem EDR instalado e sem monitoramento de rede — zero visibilidade no processo de build."
+        }
+      }
     },
     "volt_typhoon": {
       "target": "Infraestrutura Crítica e Redes OT",
@@ -18291,7 +18516,32 @@ const ADVERSARIES_I18N = {
           "title": "Parecer Conjunto Five Eyes",
           "text": "EUA, Reino Unido, Austrália, Canadá e Nova Zelândia emitiram parecer conjunto em maio de 2023: VOLT TYPHOON está pré-posicionado em infraestrutura crítica em todas as cinco nações."
         }
-      ]
+      ],
+      "nation": "🇨🇳 China — PLA",
+      "aka": "Bronze Silhouette",
+      "caseTitle": "OPERAÇÃO SILENT PRE-POSITION",
+      "moduleClues": {
+        "identity": {
+          "title": "LSASS via Task Manager",
+          "text": "Falcon Identity detectou processo Task Manager acessando LSASS — dumping de credencial usando ferramenta Windows legítima. Assinatura de malware: zero."
+        },
+        "xdr": {
+          "title": "Sequência de Comando VOLT TYPHOON",
+          "text": "Análise comportamental XDR: netsh portproxy + certutil -encode + WMIC remote query — sequência de comando exata documentada em todas as intrusões VOLT TYPHOON confirmadas."
+        },
+        "pangea": {
+          "title": "Rede Relay SOHO Router",
+          "text": "Inteligência de ameaça correspondeu padrão de comprometimento router SOHO Netgear e Cisco para infraestrutura VOLT TYPHOON usada em campanha de base militar em Guam."
+        },
+        "overwatch": {
+          "title": "Dwell de 5+ Anos Confirmado",
+          "text": "Timeline forense OverWatch: artefato VOLT TYPHOON mais antigo datado de 2019. 5+ anos de acesso não detectado à infraestrutura crítica."
+        },
+        "exposure": {
+          "title": "Ghost OT Asset — 2011",
+          "text": "Exposure Management encontrou controlador SCADA instalado em 2011, nunca registrado em nenhum inventário de ativos, conectado à rede corporativa via bridge legado."
+        }
+      }
     },
     "sandworm": {
       "target": "Sistemas de Controle Industrial e Rede Elétrica",
@@ -18356,7 +18606,32 @@ const ADVERSARIES_I18N = {
           "title": "Industroyer2 — Segunda Tentativa",
           "text": "Abril 2022: Industroyer2 parado por ESET e CERT-UA 2 horas antes da ativação. Operação atual é a segunda tentativa de implantação contra a mesma rede."
         }
-      ]
+      ],
+      "nation": "🇷🇺 Rússia — Unidade GRU 74455",
+      "aka": "Voodoo Bear · Unit 74455",
+      "caseTitle": "OPERAÇÃO DARK GRID",
+      "moduleClues": {
+        "identity": {
+          "title": "Reutilização de Credencial de Admin OT",
+          "text": "Falcon Identity detectou credenciais de admin de domínio da rede IT agora ativas na rede OT — roubadas 3 semanas antes via spearphish SANDWORM."
+        },
+        "xdr": {
+          "title": "Strings de Memória Industroyer2",
+          "text": "Scan de memória XDR encontrou strings de comando IEC 104 e configuração XML de subestação em memória de processo — variante Industroyer2 confirmada."
+        },
+        "pangea": {
+          "title": "Atribuição GRU Unit 74455",
+          "text": "Inteligência de ameaça correspondeu linhagem de malware para GRU Unit 74455 — mesma base de código que NotPetya 2017, Industroyer 2016 e Industroyer2 2022."
+        },
+        "overwatch": {
+          "title": "Teste Manual de Comando ICS",
+          "text": "OverWatch detectou entrada manual de comandos IEC 104 — não automatizado. Operador está testando resposta de subestação antes de deployment final."
+        },
+        "exposure": {
+          "title": "3 Terminais HMI Expostos à Internet",
+          "text": "Exposure encontrou 3 terminais Human-Machine Interface com conectividade direta à internet e credenciais padrão. Controles de subestação física expostos."
+        }
+      }
     }
   },
   "es": {
@@ -18423,7 +18698,32 @@ const ADVERSARIES_I18N = {
           "title": "Impacto de $100M — Patrón MGM",
           "text": "El perfil forense coincide con MGM Resorts 2023. Pérdidas combinadas de interrupciones, rescate y violación de datos: $100M+. Testimonio ante el Congreso posterior."
         }
-      ]
+      ],
+      "nation": "🌐 Cibercrimen Occidental",
+      "aka": "UNC3944 · Muddled Libra",
+      "caseTitle": "OPERACIÓN PHANTOM HELPDESK",
+      "moduleClues": {
+        "identity": {
+          "title": "Anomalía en el Gráfico de Identidad",
+          "text": "Falcon Identity detectó viaje imposible: misma sesión Okta autenticada desde Londres y Las Vegas en 6 minutos — físicamente imposible."
+        },
+        "xdr": {
+          "title": "Correlación Entre Plataformas",
+          "text": "XDR correlacionó señales de endpoint, correo electrónico y nube: 3 dispositivos, 2 países, 1 credencial robada — todos activos simultáneamente en la misma sesión."
+        },
+        "pangea": {
+          "title": "Superposición de Infraestructura — Caesars",
+          "text": "Inteligencia de amenaza relacionó infraestructura de suplantación de telefonía del actor con la brecha de Caesars Entertainment 2 semanas antes. Mismo proveedor de vishing-as-a-service."
+        },
+        "overwatch": {
+          "title": "Coincidencia de Perfil del Operador",
+          "text": "OverWatch observó enumeración manual de la consola de administración Okta — cadencia de pulsaciones y secuencia de banderas coinciden con el perfil de operador UNC3944 documentado."
+        },
+        "exposure": {
+          "title": "Método MFA Heredado Expuesto",
+          "text": "Falcon Exposure identificó portal de administración Okta accesible públicamente con MFA heredado basado en SMS habilitado — el vector de bypass exacto confirmado en la investigación."
+        }
+      }
     },
     "carbon_spider": {
       "target": "REDES POS DE MINORISTA & FINANZAS",
@@ -18488,7 +18788,32 @@ const ADVERSARIES_I18N = {
           "title": "94 VM Cifradas Simultáneamente",
           "text": "Todas las 94 VM ESXi cifradas en 8 minutos de implementación. 100% de la infraestructura virtualizada fuera de línea. Cronología de recuperación: semanas."
         }
-      ]
+      ],
+      "nation": "🌐 Sindicato de Cibercrimen",
+      "aka": "FIN7 · Sangria Tempest",
+      "caseTitle": "OPERACIÓN BLACKCAT RAPIDS",
+      "moduleClues": {
+        "identity": {
+          "title": "Abuso de Cuenta de Servicio",
+          "text": "Falcon Identity detectó cuenta de servicio realizando inicio de sesión interactivo desde 14 estaciones de trabajo simultáneamente — solo posible con herramientas automatizadas."
+        },
+        "xdr": {
+          "title": "Cadena de Ejecución sin Archivos",
+          "text": "Árbol de procesos XDR: explorer.exe → mshta.exe → powershell.exe (codificado) → beacon Cobalt Strike. Completamente en memoria. Cero escrituras en disco."
+        },
+        "pangea": {
+          "title": "Infraestructura IP FIN7",
+          "text": "IP C2 coincidió con el grupo de infraestructura FIN7 de 3 campañas minoristas anteriores. Mismo ASN utilizado en brechas de Darden Restaurants y Chipotle."
+        },
+        "overwatch": {
+          "title": "Coincidencia de Tradecraft del Operador",
+          "text": "OverWatch identificó estilo de enumeración de línea de comandos manual — orden de banderas WMIC específica y sincronización consistentes con perfil de operador FIN7 documentado."
+        },
+        "exposure": {
+          "title": "RDP Expuesto en la Red POS",
+          "text": "Exposure Management encontró 3 terminales POS con RDP abierto a Internet y CVE-2019-0708 (BlueKeep) sin parches desde marzo de 2019."
+        }
+      }
     },
     "plump_spider": {
       "target": "BANCA BRASILEÑA & RED PIX",
@@ -18553,7 +18878,32 @@ const ADVERSARIES_I18N = {
           "title": "Tres Bancos — Simultáneamente",
           "text": "PLUMP SPIDER está dentro de Bradesco, Itaú y Nubank simultáneamente. Se activó la alerta del Banco Central pero las transferencias ya se están liquidando."
         }
-      ]
+      ],
+      "nation": "🇧🇷 Brasil — Cibercrimen",
+      "aka": "Banda Grandoreiro · PIX Bandits",
+      "caseTitle": "OPERACIÓN PIX HEIST",
+      "moduleClues": {
+        "identity": {
+          "title": "Validación Masiva de CPF",
+          "text": "Falcon Identity detectó consultas automatizadas de validación de CPF y CNPJ contra la API Receita Federal — 4.700 solicitudes en 8 minutos desde un endpoint."
+        },
+        "xdr": {
+          "title": "Técnica Overlay Grandoreiro Detectada",
+          "text": "XDR capturó técnica overlay Grandoreiro: ventana de phishing transparente posicionada sobre aplicación bancaria en coordenadas pixel-perfectas para cada banco."
+        },
+        "pangea": {
+          "title": "Infraestructura C2 Grandoreiro",
+          "text": "Inteligencia de amenaza relacionó cadena de certificados SSL del servidor C2 con infraestructura Grandoreiro conocida de 3 campañas anteriores dirigidas al Banco do Brasil."
+        },
+        "overwatch": {
+          "title": "Operador En Vivo en UTC-3",
+          "text": "OverWatch observó interacción manual del operador con dispositivos comprometidos durante 09:00-17:00 hora de Brasilia. Las transferencias iniciadas manualmente, no automatizadas."
+        },
+        "exposure": {
+          "title": "Explotación de Deep Link de Aplicación Bancaria",
+          "text": "Exposure identificó aplicación bancaria versión 4.2.1 con vulnerabilidad de secuestro de deep link permitiendo a Grandoreiro interceptar códigos OTP en la entrega."
+        }
+      }
     },
     "blind_spider": {
       "target": "Instituciones Financieras de LatAm y Red SWIFT",
@@ -18618,7 +18968,32 @@ const ADVERSARIES_I18N = {
           "title": "$47M — 6 Bancos Objetivo",
           "text": "Exposición total BEC: $47M en 6 instituciones financieras de LatAm. Tres transferencias ya se han procesado. La ventana de intercepción se está cerrando."
         }
-      ]
+      ],
+      "nation": "🌐 Colombia — Cibercrimen",
+      "aka": "Colectivo BEC Latinoamericano",
+      "caseTitle": "OPERACIÓN BOGOTA WIRE",
+      "moduleClues": {
+        "identity": {
+          "title": "Viaje Imposible de la Cuenta CFO",
+          "text": "Falcon Identity detectó cuenta de correo electrónico del CFO autenticada desde Colombia y Nueva York simultáneamente — misma sesión, 8 minutos de diferencia."
+        },
+        "xdr": {
+          "title": "Cadena de Procesos AsyncRAT",
+          "text": "XDR rastreó instalación AsyncRAT a macro de Excel malicioso abierto por miembro del equipo de finanzas. Registro de pulsaciones completo y captura de pantalla confirmados."
+        },
+        "pangea": {
+          "title": "Actor BEC Conocido de LatAm",
+          "text": "Inteligencia de amenaza relacionó C2 AsyncRAT con actor BEC colombiano conocido responsable del robo de $12M de un banco local en 2022."
+        },
+        "overwatch": {
+          "title": "Operador Colombiano Confirmado",
+          "text": "OverWatch confirmó comandos en idioma español con dialecto colombiano. El conocimiento local de los procedimientos de aprobación de transferencias del banco objetivo es evidente."
+        },
+        "exposure": {
+          "title": "Servidor SWIFT No Segmentado",
+          "text": "Exposure encontró servidor legado SWIFT Alliance Access sin segmentación de red desde la red de correo electrónico corporativa — recorrido directo posible."
+        }
+      }
     },
     "blackcat": {
       "target": "Infraestructura Empresarial — Extorsión Triple",
@@ -18683,7 +19058,32 @@ const ADVERSARIES_I18N = {
           "title": "Patrón de Traición del Afiliado",
           "text": "ALPHV tomó los $22M de rescate, cerró la infraestructura, culpó al FBI — afiliado no recibió nada, víctima no recibió desencriptador. Fraude criminal puro."
         }
-      ]
+      ],
+      "nation": "🌐 Operador RaaS",
+      "aka": "ALPHV · Noberus RaaS",
+      "caseTitle": "OPERACIÓN TRIPLE THREAT",
+      "moduleClues": {
+        "identity": {
+          "title": "Cadena de Credenciales IAB",
+          "text": "Falcon Identity confirmó: credenciales compradas de IAB provinieron de infección anterior de infostealer en laptop de contratista. Reutilizadas en 4 servicios en la nube."
+        },
+        "xdr": {
+          "title": "Características del Payload en Rust",
+          "text": "Análisis de memoria XDR identificó binario Rust de ALPHV: asignador de memoria personalizado, rutinas de criptografía multiplataforma, sin símbolos de depuración."
+        },
+        "pangea": {
+          "title": "Afiliado del Ataque MGM",
+          "text": "Inteligencia de amenazas correlacionó infraestructura C2 con afiliado ALPHV activo en MGM Resorts en septiembre de 2023. Colaboración SCATTERED SPIDER confirmada."
+        },
+        "overwatch": {
+          "title": "Operador Manual Hands-On-Keyboard",
+          "text": "OverWatch confirmó operador manual hands-on-keyboard — comandos de enumeración personalizados que no coinciden con ninguna secuencia de herramienta automatizada conocida."
+        },
+        "exposure": {
+          "title": "Citrix Bleed Sin Parche",
+          "text": "Exposure encontró Citrix NetScaler ADC vulnerable a CVE-2023-4966 (Citrix Bleed) — permite robo de token de sesión sin autenticación."
+        }
+      }
     },
     "lazarus": {
       "target": "Criptografía & Sistemas Financieros",
@@ -18748,7 +19148,32 @@ const ADVERSARIES_I18N = {
           "title": "Programa de Armas Financiado",
           "text": "Tesorería de EE.UU. confirmó: LAZARUS Group financia desarrollo de ICBM de Corea del Norte. $625M financia un estimado 6 ciclos de desarrollo de misiles balísticos intercontinentales."
         }
-      ]
+      ],
+      "nation": "🇰🇵 Corea del Norte — RGB",
+      "aka": "Hidden Cobra · Oficina RGB 121",
+      "caseTitle": "OPERACIÓN CRYPTO THUNDER",
+      "moduleClues": {
+        "identity": {
+          "title": "Pivote de Cuenta de Desarrollador",
+          "text": "Falcon Identity rastreó cuenta de desarrollador senior comprometida usada para autenticar en 4 nodos validadores simultáneamente — imposible sin robo de credenciales."
+        },
+        "xdr": {
+          "title": "Implante Personalizado Decodificado",
+          "text": "Análisis forense de memoria XDR decodificó implante personalizado LAZARUS — ninguna correlación con inteligencia de amenazas a nivel global. Construido exclusivamente para este objetivo."
+        },
+        "pangea": {
+          "title": "Rango de IP de Corea del Norte",
+          "text": "Inteligencia de amenazas señaló comunicaciones C2 directas desde rango BGP de Corea del Norte — LAZARUS raramente usa IPs de RPDC, indicando urgencia operacional."
+        },
+        "overwatch": {
+          "title": "Patrón de Escaneo SWIFT de Bangladesh",
+          "text": "OverWatch identificó escaneo de puerto SWIFT Alliance Access idéntico al reconocimiento previo al ataque observado 6 horas antes del robo del Banco de Bangladesh en 2016."
+        },
+        "exposure": {
+          "title": "Nodo Validador Sin Parche",
+          "text": "Exposure encontró validador de puente Ronin ejecutando software con 26 meses de retraso con vulnerabilidad de ejecución remota de código sin parche en la capa de consenso."
+        }
+      }
     },
     "cozy_bear": {
       "target": "Infraestructura en la Nube y Proveedores de Identidad",
@@ -18813,7 +19238,32 @@ const ADVERSARIES_I18N = {
           "title": "9 Agencias de EE.UU. — Investigación de 3 Años",
           "text": "9 agencias federales de EE.UU. incluyendo Tesorería, Comercio y Seguridad Nacional profundamente comprometidas. La investigación duró más de 3 años."
         }
-      ]
+      ],
+      "nation": "🇷🇺 Rusia — SVR",
+      "aka": "APT29 · Midnight Blizzard",
+      "caseTitle": "OPERACIÓN SILENT OAUTH",
+      "moduleClues": {
+        "identity": {
+          "title": "Token OAuth — 4 Continentes",
+          "text": "Falcon Identity señaló el mismo token OAuth autenticado desde Londres, Moscú, Singapur y Toronto en 18 minutos — físicamente imposible."
+        },
+        "xdr": {
+          "title": "Certificado Expirado Aceptado",
+          "text": "Telemetría de nube XDR encontró aserción SAML firmada con certificado expirado hace 6 meses — aceptada por IdP heredado sin verificación de revocación."
+        },
+        "pangea": {
+          "title": "Coincidencia de Patrón de Dominio SVR",
+          "text": "Inteligencia de amenazas correlacionó cadencia de registro de dominio C2 y patrón de nomenclatura con campañas SVR en Microsoft 2024 y SolarWinds 2020."
+        },
+        "overwatch": {
+          "title": "Ritmo Deliberadamente Por Debajo del Umbral",
+          "text": "OverWatch confirmó: un intento de autenticación por cuenta cada 8 horas durante 34 días — deliberadamente por debajo de todos los umbrales de bloqueo empresarial."
+        },
+        "exposure": {
+          "title": "Tenant de Prueba Heredado — Sin MFA",
+          "text": "Exposure identificó tenant Microsoft 365 de prueba olvidado sin MFA — el vector exacto de acceso inicial confirmado en la violación Microsoft 2024."
+        }
+      }
     },
     "fancy_bear": {
       "target": "Redes de la OTAN y del Gobierno",
@@ -18878,7 +19328,32 @@ const ADVERSARIES_I18N = {
           "title": "DNC — Bundestag — Trilogía de la OTAN",
           "text": "Continuidad TTP en DNC 2016, Bundestag 2015 y esta operación confirma el direccionamiento sistemático de la Unidad GRU 26165 a las instituciones democráticas occidentales."
         }
-      ]
+      ],
+      "nation": "🇷🇺 Rusia — GRU",
+      "aka": "APT28 · Forest Blizzard",
+      "caseTitle": "OPERACIÓN IRON HARVEST",
+      "moduleClues": {
+        "identity": {
+          "title": "Viaje Imposible del Agregado de Defensa",
+          "text": "Falcon Identity detectó cuenta de agregado de defensa de la OTAN autenticada desde tres países en 4 horas — credencial compartida entre el equipo operador APT28."
+        },
+        "xdr": {
+          "title": "Artefactos de Cadena X-Agent en Memoria",
+          "text": "Escaneo de memoria XDR encontró artefactos de cadena X-Agent — marco exclusivo de GRU nunca filtrado públicamente ni vendido en mercado criminal alguno."
+        },
+        "pangea": {
+          "title": "Patrón de Registro de Dominio APT28",
+          "text": "Inteligencia de amenazas correlacionó C2 de dominio con patrón APT28 — [agencia-legítima]-[acción].com — consistente en DNC 2016, Bundestag 2015 y operación actual."
+        },
+        "overwatch": {
+          "title": "Coincidencia de Tradecraft de Bundestag",
+          "text": "OverWatch confirmó: orden específica de bandera WMIC y timing de comando coinciden con tradecraft de operador APT28 documentado en investigación Bundestag 2015."
+        },
+        "exposure": {
+          "title": "Exchange ProxyLogon Sin Parche",
+          "text": "Exposure encontró Exchange Server vulnerable a ProxyLogon CVE-2021-26855 — sin parche desde marzo de 2021. APT28 explota activamente este vector."
+        }
+      }
     },
     "midnight_blizzard": {
       "target": "Cadena de Suministro de Software y Redes de Proveedor",
@@ -18943,7 +19418,32 @@ const ADVERSARIES_I18N = {
           "title": "9 Agencias — Investigación de 3 Años",
           "text": "Tesorería de EE.UU., Comercio, Seguridad Nacional, Departamento de Estado y 5 agencias más profundamente comprometidas. La investigación duró más de 3 años."
         }
-      ]
+      ],
+      "nation": "🇷🇺 Rusia — SVR Tier-1",
+      "aka": "NOBELIUM · APT29 Elite",
+      "caseTitle": "OPERACIÓN SUNBURST ECHO",
+      "moduleClues": {
+        "identity": {
+          "title": "Reutilización de Credenciales de Desarrollador",
+          "text": "Falcon Identity rastreó certificado de firma de código robado hasta una estación de trabajo de desarrollador — mismas credenciales usadas para laptop de desarrollo y servidor de compilación de producción."
+        },
+        "xdr": {
+          "title": "DLL Firmado en Orion Update",
+          "text": "XDR detectó sideloading de DLL dentro de SolarWinds Orion — DLL malicioso cargado al inicio de la aplicación, firmado con un certificado SolarWinds válido."
+        },
+        "pangea": {
+          "title": "SUNBURST C2 Pre-Registrado",
+          "text": "Inteligencia de amenazas identificó avsvmcloud[.]com — el dominio SUNBURST C2 registrado por NOBELIUM 8 meses antes de que comenzara el despliegue."
+        },
+        "overwatch": {
+          "title": "Activación Selectiva en 100 de 18.000",
+          "text": "OverWatch: SUNBURST inactivo en 17.900 instalaciones — activado manualmente en 100 basado en evaluación de valor de inteligencia."
+        },
+        "exposure": {
+          "title": "Servidor de Compilación Sin EDR",
+          "text": "Exposure encontró servidor CI/CD SolarWinds sin EDR instalado ni monitoreo de red — cero visibilidad en el proceso de compilación."
+        }
+      }
     },
     "volt_typhoon": {
       "target": "Infraestructura Crítica y Redes OT",
@@ -19008,7 +19508,32 @@ const ADVERSARIES_I18N = {
           "title": "Asesoramiento Conjunto Five Eyes",
           "text": "EE.UU., Reino Unido, Australia, Canadá y Nueva Zelanda emitieron asesoramiento conjunto en mayo 2023: VOLT TYPHOON está preposicionado en infraestructura crítica en las cinco naciones."
         }
-      ]
+      ],
+      "nation": "🇨🇳 China — PLA",
+      "aka": "Bronze Silhouette",
+      "caseTitle": "OPERACIÓN SILENT PRE-POSITION",
+      "moduleClues": {
+        "identity": {
+          "title": "LSASS a través de Administrador de Tareas",
+          "text": "Falcon Identity detectó proceso Administrador de Tareas accediendo a LSASS — volcado de credenciales usando herramienta legítima de Windows. Firma de malware: cero."
+        },
+        "xdr": {
+          "title": "Secuencia de Comando VOLT TYPHOON",
+          "text": "Análisis conductual XDR: netsh portproxy + certutil -encode + WMIC remote query — secuencia de comando exacta documentada en todas las intrusiones VOLT TYPHOON confirmadas."
+        },
+        "pangea": {
+          "title": "Red Relay SOHO Router",
+          "text": "Inteligencia de amenazas coincidió patrón de compromiso de enrutador SOHO Netgear y Cisco con infraestructura VOLT TYPHOON usada en campaña de base militar en Guam."
+        },
+        "overwatch": {
+          "title": "Permanencia de 5+ Años Confirmada",
+          "text": "Timeline forense OverWatch: artefacto VOLT TYPHOON más antiguo fechado en 2019. 5+ años de acceso no detectado a infraestructura crítica."
+        },
+        "exposure": {
+          "title": "Activo OT Fantasma — 2011",
+          "text": "Exposure Management encontró controlador SCADA instalado en 2011, nunca registrado en ningún inventario de activos, conectado a red corporativa a través de puente heredado."
+        }
+      }
     },
     "sandworm": {
       "target": "Sistemas de Control Industrial y Red Eléctrica",
@@ -19073,7 +19598,32 @@ const ADVERSARIES_I18N = {
           "title": "Industroyer2 — Segundo Intento",
           "text": "Abril 2022: Industroyer2 detenido por ESET y CERT-UA 2 horas antes de activación. Operación actual es el segundo intento de despliegue contra la misma red."
         }
-      ]
+      ],
+      "nation": "🇷🇺 Rusia — Unidad GRU 74455",
+      "aka": "Voodoo Bear · Unit 74455",
+      "caseTitle": "OPERACIÓN DARK GRID",
+      "moduleClues": {
+        "identity": {
+          "title": "Reutilización de Credenciales de Admin OT",
+          "text": "Falcon Identity detectó credenciales de admin de dominio de la red IT ahora activas en la red OT — robadas 3 semanas antes a través de phishing dirigido SANDWORM."
+        },
+        "xdr": {
+          "title": "Cadenas de Memoria Industroyer2",
+          "text": "Escaneo de memoria XDR encontró cadenas de comando IEC 104 y configuración XML de subestación en memoria de proceso — variante Industroyer2 confirmada."
+        },
+        "pangea": {
+          "title": "Atribución Unidad GRU 74455",
+          "text": "Inteligencia de amenazas coincidió linaje de malware con Unidad GRU 74455 — misma base de código que NotPetya 2017, Industroyer 2016 e Industroyer2 2022."
+        },
+        "overwatch": {
+          "title": "Prueba Manual de Comando ICS",
+          "text": "OverWatch detectó entrada manual de comandos IEC 104 — no automatizado. El operador está probando respuesta de subestación antes de despliegue final."
+        },
+        "exposure": {
+          "title": "3 Terminales HMI Expuestos a Internet",
+          "text": "Exposure encontró 3 terminales Human-Machine Interface con conectividad directa a internet y credenciales predeterminadas. Controles de subestación física expuestos."
+        }
+      }
     }
   },
   "jp": {
@@ -19140,7 +19690,32 @@ const ADVERSARIES_I18N = {
           "title": "$1億インパクト — MGMパターン",
           "text": "フォレンジック分析が2023年MGM Resortsと一致。停止、身代金、データ侵害による合計損失：1億ドル以上。その後、議会証言。"
         }
-      ]
+      ],
+      "nation": "🌐 西側サイバー犯罪",
+      "aka": "UNC3944 · Muddled Libra",
+      "caseTitle": "OPERATION PHANTOM HELPDESK",
+      "moduleClues": {
+        "identity": {
+          "title": "アイデンティティグラフの異常",
+          "text": "Falcon Identity は不可能な移動を検出しました：同じ Okta セッションがロンドンとラスベガスから 6 分以内に認証された — 物理的に不可能です。"
+        },
+        "xdr": {
+          "title": "クロスプラットフォーム相関",
+          "text": "XDR はエンドポイント、メール、クラウド信号を相関させました：3 デバイス、2 国、1 つの盗難された認証情報 — すべて同じセッションで同時にアクティブです。"
+        },
+        "pangea": {
+          "title": "インフラストラクチャの重複 — Caesars",
+          "text": "脅威インテリジェンスは、アクターの電話スプーフィングインフラストラクチャを 2 週間前の Caesars Entertainment 侵害と照合しました。同じ vishing-as-a-service プロバイダーです。"
+        },
+        "overwatch": {
+          "title": "オペレータープロファイルの一致",
+          "text": "OverWatch は Okta 管理者コンソールの手動列挙を観察しました — キーストロークケイデンスとフラグシーケンスは文書化された UNC3944 オペレータープロファイルと一致します。"
+        },
+        "exposure": {
+          "title": "レガシー MFA 方法が公開されました",
+          "text": "Falcon Exposure は、レガシー SMS ベース MFA が有効な公開アクセス可能な Okta 管理者ポータルを特定しました — 調査で確認された正確なバイパスベクトル。"
+        }
+      }
     },
     "carbon_spider": {
       "target": "小売 & 金融POSネットワーク",
@@ -19205,7 +19780,32 @@ const ADVERSARIES_I18N = {
           "title": "94 VM 同時暗号化",
           "text": "配置8分以内に94台全ESXi VM暗号化。仮想化基盤100%オフライン。復旧タイムライン：週単位。"
         }
-      ]
+      ],
+      "nation": "🌐 サイバー犯罪シンジケート",
+      "aka": "FIN7 · Sangria Tempest",
+      "caseTitle": "OPERATION BLACKCAT RAPIDS",
+      "moduleClues": {
+        "identity": {
+          "title": "サービスアカウント悪用",
+          "text": "Falcon Identity は、14 個のワークステーションから同時にインタラクティブログオンを実行しているサービスアカウントを検出しました — 自動化されたツールでのみ可能です。"
+        },
+        "xdr": {
+          "title": "ファイルレス実行チェーン",
+          "text": "XDR プロセスツリー：explorer.exe → mshta.exe → powershell.exe（エンコード済み）→ Cobalt Strike ビーコン。完全にメモリ内です。ディスク書き込みはゼロです。"
+        },
+        "pangea": {
+          "title": "FIN7 IP インフラストラクチャ",
+          "text": "C2 IP は 3 つの前の小売キャンペーンから FIN7 インフラストラクチャプールと一致しました。Darden Restaurants と Chipotle の侵害で使用された同じ ASN です。"
+        },
+        "overwatch": {
+          "title": "オペレータートラッドクラフトの一致",
+          "text": "OverWatch は手動コマンドライン列挙スタイルを特定しました — 特定の WMIC フラグ順序とタイミングは文書化された FIN7 オペレータープロファイルと一致します。"
+        },
+        "exposure": {
+          "title": "POS ネットワークで公開された RDP",
+          "text": "Exposure Management は、インターネットに開かれた RDP と 2019 年 3 月以降のパッチが当たっていない CVE-2019-0708（BlueKeep）を備えた 3 つの POS エンドポイントを検出しました。"
+        }
+      }
     },
     "plump_spider": {
       "target": "ブラジル銀行 & PIXネットワーク",
@@ -19270,7 +19870,32 @@ const ADVERSARIES_I18N = {
           "title": "3銀行 — 同時",
           "text": "PLUMP SPIDERがBradesco、Itaú、Nubankに同時侵入。中央銀行アラート発動も送金は既に清算中。"
         }
-      ]
+      ],
+      "nation": "🇧🇷 ブラジル — サイバー犯罪",
+      "aka": "Grandoreiro ギャング · PIX Bandits",
+      "caseTitle": "OPERATION PIX HEIST",
+      "moduleClues": {
+        "identity": {
+          "title": "CPF 一括検証",
+          "text": "Falcon Identity は、Receita Federal API に対する自動化された CPF および CNPJ 検証クエリを検出しました — 1 つのエンドポイントから 8 分間に 4,700 件のリクエスト。"
+        },
+        "xdr": {
+          "title": "Grandoreiro オーバーレイ検出",
+          "text": "XDR は Grandoreiro オーバーレイ技術をキャッチしました：透明なフィッシングウィンドウが各銀行のピクセル完全な座標のバンキングアプリ上に配置されています。"
+        },
+        "pangea": {
+          "title": "Grandoreiro C2 インフラストラクチャ",
+          "text": "脅威インテリジェンスは C2 サーバー SSL 証明書チェーンを、Banco do Brasil をターゲットにした 3 つの前のキャンペーンから既知の Grandoreiro インフラストラクチャと照合しました。"
+        },
+        "overwatch": {
+          "title": "UTC-3 のライブオペレーター",
+          "text": "OverWatch は、ブラジリア時間 09:00-17:00 中に侵害されたデバイスとの手動オペレーター相互作用を観察しました。転送は手動で開始され、自動化されていません。"
+        },
+        "exposure": {
+          "title": "バンキングアプリディープリンク悪用",
+          "text": "Exposure は、Grandoreiro が配信時に OTP コードをインターセプトできるようにするディープリンクハイジャック脆弱性を備えたバンキングアプリバージョン 4.2.1 を特定しました。"
+        }
+      }
     },
     "blind_spider": {
       "target": "ラテンアメリカ金融機関およびSWIFTネットワーク",
@@ -19335,7 +19960,32 @@ const ADVERSARIES_I18N = {
           "title": "$4,700万 — 6銀行が対象",
           "text": "総BEC露出：ラテンアメリカ6金融機関で4,700万ドル。3件の送金が既に処理。傍受ウィンドウが閉じている。"
         }
-      ]
+      ],
+      "nation": "🌐 コロンビア — サイバー犯罪",
+      "aka": "ラテンアメリカ BEC コレクティブ",
+      "caseTitle": "OPERATION BOGOTA WIRE",
+      "moduleClues": {
+        "identity": {
+          "title": "CFO アカウント不可能な移動",
+          "text": "Falcon Identity は、CFO メールアカウントがコロンビアとニューヨークから同時に認証されたことを検出しました — 同じセッション、8 分離。"
+        },
+        "xdr": {
+          "title": "AsyncRAT プロセスチェーン",
+          "text": "XDR は、財務チームメンバーが開いた悪意のある Excel マクロへの AsyncRAT インストールをトレースしました。完全なキーロギングとスクリーンキャプチャが確認されました。"
+        },
+        "pangea": {
+          "title": "既知の LatAm BEC アクター",
+          "text": "脅威インテリジェンスは AsyncRAT C2 を、2022 年のローカルバンクから 1,200 万ドルの盗難の責任がある既知のコロンビア BEC オペレーターと照合しました。"
+        },
+        "overwatch": {
+          "title": "コロンビアンオペレーター確認",
+          "text": "OverWatch はコロンビア方言を使用したスペイン語コマンドを確認しました。ターゲットバンクのワイヤー承認手順に関する地元の知識は明白です。"
+        },
+        "exposure": {
+          "title": "SWIFT サーバーがセグメント化されていません",
+          "text": "Exposure は、企業メールネットワークからネットワークセグメンテーションがない SWIFT Alliance Access レガシーサーバーを見つけました — 直接トラバーサルが可能です。"
+        }
+      }
     },
     "blackcat": {
       "target": "エンタープライズインフラストラクチャ — トリプル恐喝",
@@ -19400,7 +20050,32 @@ const ADVERSARIES_I18N = {
           "title": "アフィリエイト背信パターン",
           "text": "ALPHVが2,200万ドルの身代金を獲得し、インフラをシャットダウンしFBIを非難 — アフィリエイトは何も受け取らず、被害者は復号化ツールを受け取らず。純粋な犯罪詐欺。"
         }
-      ]
+      ],
+      "nation": "🌐 RaaS オペレーター",
+      "aka": "ALPHV · Noberus RaaS",
+      "caseTitle": "OPERATION TRIPLE THREAT",
+      "moduleClues": {
+        "identity": {
+          "title": "IAB認証情報チェーン",
+          "text": "Falcon Identityが確認：IABから購入された認証情報は、契約社員のノートパソコンの過去のinfostealer感染から流出。4つのクラウドサービス全体で再利用。"
+        },
+        "xdr": {
+          "title": "Rustペイロード特性",
+          "text": "XDRメモリ分析がALPHV Rustバイナリを特定：カスタムメモリアロケーター、クロスプラットフォーム暗号ルーチン、デバッグシンボルなし。"
+        },
+        "pangea": {
+          "title": "MGM攻撃のアフィリエイト",
+          "text": "脅威インテリジェンスがC2インフラをALPHVアフィリエイトと相関：2023年9月MGM Resortsで活動。SCATTERED SPIDER協力が確認。"
+        },
+        "overwatch": {
+          "title": "ハンズオン・キーボード・オペレーター",
+          "text": "OverWatchが手動ハンズオン・キーボード・オペレーターを確認：カスタム列挙コマンドが既知の自動ツール列と一致しない。"
+        },
+        "exposure": {
+          "title": "Citrix Bleed未パッチ",
+          "text": "ExposureがCitrix NetScaler ADCをCVE-2023-4966（Citrix Bleed）に対して脆弱性を検出：認証なしでセッショントークン盗聴可能。"
+        }
+      }
     },
     "lazarus": {
       "target": "暗号資産および金融システム",
@@ -19465,7 +20140,32 @@ const ADVERSARIES_I18N = {
           "title": "兵器プログラムに資金提供",
           "text": "米国財務省が確認：LAZARUS Groupが北朝鮮ICBM開発に資金提供。6,250万ドルが推定6サイクルの大陸間弾道ミサイル開発に資金提供。"
         }
-      ]
+      ],
+      "nation": "🇰🇵 北朝鮮 — RGB",
+      "aka": "Hidden Cobra · RGB Bureau 121",
+      "caseTitle": "OPERATION CRYPTO THUNDER",
+      "moduleClues": {
+        "identity": {
+          "title": "開発者アカウント侵害",
+          "text": "Falcon Identityが流出した上級開発者アカウントをトレース：4つのバリデーターノードに同時認証。認証情報盗取なしでは不可能。"
+        },
+        "xdr": {
+          "title": "カスタムインプラント解読",
+          "text": "XDRメモリフォレンジックがLAZARUSカスタムインプラントをデコード：世界中のどの脅威インテリジェンスとも一致なし。このターゲット専用に構築。"
+        },
+        "pangea": {
+          "title": "北朝鮮IPレンジ",
+          "text": "脅威インテリジェンスが北朝鮮BGPレンジからの直接C2通信をフラグ：LAZARUSがDPRK IPを使用することは稀、作戦上の急速性を示唆。"
+        },
+        "overwatch": {
+          "title": "バングラデシュSWIFTスキャンパターン",
+          "text": "OverWatchがバングラデシュ銀行2016年盗難の6時間前に観察された攻撃前偵察と同一のSWIFT Alliance Accessポートスキャンを特定。"
+        },
+        "exposure": {
+          "title": "未パッチバリデーターノード",
+          "text": "ExposureがRoninブリッジバリデーターが26ヶ月遅れたソフトウェアでコンセンサスレイヤーの未パッチRCE脆弱性を検出。"
+        }
+      }
     },
     "cozy_bear": {
       "target": "クラウドインフラとIDプロバイダ",
@@ -19530,7 +20230,32 @@ const ADVERSARIES_I18N = {
           "title": "米国機関9社—3年調査",
           "text": "米国財務省、商務省、国土安全保障省を含む連邦機関9社が深く侵害。調査は3年以上継続。"
         }
-      ]
+      ],
+      "nation": "🇷🇺 ロシア — SVR",
+      "aka": "APT29 · Midnight Blizzard",
+      "caseTitle": "OPERATION SILENT OAUTH",
+      "moduleClues": {
+        "identity": {
+          "title": "OAuthトークン — 4大陸",
+          "text": "Falcon Identityが同一OAuthトークンをロンドン、モスクワ、シンガポール、トロントから18分以内で認証をフラグ：物理的に不可能。"
+        },
+        "xdr": {
+          "title": "期限切れ証明書が受理",
+          "text": "XDRクラウドテレメトリが6ヶ月前に期限切れの証明書で署名されたSAMLアサーションを検出：レガシーIdPが失効確認なしで受理。"
+        },
+        "pangea": {
+          "title": "SVRドメインパターン一致",
+          "text": "脅威インテリジェンスがC2ドメイン登録頻度と命名パターンをMicrosoft 2024およびSolarWinds 2020のSVRキャンペーンと相関。"
+        },
+        "overwatch": {
+          "title": "意図的に下限以下のペーシング",
+          "text": "OverWatchが確認：34日間にわたるアカウントごとに8時間ごと1認証試行。企業ロックアウト閾値全てを意図的に下回る。"
+        },
+        "exposure": {
+          "title": "レガシーテストテナント — MFA無し",
+          "text": "ExposureがMFA無しの忘却されたMicrosoft 365テストテナントを特定：Microsoft 2024侵害で確認された正確な初期アクセスベクトル。"
+        }
+      }
     },
     "fancy_bear": {
       "target": "NATOと政府ネットワーク",
@@ -19595,7 +20320,32 @@ const ADVERSARIES_I18N = {
           "title": "DNC—ドイツ連邦議会—NATO三部作",
           "text": "DNC 2016、ドイツ連邦議会2015、本作戦全体のTTP継続がGRU部隊26165の西側民主主義機関への体系的攻撃確認。"
         }
-      ]
+      ],
+      "nation": "🇷🇺 ロシア — GRU",
+      "aka": "APT28 · Forest Blizzard",
+      "caseTitle": "OPERATION IRON HARVEST",
+      "moduleClues": {
+        "identity": {
+          "title": "国防駐在官の不可能な移動",
+          "text": "Falcon IdentityがNATO国防駐在官アカウントが4時間以内に3国から認証をトレース：APT28オペレーターチーム間で認証情報が共有。"
+        },
+        "xdr": {
+          "title": "X-Agentメモリ文字列アーティファクト",
+          "text": "XDRメモリスキャンがX-Agent文字列アーティファクトを検出：GRU専用フレームワーク、公開漏洩なし、犯罪市場で売却なし。"
+        },
+        "pangea": {
+          "title": "APT28ドメイン登録パターン",
+          "text": "脅威インテリジェンスがC2ドメインをAPT28パターンと相関：[legitimate-agency]-[action].com。DNC 2016、Bundestag 2015、現在の作戦全体で一貫。"
+        },
+        "overwatch": {
+          "title": "Bundestag Tradecraft一致",
+          "text": "OverWatchが確認：特定のWMICフラグ順序とコマンドタイミングがBundestag 2015調査で文書化されたAPT28オペレータートレードクラフトと一致。"
+        },
+        "exposure": {
+          "title": "ProxyLogon Exchangeは未パッチ",
+          "text": "ExposureがExchange ServerをProxyLogon CVE-2021-26855に対して脆弱性を検出：2021年3月以来未パッチ。APT28は能動的にこのベクトルを悪用。"
+        }
+      }
     },
     "midnight_blizzard": {
       "target": "ソフトウェアサプライチェーンとベンダーネットワーク",
@@ -19660,7 +20410,32 @@ const ADVERSARIES_I18N = {
           "title": "機関9社—3年調査",
           "text": "米国財務省、商務省、国土安全保障省、国務省および5その他機関が深く侵害。調査は3年以上継続。"
         }
-      ]
+      ],
+      "nation": "🇷🇺 ロシア — SVR Tier-1",
+      "aka": "NOBELIUM · APT29 Elite",
+      "caseTitle": "OPERATION SUNBURST ECHO",
+      "moduleClues": {
+        "identity": {
+          "title": "開発者認証情報の再利用",
+          "text": "Falcon Identityは、盗まれたコード署名証明書を開発者ワークステーションまで追跡しました — 開発用ラップトップと本番ビルドサーバーで使用された同じ認証情報。"
+        },
+        "xdr": {
+          "title": "Orion Update内の署名付きDLL",
+          "text": "XDRはSolarWinds Orion内のDLLサイドローディングを検出しました — アプリケーション起動時に読み込まれた悪意のあるDLLで、有効なSolarWinds証明書で署名されています。"
+        },
+        "pangea": {
+          "title": "SUNBURST C2事前登録",
+          "text": "脅威インテリジェンスはavsvmcloud[.]comを特定しました — NOBELIUMが登録したSUNBURST C2ドメイン、デプロイメント開始の8ヶ月前。"
+        },
+        "overwatch": {
+          "title": "18,000のうち100での選別的活性化",
+          "text": "OverWatch: SUNBURSTは17,900のインストール環境では非活性状態 — インテリジェンス値の評価に基づいて100で手動で活性化されました。"
+        },
+        "exposure": {
+          "title": "ビルドサーバーにEDRなし",
+          "text": "Exposureは、SolarWinds CI/CDビルドサーバーがEDRをインストールしておらず、ネットワーク監視もないことを発見しました — ビルドプロセスへのアクセス可視性がゼロです。"
+        }
+      }
     },
     "volt_typhoon": {
       "target": "重要インフラとOTネットワーク",
@@ -19725,7 +20500,32 @@ const ADVERSARIES_I18N = {
           "title": "Five Eyesの共同警告",
           "text": "米国、英国、オーストラリア、カナダ、ニュージーランドが2023年5月に共同警告を発行：VOLT TYPHOONは5つの国すべての重要インフラに事前配置されている。"
         }
-      ]
+      ],
+      "nation": "🇨🇳 中国 — PLA",
+      "aka": "Bronze Silhouette",
+      "caseTitle": "OPERATION SILENT PRE-POSITION",
+      "moduleClues": {
+        "identity": {
+          "title": "タスクマネージャー経由のLSASS",
+          "text": "Falcon Identityは、LSASSにアクセスするタスクマネージャープロセスを検出しました — 正規のWindowsツールを使用した認証情報ダンプ。マルウェアシグネチャ: ゼロ。"
+        },
+        "xdr": {
+          "title": "VOLT TYPHOONコマンドシーケンス",
+          "text": "XDR行動分析: netsh portproxy + certutil -encode + WMIC remote query — すべての確認されたVOLT TYPHOON侵入で文書化された正確なコマンドシーケンス。"
+        },
+        "pangea": {
+          "title": "SOHOルーター中継ネットワーク",
+          "text": "脅威インテリジェンスはNetgearおよびCisco SOHOルーター侵害パターンをグアム軍事基地キャンペーンで使用されたVOLT TYPHOON基盤構造と照合しました。"
+        },
+        "overwatch": {
+          "title": "5年以上の滞在が確認",
+          "text": "OverWatch法医学タイムライン: 最も古いVOLT TYPHOONアーティファクトは2019年にさかのぼります。重要なインフラへの5年以上の未検出アクセス。"
+        },
+        "exposure": {
+          "title": "ゴーストOTアセット — 2011年",
+          "text": "Exposure Managementは2011年にインストールされたSCADAコントローラーを発見しました。ユーザー資産インベントリに登録されたことがなく、レガシーブリッジを経由して企業ネットワークに接続されています。"
+        }
+      }
     },
     "sandworm": {
       "target": "産業制御システムと電力網",
@@ -19790,7 +20590,32 @@ const ADVERSARIES_I18N = {
           "title": "Industroyer2 — 第2次試行",
           "text": "2022年4月：Industroyer2がESETとCERT-UAによって起動2時間前に阻止。現在の作戦は同じグリッドに対する第2次展開試行。"
         }
-      ]
+      ],
+      "nation": "🇷🇺 ロシア — GRU Unit 74455",
+      "aka": "Voodoo Bear · Unit 74455",
+      "caseTitle": "OPERATION DARK GRID",
+      "moduleClues": {
+        "identity": {
+          "title": "OTユーザー管理者認証情報の再利用",
+          "text": "Falcon IdentityはITネットワークからのドメイン管理者認証情報がOTネットワークでアクティブになるのを検出しました — SANDWORMのスピアフィッシング経由で3週間前に盗まれたもの。"
+        },
+        "xdr": {
+          "title": "Industroyer2メモリ文字列",
+          "text": "XDRメモリスキャンはプロセスメモリ内のIEC 104コマンド文字列および変電所XML設定を発見しました — Industroyer2バリアント確認。"
+        },
+        "pangea": {
+          "title": "GRUユニット74455帰属",
+          "text": "脅威インテリジェンスはマルウェア系統をGRUユニット74455と照合しました — NotPetya 2017、Industroyer 2016、Industroyer2 2022と同じコードベース。"
+        },
+        "overwatch": {
+          "title": "手動ICSコマンドテスト",
+          "text": "OverWatchはIEC 104コマンドの手動入力を検出しました — 自動化ではなく。オペレーターは最終的なデプロイメント前に変電所の応答をテストしています。"
+        },
+        "exposure": {
+          "title": "3つのHMI端末がインターネット公開",
+          "text": "Exposureは3つのヒューマンマシンインターフェース端末がインターネットに直接接続され、デフォルト認証情報を持つことを発見しました。物理的な変電所制御が公開されています。"
+        }
+      }
     }
   }
 };
@@ -19817,13 +20642,31 @@ function getAdvLocale(adv) {
     });
   }
 
+  // Build localized moduleClues: merge title/text per module key
+  let localModuleClues = adv.moduleClues;
+  if (overrides.moduleClues && adv.moduleClues) {
+    localModuleClues = {};
+    for (const mk of Object.keys(adv.moduleClues)) {
+      const base = adv.moduleClues[mk];
+      const ov   = overrides.moduleClues[mk] || {};
+      localModuleClues[mk] = Object.assign({}, base, {
+        title: ov.title || base.title,
+        text:  ov.text  || base.text,
+      });
+    }
+  }
+
   return Object.assign({}, adv, {
-    target:     overrides.target     || adv.target,
-    motto:      overrides.motto      || adv.motto,
-    brief:      overrides.brief      || adv.brief,
-    phaseNames: overrides.phaseNames || adv.phaseNames,
-    intercepts: overrides.intercepts || adv.intercepts,
-    clues:      localClues,
+    target:      overrides.target      || adv.target,
+    motto:       overrides.motto       || adv.motto,
+    brief:       overrides.brief       || adv.brief,
+    nation:      overrides.nation      || adv.nation,
+    aka:         overrides.aka         || adv.aka,
+    caseTitle:   overrides.caseTitle   || adv.caseTitle,
+    phaseNames:  overrides.phaseNames  || adv.phaseNames,
+    intercepts:  overrides.intercepts  || adv.intercepts,
+    clues:       localClues,
+    moduleClues: localModuleClues,
   });
 }
 
@@ -20801,7 +21644,7 @@ function handleInvestigationClick(){
         // Deploy module-specific bonus clue — unique per module, never repeats from main pool
         const modKeys=['identity','xdr','pangea','overwatch','exposure'];
         const mKey=modKeys[i];
-        const moduleClue=selectedCase.moduleClues?.[mKey];
+        const moduleClue=getAdvLocale(selectedCase).moduleClues?.[mKey];
         if(moduleClue){
           const positions=[{x:LW*0.35,y:LH*0.45},{x:LW*0.6,y:LH*0.38}];
           const pos=positions[ri(0,1)];
@@ -21285,12 +22128,13 @@ function drawHUD(){
 
   // Case info
   if(selectedCase){
+    const _caseL=getAdvLocale(selectedCase);
     const _caseMaxW=Math.max(200, LW-Math.round(460*ui));
     ctx.font=huntFont(15,'bold'); ctx.fillStyle=selectedCase.color; ctx.textAlign='center';
     ctx.shadowColor=selectedCase.color; ctx.shadowBlur=10;
-    ctx.fillText(`◈ ${selectedCase.name} — ${selectedCase.caseTitle}`,LW/2,Math.round(_hudH*0.42),_caseMaxW); ctx.shadowBlur=0;
+    ctx.fillText(`◈ ${selectedCase.name} — ${_caseL.caseTitle}`,LW/2,Math.round(_hudH*0.42),_caseMaxW); ctx.shadowBlur=0;
     ctx.font=huntFont(12); ctx.fillStyle='#7f8b96';
-    ctx.fillText(`${T('g_hop_short')} ${advNodeIdx+1} / ${caseRoute.length}  •  ${selectedCase.target}`,LW/2,Math.round(_hudH*0.76),_caseMaxW);
+    ctx.fillText(`${T('g_hop_short')} ${advNodeIdx+1} / ${caseRoute.length}  •  ${_caseL.target}`,LW/2,Math.round(_hudH*0.76),_caseMaxW);
     ctx.textAlign='left';
   }
 
@@ -21314,7 +22158,7 @@ function drawTitle(dt){
   titleT+=dt; titleBlinkT+=dt;
   if(titleBlinkT>0.55){titleBlink=!titleBlink;titleBlinkT=0;}
   const ui=huntTitleScale();
-  const featured=ADVERSARIES[Math.floor(titleT*0.22)%ADVERSARIES.length];
+  const featured=getAdvLocale(ADVERSARIES[Math.floor(titleT*0.22)%ADVERSARIES.length]);
   const intelPool=[...RADIO_MSGS.generic,...(RADIO_MSGS[featured.id]||[])];
   const intel=intelPool[Math.floor(titleT*0.55)%intelPool.length];
   const objectiveNode=NODES[featured.objective];
@@ -21504,6 +22348,7 @@ function drawCaseSelect(dt){
   const sx=(LW-(cols*cw+(cols-1)*gap))/2;
 
   ADVERSARIES.forEach((caseFile,i)=>{
+    const lFile=getAdvLocale(caseFile);  // localized copy
     const col=i%cols, row=Math.floor(i/cols);
     const cx=sx+col*(cw+gap), cy=sy+row*(ch+gap);
     const sel=i===caseSel, hov=MOUSE.x>cx&&MOUSE.x<cx+cw&&MOUSE.y>cy&&MOUSE.y<cy+ch;
@@ -21532,13 +22377,13 @@ function drawCaseSelect(dt){
     ctx.fillStyle=caseFile.color; ctx.textAlign='left';
     ctx.fillText(caseFile.name,cx+8,cy+16, cw-16);
     ctx.font=`${Math.round(10*ui)}px "Courier New"`; ctx.fillStyle='#7f8b96';
-    ctx.fillText(caseFile.nation,cx+8,cy+28);
+    ctx.fillText(lFile.nation,cx+8,cy+28);
     ctx.font=`bold ${Math.round(10*ui)}px "Courier New"`; ctx.fillStyle=threatCol;
     ctx.fillText(`! ${huntThreatLabel(caseFile.threat)}`,cx+8,cy+42);
     ctx.fillStyle=tierCol;
     ctx.fillText('★'.repeat(ds)+'☆'.repeat(5-ds),cx+8,cy+57);
     ctx.fillStyle='#d5dde5';
-    const targetText=caseFile.target.length>24?caseFile.target.slice(0,22)+'…':caseFile.target;
+    const targetText=lFile.target.length>24?lFile.target.slice(0,22)+'…':lFile.target;
     ctx.fillText(targetText,cx+8,cy+70);
     ctx.fillStyle='#7f8b96';
     const moduleText=caseFile.counterModule.length>22?caseFile.counterModule.slice(0,20)+'…':caseFile.counterModule;
@@ -21646,6 +22491,7 @@ function drawCaseSelect(dt){
   const copies=Math.ceil(LW/totalW)+2;
   for(let copy=0;copy<copies;copy++){
     ADVERSARIES.forEach((caseFile,i)=>{
+      const lStrip=getAdvLocale(caseFile);
       const ax=(copy*totalW)+i*(cardW+gap2)-offset+(LW-totalW)/2;
       if(ax+cardW<-10||ax>LW+10) return;
       const active=caseFile.id===adv.id;
@@ -21655,7 +22501,7 @@ function drawCaseSelect(dt){
       ctx.fillStyle=caseFile.color; ctx.font=`bold ${Math.round(9*ui)}px "Courier New"`; ctx.textAlign='center';
       ctx.fillText(caseFile.name,ax+cardW/2,stripY+13);
       ctx.fillStyle='#7f8b96'; ctx.font=`${Math.round(9*ui)}px "Courier New"`;
-      ctx.fillText(caseFile.caseTitle.slice(0,18),ax+cardW/2,stripY+26);
+      ctx.fillText(lStrip.caseTitle.slice(0,18),ax+cardW/2,stripY+26);
     });
   }
   ctx.restore();
@@ -21716,7 +22562,8 @@ function drawBriefing(dt){
   ctx.font=huntFont(42,'bold'); ctx.fillStyle=adv.color; ctx.shadowColor=adv.color; ctx.shadowBlur=26;
   ctx.fillText(adv.name,LW/2,_nameY); ctx.shadowBlur=0;
   ctx.font=huntFont(14,'bold'); ctx.fillStyle='#7f8b96'; ctx.fillText(adv.aka,LW/2,_nameY+Math.round(26*ui));
-  ctx.font=huntFont(12,'bold'); ctx.fillStyle=adv.nation.includes('Russia')?'#FF1744':adv.nation.includes('China')?'#FF8D39':adv.nation.includes('Korea')?'#FFD700':'#4488FF';
+  const _enNation=selectedCase.nation;
+  ctx.font=huntFont(12,'bold'); ctx.fillStyle=_enNation.includes('Russia')?'#FF1744':_enNation.includes('China')?'#FF8D39':_enNation.includes('Korea')?'#FFD700':'#4488FF';
   ctx.fillText(adv.nation,LW/2,_nameY+Math.round(48*ui));
 
   // Divider
