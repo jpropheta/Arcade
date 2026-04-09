@@ -4,8 +4,10 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>FalconArcade — CrowdStrike Mission Select</title>
-<!-- Inline favicon prevents Chrome from attempting a file:// favicon.ico fetch (cross-origin error) -->
+<!-- Inline resources prevent Chrome from auto-fetching file:// resources (cross-origin error) -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🦅</text></svg>"/>
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="/>
+<link rel="manifest" href="data:application/manifest+json,{}"/>
 <style>
 
 @property --glow-size { syntax:'<length>'; inherits:false; initial-value:0px; }
@@ -1523,6 +1525,7 @@ const TRANSLATIONS = {
     iz_report_line3:'Cloud environment intrusions increased 75% year-over-year.',
     iz_report_line4:'Unified Falcon platform reduces mean time to respond from hours to minutes.',
     iz_report_line5:'Named adversary intelligence turns reactive defence into proactive hunting.',
+    iz_report_line6:'crowdstrike.com/adversary-universe  ·  falcon.crowdstrike.com',
     iz_loading_title:'THREAT INTELLIGENCE INITIALIZING',
     iz_loading_assets:'{loaded} / {total} assets loaded',
     iz_loading_ready:'✅  ALL SYSTEMS READY',
@@ -1786,6 +1789,7 @@ const TRANSLATIONS = {
     iz_comms_fuel_critical:'FUEL CRITICAL — emergency supply barge deployed',
     iz_banner_data_exfil:'DATA EXFILTRATED — −280 pts',
     h_radio_feed:'CROWDSTRIKE INTEL FEED',
+    g_brand_name:'CROWDSTRIKE',
     g_incident_report_title:'🦅  CROWDSTRIKE INCIDENT REPORT',
     g_ally_label:'ALLY',
     g_threats_eliminated:'✅  THREATS ELIMINATED — OVERWATCH STANDS DOWN',
@@ -1817,7 +1821,13 @@ const TRANSLATIONS = {
     g_hunt_tier_5:'TIER 5 — ELITE',
     g_hunt_layer_endpoint:'ENDPOINT LAYER',
     g_hunt_layer_identity:'IDENTITY LAYER',
-    g_hunt_layer_cloud:'CLOUD LAYER'
+    g_hunt_layer_cloud:'CLOUD LAYER',
+    disc_banner:'⚠&nbsp;&nbsp;CLASSIFIED — AUTHORIZED PERSONNEL ONLY&nbsp;&nbsp;⚠',
+    disc_title:'LEGAL DISCLAIMER',
+    disc_body1:'This is a <strong style="color:#aac4ff;">fictional training simulation</strong> created for demonstration and educational purposes only. All adversary names, operations, and scenarios are entirely fictitious. Any resemblance to actual threat actors or incidents is coincidental.',
+    disc_body2:'CrowdStrike<sup>®</sup>, Falcon<sup>®</sup>, and related marks are registered trademarks of CrowdStrike, Inc. This application is <strong style="color:#aac4ff;">not affiliated with or endorsed by CrowdStrike, Inc.</strong> Detection statistics are illustrative only and do not represent actual product performance.',
+    disc_btn:'[ ACKNOWLEDGE ]',
+    disc_hint:'SPACE &nbsp;/&nbsp; ENTER TO ACKNOWLEDGE'
   },
   pt: {
     eyebrow:'◈ CrowdStrike Série Arcade 2026', title:'SELEÇÃO DE MISSÃO',
@@ -2010,6 +2020,7 @@ const TRANSLATIONS = {
     iz_report_line3:'As intrusões em ambientes de nuvem cresceram 75% ano a ano.',
     iz_report_line4:'A plataforma Falcon unificada reduz o tempo médio de resposta de horas para minutos.',
     iz_report_line5:'A inteligência sobre adversários transforma defesa reativa em caça proativa.',
+    iz_report_line6:'crowdstrike.com/adversary-universe  ·  falcon.crowdstrike.com',
     iz_loading_title:'INTELIGÊNCIA DE AMEAÇAS INICIALIZANDO',
     iz_loading_assets:'{loaded} / {total} recursos carregados',
     iz_loading_ready:'✅  TODOS OS SISTEMAS PRONTOS',
@@ -2271,6 +2282,7 @@ const TRANSLATIONS = {
     iz_comms_fuel_critical:'COMBUSTÍVEL CRÍTICO — barcaça de suprimento emergencial lançada',
     iz_banner_data_exfil:'DADOS EXFILTRADOS — −280 pts',
     h_radio_feed:'FEED DE INTEL CROWDSTRIKE',
+    g_brand_name:'CROWDSTRIKE',
     g_incident_report_title:'🦅  RELATÓRIO DE INCIDENTE CROWDSTRIKE',
     g_ally_label:'ALIADO',
     g_threats_eliminated:'✅  AMEAÇAS ELIMINADAS — OVERWATCH ENCERRA OPERAÇÃO',
@@ -2302,7 +2314,13 @@ const TRANSLATIONS = {
     g_hunt_tier_5:'NÍVEL 5 — ELITE',
     g_hunt_layer_endpoint:'CAMADA DE ENDPOINT',
     g_hunt_layer_identity:'CAMADA DE IDENTIDADE',
-    g_hunt_layer_cloud:'CAMADA DE NUVEM'
+    g_hunt_layer_cloud:'CAMADA DE NUVEM',
+    disc_banner:'⚠&nbsp;&nbsp;CLASSIFICADO — SOMENTE PESSOAL AUTORIZADO&nbsp;&nbsp;⚠',
+    disc_title:'AVISO LEGAL',
+    disc_body1:'Esta é uma <strong style="color:#aac4ff;">simulação de treinamento fictícia</strong> criada apenas para fins de demonstração e educação. Todos os nomes de adversários, operações e cenários são completamente fictícios. Qualquer semelhança com agentes de ameaças ou incidentes reais é mera coincidência.',
+    disc_body2:'CrowdStrike<sup>®</sup>, Falcon<sup>®</sup> e marcas relacionadas são marcas registradas da CrowdStrike, Inc. Esta aplicação <strong style="color:#aac4ff;">não é afiliada nem endossada pela CrowdStrike, Inc.</strong> As estatísticas de detecção são apenas ilustrativas e não representam o desempenho real do produto.',
+    disc_btn:'[ RECONHECER ]',
+    disc_hint:'ESPAÇO &nbsp;/&nbsp; ENTER PARA RECONHECER'
   },
   es: {
     eyebrow:'◈ Serie Arcade CrowdStrike 2026', title:'SELECCIÓN DE MISIÓN',
@@ -2495,6 +2513,7 @@ const TRANSLATIONS = {
     iz_report_line3:'Las intrusiones en entornos cloud aumentaron un 75% interanual.',
     iz_report_line4:'La plataforma Falcon unificada reduce el tiempo medio de respuesta de horas a minutos.',
     iz_report_line5:'La inteligencia de adversarios convierte la defensa reactiva en caza proactiva.',
+    iz_report_line6:'crowdstrike.com/adversary-universe  ·  falcon.crowdstrike.com',
     iz_loading_title:'INICIALIZANDO INTELIGENCIA DE AMENAZAS',
     iz_loading_assets:'{loaded} / {total} recursos cargados',
     iz_loading_ready:'✅  TODOS LOS SISTEMAS LISTOS',
@@ -2756,6 +2775,7 @@ const TRANSLATIONS = {
     iz_comms_fuel_critical:'COMBUSTIBLE CRÍTICO — barcaza de suministro de emergencia desplegada',
     iz_banner_data_exfil:'DATOS EXFILTRADOS — −280 pts',
     h_radio_feed:'FEED DE INTEL CROWDSTRIKE',
+    g_brand_name:'CROWDSTRIKE',
     g_incident_report_title:'🦅  INFORME DE INCIDENTE CROWDSTRIKE',
     g_ally_label:'ALIADO',
     g_threats_eliminated:'✅  AMENAZAS ELIMINADAS — OVERWATCH SE RETIRA',
@@ -2787,7 +2807,13 @@ const TRANSLATIONS = {
     g_hunt_tier_5:'NIVEL 5 — ÉLITE',
     g_hunt_layer_endpoint:'CAPA DE ENDPOINT',
     g_hunt_layer_identity:'CAPA DE IDENTIDAD',
-    g_hunt_layer_cloud:'CAPA DE CLOUD'
+    g_hunt_layer_cloud:'CAPA DE CLOUD',
+    disc_banner:'⚠&nbsp;&nbsp;CLASIFICADO — SOLO PERSONAL AUTORIZADO&nbsp;&nbsp;⚠',
+    disc_title:'AVISO LEGAL',
+    disc_body1:'Esta es una <strong style="color:#aac4ff;">simulación de entrenamiento ficticia</strong> creada únicamente con fines de demostración y educación. Todos los nombres de adversarios, operaciones y escenarios son completamente ficticios. Cualquier parecido con actores de amenazas o incidentes reales es coincidencia.',
+    disc_body2:'CrowdStrike<sup>®</sup>, Falcon<sup>®</sup> y marcas relacionadas son marcas registradas de CrowdStrike, Inc. Esta aplicación <strong style="color:#aac4ff;">no está afiliada ni respaldada por CrowdStrike, Inc.</strong> Las estadísticas de detección son solo ilustrativas y no representan el rendimiento real del producto.',
+    disc_btn:'[ RECONOCER ]',
+    disc_hint:'ESPACIO &nbsp;/&nbsp; ENTER PARA RECONOCER'
   },
   jp: {
     eyebrow:'◈ CrowdStrike アーケードシリーズ 2026', title:'ミッション選択',
@@ -2980,6 +3006,7 @@ const TRANSLATIONS = {
     iz_report_line3:'クラウド環境への侵入は前年比75%増加しました。',
     iz_report_line4:'統合Falconプラットフォームは平均対応時間を数時間から数分へ短縮します。',
     iz_report_line5:'敵対者インテリジェンスは受動的防御を能動的ハンティングへ変えます。',
+    iz_report_line6:'crowdstrike.com/adversary-universe  ·  falcon.crowdstrike.com',
     iz_loading_title:'脅威インテリジェンスを初期化中',
     iz_loading_assets:'{loaded} / {total} アセット読み込み済み',
     iz_loading_ready:'✅  すべてのシステム準備完了',
@@ -3241,6 +3268,7 @@ const TRANSLATIONS = {
     iz_comms_fuel_critical:'燃料危機 — 緊急補給バージを展開',
     iz_banner_data_exfil:'データ流出 — −280 pts',
     h_radio_feed:'CROWDSTRIKE インテルフィード',
+    g_brand_name:'CROWDSTRIKE',
     g_incident_report_title:'🦅  CROWDSTRIKEインシデントレポート',
     g_ally_label:'味方',
     g_threats_eliminated:'✅  脅威排除 — OVERWATCHが撤退',
@@ -3272,7 +3300,13 @@ const TRANSLATIONS = {
     g_hunt_tier_5:'ティア 5 — エリート',
     g_hunt_layer_endpoint:'エンドポイント層',
     g_hunt_layer_identity:'ID層',
-    g_hunt_layer_cloud:'クラウド層'
+    g_hunt_layer_cloud:'クラウド層',
+    disc_banner:'⚠&nbsp;&nbsp;機密 — 許可された担当者のみ&nbsp;&nbsp;⚠',
+    disc_title:'法的免責事項',
+    disc_body1:'これはデモンストレーションおよび教育目的のみで作成された<strong style="color:#aac4ff;">架空のトレーニングシミュレーション</strong>です。すべての攻撃者名、オペレーション、シナリオは完全に架空のものです。実際の脅威アクターや事件との類似は偶然です。',
+    disc_body2:'CrowdStrike<sup>®</sup>、Falcon<sup>®</sup>および関連マークはCrowdStrike, Inc.の登録商標です。このアプリケーションは<strong style="color:#aac4ff;">CrowdStrike, Inc.とは一切関係なく、同社による承認も受けていません。</strong>検出統計は説明目的のみであり、実際の製品パフォーマンスを表すものではありません。',
+    disc_btn:'[ 確認 ]',
+    disc_hint:'スペース &nbsp;/&nbsp; ENTER で確認'
   }
 };
 
@@ -4558,23 +4592,20 @@ function _ensureDashDisclaimer(onAcknowledge) {
     'position:fixed','inset:0','z-index:9999',
     'background:rgba(2,3,8,0.97)',
     'display:flex','align-items:center','justify-content:center',
-    "font-family:'Share Tech Mono',monospace"
+    'font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace'
   ].join(';');
   ov.innerHTML = `
     <div style="max-width:580px;width:90%;border:1px solid rgba(220,38,38,0.65);border-radius:8px;
       background:rgba(8,10,18,0.99);padding:40px 44px;
       box-shadow:0 0 40px rgba(220,38,38,0.28),0 0 80px rgba(220,38,38,0.10);text-align:center;">
       <div style="font-size:10px;letter-spacing:3.5px;color:#ff1744;margin-bottom:18px;text-transform:uppercase;">
-        ⚠&nbsp;&nbsp;CLASSIFIED — AUTHORIZED PERSONNEL ONLY&nbsp;&nbsp;⚠
+        ${T('disc_banner')}
       </div>
-      <div style="font-size:22px;font-weight:700;color:#dce8ff;letter-spacing:2px;margin-bottom:6px;">LEGAL DISCLAIMER</div>
+      <div style="font-size:22px;font-weight:700;color:#dce8ff;letter-spacing:2px;margin-bottom:6px;">${T('disc_title')}</div>
       <div style="width:60px;height:2px;background:linear-gradient(90deg,transparent,#ff1744,transparent);margin:0 auto 22px;"></div>
       <div style="font-size:11.5px;color:#7a93bb;line-height:1.78;margin-bottom:28px;text-align:left;">
-        This is a <strong style="color:#aac4ff;">fictional training simulation</strong> created for demonstration and educational purposes only.
-        All adversary names, operations, and scenarios are entirely fictitious. Any resemblance to actual threat actors or incidents is coincidental.<br><br>
-        CrowdStrike<sup>®</sup>, Falcon<sup>®</sup>, and related marks are registered trademarks of CrowdStrike, Inc.
-        This application is <strong style="color:#aac4ff;">not affiliated with or endorsed by CrowdStrike, Inc.</strong>
-        Detection statistics are illustrative only and do not represent actual product performance.
+        ${T('disc_body1')}<br><br>
+        ${T('disc_body2')}
       </div>
       <button id="dash-disclaimer-ack-btn"
         style="background:linear-gradient(135deg,#b71c1c,#ef5350);border:1px solid rgba(255,100,100,0.4);
@@ -4583,9 +4614,9 @@ function _ensureDashDisclaimer(onAcknowledge) {
           transition:box-shadow 0.2s;"
         onmouseover="this.style.boxShadow='0 0 18px rgba(239,83,80,0.7)'"
         onmouseout="this.style.boxShadow='none'">
-        [ ACKNOWLEDGE ]
+        ${T('disc_btn')}
       </button>
-      <div style="margin-top:14px;font-size:9.5px;color:#344a60;letter-spacing:1.5px;">SPACE &nbsp;/&nbsp; ENTER TO ACKNOWLEDGE</div>
+      <div style="margin-top:14px;font-size:9.5px;color:#344a60;letter-spacing:1.5px;">${T('disc_hint')}</div>
     </div>`;
   document.body.appendChild(ov);
 
@@ -4710,6 +4741,7 @@ const CyberBootLoader = (() => {
   };
   function _loaderClick(freq = 1800, g = 0.022, dur = 0.028) {
     try {
+      if (!window._userHasGestured) return; // no AudioContext before user gesture
       if (!_loaderAC) _loaderAC = new (window.AudioContext || window.webkitAudioContext)();
       if (_loaderAC.state !== 'running') _loaderAC.resume();
       const now = _loaderAC.currentTime;
@@ -5732,6 +5764,7 @@ function _createDashboardAttractDirector() {
   }
   function stop(reason='manual') {
     active = false;
+    window._simMuted = false; // restore audio for real gameplay
     stopFrame();
     overlayEl()?.classList.remove('is-open');
     const stage = stageEl();
@@ -5743,6 +5776,7 @@ function _createDashboardAttractDirector() {
     if (active || !_arcadeDashVisible || rankingsOverlayOpen()) return;
     _ensureDashboardAttractOverlay();
     active = true;
+    window._simMuted = true; // silence audio during attract simulations
     sceneIdx = 0;
     overlayEl()?.classList.add('is-open');
     renderScene();
@@ -5769,6 +5803,12 @@ function _createDashboardAttractDirector() {
   });
   return { start, stop, toggle, resetIdle, isActive:() => active };
 }
+
+// ── User gesture tracker — gates AudioContext creation everywhere ──
+window._userHasGestured = false;
+['click','keydown','touchstart'].forEach(evt =>
+  document.addEventListener(evt, () => { window._userHasGestured = true; }, {once: true, capture: true})
+);
 
 // ── Boot ──
 document.addEventListener('DOMContentLoaded', () => {
@@ -6881,15 +6921,23 @@ const FalconRanking = (function () {
         <div class="fr-rank-name">${_esc(name)}</div>
         <div class="fr-rank-score">${score.toLocaleString()} pts</div>
         <div class="fr-rank-prize">${_esc(tier.label)}</div>
+        <canvas id="fr-qr-rank-canvas" width="88" height="88"
+          style="display:block;margin:16px auto 4px;image-rendering:pixelated;
+                 border:2px solid currentColor;border-radius:2px;opacity:0.85;"></canvas>
+        <div style="font-size:7.5px;letter-spacing:2px;text-transform:uppercase;opacity:0.5;margin-bottom:12px;">scan to share</div>
         <span class="fr-rank-dismiss">${T('lb_press_continue')}</span>
       </div>
     `;
     panel.appendChild(div);
+    try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'){const _qx=_qc.getContext('2d'),_mod=3,_qz=2,_mat=window.generateQRMatrix('#crowdtour');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<25;r++)for(let c=0;c<25;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){}
 
-    const dismiss = () => { _closeForm(); div.removeEventListener('click',dismiss); };
-    div.addEventListener('click', dismiss);
-    const kd = () => { _closeForm(); document.removeEventListener('keydown',kd); };
-    document.addEventListener('keydown', kd);
+    // Lock dismiss for 3 s — gives players time to scan before any key/click closes the card
+    setTimeout(() => {
+      const dismiss = () => { _closeForm(); div.removeEventListener('click',dismiss); };
+      div.addEventListener('click', dismiss);
+      const kd = () => { _closeForm(); document.removeEventListener('keydown',kd); };
+      document.addEventListener('keydown', kd);
+    }, 3000);
   }
 
   function _closeForm() {
@@ -7274,7 +7322,7 @@ function _buildReverbImpulse(ac,decay,duration){
 function _dest(){ return _masterGain||(AC(),_masterGain); }
 
 function beep(f,d=0.08,type='square',g=0.055,sl=null){
-  if(MUTED) return;
+  if(MUTED||window._simMuted) return;
   if (_activeGameId !== 'zero') return;
   try{
     const ac=AC(),o=ac.createOscillator(),gn=ac.createGain();
@@ -7286,7 +7334,7 @@ function beep(f,d=0.08,type='square',g=0.055,sl=null){
   }catch(_){}
 }
 function noise(d=0.15,g=0.10,lpf=4000){
-  if(MUTED) return;
+  if(MUTED||window._simMuted) return;
   if (_activeGameId !== 'zero') return;
   try{
     const ac=AC();
@@ -7305,7 +7353,7 @@ function noise(d=0.15,g=0.10,lpf=4000){
   }catch(_){}
 }
 function phrase(notes,baseTime=0){
-  if(MUTED) return;
+  if(MUTED||window._simMuted) return;
   if (_activeGameId !== 'zero') return;
   const ac=AC(); let t=ac.currentTime+0.02+baseTime;
   for(const n of notes){
@@ -7319,7 +7367,7 @@ function phrase(notes,baseTime=0){
 }
 let _bossOsc=null,_bossGain=null,_bossLFO=null;
 function startBossMusic(){
-  if(MUTED||!_masterGain) return;
+  if(MUTED||window._simMuted||!_masterGain) return;
   if (_activeGameId !== 'zero') return;
   stopBossMusic();
   try{
@@ -10433,7 +10481,7 @@ function drawTitle(){
   CX.fillStyle='#0a2030'; CX.fill(); CX.restore();
   CX.fillStyle='rgba(2,4,6,0.60)'; CX.fillRect(0,0,VW,VH);
   CX.shadowBlur=38; CX.shadowColor='#e0003c'; CX.fillStyle='#e0003c'; CX.font=izFont(18,'bold'); CX.textAlign='center';
-  CX.fillText('CROWDSTRIKE',VW/2,72); CX.shadowBlur=0;
+  CX.fillText(T('g_brand_name'),VW/2,72); CX.shadowBlur=0;
   CX.shadowBlur=28; CX.shadowColor='#fff'; CX.fillStyle='#ffffff'; CX.font=izFont(48,'bold');
   CX.fillText(T('g_incident_zero'),VW/2,122); CX.shadowBlur=0;
   CX.fillStyle='#7f8b96'; CX.font=izFont(11);
@@ -10563,7 +10611,7 @@ function drawBossIntro(){
   CX.strokeStyle='#ff5a4d'; CX.lineWidth=2.5; CX.strokeRect(68,52,VW-136,VH-104);
 
   const pulse=0.5+0.5*Math.sin(Date.now()*0.009);
-  CX.shadowBlur=20*pulse; CX.shadowColor='#ff5a4d';
+  CX.shadowBlur=Math.max(10,20*pulse); CX.shadowColor='#ff5a4d';
   CX.fillStyle='#ff5a4d'; CX.font='bold 14px monospace'; CX.textAlign='center';
   CX.fillText(T('g_contact_detected'),VW/2,90); CX.shadowBlur=0;
 
@@ -10712,7 +10760,7 @@ function drawGameOver(){
   CX.fillStyle='#74ff88'; CX.font='10px monospace';
   CX.fillText(T('iz_report_line5'),VW/2,426);
   CX.fillStyle='#555'; CX.font='9px monospace';
-  CX.fillText('crowdstrike.com/adversary-universe  ·  falcon.crowdstrike.com',VW/2,446);
+  CX.fillText(T('iz_report_line6'),VW/2,446);
 
   if(Math.floor(Date.now()/380)%2===0){
     CX.fillStyle='#ffd84d'; CX.font='bold 14px monospace';
@@ -11995,15 +12043,23 @@ const FalconRanking = (function () {
         <div class="fr-rank-name">${_esc(name)}</div>
         <div class="fr-rank-score">${score.toLocaleString()} pts</div>
         <div class="fr-rank-prize">${_esc(tier.label)}</div>
+        <canvas id="fr-qr-rank-canvas" width="88" height="88"
+          style="display:block;margin:16px auto 4px;image-rendering:pixelated;
+                 border:2px solid currentColor;border-radius:2px;opacity:0.85;"></canvas>
+        <div style="font-size:7.5px;letter-spacing:2px;text-transform:uppercase;opacity:0.5;margin-bottom:12px;">scan to share</div>
         <span class="fr-rank-dismiss">${T('lb_press_continue')}</span>
       </div>
     `;
     panel.appendChild(div);
+    try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'){const _qx=_qc.getContext('2d'),_mod=3,_qz=2,_mat=window.generateQRMatrix('#crowdtour');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<25;r++)for(let c=0;c<25;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){}
 
-    const dismiss = () => { _closeForm(); div.removeEventListener('click',dismiss); };
-    div.addEventListener('click', dismiss);
-    const kd = () => { _closeForm(); document.removeEventListener('keydown',kd); };
-    document.addEventListener('keydown', kd);
+    // Lock dismiss for 3 s — gives players time to scan before any key/click closes the card
+    setTimeout(() => {
+      const dismiss = () => { _closeForm(); div.removeEventListener('click',dismiss); };
+      div.addEventListener('click', dismiss);
+      const kd = () => { _closeForm(); document.removeEventListener('keydown',kd); };
+      document.addEventListener('keydown', kd);
+    }, 3000);
   }
 
   function _closeForm() {
@@ -13163,6 +13219,7 @@ class AudioEngine{
   #getAC(){if(!this.#ac)this.#ac=new(window.AudioContext||window.webkitAudioContext)();return this.#ac;}
   #resume(){const ac=this.#getAC();if(ac.state!=="running")ac.resume();}
   #tone({type="square",f0,f1,dur,gain=0.22,filt=null,det=0,delay=0}){
+    if(window._simMuted) return; // silent during attract simulation
     setTimeout(()=>{
       this.#resume();
       const ac=this.#getAC(),osc=ac.createOscillator(),g=ac.createGain();
@@ -13389,7 +13446,7 @@ class ModuleChoiceScreen{
       }
       ctx.fillStyle=isSelected?"rgba(8,2,26,0.98)":"rgba(4,1,18,0.75)";
       ctx.strokeStyle=viewModule.color;ctx.lineWidth=isSelected?2.5:1.2;
-      ctx.shadowColor=viewModule.color;ctx.shadowBlur=isSelected?20:6*pulse;
+      ctx.shadowColor=viewModule.color;ctx.shadowBlur=isSelected?20:Math.max(10,6*pulse);
       ctx.beginPath();ctx.roundRect(x,cy,CW,CH,6);ctx.fill();ctx.stroke();
       if(isSelected){
         ctx.fillStyle=viewModule.color;
@@ -14142,7 +14199,7 @@ class Block{
     ctx.fillRect(this.x+1,this.y+this.h-3,(this.w-2)*t,2);
     ctx.globalAlpha=1;
     const nl=this.tool.name.length;
-    ctx.font=`bold ${nl>7?7:nl>5?8:9}px 'Courier New'`;ctx.textAlign="center";
+    ctx.font=`bold ${Math.max(9,nl>7?7:nl>5?8:9)}px 'Courier New'`;ctx.textAlign="center";
     ctx.fillStyle=drawColor;ctx.shadowColor=drawColor;ctx.shadowBlur=t>0.5?8:4;
     ctx.fillText(this.corrupted?T('def_corrupted'):this.tool.name,this.x+this.w/2,this.y+this.h*0.65);
     if(this.strength<CFG.BLK_STRENGTH&&!this.corrupted){
@@ -14497,7 +14554,7 @@ class TitleScreen{
         }
         ctx.fillStyle="rgba(4,1,18,0.82)";ctx.strokeStyle=m.color;
         ctx.lineWidth=isCenter?2:1;ctx.shadowColor=m.color;
-        ctx.shadowBlur=isCenter?14:5*pulse;
+        ctx.shadowBlur=isCenter?14:Math.max(10,5*pulse);
         ctx.beginPath();ctx.roundRect(x,y,EW,EH,4);ctx.fill();ctx.stroke();
         ctx.font="16px serif";ctx.textAlign="center";ctx.shadowBlur=0;
         ctx.fillText(m.emoji,x+EW/2,y+22);
@@ -16644,12 +16701,13 @@ const FalconRanking=(function(){'use strict';
   function _toast(msg,color='#74ff88'){const el=document.getElementById('fr-toast-hunt');if(!el)return;el.textContent=msg;el.style.borderColor=color;el.style.color=color;el.classList.add('fr-show');clearTimeout(_toastTimer);_toastTimer=setTimeout(()=>el.classList.remove('fr-show'),2800);}
   function _animateCounter(el,target,duration=1200){const start=performance.now();function step(now){const p=Math.min(1,(now-start)/duration),eased=1-Math.pow(1-p,3);el.textContent=Math.floor(eased*target).toLocaleString();if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
   function _esc(str){return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-  function showForm(data){if(_formOpen)return;_formOpen=true;_clearContent();_showOverlay();const entries=Store.load(),tempRank=entries.filter(e=>e.score>=data.score).length+1,tier=_getPrizeTier(tempRank);const panel=document.createElement('div');panel.id='fr-form-panel';panel.innerHTML=`<div class="fr-form-header"><div class="fr-eyebrow">◈ ${_esc(CFG.gameName)} · ${_esc(CFG.eventName)}</div><h2>${T('lb_enter')}</h2><div class="fr-sub">${T('lb_sub')}</div></div><div class="fr-score-badge"><div class="fr-score-num" id="fr-score-display">0</div><div class="fr-score-meta"><div><strong>${T('lb_case')}:</strong> ${_esc(data.phase||'Unknown')}</div><div><strong>${T('lb_adversary')}:</strong> ${_esc(data.adversary||'—')}</div><div><strong>${T('lb_grade')}:</strong> ${_esc(data.grade||'—')}</div><div><strong>${T('lb_projected_rank')}:</strong> #${tempRank}</div><span class="fr-prize" style="color:${tier.color};border-color:${tier.color}">${_esc(tier.label)}</span></div></div><div class="fr-fields"><div class="fr-field"><label>${T('lb_agent_name')}</label><input id="fr-name" type="text" placeholder="${T('lb_name_placeholder')}" autocomplete="name" maxlength="60"/><span class="fr-hint" id="fr-name-hint"></span></div><div class="fr-field"><label>${T('lb_company')}</label><input id="fr-company" type="text" placeholder="${T('lb_company_placeholder')}" autocomplete="organization" maxlength="80"/><span class="fr-hint" id="fr-company-hint"></span></div><div class="fr-field"><label>${T('lb_work_email')}</label><input id="fr-email" type="email" placeholder="${T('lb_email_placeholder')}" autocomplete="email" maxlength="100"/><span class="fr-hint" id="fr-email-hint"></span></div></div><div class="fr-actions"><button class="fr-btn fr-btn-primary" id="fr-submit">${T('lb_submit')}</button><button class="fr-btn fr-btn-secondary" id="fr-skip">${T('lb_skip')}</button></div><div class="fr-consent">${T('lb_consent')}</div>`;
-    _overlayEl.appendChild(panel);setTimeout(()=>_animateCounter(document.getElementById('fr-score-display'),data.score,1400),200);setTimeout(()=>document.getElementById('fr-name')?.focus(),450);
+  function showForm(data){if(_formOpen)return;_formOpen=true;_clearContent();_showOverlay();const entries=Store.load(),tempRank=entries.filter(e=>e.score>=data.score).length+1,tier=_getPrizeTier(tempRank);const panel=document.createElement('div');panel.id='fr-form-panel';panel.innerHTML=`<div class="fr-form-header"><div class="fr-eyebrow">◈ ${_esc(CFG.gameName)} · ${_esc(CFG.eventName)}</div><h2>${T('lb_enter')}</h2><div class="fr-sub">${T('lb_sub')}</div></div><div class="fr-score-badge"><div class="fr-score-num" id="fr-score-display">0</div><div class="fr-score-meta"><div><strong>${T('lb_case')}:</strong> ${_esc(data.phase||'Unknown')}</div><div><strong>${T('lb_adversary')}:</strong> ${_esc(data.adversary||'—')}</div><div><strong>${T('lb_grade')}:</strong> ${_esc(data.grade||'—')}</div><div><strong>${T('lb_projected_rank')}:</strong> #${tempRank}</div><span class="fr-prize" style="color:${tier.color};border-color:${tier.color}">${_esc(tier.label)}</span></div></div><div class="fr-fields"><div class="fr-field"><label>${T('lb_agent_name')}</label><input id="fr-name" type="text" placeholder="${T('lb_name_placeholder')}" autocomplete="name" maxlength="60"/><span class="fr-hint" id="fr-name-hint"></span></div><div class="fr-field"><label>${T('lb_company')}</label><input id="fr-company" type="text" placeholder="${T('lb_company_placeholder')}" autocomplete="organization" maxlength="80"/><span class="fr-hint" id="fr-company-hint"></span></div><div class="fr-field"><label>${T('lb_work_email')}</label><input id="fr-email" type="email" placeholder="${T('lb_email_placeholder')}" autocomplete="email" maxlength="100"/><span class="fr-hint" id="fr-email-hint"></span></div></div><div class="fr-actions"><button class="fr-btn fr-btn-primary" id="fr-submit">${T('lb_submit')}</button><button class="fr-btn fr-btn-secondary" id="fr-skip">${T('lb_skip')}</button></div><div class="fr-consent">${T('lb_consent')}</div>`;  // QR is now on the rank confirm card — see _showRankConfirm
+    _overlayEl.appendChild(panel);
+    setTimeout(()=>_animateCounter(document.getElementById('fr-score-display'),data.score,1400),200);setTimeout(()=>document.getElementById('fr-name')?.focus(),450);
     document.getElementById('fr-submit').addEventListener('click',()=>{const validation=validateLeadCaptureEntry({name:document.getElementById('fr-name').value,company:document.getElementById('fr-company').value,email:document.getElementById('fr-email').value});if(validation.errors.name)_fieldError('fr-name','fr-name-hint',validation.errors.name);if(validation.errors.company)_fieldError('fr-company','fr-company-hint',validation.errors.company);if(validation.errors.email)_fieldError('fr-email','fr-email-hint',validation.errors.email);if(!validation.ok)return;const { name, company, email }=validation.cleaned;const finalRank=Store.add({name,company,email,score:data.score,phase:data.phase||'',adversary:data.adversary||'',grade:data.grade||'',maxStreak:data.maxStreak||0,lives:data.lives||0,gameId:CFG.gameName,event:CFG.eventName});_burstParticles(panel);panel.querySelectorAll('input,button').forEach(el=>el.disabled=true);setTimeout(()=>_showRankConfirm(panel,finalRank,name,data.score),700);});
     document.getElementById('fr-skip').addEventListener('click',()=>_closeForm());}
   function _fieldError(inputId,hintId,msg){const inp=document.getElementById(inputId),hint=document.getElementById(hintId);if(inp){inp.classList.add('fr-error');setTimeout(()=>inp.classList.remove('fr-error'),500);}if(hint)hint.textContent=msg;}
-  function _showRankConfirm(panel,rank,name,score){const tier=_getPrizeTier(rank),div=document.createElement('div');div.id='fr-rank-confirm';div.style.setProperty('--fr-confirm-color',tier.color);div.innerHTML=`<div class="fr-rank-card"><div class="fr-rank-pos">#${rank}</div><div class="fr-rank-label">${T('lb_your_rank')}</div><div class="fr-rank-name">${_esc(name)}</div><div class="fr-rank-score">${score.toLocaleString()} pts</div><div class="fr-rank-prize">${_esc(tier.label)}</div><span class="fr-rank-dismiss">${T('lb_press_continue')}</span></div>`;panel.appendChild(div);const dismiss=()=>{_closeForm();div.removeEventListener('click',dismiss);};div.addEventListener('click',dismiss);const kd=()=>{_closeForm();document.removeEventListener('keydown',kd);};document.addEventListener('keydown',kd);}
+  function _showRankConfirm(panel,rank,name,score){const tier=_getPrizeTier(rank),div=document.createElement('div');div.id='fr-rank-confirm';div.style.setProperty('--fr-confirm-color',tier.color);div.innerHTML=`<div class="fr-rank-card"><div class="fr-rank-pos">#${rank}</div><div class="fr-rank-label">${T('lb_your_rank')}</div><div class="fr-rank-name">${_esc(name)}</div><div class="fr-rank-score">${score.toLocaleString()} pts</div><div class="fr-rank-prize">${_esc(tier.label)}</div><canvas id="fr-qr-rank-canvas" width="88" height="88" style="display:block;margin:16px auto 4px;image-rendering:pixelated;border:2px solid currentColor;border-radius:2px;opacity:0.85;"></canvas><div style="font-size:7.5px;letter-spacing:2px;text-transform:uppercase;opacity:0.5;margin-bottom:12px;">scan to share</div><span class="fr-rank-dismiss">${T('lb_press_continue')}</span></div>`;panel.appendChild(div);try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'){const _qx=_qc.getContext('2d'),_mod=3,_qz=2,_mat=window.generateQRMatrix(HUNT_SHARE_URL);_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<25;r++)for(let c=0;c<25;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){}setTimeout(()=>{const dismiss=()=>{_closeForm();div.removeEventListener('click',dismiss);};div.addEventListener('click',dismiss);const kd=()=>{_closeForm();document.removeEventListener('keydown',kd);};document.addEventListener('keydown',kd);},3000);}
   function _closeForm(){_formOpen=false;_clearContent();_hideOverlay();if(CFG.onFormClose)CFG.onFormClose();}
   function showAttract(){if(_formOpen||_attractOpen)return;_attractOpen=true;_clearContent();_showOverlay();const top=Store.topN(CFG.topN),isEmpty=top.length===0;const attract=document.createElement('div');attract.id='fr-attract';attract.innerHTML=`<div class="fr-attract-header"><div class="fr-cs-logo">◈ CrowdStrike OverWatch</div><h1>${_esc(CFG.gameName)}</h1><div class="fr-event-name">${_esc(CFG.eventName)} ${isEmpty?' — '+T('lb_first_board'):'— '+T('lb_top_agents')}</div></div><div class="fr-divider"></div><div class="fr-lb-header"><span>${T('lb_rank')}</span><span>${T('lb_agent')}</span><span style="text-align:right">${T('lb_score')}</span><span style="text-align:right">${T('lb_grade_short')}</span></div><div class="fr-lb-viewport" id="fr-lb-viewport"><div class="fr-lb-scroll" id="fr-lb-scroll">${_renderEntries(top)}${_renderEntries(top)}</div></div><div class="fr-divider"></div><div class="fr-attract-footer"><span class="fr-cta">${T('lb_press_begin')}</span><span style="font-size:8px;color:#2a3a4a;letter-spacing:1px">${T('lb_admin_hint')}</span></div>`;_overlayEl.appendChild(attract);_attractY=0;const scrollEl=document.getElementById('fr-lb-scroll');let lastT=0;let half=0;function scrollStep(ts){if(half===0)half=scrollEl.scrollHeight/2;const dt=Math.min(0.05,(ts-lastT)/1000||0.016);lastT=ts;if(!isEmpty){_attractY+=CFG.attractSpeed*dt;if(half>0&&_attractY>=half)_attractY=0;scrollEl.style.transform=`translateY(${-_attractY}px)`;}  _attractAF=requestAnimationFrame(scrollStep);}_attractAF=requestAnimationFrame(scrollStep);const kd=(e)=>{if(['Control','Shift','Alt','Meta'].includes(e.key))return;document.removeEventListener('keydown',kd);_closeAttract();};const dismiss=()=>{document.removeEventListener('keydown',kd);_closeAttract();};document.addEventListener('keydown',kd);attract.addEventListener('click',dismiss);}
   function _renderEntries(entries){if(!entries.length)return Array.from({length:10},(_,i)=>`<div class="fr-entry" data-rank="${i+1}" style="--fr-entry-color:#1a2a3a"><div class="fr-rank">${i+1}</div><div class="fr-player"><div class="fr-player-name">———</div><div class="fr-player-company">${T('lb_first_player')}</div></div><div class="fr-entry-score">—</div><div class="fr-entry-grade">—</div></div>`).join('');return entries.map((e,i)=>{const rank=i+1,tier=_getPrizeTier(rank);return`<div class="fr-entry" data-rank="${rank}" style="--fr-entry-color:${tier.color}"><div class="fr-rank">${rank}</div><div class="fr-player"><div class="fr-player-name">${_esc(e.name)}</div><div class="fr-player-company">${_esc(e.company)}</div></div><div class="fr-entry-score">${Number(e.score).toLocaleString()}</div><div class="fr-entry-grade">${_esc(e.grade||'—')}</div></div>`;}).join('');}
@@ -16674,7 +16732,7 @@ const FalconRanking=(function(){'use strict';
 
 // ── Share URL (swap for CrowdStrike marketing URL when ready) ──
 // Version 2 QR (ECC-M) holds max 42 bytes — keep this URL ≤ 42 chars
-const HUNT_SHARE_URL='https://github.com/jpropheta/Arcade';
+const HUNT_SHARE_URL='#crowdtour';
 
 const canvas=document.getElementById('g-hunt');
 const ctx=canvas.getContext('2d',{alpha:false});
@@ -16746,7 +16804,7 @@ let MUTED=false;
 // ─── AUDIO ───────────────────────────────────────────────────────
 let AC_CTX=null;
 function AC(){if(!AC_CTX){AC_CTX=new(window.AudioContext||window.webkitAudioContext)();}if(AC_CTX.state!=='running')AC_CTX.resume();return AC_CTX;}
-function beep({f0,f1,dur,type='square',gain=0.15,delay=0}){if(MUTED)return;try{const ac=AC(),o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.setValueAtTime(f0,ac.currentTime+delay);if(f1)o.frequency.exponentialRampToValueAtTime(f1,ac.currentTime+delay+dur);g.gain.setValueAtTime(0,ac.currentTime+delay);g.gain.linearRampToValueAtTime(gain,ac.currentTime+delay+0.01);g.gain.exponentialRampToValueAtTime(0.0001,ac.currentTime+delay+dur);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+delay);o.stop(ac.currentTime+delay+dur);}catch(_){}}
+function beep({f0,f1,dur,type='square',gain=0.15,delay=0}){if(MUTED||window._simMuted)return;try{const ac=AC(),o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.setValueAtTime(f0,ac.currentTime+delay);if(f1)o.frequency.exponentialRampToValueAtTime(f1,ac.currentTime+delay+dur);g.gain.setValueAtTime(0,ac.currentTime+delay);g.gain.linearRampToValueAtTime(gain,ac.currentTime+delay+0.01);g.gain.exponentialRampToValueAtTime(0.0001,ac.currentTime+delay+dur);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+delay);o.stop(ac.currentTime+delay+dur);}catch(_){}}
 const SFX={
   click(){beep({f0:600,f1:900,dur:0.08,gain:0.12});},
   collect(){[0,80,160].forEach((d,i)=>beep({f0:440+i*220,dur:0.12,type:'sine',gain:0.16,delay:d/1000}));},
@@ -16815,6 +16873,7 @@ function resetThreatHuntRuntimeState(opts={}){
   deductionT=0;
   deductionLocked=false;
   deductionTimeLeft=DEDUCTION_TIMER;
+  _deductTierPlayed=0;
   score=0;
   briefingT=0;
   interceptT=0; interceptFiredAt=[-1,-1,-1]; interceptMsg=null; phaseTransState=null; nodeArrivalState=null;
@@ -16860,7 +16919,7 @@ function shutdownThreatHuntRuntime(){
 }
 registerArcadeRuntimeResetter('threat_hunt', shutdownThreatHuntRuntime);
 function syncHuntSoundscape(dt){
-  if(MUTED) return;
+  if(MUTED||window._simMuted) return;
   HUNT_AUDIO.pulseT+=dt;
   HUNT_AUDIO.titleSweepT+=dt;
   if(HUNT_AUDIO.state!==gameState){
@@ -21738,6 +21797,8 @@ function handleInvestigationClick(){
       activeEvidenceCard={clue:node2.clue,t:0,showing:true};
       gameState=STATE.EVIDENCE_CARD;
       SFX.collectEnhanced(node2.clue.type);
+      // Clue discovery visual burst: cyan/yellow/white particles
+      burst(node2.x,node2.y,18,[[0,229,255],[255,216,77],[255,255,255]],{maxSpd:180,life:0.55});
       // Dramatic burst: 3 rings at different radii + gold particles
       burst(node2.x,node2.y,36,[[255,215,0],[170,0,255],[57,255,20],[255,255,255]],{maxSpd:180,life:0.6});
       burst(node2.x,node2.y,14,[[255,255,255],[255,215,0]],{maxSpd:80,life:0.35});
@@ -21951,6 +22012,7 @@ function calcClueMatches(nodeId){
 
 const DEDUCTION_TIMER=20;
 let deductionTimeLeft=DEDUCTION_TIMER;
+let _deductTierPlayed=0;
 
 function drawDeduction(dt){
   deductionT+=dt;
@@ -23655,6 +23717,7 @@ window.__huntSim = {
         buildDeductionChoices();
         deductionTimeLeft=DEDUCTION_TIMER;
         deductionT=0;
+        _deductTierPlayed=0;
         gameState=STATE.DEDUCTION;
         this._setStageDelay(1650);
       }
@@ -23669,6 +23732,7 @@ window.__huntSim = {
         buildDeductionChoices();
         deductionTimeLeft=DEDUCTION_TIMER;
         deductionT=0;
+        _deductTierPlayed=0;
         gameState=STATE.DEDUCTION;
         this._setStageDelay(1650);
       }else{
@@ -23753,6 +23817,7 @@ function frame(ts){
     case STATE.BRIEFING:
       briefingT+=dt;
       if(hk('Space')||briefingT>6){gameState=STATE.WORLD_MAP;}
+      if(hk('Escape')){gameState=STATE.CASE_SELECT;FalconRanking.startIdleWatch();}
       break;
 
     case STATE.WORLD_MAP:
@@ -23783,6 +23848,7 @@ function frame(ts){
         // Time up — force deduction with what we have
         buildDeductionChoices();
         deductionTimeLeft=DEDUCTION_TIMER;
+        _deductTierPlayed=0;
         gameState=STATE.DEDUCTION;
         SFX.wrong();
       }
@@ -23792,13 +23858,15 @@ function frame(ts){
         buildDeductionChoices();
         deductionTimeLeft=DEDUCTION_TIMER;
         deductionT=0;
+        _deductTierPlayed=0;
         gameState=STATE.DEDUCTION;
         SFX.deploy();
         floatSpawn(LW/2,LH*0.4,T('g_hunt_all_evidence'),'#FFD700',14);
       }
       if(MOUSE.clicked) handleInvestigationClick();
       // Allow manual advance to deduction
-      if(hk('Space')&&collectedClues.length>=2){buildDeductionChoices();deductionTimeLeft=DEDUCTION_TIMER;deductionT=0;gameState=STATE.DEDUCTION;SFX.click();}
+      if(hk('Space')&&collectedClues.length>=2){buildDeductionChoices();deductionTimeLeft=DEDUCTION_TIMER;deductionT=0;_deductTierPlayed=0;gameState=STATE.DEDUCTION;SFX.click();}
+      if(hk('Escape')){gameState=STATE.CASE_SELECT;FalconRanking.startIdleWatch();}
       if(hk('KeyM'))MUTED=!MUTED;
       break;
 
@@ -23810,15 +23878,22 @@ function frame(ts){
         gameState=STATE.INVESTIGATION;
         // Reset timer only if cards remain
         if(activeEvidenceNodes.every(n=>n.collected)&&activeEvidenceNodes.length>0){
-          buildDeductionChoices();deductionTimeLeft=DEDUCTION_TIMER;deductionT=0;gameState=STATE.DEDUCTION;SFX.deploy();
+          buildDeductionChoices();deductionTimeLeft=DEDUCTION_TIMER;deductionT=0;_deductTierPlayed=0;gameState=STATE.DEDUCTION;SFX.deploy();
         }
       }
+      if(hk('Escape')){gameState=STATE.CASE_SELECT;FalconRanking.startIdleWatch();}
       if(hk('KeyM'))MUTED=!MUTED;
       break;
 
     case STATE.DEDUCTION:
       deductionT+=dt;
       if(!deductionLocked) deductionTimeLeft=Math.max(0,DEDUCTION_TIMER-deductionT);
+      // Audio escalation: play tension sounds as timer counts down
+      if(!deductionLocked){
+        if(deductionTimeLeft<15&&_deductTierPlayed<1){_deductTierPlayed=1;SFX.tension(1);}
+        if(deductionTimeLeft<10&&_deductTierPlayed<2){_deductTierPlayed=2;SFX.tension(2);}
+        if(deductionTimeLeft<5&&_deductTierPlayed<3){_deductTierPlayed=3;SFX.tension(3);}
+      }
       if(deductionTimeLeft<=0&&!deductionLocked) deductionTimeout();
       if(MOUSE.clicked&&!deductionLocked) handleDeductionClick();
       if(hk('Escape')){gameState=STATE.CASE_SELECT;caseSel=0;caseSelectEntryT=0;score=0;}
