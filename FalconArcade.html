@@ -1795,6 +1795,7 @@ const TRANSLATIONS = {
     iz_comms_itdr:'ITDR: All identities exposed. Threats weakened -30%. Bullets deal ×1.5 damage.',
     iz_banner_itdr:'ITDR ACTIVE — enemies identified and weakened',
     iz_comms_charlotte:'CHARLOTTE AI: Two AI wingmen deployed. All threats visible. Triple drops.',
+    iz_charlotte_kill:'CHARLOTTE AI: {etype} · ANALYZED · NEUTRALIZED',
     iz_comms_xdr:'XDR: Cross-domain correlation active. Threat chains visualised.',
     iz_comms_intel:'INTEL: Adversary profiles loaded. Boss patterns telegraphed. ×1.5 on intel kills.',
     iz_comms_overwatch:'OVERWATCH: All threats revealed. Elite hunters active. Homing missiles every 1.8s.',
@@ -1803,6 +1804,14 @@ const TRANSLATIONS = {
     iz_comms_dlp:'NGDLP: Exfil boats reversed. Data protection active. +80 pts per intercept.',
     iz_comms_pam:'JIT ACCESS: 6s full immunity. Zero standing privileges enforced. Gate cannons destroyed.',
     iz_banner_pam:'PAM SHIELD ACTIVE — 6 seconds invulnerability',
+    iz_banner_mdr_response:'MDR · RESPONSE TEAM · THREAT NEUTRALIZED',
+    iz_banner_siem_corr:'NGSIEM · CORRELATED KILL +100',
+    iz_banner_ngav_scan:'NGAV · ML SCAN COMPLETE · QUARANTINE DEPLOYED',
+    iz_banner_soar_launch:'SOAR · PLAYBOOK EXECUTING · MACHINE-SPEED SWEEP',
+    iz_banner_cloud_active:'CSPM · CLOUD PERIMETER SECURED · BLAST RADIUS CONTAINED',
+    iz_banner_overwatch_deployed:'OVERWATCH · ELITE HUNTERS DEPLOYED · ALL SECTORS SCANNING',
+    iz_banner_charlotte_online:'CHARLOTTE AI · NEURAL NETWORK ONLINE · TRIAGE MODE ACTIVE',
+    iz_banner_jit_revoked:'JIT · ACCESS REVOKED · CREDENTIALS CYCLED',
     iz_comms_schtasks:'OVERWATCH: schtasks.exe re-registered — adversary persistence survived first kill. OverWatch on it.',
     iz_comms_bits:'OVERWATCH: bitsAdmin.exe LOLBin intercepted — covert BITS transfer blocked, payload recovered',
     iz_banner_objective_complete:'OBJECTIVE COMPLETE: {objective}',
@@ -2290,6 +2299,7 @@ const TRANSLATIONS = {
     iz_comms_itdr:'ITDR: todas as identidades expostas. Ameaças enfraquecidas em -30%. Tiros causam ×1.5 de dano.',
     iz_banner_itdr:'ITDR ATIVO — inimigos identificados e enfraquecidos',
     iz_comms_charlotte:'CHARLOTTE AI: duas alas de IA ativadas. Todas as ameaças visíveis. Queda tripla.',
+    iz_charlotte_kill:'CHARLOTTE AI: {etype} · ANALISADO · NEUTRALIZADO',
     iz_comms_xdr:'XDR: correlação entre domínios ativa. Cadeias de ameaça visualizadas.',
     iz_comms_intel:'INTEL: perfis de adversários carregados. Padrões do chefe telegrafados. ×1.5 em eliminações de intel.',
     iz_comms_overwatch:'OVERWATCH: todas as ameaças reveladas. Hunters de elite ativos. Mísseis teleguiados a cada 1.8s.',
@@ -2298,6 +2308,14 @@ const TRANSLATIONS = {
     iz_comms_dlp:'NGDLP: barcos de exfiltração revertidos. Proteção de dados ativa. +80 pts por interceptação.',
     iz_comms_pam:'PAM SHIELD: 6 s de imunidade total. Canhões de portão e relés internos destruídos.',
     iz_banner_pam:'PAM SHIELD ATIVO — 6 segundos de invulnerabilidade',
+    iz_banner_mdr_response:'MDR · EQUIPE DE RESPOSTA · AMEAÇA NEUTRALIZADA',
+    iz_banner_siem_corr:'NGSIEM · ELIMINAÇÃO CORRELACIONADA +100',
+    iz_banner_ngav_scan:'NGAV · ANÁLISE ML CONCLUÍDA · QUARENTENA IMPLANTADA',
+    iz_banner_soar_launch:'SOAR · PLAYBOOK EM EXECUÇÃO · VARREDURA EM VELOCIDADE DE MÁQUINA',
+    iz_banner_cloud_active:'CSPM · PERÍMETRO CLOUD SEGURO · RAIO DE IMPACTO CONTIDO',
+    iz_banner_overwatch_deployed:'OVERWATCH · HUNTERS DE ELITE IMPLANTADOS · TODOS OS SETORES EM PATRULHA',
+    iz_banner_charlotte_online:'CHARLOTTE AI · REDE NEURAL ATIVA · MODO DE TRIAGEM ATIVO',
+    iz_banner_jit_revoked:'JIT · ACESSO REVOGADO · CREDENCIAIS ROTACIONADAS',
     iz_comms_schtasks:'OVERWATCH: schtasks.exe re-registrado — persistência do adversário sobreviveu ao primeiro neutralização. OverWatch ativo.',
     iz_comms_bits:'OVERWATCH: LOLBin bitsAdmin.exe interceptado — transferência BITS bloqueada, payload recuperado',
     iz_banner_objective_complete:'OBJETIVO CONCLUÍDO: {objective}',
@@ -2785,6 +2803,7 @@ const TRANSLATIONS = {
     iz_comms_itdr:'ITDR: todas las identidades expuestas. Amenazas debilitadas un -30%. Las balas causan ×1.5 de daño.',
     iz_banner_itdr:'ITDR ACTIVO — enemigos identificados y debilitados',
     iz_comms_charlotte:'CHARLOTTE AI: dos alas de IA desplegadas. Todas las amenazas visibles. Caída triple.',
+    iz_charlotte_kill:'CHARLOTTE AI: {etype} · ANALIZADO · NEUTRALIZADO',
     iz_comms_xdr:'XDR: correlación entre dominios activa. Cadenas de amenaza visualizadas.',
     iz_comms_intel:'INTEL: perfiles de adversario cargados. Patrones del jefe telegrafiados. ×1.5 en bajas de intel.',
     iz_comms_overwatch:'OVERWATCH: todas las amenazas reveladas. Hunters de élite activos. Misiles guiados cada 1.8 s.',
@@ -2793,6 +2812,14 @@ const TRANSLATIONS = {
     iz_comms_dlp:'NGDLP: barcas de exfiltración invertidas. Protección de datos activa. +80 pts por interceptación.',
     iz_comms_pam:'PAM SHIELD: 6 s de inmunidad total. Cañones de puerta y relés internos destruidos.',
     iz_banner_pam:'PAM SHIELD ACTIVO — 6 segundos de invulnerabilidad',
+    iz_banner_mdr_response:'MDR · EQUIPO DE RESPUESTA · AMENAZA NEUTRALIZADA',
+    iz_banner_siem_corr:'NGSIEM · ELIMINACIÓN CORRELACIONADA +100',
+    iz_banner_ngav_scan:'NGAV · ANÁLISIS ML COMPLETO · CUARENTENA DESPLEGADA',
+    iz_banner_soar_launch:'SOAR · PLAYBOOK EN EJECUCIÓN · BARRIDO A VELOCIDAD DE MÁQUINA',
+    iz_banner_cloud_active:'CSPM · PERÍMETRO CLOUD ASEGURADO · RADIO DE IMPACTO CONTENIDO',
+    iz_banner_overwatch_deployed:'OVERWATCH · HUNTERS DE ÉLITE DESPLEGADOS · TODOS LOS SECTORES ESCANEANDO',
+    iz_banner_charlotte_online:'CHARLOTTE AI · RED NEURONAL EN LÍNEA · MODO DE TRIAJE ACTIVO',
+    iz_banner_jit_revoked:'JIT · ACCESO REVOCADO · CREDENCIALES ROTADAS',
     iz_comms_schtasks:'OVERWATCH: schtasks.exe re-registrado — persistencia del adversario sobrevivió al primer neutralización. OverWatch activo.',
     iz_comms_bits:'OVERWATCH: LOLBin bitsAdmin.exe interceptado — transferencia BITS bloqueada, payload recuperado',
     iz_banner_objective_complete:'OBJETIVO COMPLETADO: {objective}',
@@ -3280,6 +3307,7 @@ const TRANSLATIONS = {
     iz_comms_itdr:'ITDR: すべてのIDを可視化。脅威を -30% 弱体化。弾のダメージは ×1.5。',
     iz_banner_itdr:'ITDR 起動 — 敵を識別して弱体化',
     iz_comms_charlotte:'CHARLOTTE AI: 2機のAIウィングマンを展開。全脅威を可視化。ドロップ3倍。',
+    iz_charlotte_kill:'CHARLOTTE AI: {etype} · 分析完了 · 無力化',
     iz_comms_xdr:'XDR: クロスドメイン相関が有効。脅威チェーンを可視化。',
     iz_comms_intel:'INTEL: 敵対者プロファイルを読込。ボス行動を事前表示。intelキル ×1.5。',
     iz_comms_overwatch:'OVERWATCH: 全脅威を可視化。エリートハンター稼働。追尾ミサイルを1.8秒ごとに発射。',
@@ -3288,6 +3316,14 @@ const TRANSLATIONS = {
     iz_comms_dlp:'NGDLP: 送出ボートを逆走。データ保護が有効。迎撃ごとに +80 pts。',
     iz_comms_pam:'PAM SHIELD: 6秒間完全無敵。ゲート砲台と内部リレーを破壊。',
     iz_banner_pam:'PAM SHIELD 起動 — 6秒間無敵',
+    iz_banner_mdr_response:'MDR · 対応チーム · 脅威を無力化',
+    iz_banner_siem_corr:'NGSIEM · 相関キル +100',
+    iz_banner_ngav_scan:'NGAV · ML スキャン完了 · 検疫を展開',
+    iz_banner_soar_launch:'SOAR · プレイブック実行中 · マシンスピード掃討',
+    iz_banner_cloud_active:'CSPM · クラウド境界を確保 · 爆発半径を封じ込め',
+    iz_banner_overwatch_deployed:'OVERWATCH · エリートハンター展開 · 全セクター監視中',
+    iz_banner_charlotte_online:'CHARLOTTE AI · ニューラルネット起動 · トリアージモード有効',
+    iz_banner_jit_revoked:'JIT · アクセス失効 · クレデンシャルを更新',
     iz_comms_schtasks:'OVERWATCH: schtasks.exe 再登録 — 敵の永続化が最初の排除を生き残った。OverWatch 追跡中。',
     iz_comms_bits:'OVERWATCH: bitsAdmin.exe LOLBin を阻止 — 秘密のBITS転送をブロック、ペイロードを回収',
     iz_banner_objective_complete:'目標達成: {objective}',
@@ -7691,7 +7727,15 @@ function updWingmen(dt){
       if(!e.alive) continue;
       const sy=w2s(e.wy);
       if(Math.hypot(e.x-b.x,sy-b.y)<(e.w/2+6)){
-        e.hp-=b.dmg; e.hf=0.09; if(e.hp<=0) killE(e);
+        e.hp-=b.dmg; e.hf=0.09;
+        if(e.hp<=0){
+          killE(e);
+          // Charlotte AI: ANALYZED kill feedback (throttled 2.5s)
+          if(!(window._charlotteCommsT>0)){
+            COMMS(TF('iz_charlotte_kill',{etype:e.type.toUpperCase()}),'#b86bff');
+            window._charlotteCommsT=2.5;
+          }
+        }
         burst(b.x,b.y,8,['#b86bff','#fff'],110,0.38); hit=true; break;
       }
     }
@@ -7829,6 +7873,174 @@ function drawExposureRadar(){
 }
 
 // ══════════════════════════════════════════════════════════════════════
+//  NGSIEM CORRELATION WEB (drawn during siem active period)
+// ══════════════════════════════════════════════════════════════════════
+function drawSiemCorrelation(){
+  if(!hasMod('siem')) return;
+  const _t=Date.now()*0.001;
+  // Group alive on-screen enemies by type
+  const _groups={};
+  for(const _e of ENEMIES){
+    if(!_e.alive) continue;
+    const _sy=w2s(_e.wy); if(_sy<-60||_sy>VH+60) continue;
+    if(!_groups[_e.type]) _groups[_e.type]=[];
+    _groups[_e.type].push({e:_e,sy:_sy});
+  }
+  CX.save();
+  CX.setLineDash([4,6]);
+  CX.lineWidth=1;
+  let _pairCount=0;
+  for(const _type of Object.keys(_groups)){
+    const _grp=_groups[_type]; if(_grp.length<2) continue;
+    for(let _i=0;_i<_grp.length-1&&_pairCount<5;_i++){
+      const _a=_grp[_i], _b=_grp[_i+1];
+      CX.lineDashOffset=-_t*18;
+      CX.strokeStyle='rgba(255,216,77,0.30)';
+      CX.shadowBlur=4; CX.shadowColor='#ffd84d';
+      CX.beginPath(); CX.moveTo(_a.e.x,_a.sy); CX.lineTo(_b.e.x,_b.sy); CX.stroke();
+      _pairCount++;
+    }
+  }
+  CX.setLineDash([]); CX.lineDashOffset=0; CX.shadowBlur=0;
+  CX.restore();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  EXP INCOMING PREVIEW (ghost icons of off-screen enemies just above viewport)
+// ══════════════════════════════════════════════════════════════════════
+function drawExpPreview(){
+  if(!hasMod('exposure')) return;
+  CX.save();
+  for(const _e of ENEMIES){
+    if(!_e.alive) continue;
+    const _sy=w2s(_e.wy);
+    if(_sy<-20||_sy>-180) continue; // just above viewport
+    const _gx=clamp(_e.x,18,VW-18), _gy=12;
+    CX.globalAlpha=0.42;
+    CX.fillStyle='#ff9a48';
+    CX.shadowBlur=6; CX.shadowColor='#ff9a48';
+    // Ghost diamond icon
+    CX.beginPath();
+    CX.moveTo(_gx,_gy-7); CX.lineTo(_gx+6,_gy); CX.lineTo(_gx,_gy+7); CX.lineTo(_gx-6,_gy); CX.closePath();
+    CX.fill();
+    CX.fillStyle='rgba(0,0,0,0.7)';
+    CX.shadowBlur=0;
+    CX.globalAlpha=0.55;
+    CX.font='bold 7px monospace'; CX.textAlign='center';
+    CX.fillStyle='#ffd084';
+    CX.fillText(_e.type.slice(0,4).toUpperCase(),_gx,_gy+16);
+  }
+  CX.textAlign='left'; CX.globalAlpha=1; CX.shadowBlur=0;
+  CX.restore();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  NGAV ML SCAN RING
+// ══════════════════════════════════════════════════════════════════════
+function drawNGAVScanRing(){
+  if(_ngavScanRingT<=0||!PL.alive) return;
+  const _prog=1-_ngavScanRingT/0.9; // 0→1 as ring expands
+  const _r=_prog*225, _a=(1-_prog)*0.82;
+  CX.save();
+  CX.globalAlpha=_a;
+  CX.shadowBlur=26; CX.shadowColor='#e0003c';
+  CX.strokeStyle='#e0003c'; CX.lineWidth=2.8;
+  CX.beginPath(); CX.arc(PL.x,PL.y,_r,0,TAU); CX.stroke();
+  CX.strokeStyle='rgba(255,255,255,0.55)'; CX.lineWidth=1.2;
+  CX.beginPath(); CX.arc(PL.x,PL.y,_r*0.82,0,TAU); CX.stroke();
+  CX.shadowBlur=0; CX.restore();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  ITDR CREDENTIAL CHAIN WEB
+// ══════════════════════════════════════════════════════════════════════
+function drawITDRChains(){
+  if(!window._itdrChainT||window._itdrChainT<=0) return;
+  const _a=Math.min(1,window._itdrChainT/0.55)*0.72;
+  const _idT=['idGhost','insiderRelay','oauthRelay','vishRelay'];
+  const _ids=ENEMIES.filter(_e=>_e.alive&&_idT.includes(_e.type));
+  if(_ids.length<2) return;
+  CX.save(); CX.globalAlpha=_a;
+  CX.shadowBlur=9; CX.shadowColor='#ff62ff';
+  CX.strokeStyle='#ff62ff'; CX.lineWidth=1.4; CX.setLineDash([4,5]);
+  for(let _i=0;_i<_ids.length-1;_i++){
+    const _ae=_ids[_i], _be=_ids[_i+1];
+    CX.beginPath(); CX.moveTo(_ae.x,w2s(_ae.wy)); CX.lineTo(_be.x,w2s(_be.wy)); CX.stroke();
+  }
+  if(_ids.length>2){
+    CX.beginPath(); CX.moveTo(_ids[0].x,w2s(_ids[0].wy)); CX.lineTo(_ids[_ids.length-1].x,w2s(_ids[_ids.length-1].wy)); CX.stroke();
+  }
+  // Small chain-link markers at enemy positions
+  CX.setLineDash([]); CX.fillStyle='#ff62ff'; CX.shadowBlur=6;
+  _ids.forEach(_e=>{ CX.beginPath(); CX.arc(_e.x,w2s(_e.wy),5,0,TAU); CX.fill(); });
+  CX.shadowBlur=0; CX.globalAlpha=1; CX.restore();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  CLOUD PERIMETER WALLS
+// ══════════════════════════════════════════════════════════════════════
+function drawCloudPerimeter(){
+  if(!hasMod('cloud')) return;
+  const _t=Date.now()*0.001;
+  const _pulse=0.38+0.26*Math.sin(_t*4.2);
+  const _rv=getRivS(PL.y);
+  const _lx=_rv.cx-_rv.cw/2, _rx=_rv.cx+_rv.cw/2;
+  CX.save();
+  // Left perimeter wall gradient
+  const _g1=CX.createLinearGradient(_lx-6,0,_lx+6,0);
+  _g1.addColorStop(0,'rgba(0,0,0,0)'); _g1.addColorStop(0.5,'#4ab6ff'); _g1.addColorStop(1,'rgba(0,0,0,0)');
+  CX.globalAlpha=_pulse*0.75; CX.fillStyle=_g1; CX.shadowBlur=14; CX.shadowColor='#4ab6ff';
+  CX.fillRect(_lx-4,48,8,VH-96);
+  // Right perimeter wall gradient
+  const _g2=CX.createLinearGradient(_rx-6,0,_rx+6,0);
+  _g2.addColorStop(0,'rgba(0,0,0,0)'); _g2.addColorStop(0.5,'#4ab6ff'); _g2.addColorStop(1,'rgba(0,0,0,0)');
+  CX.fillStyle=_g2; CX.fillRect(_rx-4,48,8,VH-96);
+  // Perimeter nodes with pulsing glow
+  CX.fillStyle='#42d9ff'; CX.shadowBlur=10; CX.shadowColor='#42d9ff';
+  for(let _y=72;_y<VH-60;_y+=66){
+    const _na=_pulse*(0.6+0.4*Math.sin(_t*5+_y*0.05));
+    CX.globalAlpha=_na;
+    CX.beginPath(); CX.arc(_lx,_y,4,0,TAU); CX.fill();
+    CX.beginPath(); CX.arc(_rx,_y,4,0,TAU); CX.fill();
+  }
+  CX.shadowBlur=0; CX.globalAlpha=1; CX.restore();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  OVERWATCH TARGETING CROSSHAIR
+// ══════════════════════════════════════════════════════════════════════
+function drawOverwatchCrosshair(){
+  if(!hasMod('overwatch')) return;
+  let _best=null, _bd=9999;
+  for(const _e of ENEMIES){
+    if(!_e.alive||!canSeeE(_e)) continue;
+    const _sy=w2s(_e.wy); if(_sy<-80||_sy>VH+80) continue;
+    const _d=Math.hypot(_e.x-PL.x,_sy-PL.y);
+    if(_d<_bd){ _bd=_d; _best=_e; }
+  }
+  if(!_best) return;
+  const _sy=w2s(_best.wy);
+  const _t=Date.now()*0.001;
+  const _preFire=PL._owTimer<0.4; // about to fire — intensify
+  const _a=_preFire?(0.7+0.3*Math.sin(_t*28)):0.55;
+  const _cs=_preFire?20:14;
+  CX.save(); CX.globalAlpha=_a;
+  CX.shadowBlur=_preFire?20:10; CX.shadowColor='#74ff88';
+  CX.strokeStyle=_preFire?'#ffffff':'#74ff88'; CX.lineWidth=_preFire?2.2:1.5;
+  const _hw=_best.w/2+9, _hh=_best.h/2+9;
+  [[_best.x-_hw,_sy-_hh,1,1],[_best.x+_hw,_sy-_hh,-1,1],[_best.x-_hw,_sy+_hh,1,-1],[_best.x+_hw,_sy+_hh,-1,-1]].forEach(([_x,_y,_sx,_sy2])=>{
+    CX.beginPath(); CX.moveTo(_x,_y+_sy2*_cs); CX.lineTo(_x,_y); CX.lineTo(_x+_sx*_cs,_y); CX.stroke();
+  });
+  if(_preFire){
+    CX.fillStyle='#74ff88'; CX.beginPath(); CX.arc(_best.x,_sy,3.5,0,TAU); CX.fill();
+    const _ring=16+10*Math.sin(_t*20);
+    CX.strokeStyle='rgba(116,255,136,0.5)'; CX.lineWidth=1;
+    CX.beginPath(); CX.arc(_best.x,_sy,_ring,0,TAU); CX.stroke();
+  }
+  CX.shadowBlur=0; CX.globalAlpha=1; CX.restore();
+}
+
+// ══════════════════════════════════════════════════════════════════════
 //  PAM SHIELD
 // ══════════════════════════════════════════════════════════════════════
 // ARCH: pamShieldT remains a dedicated global (not in AMODS) because it
@@ -7836,6 +8048,10 @@ function drawExposureRadar(){
 // It IS however now always reset in resetPhaseState() so it cannot leak
 // between phases — previously it was omitted from the reset list.
 let pamShieldT=0;
+// MDR managed auto-response timer — counts down to next auto-kill while hasMod('complete')
+let _mdrAutoT=0;
+// NGAV ML scan ring expansion timer (set on NGAV activate, decays to 0)
+let _ngavScanRingT=0;
 function drawPAMShield(){
   if(pamShieldT<=0||!PL.alive) return;
   const a=Math.min(1,pamShieldT*0.8)*0.62, pulse=0.5+0.5*Math.sin(Date.now()*0.016);
@@ -7844,6 +8060,18 @@ function drawPAMShield(){
   CX.beginPath(); CX.ellipse(PL.x,PL.y,32+pulse*5,36+pulse*5,0,0,TAU); CX.stroke();
   CX.globalAlpha=a*0.14*(0.5+0.5*pulse); CX.fillStyle='#fff274';
   CX.beginPath(); CX.ellipse(PL.x,PL.y,32+pulse*5,36+pulse*5,0,0,TAU); CX.fill();
+  // JIT countdown arc — 8 time-bounded access segments (each = 0.75s of 6s window)
+  const _segs=8, _maxT=6.0, _rem=Math.ceil(pamShieldT/_maxT*_segs);
+  const _warn=_rem<=2;
+  for(let _i=0;_i<_rem;_i++){
+    const _a1=-Math.PI/2+(_i/_segs)*TAU;
+    const _a2=-Math.PI/2+((_i+0.78)/_segs)*TAU;
+    CX.globalAlpha=a*(_warn?(0.55+0.45*Math.sin(Date.now()*0.022)):0.88);
+    CX.strokeStyle=_warn?'#ff5a4d':'#fff274';
+    CX.shadowColor=_warn?'#ff5a4d':'#fff274';
+    CX.shadowBlur=10; CX.lineWidth=4.5;
+    CX.beginPath(); CX.arc(PL.x,PL.y,50+pulse*4,_a1,_a2); CX.stroke();
+  }
   CX.shadowBlur=0; CX.restore();
 }
 
@@ -8548,6 +8776,11 @@ function resetPhaseState(){
   phKills=0; phHits=0; phScore=0;
   FUEL=100; STREAK=0;
   pamShieldT=0;       // PAM shield must not carry over between phases
+  _mdrAutoT=0;        // MDR managed response timer must not carry over between phases
+  _ngavScanRingT=0;   // NGAV scan ring animation must not carry over
+  window._itdrChainT=0;        // ITDR chain web flash must not carry over
+  window._pamWasActive=false;  // JIT expiry edge detection must not carry over
+  window._charlotteCommsT=0;   // Charlotte AI comms throttle must not carry over
   _lastNarrT=0;       // narrative timing is phase-scoped
   _lastCommsMsg='';   // comms dedup cache is phase-scoped
   IR_TOKEN=null;      // IR power-up must not carry over between phases
@@ -8737,21 +8970,41 @@ function activateMod(name){
   switch(m.apply){
     case 'prevent':
       ENEMIES.forEach(e=>{ if(!e.alive) return; const sy=w2s(e.wy); if(Math.hypot(e.x-PL.x,sy-PL.y)<185) killE(e); });
+      _ngavScanRingT=0.9; // trigger ML scan ring expansion
       burst(PL.x,PL.y,60,['#e0003c','#ff7a00','#fff'],220,1.0);
-      SFX.bigExplode(); FLASH('#e0003c',0.14); break;
+      burst(PL.x,PL.y,28,['#ffffff','#e0003c'],188,0.45); // scan boundary burst
+      SFX.bigExplode(); FLASH('#e0003c',0.16);
+      BANNER(T('iz_banner_ngav_scan'),1.8,'#e0003c'); break;
 
-    case 'soar':
-      ENEMIES.forEach(e=>{ if(!e.alive) return; const sy=w2s(e.wy); if(sy>-80&&sy<VH+80) killE(e); });
-      GTERGETS.forEach(g=>{ if(!g.alive||g.noShoot) return; const sy=w2s(g.wy); if(sy>-80&&sy<VH+80) killG(g); });
+    case 'soar': {
+      // SOAR: Left→right playbook sweep — enemies die in sequence like automated workflow steps
+      const _soarE=[];
+      ENEMIES.forEach(_e=>{ if(!_e.alive) return; const _sy=w2s(_e.wy); if(_sy>-80&&_sy<VH+80) _soarE.push(_e); });
+      _soarE.sort((_a,_b)=>_a.x-_b.x); // left-to-right execution order
       EBULLETS.length=0; SCORE+=500; phScore+=500;
       spawnBossFuelWave(true,2);
-      burst(PL.x,PL.y,80,['#ff5a4d','#ffd84d','#fff'],260,1.2);
-      SFX.bigExplode(); FLASH('#ff5a4d',0.16); break;
+      BANNER(T('iz_banner_soar_launch'),2.0,'#ff5a4d');
+      FLASH('#ff5a4d',0.16);
+      _soarE.forEach((_e,_idx)=>{
+        setTimeout(()=>{ if(!_e.alive||STATE!==S.PLAYING) return; burst(_e.x,w2s(_e.wy),18,['#ff5a4d','#ffd84d','#fff'],155,0.65); killE(_e); }, _idx*35);
+      });
+      GTERGETS.forEach(_g=>{ if(!_g.alive||_g.noShoot) return; const _sy=w2s(_g.wy); if(_sy>-80&&_sy<VH+80) setTimeout(()=>{ if(_g.alive) killG(_g); },_soarE.length*35+100); });
+      const _swpDelay=Math.max(320,_soarE.length*35+100);
+      setTimeout(()=>{ burst(PL.x,PL.y,80,['#ff5a4d','#ffd84d','#fff'],260,1.2); SFX.bigExplode(); },_swpDelay);
+      break;
+    }
 
     case 'cloud':
       ENEMIES.filter(e=>['tokenDrone','tokenSkiff','poisonBarge','mine'].includes(e.type)).forEach(e=>killE(e));
-      { const r=getRivS(PL.y); burst(r.cx+r.cw/2,PL.y,18,['#4ab6ff','#fff'],140,0.6); }
+      { const _cr=getRivS(PL.y);
+        const _lx=_cr.cx-_cr.cw/2, _rx=_cr.cx+_cr.cw/2;
+        burst(_lx,VH/2,32,['#4ab6ff','#42d9ff','#fff'],170,0.8); // left perimeter ignition
+        burst(_rx,VH/2,32,['#4ab6ff','#42d9ff','#fff'],170,0.8); // right perimeter ignition
+        burst(PL.x,PL.y,30,['#4ab6ff','#fff','#00aaff'],170,0.7);
+      }
       spawnBossFuelWave(true,2);
+      FLASH('#4ab6ff',0.13);
+      BANNER(T('iz_banner_cloud_active'),2.0,'#4ab6ff');
       COMMS(T('iz_comms_cloud_perimeter'),'#4ab6ff'); break;
 
     case 'complete': {
@@ -8774,30 +9027,53 @@ function activateMod(name){
 
     case 'identity':
       revealAll(); FLASH('#ff62ff',0.10);
+      window._itdrChainT=0.55; // trigger credential chain web flash
       ENEMIES.forEach(e=>{ if(!e.alive) return; const dmg=Math.max(1,Math.floor(e.hp*0.30)); e.hp-=dmg; e.hf=0.12; if(e.hp<=0) killE(e); });
       GTERGETS.forEach(g=>{ if(g.alive&&(g.type==='vishRelay'||g.type==='oauthRelay')) killG(g); });
       spawnBossFuelWave(true,1);
       burst(PL.x,PL.y,44,['#ff62ff','#ffc8ff','#fff'],190,0.88);
+      // Chain-breaking burst at identity infrastructure positions
+      ENEMIES.filter(_e=>_e.alive&&['idGhost','insiderRelay','oauthRelay','vishRelay'].includes(_e.type))
+        .forEach(_e=>setTimeout(()=>burst(_e.x,w2s(_e.wy),16,['#ff62ff','#fff','#ffd84d'],130,0.55),180));
       COMMS(T('iz_comms_itdr'),'#ff62ff');
       BANNER(T('iz_banner_itdr'),2.6,'#ff62ff'); break;
 
     case 'charlotte':
-      revealAll(); FLASH('#b86bff',0.08); initWingmen();
+      revealAll(); FLASH('#b86bff',0.09); initWingmen();
       burst(PL.x-72,PL.y,22,['#b86bff','#e8c8ff','#fff'],140,0.7);
       burst(PL.x+72,PL.y,22,['#b86bff','#e8c8ff','#fff'],140,0.7);
+      // Neural network initialisation: secondary wave + central convergence
+      setTimeout(()=>burst(PL.x-72,PL.y,14,['#b86bff','#fff'],115,0.45),110);
+      setTimeout(()=>burst(PL.x+72,PL.y,14,['#b86bff','#fff'],115,0.45),110);
+      setTimeout(()=>burst(PL.x,PL.y,32,['#b86bff','#e8c8ff','#fff','#42d9ff'],165,0.82),230);
+      BANNER(T('iz_banner_charlotte_online'),2.2,'#b86bff');
       COMMS(T('iz_comms_charlotte'),'#b86bff'); break;
 
     case 'xdr':
-      revealAll(); FLASH('#42d9ff',0.08);
-      COMMS(T('iz_comms_xdr'),'#42d9ff');
-      burst(PL.x,PL.y,32,['#42d9ff','#fff'],160,0.7); break;
+      revealAll(); FLASH('#42d9ff',0.13);
+      // 4-domain convergence burst: endpoint · network · cloud · identity
+      burst(PL.x,PL.y,18,['#e0003c','#ff7a00'],130,0.85);   // endpoint (red)
+      burst(PL.x,PL.y,18,['#42d9ff','#00c8ff'],130,0.85);   // network (cyan)
+      burst(PL.x,PL.y,18,['#b86bff','#cc88ff'],130,0.85);   // cloud (purple)
+      burst(PL.x,PL.y,18,['#ffd84d','#fff274'],130,0.85);   // identity (gold)
+      burst(PL.x,PL.y,20,['#ffffff','#42d9ff'],200,1.3);    // unified signal convergence
+      COMMS(T('iz_comms_xdr'),'#42d9ff'); break;
 
     case 'intel':
-      revealAll(); FLASH('#ff8d39',0.08);
+      revealAll(); FLASH('#ff8d39',0.12);
+      burst(PL.x,PL.y,44,['#ff8d39','#ffaa44','#ff6600','#fff'],200,1.1);
+      SFX.module();
       COMMS(T('iz_comms_intel'),'#ff8d39'); break;
 
     case 'overwatch':
-      revealAll(); FLASH('#74ff88',0.08);
+      revealAll(); FLASH('#74ff88',0.13);
+      burst(PL.x,PL.y,52,['#74ff88','#00ff44','#b8ffcc','#fff'],220,1.2);
+      // Spotting bursts across all sectors — hunters deploying simultaneously
+      setTimeout(()=>burst(VW*0.18,VH*0.28,22,['#74ff88','#00ff44','#fff'],175,0.75),80);
+      setTimeout(()=>burst(VW*0.82,VH*0.38,22,['#74ff88','#00ff44','#fff'],175,0.75),155);
+      setTimeout(()=>burst(VW*0.5,VH*0.62,22,['#74ff88','#b8ffcc','#fff'],175,0.75),230);
+      SFX.module();
+      BANNER(T('iz_banner_overwatch_deployed'),2.4,'#74ff88');
       COMMS(T('iz_comms_overwatch'),'#74ff88'); break;
 
     case 'siem':
@@ -8873,7 +9149,7 @@ function killE(e){
     return;
   }
   e.alive=false;
-  const mult=1+Math.floor(STREAK/5)+(hasMod('overwatch')?1:0)+(hasMod('siem')?1:0)+(hasMod('xdr')&&phKills>0?1:0);
+  const mult=1+Math.floor(STREAK/5)+(hasMod('overwatch')?1:0)+(hasMod('siem')?1:0)+(hasMod('xdr')&&phKills>0?1:0)+(hasMod('intel')?1:0);
   const pts=e.score*mult;
   SCORE+=pts; phScore+=pts; phKills++; STREAK++;
   MAXSTREAK=Math.max(MAXSTREAK,STREAK);
@@ -8887,6 +9163,38 @@ function killE(e){
   if(e.type==='cloneVM') burst(e.x+rnd(-24,24),w2s(e.wy),16,['#00ff88','#ffffff','#aaffcc'],100,0.5);
   if(seededRng()<(hasMod('charlotte')?0.33:0.11)*pickupDropRate())
     addPickup(e.wy,e.x,'module',MKEYS[sri(0,MKEYS.length-1)]);
+  // NGSIEM: Correlated kill bonus — same-type enemy within 320px = +100 correlation bonus
+  if(hasMod('siem')){
+    const _esy=w2s(e.wy);
+    for(const _se of ENEMIES){
+      if(!_se.alive||_se===e||_se.type!==e.type) continue;
+      const _ssy=w2s(_se.wy);
+      if(Math.hypot(_se.x-e.x,_ssy-_esy)<320){
+        SCORE+=100; phScore+=100;
+        BANNER(T('iz_banner_siem_corr'),1.0,'#ffd84d');
+        break;
+      }
+    }
+  }
+  // SOAR: Playbook chain reaction — auto-neutralise nearest enemy within 150px (1 level deep)
+  if(hasMod('soar')){
+    const _cex=e.x, _cesy=w2s(e.wy);
+    setTimeout(()=>{
+      if(!hasMod('soar')||STATE!==S.PLAYING) return;
+      let _cb=null, _cbd=151;
+      for(const _fe of ENEMIES){
+        if(!_fe.alive) continue;
+        const _fsy=w2s(_fe.wy); if(_fsy<-80||_fsy>VH+80) continue;
+        const _fd=Math.hypot(_fe.x-_cex,_fsy-_cesy);
+        if(_fd<_cbd){ _cbd=_fd; _cb=_fe; }
+      }
+      if(_cb){
+        burst(_cb.x,w2s(_cb.wy),18,['#ff5a4d','#ffd84d','#fff'],140,0.6);
+        killE(_cb);
+        BANNER('⚡ PLAYBOOK CHAIN · AUTO-NEUTRALIZED',1.0,'#ff5a4d');
+      }
+    },180);
+  }
 }
 
 function killG(g){
@@ -9025,9 +9333,18 @@ function firePL(charged=false){
     SFX.shotCharged();
   } else {
     addBullet(PL.x,PL.y-20,0,-510,itdr?2:1,itdr?'#ff62ff':'#f4f7fa');
-    if(hasMod('xdr')||hasMod('siem')||hasMod('overwatch')){
+    if(hasMod('siem')||hasMod('overwatch')){
       addBullet(PL.x-14,PL.y-9,-22,-475,itdr?2:1,'#42d9ff');
       addBullet(PL.x+14,PL.y-9, 22,-475,itdr?2:1,'#42d9ff');
+    }
+    if(hasMod('xdr')){
+      // 4-domain cross-correlation shots: endpoint=red, network=cyan, cloud=purple, identity=gold
+      const _xdc=['#e0003c','#42d9ff','#b86bff','#ffd84d'];
+      window._xdrDIdx=(window._xdrDIdx||0);
+      const _xc1=_xdc[window._xdrDIdx%4], _xc2=_xdc[(window._xdrDIdx+2)%4];
+      window._xdrDIdx++;
+      addBullet(PL.x-14,PL.y-9,-22,-475,itdr?2:1,_xc1);
+      addBullet(PL.x+14,PL.y-9, 22,-475,itdr?2:1,_xc2);
     }
     if(itdr){
       addBullet(PL.x-8,PL.y-16,-16,-495,2,'#ff62ff');
@@ -9534,6 +9851,13 @@ function update(dt){
   if(PAUSED) return;
   W.scroll+=W.speed*dt; phTime+=dt;
   pamShieldT=Math.max(0,pamShieldT-dt);
+  // JIT shield expiry banner — "ACCESS REVOKED · CREDENTIALS CYCLED"
+  if(window._pamWasActive&&pamShieldT<=0&&STATE===S.PLAYING){ BANNER(T('iz_banner_jit_revoked'),2.0,'#ff5a4d'); FLASH('#ff5a4d',0.07); }
+  window._pamWasActive=pamShieldT>0;
+  // Cinematic module effect timers
+  if(_ngavScanRingT>0) _ngavScanRingT=Math.max(0,_ngavScanRingT-dt);
+  if(window._itdrChainT>0) window._itdrChainT=Math.max(0,window._itdrChainT-dt);
+  if(window._charlotteCommsT>0) window._charlotteCommsT-=dt;
   // SGNL tether timer + enemy drag animation
   if(window._sgnlActive&&window._sgnlTimer>0){
     window._sgnlTimer-=dt;
@@ -9543,6 +9867,25 @@ function update(dt){
   generateEnemiesAhead();
   updShake(dt); updParts(dt); updBanner(dt); updComms(dt); updActAnn(dt);
   updMods(dt); updNarrative(dt);
+  // MDR: Managed response auto-kill every 5s while active
+  if(hasMod('complete')){
+    _mdrAutoT=Math.max(0,_mdrAutoT-dt);
+    if(_mdrAutoT<=0){
+      _mdrAutoT=5.0;
+      let _mb=null, _mbd=999999;
+      for(const _me of ENEMIES){
+        if(!_me.alive) continue;
+        const _msy=w2s(_me.wy); if(_msy<-80||_msy>VH+80) continue;
+        const _md=Math.hypot(_me.x-PL.x,_msy-PL.y);
+        if(_md<_mbd){ _mbd=_md; _mb=_me; }
+      }
+      if(_mb){
+        burst(_mb.x,w2s(_mb.wy),24,['#ff7a00','#ffd84d','#fff','#ff5a4d'],180,0.9);
+        killE(_mb);
+        BANNER(T('iz_banner_mdr_response'),1.4,'#ff7a00');
+      }
+    }
+  } else { _mdrAutoT=0; }
   updPlayer(dt); updBullets(dt); updHomingMissiles(dt);
   updWingmen(dt); updCloudBorder(dt); updExposureRadar(dt);
   updEnemies(dt); updGround(dt); updFuel(dt);
@@ -10357,9 +10700,9 @@ function drawPickups(){
       CX.fillStyle='rgba(0,0,0,0.70)'; CX.beginPath();
       for(let i=0;i<6;i++){ const a=i/6*TAU-Math.PI/6; CX.lineTo(Math.cos(a)*(sz-7),Math.sin(a)*(sz-7)); }
       CX.closePath(); CX.fill();
-      // 4. Mini threat-correlation graph inside hex (3 pulsing nodes)
+      // 4. Mini threat-correlation graph inside hex (3 pulsing nodes — upper half only)
       CX.save(); CX.rotate(t*0.12);
-      const nPos=[[-1,-11],[10,6],[-10,6]];
+      const nPos=[[-9,-13],[9,-13],[0,-4]];
       CX.strokeStyle='rgba(255,216,77,0.55)'; CX.lineWidth=0.8; CX.setLineDash([2,3]);
       for(let a=0;a<3;a++) for(let b=a+1;b<3;b++){
         CX.beginPath(); CX.moveTo(nPos[a][0],nPos[a][1]); CX.lineTo(nPos[b][0],nPos[b][1]); CX.stroke();
@@ -10372,10 +10715,9 @@ function drawPickups(){
         CX.beginPath(); CX.arc(np[0],np[1],2.2+np2*0.4,0,TAU); CX.fill();
       });
       CX.globalAlpha=1; CX.shadowBlur=0; CX.restore();
-      // 5. Two-line label: "NG" + "SIEM"
+      // 5. Single-line label: "NGSIEM"
       CX.fillStyle='#ffffff'; CX.textAlign='center';
-      CX.font='bold 9px monospace'; CX.fillText('NG',0,-2);
-      CX.font='bold 8px monospace'; CX.fillText('SIEM',0,8);
+      CX.font='bold 8px monospace'; CX.fillText('NGSIEM',0,10);
       // Proximity tooltip
       const sdist=Math.hypot(p.x-PL.x,by-PL.y);
       if(sdist<92&&m){
@@ -10459,6 +10801,477 @@ function drawPickups(){
       }
       CX.shadowBlur=0; CX.textAlign='left'; CX.restore(); continue;
     }
+
+    // ─── CINEMATIC MODULE PICKUP ICONS ────────────────────────────────────
+    // Helper: compact proximity tooltip (used by every special case below)
+    // _ptip(color) — call just before final restore+continue
+    const _ptip=(c)=>{const _d=Math.hypot(p.x-PL.x,by-PL.y);if(_d<92&&m){const _a=clamp((92-_d)/64,0,1);CX.globalAlpha=_a;CX.fillStyle='rgba(0,0,0,0.86)';CX.fillRect(-58,sz+4,116,30);CX.strokeStyle=c;CX.lineWidth=1;CX.strokeRect(-58,sz+4,116,30);CX.fillStyle=c;CX.font='bold 9px monospace';CX.textAlign='center';CX.fillText(p.data||'Module',0,sz+18);CX.fillStyle='#aaaaaa';CX.font='9px monospace';CX.fillText(m.tagline.slice(0,28),0,sz+28);CX.globalAlpha=1;}};
+    // ─── NGAV (Falcon Prevent) — ML binary shield, zero-trust execution ──
+    if(p.data==='Falcon Prevent'){
+      const t=Date.now()*0.001,c='#e0003c';
+      // Twin ML-analysis rings: two orbiting node clusters (behavioral model layers)
+      for(let rg=0;rg<2;rg++){
+        const r=sz+10+rg*9,sp=rg===0?0.7:-0.45;
+        CX.save();CX.rotate(t*sp);
+        CX.strokeStyle=`rgba(224,0,60,${0.30-rg*0.08})`;CX.lineWidth=1.1;CX.setLineDash([4,5]);
+        CX.beginPath();CX.arc(0,0,r,0,TAU);CX.stroke();CX.setLineDash([]);
+        for(let i=0;i<5;i++){
+          const a=i/5*TAU,pu=Math.sin(t*4+i*TAU/5)*0.3;
+          CX.fillStyle=c;CX.globalAlpha=0.45+pu;
+          CX.beginPath();CX.arc(Math.cos(a)*r,Math.sin(a)*r,1.8,0,TAU);CX.fill();
+        }
+        CX.globalAlpha=1;CX.restore();
+      }
+      CX.shadowBlur=20;CX.shadowColor=c;
+      CX.fillStyle=c;CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*sz,Math.sin(a)*sz);}
+      CX.closePath();CX.fill();
+      CX.fillStyle='rgba(0,0,0,0.70)';CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*(sz-7),Math.sin(a)*(sz-7));}
+      CX.closePath();CX.fill();
+      // Shield with checkmark (ML prevention = "blocked before execution")
+      CX.save();CX.shadowBlur=8;CX.shadowColor=c;
+      CX.strokeStyle='rgba(224,0,60,0.90)';CX.lineWidth=2;
+      CX.beginPath();CX.moveTo(0,-12);CX.bezierCurveTo(10,-12,13,-6,13,1);
+      CX.bezierCurveTo(13,9,6,13,0,15);CX.bezierCurveTo(-6,13,-13,9,-13,1);
+      CX.bezierCurveTo(-13,-6,-10,-12,0,-12);CX.stroke();
+      CX.strokeStyle='rgba(255,255,255,0.80)';CX.lineWidth=1.8;
+      CX.beginPath();CX.moveTo(-4,1);CX.lineTo(-1,5);CX.lineTo(5,-4);CX.stroke();
+      CX.shadowBlur=0;CX.restore();
+      CX.fillStyle='#ffffff';CX.textAlign='center';CX.font='bold 8px monospace';CX.fillText('NGAV',0,sz-11);
+      _ptip(c);CX.shadowBlur=0;CX.textAlign='left';CX.restore();continue;
+    }
+    // ─── XDR (Falcon Insight XDR) — 4-domain signal convergence ──────────
+    if(p.data==='Falcon Insight XDR'){
+      const t=Date.now()*0.001,c='#42d9ff';
+      // 4 domain beam streams converging to center
+      const domains=[['#e0003c',0],['#42d9ff',Math.PI/2],['#b86bff',Math.PI],['#ffd84d',3*Math.PI/2]];
+      for(const [dc,da] of domains){
+        const r=sz+20,tip=sz+3;
+        const ax=Math.cos(da),ay=Math.sin(da);
+        const off=(t*18+da*8)%14;
+        CX.save();
+        CX.strokeStyle=dc;CX.lineWidth=1.2;CX.globalAlpha=0.55;
+        CX.setLineDash([4,5]);CX.lineDashOffset=-off;
+        CX.beginPath();CX.moveTo(ax*r,ay*r);CX.lineTo(ax*tip,ay*tip);CX.stroke();
+        CX.setLineDash([]);
+        // Domain node at tip
+        CX.shadowBlur=9;CX.shadowColor=dc;CX.fillStyle=dc;CX.globalAlpha=0.75;
+        CX.beginPath();CX.arc(ax*r,ay*r,3,0,TAU);CX.fill();
+        CX.globalAlpha=1;CX.restore();
+      }
+      // Pulsing convergence core
+      const pu=0.5+0.5*Math.sin(t*3.5);
+      CX.strokeStyle=`rgba(66,217,255,${0.30+pu*0.30})`;CX.lineWidth=1.1;
+      CX.beginPath();CX.arc(0,0,sz+5,0,TAU);CX.stroke();
+      CX.shadowBlur=22;CX.shadowColor=c;
+      CX.fillStyle=c;CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*sz,Math.sin(a)*sz);}
+      CX.closePath();CX.fill();
+      CX.fillStyle='rgba(0,0,0,0.70)';CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*(sz-7),Math.sin(a)*(sz-7));}
+      CX.closePath();CX.fill();
+      // Inner 4-quadrant sector (endpoint/network/cloud/identity domains)
+      CX.save();CX.globalAlpha=0.55;
+      domains.forEach(([dc,da],qi)=>{
+        CX.fillStyle=dc;CX.beginPath();
+        CX.moveTo(0,0);CX.arc(0,0,sz-9,da,da+Math.PI/2);CX.closePath();CX.fill();
+      });
+      CX.globalAlpha=1;
+      // Central convergence diamond
+      CX.shadowBlur=10;CX.shadowColor='#ffffff';CX.fillStyle='#ffffff';
+      CX.beginPath();CX.moveTo(0,-5);CX.lineTo(4,0);CX.lineTo(0,5);CX.lineTo(-4,0);CX.closePath();CX.fill();
+      CX.shadowBlur=0;CX.restore();
+      CX.fillStyle='#ffffff';CX.textAlign='center';CX.font='bold 9px monospace';CX.fillText('XDR',0,sz-10);
+      _ptip(c);CX.shadowBlur=0;CX.textAlign='left';CX.restore();continue;
+    }
+    // ─── ITDR (Falcon Identity Protection) — credential chains broken ─────
+    if(p.data==='Falcon Identity Protection'){
+      const t=Date.now()*0.001,c='#ff62ff';
+      // Broken chain links orbiting (identity chains — severed credential theft paths)
+      for(let i=0;i<6;i++){
+        const a=i/6*TAU+t*0.60,r=sz+15;
+        CX.save();CX.translate(Math.cos(a)*r,Math.sin(a)*r);CX.rotate(a+t);
+        CX.globalAlpha=0.42+Math.sin(t*2.5+i)*0.22;
+        CX.strokeStyle=c;CX.lineWidth=1.3;CX.strokeRect(-3,-4,6,8);
+        CX.restore();
+      }
+      // Two "broken" connection sparks (stopped lateral movement)
+      for(let j=0;j<2;j++){
+        const ba=t*0.45+j*Math.PI,r=sz+15;
+        CX.save();CX.translate(Math.cos(ba)*r,Math.sin(ba)*r);
+        CX.globalAlpha=0.88;CX.shadowBlur=9;CX.shadowColor='#ff0088';
+        CX.strokeStyle='#ff0088';CX.lineWidth=2;
+        CX.beginPath();CX.moveTo(-4,-1);CX.lineTo(0,-1);CX.stroke();
+        CX.beginPath();CX.moveTo(0,3);CX.lineTo(4,3);CX.stroke();
+        CX.shadowBlur=0;CX.restore();
+      }
+      CX.globalAlpha=1;
+      const pu=0.5+0.5*Math.sin(t*3.2);
+      CX.save();CX.rotate(-t*0.8);
+      CX.strokeStyle=`rgba(255,98,255,${0.28+pu*0.22})`;CX.lineWidth=1.2;CX.setLineDash([5,8]);
+      CX.shadowBlur=14;CX.shadowColor=c;
+      CX.beginPath();CX.arc(0,0,sz+8,0,TAU);CX.stroke();CX.setLineDash([]);CX.restore();
+      CX.shadowBlur=20;CX.shadowColor=c;
+      CX.fillStyle=c;CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*sz,Math.sin(a)*sz);}
+      CX.closePath();CX.fill();
+      CX.fillStyle='rgba(0,0,0,0.70)';CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*(sz-7),Math.sin(a)*(sz-7));}
+      CX.closePath();CX.fill();
+      // Key icon (the identity key — access control)
+      CX.save();CX.shadowBlur=8;CX.shadowColor=c;
+      CX.strokeStyle='rgba(255,98,255,0.90)';CX.lineWidth=1.8;
+      CX.beginPath();CX.arc(0,-7,6,0,TAU);CX.stroke();   // key bow
+      CX.beginPath();CX.moveTo(0,-1);CX.lineTo(0,10);CX.stroke(); // shaft
+      CX.beginPath();CX.moveTo(0,2);CX.lineTo(5,2);CX.stroke();   // tooth 1
+      CX.beginPath();CX.moveTo(0,6);CX.lineTo(3.5,6);CX.stroke(); // tooth 2
+      CX.shadowBlur=0;CX.restore();
+      CX.fillStyle='#ffffff';CX.textAlign='center';CX.font='bold 8px monospace';CX.fillText('ITDR',0,sz-11);
+      _ptip(c);CX.shadowBlur=0;CX.textAlign='left';CX.restore();continue;
+    }
+    // ─── Cloud (Falcon Cloud Security) — perimeter lightning guardian ─────
+    if(p.data==='Falcon Cloud Security'){
+      const t=Date.now()*0.001,c='#4ab6ff';
+      // Arc + lightning bolt effect around hex (cloud perimeter defense)
+      CX.save();CX.rotate(t*0.5);
+      CX.strokeStyle=`rgba(74,182,255,0.40)`;CX.lineWidth=1.3;CX.setLineDash([6,6]);
+      CX.beginPath();CX.arc(0,0,sz+12,0,TAU);CX.stroke();CX.setLineDash([]);CX.restore();
+      // 3 mini lightning bolts at hex vertices (cloud border zaps)
+      for(let i=0;i<3;i++){
+        const a=i/3*TAU+t*0.4;
+        const bx=Math.cos(a)*(sz+14),by2=Math.sin(a)*(sz+14);
+        const blink=Math.sin(t*8+i*TAU/3)>0.3;
+        if(!blink) continue;
+        CX.save();CX.translate(bx,by2);CX.rotate(a+Math.PI/2);
+        CX.globalAlpha=0.80;CX.shadowBlur=12;CX.shadowColor=c;
+        CX.strokeStyle='#ffffff';CX.lineWidth=1.6;
+        CX.beginPath();CX.moveTo(0,-6);CX.lineTo(-3,0);CX.lineTo(1,0);CX.lineTo(-2,6);CX.stroke();
+        CX.strokeStyle=c;CX.lineWidth=0.9;
+        CX.beginPath();CX.moveTo(0,-6);CX.lineTo(-3,0);CX.lineTo(1,0);CX.lineTo(-2,6);CX.stroke();
+        CX.shadowBlur=0;CX.restore();
+      }
+      CX.globalAlpha=1;CX.shadowBlur=20;CX.shadowColor=c;
+      CX.fillStyle=c;CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*sz,Math.sin(a)*sz);}
+      CX.closePath();CX.fill();
+      CX.fillStyle='rgba(0,0,0,0.70)';CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*(sz-7),Math.sin(a)*(sz-7));}
+      CX.closePath();CX.fill();
+      // Cloud icon (3 arcs = cloud silhouette)
+      CX.save();CX.strokeStyle='rgba(74,182,255,0.88)';CX.lineWidth=2;CX.shadowBlur=7;CX.shadowColor=c;
+      CX.beginPath();CX.arc(-4,-4,5,Math.PI,0);    // left dome
+      CX.arc(4,-7,6,Math.PI,0);                     // right dome
+      CX.lineTo(10,2);CX.lineTo(-10,2);CX.closePath();CX.stroke(); // base
+      // Lightning bolt below cloud
+      CX.strokeStyle='rgba(255,255,255,0.78)';CX.lineWidth=1.6;
+      CX.beginPath();CX.moveTo(1,3);CX.lineTo(-2,8);CX.lineTo(1,8);CX.lineTo(-1,13);CX.stroke();
+      CX.shadowBlur=0;CX.restore();
+      CX.fillStyle='#ffffff';CX.textAlign='center';CX.font='bold 7px monospace';CX.fillText('CSPM',0,sz-11);
+      _ptip(c);CX.shadowBlur=0;CX.textAlign='left';CX.restore();continue;
+    }
+    // ─── Intel (Falcon Intelligence) — adversary attribution dossier ──────
+    if(p.data==='Falcon Intelligence'){
+      const t=Date.now()*0.001,c='#ff8d39';
+      // Dossier "pages" orbiting — named adversary profiles being pulled
+      for(let i=0;i<4;i++){
+        const a=i/4*TAU+t*0.55,r=sz+16;
+        const dx=Math.cos(a)*r,dy=Math.sin(a)*r;
+        CX.save();CX.translate(dx,dy);CX.rotate(a+0.8);
+        CX.globalAlpha=0.42+Math.sin(t*2+i*1.5)*0.18;
+        CX.fillStyle='rgba(20,10,0,0.80)';CX.fillRect(-5,-6,10,8);
+        CX.strokeStyle=c;CX.lineWidth=1;CX.strokeRect(-5,-6,10,8);
+        // Lines on dossier page
+        CX.strokeStyle=`rgba(255,141,57,0.60)`;CX.lineWidth=0.7;
+        CX.beginPath();CX.moveTo(-3,-4);CX.lineTo(3,-4);CX.stroke();
+        CX.beginPath();CX.moveTo(-3,-2);CX.lineTo(3,-2);CX.stroke();
+        CX.beginPath();CX.moveTo(-3,0);CX.lineTo(1,0);CX.stroke();
+        CX.restore();
+      }
+      CX.globalAlpha=1;
+      CX.save();CX.rotate(t*0.35);
+      CX.strokeStyle=`rgba(255,141,57,0.35)`;CX.lineWidth=1.2;CX.setLineDash([5,7]);
+      CX.shadowBlur=14;CX.shadowColor=c;
+      CX.beginPath();CX.arc(0,0,sz+7,0,TAU);CX.stroke();CX.setLineDash([]);CX.restore();
+      CX.shadowBlur=20;CX.shadowColor=c;
+      CX.fillStyle=c;CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*sz,Math.sin(a)*sz);}
+      CX.closePath();CX.fill();
+      CX.fillStyle='rgba(0,0,0,0.70)';CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*(sz-7),Math.sin(a)*(sz-7));}
+      CX.closePath();CX.fill();
+      // Magnifying glass over target crosshair (adversary hunting)
+      CX.save();CX.shadowBlur=8;CX.shadowColor=c;
+      CX.strokeStyle='rgba(255,141,57,0.88)';CX.lineWidth=1.8;
+      CX.beginPath();CX.arc(-2,-4,7,0,TAU);CX.stroke();      // lens
+      CX.beginPath();CX.moveTo(3.5,1.5);CX.lineTo(8,7);CX.stroke(); // handle
+      // Crosshair inside lens
+      CX.lineWidth=1;CX.strokeStyle='rgba(255,200,100,0.70)';
+      CX.beginPath();CX.moveTo(-2,-9);CX.lineTo(-2,1);CX.stroke();
+      CX.beginPath();CX.moveTo(-7,-4);CX.lineTo(3,-4);CX.stroke();
+      CX.beginPath();CX.arc(-2,-4,3,0,TAU);CX.stroke();       // target ring
+      CX.shadowBlur=0;CX.restore();
+      CX.fillStyle='#ffffff';CX.textAlign='center';CX.font='bold 7px monospace';CX.fillText('INTEL',0,sz-11);
+      _ptip(c);CX.shadowBlur=0;CX.textAlign='left';CX.restore();continue;
+    }
+    // ─── Charlotte AI — neural analysis, AI triage at machine speed ───────
+    if(p.data==='Charlotte AI'){
+      const t=Date.now()*0.001,c='#b86bff';
+      // Neural network nodes orbiting (AI reasoning layer)
+      const nodes=6;
+      for(let i=0;i<nodes;i++){
+        const a=i/nodes*TAU+t*0.5,r=sz+14;
+        const nx=Math.cos(a)*r,ny=Math.sin(a)*r;
+        // Connection lines between adjacent nodes
+        const na=((i+1)%nodes)/nodes*TAU+t*0.5;
+        CX.save();CX.globalAlpha=0.30+Math.sin(t*3+i)*0.15;
+        CX.strokeStyle=c;CX.lineWidth=0.8;
+        CX.beginPath();CX.moveTo(nx,ny);CX.lineTo(Math.cos(na)*r,Math.sin(na)*r);CX.stroke();
+        // Pulse at each node
+        CX.fillStyle=c;CX.globalAlpha=0.55+Math.sin(t*4+i*TAU/nodes)*0.3;
+        CX.beginPath();CX.arc(nx,ny,2,0,TAU);CX.fill();
+        CX.restore();
+      }
+      // Pulsing AI processing ring
+      CX.globalAlpha=1;
+      const aiPulse=0.5+0.5*Math.sin(t*4.5);
+      CX.strokeStyle=`rgba(184,107,255,${0.25+aiPulse*0.30})`;CX.lineWidth=1.2;
+      CX.beginPath();CX.arc(0,0,sz+6,0,TAU);CX.stroke();
+      CX.shadowBlur=20;CX.shadowColor=c;
+      CX.fillStyle=c;CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*sz,Math.sin(a)*sz);}
+      CX.closePath();CX.fill();
+      CX.fillStyle='rgba(0,0,0,0.70)';CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*(sz-7),Math.sin(a)*(sz-7));}
+      CX.closePath();CX.fill();
+      // Brain / circuit icon (AI neural processing)
+      CX.save();CX.shadowBlur=8;CX.shadowColor=c;
+      CX.strokeStyle='rgba(184,107,255,0.85)';CX.lineWidth=1.6;
+      // Brain outline (two lobes)
+      CX.beginPath();CX.arc(-4,-5,6,Math.PI*1.1,Math.PI*2.4);CX.stroke(); // left lobe
+      CX.beginPath();CX.arc(4,-5,6,Math.PI*0.6,Math.PI*1.9);CX.stroke();  // right lobe
+      // Central spine
+      CX.lineWidth=1.2;CX.strokeStyle='rgba(220,160,255,0.70)';
+      CX.beginPath();CX.moveTo(0,-11);CX.lineTo(0,4);CX.stroke();
+      // Synapse nodes inside
+      CX.fillStyle=c;CX.globalAlpha=0.80+aiPulse*0.20;
+      [[-4,-6],[4,-6],[-5,-1],[5,-1],[0,2]].forEach(([nx2,ny2])=>{
+        CX.beginPath();CX.arc(nx2,ny2,1.4,0,TAU);CX.fill();
+      });
+      CX.globalAlpha=1;CX.shadowBlur=0;CX.restore();
+      CX.fillStyle='#ffffff';CX.textAlign='center';CX.font='bold 9px monospace';CX.fillText('AI',0,sz-11);
+      _ptip(c);CX.shadowBlur=0;CX.textAlign='left';CX.restore();continue;
+    }
+    // ─── Overwatch (Falcon OverWatch) — human hunter's spotlight ─────────
+    if(p.data==='Falcon OverWatch'){
+      const t=Date.now()*0.001,c='#74ff88';
+      // Rotating spotlight arc (24/7 human threat hunter sweeping the field)
+      CX.save();CX.rotate(t*0.7);
+      CX.globalAlpha=0.14;CX.fillStyle=c;
+      CX.beginPath();CX.moveTo(0,0);CX.arc(0,0,sz+24,-0.6,0.6);CX.closePath();CX.fill();
+      CX.globalAlpha=0.40;CX.strokeStyle=c;CX.lineWidth=1.6;
+      CX.beginPath();CX.moveTo(0,0);CX.lineTo(Math.cos(0)*(sz+24),Math.sin(0)*(sz+24));CX.stroke();
+      CX.restore();
+      // Pulse ring
+      CX.globalAlpha=1;
+      const pu=0.5+0.5*Math.sin(t*2.8);
+      CX.strokeStyle=`rgba(116,255,136,${0.28+pu*0.25})`;CX.lineWidth=1.2;
+      CX.shadowBlur=16;CX.shadowColor=c;
+      CX.beginPath();CX.arc(0,0,sz+8,0,TAU);CX.stroke();
+      CX.shadowBlur=20;CX.shadowColor=c;
+      CX.fillStyle=c;CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*sz,Math.sin(a)*sz);}
+      CX.closePath();CX.fill();
+      CX.fillStyle='rgba(0,0,0,0.70)';CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*(sz-7),Math.sin(a)*(sz-7));}
+      CX.closePath();CX.fill();
+      // Eye + crosshair (threat hunter's gaze)
+      CX.save();CX.shadowBlur=8;CX.shadowColor=c;
+      CX.strokeStyle='rgba(116,255,136,0.88)';CX.lineWidth=1.8;
+      CX.beginPath();CX.ellipse(0,-4,10,6,0,0,TAU);CX.stroke();    // eye outline
+      CX.beginPath();CX.arc(0,-4,3.5,0,TAU);CX.stroke();           // iris
+      CX.fillStyle=c;CX.globalAlpha=0.70;
+      CX.beginPath();CX.arc(0,-4,1.5,0,TAU);CX.fill();             // pupil
+      CX.globalAlpha=1;
+      // Crosshair ticks
+      CX.strokeStyle='rgba(180,255,190,0.70)';CX.lineWidth=1;
+      CX.beginPath();CX.moveTo(0,-13);CX.lineTo(0,-10);CX.stroke(); // top tick
+      CX.beginPath();CX.moveTo(0,2);CX.lineTo(0,5);CX.stroke();     // bottom tick
+      CX.beginPath();CX.moveTo(-13,-4);CX.lineTo(-10,-4);CX.stroke();// left tick
+      CX.beginPath();CX.moveTo(10,-4);CX.lineTo(13,-4);CX.stroke();  // right tick
+      CX.shadowBlur=0;CX.restore();
+      CX.fillStyle='#ffffff';CX.textAlign='center';CX.font='bold 9px monospace';CX.fillText('OW',0,sz-10);
+      _ptip(c);CX.shadowBlur=0;CX.textAlign='left';CX.restore();continue;
+    }
+    // ─── MDR (Falcon Complete MDR) — rapid expert response, mass clear ────
+    if(p.data==='Falcon Complete MDR'){
+      const t=Date.now()*0.001,c='#ff7a00';
+      // Cascading response pulse rings (MDR = <1min response time)
+      for(let rg=0;rg<3;rg++){
+        const age=(t*0.7+rg/3)%1;
+        const r=sz+5+age*22,al=1-age;
+        CX.strokeStyle=`rgba(255,122,0,${al*0.35})`;CX.lineWidth=1;
+        CX.beginPath();CX.arc(0,0,r,0,TAU);CX.stroke();
+      }
+      CX.save();CX.rotate(-t*0.5);
+      CX.strokeStyle='rgba(255,122,0,0.35)';CX.lineWidth=1.2;CX.setLineDash([6,6]);
+      CX.beginPath();CX.arc(0,0,sz+9,0,TAU);CX.stroke();CX.setLineDash([]);CX.restore();
+      CX.shadowBlur=20;CX.shadowColor=c;
+      CX.fillStyle=c;CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*sz,Math.sin(a)*sz);}
+      CX.closePath();CX.fill();
+      CX.fillStyle='rgba(0,0,0,0.70)';CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*(sz-7),Math.sin(a)*(sz-7));}
+      CX.closePath();CX.fill();
+      // Headset icon (expert MDR analyst on duty)
+      CX.save();CX.shadowBlur=8;CX.shadowColor=c;
+      CX.strokeStyle='rgba(255,122,0,0.88)';CX.lineWidth=1.8;
+      CX.beginPath();CX.arc(0,-5,8,Math.PI,0); // headband arc
+      // Ear cups
+      CX.moveTo(-8,-5);CX.lineTo(-8,0); CX.moveTo(8,-5);CX.lineTo(8,0); CX.stroke();
+      CX.beginPath();CX.arc(-8,-1,2.5,0,TAU);CX.stroke(); // left cup
+      CX.beginPath();CX.arc(8,-1,2.5,0,TAU);CX.stroke();  // right cup
+      // Mic boom
+      CX.lineWidth=1.2;CX.strokeStyle='rgba(255,170,80,0.70)';
+      CX.beginPath();CX.moveTo(-8,1);CX.quadraticCurveTo(-4,8,0,9);CX.stroke();
+      CX.beginPath();CX.arc(0,9,1.6,0,TAU);CX.stroke();
+      CX.shadowBlur=0;CX.restore();
+      CX.fillStyle='#ffffff';CX.textAlign='center';CX.font='bold 8px monospace';CX.fillText('MDR',0,sz-10);
+      _ptip(c);CX.shadowBlur=0;CX.textAlign='left';CX.restore();continue;
+    }
+    // ─── SOAR (Fusion SOAR) — machine-speed playbook execution chain ──────
+    if(p.data==='Fusion SOAR'){
+      const t=Date.now()*0.001,c='#ff5a4d';
+      // Playbook chain: 4 nodes firing in rapid cascade (automation sequence)
+      const chainNodes=[{x:-sz-16,y:4},{x:-sz/2-4,y:-12},{x:sz/2+4,y:-12},{x:sz+16,y:4}];
+      const chainStep=(t*2.2)%4; // 0-4 cascading
+      for(let ci=0;ci<chainNodes.length-1;ci++){
+        const n1=chainNodes[ci],n2=chainNodes[ci+1];
+        const active=chainStep>ci&&chainStep<ci+1+0.8;
+        CX.save();
+        CX.globalAlpha=active?0.80:0.30;
+        CX.strokeStyle=active?c:'rgba(255,90,77,0.40)';CX.lineWidth=active?1.6:0.8;
+        CX.beginPath();CX.moveTo(n1.x,n1.y);CX.lineTo(n2.x,n2.y);CX.stroke();
+        // Arrow head pointing right
+        const mx=(n1.x+n2.x)/2,my=(n1.y+n2.y)/2;
+        const ang=Math.atan2(n2.y-n1.y,n2.x-n1.x);
+        CX.save();CX.translate(mx,my);CX.rotate(ang);
+        CX.beginPath();CX.moveTo(-3,-2.5);CX.lineTo(0,0);CX.lineTo(-3,2.5);CX.stroke();
+        CX.restore();CX.restore();
+      }
+      // Playbook nodes
+      chainNodes.forEach((n,ni)=>{
+        const fired=chainStep>ni;
+        CX.save();CX.globalAlpha=fired?0.95:0.38;
+        CX.shadowBlur=fired?12:4;CX.shadowColor=c;
+        CX.fillStyle=fired?c:'rgba(255,90,77,0.4)';
+        CX.beginPath();CX.arc(n.x,n.y,4,0,TAU);CX.fill();
+        CX.restore();
+      });
+      CX.globalAlpha=1;
+      // Lightning bolt orbit (machine speed)
+      CX.save();CX.rotate(t*1.2);
+      CX.strokeStyle='rgba(255,90,77,0.38)';CX.lineWidth=1.1;CX.setLineDash([3,5]);
+      CX.beginPath();CX.arc(0,0,sz+10,0,TAU);CX.stroke();CX.setLineDash([]);CX.restore();
+      CX.shadowBlur=22;CX.shadowColor=c;
+      CX.fillStyle=c;CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*sz,Math.sin(a)*sz);}
+      CX.closePath();CX.fill();
+      CX.fillStyle='rgba(0,0,0,0.70)';CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*(sz-7),Math.sin(a)*(sz-7));}
+      CX.closePath();CX.fill();
+      // Lightning bolt icon (automated response at machine speed)
+      CX.save();CX.shadowBlur=10;CX.shadowColor=c;
+      CX.fillStyle='rgba(255,255,255,0.88)';
+      CX.beginPath();CX.moveTo(2,-13);CX.lineTo(-5,0);CX.lineTo(1,0);CX.lineTo(-2,13);CX.lineTo(7,0);CX.lineTo(1,0);CX.lineTo(6,-13);CX.closePath();CX.fill();
+      CX.shadowBlur=0;CX.restore();
+      CX.fillStyle='#ffffff';CX.textAlign='center';CX.font='bold 8px monospace';CX.fillText('SOAR',0,sz-10);
+      _ptip(c);CX.shadowBlur=0;CX.textAlign='left';CX.restore();continue;
+    }
+    // ─── EXP (Exposure Management) — attacker's-eye recon sweep ──────────
+    if(p.data==='Exposure Management'){
+      const t=Date.now()*0.001,c='#ff9a48';
+      // Outward discovery pulses (ASM scanning internet-facing attack surface)
+      for(let rg=0;rg<3;rg++){
+        const age=(t*0.55+rg/3)%1;
+        const r=sz+4+age*20,al=(1-age)*0.45;
+        CX.strokeStyle=`rgba(255,154,72,${al})`;CX.lineWidth=1.2;
+        CX.beginPath();CX.arc(0,0,r,0,TAU);CX.stroke();
+      }
+      // Sweep arc (recon angle sweeping)
+      CX.save();CX.rotate(t*0.65);
+      CX.globalAlpha=0.18;CX.fillStyle=c;
+      CX.beginPath();CX.moveTo(0,0);CX.arc(0,0,sz+18,-0.5,0.5);CX.closePath();CX.fill();
+      CX.globalAlpha=0.45;CX.strokeStyle=c;CX.lineWidth=1.4;
+      CX.shadowBlur=12;CX.shadowColor=c;
+      CX.beginPath();CX.moveTo(0,0);CX.lineTo(Math.cos(0)*(sz+18),Math.sin(0)*(sz+18));CX.stroke();
+      CX.restore();CX.globalAlpha=1;
+      CX.shadowBlur=20;CX.shadowColor=c;
+      CX.fillStyle=c;CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*sz,Math.sin(a)*sz);}
+      CX.closePath();CX.fill();
+      CX.fillStyle='rgba(0,0,0,0.70)';CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*(sz-7),Math.sin(a)*(sz-7));}
+      CX.closePath();CX.fill();
+      // Globe with meridian + scan line (attack surface map)
+      CX.save();CX.shadowBlur=7;CX.shadowColor=c;
+      CX.strokeStyle='rgba(255,154,72,0.85)';CX.lineWidth=1.6;
+      CX.beginPath();CX.arc(0,-3,9,0,TAU);CX.stroke();  // globe
+      CX.lineWidth=1;CX.strokeStyle='rgba(255,180,100,0.55)';
+      CX.beginPath();CX.ellipse(0,-3,9,4,0,0,TAU);CX.stroke(); // equator
+      CX.beginPath();CX.moveTo(0,-12);CX.lineTo(0,6);CX.stroke(); // meridian
+      // Scan line
+      CX.strokeStyle='rgba(255,255,255,0.60)';CX.lineWidth=1.3;CX.setLineDash([2,2]);
+      CX.beginPath();CX.moveTo(-9,-3);CX.lineTo(9,-3);CX.stroke();CX.setLineDash([]);
+      CX.shadowBlur=0;CX.restore();
+      CX.fillStyle='#ffffff';CX.textAlign='center';CX.font='bold 9px monospace';CX.fillText('EXP',0,sz-10);
+      _ptip(c);CX.shadowBlur=0;CX.textAlign='left';CX.restore();continue;
+    }
+    // ─── JIT (Just in Time Access) — ephemeral vault, time-bounded token ──
+    if(p.data==='Just in Time Access'){
+      const t=Date.now()*0.001,c='#fff274';
+      // Countdown arc: segments disappearing (time-bounded access expiring)
+      const segs=8,elapsed=(t*0.4)%1;
+      for(let si=0;si<segs;si++){
+        const segAng=(si/segs)*TAU-(Math.PI/2);
+        const segEnd=segAng+TAU/segs-0.08;
+        const alive=si/segs>(elapsed%1);
+        CX.strokeStyle=alive?c:'rgba(255,242,116,0.15)';
+        CX.lineWidth=alive?2.2:1.0;
+        CX.globalAlpha=alive?0.70:0.18;
+        CX.beginPath();CX.arc(0,0,sz+11,segAng,segEnd);CX.stroke();
+      }
+      CX.globalAlpha=1;
+      CX.save();CX.rotate(t*0.3);
+      CX.strokeStyle='rgba(255,242,116,0.22)';CX.lineWidth=1.0;CX.setLineDash([3,7]);
+      CX.beginPath();CX.arc(0,0,sz+5,0,TAU);CX.stroke();CX.setLineDash([]);CX.restore();
+      CX.shadowBlur=20;CX.shadowColor=c;
+      CX.fillStyle=c;CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*sz,Math.sin(a)*sz);}
+      CX.closePath();CX.fill();
+      CX.fillStyle='rgba(0,0,0,0.70)';CX.beginPath();
+      for(let i=0;i<6;i++){const a=i/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*(sz-7),Math.sin(a)*(sz-7));}
+      CX.closePath();CX.fill();
+      // Vault door icon (ephemeral credential vault opening on demand)
+      CX.save();CX.shadowBlur=8;CX.shadowColor=c;
+      CX.strokeStyle='rgba(255,242,116,0.90)';CX.lineWidth=2;
+      CX.beginPath();CX.arc(0,-3,9,0,TAU);CX.stroke();   // vault ring
+      CX.lineWidth=1.4;
+      CX.beginPath();CX.arc(0,-3,5,0,TAU);CX.stroke();   // inner ring
+      // Vault bolt markers (4 position)
+      CX.lineWidth=1.2;
+      [[9,0],[0,9],[-9,0],[0,-9]].forEach(([bx2,by3])=>{
+        CX.beginPath();CX.moveTo(bx2*0.62+0,by3*0.62-3);CX.lineTo(bx2*0.88,by3*0.88-3);CX.stroke();
+      });
+      // Timer arc inside vault (remaining access time)
+      const timeLeft=1-elapsed;
+      CX.strokeStyle=`rgba(255,255,100,0.65)`;CX.lineWidth=1.8;
+      CX.beginPath();CX.arc(0,-3,3,-Math.PI/2,-Math.PI/2+timeLeft*TAU);CX.stroke();
+      CX.shadowBlur=0;CX.restore();
+      CX.fillStyle='rgba(0,0,0,0.80)';CX.textAlign='center';CX.font='bold 8px monospace';CX.fillText('JIT',0,sz-10);
+      _ptip(c);CX.shadowBlur=0;CX.textAlign='left';CX.restore();continue;
+    }
+    // ─── END CINEMATIC MODULE ICONS ───────────────────────────────────────
 
     CX.shadowBlur=20; CX.shadowColor=col;
     CX.save(); CX.rotate(p.bob*0.6);
@@ -11234,9 +12047,15 @@ function render(dt){
       drawFuelBarges();
       drawPickups();
       drawIR();
+      drawNGAVScanRing();
+      drawSiemCorrelation();
+      drawITDRChains();
+      drawCloudPerimeter();
       drawEnemies();
       drawCloudZaps();
       drawExposureRadar();
+      drawExpPreview();
+      drawOverwatchCrosshair();
       if(BOSS) drawBoss();
       drawBullets();
       drawWingmen();
