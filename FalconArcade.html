@@ -1806,6 +1806,12 @@ const TRANSLATIONS = {
     iz_banner_pam:'PAM SHIELD ACTIVE — 6 seconds invulnerability',
     iz_banner_mdr_response:'MDR · RESPONSE TEAM · THREAT NEUTRALIZED',
     iz_banner_siem_corr:'NGSIEM · CORRELATED KILL +100',
+    def_act_prevent:'FALCON PREVENT — ML BARRIER DEPLOYED',
+    def_act_insight:'INSIGHT XDR — FULL ATTACK SURFACE MAPPED',
+    def_act_identity:'IDENTITY — CREDENTIALS LOCKED · IMPOSTORS EXPOSED',
+    def_act_fem_exposed:'FEM — {count} NODES EXPOSED · SURFACE MAPPED',
+    def_act_charlotte:'CHARLOTTE AI — NEURAL NETWORK ONLINE · TARGETING',
+    def_act_pangea:'PANGEA — PLANET-SCALE FREEZE · ALL SECTORS LOCKED',
     iz_banner_ngav_scan:'NGAV · ML SCAN COMPLETE · QUARANTINE DEPLOYED',
     iz_banner_soar_launch:'SOAR · PLAYBOOK EXECUTING · MACHINE-SPEED SWEEP',
     iz_banner_cloud_active:'CSPM · CLOUD PERIMETER SECURED · BLAST RADIUS CONTAINED',
@@ -2310,6 +2316,12 @@ const TRANSLATIONS = {
     iz_banner_pam:'PAM SHIELD ATIVO — 6 segundos de invulnerabilidade',
     iz_banner_mdr_response:'MDR · EQUIPE DE RESPOSTA · AMEAÇA NEUTRALIZADA',
     iz_banner_siem_corr:'NGSIEM · ELIMINAÇÃO CORRELACIONADA +100',
+    def_act_prevent:'FALCON PREVENT — BARREIRA ML IMPLANTADA',
+    def_act_insight:'INSIGHT XDR — SUPERFÍCIE DE ATAQUE TOTALMENTE MAPEADA',
+    def_act_identity:'IDENTITY — CREDENCIAIS BLOQUEADAS · IMPOSTORES EXPOSTOS',
+    def_act_fem_exposed:'FEM — {count} NÓS EXPOSTOS · SUPERFÍCIE MAPEADA',
+    def_act_charlotte:'CHARLOTTE AI — REDE NEURAL ATIVA · ALVEJANDO',
+    def_act_pangea:'PANGEA — CONGELAMENTO GLOBAL · TODOS OS SETORES TRAVADOS',
     iz_banner_ngav_scan:'NGAV · ANÁLISE ML CONCLUÍDA · QUARENTENA IMPLANTADA',
     iz_banner_soar_launch:'SOAR · PLAYBOOK EM EXECUÇÃO · VARREDURA EM VELOCIDADE DE MÁQUINA',
     iz_banner_cloud_active:'CSPM · PERÍMETRO CLOUD SEGURO · RAIO DE IMPACTO CONTIDO',
@@ -2814,6 +2826,12 @@ const TRANSLATIONS = {
     iz_banner_pam:'PAM SHIELD ACTIVO — 6 segundos de invulnerabilidad',
     iz_banner_mdr_response:'MDR · EQUIPO DE RESPUESTA · AMENAZA NEUTRALIZADA',
     iz_banner_siem_corr:'NGSIEM · ELIMINACIÓN CORRELACIONADA +100',
+    def_act_prevent:'FALCON PREVENT — BARRERA ML DESPLEGADA',
+    def_act_insight:'INSIGHT XDR — SUPERFICIE DE ATAQUE COMPLETAMENTE MAPEADA',
+    def_act_identity:'IDENTITY — CREDENCIALES BLOQUEADAS · IMPOSTORES EXPUESTOS',
+    def_act_fem_exposed:'FEM — {count} NODOS EXPUESTOS · SUPERFICIE MAPEADA',
+    def_act_charlotte:'CHARLOTTE AI — RED NEURONAL EN LÍNEA · OBJETIVO FIJADO',
+    def_act_pangea:'PANGEA — CONGELAMIENTO GLOBAL · TODOS LOS SECTORES BLOQUEADOS',
     iz_banner_ngav_scan:'NGAV · ANÁLISIS ML COMPLETO · CUARENTENA DESPLEGADA',
     iz_banner_soar_launch:'SOAR · PLAYBOOK EN EJECUCIÓN · BARRIDO A VELOCIDAD DE MÁQUINA',
     iz_banner_cloud_active:'CSPM · PERÍMETRO CLOUD ASEGURADO · RADIO DE IMPACTO CONTENIDO',
@@ -3318,6 +3336,12 @@ const TRANSLATIONS = {
     iz_banner_pam:'PAM SHIELD 起動 — 6秒間無敵',
     iz_banner_mdr_response:'MDR · 対応チーム · 脅威を無力化',
     iz_banner_siem_corr:'NGSIEM · 相関キル +100',
+    def_act_prevent:'FALCON PREVENT — ML バリア展開',
+    def_act_insight:'INSIGHT XDR — 攻撃面を完全マッピング',
+    def_act_identity:'IDENTITY — 認証情報をロック · なりすましを露出',
+    def_act_fem_exposed:'FEM — {count} ノードを露出 · 攻撃面をマッピング',
+    def_act_charlotte:'CHARLOTTE AI — ニューラルネット起動 · ターゲット特定中',
+    def_act_pangea:'PANGEA — グローバル凍結 · 全セクターをロック',
     iz_banner_ngav_scan:'NGAV · ML スキャン完了 · 検疫を展開',
     iz_banner_soar_launch:'SOAR · プレイブック実行中 · マシンスピード掃討',
     iz_banner_cloud_active:'CSPM · クラウド境界を確保 · 爆発半径を封じ込め',
@@ -4693,6 +4717,7 @@ function _ensureDashDisclaimer(onAcknowledge) {
   document.body.appendChild(ov);
 
   function _ack() {
+    document.removeEventListener('keydown', _kh);
     _dashDisclaimerAcked = true;
     ov.dispatchEvent(new Event('dash-acked'));
     ov.remove();
@@ -13713,6 +13738,9 @@ const SOC_COMMS = {
     "Weaponised Word document opened — macro blocked by Prevent.",
     "Spear-phish link clicked — sandbox detonation in progress.",
     "FANCY BEAR C2 beacon: encrypted traffic to known GRU infra.",
+    "Falcon Identity: impossible travel verified — session hard-frozen in real time.",
+    "Insight XDR: helpdesk compromise correlated to finance lateral movement — one attack story.",
+    "OverWatch: GRU unit 26165 toolset fingerprinted — TTPs match 9 prior campaigns exactly.",
   ],
   ai_syndicate:[
     "LLM-generated phishing — zero grammar errors, zero signatures.",
@@ -13727,6 +13755,9 @@ const SOC_COMMS = {
     "Prompt injection attack on internal LLM detected.",
     "Deepfake video call to CFO in progress — verify out-of-band.",
     "AI-generated OSINT package on CEO distributed on dark forum.",
+    "Charlotte AI: triage complete — 5 critical vectors ranked and queued in 0.3 seconds.",
+    "Falcon Prevent: ML model stopped zero-day payload — no signature, pure behaviour analysis.",
+    "Insight XDR: 847 low-noise events correlated into a single attack story in real time.",
   ],
   carbon_spider:[
     "Staging phase detected: credential harvest under way.",
@@ -13741,6 +13772,9 @@ const SOC_COMMS = {
     "RDP brute-force succeeded on an unpatched retail endpoint.",
     "Cobalt Strike beacon active — C2 channel established.",
     "VSS deletion imminent. Prevent must act before encryption starts.",
+    "Falcon Complete MDR: analyst team deployed — containment playbook executing now.",
+    "Falcon Prevent: memory scanning quarantined fileless ransomware before a single byte wrote.",
+    "Exposure Management: unpatched RDP was visible for 11 days — attack path now sealed.",
   ],
   cozy_bear:[
     "OAuth consent spike detected — cloud pivot likely.",
@@ -13755,6 +13789,9 @@ const SOC_COMMS = {
     "SAML token forged — identity provider trust abused.",
     "OAuth app granted Mail.Read permissions without user notice.",
     "API key rotated by attacker — locking out legitimate team.",
+    "Cloud Security CSPM: misconfiguration opened lateral path to production data — now remediated.",
+    "Falcon Identity: token reuse flagged — JIT access enforced, standing privileges revoked.",
+    "Insight XDR: OAuth consent anomaly correlated with 23 downstream cloud API calls.",
   ],
   scattered_spider:[
     "Vishing call active right now. Helpdesk is being targeted.",
@@ -13769,6 +13806,9 @@ const SOC_COMMS = {
     "Phishing portal spoofing the company SSO login — 14 submissions.",
     "Internal Slack account compromised — spreading phish internally.",
     "Attacker pivoted to cloud after bypassing identity — now in Azure.",
+    "Falcon Identity: account logged in from UK and Lagos simultaneously — session terminated.",
+    "OverWatch: SCATTERED SPIDER vishing call script matched against known playbook variant.",
+    "Falcon Complete: social engineering case escalated — executive and HR notified.",
   ],
   volt_typhoon:[
     "Stealth movement detected near OT boundary",
@@ -13783,6 +13823,9 @@ const SOC_COMMS = {
     "OT historian server queried — SCADA data exfiltrated over DNS.",
     "Netsh port forwarding rules added — covert tunnel established.",
     "PowerShell constrained mode bypassed via LOLBin proxy execution.",
+    "Exposure Management: 3 legacy PLCs visible from internet — attack surface mapped in 90 seconds.",
+    "Insight XDR: low-and-slow lateral movement correlated across 47 separate log sources.",
+    "OverWatch: VOLT TYPHOON hunter embedded — adversary dwell confirmed, eviction authorised.",
   ],
   midnight_blizzard_boss:[
     "Supply chain alert: vendor update package shows code anomaly.",
@@ -13797,6 +13840,9 @@ const SOC_COMMS = {
     "Digital certificate stolen from code signing infrastructure.",
     "NOBELIUM actor installed custom malware inside security vendor tools.",
     "Downstream customer count infected via SolarWinds-style mechanism: 1,847.",
+    "Falcon Complete MDR: NOBELIUM response team activated — all vectors tracked simultaneously.",
+    "Pangea: adversary infrastructure IP flagged 14 hours before first alert fired.",
+    "Insight XDR: supply chain breach traced to single build server compromised 6 months ago.",
   ],
   sandworm:[
     "Wiper malware staging confirmed — destructive intent verified.",
@@ -13811,6 +13857,9 @@ const SOC_COMMS = {
     "Wiper has renamed system binaries — rollback is impossible.",
     "Lateral movement through IT-OT bridge confirmed — 14 PLCs at risk.",
     "Data destruction rate: 40,000 endpoints in under 60 minutes.",
+    "Falcon Prevent: wiper behavioural signature matched — MBR overwrite blocked at memory level.",
+    "Falcon Complete: destructive incident response team deployed — OT isolation order issued.",
+    "Exposure Management: 8 OT assets had zero prior visibility — Falcon now deployed on all.",
   ],
   blackcat_boss:[
     "BLACKCAT affiliate active — Rust-based payload confirmed.",
@@ -13825,6 +13874,9 @@ const SOC_COMMS = {
     "Ransom demand: $4.5M — timer showing 72 hours to payment.",
     "BLACKCAT leak site updated — company name now listed publicly.",
     "Charlotte AI autonomous response: 5 highest-velocity threats queued.",
+    "Falcon Complete MDR: ALPHV/BLACKCAT playbook executing — ESXi isolation in progress.",
+    "Charlotte AI: 5 highest-velocity encryption paths identified — autonomous block engaged.",
+    "Falcon Prevent: intermittent encryption pattern flagged by ML before threshold crossed.",
   ],
   lazarus_final:[
     "Crypto treasury targeted — North Korean RGB Bureau 121 confirmed.",
@@ -13839,6 +13891,9 @@ const SOC_COMMS = {
     "SWIFT messaging system access detected — wire transfer risk.",
     "Destructive wiper staged as contingency — eviction window closing.",
     "OverWatch: LAZARUS persistence mechanisms found on 4 systems.",
+    "Full Falcon Platform: all 8 modules detecting simultaneous LAZARUS attack vectors in parallel.",
+    "Pangea: cryptocurrency mixing wallet on CrowdStrike adversary graph — funds traceable.",
+    "Falcon Complete MDR: 14-month dwell fully traced — complete eviction playbook now executing.",
   ],
 };
 
@@ -15441,19 +15496,153 @@ class PowerUp{
     if(!this.alive)return;
     const displayMod=this.isFake?this.decoyMod:this.mod;
     const fade=Math.min(1,1-this.life/this.maxLife*0.5);
-    const pulse=0.75+Math.sin(performance.now()*0.006)*0.25;
     const now=performance.now();
+    const _t=now*0.001; // seconds — drives all animations
+    const pulse=0.75+Math.sin(_t*6)*0.25;
     ctx.save();ctx.globalAlpha=fade*pulse;
     ctx.fillStyle="rgba(4,1,18,0.88)";
     const borderCol=this.isFake
-      ?`hsl(${350+Math.sin(now*0.008)*20},90%,${50+Math.sin(now*0.012)*10}%)`
+      ?`hsl(${350+Math.sin(_t*8)*20},90%,${50+Math.sin(_t*12)*10}%)`
       :displayMod.color;
     ctx.strokeStyle=borderCol;ctx.lineWidth=1.6;
-    ctx.shadowColor=borderCol;ctx.shadowBlur=Math.max(10,12*pulse);
+    ctx.shadowColor=borderCol;ctx.shadowBlur=Math.max(10,18*pulse);
     ctx.beginPath();ctx.roundRect(this.x,this.y,this.w,this.h,4);ctx.fill();ctx.stroke();
-    ctx.font="15px serif";ctx.textAlign="center";ctx.shadowBlur=0;
-    ctx.fillText(displayMod.emoji,this.x+this.w/2,this.y+this.h*0.78);
+    // ── Animated canvas icon: unique per CrowdStrike product ─────────
+    const _cx=this.x+this.w/2,_cy=this.y+this.h/2;
+    const _ic=displayMod.color;
+    ctx.shadowBlur=8;ctx.shadowColor=_ic;ctx.strokeStyle=_ic;ctx.fillStyle=_ic;
+    ctx.lineWidth=1.4;ctx.setLineDash([]);
+    switch(displayMod.id){
+      case'PREVENT':{
+        // Shield breathes (scale ±8%) + ML scan line sweeps through interior
+        const _ps=1+Math.sin(_t*3.2)*0.08;
+        ctx.save();ctx.translate(_cx,_cy);ctx.scale(_ps,_ps);ctx.translate(-_cx,-_cy);
+        ctx.beginPath();ctx.moveTo(_cx,_cy-9);ctx.lineTo(_cx+7,_cy-5);ctx.lineTo(_cx+7,_cy+2);
+        ctx.lineTo(_cx,_cy+9);ctx.lineTo(_cx-7,_cy+2);ctx.lineTo(_cx-7,_cy-5);ctx.closePath();ctx.stroke();
+        ctx.restore();
+        const _sl=Math.sin(_t*2.8)*5;
+        ctx.setLineDash([2,2]);ctx.lineWidth=1;ctx.globalAlpha=fade*0.7;
+        ctx.beginPath();ctx.moveTo(_cx-5,_cy-2+_sl);ctx.lineTo(_cx+5,_cy-2+_sl);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(_cx-5,_cy+2+_sl);ctx.lineTo(_cx+5,_cy+2+_sl);ctx.stroke();
+        ctx.setLineDash([]);ctx.globalAlpha=fade*pulse;break;
+      }
+      case'INSIGHT':{
+        // Eye: pupil orbits in tiny ellipse + domain rays slowly rotate
+        const _ep=_t*2.2;
+        ctx.beginPath();ctx.ellipse(_cx,_cy,7,4,0,0,Math.PI*2);ctx.stroke();
+        ctx.beginPath();ctx.arc(_cx+Math.sin(_ep)*2.5,_cy+Math.sin(_ep*0.7)*1.2,2.5,0,Math.PI*2);ctx.fill();
+        const _dc=['#e0003c','#42d9ff','#b86bff','#ffd84d'];
+        const _br=_t*0.5; // slow rotation offset
+        [0,1,2,3].forEach(_i=>{
+          const _a=-Math.PI/4+_i*(Math.PI/2)+_br;
+          ctx.strokeStyle=_dc[_i];ctx.lineWidth=1.2;ctx.shadowColor=_dc[_i];
+          ctx.beginPath();ctx.moveTo(_cx+Math.cos(_a)*3,_cy+Math.sin(_a)*3);
+          ctx.lineTo(_cx+Math.cos(_a)*8,_cy+Math.sin(_a)*8);ctx.stroke();
+        });
+        break;
+      }
+      case'IDENTITY':{
+        // Credential card + nodes pulse in cascading sequence
+        ctx.strokeRect(_cx-7,_cy-5,14,10);
+        const _nd=[[_cx-4,_cy+1],[_cx,_cy-1],[_cx+4,_cy+1]];
+        ctx.beginPath();ctx.moveTo(_nd[0][0],_nd[0][1]);
+        _nd.forEach(([_nx,_ny])=>ctx.lineTo(_nx,_ny));ctx.stroke();
+        _nd.forEach(([_nx,_ny],_ni)=>{
+          const _nr=1.5+Math.sin(_t*4+_ni*1.2)*1;
+          ctx.beginPath();ctx.arc(_nx,_ny,_nr,0,Math.PI*2);ctx.fill();
+        });
+        break;
+      }
+      case'CLOUD':{
+        // Cloud bumps float up/down + security walls blink in alternation
+        const _cb=Math.sin(_t*2.5)*1.5;
+        ctx.beginPath();ctx.arc(_cx-4,_cy-1+_cb,4,Math.PI,0,false);ctx.stroke();
+        ctx.beginPath();ctx.arc(_cx+4,_cy+_cb*0.5,3,Math.PI,0,false);ctx.stroke();
+        ctx.beginPath();ctx.arc(_cx-1,_cy-4+_cb,3,Math.PI,0,false);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(_cx-8,_cy+4);ctx.lineTo(_cx+8,_cy+4);ctx.stroke();
+        ctx.setLineDash([1,3]);ctx.lineWidth=1;
+        ctx.globalAlpha=fade*pulse*(0.4+Math.sin(_t*4)*0.35);
+        ctx.beginPath();ctx.moveTo(_cx-9,_cy-3);ctx.lineTo(_cx-9,_cy+5);ctx.stroke();
+        ctx.globalAlpha=fade*pulse*(0.4+Math.sin(_t*4+Math.PI)*0.35);
+        ctx.beginPath();ctx.moveTo(_cx+9,_cy-3);ctx.lineTo(_cx+9,_cy+5);ctx.stroke();
+        ctx.setLineDash([]);ctx.globalAlpha=fade*pulse;break;
+      }
+      case'FEM':{
+        // Radar arcs + animated sweep ray + exposure dot at tip
+        const _fsw=_t*1.8;
+        [9,6,3].forEach((_r,_ri)=>{
+          ctx.globalAlpha=(fade*pulse)*(0.35+0.25*(_ri/2));
+          ctx.beginPath();ctx.arc(_cx,_cy+4,_r,-Math.PI,0);ctx.stroke();
+        });
+        ctx.globalAlpha=fade*pulse;
+        const _tipx=_cx+Math.cos(_fsw)*9,_tipy=_cy+4+Math.sin(_fsw)*9*0.55;
+        ctx.beginPath();ctx.moveTo(_cx,_cy+4);ctx.lineTo(_tipx,_tipy);ctx.stroke();
+        ctx.fillStyle=_ic;ctx.beginPath();ctx.arc(_tipx,_tipy,1.5,0,Math.PI*2);ctx.fill();
+        break;
+      }
+      case'CHARLOTTE':{
+        // Hub pulses, satellite nodes orbit in micro-circles
+        const _chub=2+Math.sin(_t*5)*1.2;
+        ctx.beginPath();ctx.arc(_cx,_cy,_chub,0,Math.PI*2);ctx.fill();
+        const _cor=_t*1.4;
+        [[0,-8],[8,3],[-8,3],[0,8]].forEach(([_dx,_dy],_ci)=>{
+          const _oa=_cor+_ci*(Math.PI/2);
+          const _nx=_cx+_dx+Math.cos(_oa)*1.5,_ny=_cy+_dy+Math.sin(_oa)*1.5;
+          ctx.beginPath();ctx.moveTo(_cx,_cy);ctx.lineTo(_nx,_ny);ctx.stroke();
+          ctx.beginPath();ctx.arc(_nx,_ny,2,0,Math.PI*2);ctx.fill();
+        });
+        break;
+      }
+      case'PANGEA':{
+        // Globe meridian sweeps (tilts with time) + crystal spokes pulse outward
+        const _pgr=_t*0.4;
+        ctx.beginPath();ctx.arc(_cx,_cy,8,0,Math.PI*2);ctx.stroke();
+        ctx.beginPath();ctx.ellipse(_cx,_cy,8,3,0,0,Math.PI*2);ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(_cx+Math.sin(_pgr)*3,_cy-8);
+        ctx.lineTo(_cx-Math.sin(_pgr)*3,_cy+8);ctx.stroke();
+        ctx.lineWidth=1;
+        for(let _i=0;_i<6;_i++){
+          const _a=_i*Math.PI/3+_pgr*0.5;
+          const _sr=2+Math.sin(_t*3+_i)*2;
+          ctx.beginPath();ctx.moveTo(_cx,_cy);ctx.lineTo(_cx+Math.cos(_a)*_sr,_cy+Math.sin(_a)*_sr);ctx.stroke();
+        }
+        break;
+      }
+      case'OVERWATCH':{
+        // Scope reticle: fixed crosshair + rotating corner brackets
+        ctx.beginPath();ctx.arc(_cx,_cy,8,0,Math.PI*2);ctx.stroke();
+        ctx.beginPath();ctx.arc(_cx,_cy,2,0,Math.PI*2);ctx.fill();
+        [[-1,0],[1,0],[0,-1],[0,1]].forEach(([_dx,_dy])=>{
+          ctx.beginPath();ctx.moveTo(_cx+_dx*3,_cy+_dy*3);ctx.lineTo(_cx+_dx*7,_cy+_dy*7);ctx.stroke();
+        });
+        const _or=_t*0.8;
+        [0,1,2,3].forEach(_oi=>{
+          const _oa=_oi*(Math.PI/2)+_or;
+          const _bx=_cx+Math.cos(_oa)*7,_by=_cy+Math.sin(_oa)*7;
+          ctx.beginPath();ctx.moveTo(_bx,_by);
+          ctx.lineTo(_bx-Math.cos(_oa)*3,_by-Math.sin(_oa)*3);ctx.stroke();
+        });
+        break;
+      }
+      case'COMPLETE':{
+        // MDR falcon shield + chevrons ripple downward in staggered phase
+        ctx.beginPath();ctx.moveTo(_cx,_cy-9);ctx.lineTo(_cx+7,_cy-5);ctx.lineTo(_cx+7,_cy+3);
+        ctx.lineTo(_cx,_cy+9);ctx.lineTo(_cx-7,_cy+3);ctx.lineTo(_cx-7,_cy-5);ctx.closePath();ctx.stroke();
+        ctx.lineWidth=1.6;
+        const _cs1=Math.sin(_t*4)*1.2,_cs2=Math.sin(_t*4+1.2)*1.2;
+        ctx.beginPath();ctx.moveTo(_cx-5,_cy-1+_cs1);ctx.lineTo(_cx,_cy+4+_cs1);ctx.lineTo(_cx+5,_cy-1+_cs1);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(_cx-4,_cy-4+_cs2);ctx.lineTo(_cx,_cy+1+_cs2);ctx.lineTo(_cx+4,_cy-4+_cs2);ctx.stroke();
+        break;
+      }
+      default:{
+        ctx.shadowBlur=0;ctx.font="15px serif";ctx.textAlign="center";
+        ctx.fillText(displayMod.emoji,_cx,this.y+this.h*0.78);break;
+      }
+    }
+    ctx.setLineDash([]);
     if(this.isFake){
+      ctx.shadowBlur=0;ctx.textAlign='center';
       ctx.font="bold 9px 'Courier New'";ctx.fillStyle="rgba(255,100,100,0.7)";
       ctx.fillText("?",this.x+this.w-4,this.y+6);
     }
@@ -17269,13 +17458,42 @@ class Game{
     switch(mod.id){
       case"PREVENT":
         this.#mods.PREVENT=mod.duration;
-        this.#floats.spawn(this.#px+CFG.PLR_W/2,this.#py-10,T('def_pickup_prevent'),CS.CYAN,12);break;
+        this.#fx.flash(0,229,255,0.42);this.#fx.shake(0.18);
+        // Twin flanking shield deployment — L+R bursts then center convergence
+        this.#parts.burst(this.#px-30,this.#py+CFG.PLR_H/2,16,[[0,229,255],[127,251,255],[255,255,255]],{maxSpd:80,life:0.5});
+        this.#parts.burst(this.#px+CFG.PLR_W+30,this.#py+CFG.PLR_H/2,16,[[0,229,255],[127,251,255],[255,255,255]],{maxSpd:80,life:0.5});
+        setTimeout(()=>this.#parts.burst(this.#px+CFG.PLR_W/2,this.#py-10,12,[[0,229,255],[255,255,255]],{maxSpd:40,life:0.4}),120);
+        this.#floats.spawn(this.#px+CFG.PLR_W/2,this.#py-10,T('def_pickup_prevent'),CS.CYAN,12);
+        this.#floats.spawn(LW/2,LH*0.35,T('def_act_prevent'),CS.CYAN,11);break;
       case"INSIGHT":
         this.#mods.INSIGHT=mod.duration;
-        this.#floats.spawn(this.#px+CFG.PLR_W/2,this.#py-10,T('def_pickup_insight'),CS.BLUE,12);break;
+        this.#fx.flash(74,160,255,0.38);
+        // 4-domain corner bursts: endpoint/red · identity/gold · cloud/purple · network/cyan → white convergence
+        {const _iga=this.#attackers[0]?.[0],_igb=this.#attackers[CFG.COLS-1]?.[CFG.ROWS-1];
+        if(_iga&&_igb){
+          const _igx0=_iga.x,_igy0=_iga.y,_igx1=_igb.x+CFG.ATK_W,_igy1=_igb.y+CFG.ATK_H;
+          setTimeout(()=>this.#parts.burst(_igx0,_igy0,10,[[255,80,80],[255,150,150]],{maxSpd:60,life:0.45}),0);
+          setTimeout(()=>this.#parts.burst(_igx1,_igy0,10,[[255,215,0],[255,240,100]],{maxSpd:60,life:0.45}),60);
+          setTimeout(()=>this.#parts.burst(_igx1,_igy1,10,[[180,100,255],[200,150,255]],{maxSpd:60,life:0.45}),120);
+          setTimeout(()=>{
+            this.#parts.burst(_igx0,_igy1,10,[[0,229,255],[100,240,255]],{maxSpd:60,life:0.45});
+            this.#parts.burst((_igx0+_igx1)/2,(_igy0+_igy1)/2,14,[[255,255,255],[200,230,255]],{maxSpd:30,life:0.35});
+          },180);
+        }}
+        this.#floats.spawn(this.#px+CFG.PLR_W/2,this.#py-10,T('def_pickup_insight'),CS.BLUE,12);
+        this.#floats.spawn(LW/2,LH*0.35,T('def_act_insight'),CS.BLUE,11);break;
       case"IDENTITY":
         this.#mods.IDENTITY=mod.duration;
-        this.#floats.spawn(this.#px+CFG.PLR_W/2,this.#py-10,T('def_pickup_identity'),CS.YELLOW,12);break;
+        this.#fx.flash(255,215,0,0.40);this.#fx.shake(0.14);
+        // Expose all impostor enemies instantly
+        for(let _c=0;_c<CFG.COLS;_c++)
+          for(let _r=0;_r<CFG.ROWS;_r++){
+            const _ia=this.#attackers[_c]?.[_r];
+            if(_ia?.alive&&_ia.isImpostor){_ia.revealed=true;
+              this.#parts.burst(_ia.x+CFG.ATK_W/2,_ia.y+CFG.ATK_H/2,14,[[255,216,77],[255,170,0],[255,255,255]],{maxSpd:70,life:0.45});}
+          }
+        this.#floats.spawn(this.#px+CFG.PLR_W/2,this.#py-10,T('def_pickup_identity'),CS.YELLOW,12);
+        this.#floats.spawn(LW/2,LH*0.35,T('def_act_identity'),CS.YELLOW,11);break;
       case"CLOUD":   this.#doCloud();break;
       case"FEM":     this.#doFEM();break;
       case"CHARLOTTE":this.#doCharlotte();break;
@@ -17309,20 +17527,34 @@ class Game{
   }
 
   #doFEM(){
-    this.#audio.fem();this.#fx.flash(0,255,208,0.3);this.#mods.FEM=MODULES.FEM.duration;
-    this.#floats.spawn(LW/2,LH/2-20,T('def_pickup_fem'),CS.TEAL,14);
+    this.#audio.fem();this.#fx.flash(0,255,208,0.3);this.#fx.shake(0.12);
+    this.#mods.FEM=MODULES.FEM.duration;
+    let _femRevealed=0;
     for(let c=0;c<CFG.COLS;c++)
       for(let r=0;r<CFG.ROWS;r++){
         const a=this.#attackers[c]?.[r];if(!a)continue;
-        if(a.isHidden){a.isHidden=false;this.#parts.femReveal(a.x+CFG.ATK_W/2,a.y+CFG.ATK_H/2);}
+        if(a.isHidden){a.isHidden=false;_femRevealed++;
+          this.#parts.femReveal(a.x+CFG.ATK_W/2,a.y+CFG.ATK_H/2);}
         a.vanished=false;
         if(a.alive)this.#parts.femReveal(a.x+CFG.ATK_W/2,a.y+CFG.ATK_H/2);
       }
+    this.#floats.spawn(LW/2,LH/2-20,T('def_pickup_fem'),CS.TEAL,14);
+    this.#floats.spawn(LW/2,LH*0.35,TF('def_act_fem_exposed',{count:_femRevealed||CFG.COLS*CFG.ROWS}),CS.TEAL,11);
   }
 
   #doCharlotte(){
-    this.#audio.charlotte();this.#fx.flash(57,255,20,0.35);this.#mods.CHARLOTTE_AIM=15;
+    this.#audio.charlotte();this.#fx.flash(57,255,20,0.35);this.#fx.shake(0.16);
+    this.#fx.chroma(0.05); // AI glitch aesthetic on neural activation
+    this.#mods.CHARLOTTE_AIM=15;
+    // Neural network burst: radial particle web from screen center
+    const _chAngles=8;
+    for(let _i=0;_i<_chAngles;_i++){
+      const _a=(_i/_chAngles)*Math.PI*2;
+      const _ex=LW/2+Math.cos(_a)*LW*0.38, _ey=LH/2+Math.sin(_a)*LH*0.38;
+      setTimeout(()=>this.#parts.burst(_ex,_ey,6,[[87,255,20],[184,255,160],[255,255,255]],{maxSpd:60,life:0.4}),_i*28);
+    }
     this.#floats.spawn(LW/2,LH/3,T('def_pickup_charlotte'),CS.GREEN,14);
+    this.#floats.spawn(LW/2,LH*0.28,T('def_act_charlotte'),CS.GREEN,11);
     this.#charlotte.activate(this.#attackers,CFG.COLS,CFG.ROWS,a=>{
       this.#parts.csExplosion(a.x+CFG.ATK_W/2,a.y+CFG.ATK_H/2);
       const pts=CFG.SCORE_ROW[0]*3;
@@ -17331,9 +17563,18 @@ class Game{
   }
 
   #doPangea(){
-    this.#audio.pangea();this.#fx.flash(0,255,208,0.45);this.#fx.shake(0.18);
+    this.#audio.pangea();this.#fx.flash(0,255,208,0.45);this.#fx.shake(0.25);
+    this.#fx.chroma(0.04); // planet-scale intelligence surge
     this.#pangeaT=MODULES.PANGEA.duration;this.#mods.PANGEA=this.#pangeaT;
+    // Crystallization burst: 8 radial directions × staggered timing
+    const _pgDirs=8;
+    for(let _i=0;_i<_pgDirs;_i++){
+      const _a=(_i/_pgDirs)*Math.PI*2;
+      const _ex=LW/2+Math.cos(_a)*LW*0.42, _ey=LH/2+Math.sin(_a)*LH*0.35;
+      setTimeout(()=>this.#parts.pangeaFreeze(_ex,_ey),_i*22);
+    }
     this.#floats.spawn(LW/2,LH/2-30,T('def_pickup_pangea'),CS.TEAL,14);
+    this.#floats.spawn(LW/2,LH*0.30,T('def_act_pangea'),CS.TEAL,11);
     for(let c=0;c<CFG.COLS;c++)
       for(let r=0;r<CFG.ROWS;r++){
         const a=this.#attackers[c]?.[r];
@@ -17433,6 +17674,7 @@ class Game{
     this.#drawIRToken(ctx);
     this.#bonusDrop.draw(ctx);
     this.#charlotte.draw(ctx);
+    this.#drawModFX(ctx);
     this.#parts.draw(ctx);this.#floats.draw(ctx);
     if(this.#fx.chromaAmt>0.005){
       ctx.save();ctx.globalAlpha=0.26;ctx.globalCompositeOperation="screen";
@@ -17704,6 +17946,172 @@ class Game{
     ctx.restore();
   }
 
+  // ── Per-frame visual indicators for active modules ──────────────
+  #drawModFX(ctx){
+    const _t=performance.now()*0.001;
+    const _px=this.#px+CFG.PLR_W/2, _py=this.#py+CFG.PLR_H/2;
+    // ─ PREVENT: cyan shield aura around player ─────────────────────
+    if(this.#mods.PREVENT>0){
+      const _pp=0.55+0.3*Math.sin(_t*4.8);
+      ctx.save();ctx.globalAlpha=_pp*0.72;
+      ctx.shadowBlur=18;ctx.shadowColor=CS.CYAN;ctx.strokeStyle=CS.CYAN;ctx.lineWidth=2.2;
+      ctx.beginPath();
+      ctx.moveTo(_px,this.#py-CFG.PLR_H*0.2);
+      ctx.lineTo(_px+CFG.PLR_W*0.7,this.#py+CFG.PLR_H*0.5);
+      ctx.lineTo(_px,this.#py+CFG.PLR_H*0.9);
+      ctx.lineTo(_px-CFG.PLR_W*0.7,this.#py+CFG.PLR_H*0.5);
+      ctx.closePath();ctx.stroke();
+      // Animated ML scan line sweeping up through the shield zone
+      const _sl=(((_t*0.7)%1)*CFG.PLR_H)*2-CFG.PLR_H*0.5;
+      ctx.globalAlpha=0.22*_pp;ctx.strokeStyle='#7ffbff';ctx.lineWidth=1;ctx.shadowBlur=4;
+      ctx.beginPath();ctx.moveTo(_px-CFG.PLR_W,this.#py+_sl);ctx.lineTo(_px+CFG.PLR_W,this.#py+_sl);ctx.stroke();
+      ctx.shadowBlur=0;ctx.restore();
+    }
+    // ─ IDENTITY: gold shield arc at player + quarantine brackets on impostors ─
+    if(this.#mods.IDENTITY>0){
+      const _ip=0.6+0.25*Math.sin(_t*6);
+      ctx.save();ctx.globalAlpha=_ip;
+      ctx.strokeStyle='#ffd84d';ctx.lineWidth=2.4;ctx.shadowBlur=14;ctx.shadowColor='#ffd84d';
+      ctx.beginPath();ctx.arc(_px,this.#py+CFG.PLR_H*0.3,CFG.PLR_W*0.85,Math.PI*1.1,-0.1,false);ctx.stroke();
+      ctx.shadowBlur=0;ctx.restore();
+      // Pulsing quarantine bracket corners around revealed impostors (no text)
+      for(let _c=0;_c<CFG.COLS;_c++)
+        for(let _r=0;_r<CFG.ROWS;_r++){
+          const _a=this.#attackers[_c]?.[_r];
+          if(_a?.alive&&_a.isImpostor&&_a.revealed){
+            const _qa=0.5+0.4*Math.sin(_t*6+_c+_r);
+            ctx.save();ctx.globalAlpha=_qa;
+            ctx.strokeStyle='#ff1e1e';ctx.lineWidth=2;ctx.shadowBlur=10;ctx.shadowColor='#ff1e1e';
+            const _qx=_a.x-3,_qy=_a.y-3,_qw=CFG.ATK_W+6,_qh=CFG.ATK_H+6,_tk=6;
+            ctx.beginPath();
+            ctx.moveTo(_qx+_tk,_qy);ctx.lineTo(_qx,_qy);ctx.lineTo(_qx,_qy+_tk);
+            ctx.moveTo(_qx+_qw-_tk,_qy);ctx.lineTo(_qx+_qw,_qy);ctx.lineTo(_qx+_qw,_qy+_tk);
+            ctx.moveTo(_qx,_qy+_qh-_tk);ctx.lineTo(_qx,_qy+_qh);ctx.lineTo(_qx+_tk,_qy+_qh);
+            ctx.moveTo(_qx+_qw,_qy+_qh-_tk);ctx.lineTo(_qx+_qw,_qy+_qh);ctx.lineTo(_qx+_qw-_tk,_qy+_qh);
+            ctx.stroke();ctx.shadowBlur=0;ctx.restore();
+          }
+        }
+    }
+    // ─ INSIGHT: thin cyan dashed lines linking same-row enemies ─────
+    if(this.#mods.INSIGHT>0){
+      ctx.save();ctx.globalAlpha=0.28+0.12*Math.sin(_t*3);
+      ctx.strokeStyle='#4ab0ff';ctx.lineWidth=1;ctx.shadowBlur=6;ctx.shadowColor='#4ab0ff';
+      ctx.setLineDash([3,6]);
+      for(let _r=0;_r<CFG.ROWS;_r++){
+        const _rowE=[];
+        for(let _c=0;_c<CFG.COLS;_c++){const _a=this.#attackers[_c]?.[_r];if(_a?.alive)_rowE.push(_a);}
+        for(let _i=0;_i<_rowE.length-1;_i++){
+          ctx.beginPath();
+          ctx.moveTo(_rowE[_i].x+CFG.ATK_W/2,_rowE[_i].y+CFG.ATK_H/2);
+          ctx.lineTo(_rowE[_i+1].x+CFG.ATK_W/2,_rowE[_i+1].y+CFG.ATK_H/2);
+          ctx.stroke();
+        }
+      }
+      ctx.setLineDash([]);ctx.shadowBlur=0;ctx.restore();
+    }
+    // ─ FEM: orange pulse ring + radar sweep highlighting enemies ───
+    if(this.#mods.FEM>0){
+      const _fp=(_t*0.55)%1;
+      const _fr=_fp*LH*0.55;
+      ctx.save();ctx.globalAlpha=(1-_fp)*0.32;
+      ctx.strokeStyle='#ff9a48';ctx.lineWidth=1.4;ctx.shadowBlur=8;ctx.shadowColor='#ff9a48';
+      ctx.beginPath();ctx.ellipse(_px,_py,_fr*0.7,_fr*0.4,0,0,Math.PI*2);ctx.stroke();
+      ctx.shadowBlur=0;ctx.restore();
+      // Sweep angle highlights enemies as the radar wave passes through
+      const _femSweep=((_t%2.2)/2.2)*Math.PI*2;
+      for(let _fc=0;_fc<CFG.COLS;_fc++)
+        for(let _fr2=0;_fr2<CFG.ROWS;_fr2++){
+          const _fa=this.#attackers[_fc]?.[_fr2];
+          if(!_fa?.alive)continue;
+          const _fex=_fa.x+CFG.ATK_W/2,_fey=_fa.y+CFG.ATK_H/2;
+          const _fang=Math.atan2(_fey-_py,_fex-_px);
+          const _fdiff=Math.abs(((_fang-_femSweep+Math.PI*3)%(Math.PI*2))-Math.PI);
+          if(_fdiff<0.3){
+            ctx.save();ctx.globalAlpha=0.65*(1-_fdiff/0.3);
+            ctx.strokeStyle='rgba(255,140,0,0.75)';ctx.lineWidth=1.5;
+            ctx.shadowBlur=8;ctx.shadowColor='#ff8c00';
+            ctx.strokeRect(_fa.x-2,_fa.y-2,CFG.ATK_W+4,CFG.ATK_H+4);
+            ctx.shadowBlur=0;ctx.restore();
+          }
+        }
+    }
+    // ─ CLOUD: pulsing cyan containment walls on screen edges ────────
+    if(this.#mods.CLOUD>0){
+      const _ca=0.18+0.12*Math.sin(_t*3.5);
+      ctx.save();ctx.globalAlpha=_ca;
+      ctx.strokeStyle='rgba(0,229,255,1)';ctx.lineWidth=6;ctx.shadowBlur=10;ctx.shadowColor='#00e5ff';
+      ctx.beginPath();ctx.moveTo(3,0);ctx.lineTo(3,LH);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(LW-3,0);ctx.lineTo(LW-3,LH);ctx.stroke();
+      ctx.lineWidth=1;ctx.globalAlpha=Math.min(1,_ca*1.6);
+      const _nodeCount=Math.floor(LH/80);
+      for(let _ni=0;_ni<=_nodeCount;_ni++){
+        const _ny=40+_ni*80;
+        ctx.beginPath();ctx.arc(3,_ny,4,0,Math.PI*2);ctx.stroke();
+        ctx.beginPath();ctx.arc(LW-3,_ny,4,0,Math.PI*2);ctx.stroke();
+      }
+      ctx.shadowBlur=0;ctx.restore();
+    }
+    // ─ CHARLOTTE: green auto-targeting line to nearest enemy ────────
+    if(this.#mods.CHARLOTTE_AIM>0){
+      let _ctNearest=null,_ctDist=Infinity;
+      for(let _ctc=0;_ctc<CFG.COLS;_ctc++)
+        for(let _ctr=0;_ctr<CFG.ROWS;_ctr++){
+          const _cta=this.#attackers[_ctc]?.[_ctr];
+          if(!_cta?.alive||_cta.isHidden)continue;
+          const _ctd=Math.hypot((_cta.x+CFG.ATK_W/2)-_px,(_cta.y+CFG.ATK_H/2)-_py);
+          if(_ctd<_ctDist){_ctDist=_ctd;_ctNearest=_cta;}
+        }
+      if(_ctNearest){
+        const _ctx2=_ctNearest.x+CFG.ATK_W/2,_cty2=_ctNearest.y+CFG.ATK_H/2;
+        ctx.save();
+        ctx.globalAlpha=0.65+0.2*Math.sin(_t*6);
+        ctx.strokeStyle='rgba(87,255,20,0.7)';ctx.lineWidth=1.5;ctx.shadowBlur=8;ctx.shadowColor='#57ff14';
+        ctx.setLineDash([6,4]);
+        ctx.beginPath();ctx.moveTo(_px,_py);ctx.lineTo(_ctx2,_cty2);ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.globalAlpha=0.5;ctx.lineWidth=1.5;
+        ctx.beginPath();ctx.arc(_ctx2,_cty2,10,0,Math.PI*2);ctx.stroke();
+        ctx.globalAlpha=0.9;
+        ctx.beginPath();ctx.arc(_ctx2,_cty2,4,0,Math.PI*2);ctx.stroke();
+        const _ctPulseR=2+Math.sin(_t*8);
+        ctx.globalAlpha=1;ctx.fillStyle='#57ff14';
+        ctx.beginPath();ctx.arc(_ctx2,_cty2,_ctPulseR,0,Math.PI*2);ctx.fill();
+        ctx.shadowBlur=0;ctx.restore();
+      }
+    }
+    // ─ PANGEA: diamond crystal outlines on all frozen enemies ───────
+    if(this.#pangeaT>0){
+      ctx.save();
+      for(let _pgc=0;_pgc<CFG.COLS;_pgc++)
+        for(let _pgr=0;_pgr<CFG.ROWS;_pgr++){
+          const _pga=this.#attackers[_pgc]?.[_pgr];
+          if(!_pga?.alive)continue;
+          const _pgcx=_pga.x+CFG.ATK_W/2,_pgcy=_pga.y+CFG.ATK_H/2;
+          const _pgAlpha=0.4+0.3*Math.sin(_t*4+_pgc+_pgr);
+          ctx.globalAlpha=_pgAlpha;
+          ctx.strokeStyle='rgba(180,220,255,1)';ctx.lineWidth=1.2;ctx.shadowBlur=8;ctx.shadowColor='#b4dcff';
+          // Outer diamond
+          ctx.beginPath();
+          ctx.moveTo(_pgcx,_pga.y-3);
+          ctx.lineTo(_pga.x+CFG.ATK_W+3,_pgcy);
+          ctx.lineTo(_pgcx,_pga.y+CFG.ATK_H+3);
+          ctx.lineTo(_pga.x-3,_pgcy);
+          ctx.closePath();ctx.stroke();
+          // Inner diamond (60% scale)
+          const _pgIx=CFG.ATK_W*0.3+3,_pgIy=CFG.ATK_H*0.3+3;
+          ctx.globalAlpha=_pgAlpha*0.4;
+          ctx.beginPath();
+          ctx.moveTo(_pgcx,_pgcy-_pgIy);
+          ctx.lineTo(_pgcx+_pgIx,_pgcy);
+          ctx.lineTo(_pgcx,_pgcy+_pgIy);
+          ctx.lineTo(_pgcx-_pgIx,_pgcy);
+          ctx.closePath();ctx.stroke();
+          ctx.shadowBlur=0;
+        }
+      ctx.restore();
+    }
+  }
+
   #drawPlayer(){
     const now=performance.now();
     const flicker=0.4+Math.random()*0.6;
@@ -17721,23 +18129,6 @@ class Game{
       ctx.ellipse(this.#px+CFG.PLR_W/2,this.#py+CFG.PLR_H/2,
         CFG.PLR_W*0.85,CFG.PLR_H*1.4,0,0,Math.PI*2);
       ctx.stroke();
-    }
-    if(this.#mods.CHARLOTTE_AIM>0){
-      let nearest=null,nearDist=Infinity;
-      for(let c=0;c<CFG.COLS;c++)
-        for(let r=0;r<CFG.ROWS;r++){
-          const a=this.#attackers[c]?.[r];
-          if(!a?.alive||a.isHidden)continue;
-          const d=Math.abs(a.x+CFG.ATK_W/2-(this.#px+CFG.PLR_W/2));
-          if(d<nearDist){nearDist=d;nearest=a;}
-        }
-      if(nearest){
-        ctx.save();ctx.globalAlpha=0.35;ctx.strokeStyle=CS.GREEN;ctx.lineWidth=1;
-        ctx.setLineDash([4,4]);ctx.shadowColor=CS.GREEN;ctx.shadowBlur=6;
-        ctx.beginPath();ctx.moveTo(this.#px+CFG.PLR_W/2,this.#py);
-        ctx.lineTo(nearest.x+CFG.ATK_W/2,nearest.y+CFG.ATK_H);ctx.stroke();
-        ctx.setLineDash([]);ctx.restore();
-      }
     }
     // Grace period shield ring around player
     if(this.#waveGraceT>0){
@@ -18015,10 +18406,10 @@ game.init().catch(console.error);
     // Auto-select version: V2-M (≤28 bytes, 25×25) or V5-M (≤62 bytes, 37×37)
     const useV5=bytes.length>28;
     const N=useV5?37:25;
-    const totalDataCW=useV5?64:28; // data codewords capacity
-    const eccPerBlock=useV5?18:16;
+    const totalDataCW=useV5?86:28; // data codewords capacity (V5-M=86, V2-M=28)
+    const eccPerBlock=useV5?24:16;
     const numBlocks=useV5?2:1;
-    const cwPerBlock=useV5?32:28;
+    const cwPerBlock=useV5?43:28;
     const totalBits=totalDataCW*8;
 
     const mat=Array.from({length:N},()=>new Uint8Array(N));
@@ -18077,11 +18468,11 @@ game.init().catch(console.error);
       // Version 2-M: 1 block, 16 ECC codewords
       stream=[...cw,..._rsEcc(cw,eccPerBlock)];
     } else {
-      // Version 5-M: 2 blocks of 32 data + 18 ECC each, interleaved
-      const b1=cw.slice(0,32),b2=cw.slice(32,64);
-      const e1=_rsEcc(b1,18),e2=_rsEcc(b2,18);
-      for(let i=0;i<32;i++){stream.push(b1[i]);stream.push(b2[i]);}
-      for(let i=0;i<18;i++){stream.push(e1[i]);stream.push(e2[i]);}
+      // Version 5-M: 2 blocks of 43 data + 24 ECC each, interleaved
+      const b1=cw.slice(0,43),b2=cw.slice(43,86);
+      const e1=_rsEcc(b1,24),e2=_rsEcc(b2,24);
+      for(let i=0;i<43;i++){stream.push(b1[i]);stream.push(b2[i]);}
+      for(let i=0;i<24;i++){stream.push(e1[i]);stream.push(e2[i]);}
     }
 
     // Place data in zigzag
@@ -18144,9 +18535,9 @@ game.init().catch(console.error);
     const fmt=_fmtInfo(0,bestMask);
     const fmtBits=[];for(let i=14;i>=0;i--)fmtBits.push((fmt>>i)&1);
     const fmtPos1=[[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,7],[8,8],[7,8],[5,8],[4,8],[3,8],[2,8],[1,8],[0,8]];
-    fmtPos1.forEach(([r,c],i)=>{final[r][c]=fmtBits[i];});
-    for(let i=0;i<8;i++)final[N-1-i][8]=fmtBits[i];
-    for(let i=8;i<15;i++)final[8][N-15+i]=fmtBits[i];
+    fmtPos1.forEach(([r,c],i)=>{final[r][c]=fmtBits[14-i];}); // copy1: LSB at (8,0), MSB at (0,8)
+    for(let i=0;i<7;i++)final[N-1-i][8]=fmtBits[i]; // copy2 col8: rows N-1..N-7 = bits 14..8
+    for(let i=7;i<15;i++)final[8][N-8+(i-7)]=fmtBits[i]; // copy2 row8: cols N-8..N-1 = bits 7..0
     final[N-8][8]=1; // dark module always dark
 
     return final;
