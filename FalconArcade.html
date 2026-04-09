@@ -1800,7 +1800,7 @@ const TRANSLATIONS = {
     iz_comms_overwatch:'OVERWATCH: All threats revealed. Elite hunters active. Homing missiles every 1.8s.',
     iz_comms_ngsiem:'NGSIEM: Petabyte scan complete. Correlation active. Double XP window open.',
     iz_comms_exposure:'EXPOSURE MGMT: Radar sweep active. All attack surface exposed.',
-    iz_comms_dlp:'DLP: Exfil boats reversed. Data protection active. +80 pts per intercept.',
+    iz_comms_dlp:'NGDLP: Exfil boats reversed. Data protection active. +80 pts per intercept.',
     iz_comms_pam:'JIT ACCESS: 6s full immunity. Zero standing privileges enforced. Gate cannons destroyed.',
     iz_banner_pam:'PAM SHIELD ACTIVE — 6 seconds invulnerability',
     iz_comms_schtasks:'OVERWATCH: schtasks.exe re-registered — adversary persistence survived first kill. OverWatch on it.',
@@ -2295,7 +2295,7 @@ const TRANSLATIONS = {
     iz_comms_overwatch:'OVERWATCH: todas as ameaças reveladas. Hunters de elite ativos. Mísseis teleguiados a cada 1.8s.',
     iz_comms_ngsiem:'NGSIEM: varredura em escala petabyte concluída. Correlação ativa. Janela de XP duplo aberta.',
     iz_comms_exposure:'EXPOSURE MGMT: radar ativo. Toda a superfície de ataque exposta.',
-    iz_comms_dlp:'DLP: barcos de exfiltração revertidos. Proteção de dados ativa. +80 pts por interceptação.',
+    iz_comms_dlp:'NGDLP: barcos de exfiltração revertidos. Proteção de dados ativa. +80 pts por interceptação.',
     iz_comms_pam:'PAM SHIELD: 6 s de imunidade total. Canhões de portão e relés internos destruídos.',
     iz_banner_pam:'PAM SHIELD ATIVO — 6 segundos de invulnerabilidade',
     iz_comms_schtasks:'OVERWATCH: schtasks.exe re-registrado — persistência do adversário sobreviveu ao primeiro neutralização. OverWatch ativo.',
@@ -2790,7 +2790,7 @@ const TRANSLATIONS = {
     iz_comms_overwatch:'OVERWATCH: todas las amenazas reveladas. Hunters de élite activos. Misiles guiados cada 1.8 s.',
     iz_comms_ngsiem:'NGSIEM: escaneo a escala petabyte completo. Correlación activa. Ventana de XP doble abierta.',
     iz_comms_exposure:'EXPOSURE MGMT: radar activo. Toda la superficie de ataque expuesta.',
-    iz_comms_dlp:'DLP: barcas de exfiltración invertidas. Protección de datos activa. +80 pts por interceptación.',
+    iz_comms_dlp:'NGDLP: barcas de exfiltración invertidas. Protección de datos activa. +80 pts por interceptación.',
     iz_comms_pam:'PAM SHIELD: 6 s de inmunidad total. Cañones de puerta y relés internos destruidos.',
     iz_banner_pam:'PAM SHIELD ACTIVO — 6 segundos de invulnerabilidad',
     iz_comms_schtasks:'OVERWATCH: schtasks.exe re-registrado — persistencia del adversario sobrevivió al primer neutralización. OverWatch activo.',
@@ -3285,7 +3285,7 @@ const TRANSLATIONS = {
     iz_comms_overwatch:'OVERWATCH: 全脅威を可視化。エリートハンター稼働。追尾ミサイルを1.8秒ごとに発射。',
     iz_comms_ngsiem:'NGSIEM: ペタバイト規模スキャン完了。相関有効。XP2倍ウィンドウ開始。',
     iz_comms_exposure:'EXPOSURE MGMT: レーダースイープ有効。攻撃面を全面可視化。',
-    iz_comms_dlp:'DLP: 送出ボートを逆走。データ保護が有効。迎撃ごとに +80 pts。',
+    iz_comms_dlp:'NGDLP: 送出ボートを逆走。データ保護が有効。迎撃ごとに +80 pts。',
     iz_comms_pam:'PAM SHIELD: 6秒間完全無敵。ゲート砲台と内部リレーを破壊。',
     iz_banner_pam:'PAM SHIELD 起動 — 6秒間無敵',
     iz_comms_schtasks:'OVERWATCH: schtasks.exe 再登録 — 敵の永続化が最初の排除を生き残った。OverWatch 追跡中。',
@@ -6970,7 +6970,6 @@ const FalconRanking = (function () {
         <canvas id="fr-qr-rank-canvas" width="88" height="88"
           style="display:block;margin:16px auto 4px;image-rendering:pixelated;
                  border:2px solid currentColor;border-radius:2px;opacity:0.85;"></canvas>
-        <div style="font-size:7.5px;letter-spacing:2px;text-transform:uppercase;opacity:0.5;margin-bottom:12px;">scan to share</div>
         <span class="fr-rank-dismiss">${T('lb_press_continue')}</span>
       </div>
     `;
@@ -8017,14 +8016,14 @@ const MODS={
     tagline:'External Attack Surface Management · Discover before attackers',
     real:'Continuously discovers internet-facing assets and misconfigurations.',
     game:'EFFECT: Radar sweep reveals ALL enemies with type+HP data tags.',size:26 },
-  'Falcon Data Protection':{ col:'#caffb2', dur:13, apply:'data', abbr:'DLP',
+  'Falcon Data Protection':{ col:'#caffb2', dur:13, apply:'data', abbr:'NGDLP',
     tagline:'Data Loss Prevention + Classification · Real-time exfil block',
     real:'Classifies sensitive data in real time, blocks unauthorized exfiltration.',
-    game:'EFFECT: Exfil boats reversed. Stops score penalty. +80 pts per intercept.',size:26 },
+    game:'EFFECT: Exfil boats reversed. Stops score penalty. +80 pts per intercept.',size:32 },
   'Next-Gen SIEM':{ col:'#ffd84d', dur:13, apply:'siem', abbr:'NGSIEM',
     tagline:'Log-Scale SIEM · Petabyte analytics · Sub-second search',
     real:'Ingests and correlates data at petabyte scale with behavioral analytics.',
-    game:'EFFECT: Wide-area scan. Correlation lines. Double XP 13s.',size:22 },
+    game:'EFFECT: Wide-area scan. Correlation lines. Double XP 13s.',size:32 },
   'Just in Time Access':{ col:'#fff274', dur:11, apply:'priv', abbr:'JIT',
     tagline:'Just-in-Time Access · Zero Standing Privileges · Vaulted credentials',
     real:'Just-in-time access, vaulted credentials and session recording.',
@@ -9559,7 +9558,7 @@ function update(dt){
 // ════════════════════════════════════════════════════════════════════
 function updIR(dt){
   // ── Spawn: once per phase, in 30-70% scroll window ───────────────
-  if(!IR_TOKEN && IR_SPAWNED_PHASE!==phIdx && STATE===S.PLAYING){
+  if(!IR_TOKEN && IR_SPAWNED_PHASE!==phIdx && STATE===S.PLAYING && LIVES===1){
     const prog=W.scroll/Math.max(1,W.progressMax);
     if(prog>=0.30&&prog<=0.70){
       IR_SPAWNED_PHASE=phIdx;
@@ -10291,6 +10290,174 @@ function drawPickups(){
         CX.fillStyle=`hsl(${dHue},100%,75%)`; CX.beginPath(); CX.arc(Math.cos(da)*dr,Math.sin(da)*dr,2.8,0,TAU); CX.fill();
       }
       CX.textAlign='left'; CX.restore(); continue;
+    }
+
+    // ── NGSIEM special rendering ─────────────────────────────────────────
+    if(p.data==='Next-Gen SIEM'){
+      const t=Date.now()*0.001;
+      const siemCol='#ffd84d';
+      // 1. Correlation web — lines from pickup center to visible enemies, grouped by type
+      const visEnemies=[];
+      for(const e of ENEMIES){
+        if(!e.alive) continue;
+        const ey=w2s(e.wy); if(ey<-60||ey>VH+60) continue;
+        const dx=e.x-p.x, dy=ey-by;
+        const ed=Math.sqrt(dx*dx+dy*dy);
+        if(ed>380) continue;
+        visEnemies.push({rx:dx,ry:dy,type:e.type,dist:ed});
+      }
+      if(visEnemies.length){
+        const groups={};
+        visEnemies.forEach(e=>{ if(!groups[e.type]) groups[e.type]=[]; groups[e.type].push(e); });
+        CX.save();
+        const dashOff=(t*38)%22;
+        CX.setLineDash([4,6]); CX.lineDashOffset=-dashOff;
+        let gi=0;
+        for(const [,pts] of Object.entries(groups)){
+          const hue=(gi*57+20)%360;
+          // Lines: center → each enemy of this type
+          CX.strokeStyle=`hsla(${hue},100%,72%,0.30)`; CX.lineWidth=0.9;
+          for(const pt of pts){
+            const fa=Math.max(0,(1-pt.dist/380)*0.55);
+            CX.globalAlpha=fa;
+            CX.beginPath(); CX.moveTo(0,0); CX.lineTo(pt.rx,pt.ry); CX.stroke();
+          }
+          // Cross-connect same-type enemies: these are the correlation "events"
+          if(pts.length>=2){
+            CX.strokeStyle=`hsla(${hue},100%,85%,0.18)`; CX.lineWidth=0.7;
+            for(let a=0;a<pts.length-1;a++){
+              CX.globalAlpha=0.22;
+              CX.beginPath(); CX.moveTo(pts[a].rx,pts[a].ry); CX.lineTo(pts[a+1].rx,pts[a+1].ry); CX.stroke();
+            }
+          }
+          // Small correlation dot at each enemy position
+          CX.setLineDash([]); CX.fillStyle=`hsl(${hue},100%,78%)`;
+          for(const pt of pts){ CX.globalAlpha=0.5; CX.beginPath(); CX.arc(pt.rx,pt.ry,2.8,0,TAU); CX.fill(); }
+          CX.setLineDash([4,6]); CX.lineDashOffset=-dashOff;
+          gi++;
+        }
+        CX.setLineDash([]); CX.lineDashOffset=0; CX.globalAlpha=1; CX.restore();
+      }
+      // 2. Rotating scan ring + pulsing glow ring
+      CX.save();
+      CX.shadowBlur=18; CX.shadowColor=siemCol;
+      CX.save(); CX.rotate(t*0.55);
+      CX.strokeStyle='rgba(255,216,77,0.40)'; CX.lineWidth=1.3; CX.setLineDash([7,5]);
+      CX.beginPath(); CX.arc(0,0,sz+14,0,TAU); CX.stroke(); CX.setLineDash([]); CX.restore();
+      const pulse=0.5+0.5*Math.sin(t*2.8);
+      CX.globalAlpha=0.45+pulse*0.40;
+      CX.strokeStyle='rgba(255,216,77,0.60)'; CX.lineWidth=1;
+      CX.beginPath(); CX.arc(0,0,sz+6,0,TAU); CX.stroke();
+      CX.globalAlpha=1; CX.restore();
+      // 3. Hex body
+      CX.shadowBlur=22; CX.shadowColor=siemCol;
+      CX.fillStyle=siemCol; CX.beginPath();
+      for(let i=0;i<6;i++){ const a=i/6*TAU-Math.PI/6; CX.lineTo(Math.cos(a)*sz,Math.sin(a)*sz); }
+      CX.closePath(); CX.fill();
+      CX.fillStyle='rgba(0,0,0,0.70)'; CX.beginPath();
+      for(let i=0;i<6;i++){ const a=i/6*TAU-Math.PI/6; CX.lineTo(Math.cos(a)*(sz-7),Math.sin(a)*(sz-7)); }
+      CX.closePath(); CX.fill();
+      // 4. Mini threat-correlation graph inside hex (3 pulsing nodes)
+      CX.save(); CX.rotate(t*0.12);
+      const nPos=[[-1,-11],[10,6],[-10,6]];
+      CX.strokeStyle='rgba(255,216,77,0.55)'; CX.lineWidth=0.8; CX.setLineDash([2,3]);
+      for(let a=0;a<3;a++) for(let b=a+1;b<3;b++){
+        CX.beginPath(); CX.moveTo(nPos[a][0],nPos[a][1]); CX.lineTo(nPos[b][0],nPos[b][1]); CX.stroke();
+      }
+      CX.setLineDash([]);
+      nPos.forEach((np,ni)=>{
+        const np2=Math.sin(t*3.2+ni*TAU/3);
+        CX.shadowBlur=5; CX.shadowColor=siemCol;
+        CX.fillStyle=siemCol; CX.globalAlpha=0.75+np2*0.22;
+        CX.beginPath(); CX.arc(np[0],np[1],2.2+np2*0.4,0,TAU); CX.fill();
+      });
+      CX.globalAlpha=1; CX.shadowBlur=0; CX.restore();
+      // 5. Two-line label: "NG" + "SIEM"
+      CX.fillStyle='#ffffff'; CX.textAlign='center';
+      CX.font='bold 9px monospace'; CX.fillText('NG',0,-2);
+      CX.font='bold 8px monospace'; CX.fillText('SIEM',0,8);
+      // Proximity tooltip
+      const sdist=Math.hypot(p.x-PL.x,by-PL.y);
+      if(sdist<92&&m){
+        const sa=clamp((92-sdist)/64,0,1); CX.globalAlpha=sa;
+        CX.fillStyle='rgba(0,0,0,0.86)'; CX.fillRect(-58,sz+4,116,30);
+        CX.strokeStyle=siemCol; CX.lineWidth=1; CX.strokeRect(-58,sz+4,116,30);
+        CX.fillStyle=siemCol; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText(p.data||'Module',0,sz+18);
+        CX.fillStyle='#aaaaaa'; CX.font='9px monospace'; CX.fillText(m.tagline.slice(0,28),0,sz+28);
+        CX.globalAlpha=1;
+      }
+      CX.shadowBlur=0; CX.textAlign='left'; CX.restore(); continue;
+    }
+
+    // ── NGDLP special rendering ──────────────────────────────────────────
+    if(p.data==='Falcon Data Protection'){
+      const t=Date.now()*0.001;
+      const dlpCol='#caffb2';
+      // 1. Orbiting data packets — 8 squares in orbit, 2 flagged red (blocked exfil)
+      CX.save();
+      const orbitR=sz+17;
+      for(let i=0;i<8;i++){
+        const angle=i/8*TAU+t*0.85;
+        const ox=Math.cos(angle)*orbitR, oy=Math.sin(angle)*orbitR;
+        const isBlocked=(i===2||i===5); // these 2 are "blocked exfil" packets
+        const blink=Math.sin(t*4.5+i*TAU/8)>0;
+        CX.globalAlpha=blink?0.88:0.50;
+        CX.shadowBlur=isBlocked?8:5;
+        CX.shadowColor=isBlocked?'#ff4444':dlpCol;
+        CX.fillStyle=isBlocked?'#ff5555':dlpCol;
+        CX.fillRect(ox-3,oy-3,6,6);
+        // Blocked packets get an X overlay
+        if(isBlocked){
+          CX.globalAlpha=0.9; CX.strokeStyle='#ff2222'; CX.lineWidth=1.2;
+          CX.beginPath(); CX.moveTo(ox-2.5,oy-2.5); CX.lineTo(ox+2.5,oy+2.5); CX.stroke();
+          CX.beginPath(); CX.moveTo(ox+2.5,oy-2.5); CX.lineTo(ox-2.5,oy+2.5); CX.stroke();
+        }
+      }
+      CX.globalAlpha=1; CX.shadowBlur=0; CX.restore();
+      // 2. Containment field rings (counter-rotating)
+      CX.save();
+      CX.shadowBlur=16; CX.shadowColor=dlpCol;
+      CX.save(); CX.rotate(t*0.35);
+      CX.strokeStyle='rgba(202,255,178,0.38)'; CX.lineWidth=1.5; CX.setLineDash([9,5]);
+      CX.beginPath(); CX.arc(0,0,sz+10,0,TAU); CX.stroke(); CX.setLineDash([]); CX.restore();
+      CX.save(); CX.rotate(-t*1.05);
+      CX.strokeStyle='rgba(202,255,178,0.55)'; CX.lineWidth=1.0; CX.setLineDash([4,6]);
+      CX.beginPath(); CX.arc(0,0,sz+4,0,TAU); CX.stroke(); CX.setLineDash([]); CX.restore();
+      CX.restore();
+      // 3. Hex body
+      CX.shadowBlur=22; CX.shadowColor=dlpCol;
+      CX.fillStyle=dlpCol; CX.beginPath();
+      for(let i=0;i<6;i++){ const a=i/6*TAU-Math.PI/6; CX.lineTo(Math.cos(a)*sz,Math.sin(a)*sz); }
+      CX.closePath(); CX.fill();
+      CX.fillStyle='rgba(0,0,0,0.70)'; CX.beginPath();
+      for(let i=0;i<6;i++){ const a=i/6*TAU-Math.PI/6; CX.lineTo(Math.cos(a)*(sz-7),Math.sin(a)*(sz-7)); }
+      CX.closePath(); CX.fill();
+      // 4. Lock icon + NGDLP label inside hex
+      CX.save();
+      // Lock shackle (arc, top of lock)
+      CX.strokeStyle='rgba(202,255,178,0.90)'; CX.lineWidth=1.6;
+      CX.beginPath(); CX.arc(0,-7,4.5,Math.PI,0); CX.stroke();
+      // Lock body (rectangle)
+      CX.fillStyle='rgba(202,255,178,0.72)';
+      CX.fillRect(-5,-4,10,8);
+      // Keyhole dot
+      CX.fillStyle='rgba(0,0,0,0.70)';
+      CX.beginPath(); CX.arc(0,-0.5,1.6,0,TAU); CX.fill();
+      CX.restore();
+      // NGDLP label below lock
+      CX.fillStyle='#ffffff'; CX.textAlign='center';
+      CX.font='bold 7px monospace'; CX.fillText('NGDLP',0,11);
+      // Proximity tooltip
+      const ddist=Math.hypot(p.x-PL.x,by-PL.y);
+      if(ddist<92&&m){
+        const da=clamp((92-ddist)/64,0,1); CX.globalAlpha=da;
+        CX.fillStyle='rgba(0,0,0,0.86)'; CX.fillRect(-58,sz+4,116,30);
+        CX.strokeStyle=dlpCol; CX.lineWidth=1; CX.strokeRect(-58,sz+4,116,30);
+        CX.fillStyle=dlpCol; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText(p.data||'Module',0,sz+18);
+        CX.fillStyle='#aaaaaa'; CX.font='9px monospace'; CX.fillText(m.tagline.slice(0,28),0,sz+28);
+        CX.globalAlpha=1;
+      }
+      CX.shadowBlur=0; CX.textAlign='left'; CX.restore(); continue;
     }
 
     CX.shadowBlur=20; CX.shadowColor=col;
@@ -12242,7 +12409,6 @@ const FalconRanking = (function () {
         <canvas id="fr-qr-rank-canvas" width="88" height="88"
           style="display:block;margin:16px auto 4px;image-rendering:pixelated;
                  border:2px solid currentColor;border-radius:2px;opacity:0.85;"></canvas>
-        <div style="font-size:7.5px;letter-spacing:2px;text-transform:uppercase;opacity:0.5;margin-bottom:12px;">scan to share</div>
         <span class="fr-rank-dismiss">${T('lb_press_continue')}</span>
       </div>
     `;
@@ -15318,7 +15484,7 @@ class Game{
   #updateIR(dt){
     this.#irWaveT+=dt;
     // ── Spawn: once per wave, 4-9 seconds into it, not during boss ──
-    if(!this.#irToken && this.#irSpawnedWave!==this.#waveIdx && !this.#currentPhase?.isBoss){
+    if(!this.#irToken && this.#irSpawnedWave!==this.#waveIdx && !this.#currentPhase?.isBoss && this.#lives===1){
       if(this.#irWaveT>=4 && this.#irWaveT<=9){
         this.#irSpawnedWave=this.#waveIdx;
         const sx=50+Math.random()*(LW-100), sy=50+Math.random()*(LH-180);
@@ -17002,6 +17168,173 @@ game.init().catch(console.error);
 <!-- ═══ THREAT HUNT (deferred init) ═══ -->
 <script>
 
+// ════════════════════════════════════════════════════════════════
+//  PURE-JS QR ENCODER  (Auto Version 2 or 5, ECC Level M, Byte mode)
+//  Version 2-M: up to 28 bytes (25×25 matrix)
+//  Version 5-M: up to 62 bytes (37×37 matrix) — used for full URLs
+//  No external dependencies. Returns N×N boolean matrix.
+// ════════════════════════════════════════════════════════════════
+(function(){
+  // GF(256) tables for Reed-Solomon over primitive poly 0x11D
+  const _EXP=new Uint8Array(512), _LOG=new Uint8Array(256);
+  (function(){let x=1;for(let i=0;i<255;i++){_EXP[i]=x;_LOG[x]=i;x<<=1;if(x&256)x^=0x11D;}for(let i=255;i<512;i++)_EXP[i]=_EXP[i-255];}());
+  function _gfMul(a,b){return(a&&b)?_EXP[(_LOG[a]+_LOG[b])%255]:0;}
+  function _rsGen(n){let g=[1];for(let i=0;i<n;i++){const t=[1,_EXP[i]];const r=new Array(g.length+1).fill(0);for(let j=0;j<g.length;j++)for(let k=0;k<t.length;k++)r[j+k]^=_gfMul(g[j],t[k]);g=r;}return g;}
+  function _rsEcc(data,n){const gen=_rsGen(n);const msg=[...data,...new Array(n).fill(0)];for(let i=0;i<data.length;i++){const c=msg[i];if(c)for(let j=0;j<gen.length;j++)msg[i+j]^=_gfMul(gen[j],c);}return msg.slice(data.length);}
+
+  // BCH format info (15,5) for ECC level + mask
+  function _fmtInfo(eccLvl,mask){
+    const data=(eccLvl<<3)|mask;
+    let d=data<<10;
+    const G=0x537;
+    for(let i=14;i>=10;i--)if(d&(1<<i))d^=G<<(i-10);
+    return((data<<10)|(d))^0x5412;
+  }
+
+  window.generateQRMatrix=function(text){
+    const bytes=Array.from(new TextEncoder().encode(text));
+    // Auto-select version: V2-M (≤28 bytes, 25×25) or V5-M (≤62 bytes, 37×37)
+    const useV5=bytes.length>28;
+    const N=useV5?37:25;
+    const totalDataCW=useV5?64:28; // data codewords capacity
+    const eccPerBlock=useV5?18:16;
+    const numBlocks=useV5?2:1;
+    const cwPerBlock=useV5?32:28;
+    const totalBits=totalDataCW*8;
+
+    const mat=Array.from({length:N},()=>new Uint8Array(N));
+    const res=Array.from({length:N},()=>new Uint8Array(N)); // reserved (non-data) cells
+
+    // Place a finder pattern at (r,c) top-left corner
+    function finder(r,c){
+      for(let dr=0;dr<7;dr++)for(let dc=0;dc<7;dc++){
+        mat[r+dr][c+dc]=(dr===0||dr===6||dc===0||dc===6||((dr>=2&&dr<=4)&&(dc>=2&&dc<=4)))?1:0;
+        res[r+dr][c+dc]=1;
+      }
+    }
+    finder(0,0);finder(0,N-7);finder(N-7,0);
+
+    // Separators
+    function sepRow(r,cStart,cEnd){for(let c=cStart;c<=cEnd;c++){if(r>=0&&r<N&&c>=0&&c<N){mat[r][c]=0;res[r][c]=1;}}}
+    function sepCol(c,rStart,rEnd){for(let r=rStart;r<=rEnd;r++){if(r>=0&&r<N&&c>=0&&c<N){mat[r][c]=0;res[r][c]=1;}}}
+    sepRow(7,0,7);sepRow(7,N-8,N-1);sepRow(N-8,0,7);
+    sepCol(7,0,7);sepCol(7,N-8,N-1);sepCol(N-8,0,7);
+
+    // Timing patterns (row 6, col 6)
+    for(let i=8;i<N-8;i++){mat[6][i]=(i%2===0)?1:0;res[6][i]=1;mat[i][6]=(i%2===0)?1:0;res[i][6]=1;}
+
+    // Format info placeholders (reserve cells)
+    for(let i=0;i<9;i++){res[8][i]=1;res[i][8]=1;}
+    for(let i=N-8;i<N;i++){res[8][i]=1;res[i][8]=1;}
+    mat[N-8][8]=1;res[N-8][8]=1; // dark module
+
+    // Version 5: alignment pattern at center (30,30)
+    if(useV5){
+      const ar=30,ac=30;
+      for(let dr=-2;dr<=2;dr++)for(let dc=-2;dc<=2;dc++){
+        mat[ar+dr][ac+dc]=(dr===-2||dr===2||dc===-2||dc===2||(dr===0&&dc===0))?1:0;
+        res[ar+dr][ac+dc]=1;
+      }
+    }
+
+    // Encode data: byte mode
+    const bits=[];
+    bits.push(0,1,0,0); // mode indicator
+    for(let i=7;i>=0;i--)bits.push((bytes.length>>i)&1); // 8-bit char count
+    for(const b of bytes)for(let i=7;i>=0;i--)bits.push((b>>i)&1);
+    // Terminator
+    for(let i=0;i<4&&bits.length<totalBits;i++)bits.push(0);
+    // Byte-align
+    while(bits.length%8)bits.push(0);
+    // Pad codewords
+    const pads=[0xEC,0x11];let pi=0;
+    while(bits.length<totalBits){const p=pads[pi++%2];for(let i=7;i>=0;i--)bits.push((p>>i)&1);}
+    // Convert bits to codewords
+    const cw=[];for(let i=0;i<bits.length;i+=8){let v=0;for(let j=0;j<8;j++)v=(v<<1)|bits[i+j];cw.push(v);}
+
+    // Build interleaved stream
+    let stream=[];
+    if(!useV5){
+      // Version 2-M: 1 block, 16 ECC codewords
+      stream=[...cw,..._rsEcc(cw,eccPerBlock)];
+    } else {
+      // Version 5-M: 2 blocks of 32 data + 18 ECC each, interleaved
+      const b1=cw.slice(0,32),b2=cw.slice(32,64);
+      const e1=_rsEcc(b1,18),e2=_rsEcc(b2,18);
+      for(let i=0;i<32;i++){stream.push(b1[i]);stream.push(b2[i]);}
+      for(let i=0;i<18;i++){stream.push(e1[i]);stream.push(e2[i]);}
+    }
+
+    // Place data in zigzag
+    let bitIdx=0;
+    let goUp=true;
+    for(let cBase=N-1;cBase>0;cBase-=2){
+      if(cBase===6)cBase=5; // skip timing col
+      const cols=[cBase,cBase-1];
+      for(let ri=0;ri<N;ri++){
+        const r=goUp?(N-1-ri):ri;
+        for(const c of cols){
+          if(!res[r][c]){
+            const wordIdx=Math.floor(bitIdx/8);
+            const bitOff=7-(bitIdx%8);
+            mat[r][c]=(wordIdx<stream.length)?(stream[wordIdx]>>bitOff)&1:0;
+            bitIdx++;
+          }
+        }
+      }
+      goUp=!goUp;
+    }
+
+    // Evaluate all 8 masks, pick best
+    function penalty(m){
+      let p=0;
+      for(let r=0;r<N;r++){let run=1;for(let c=1;c<N;c++){if(m[r][c]===m[r][c-1])run++;else{if(run>=5)p+=run-2;run=1;}}if(run>=5)p+=run-2;}
+      for(let c=0;c<N;c++){let run=1;for(let r=1;r<N;r++){if(m[r][c]===m[r-1][c])run++;else{if(run>=5)p+=run-2;run=1;}}if(run>=5)p+=run-2;}
+      for(let r=0;r<N-1;r++)for(let c=0;c<N-1;c++)if(m[r][c]===m[r+1][c]&&m[r][c]===m[r][c+1]&&m[r][c]===m[r+1][c+1])p+=3;
+      const pat1=[1,0,1,1,1,0,1,0,0,0,0],pat2=[0,0,0,0,1,0,1,1,1,0,1];
+      for(let r=0;r<N;r++)for(let c=0;c<=N-11;c++){let a=true,b=true;for(let i=0;i<11;i++){if(m[r][c+i]!==pat1[i])a=false;if(m[r][c+i]!==pat2[i])b=false;}if(a||b)p+=40;}
+      for(let c=0;c<N;c++)for(let r=0;r<=N-11;r++){let a=true,b=true;for(let i=0;i<11;i++){if(m[r+i][c]!==pat1[i])a=false;if(m[r+i][c]!==pat2[i])b=false;}if(a||b)p+=40;}
+      let dark=0;for(let r=0;r<N;r++)for(let c=0;c<N;c++)dark+=m[r][c];
+      const pct=Math.abs(dark*100/(N*N)-50)/5;p+=Math.floor(pct)*10;
+      return p;
+    }
+
+    function applyMask(baseM,maskId){
+      const m=baseM.map(r=>new Uint8Array(r));
+      for(let r=0;r<N;r++)for(let c=0;c<N;c++){
+        if(res[r][c])continue;
+        let flip=false;
+        if(maskId===0)flip=(r+c)%2===0;
+        else if(maskId===1)flip=r%2===0;
+        else if(maskId===2)flip=c%3===0;
+        else if(maskId===3)flip=(r+c)%3===0;
+        else if(maskId===4)flip=(Math.floor(r/2)+Math.floor(c/3))%2===0;
+        else if(maskId===5)flip=((r*c)%2)+((r*c)%3)===0;
+        else if(maskId===6)flip=(((r*c)%2)+((r*c)%3))%2===0;
+        else if(maskId===7)flip=(((r+c)%2)+((r*c)%3))%2===0;
+        if(flip)m[r][c]^=1;
+      }
+      return m;
+    }
+
+    let bestMask=0,bestPen=Infinity;
+    for(let mi=0;mi<8;mi++){const pen=penalty(applyMask(mat,mi));if(pen<bestPen){bestPen=pen;bestMask=mi;}}
+    const final=applyMask(mat,bestMask);
+
+    // Write format info (ECC level M=00, chosen mask)
+    const fmt=_fmtInfo(0,bestMask);
+    const fmtBits=[];for(let i=14;i>=0;i--)fmtBits.push((fmt>>i)&1);
+    const fmtPos1=[[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,7],[8,8],[7,8],[5,8],[4,8],[3,8],[2,8],[1,8],[0,8]];
+    fmtPos1.forEach(([r,c],i)=>{final[r][c]=fmtBits[i];});
+    for(let i=0;i<8;i++)final[N-1-i][8]=fmtBits[i];
+    for(let i=8;i<15;i++)final[8][N-15+i]=fmtBits[i];
+    final[N-8][8]=1; // dark module always dark
+
+    return final;
+  };
+}());
+
+
 // === initGameHunt — deferred, only initialized on first launch ===
 let _initGameHunt_initialized = false;
 function initGameHunt() {
@@ -17046,7 +17379,7 @@ const FalconRanking=(function(){'use strict';
     document.getElementById('fr-submit').addEventListener('click',()=>{const validation=validateLeadCaptureEntry({name:document.getElementById('fr-name').value,company:document.getElementById('fr-company').value,email:document.getElementById('fr-email').value});if(validation.errors.name)_fieldError('fr-name','fr-name-hint',validation.errors.name);if(validation.errors.company)_fieldError('fr-company','fr-company-hint',validation.errors.company);if(validation.errors.email)_fieldError('fr-email','fr-email-hint',validation.errors.email);if(!validation.ok)return;const { name, company, email }=validation.cleaned;const finalRank=Store.add({name,company,email,score:data.score,phase:data.phase||'',adversary:data.adversary||'',grade:data.grade||'',maxStreak:data.maxStreak||0,lives:data.lives||0,gameId:CFG.gameName,event:CFG.eventName});_burstParticles(panel);panel.querySelectorAll('input,button').forEach(el=>el.disabled=true);setTimeout(()=>_showRankConfirm(panel,finalRank,name,data.score,data.difficulty,data.multiplier),700);});
     document.getElementById('fr-skip').addEventListener('click',()=>_closeForm());}
   function _fieldError(inputId,hintId,msg){const inp=document.getElementById(inputId),hint=document.getElementById(hintId);if(inp){inp.classList.add('fr-error');setTimeout(()=>inp.classList.remove('fr-error'),500);}if(hint)hint.textContent=msg;}
-  function _showRankConfirm(panel,rank,name,score,difficulty,multiplier){const tier=_getPrizeTier(rank),div=document.createElement('div');div.id='fr-rank-confirm';div.style.setProperty('--fr-confirm-color',tier.color);const _db=(difficulty>0&&difficulty!=null)?`<div style="font-size:10px;letter-spacing:1.5px;color:${tier.color};opacity:0.85;margin:2px 0 8px;font-weight:700;">TIER ${difficulty} · ×${(multiplier||1).toFixed(1)}x</div>`:'';div.innerHTML=`<div class="fr-rank-card"><div class="fr-rank-pos">#${rank}</div><div class="fr-rank-label">${T('lb_your_rank')}</div>${_db}<div class="fr-rank-name">${_esc(name)}</div><div class="fr-rank-score">${score.toLocaleString()} pts</div><div class="fr-rank-prize">${_esc(tier.label)}</div><canvas id="fr-qr-rank-canvas" width="88" height="88" style="display:block;margin:16px auto 4px;image-rendering:pixelated;border:2px solid currentColor;border-radius:2px;opacity:0.85;"></canvas><div style="font-size:7.5px;letter-spacing:2px;text-transform:uppercase;opacity:0.5;margin-bottom:12px;">scan to share</div><span class="fr-rank-dismiss">${T('lb_press_continue')}</span></div>`;panel.appendChild(div);try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'){const _mat=window.generateQRMatrix(HUNT_SHARE_URL),_N=_mat.length,_mod=_N<=25?3:2,_qz=2,_qx=_qc.getContext('2d');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<_N;r++)for(let c=0;c<_N;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){}setTimeout(()=>{if(window._showPostGameCTA){window._showPostGameCTA(()=>_closeForm());}else{const dismiss=()=>{_closeForm();div.removeEventListener('click',dismiss);};div.addEventListener('click',dismiss);const kd=()=>{_closeForm();document.removeEventListener('keydown',kd);};document.addEventListener('keydown',kd);}},40000);}
+  function _showRankConfirm(panel,rank,name,score,difficulty,multiplier){const tier=_getPrizeTier(rank),div=document.createElement('div');div.id='fr-rank-confirm';div.style.setProperty('--fr-confirm-color',tier.color);const _db=(difficulty>0&&difficulty!=null)?`<div style="font-size:10px;letter-spacing:1.5px;color:${tier.color};opacity:0.85;margin:2px 0 8px;font-weight:700;">TIER ${difficulty} · ×${(multiplier||1).toFixed(1)}x</div>`:'';div.innerHTML=`<div class="fr-rank-card"><div class="fr-rank-pos">#${rank}</div><div class="fr-rank-label">${T('lb_your_rank')}</div>${_db}<div class="fr-rank-name">${_esc(name)}</div><div class="fr-rank-score">${score.toLocaleString()} pts</div><div class="fr-rank-prize">${_esc(tier.label)}</div><canvas id="fr-qr-rank-canvas" width="88" height="88" style="display:block;margin:16px auto 4px;image-rendering:pixelated;border:2px solid currentColor;border-radius:2px;opacity:0.85;"></canvas><span class="fr-rank-dismiss">${T('lb_press_continue')}</span></div>`;panel.appendChild(div);try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'){const _mat=window.generateQRMatrix(HUNT_SHARE_URL),_N=_mat.length,_mod=_N<=25?3:2,_qz=2,_qx=_qc.getContext('2d');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<_N;r++)for(let c=0;c<_N;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){}setTimeout(()=>{if(window._showPostGameCTA){window._showPostGameCTA(()=>_closeForm());}else{const dismiss=()=>{_closeForm();div.removeEventListener('click',dismiss);};div.addEventListener('click',dismiss);const kd=()=>{_closeForm();document.removeEventListener('keydown',kd);};document.addEventListener('keydown',kd);}},40000);}
   function _closeForm(){_formOpen=false;_clearContent();_hideOverlay();if(CFG.onFormClose)CFG.onFormClose();}
   function showAttract(){if(_formOpen||_attractOpen)return;_attractOpen=true;_clearContent();_showOverlay();const top=Store.topN(CFG.topN),isEmpty=top.length===0;const attract=document.createElement('div');attract.id='fr-attract';attract.innerHTML=`<div class="fr-attract-header"><div class="fr-cs-logo">◈ CrowdStrike OverWatch</div><h1>${_esc(CFG.gameName)}</h1><div class="fr-event-name">${_esc(CFG.eventName)} ${isEmpty?' — '+T('lb_first_board'):'— '+T('lb_top_agents')}</div></div><div class="fr-divider"></div><div class="fr-lb-header"><span>${T('lb_rank')}</span><span>${T('lb_agent')}</span><span style="text-align:right">${T('lb_score')}</span><span style="text-align:right">${T('lb_grade_short')}</span></div><div class="fr-lb-viewport" id="fr-lb-viewport"><div class="fr-lb-scroll" id="fr-lb-scroll">${_renderEntries(top)}${_renderEntries(top)}</div></div><div class="fr-divider"></div><div class="fr-attract-footer"><span class="fr-cta">${T('lb_press_begin')}</span><span style="font-size:8px;color:#2a3a4a;letter-spacing:1px">${T('lb_admin_hint')}</span></div>`;_overlayEl.appendChild(attract);_attractY=0;const scrollEl=document.getElementById('fr-lb-scroll');let lastT=0;let half=0;function scrollStep(ts){if(half===0)half=scrollEl.scrollHeight/2;const dt=Math.min(0.05,(ts-lastT)/1000||0.016);lastT=ts;if(!isEmpty){_attractY+=CFG.attractSpeed*dt;if(half>0&&_attractY>=half)_attractY=0;scrollEl.style.transform=`translateY(${-_attractY}px)`;}  _attractAF=requestAnimationFrame(scrollStep);}_attractAF=requestAnimationFrame(scrollStep);const kd=(e)=>{if(['Control','Shift','Alt','Meta'].includes(e.key))return;document.removeEventListener('keydown',kd);_closeAttract();};const dismiss=()=>{document.removeEventListener('keydown',kd);_closeAttract();};document.addEventListener('keydown',kd);attract.addEventListener('click',dismiss);}
   function _renderEntries(entries){if(!entries.length)return Array.from({length:10},(_,i)=>`<div class="fr-entry" data-rank="${i+1}" style="--fr-entry-color:#1a2a3a"><div class="fr-rank">${i+1}</div><div class="fr-player"><div class="fr-player-name">———</div><div class="fr-player-company">${T('lb_first_player')}</div></div><div class="fr-entry-score">—</div><div class="fr-entry-grade">—</div></div>`).join('');return entries.map((e,i)=>{const rank=i+1,tier=_getPrizeTier(rank);return`<div class="fr-entry" data-rank="${rank}" style="--fr-entry-color:${tier.color}"><div class="fr-rank">${rank}</div><div class="fr-player"><div class="fr-player-name">${_esc(e.name)}</div><div class="fr-player-company">${_esc(e.company)}</div></div><div class="fr-entry-score">${Number(e.score).toLocaleString()}</div><div class="fr-entry-grade">${_esc(e.grade||'—')}</div></div>`;}).join('');}
@@ -22705,171 +23038,6 @@ function drawPursuitBar(){
   ctx.textAlign='left';
 }
 
-// ════════════════════════════════════════════════════════════════
-//  PURE-JS QR ENCODER  (Auto Version 2 or 5, ECC Level M, Byte mode)
-//  Version 2-M: up to 28 bytes (25×25 matrix)
-//  Version 5-M: up to 62 bytes (37×37 matrix) — used for full URLs
-//  No external dependencies. Returns N×N boolean matrix.
-// ════════════════════════════════════════════════════════════════
-(function(){
-  // GF(256) tables for Reed-Solomon over primitive poly 0x11D
-  const _EXP=new Uint8Array(512), _LOG=new Uint8Array(256);
-  (function(){let x=1;for(let i=0;i<255;i++){_EXP[i]=x;_LOG[x]=i;x<<=1;if(x&256)x^=0x11D;}for(let i=255;i<512;i++)_EXP[i]=_EXP[i-255];}());
-  function _gfMul(a,b){return(a&&b)?_EXP[(_LOG[a]+_LOG[b])%255]:0;}
-  function _rsGen(n){let g=[1];for(let i=0;i<n;i++){const t=[1,_EXP[i]];const r=new Array(g.length+1).fill(0);for(let j=0;j<g.length;j++)for(let k=0;k<t.length;k++)r[j+k]^=_gfMul(g[j],t[k]);g=r;}return g;}
-  function _rsEcc(data,n){const gen=_rsGen(n);const msg=[...data,...new Array(n).fill(0)];for(let i=0;i<data.length;i++){const c=msg[i];if(c)for(let j=0;j<gen.length;j++)msg[i+j]^=_gfMul(gen[j],c);}return msg.slice(data.length);}
-
-  // BCH format info (15,5) for ECC level + mask
-  function _fmtInfo(eccLvl,mask){
-    const data=(eccLvl<<3)|mask;
-    let d=data<<10;
-    const G=0x537;
-    for(let i=14;i>=10;i--)if(d&(1<<i))d^=G<<(i-10);
-    return((data<<10)|(d))^0x5412;
-  }
-
-  window.generateQRMatrix=function(text){
-    const bytes=Array.from(new TextEncoder().encode(text));
-    // Auto-select version: V2-M (≤28 bytes, 25×25) or V5-M (≤62 bytes, 37×37)
-    const useV5=bytes.length>28;
-    const N=useV5?37:25;
-    const totalDataCW=useV5?64:28; // data codewords capacity
-    const eccPerBlock=useV5?18:16;
-    const numBlocks=useV5?2:1;
-    const cwPerBlock=useV5?32:28;
-    const totalBits=totalDataCW*8;
-
-    const mat=Array.from({length:N},()=>new Uint8Array(N));
-    const res=Array.from({length:N},()=>new Uint8Array(N)); // reserved (non-data) cells
-
-    // Place a finder pattern at (r,c) top-left corner
-    function finder(r,c){
-      for(let dr=0;dr<7;dr++)for(let dc=0;dc<7;dc++){
-        mat[r+dr][c+dc]=(dr===0||dr===6||dc===0||dc===6||((dr>=2&&dr<=4)&&(dc>=2&&dc<=4)))?1:0;
-        res[r+dr][c+dc]=1;
-      }
-    }
-    finder(0,0);finder(0,N-7);finder(N-7,0);
-
-    // Separators
-    function sepRow(r,cStart,cEnd){for(let c=cStart;c<=cEnd;c++){if(r>=0&&r<N&&c>=0&&c<N){mat[r][c]=0;res[r][c]=1;}}}
-    function sepCol(c,rStart,rEnd){for(let r=rStart;r<=rEnd;r++){if(r>=0&&r<N&&c>=0&&c<N){mat[r][c]=0;res[r][c]=1;}}}
-    sepRow(7,0,7);sepRow(7,N-8,N-1);sepRow(N-8,0,7);
-    sepCol(7,0,7);sepCol(7,N-8,N-1);sepCol(N-8,0,7);
-
-    // Timing patterns (row 6, col 6)
-    for(let i=8;i<N-8;i++){mat[6][i]=(i%2===0)?1:0;res[6][i]=1;mat[i][6]=(i%2===0)?1:0;res[i][6]=1;}
-
-    // Format info placeholders (reserve cells)
-    for(let i=0;i<9;i++){res[8][i]=1;res[i][8]=1;}
-    for(let i=N-8;i<N;i++){res[8][i]=1;res[i][8]=1;}
-    mat[N-8][8]=1;res[N-8][8]=1; // dark module
-
-    // Version 5: alignment pattern at center (30,30)
-    if(useV5){
-      const ar=30,ac=30;
-      for(let dr=-2;dr<=2;dr++)for(let dc=-2;dc<=2;dc++){
-        mat[ar+dr][ac+dc]=(dr===-2||dr===2||dc===-2||dc===2||(dr===0&&dc===0))?1:0;
-        res[ar+dr][ac+dc]=1;
-      }
-    }
-
-    // Encode data: byte mode
-    const bits=[];
-    bits.push(0,1,0,0); // mode indicator
-    for(let i=7;i>=0;i--)bits.push((bytes.length>>i)&1); // 8-bit char count
-    for(const b of bytes)for(let i=7;i>=0;i--)bits.push((b>>i)&1);
-    // Terminator
-    for(let i=0;i<4&&bits.length<totalBits;i++)bits.push(0);
-    // Byte-align
-    while(bits.length%8)bits.push(0);
-    // Pad codewords
-    const pads=[0xEC,0x11];let pi=0;
-    while(bits.length<totalBits){const p=pads[pi++%2];for(let i=7;i>=0;i--)bits.push((p>>i)&1);}
-    // Convert bits to codewords
-    const cw=[];for(let i=0;i<bits.length;i+=8){let v=0;for(let j=0;j<8;j++)v=(v<<1)|bits[i+j];cw.push(v);}
-
-    // Build interleaved stream
-    let stream=[];
-    if(!useV5){
-      // Version 2-M: 1 block, 16 ECC codewords
-      stream=[...cw,..._rsEcc(cw,eccPerBlock)];
-    } else {
-      // Version 5-M: 2 blocks of 32 data + 18 ECC each, interleaved
-      const b1=cw.slice(0,32),b2=cw.slice(32,64);
-      const e1=_rsEcc(b1,18),e2=_rsEcc(b2,18);
-      for(let i=0;i<32;i++){stream.push(b1[i]);stream.push(b2[i]);}
-      for(let i=0;i<18;i++){stream.push(e1[i]);stream.push(e2[i]);}
-    }
-
-    // Place data in zigzag
-    let bitIdx=0;
-    let goUp=true;
-    for(let cBase=N-1;cBase>0;cBase-=2){
-      if(cBase===6)cBase=5; // skip timing col
-      const cols=[cBase,cBase-1];
-      for(let ri=0;ri<N;ri++){
-        const r=goUp?(N-1-ri):ri;
-        for(const c of cols){
-          if(!res[r][c]){
-            const wordIdx=Math.floor(bitIdx/8);
-            const bitOff=7-(bitIdx%8);
-            mat[r][c]=(wordIdx<stream.length)?(stream[wordIdx]>>bitOff)&1:0;
-            bitIdx++;
-          }
-        }
-      }
-      goUp=!goUp;
-    }
-
-    // Evaluate all 8 masks, pick best
-    function penalty(m){
-      let p=0;
-      for(let r=0;r<N;r++){let run=1;for(let c=1;c<N;c++){if(m[r][c]===m[r][c-1])run++;else{if(run>=5)p+=run-2;run=1;}}if(run>=5)p+=run-2;}
-      for(let c=0;c<N;c++){let run=1;for(let r=1;r<N;r++){if(m[r][c]===m[r-1][c])run++;else{if(run>=5)p+=run-2;run=1;}}if(run>=5)p+=run-2;}
-      for(let r=0;r<N-1;r++)for(let c=0;c<N-1;c++)if(m[r][c]===m[r+1][c]&&m[r][c]===m[r][c+1]&&m[r][c]===m[r+1][c+1])p+=3;
-      const pat1=[1,0,1,1,1,0,1,0,0,0,0],pat2=[0,0,0,0,1,0,1,1,1,0,1];
-      for(let r=0;r<N;r++)for(let c=0;c<=N-11;c++){let a=true,b=true;for(let i=0;i<11;i++){if(m[r][c+i]!==pat1[i])a=false;if(m[r][c+i]!==pat2[i])b=false;}if(a||b)p+=40;}
-      for(let c=0;c<N;c++)for(let r=0;r<=N-11;r++){let a=true,b=true;for(let i=0;i<11;i++){if(m[r+i][c]!==pat1[i])a=false;if(m[r+i][c]!==pat2[i])b=false;}if(a||b)p+=40;}
-      let dark=0;for(let r=0;r<N;r++)for(let c=0;c<N;c++)dark+=m[r][c];
-      const pct=Math.abs(dark*100/(N*N)-50)/5;p+=Math.floor(pct)*10;
-      return p;
-    }
-
-    function applyMask(baseM,maskId){
-      const m=baseM.map(r=>new Uint8Array(r));
-      for(let r=0;r<N;r++)for(let c=0;c<N;c++){
-        if(res[r][c])continue;
-        let flip=false;
-        if(maskId===0)flip=(r+c)%2===0;
-        else if(maskId===1)flip=r%2===0;
-        else if(maskId===2)flip=c%3===0;
-        else if(maskId===3)flip=(r+c)%3===0;
-        else if(maskId===4)flip=(Math.floor(r/2)+Math.floor(c/3))%2===0;
-        else if(maskId===5)flip=((r*c)%2)+((r*c)%3)===0;
-        else if(maskId===6)flip=(((r*c)%2)+((r*c)%3))%2===0;
-        else if(maskId===7)flip=(((r+c)%2)+((r*c)%3))%2===0;
-        if(flip)m[r][c]^=1;
-      }
-      return m;
-    }
-
-    let bestMask=0,bestPen=Infinity;
-    for(let mi=0;mi<8;mi++){const pen=penalty(applyMask(mat,mi));if(pen<bestPen){bestPen=pen;bestMask=mi;}}
-    const final=applyMask(mat,bestMask);
-
-    // Write format info (ECC level M=00, chosen mask)
-    const fmt=_fmtInfo(0,bestMask);
-    const fmtBits=[];for(let i=14;i>=0;i--)fmtBits.push((fmt>>i)&1);
-    const fmtPos1=[[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,7],[8,8],[7,8],[5,8],[4,8],[3,8],[2,8],[1,8],[0,8]];
-    fmtPos1.forEach(([r,c],i)=>{final[r][c]=fmtBits[i];});
-    for(let i=0;i<8;i++)final[N-1-i][8]=fmtBits[i];
-    for(let i=8;i<15;i++)final[8][N-15+i]=fmtBits[i];
-    final[N-8][8]=1; // dark module always dark
-
-    return final;
-  };
-}());
 
 // ════════════════════════════════════════════════════════════════
 //  ADVERSARY QUOTE — shown during INTERCEPT and BREACH states
