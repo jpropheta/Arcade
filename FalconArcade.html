@@ -18339,13 +18339,13 @@ const HUNT_SHARE_URL='https://www.crowdstrike.com/en-us/global-threat-report/';
 const canvas=document.getElementById('g-hunt');
 const ctx=canvas.getContext('2d',{alpha:false});
 let LW=window.innerWidth, LH=window.innerHeight;
-let SCALE=1;
+let HUNT_SCALE=1;
 function resizeCanvas(){
   const dpr=Math.min(window.devicePixelRatio||1,2);
   LW=window.innerWidth; LH=window.innerHeight;
   canvas.width=Math.round(LW*dpr); canvas.height=Math.round(LH*dpr);
   canvas.style.width=LW+'px'; canvas.style.height=LH+'px';
-  SCALE=1; ctx.setTransform(dpr,0,0,dpr,0,0);
+  HUNT_SCALE=1; ctx.setTransform(dpr,0,0,dpr,0,0);
 }
 resizeCanvas();
 window.addEventListener("resize",()=>{
@@ -18369,8 +18369,8 @@ function clrJP(){for(const k in JP)delete JP[k];}
 
 // ─── MOUSE ───────────────────────────────────────────────────────
 const MOUSE={x:0,y:0,clicked:false,clickX:0,clickY:0};
-canvas.addEventListener('mousemove',e=>{const r=canvas.getBoundingClientRect();MOUSE.x=(e.clientX-r.left)/SCALE;MOUSE.y=(e.clientY-r.top)/SCALE;});
-canvas.addEventListener('click',e=>{const r=canvas.getBoundingClientRect();MOUSE.clickX=(e.clientX-r.left)/SCALE;MOUSE.clickY=(e.clientY-r.top)/SCALE;MOUSE.clicked=true;});
+canvas.addEventListener('mousemove',e=>{const r=canvas.getBoundingClientRect();MOUSE.x=(e.clientX-r.left)/HUNT_SCALE;MOUSE.y=(e.clientY-r.top)/HUNT_SCALE;});
+canvas.addEventListener('click',e=>{const r=canvas.getBoundingClientRect();MOUSE.clickX=(e.clientX-r.left)/HUNT_SCALE;MOUSE.clickY=(e.clientY-r.top)/HUNT_SCALE;MOUSE.clicked=true;});
 function clrMouse(){MOUSE.clicked=false;}
 
 // ─── HELPERS ─────────────────────────────────────────────────────
@@ -18401,13 +18401,16 @@ const lerp=(a,b,t)=>a+(b-a)*t;
 const rnd=(a,b)=>a+Math.random()*(b-a);
 const ri=(a,b)=>Math.floor(rnd(a,b+1));
 const TAU=Math.PI*2;
-let MUTED=false;
+// HUNT_MUTED / HUNT_AC_CTX / HUNT_AC() — renamed to avoid SyntaxError from
+// duplicate 'let MUTED' / 'let AC_CTX' with the IZ script block (block 2).
+// Chrome treats top-level 'let' as global-declarative and throws on re-declaration.
+let HUNT_MUTED=false;
 
 // ─── AUDIO ───────────────────────────────────────────────────────
-let AC_CTX=null;
-function AC(){if(!AC_CTX){AC_CTX=new(window.AudioContext||window.webkitAudioContext)();}if(AC_CTX.state!=='running')AC_CTX.resume();return AC_CTX;}
-function beep({f0,f1,dur,type='square',gain=0.15,delay=0}){if(MUTED||window._simMuted)return;try{const ac=AC(),o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.setValueAtTime(f0,ac.currentTime+delay);if(f1)o.frequency.exponentialRampToValueAtTime(f1,ac.currentTime+delay+dur);g.gain.setValueAtTime(0,ac.currentTime+delay);g.gain.linearRampToValueAtTime(gain,ac.currentTime+delay+0.01);g.gain.exponentialRampToValueAtTime(0.0001,ac.currentTime+delay+dur);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+delay);o.stop(ac.currentTime+delay+dur);}catch(_){}}
-const SFX={
+let HUNT_AC_CTX=null;
+function HUNT_AC(){if(!HUNT_AC_CTX){HUNT_AC_CTX=new(window.AudioContext||window.webkitAudioContext)();}if(HUNT_AC_CTX.state!=='running')HUNT_AC_CTX.resume();return HUNT_AC_CTX;}
+function beep({f0,f1,dur,type='square',gain=0.15,delay=0}){if(HUNT_MUTED||window._simMuted)return;try{const ac=HUNT_AC(),o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.setValueAtTime(f0,ac.currentTime+delay);if(f1)o.frequency.exponentialRampToValueAtTime(f1,ac.currentTime+delay+dur);g.gain.setValueAtTime(0,ac.currentTime+delay);g.gain.linearRampToValueAtTime(gain,ac.currentTime+delay+0.01);g.gain.exponentialRampToValueAtTime(0.0001,ac.currentTime+delay+dur);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+delay);o.stop(ac.currentTime+delay+dur);}catch(_){}}
+const HUNT_SFX={
   click(){beep({f0:600,f1:900,dur:0.08,gain:0.12});},
   collect(){[0,80,160].forEach((d,i)=>beep({f0:440+i*220,dur:0.12,type:'sine',gain:0.16,delay:d/1000}));},
   correct(){[0,100,220,380].forEach((d,i)=>beep({f0:330*Math.pow(1.5,i),dur:0.16,type:'sine',gain:0.18,delay:d/1000}));},
@@ -18521,40 +18524,40 @@ function shutdownThreatHuntRuntime(){
 }
 registerArcadeRuntimeResetter('threat_hunt', shutdownThreatHuntRuntime);
 function syncHuntSoundscape(dt){
-  if(MUTED||window._simMuted) return;
+  if(HUNT_MUTED||window._simMuted) return;
   HUNT_AUDIO.pulseT+=dt;
   HUNT_AUDIO.titleSweepT+=dt;
   if(HUNT_AUDIO.state!==gameState){
     HUNT_AUDIO.state=gameState;
     HUNT_AUDIO.pulseT=0;
-    if(gameState===STATE.TITLE) SFX.pulse();
-    else if(gameState===STATE.CASE_SELECT) SFX.dossier();
-    else if(gameState===STATE.BRIEFING) SFX.dossier();
-    else if(gameState===STATE.WORLD_MAP) SFX.comms();
-    else if(gameState===STATE.DEDUCTION) SFX.lock();
+    if(gameState===STATE.TITLE) HUNT_SFX.pulse();
+    else if(gameState===STATE.CASE_SELECT) HUNT_SFX.dossier();
+    else if(gameState===STATE.BRIEFING) HUNT_SFX.dossier();
+    else if(gameState===STATE.WORLD_MAP) HUNT_SFX.comms();
+    else if(gameState===STATE.DEDUCTION) HUNT_SFX.lock();
   }
   if(gameState===STATE.TITLE && HUNT_AUDIO.titleSweepT>4.8){
     HUNT_AUDIO.titleSweepT=0;
-    SFX.pulse();
+    HUNT_SFX.pulse();
   }
   if(gameState===STATE.CASE_SELECT){
     if(HUNT_AUDIO.caseSel!==caseSel){
-      if(HUNT_AUDIO.caseSel!==-1) SFX.click();
+      if(HUNT_AUDIO.caseSel!==-1) HUNT_SFX.click();
       HUNT_AUDIO.caseSel=caseSel;
     }
     if(HUNT_AUDIO.pulseT>5.2){
       HUNT_AUDIO.pulseT=0;
-      SFX.pulse();
+      HUNT_SFX.pulse();
     }
   }
   if([STATE.WORLD_MAP,STATE.INVESTIGATION,STATE.DEDUCTION].includes(gameState)){
     const tier=pursuit<=25?3:pursuit<=45?2:pursuit<=65?1:0;
     if(tier!==HUNT_AUDIO.pursuitTier){
-      if(tier>0) SFX.tension(tier);
+      if(tier>0) HUNT_SFX.tension(tier);
       HUNT_AUDIO.pursuitTier=tier;
     } else if(tier>0 && HUNT_AUDIO.pulseT>(tier===3?2.1:tier===2?3.2:4.8)){
       HUNT_AUDIO.pulseT=0;
-      SFX.tension(tier);
+      HUNT_SFX.tension(tier);
     }
   } else {
     HUNT_AUDIO.pursuitTier=-1;
@@ -18727,7 +18730,7 @@ function updRadio(dt){
       const specific=(id&&RADIO_MSGS[id])||[];
       const pool=[...RADIO_MSGS.generic,...specific];
       RADIO.msg=pool[Math.floor(Math.random()*pool.length)];
-      if(RADIO.msg?.msg!==HUNT_AUDIO.lastRadioMsg){ HUNT_AUDIO.lastRadioMsg=RADIO.msg?.msg||''; SFX.comms(); }
+      if(RADIO.msg?.msg!==HUNT_AUDIO.lastRadioMsg){ HUNT_AUDIO.lastRadioMsg=RADIO.msg?.msg||''; HUNT_SFX.comms(); }
     }
   } else if(RADIO.state==='incoming'){
     if(RADIO.t>1.6){RADIO.state='showing';RADIO.t=0;}
@@ -23403,7 +23406,7 @@ function handleInvestigationClick(){
       collectedClues.push(node2.clue); maybeFireIntercept();
       activeEvidenceCard={clue:node2.clue,t:0,showing:true};
       gameState=STATE.EVIDENCE_CARD;
-      SFX.collectEnhanced(node2.clue.type);
+      HUNT_SFX.collectEnhanced(node2.clue.type);
       // Clue discovery visual burst: cyan/yellow/white particles
       burst(node2.x,node2.y,18,[[0,229,255],[255,216,77],[255,255,255]],{maxSpd:180,life:0.55});
       // Dramatic burst: 3 rings at different radii + gold particles
@@ -23425,7 +23428,7 @@ function handleInvestigationClick(){
       const my=by+Math.round(60*ui)+i*rowH;
       if(cx>bx+4&&cx<bx+panelW-4&&cy>my-2&&cy<my+rowH-4){
         usedModuleThisInvestigation=true; selectedModule=m;
-        SFX.deployEnhanced();
+        HUNT_SFX.deployEnhanced();
         const modKeys=['identity','xdr','pangea','overwatch','exposure'];
         const mKey=modKeys[i];
         // Stage ceremony — actual deploy effects fire after 0.8s animation
@@ -23857,7 +23860,7 @@ function handleDeductionClick(){
         const _dPts=_huntAddScore(500+timeBonus+matchBonus);
         floatSpawn(finalX+cardW/2,cardY-50,`+${_dPts}`,`#39FF14`,18);
         floatSpawn(finalX+cardW/2,cardY-30,T('g_hunt_correct_bonus').replace('{score}',500+timeBonus+matchBonus),'#39FF14',14);
-        flash(57,255,20,0.4); SFX.correct();
+        flash(57,255,20,0.4); HUNT_SFX.correct();
         burst(finalX+cardW/2,cardY+cardH/2,50,[[57,255,20],[255,255,255],[255,215,0],[57,255,200]],{maxSpd:200,life:0.7});
         burst(finalX+cardW/2,cardY+cardH/2,20,[[255,255,255]],{maxSpd:80,life:0.4});
       } else {
@@ -23865,7 +23868,7 @@ function handleDeductionClick(){
         pursuit=Math.max(0,pursuit-18);
         score=Math.max(0,score-100);
         floatSpawn(finalX+cardW/2,cardY-30,T('g_hunt_wrong_lost'),'#FF1744',14);
-        flash(255,23,68,0.5); SFX.wrong();
+        flash(255,23,68,0.5); HUNT_SFX.wrong();
       }
       setTimeout(()=>advanceAfterDeduction(),2000);
     }
@@ -23878,7 +23881,7 @@ function deductionTimeout(){
     pursuit=Math.max(0,pursuit-12);
     score=Math.max(0,score-50);
     floatSpawn(LW/2,LH/2,T('g_hunt_time_expired'),'#FF1744',16);
-    flash(255,23,68,0.3); SFX.wrong();
+    flash(255,23,68,0.3); HUNT_SFX.wrong();
     setTimeout(()=>advanceAfterDeduction(),2000);
   }
 }
@@ -23902,16 +23905,16 @@ function advanceAfterDeduction(){
       advNodeIdx=Math.min(advNodeIdx+2,caseRoute.length-1);
       advMoveTo=caseRoute[advNodeIdx];
     }
-    SFX.move();
+    HUNT_SFX.move();
   }
 
   // Check game end
   if(pursuit>=100){
-    setTimeout(()=>{gameState=STATE.INTERCEPT;interceptT=0;_advQuoteIdx=-1;SFX.intercept();flash(57,255,20,0.8);burst(LW/2,LH/2,60,[[57,255,20],[255,215,0],[255,255,255]],{maxSpd:250,life:0.8});},600);
+    setTimeout(()=>{gameState=STATE.INTERCEPT;interceptT=0;_advQuoteIdx=-1;HUNT_SFX.intercept();flash(57,255,20,0.8);burst(LW/2,LH/2,60,[[57,255,20],[255,215,0],[255,255,255]],{maxSpd:250,life:0.8});},600);
     return;
   }
   if(pursuit<=0||advNodeIdx>=caseRoute.length-1){
-    setTimeout(()=>{gameState=STATE.BREACH;breachT=0;_advQuoteIdx=-1;SFX.breach();flash(255,23,68,0.8);},600);
+    setTimeout(()=>{gameState=STATE.BREACH;breachT=0;_advQuoteIdx=-1;HUNT_SFX.breach();flash(255,23,68,0.8);},600);
     return;
   }
 
@@ -24901,7 +24904,7 @@ function drawBreach(dt){
       const wave=(c+r)/(_tCols+_tRows);
       _breachTiles.push({x:c*_tW,y:r*_tH,delay:wave*1.2+Math.random()*0.18});
     }
-    SFX.breachAlarm();
+    HUNT_SFX.breachAlarm();
     flash(255,23,68,0.7);
   }
 
@@ -25266,7 +25269,7 @@ function endGame(won){
     markCampaignBeat('threat_hunt');
     // Capture post-game card state (win only)
     if(won&&!_falconWonState){
-      SFX.victoryFanfare();
+      HUNT_SFX.victoryFanfare();
       _falconWonState={
         t:0,
         adv:selectedCase,
@@ -25321,11 +25324,11 @@ window.__huntSim = {
     this.forceResize();
   },
   startAttractDemo(){
-    try{ AC(); }catch(_){}
+    try{ HUNT_AC(); }catch(_){}
     FalconRanking.stopIdleWatch?.();
     _hideHuntRankingOverlay();
     rankingShown=false;
-    MUTED=false;
+    HUNT_MUTED=false;
     this.forceResize();
     const idx = Math.floor((performance.now() / 1000) % ADVERSARIES.length);
     startCase(idx);
@@ -25465,7 +25468,7 @@ function frame(ts){
         if(!sessionStorage.getItem('arcade_tutorialCompleted')){_tutorialActive=true;_tutorialT=0;}
       }
       if(hk('KeyL'))FalconRanking.showAttract?.();
-      if(hk('KeyM'))MUTED=!MUTED;
+      if(hk('KeyM'))HUNT_MUTED=!HUNT_MUTED;
       break;
 
     case STATE.CASE_SELECT:
@@ -25497,10 +25500,10 @@ function frame(ts){
         buildInvestigationNodes();
         investigationTimer=0;
         gameState=STATE.INVESTIGATION;
-        SFX.click();
+        HUNT_SFX.click();
       }
       if(hk('Escape')){gameState=STATE.CASE_SELECT;}
-      if(hk('KeyM'))MUTED=!MUTED;
+      if(hk('KeyM'))HUNT_MUTED=!HUNT_MUTED;
       break;
 
     case STATE.INVESTIGATION:
@@ -25509,7 +25512,7 @@ function frame(ts){
       // 5-second warning sound — fires once
       if(!_invTimerWarnFired&&investigationMaxTime-investigationTimer<=5){
         _invTimerWarnFired=true;
-        SFX.tension(3);
+        HUNT_SFX.tension(3);
         floatSpawn(LW/2,LH*0.15,T('g_hunt_five_seconds'),'#FF8D39',13);
       }
       if(investigationTimer>=investigationMaxTime){
@@ -25518,7 +25521,7 @@ function frame(ts){
         deductionTimeLeft=DEDUCTION_TIMER;
         _deductTierPlayed=0;
         gameState=STATE.DEDUCTION;
-        SFX.wrong();
+        HUNT_SFX.wrong();
       }
       // Check if all collected
       const allCollected=activeEvidenceNodes.every(n=>n.collected);
@@ -25528,14 +25531,14 @@ function frame(ts){
         deductionT=0;
         _deductTierPlayed=0;
         gameState=STATE.DEDUCTION;
-        SFX.deploy();
+        HUNT_SFX.deploy();
         floatSpawn(LW/2,LH*0.4,T('g_hunt_all_evidence'),'#FFD700',14);
       }
       if(MOUSE.clicked) handleInvestigationClick();
       // Allow manual advance to deduction
-      if(hk('Space')&&collectedClues.length>=2){buildDeductionChoices();deductionTimeLeft=DEDUCTION_TIMER;deductionT=0;_deductTierPlayed=0;gameState=STATE.DEDUCTION;SFX.click();}
+      if(hk('Space')&&collectedClues.length>=2){buildDeductionChoices();deductionTimeLeft=DEDUCTION_TIMER;deductionT=0;_deductTierPlayed=0;gameState=STATE.DEDUCTION;HUNT_SFX.click();}
       if(hk('Escape')){if(confirm(T('g_exit_confirm'))){gameState=STATE.CASE_SELECT;FalconRanking.startIdleWatch();}}
-      if(hk('KeyM'))MUTED=!MUTED;
+      if(hk('KeyM'))HUNT_MUTED=!HUNT_MUTED;
       break;
 
     case STATE.EVIDENCE_CARD:
@@ -25546,11 +25549,11 @@ function frame(ts){
         gameState=STATE.INVESTIGATION;
         // Reset timer only if cards remain
         if(activeEvidenceNodes.every(n=>n.collected)&&activeEvidenceNodes.length>0){
-          buildDeductionChoices();deductionTimeLeft=DEDUCTION_TIMER;deductionT=0;_deductTierPlayed=0;gameState=STATE.DEDUCTION;SFX.deploy();
+          buildDeductionChoices();deductionTimeLeft=DEDUCTION_TIMER;deductionT=0;_deductTierPlayed=0;gameState=STATE.DEDUCTION;HUNT_SFX.deploy();
         }
       }
       if(hk('Escape')){gameState=STATE.CASE_SELECT;FalconRanking.startIdleWatch();}
-      if(hk('KeyM'))MUTED=!MUTED;
+      if(hk('KeyM'))HUNT_MUTED=!HUNT_MUTED;
       break;
 
     case STATE.DEDUCTION:
@@ -25558,14 +25561,14 @@ function frame(ts){
       if(!deductionLocked) deductionTimeLeft=Math.max(0,DEDUCTION_TIMER-deductionT);
       // Audio escalation: play tension sounds as timer counts down
       if(!deductionLocked){
-        if(deductionTimeLeft<15&&_deductTierPlayed<1){_deductTierPlayed=1;SFX.tension(1);}
-        if(deductionTimeLeft<10&&_deductTierPlayed<2){_deductTierPlayed=2;SFX.tension(2);}
-        if(deductionTimeLeft<5&&_deductTierPlayed<3){_deductTierPlayed=3;SFX.tension(3);}
+        if(deductionTimeLeft<15&&_deductTierPlayed<1){_deductTierPlayed=1;HUNT_SFX.tension(1);}
+        if(deductionTimeLeft<10&&_deductTierPlayed<2){_deductTierPlayed=2;HUNT_SFX.tension(2);}
+        if(deductionTimeLeft<5&&_deductTierPlayed<3){_deductTierPlayed=3;HUNT_SFX.tension(3);}
       }
       if(deductionTimeLeft<=0&&!deductionLocked) deductionTimeout();
       if(MOUSE.clicked&&!deductionLocked) handleDeductionClick();
       if(hk('Escape')){if(confirm(T('g_exit_confirm'))){gameState=STATE.CASE_SELECT;caseSel=0;caseSelectEntryT=0;score=0;}}
-      if(hk('KeyM'))MUTED=!MUTED;
+      if(hk('KeyM'))HUNT_MUTED=!HUNT_MUTED;
       break;
 
     case STATE.INTERCEPT:
