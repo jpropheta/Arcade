@@ -93,217 +93,15 @@ html, body { width:100%; height:100%; background:#020308; overflow:hidden; font-
 @media (max-width:640px) { .ops-strip { grid-template-columns:1fr; } }
 @media (max-height:640px) { .header { margin-bottom:10px; } .divider { margin-bottom:10px; } .card-preview { height:90px; } .card-body { padding:10px 14px 14px; } }
 
-/* ── CINEMATIC LOADER ── */
+/* ── CINEMATIC BOOT ── */
 body.arcade-loader-active { overflow:hidden; }
 #cyber-loader {
   position:fixed; inset:0; z-index:20000; opacity:1; visibility:visible;
-  background:
-    radial-gradient(circle at 50% 24%, rgba(255,56,182,0.12), transparent 30%),
-    radial-gradient(circle at 76% 18%, rgba(66,217,255,0.10), transparent 28%),
-    radial-gradient(circle at 28% 78%, rgba(153,91,255,0.10), transparent 34%),
-    linear-gradient(180deg,#06030b,#090614 52%,#060b14);
+  background:#030010;
   transition:opacity .75s ease, visibility .75s ease;
 }
 #cyber-loader.is-done { opacity:0; visibility:hidden; pointer-events:none; }
-#cyber-loader-fx, #cyber-loader-particles {
-  position:absolute; inset:0; width:100%; height:100%; display:block; pointer-events:none;
-}
-#cyber-loader-shell {
-  position:absolute; inset:0; display:grid; place-items:center; padding:28px;
-}
-#cyber-loader-terminal {
-  position:relative; width:min(1240px,94vw); height:min(710px,82vh);
-  border-radius:28px; overflow:hidden;
-  background:linear-gradient(180deg, rgba(12,8,24,.92), rgba(5,9,18,.96));
-  border:1px solid rgba(255,56,182,.22);
-  box-shadow:
-    0 30px 90px rgba(0,0,0,.52),
-    0 0 0 1px rgba(66,217,255,.08),
-    inset 0 0 0 1px rgba(255,255,255,.02),
-    inset 0 0 120px rgba(255,56,182,.05),
-    inset 0 0 180px rgba(66,217,255,.04);
-  transform-origin:center;
-}
-#cyber-loader-terminal::before {
-  content:""; position:absolute; inset:0; z-index:3; pointer-events:none;
-  background:radial-gradient(ellipse at center, transparent 56%, rgba(0,0,0,.2) 100%), linear-gradient(180deg, rgba(255,255,255,.02), transparent 18%);
-}
-#cyber-loader-terminal::after {
-  content:""; position:absolute; inset:0; z-index:3; pointer-events:none;
-  background:repeating-linear-gradient(180deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0) 2px, rgba(0,0,0,var(--loader-scan-opacity,.12)) 3px, rgba(0,0,0,var(--loader-scan-opacity,.12)) 4px);
-}
-.cyber-loader-hud {
-  position:absolute; top:0; left:0; right:0; height:54px; z-index:2;
-  display:flex; align-items:center; justify-content:space-between; gap:18px; padding:0 24px;
-  border-bottom:1px solid rgba(255,56,182,.16);
-  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0));
-}
-.cyber-loader-hud-left, .cyber-loader-hud-right {
-  display:flex; align-items:center; gap:14px; min-width:0; flex:1 1 0;
-}
-.cyber-loader-hud-right { justify-content:flex-end; }
-.cyber-loader-pill {
-  min-width:0;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  font:700 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:1.6px; text-transform:uppercase; color:#7895a6; white-space:nowrap;
-}
-.cyber-loader-pill-era { color:#57d6ff; }
-#cyber-loader-hud-era, #cyber-loader-hud-status { flex:1 1 auto; }
-#cyber-loader-hud-year { flex:0 0 auto; }
-.cyber-loader-progress {
-  width:170px; height:4px; overflow:hidden; border-radius:999px; background:rgba(255,255,255,.08); flex:0 0 170px;
-}
-.cyber-loader-progress > span {
-  display:block; height:100%; width:0%;
-  background:linear-gradient(90deg,#86ff9b,#57d6ff,#b28cff);
-  box-shadow:0 0 16px rgba(87,214,255,.45);
-}
-.cyber-loader-loading {
-  margin-top:16px;
-  display:flex; align-items:center; gap:10px;
-  color:#b7c6d3;
-  font:700 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:2.8px; text-transform:uppercase;
-  text-shadow:0 0 18px rgba(121,247,255,0.16);
-  opacity:.96;
-}
-.cyber-loader-loading-kicker {
-  color:#f0f6ff;
-  text-shadow:0 0 18px rgba(121,247,255,.24);
-}
-.cyber-loader-loading-dots {
-  display:inline-block;
-  min-width:2.2em;
-}
-.cyber-loader-loading-cursor {
-  margin-left:2px;
-  vertical-align:-.08em;
-  transform:scale(.82);
-}
-.cyber-loader-loading-bar {
-  position:relative; width:168px; height:3px; overflow:hidden;
-  background:rgba(255,255,255,.12); border-radius:999px;
-  box-shadow:0 0 0 1px rgba(255,255,255,.04), 0 0 18px rgba(121,247,255,.12);
-}
-.cyber-loader-loading-bar::after {
-  content:""; position:absolute; top:0; left:-28%; width:28%; height:100%;
-  background:linear-gradient(90deg, transparent, #79f7ff, #d389ff, transparent);
-  animation:cyber-loader-loading-sweep 2.8s linear infinite;
-}
-@keyframes cyber-loader-loading-sweep {
-  from { transform:translateX(0%); }
-  to { transform:translateX(460%); }
-}
-#cyber-loader-scene { position:absolute; inset:54px 0 0 0; z-index:2; }
-#cyber-loader-screen {
-  position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-start;
-  padding:34px 40px 52px; overflow:hidden;
-}
-.cyber-loader-meta {
-  display:flex; justify-content:space-between; gap:16px; margin-bottom:20px;
-  color:#7895a6; font:700 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:1.8px; text-transform:uppercase;
-  flex-shrink:0;
-}
-.cyber-loader-meta > div {
-  flex:1 1 0;
-  min-width:0;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.cyber-loader-meta > div:last-child { text-align:right; }
-#cyber-loader-title-block { margin-bottom:22px; flex-shrink:0; }
-#cyber-loader-label {
-  margin-bottom:10px; color:#57d6ff;
-  font:700 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:2px; text-transform:uppercase;
-}
-#cyber-loader-title {
-  max-width:12ch;
-  color:#f2fbff; font:700 clamp(24px,3.2vw,42px) ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  line-height:1.02; letter-spacing:-.03em;
-}
-#cyber-loader-frame {
-  display:flex; flex-direction:column; flex:1 1 0; min-height:0; overflow:hidden; gap:0;
-}
-#cyber-loader-main {
-  position:relative; min-width:0; min-height:0; overflow:hidden; border-radius:18px;
-  padding:28px 32px 30px;
-  border:1px solid var(--cl-frame-border, rgba(66,217,255,.22));
-  background:rgba(255,255,255,.025);
-  box-shadow:
-    inset 0 0 60px var(--cl-frame-glow, rgba(66,217,255,.04)),
-    inset 0 0 0 1px rgba(255,255,255,.03),
-    0 0 28px var(--cl-frame-outer, rgba(66,217,255,.06));
-  display:flex; flex-direction:column; flex:1;
-  transition: border-color .9s ease, box-shadow .9s ease;
-}
-#cyber-loader-main::before {
-  content:""; position:absolute; inset:0; pointer-events:none; z-index:0; border-radius:inherit;
-  background:linear-gradient(180deg, rgba(255,255,255,.03) 0%, transparent 22%, rgba(0,0,0,.08) 100%);
-}
-/* Corner accent brackets */
-#cyber-loader-main::after {
-  content:""; position:absolute; inset:0; pointer-events:none; z-index:0; border-radius:inherit;
-  background:
-    linear-gradient(var(--cl-frame-border, rgba(66,217,255,.35)), var(--cl-frame-border, rgba(66,217,255,.35))) top left / 20px 2px no-repeat,
-    linear-gradient(var(--cl-frame-border, rgba(66,217,255,.35)), var(--cl-frame-border, rgba(66,217,255,.35))) top left / 2px 20px no-repeat,
-    linear-gradient(var(--cl-frame-border, rgba(66,217,255,.35)), var(--cl-frame-border, rgba(66,217,255,.35))) top right / 20px 2px no-repeat,
-    linear-gradient(var(--cl-frame-border, rgba(66,217,255,.35)), var(--cl-frame-border, rgba(66,217,255,.35))) top right / 2px 20px no-repeat,
-    linear-gradient(var(--cl-frame-border, rgba(66,217,255,.35)), var(--cl-frame-border, rgba(66,217,255,.35))) bottom left / 20px 2px no-repeat,
-    linear-gradient(var(--cl-frame-border, rgba(66,217,255,.35)), var(--cl-frame-border, rgba(66,217,255,.35))) bottom left / 2px 20px no-repeat,
-    linear-gradient(var(--cl-frame-border, rgba(66,217,255,.35)), var(--cl-frame-border, rgba(66,217,255,.35))) bottom right / 20px 2px no-repeat,
-    linear-gradient(var(--cl-frame-border, rgba(66,217,255,.35)), var(--cl-frame-border, rgba(66,217,255,.35))) bottom right / 2px 20px no-repeat;
-}
-#cyber-loader-code {
-  position:relative; z-index:1; flex:1; min-height:0;
-  color:#dff8ff; white-space:pre; word-break:normal; overflow:hidden;
-  font-size:clamp(13px,1vw,17px); line-height:1.62; letter-spacing:0;
-  font-variant-numeric:tabular-nums;
-  font-variant-ligatures:none;
-  font-feature-settings:"liga" 0, "calt" 0;
-  text-shadow:0 0 18px rgba(87,214,255,.05);
-}
-#cyber-loader-sidebar { display:none; }
-.cyber-loader-card {
-  padding:16px 16px 14px; border-radius:16px; border:1px solid rgba(120,160,180,.12); background:rgba(255,255,255,.025);
-}
-.cyber-loader-card .k {
-  color:#7895a6; text-transform:uppercase; letter-spacing:2px; font:700 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; margin-bottom:10px;
-}
-.cyber-loader-card .v {
-  color:#f2fbff; font:400 14px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-}
-#cyber-loader-skip {
-  position:absolute; right:22px; bottom:18px; z-index:4; opacity:.72; color:#8ca2b2;
-  font:700 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:2px; text-transform:uppercase;
-}
-.cyber-loader-line {
-  display:block; transform-origin:left center; will-change:opacity, transform, color, filter;
-}
-.cyber-loader-cursor {
-  display:inline-block; width:.62em; height:1.08em; margin-left:.12em; vertical-align:-.14em;
-  background:currentColor; opacity:.9; animation:cyber-loader-blink 1s steps(1,end) infinite;
-}
-@keyframes cyber-loader-blink { 0%,48%{opacity:.95} 50%,100%{opacity:0} }
-.tok-comment{ color:#6f8f9c; font-style:italic; }
-.tok-violet{ color:#b28cff; }
-.tok-accent{ color:#57d6ff; }
-.tok-green{ color:#89ff9d; }
-.tok-warn{ color:#ffd166; }
-.tok-danger{ color:#ff6f7c; }
-.tok-prop{ color:#ffd5a0; }
-.tok-str{ color:#bfffb9; }
-@media (max-width:980px) {
-  #cyber-loader-terminal { height:min(760px,86vh); }
-}
-@media (max-width:720px) {
-  #cyber-loader-screen { padding:24px 22px 46px; }
-  .cyber-loader-meta { font-size:10px; }
-  #cyber-loader-skip { font-size:10px; right:16px; bottom:14px; }
-}
+#boot-canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
 
 /* ── GAME CONTAINERS ── */
 #game-zero-container, #game-defense-container, #game-hunt-container {
@@ -1152,50 +950,7 @@ body.arcade-loader-active { overflow:hidden; }
 <body>
 
 <div id="cyber-loader" aria-hidden="true">
-  <canvas id="cyber-loader-fx"></canvas>
-  <canvas id="cyber-loader-particles"></canvas>
-  <div id="cyber-loader-shell">
-    <div id="cyber-loader-terminal">
-      <div class="cyber-loader-hud">
-        <div class="cyber-loader-hud-left">
-          <div class="cyber-loader-pill cyber-loader-pill-era" id="cyber-loader-hud-era">Boot / Signal Acquisition</div>
-          <div class="cyber-loader-pill" id="cyber-loader-hud-year">1983 · 2029</div>
-        </div>
-        <div class="cyber-loader-hud-right">
-          <div class="cyber-loader-pill" id="cyber-loader-hud-status">Initializing timeline</div>
-          <div class="cyber-loader-progress"><span id="cyber-loader-hud-bar"></span></div>
-        </div>
-      </div>
-      <div id="cyber-loader-scene">
-        <div id="cyber-loader-screen">
-          <div class="cyber-loader-meta">
-            <div>ARCHIVE / ERA RECONSTRUCTION</div>
-            <div>INERT / FICTIONAL / NON-OPERATIONAL</div>
-          </div>
-  <div id="cyber-loader-title-block">
-    <div id="cyber-loader-label">Signal Acquisition</div>
-    <div id="cyber-loader-title">History Resolving</div>
-    <div class="cyber-loader-loading" aria-live="polite">
-      <span class="cyber-loader-loading-kicker">LOADING<span class="cyber-loader-loading-dots">...</span><span class="cyber-loader-cursor cyber-loader-loading-cursor"></span></span>
-      <span id="cyber-loader-loading-text">historical interface strata</span>
-      <span class="cyber-loader-loading-bar" aria-hidden="true"></span>
-    </div>
-  </div>
-          <div id="cyber-loader-frame">
-            <div id="cyber-loader-main">
-              <div id="cyber-loader-code"></div>
-            </div>
-            <div id="cyber-loader-sidebar">
-              <div class="cyber-loader-card"><div class="k">Thread</div><div class="v" id="cyber-loader-side-thread">Bootstrapping visual timeline...</div></div>
-              <div class="cyber-loader-card"><div class="k">Surface</div><div class="v" id="cyber-loader-side-surface">Cold terminal glass. Residual hum. Weak signal.</div></div>
-              <div class="cyber-loader-card"><div class="k">Context</div><div class="v" id="cyber-loader-side-context">A cinematic progression from machine-near syntax to intent-driven orchestration.</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="cyber-loader-skip">Press any key or click to skip</div>
-    </div>
-  </div>
+  <canvas id="boot-canvas"></canvas>
 </div>
 
 <!-- ═══ DASHBOARD ═══ -->
@@ -4882,494 +4637,319 @@ function _refreshPodium() {
   _refreshCampaignStatus();
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// CANVAS BOOT CINEMATIC  (replaces old CyberBootLoader DOM overlay)
+// Uses iz_load_1…8, iz_loading_ready, eyebrow, subtitle from the T() dict.
+// Same public API: CyberBootLoader.start()
+// ─────────────────────────────────────────────────────────────────────────────
 const CyberBootLoader = (() => {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const totalMs = reduceMotion ? 450 : 38000;
-  const preludeCutoff = 0.58;
+
   let rafId = 0;
   let running = false;
   let startTs = 0;
   let lastTs = 0;
-  let particles = [];
-  let activeSceneIndex = 0;
-  let currentPalette = {};
-  let _prevCharCounts = [0, 0, 0];
-  let _loaderAC = null;
-  // TV signal flicker state
-  const _flicker = {
-    roll: 0,          // current vertical roll offset (px)
-    rollV: 0,         // velocity of roll
-    spark: 0,         // remaining bright whiteout intensity
-    band: 0,          // horizontal static band opacity
-    bandY: 0,         // band position (0–1)
-    bandH: 0,         // band height (px)
-    noise: 0,         // per-frame brightness flutter
-    nextEvent: 1.2,   // seconds until next big event
-    t: 0,             // running time
-  };
-  function _loaderClick(freq = 1800, g = 0.022, dur = 0.028) {
-    try {
-      if (!window._userHasGestured) return; // no AudioContext before user gesture
-      if (!_loaderAC) _loaderAC = new (window.AudioContext || window.webkitAudioContext)();
-      if (_loaderAC.state !== 'running') _loaderAC.resume();
-      const now = _loaderAC.currentTime;
-      const o = _loaderAC.createOscillator();
-      const a = _loaderAC.createGain();
-      o.type = 'square'; o.frequency.setValueAtTime(freq, now);
-      o.frequency.exponentialRampToValueAtTime(freq * 0.55, now + dur);
-      a.gain.setValueAtTime(g, now);
-      a.gain.exponentialRampToValueAtTime(0.0001, now + dur);
-      o.connect(a); a.connect(_loaderAC.destination);
-      o.start(now); o.stop(now + dur + 0.01);
-    } catch (_) {}
-  }
-  const palette = {
-    dos:  { fg:'#a4ffb8', accent:'#42d9ff', bg:'#120716', warn:'#ffe27a', danger:'#ff7fd1', violet:'#a25dff' },
-    shell:{ fg:'#f0f5ff', accent:'#79f7ff', bg:'#14091c', warn:'#ffd166', danger:'#ff7aaf', violet:'#b86bff' },
-    vbs:  { fg:'#e3ebff', accent:'#4de1ff', bg:'#11091a', warn:'#ffd166', danger:'#ff6f9a', violet:'#c264ff' },
-    ps:   { fg:'#f3f8ff', accent:'#52d7ff', bg:'#0e0c1a', warn:'#ffd166', danger:'#ff648c', violet:'#ca72ff' },
-    ai:   { fg:'#f7fbff', accent:'#7ef4ff', bg:'#090b18', warn:'#ffd166', danger:'#ff5fa0', violet:'#d389ff' }
-  };
-  const scenes = [
-    {
-      label:'Boot / Signal Acquisition', title:'Phosphor Memory', era:'Early MS-DOS Era', years:'1983 · 1988',
-      status:'Resolving low-level text surface',
-      loading:'Loading dormant terminal strata',
-      surface:'Monochrome phosphor, weak contrast, scanline drift, gentle curvature illusion.',
-      context:'Fake boot-sector alerts and file infector atmosphere only. No real malware, no usable code.',
-      palette:'dos', morphText:'C:\\> dir',
-      snippets:[
-        ['C:\\> dir',' IO      SYS      41984',' MSDOS   SYS      37328',' COMMAND COM      25232',' KERNEL  OVL       4096',' README  TXT       1216',' ANOMALY IDX        192'],
-        ['C:\\> scan /boot /quiet',' [trace] sector map .... nominal',' [trace] file table .... nominal',' [warn ] boot-note signature mismatch',' [warn ] mirror copy renamed: SYS_NOTE.$$$',' [note ] sample remains inert in archive view']
-      ]
-    },
-    {
-      label:'Interface Shift', title:'Executable Anxiety', era:'Later DOS / Early Windows Shell', years:'1992 · 1999',
-      status:'Densifying command grammar',
-      loading:'Loading executable-era shell artifacts',
-      surface:'Sharper shell edges, improved signal clarity, tighter spacing, startup panic aesthetics.',
-      context:'Hints of macro-era suspicion, infected startup behavior, and untrusted executables as cinematic set dressing.',
-      palette:'shell', morphText:'C:\\WINDOWS> verify-startup /list',
-      snippets:[
-        ['C:\\WINDOWS> verify-startup /list',' startup.ini      [ok]',' shell.map        [ok]',' office.note      [warn: macro anomaly]',' launch.idx       [warn: phantom autorun]',' quarantine.log   [info: simulation only]'],
-        ['C:\\WINDOWS> file-audit /v',' calc32.exe       clean',' notepad.exe      clean',' intro.doc        strange-template-tag',' bootmenu.dat     duplicate entry shadowed',' [hint] executable trust became a daily ritual']
-      ]
-    },
-    {
-      label:'Administrative Scripting', title:'Systems Start Talking Back', era:'WMI / VBS Administration Era', years:'2001 · 2008',
-      status:'Reflowing lines into scripts',
-      loading:'Loading script-driven administration traces',
-      surface:'Script editor feeling, sparse syntax color, machine introspection, stealth through admin shape.',
-      context:'Harmless pseudo-VBS / WMI-style inventory and suspicious automation traces, purely atmospheric.',
-      palette:'vbs', morphText:'Set scope = GetObject("mockmgmts:\\\\.\\root\\simv2")',
-      snippets:[
-        ["' recon_note.vbs  / fictional / inert",'Set scope = GetObject("mockmgmts:\\\\.\\root\\simv2")','Set nodes = scope.ExecQuery("SELECT Name, DriftTag FROM Sim_Process")','For Each n In nodes','  If n.DriftTag <> "baseline" Then','    WScript.Echo "flagged> " & n.Name & " :: shadow startup"','  End If','Next'],
-        ["' inventory_wmi.txt",'class Sim_Process : Name, DriftTag, ParentRef','trace  > officehost    :: macro-born child','trace  > helpsvc       :: silent task note','trace  > wmiprvse      :: over-curious query burst','status > all records rendered for atmosphere only']
-      ]
-    },
-    {
-      label:'Object Pipeline', title:'Telemetry Becomes Structure', era:'PowerShell Era', years:'2012 · 2019',
-      status:'Promoting strings into objects',
-      loading:'Loading object telemetry layers',
-      surface:'Richer syntax, object output, cleaner semantics, endpoint telemetry and automation mood.',
-      context:'Fake cmdlets, fake object tables, fake stack traces and correlation summaries with zero operational value.',
-      palette:'ps', morphText:'PS C:\\Ops> Resolve-SimChain -Id 14',
-      snippets:[
-        ['PS C:\\Ops> Get-SimTrace -Recent 5','','Time     Surface   Indicator          Conf','08:14    Email     TemplateDrift      Med','08:15    Identity  PromptStorm        High','08:16    Endpoint  ScriptHostChild    Med','08:17    Network   QuietRelay         High'],
-        ['PS C:\\Ops> Resolve-SimChain -Id 14','[SimObject] ChainScore : 0.87','[SimObject] Story      : staged access mimicry','[SimObject] Nodes      : prompt > script > relay','[SimObject] Action     : Contain-SimSurface','[stack] fictional render / inert']
-      ]
-    },
-    {
-      label:'Intent-Native Operations', title:'The Prompt Becomes The Interface', era:'Modern AI Prompt Era', years:'2024 · 2029',
-      status:'Collapsing syntax into intent',
-      loading:'Loading intent-native control surface',
-      surface:'Premium orchestration UI, natural-language control, summaries, graph-like reasoning fragments.',
-      context:'Manual commands dissolve into machine-assisted correlation and security-native explanation.',
-      palette:'ai', morphText:'operator> correlate the quiet chain across identity, endpoint, and mail',
-      snippets:[
-        ['operator> correlate quiet chain across mail + endpoint','','model.summary:','  likely narrative   : staged access mimicry','  confidence         : 0.94','  exposed relations  : 6','  recommended stance : contain / observe','  note               : fragments resolved'],
-        ['assistant.graph','  [macro-drift] -> [prompt-storm]','  [startup-shadow] -> [script introspection]','  [object telemetry] -> [intent summary]','','status: reveal destination surface']
-      ]
-    }
-  ];
+  let done = false;
+  let scanY = 0;
+  let glitchTimer = 0;
+  let glitchActive = false;
 
-  function $(id){ return document.getElementById(id); }
-  function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
-  function mix(a, b, t){ return a + (b - a) * t; }
-  function escapeHtml(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  function typeSlice(text, progress){ return text.slice(0, Math.floor(text.length * progress)); }
-  function morphLine(a, b, t) {
-    const from = a || '', to = b || '';
-    const max = Math.max(from.length, to.length);
-    let out = '';
-    for (let i = 0; i < max; i++) {
-      const blendPoint = i / Math.max(1, max - 1);
-      out += (t >= blendPoint) ? (to[i] || '') : (from[i] || '');
-    }
-    return out;
+  // Load messages from existing translation keys
+  function msgs() {
+    return [
+      T('iz_load_1'), T('iz_load_2'), T('iz_load_3'), T('iz_load_4'),
+      T('iz_load_5'), T('iz_load_6'), T('iz_load_7'), T('iz_load_8'),
+    ];
   }
-  function hexToRgb(hex) {
-    const raw = hex.replace('#','');
-    const n = raw.length === 3 ? raw.split('').map(ch => ch + ch).join('') : raw;
-    const x = parseInt(n, 16);
-    return { r:(x >> 16) & 255, g:(x >> 8) & 255, b:x & 255 };
-  }
-  function rgbToHex({ r, g, b }) {
-    const c = v => clamp(Math.round(v), 0, 255).toString(16).padStart(2, '0');
-    return `#${c(r)}${c(g)}${c(b)}`;
-  }
-  function mixColor(a, b, t) {
-    const ca = hexToRgb(a), cb = hexToRgb(b);
-    return rgbToHex({ r:mix(ca.r, cb.r, t), g:mix(ca.g, cb.g, t), b:mix(ca.b, cb.b, t) });
-  }
-  function tokenize(line, sceneId) {
-    const esc = escapeHtml(line);
-    if (sceneId === 'dos' || sceneId === 'shell') {
-      return esc
-        .replace(/\[(warn|trace|note|info)\s*\]/g, '<span class="tok-warn">[$1]</span>')
-        .replace(/\b(clean|nominal|ok)\b/gi, '<span class="tok-green">$1</span>')
-        .replace(/\b(mismatch|phantom|strange|anomaly)\b/gi, '<span class="tok-danger">$1</span>')
-        .replace(/\b(A:\\>|C:\\>|C:\\WINDOWS>)/g, '<span class="tok-green">$1</span>');
-    }
-    if (sceneId === 'vbs') {
-      return esc
-        .replace(/^'.*$/gm, m => `<span class="tok-comment">${m}</span>`)
-        .replace(/\b(Set|For Each|If|Then|End If|Next)\b/g, '<span class="tok-violet">$1</span>')
-        .replace(/"[^"]*"/g, '<span class="tok-str">$&</span>')
-        .replace(/\b(GetObject|ExecQuery|WScript\.Echo)\b/g, '<span class="tok-accent">$1</span>')
-        .replace(/\b(flagged>|trace|status)\b/g, '<span class="tok-warn">$1</span>');
-    }
-    if (sceneId === 'ps') {
-      return esc
-        .replace(/\b(PS C:\\Ops>|Get-SimTrace|Resolve-SimChain|Format-Table|Contain-SimSurface)\b/g, '<span class="tok-accent">$1</span>')
-        .replace(/\b(Time|Surface|Indicator|Confidence|ChainScore|Story|Nodes|Action)\b/g, '<span class="tok-prop">$1</span>')
-        .replace(/\[[^\]]+\]/g, '<span class="tok-violet">$&</span>')
-        .replace(/\b(High|Medium)\b/g, '<span class="tok-warn">$1</span>');
-    }
-    return esc
-      .replace(/\b(operator>|assistant\.graph|model\.summary:|status:)\b/g, '<span class="tok-accent">$1</span>')
-      .replace(/\b(confidence|likely narrative|recommended stance|note|exposed relations)\b/gi, '<span class="tok-prop">$1</span>')
-      .replace(/\[[^\]]+\]/g, '<span class="tok-violet">$&</span>')
-      .replace(/\b(contain|observe|preserve context|intent summary)\b/gi, '<span class="tok-green">$1</span>');
-  }
-  function resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.75);
-    const fxCanvas = $('cyber-loader-fx');
-    const particleCanvas = $('cyber-loader-particles');
-    [fxCanvas, particleCanvas].forEach(c => {
-      c.width = Math.floor(window.innerWidth * dpr);
-      c.height = Math.floor(window.innerHeight * dpr);
-      c.style.width = `${window.innerWidth}px`;
-      c.style.height = `${window.innerHeight}px`;
-    });
-  }
-  function updatePalette(sceneIdx, localT) {
-    const scene = scenes[sceneIdx];
-    const next = scenes[Math.min(sceneIdx + 1, scenes.length - 1)];
-    const base = palette[scene.palette];
-    const target = palette[next.palette];
-    const blend = clamp((localT - 0.84) / 0.16, 0, 1);
-    currentPalette = {};
-    Object.keys(base).forEach(key => {
-      currentPalette[key] = target[key] ? mixColor(base[key], target[key], blend) : base[key];
-    });
-  }
-  function buildContent(scene, localT, nextScene) {
-    if (scene.palette === 'dos' && localT < preludeCutoff) {
-      const introT = clamp(localT / preludeCutoff, 0, 1);
-      const promptOnly = clamp(introT / 0.30, 0, 1);
-      const typingT = clamp((introT - 0.24) / 0.28, 0, 1);
-      const responseT = clamp((introT - 0.60) / 0.18, 0, 1);
-      const statusT = clamp((introT - 0.78) / 0.14, 0, 1);
-      const cmd = `C:\\> ${typeSlice('trace dormant host and inspect hostile drift', typingT)}`;
-      const resp = typeSlice('response :: terminal glass waking', responseT);
-      const stat = typeSlice('status   :: channel unstable / hold link', statusT);
-      // Fire typewriter click when new characters appear
-      const counts = [cmd.length, resp.length, stat.length];
-      counts.forEach((n, i) => {
-        if (n > _prevCharCounts[i]) {
-          _loaderClick(i === 0 ? 1600 : i === 1 ? 1100 : 900, 0.018, 0.024);
-          _prevCharCounts[i] = n;
-        }
-      });
-      // Cursor follows whichever line is actively typing
-      const cursorLine = statusT > 0 && statusT < 1 ? 2 : responseT > 0 && responseT < 1 ? 1 : 0;
-      const lines = [
-        { text:cmd,  opacity:Math.max(0.74, promptOnly), y:0, scale:1, blur:0.08, cursor: cursorLine === 0 },
-        { text:resp, opacity:responseT,                  y:1, scale:1, blur:0,    cursor: cursorLine === 1 },
-        { text:stat, opacity:statusT,                    y:2, scale:1, blur:0,    cursor: cursorLine === 2 }
-      ];
-      return lines;
-    }
-    const adjustedT = scene.palette === 'dos'
-      ? clamp((localT - preludeCutoff) / (1 - preludeCutoff), 0, 1)
-      : localT;
-    const phaseIn = clamp(adjustedT / 0.18, 0, 1);
-    const phaseOut = clamp((adjustedT - 0.96) / 0.04, 0, 1);
-    const typingWindow = clamp((adjustedT - 0.02) / 0.42, 0, 1);
-    const morphWindow = clamp((adjustedT - 0.62) / 0.20, 0, 1);
-    const settleWindow = clamp((adjustedT - 0.84) / 0.08, 0, 1);
-    const mainA = scene.snippets[0], mainB = scene.snippets[1];
-    const maxLines = Math.max(mainA.length, mainB.length);
-    const lines = [];
-    for (let i = 0; i < maxLines; i++) {
-      let raw = '';
-      if (morphWindow <= 0) raw = typeSlice(mainA[i] || '', typingWindow);
-      else raw = morphLine(mainA[i] || '', mainB[i] || '', morphWindow);
-      if (settleWindow > 0 && mainB[i]) raw = mainB[i];
-      lines.push({ text: raw, opacity: phaseIn * (1 - phaseOut * 0.45), y: i, scale: 1 - phaseOut * 0.012, blur: scene.palette === 'dos' ? (1.6 - phaseIn * 1.2) : scene.palette === 'shell' ? .45 : 0 });
-    }
-    if (nextScene && adjustedT > 0.975) {
-      const morph = clamp((adjustedT - 0.975) / 0.025, 0, 1);
-      lines.push({ text: morphLine(scene.morphText, nextScene.morphText, morph), opacity: .92 * morph, y: maxLines + 1, scale: 1, blur: 0 });
-    }
-    return lines;
-  }
-  function renderText(sceneIdx, localT) {
-    const scene = scenes[sceneIdx];
-    const next = scenes[Math.min(sceneIdx + 1, scenes.length - 1)];
-    const inPrelude = scene.palette === 'dos' && localT < preludeCutoff;
-    $('cyber-loader-label').textContent = inPrelude ? 'Terminal Wake' : scene.label;
-    $('cyber-loader-title').textContent = inPrelude ? 'Signal Intercept' : scene.title;
-    $('cyber-loader-hud-era').textContent = inPrelude ? 'Pre-Boot Terminal Wake' : scene.era;
-    $('cyber-loader-hud-year').textContent = inPrelude ? 'Signal Unknown' : scene.years;
-    $('cyber-loader-hud-status').textContent = inPrelude ? 'Awaiting terminal response' : scene.status;
-    $('cyber-loader-loading-text').textContent = inPrelude ? 'hostile signal handshake' : (scene.loading || 'interface strata');
-    $('cyber-loader-side-thread').textContent = scene.status;
-    $('cyber-loader-side-surface').textContent = scene.surface;
-    $('cyber-loader-side-context').textContent = scene.context;
-    document.documentElement.style.setProperty('--loader-scan-opacity', scene.palette === 'dos' ? '.16' : scene.palette === 'shell' ? '.11' : '.08');
-    const terminal = $('cyber-loader-terminal');
-    terminal.style.background = `linear-gradient(180deg, ${currentPalette.bg}f0, #050a10f6)`;
-    terminal.style.boxShadow = `0 30px 90px rgba(0,0,0,.48), inset 0 0 0 1px rgba(255,255,255,.02), inset 0 0 120px ${currentPalette.accent}14`;
-    $('cyber-loader-label').style.color = currentPalette.accent;
-    $('cyber-loader-hud-era').style.color = currentPalette.accent;
-    // Sync frame panel border & glow to scene palette
-    const acRgb = hexToRgb(currentPalette.accent);
-    const acStr = `${acRgb.r},${acRgb.g},${acRgb.b}`;
-    terminal.style.setProperty('--cl-frame-border', `rgba(${acStr},.26)`);
-    terminal.style.setProperty('--cl-frame-glow',   `rgba(${acRgb.r},${acRgb.g},${acRgb.b},.05)`);
-    terminal.style.setProperty('--cl-frame-outer',  `rgba(${acStr},.07)`);
-    const content = buildContent(scene, localT, next);
-    let html = '';
-    content.forEach((line, idx) => {
-      const inlineCursor = inPrelude && line.cursor ? '<span class="cyber-loader-cursor"></span>' : '';
-      html += `<span class="cyber-loader-line" style="opacity:${line.opacity};transform:scale(${line.scale});filter:blur(${line.blur}px);color:${currentPalette.fg}">${tokenize(line.text, scene.palette)}${inlineCursor}</span>`;
-    });
-    if (!inPrelude && localT < 0.975) {
-      html += `<span class="cyber-loader-line" style="opacity:${1 - clamp((localT - 0.93)/0.045,0,1)};margin-top:10px;color:${currentPalette.accent}"><span class="cyber-loader-cursor"></span></span>`;
-    }
-    $('cyber-loader-code').innerHTML = html;
-  }
-  function pushParticles(localT) {
-    // particles disabled — background is clean
-  }
-  function renderParticles(dt) {
-    const canvas = $('cyber-loader-particles');
-    const ctx = canvas.getContext('2d', { alpha:true });
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    for (let i = particles.length - 1; i >= 0; i--) {
-      const p = particles[i];
-      p.life += dt;
-      if (p.life >= p.max) { particles.splice(i, 1); continue; }
-      p.x += p.vx * dt; p.y += p.vy * dt;
-      ctx.globalAlpha = (1 - p.life / p.max) * 0.8;
-      ctx.fillStyle = p.color;
-      ctx.font = `700 ${p.size}px ui-monospace, monospace`;
-      ctx.fillText(p.char, p.x, p.y);
-    }
-    ctx.globalAlpha = 1;
-  }
-  function renderFx(sceneIdx, totalT, localT, dt) {
-    const canvas = $('cyber-loader-fx');
-    const ctx = canvas.getContext('2d', { alpha:true });
-    const w = window.innerWidth, h = window.innerHeight;
-    const scene = scenes[sceneIdx];
-    const crtIntensity = scene.palette === 'dos' ? 1 : scene.palette === 'shell' ? .72 : .32;
-    ctx.clearRect(0, 0, w, h);
 
-    // Get terminal panel bounds so ALL effects stay inside it
-    const termEl = $('cyber-loader-terminal');
-    const rect = termEl.getBoundingClientRect();
-    const tx = rect.left, ty = rect.top, tw = rect.width, th = rect.height;
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
-    // ── CRT / TV SIGNAL FLICKER ENGINE ───────────────────────────
-    const f = _flicker;
-    f.t += dt;
-    f.nextEvent -= dt;
+  function resize(canvas) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width  = Math.floor(window.innerWidth  * dpr);
+    canvas.height = Math.floor(window.innerHeight * dpr);
+    canvas.style.width  = window.innerWidth  + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+  }
 
-    if (f.nextEvent <= 0) {
-      const roll = Math.random();
-      if (roll < 0.28) {
-        f.rollV = (Math.random() > 0.5 ? 1 : -1) * (40 + Math.random() * 120);
-        f.spark = 0.22 + Math.random() * 0.18;
-        f.nextEvent = 0.8 + Math.random() * 2.2;
-      } else if (roll < 0.48) {
-        f.noise = -(0.82 + Math.random() * 0.18);
-        f.spark = 0.0;
-        f.nextEvent = 0.18 + Math.random() * 0.5;
-      } else if (roll < 0.66) {
-        f.spark = 0.28 + Math.random() * 0.35;
-        f.nextEvent = 0.3 + Math.random() * 1.0;
-      } else if (roll < 0.82) {
-        f.band = 0.55 + Math.random() * 0.4;
-        f.bandY = 0.04 + Math.random() * 0.88;
-        f.bandH = 6 + Math.random() * 28;
-        f.nextEvent = 0.4 + Math.random() * 1.2;
-      } else {
-        f.noise = 0.04 + Math.random() * 0.08;
-        f.nextEvent = 0.25 + Math.random() * 0.8;
-      }
-    }
+  function draw(canvas, elapsed) {
+    const ctx  = canvas.getContext('2d');
+    const w    = canvas.width;
+    const h    = canvas.height;
+    const dpr  = canvas.width / window.innerWidth;
+    const now  = elapsed;
 
-    // Decay
-    f.roll  += f.rollV * dt;
-    f.rollV *= Math.pow(0.008, dt);
-    f.roll  *= Math.pow(0.06, dt);
-    f.spark  = Math.max(0, f.spark - dt * 5.5);
-    f.band   = Math.max(0, f.band  - dt * 6.0);
-    f.noise += (0 - f.noise) * Math.min(1, dt * 8);
+    // ── BACKGROUND ──
+    ctx.fillStyle = '#030010';
+    ctx.fillRect(0, 0, w, h);
 
-    const micro = Math.sin(f.t * 61) * 0.008
-                + Math.sin(f.t * 137) * 0.005
-                + Math.sin(f.t * 23)  * 0.004;
+    // Radial glow
+    const rg = ctx.createRadialGradient(w/2, h*0.45, 60, w/2, h*0.45, w*0.75);
+    rg.addColorStop(0, 'rgba(20,5,60,0.55)');
+    rg.addColorStop(1, 'rgba(3,0,16,0)');
+    ctx.fillStyle = rg;
+    ctx.fillRect(0, 0, w, h);
 
-    // ── APPLY ROLL + BRIGHTNESS TO TERMINAL VIA CSS ──────────────
-    const baseScale = sceneIdx === 0 ? 1.012 : sceneIdx === 1 ? 1.007 : 1;
-    const baseRotX  = sceneIdx < 2 ? 1.2 : 0.2;
-    const luma = f.noise + micro;
-    // brightness: 0 = full black (blackout), 1 = normal, >1 = overexpose
-    const brightness = clamp(1 + luma * 1.8 + (f.spark * 2.2), 0, 3.5);
-    termEl.style.transform =
-      `perspective(1600px) scale(${baseScale}) rotateX(${baseRotX}deg) translateY(${f.roll.toFixed(1)}px)`;
-    termEl.style.filter = `brightness(${brightness.toFixed(3)})`;
-
-    // ── ALL CANVAS EFFECTS CLIPPED TO TERMINAL BOUNDS ────────────
+    // Hex grid
     ctx.save();
-    ctx.beginPath();
-    ctx.rect(tx, ty, tw, th);
-    ctx.clip();
-
-    // Static band
-    if (f.band > 0.01) {
-      const by = ty + f.bandY * th;
-      for (let s = 0; s < 5; s++) {
-        const offX = (Math.random() - 0.5) * 28;
-        const sliceH = f.bandH / 5 + Math.random() * 4;
-        const a = f.band * (0.4 + Math.random() * 0.6);
-        ctx.fillStyle = `rgba(200,230,255,${a})`;
-        ctx.fillRect(tx + offX, by + s * (f.bandH / 5), tw, sliceH);
+    ctx.strokeStyle = 'rgba(66,217,255,0.04)';
+    ctx.lineWidth = 0.5 * dpr;
+    const HEX = 28 * dpr;
+    const HR  = HEX * 0.866;
+    for (let row = -1; row < h/HR + 2; row++) {
+      for (let col = -1; col < w/(HEX*1.5) + 2; col++) {
+        const cx = col * HEX * 1.5;
+        const cy = row * HR * 2 + (col % 2 === 0 ? 0 : HR);
+        ctx.beginPath();
+        for (let i = 0; i < 6; i++) {
+          const angle = (Math.PI / 3) * i - Math.PI / 6;
+          const px = cx + HEX * Math.cos(angle);
+          const py = cy + HEX * Math.sin(angle);
+          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.stroke();
       }
-      ctx.fillStyle = `rgba(0,0,0,${f.band * 0.5})`;
-      ctx.fillRect(tx, by + f.bandH * 0.3, tw, f.bandH * 0.35);
+    }
+    ctx.restore();
+
+    // Scan line sweep
+    ctx.save();
+    const sg = ctx.createLinearGradient(0, scanY - 80*dpr, 0, scanY + 80*dpr);
+    sg.addColorStop(0, 'rgba(66,217,255,0)');
+    sg.addColorStop(0.5, 'rgba(66,217,255,0.055)');
+    sg.addColorStop(1, 'rgba(66,217,255,0)');
+    ctx.fillStyle = sg;
+    ctx.fillRect(0, scanY - 80*dpr, w, 160*dpr);
+    ctx.restore();
+
+    // CRT scanlines
+    ctx.save();
+    for (let y = 0; y < h; y += 3 * dpr) {
+      ctx.fillStyle = 'rgba(0,0,0,0.07)';
+      ctx.fillRect(0, y, w, dpr);
+    }
+    ctx.restore();
+
+    // Corner brackets
+    ctx.save();
+    const BL   = (32 + Math.sin(now * 2) * 4) * dpr;
+    const BT   = 2 * dpr;
+    const pad  = 24 * dpr;
+    const slowP = 0.5 + 0.5 * Math.sin(now * 0.8);
+    ctx.strokeStyle = `rgba(66,217,255,${0.4 + 0.3 * slowP})`;
+    ctx.lineWidth = BT;
+    ctx.shadowColor = '#42d9ff';
+    ctx.shadowBlur = 10 * dpr;
+    [[pad,pad,1,1],[w-pad,pad,-1,1],[pad,h-pad,1,-1],[w-pad,h-pad,-1,-1]].forEach(([cx,cy,sx,sy]) => {
+      ctx.beginPath();
+      ctx.moveTo(cx, cy + sy*BL); ctx.lineTo(cx, cy); ctx.lineTo(cx + sx*BL, cy);
+      ctx.stroke();
+    });
+    ctx.restore();
+
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    const cx = w / 2;
+    const cy = h / 2;
+    const fs = (px) => `bold ${px * dpr}px "Courier New", monospace`;
+
+    // ── PHASE 1 (0–1s): cursor blink ──
+    if (elapsed < 1) {
+      const blink = Math.sin(elapsed * Math.PI * 6) > 0 ? 1 : 0.2;
+      ctx.fillStyle = `rgba(66,217,255,${blink})`;
+      ctx.font = fs(20);
+      ctx.shadowColor = '#42d9ff';
+      ctx.shadowBlur = 12 * dpr;
+      ctx.fillText('_', cx, cy - 60*dpr);
     }
 
-    // Vignette (inside terminal only)
-    const cx = tx + tw / 2, cy = ty + th / 2;
-    const vignette = ctx.createRadialGradient(
-      cx, cy, Math.min(tw, th) * 0.10,
-      cx, cy, Math.max(tw, th) * 0.72);
-    vignette.addColorStop(0, 'rgba(0,0,0,0)');
-    vignette.addColorStop(1, `rgba(0,0,0,${0.32 + crtIntensity * 0.22})`);
-    ctx.fillStyle = vignette;
-    ctx.fillRect(tx, ty, tw, th);
+    // ── PHASE 2 (1–3s): typewriter ──
+    if (elapsed >= 1 && elapsed < 3) {
+      const text = T('boot_acquiring') || 'SIGNAL ACQUISITION...';
+      const t    = (elapsed - 1) / 2;
+      const chars = Math.floor(t * text.length * 1.2);
+      const display = text.substring(0, Math.min(chars, text.length));
+      ctx.font = fs(18);
+      ctx.fillStyle = '#42d9ff';
+      ctx.shadowColor = '#42d9ff';
+      ctx.shadowBlur = 14 * dpr;
+      ctx.fillText(display + (Math.sin(elapsed * 12) > 0 ? '\u2588' : ''), cx, cy - 60*dpr);
+    }
 
-    // Phosphor sweep line
-    const sweepY = ty + (totalT * 0.16 % 1) * th;
-    ctx.fillStyle = `rgba(255,255,255,${0.022 + crtIntensity * 0.028})`;
-    ctx.fillRect(tx, sweepY, tw, 2);
-    ctx.fillStyle = `rgba(255,255,255,${0.006 + crtIntensity * 0.008})`;
-    ctx.fillRect(tx, sweepY + 2, tw, 6);
+    // ── PHASE 3 (3–9s): progress log + bar ──
+    if (elapsed >= 3 && elapsed < 9) {
+      const progress = Math.min(1, (elapsed - 3) / 6);
+      const loadMsgs = msgs();
+      const msgIdx   = Math.floor(progress * loadMsgs.length);
+      const firstV   = Math.max(0, msgIdx - 4);
+      const logTop   = cy - 100*dpr;
 
-    // Scanline jitter
-    if (crtIntensity > 0.4) {
-      ctx.globalAlpha = .06 + crtIntensity * .09;
-      for (let i = 0; i < 18; i++) {
-        const ny = ty + (Math.sin(totalT * 11 + i * 0.68) * 0.5 + 0.5) * th;
-        ctx.fillStyle = i % 3 === 0 ? 'rgba(120,255,140,.05)' : 'rgba(255,255,255,.018)';
-        ctx.fillRect(tx, ny, tw, 1);
+      ctx.font = `${12 * dpr}px "Courier New", monospace`;
+      ctx.textAlign = 'left';
+      for (let i = firstV; i <= msgIdx && i < loadMsgs.length; i++) {
+        const age = msgIdx - i;
+        const op  = age === 0 ? 1 : Math.max(0.12, 0.65 - age * 0.15);
+        ctx.fillStyle = age === 0 ? `rgba(0,255,136,${op})` : `rgba(66,217,255,${op})`;
+        ctx.shadowColor = age === 0 ? '#00FF88' : '#42d9ff';
+        ctx.shadowBlur  = age === 0 ? 8*dpr : 2*dpr;
+        ctx.fillText((age === 0 ? '\u25b8 ' : '  \u2713 ') + loadMsgs[i],
+                     cx - 180*dpr, logTop + (i - firstV) * 18*dpr);
       }
+
+      // Progress bar
+      const BAR_W = 340*dpr, BAR_H = 14*dpr;
+      const bx = cx - BAR_W/2, by = cy + 20*dpr;
+      ctx.textAlign = 'center';
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = 'rgba(66,217,255,0.08)';
+      ctx.fillRect(bx, by, BAR_W, BAR_H);
+
+      const sh = 0.5 + 0.5 * Math.sin(now * 4);
+      const fg = ctx.createLinearGradient(bx, by, bx + BAR_W * progress, by);
+      fg.addColorStop(0, 'rgba(66,217,255,0.9)');
+      fg.addColorStop(1, `rgba(${80+sh*40},230,255,1)`);
+      ctx.fillStyle = fg;
+      ctx.fillRect(bx, by, BAR_W * progress, BAR_H);
+
+      ctx.strokeStyle = '#42d9ff';
+      ctx.shadowColor = '#42d9ff';
+      ctx.shadowBlur  = 8*dpr;
+      ctx.lineWidth   = dpr;
+      ctx.strokeRect(bx, by, BAR_W, BAR_H);
+      ctx.shadowBlur = 0;
+
+      ctx.font = `bold ${11*dpr}px "Courier New", monospace`;
+      ctx.fillStyle = '#42d9ff';
+      ctx.fillText(Math.floor(progress * 100) + '%', cx, by + BAR_H + 16*dpr);
+    }
+
+    // ── PHASE 4 (9–11s): READY ──
+    if (elapsed >= 9 && elapsed < 11) {
+      const t   = (elapsed - 9) / 2;
+      const pls = 0.8 + 0.2 * Math.sin(now * 6);
+      ctx.globalAlpha = Math.min(1, t * 3) * pls;
+      ctx.font = fs(22);
+      ctx.fillStyle = '#00FF88';
+      ctx.shadowColor = '#00FF88';
+      ctx.shadowBlur  = 20*dpr;
+      ctx.fillText(T('iz_loading_ready'), cx, cy - 10*dpr);
       ctx.globalAlpha = 1;
     }
 
-    // AI era wire traces
-    if (scene.palette === 'ai') {
-      ctx.strokeStyle = 'rgba(142,231,255,.07)';
-      ctx.lineWidth = 1;
-      for (let i = 0; i < 7; i++) {
-        const x = tx + tw * (0.14 + i * 0.11);
-        ctx.beginPath();
-        ctx.moveTo(x, ty + th * 0.18);
-        ctx.lineTo(x + Math.sin(totalT * 2 + i) * 30, ty + th * 0.82);
-        ctx.stroke();
+    // ── PHASE 5 (11–14s): logo reveal ──
+    if (elapsed >= 11) {
+      const t    = Math.min(1, (elapsed - 11) / 2);
+      const glitchX = (glitchActive && t < 0.4) ? (Math.random() - 0.5) * 6*dpr : 0;
+
+      ctx.globalAlpha = t;
+
+      // Red accent bars
+      ctx.fillStyle = '#e0003c';
+      ctx.fillRect(cx - 200*dpr, cy - 52*dpr, 400*dpr, 3*dpr);
+      ctx.fillRect(cx - 200*dpr, cy + 32*dpr, 400*dpr, 3*dpr);
+
+      // Main title
+      ctx.font = fs(32);
+      ctx.fillStyle = '#f4f7fa';
+      ctx.shadowColor = '#42d9ff';
+      ctx.shadowBlur  = 20*dpr;
+      ctx.fillText('\u25c8 CROWDSTRIKE', cx + glitchX, cy - 18*dpr);
+
+      ctx.font = fs(18);
+      ctx.fillStyle = '#e0003c';
+      ctx.shadowColor = '#e0003c';
+      ctx.shadowBlur  = 14*dpr;
+      ctx.fillText('ARCADE SERIES 2026', cx, cy + 16*dpr);
+
+      if (t > 0.5) {
+        ctx.globalAlpha = (t - 0.5) * 2;
+        ctx.font = `${12*dpr}px "Courier New", monospace`;
+        ctx.fillStyle = '#a0a0b0';
+        ctx.shadowBlur = 0;
+        ctx.fillText(T('subtitle') || '', cx, cy + 52*dpr);
       }
+
+      // Skip hint
+      if (t > 0.7) {
+        const blinkA = 0.4 + 0.4 * Math.sin(now * 4);
+        ctx.globalAlpha = (t - 0.7) / 0.3 * blinkA;
+        ctx.font = `${11*dpr}px "Courier New", monospace`;
+        ctx.fillStyle = '#4a4a5e';
+        ctx.shadowBlur = 0;
+        ctx.fillText('[ SPACE ] SKIP', cx, h - 30*dpr);
+      }
+
+      ctx.globalAlpha = 1;
     }
 
     ctx.restore();
   }
-  function teardown() {
-    running = false;
-    if (rafId) cancelAnimationFrame(rafId);
-    rafId = 0;
-    document.removeEventListener('keydown', onKeyDown);
-    window.removeEventListener('resize', resize);
-  }
+
   function finish() {
-    if (_cyberLoaderDone) return;
-    _cyberLoaderDone = true;
-    teardown();
-    const termEl = $('cyber-loader-terminal');
-    if (termEl) { termEl.style.filter = ''; termEl.style.transform = ''; }
-    $('cyber-loader')?.classList.add('is-done');
+    if (done) return;
+    done = true;
+    running = false;
+    if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+    document.removeEventListener('keydown', onKey);
+    document.getElementById('cyber-loader')?.classList.add('is-done');
     document.body.classList.remove('arcade-loader-active');
     _dashboardAttract?.resetIdle?.();
   }
-  function onKeyDown(e) {
+
+  function onKey(e) {
     if (['Control','Shift','Alt','Meta'].includes(e.key)) return;
-    e.preventDefault();
     finish();
   }
-  function update(ts) {
+
+  function frame(ts) {
     if (!running) return;
     if (!startTs) startTs = ts;
-    const delta = Math.min((ts - lastTs) || 16.6, 1000 / 30);
-    lastTs = ts;
-    const progress = clamp((ts - startTs) / totalMs, 0, 1);
-    const span = 1 / scenes.length;
-    activeSceneIndex = Math.min(scenes.length - 1, Math.floor(progress / span));
-    const localStart = activeSceneIndex * span;
-    const localT = clamp((progress - localStart) / span, 0, 1);
-    updatePalette(activeSceneIndex, localT);
-    renderText(activeSceneIndex, localT);
-    pushParticles(localT);
-    renderParticles(delta / 1000);
-    renderFx(activeSceneIndex, progress, localT, delta / 1000);
-    $('cyber-loader-hud-bar').style.width = `${progress * 100}%`;
-    if (progress >= 1) {
-      finish();
-      return;
+    const dt      = Math.min((ts - (lastTs || ts)) / 1000, 0.05);
+    lastTs        = ts;
+    const elapsed = (ts - startTs) / 1000;
+
+    const canvas = document.getElementById('boot-canvas');
+    if (!canvas) { finish(); return; }
+
+    // Update animation state
+    scanY += dt * 240 * (window.devicePixelRatio || 1);
+    if (scanY > canvas.height) scanY = 0;
+    glitchTimer -= dt;
+    if (glitchTimer <= 0) {
+      glitchActive = Math.random() < 0.3;
+      glitchTimer  = 0.08 + Math.random() * 0.4;
     }
-    rafId = requestAnimationFrame(update);
+
+    draw(canvas, elapsed);
+
+    if (elapsed >= 14) { finish(); return; }
+    rafId = requestAnimationFrame(frame);
   }
+
+  function onResize() {
+    const canvas = document.getElementById('boot-canvas');
+    if (canvas) resize(canvas);
+  }
+
   return {
     start() {
+      if (reduceMotion) { finish(); return; }
+      const canvas = document.getElementById('boot-canvas');
+      if (!canvas) { finish(); return; }
+      resize(canvas);
       document.body.classList.add('arcade-loader-active');
-      resize();
-      document.addEventListener('keydown', onKeyDown);
-      document.getElementById('cyber-loader')?.addEventListener('click', finish, { once:true });
-      window.addEventListener('resize', resize, { passive:true });
-      if (reduceMotion) {
-        _cyberLoaderDone = false;
-        finish();
-        return;
-      }
+      document.addEventListener('keydown', onKey);
+      document.getElementById('cyber-loader')?.addEventListener('click', finish, { once: true });
+      window.addEventListener('resize', onResize, { passive: true });
+      done    = false;
       running = true;
-      _cyberLoaderDone = false;
-      rafId = requestAnimationFrame(update);
+      rafId   = requestAnimationFrame(frame);
     }
   };
 })();
-
 let _dashboardAttract = null;
 function _ensureDashboardAttractOverlay() {
   if (document.getElementById('dashboard-attract-overlay')) return;
