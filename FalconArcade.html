@@ -8286,7 +8286,12 @@ function addBullet(x,y,vx,vy,dmg,col,en=false){
   (en?EBULLETS:BULLETS).push({x,y,vx,vy,w:en?5:4,h:en?5:12,dmg,col});
 }
 function addPickup(wy,x,kind,data=null){
-  PICKUPS.push({wy,x,kind,data,bob:Math.random()*TAU,alive:true});
+  // Clamp x to river at the pickup's actual world-y so jittered wy
+  // can't place items outside the river channel.
+  const r=getRivW(wy), minEdge=22;
+  const pL=r.cx-r.cw/2+minEdge, pR=r.cx+r.cw/2-minEdge;
+  const sx=(pR>pL)?clamp(x,pL,pR):r.cx;
+  PICKUPS.push({wy,x:sx,kind,data,bob:Math.random()*TAU,alive:true});
 }
 function addFuelBarge(wy,x,fromBoss=false){
   const r=getRivW(wy),minEdge=72;
