@@ -1426,7 +1426,10 @@ const TRANSLATIONS = {
     lb_email_placeholder:'name@company.com',
     lb_submit:'SUBMIT &amp; CLAIM RANK',
     lb_skip:'Skip',
+    g_exit_confirm:'Are you sure you want to quit? Progress will be lost.',
     lb_consent:'By submitting you agree CrowdStrike may contact you regarding this event and relevant security products. Prize eligibility requires valid work email.',
+    lb_consent_check:'I agree to the terms above',
+    lb_consent_required:'You must agree to the terms to submit.',
     lb_your_rank:'Your Rank',
     lb_press_continue:'Press any key or tap to continue',
     lb_first_board:'Be the first on the board!',
@@ -1439,6 +1442,7 @@ const TRANSLATIONS = {
     lb_grade_short:'Grade',
     lb_admin_hint:'Ctrl+Shift+E export  ·  Ctrl+Shift+R clear',
     admin_pin_prompt:'Admin PIN required:',
+    admin_locked:'Too many attempts. Try again in 60 seconds.',
     err_name_required:'Name is required',
     err_name_no_at:'Name cannot contain @',
     err_name_full:'Use a real full name',
@@ -1710,6 +1714,7 @@ const TRANSLATIONS = {
     def_defending:'DEFENDING',
     def_wave_label:'WAVE',
     def_chain:'CHAIN',
+    def_boss_counter_hint:'USE {mod} FOR 2.2× DAMAGE',
     def_network_initializing:'NETWORK INITIALIZING',
     def_threat_active:'THREAT ACTIVE',
     def_what_happened:'WHAT HAPPENED',
@@ -1721,7 +1726,7 @@ const TRANSLATIONS = {
     def_pickup_insight:'🔍 XDR — FULL VISIBILITY + 2x CORRELATED KILLS',
     def_pickup_identity:'🪪 IDENTITY — CREDENTIAL ATTACKS BLOCKED',
     def_pickup_cloud:'☁️ CLOUD SECURITY — RUNTIME PROTECTION ACTIVE',
-    def_pickup_fem:'🗺️ EXPOSURE MGMT — ATTACK SURFACE MAPPED',
+    def_pickup_exp:'🗺️ EXPOSURE MGMT — ATTACK SURFACE MAPPED',
     def_pickup_charlotte:'🤖 CHARLOTTE AI — AUTONOMOUS THREAT ANALYSIS',
     def_pickup_pangea:'🌍 PANGEA — ADVERSARY INFRASTRUCTURE FROZEN',
     def_ir_collect:'🚨 IR TEAM ON SITE — INTEGRITY RESTORED +1',
@@ -1809,7 +1814,7 @@ const TRANSLATIONS = {
     def_act_prevent:'FALCON PREVENT — ML BARRIER DEPLOYED',
     def_act_insight:'INSIGHT XDR — FULL ATTACK SURFACE MAPPED',
     def_act_identity:'IDENTITY — CREDENTIALS LOCKED · IMPOSTORS EXPOSED',
-    def_act_fem_exposed:'FEM — {count} NODES EXPOSED · SURFACE MAPPED',
+    def_act_exp_exposed:'EXP — {count} NODES EXPOSED · SURFACE MAPPED',
     def_act_charlotte:'CHARLOTTE AI — NEURAL NETWORK ONLINE · TARGETING',
     def_act_pangea:'PANGEA — PLANET-SCALE FREEZE · ALL SECTORS LOCKED',
     iz_banner_ngav_scan:'NGAV · ML SCAN COMPLETE · QUARANTINE DEPLOYED',
@@ -1869,7 +1874,7 @@ const TRANSLATIONS = {
     g_hunt_layer_cloud:'CLOUD LAYER',
     disc_banner:'⚠&nbsp;&nbsp;CLASSIFIED — AUTHORIZED PERSONNEL ONLY&nbsp;&nbsp;⚠',
     disc_title:'LEGAL DISCLAIMER',
-    disc_body1:'This is a <strong style="color:#aac4ff;">fictional training simulation</strong> created for demonstration and educational purposes only. All adversary names, operations, and scenarios are entirely fictitious. Any resemblance to actual threat actors or incidents is coincidental.',
+    disc_body1:'This is a <strong style="color:#aac4ff;">fictional training simulation</strong> created for demonstration and educational purposes only. Adversary names reference <strong style="color:#aac4ff;">real threat actors</strong> tracked by CrowdStrike intelligence, but all game scenarios, operations, and outcomes are entirely fictional and do not depict actual incidents.',
     disc_body2:'CrowdStrike<sup>®</sup>, Falcon<sup>®</sup>, and related marks are registered trademarks of CrowdStrike, Inc. This application is <strong style="color:#aac4ff;">not affiliated with or endorsed by CrowdStrike, Inc.</strong> Detection statistics are illustrative only and do not represent actual product performance.',
     disc_btn:'[ ACKNOWLEDGE ]',
     disc_hint:'SPACE &nbsp;/&nbsp; ENTER TO ACKNOWLEDGE'
@@ -1939,7 +1944,10 @@ const TRANSLATIONS = {
     lb_email_placeholder:'nome@empresa.com',
     lb_submit:'ENVIAR E GARANTIR POSIÇÃO',
     lb_skip:'Pular',
+    g_exit_confirm:'Tem certeza que deseja sair? O progresso será perdido.',
     lb_consent:'Ao enviar, você concorda que a CrowdStrike poderá entrar em contato sobre este evento e produtos de segurança relevantes. A elegibilidade para prêmios exige email corporativo válido.',
+    lb_consent_check:'Concordo com os termos acima',
+    lb_consent_required:'Você deve concordar com os termos para enviar.',
     lb_your_rank:'Sua posição',
     lb_press_continue:'Pressione qualquer tecla ou toque para continuar',
     lb_first_board:'Seja o primeiro no placar!',
@@ -1952,6 +1960,7 @@ const TRANSLATIONS = {
     lb_grade_short:'Nível',
     lb_admin_hint:'Ctrl+Shift+E exportar  ·  Ctrl+Shift+R limpar',
     admin_pin_prompt:'PIN de administrador obrigatório:',
+    admin_locked:'Muitas tentativas. Tente novamente em 60 segundos.',
     err_name_required:'Nome obrigatório',
     err_name_no_at:'O nome não pode conter @',
     err_name_full:'Use seu nome completo real',
@@ -2221,6 +2230,7 @@ const TRANSLATIONS = {
     def_defending:'DEFENDENDO',
     def_wave_label:'ONDA',
     def_chain:'COMBO',
+    def_boss_counter_hint:'USE {mod} PARA 2.2× DE DANO',
     def_network_initializing:'REDE INICIALIZANDO',
     def_threat_active:'AMEAÇA ATIVA',
     def_what_happened:'O QUE ACONTECEU',
@@ -2232,7 +2242,7 @@ const TRANSLATIONS = {
     def_pickup_insight:'🔍 XDR — VISIBILIDADE TOTAL + ABATES CORRELACIONADOS 2x',
     def_pickup_identity:'🪪 IDENTIDADE — ATAQUES DE CREDENCIAL BLOQUEADOS',
     def_pickup_cloud:'☁️ CLOUD SECURITY — PROTEÇÃO DE RUNTIME ATIVA',
-    def_pickup_fem:'🗺️ EXPOSURE MGMT — SUPERFÍCIE DE ATAQUE MAPEADA',
+    def_pickup_exp:'🗺️ EXPOSURE MGMT — SUPERFÍCIE DE ATAQUE MAPEADA',
     def_pickup_charlotte:'🤖 CHARLOTTE AI — ANÁLISE AUTÔNOMA DE AMEAÇAS',
     def_pickup_pangea:'🌍 PANGEA — INFRAESTRUTURA ADVERSÁRIA CONGELADA',
     def_ir_collect:'🚨 EQUIPE IR NO LOCAL — INTEGRIDADE RESTAURADA +1',
@@ -2319,7 +2329,7 @@ const TRANSLATIONS = {
     def_act_prevent:'FALCON PREVENT — BARREIRA ML IMPLANTADA',
     def_act_insight:'INSIGHT XDR — SUPERFÍCIE DE ATAQUE TOTALMENTE MAPEADA',
     def_act_identity:'IDENTITY — CREDENCIAIS BLOQUEADAS · IMPOSTORES EXPOSTOS',
-    def_act_fem_exposed:'FEM — {count} NÓS EXPOSTOS · SUPERFÍCIE MAPEADA',
+    def_act_exp_exposed:'EXP — {count} NÓS EXPOSTOS · SUPERFÍCIE MAPEADA',
     def_act_charlotte:'CHARLOTTE AI — REDE NEURAL ATIVA · ALVEJANDO',
     def_act_pangea:'PANGEA — CONGELAMENTO GLOBAL · TODOS OS SETORES TRAVADOS',
     iz_banner_ngav_scan:'NGAV · ANÁLISE ML CONCLUÍDA · QUARENTENA IMPLANTADA',
@@ -2379,7 +2389,7 @@ const TRANSLATIONS = {
     g_hunt_layer_cloud:'CAMADA DE NUVEM',
     disc_banner:'⚠&nbsp;&nbsp;CLASSIFICADO — SOMENTE PESSOAL AUTORIZADO&nbsp;&nbsp;⚠',
     disc_title:'AVISO LEGAL',
-    disc_body1:'Esta é uma <strong style="color:#aac4ff;">simulação de treinamento fictícia</strong> criada apenas para fins de demonstração e educação. Todos os nomes de adversários, operações e cenários são completamente fictícios. Qualquer semelhança com agentes de ameaças ou incidentes reais é mera coincidência.',
+    disc_body1:'Esta é uma <strong style="color:#aac4ff;">simulação de treinamento fictícia</strong> criada apenas para fins de demonstração e educação. Os nomes dos adversários referem-se a <strong style="color:#aac4ff;">agentes de ameaças reais</strong> rastreados pela inteligência CrowdStrike, mas todos os cenários, operações e resultados do jogo são inteiramente fictícios e não representam incidentes reais.',
     disc_body2:'CrowdStrike<sup>®</sup>, Falcon<sup>®</sup> e marcas relacionadas são marcas registradas da CrowdStrike, Inc. Esta aplicação <strong style="color:#aac4ff;">não é afiliada nem endossada pela CrowdStrike, Inc.</strong> As estatísticas de detecção são apenas ilustrativas e não representam o desempenho real do produto.',
     disc_btn:'[ RECONHECER ]',
     disc_hint:'ESPAÇO &nbsp;/&nbsp; ENTER PARA RECONHECER'
@@ -2449,7 +2459,10 @@ const TRANSLATIONS = {
     lb_email_placeholder:'nombre@empresa.com',
     lb_submit:'ENVIAR Y RECLAMAR PUESTO',
     lb_skip:'Omitir',
+    g_exit_confirm:'¿Seguro que quieres salir? Se perderá el progreso.',
     lb_consent:'Al enviar aceptas que CrowdStrike pueda contactarte sobre este evento y productos de seguridad relevantes. La elegibilidad para premios requiere un correo corporativo válido.',
+    lb_consent_check:'Acepto los términos anteriores',
+    lb_consent_required:'Debes aceptar los términos para enviar.',
     lb_your_rank:'Tu puesto',
     lb_press_continue:'Pulsa cualquier tecla o toca para continuar',
     lb_first_board:'¡Sé el primero en el ranking!',
@@ -2462,6 +2475,7 @@ const TRANSLATIONS = {
     lb_grade_short:'Nivel',
     lb_admin_hint:'Ctrl+Shift+E exportar  ·  Ctrl+Shift+R borrar',
     admin_pin_prompt:'PIN de administrador obligatorio:',
+    admin_locked:'Demasiados intentos. Inténtalo de nuevo en 60 segundos.',
     err_name_required:'El nombre es obligatorio',
     err_name_no_at:'El nombre no puede contener @',
     err_name_full:'Usa tu nombre completo real',
@@ -2731,6 +2745,7 @@ const TRANSLATIONS = {
     def_defending:'DEFENDIENDO',
     def_wave_label:'OLA',
     def_chain:'COMBO',
+    def_boss_counter_hint:'USA {mod} PARA 2.2× DAÑO',
     def_network_initializing:'RED INICIALIZÁNDOSE',
     def_threat_active:'AMENAZA ACTIVA',
     def_what_happened:'QUÉ OCURRIÓ',
@@ -2742,7 +2757,7 @@ const TRANSLATIONS = {
     def_pickup_insight:'🔍 XDR — VISIBILIDAD TOTAL + BAJAS CORRELACIONADAS 2x',
     def_pickup_identity:'🪪 IDENTIDAD — ATAQUES DE CREDENCIALES BLOQUEADOS',
     def_pickup_cloud:'☁️ CLOUD SECURITY — PROTECCIÓN DE RUNTIME ACTIVA',
-    def_pickup_fem:'🗺️ EXPOSURE MGMT — SUPERFICIE DE ATAQUE MAPEADA',
+    def_pickup_exp:'🗺️ EXPOSURE MGMT — SUPERFICIE DE ATAQUE MAPEADA',
     def_pickup_charlotte:'🤖 CHARLOTTE AI — ANÁLISIS AUTÓNOMO DE AMENAZAS',
     def_pickup_pangea:'🌍 PANGEA — INFRAESTRUCTURA ADVERSARIA CONGELADA',
     def_ir_collect:'🚨 EQUIPO IR EN SITIO — INTEGRIDAD RESTAURADA +1',
@@ -2829,7 +2844,7 @@ const TRANSLATIONS = {
     def_act_prevent:'FALCON PREVENT — BARRERA ML DESPLEGADA',
     def_act_insight:'INSIGHT XDR — SUPERFICIE DE ATAQUE COMPLETAMENTE MAPEADA',
     def_act_identity:'IDENTITY — CREDENCIALES BLOQUEADAS · IMPOSTORES EXPUESTOS',
-    def_act_fem_exposed:'FEM — {count} NODOS EXPUESTOS · SUPERFICIE MAPEADA',
+    def_act_exp_exposed:'EXP — {count} NODOS EXPUESTOS · SUPERFICIE MAPEADA',
     def_act_charlotte:'CHARLOTTE AI — RED NEURONAL EN LÍNEA · OBJETIVO FIJADO',
     def_act_pangea:'PANGEA — CONGELAMIENTO GLOBAL · TODOS LOS SECTORES BLOQUEADOS',
     iz_banner_ngav_scan:'NGAV · ANÁLISIS ML COMPLETO · CUARENTENA DESPLEGADA',
@@ -2889,7 +2904,7 @@ const TRANSLATIONS = {
     g_hunt_layer_cloud:'CAPA DE CLOUD',
     disc_banner:'⚠&nbsp;&nbsp;CLASIFICADO — SOLO PERSONAL AUTORIZADO&nbsp;&nbsp;⚠',
     disc_title:'AVISO LEGAL',
-    disc_body1:'Esta es una <strong style="color:#aac4ff;">simulación de entrenamiento ficticia</strong> creada únicamente con fines de demostración y educación. Todos los nombres de adversarios, operaciones y escenarios son completamente ficticios. Cualquier parecido con actores de amenazas o incidentes reales es coincidencia.',
+    disc_body1:'Esta es una <strong style="color:#aac4ff;">simulación de entrenamiento ficticia</strong> creada únicamente con fines de demostración y educación. Los nombres de adversarios hacen referencia a <strong style="color:#aac4ff;">actores de amenazas reales</strong> rastreados por la inteligencia de CrowdStrike, pero todos los escenarios, operaciones y resultados del juego son completamente ficticios y no representan incidentes reales.',
     disc_body2:'CrowdStrike<sup>®</sup>, Falcon<sup>®</sup> y marcas relacionadas son marcas registradas de CrowdStrike, Inc. Esta aplicación <strong style="color:#aac4ff;">no está afiliada ni respaldada por CrowdStrike, Inc.</strong> Las estadísticas de detección son solo ilustrativas y no representan el rendimiento real del producto.',
     disc_btn:'[ RECONOCER ]',
     disc_hint:'ESPACIO &nbsp;/&nbsp; ENTER PARA RECONOCER'
@@ -2959,7 +2974,10 @@ const TRANSLATIONS = {
     lb_email_placeholder:'name@company.com',
     lb_submit:'送信して順位を確定',
     lb_skip:'スキップ',
+    g_exit_confirm:'本当に終了しますか？進行状況が失われます。',
     lb_consent:'送信すると、このイベントおよび関連するセキュリティ製品についてCrowdStrikeから連絡を受けることに同意したものとみなされます。賞品対象には有効な勤務先メールが必要です。',
+    lb_consent_check:'上記の条件に同意します',
+    lb_consent_required:'送信するには条件に同意する必要があります。',
     lb_your_rank:'あなたの順位',
     lb_press_continue:'続行するには任意のキーを押すかタップしてください',
     lb_first_board:'最初のランカーになりましょう！',
@@ -2972,6 +2990,7 @@ const TRANSLATIONS = {
     lb_grade_short:'評価',
     lb_admin_hint:'Ctrl+Shift+E 書き出し  ·  Ctrl+Shift+R 消去',
     admin_pin_prompt:'管理者PINを入力してください:',
+    admin_locked:'試行回数が上限に達しました。60秒後にお試しください。',
     err_name_required:'氏名は必須です',
     err_name_no_at:'氏名に@は使えません',
     err_name_full:'実名のフルネームを入力してください',
@@ -3241,6 +3260,7 @@ const TRANSLATIONS = {
     def_defending:'防衛中',
     def_wave_label:'ウェーブ',
     def_chain:'コンボ',
+    def_boss_counter_hint:'{mod} で2.2倍ダメージ',
     def_network_initializing:'ネットワーク初期化中',
     def_threat_active:'脅威アクティブ',
     def_what_happened:'何が起きたか',
@@ -3252,7 +3272,7 @@ const TRANSLATIONS = {
     def_pickup_insight:'🔍 XDR — 全面可視化 + 相関キル2倍',
     def_pickup_identity:'🪪 IDENTITY — 認証攻撃を遮断',
     def_pickup_cloud:'☁️ CLOUD SECURITY — ランタイム保護が有効化',
-    def_pickup_fem:'🗺️ EXPOSURE MGMT — 攻撃面をマッピング',
+    def_pickup_exp:'🗺️ EXPOSURE MGMT — 攻撃面をマッピング',
     def_pickup_charlotte:'🤖 CHARLOTTE AI — 自律的脅威分析',
     def_pickup_pangea:'🌍 PANGEA — 敵対インフラを凍結',
     def_ir_collect:'🚨 IRチーム現場到着 — 整合性回復 +1',
@@ -3339,7 +3359,7 @@ const TRANSLATIONS = {
     def_act_prevent:'FALCON PREVENT — ML バリア展開',
     def_act_insight:'INSIGHT XDR — 攻撃面を完全マッピング',
     def_act_identity:'IDENTITY — 認証情報をロック · なりすましを露出',
-    def_act_fem_exposed:'FEM — {count} ノードを露出 · 攻撃面をマッピング',
+    def_act_exp_exposed:'EXP — {count} ノードを露出 · 攻撃面をマッピング',
     def_act_charlotte:'CHARLOTTE AI — ニューラルネット起動 · ターゲット特定中',
     def_act_pangea:'PANGEA — グローバル凍結 · 全セクターをロック',
     iz_banner_ngav_scan:'NGAV · ML スキャン完了 · 検疫を展開',
@@ -3399,7 +3419,7 @@ const TRANSLATIONS = {
     g_hunt_layer_cloud:'クラウド層',
     disc_banner:'⚠&nbsp;&nbsp;機密 — 許可された担当者のみ&nbsp;&nbsp;⚠',
     disc_title:'法的免責事項',
-    disc_body1:'これはデモンストレーションおよび教育目的のみで作成された<strong style="color:#aac4ff;">架空のトレーニングシミュレーション</strong>です。すべての攻撃者名、オペレーション、シナリオは完全に架空のものです。実際の脅威アクターや事件との類似は偶然です。',
+    disc_body1:'これはデモンストレーションおよび教育目的のみで作成された<strong style="color:#aac4ff;">架空のトレーニングシミュレーション</strong>です。攻撃者名はCrowdStrikeインテリジェンスが追跡する<strong style="color:#aac4ff;">実在の脅威アクター</strong>に基づいていますが、ゲーム内のシナリオ、オペレーション、結果はすべて架空であり、実際のインシデントを描写するものではありません。',
     disc_body2:'CrowdStrike<sup>®</sup>、Falcon<sup>®</sup>および関連マークはCrowdStrike, Inc.の登録商標です。このアプリケーションは<strong style="color:#aac4ff;">CrowdStrike, Inc.とは一切関係なく、同社による承認も受けていません。</strong>検出統計は説明目的のみであり、実際の製品パフォーマンスを表すものではありません。',
     disc_btn:'[ 確認 ]',
     disc_hint:'スペース &nbsp;/&nbsp; ENTER で確認'
@@ -4246,9 +4266,10 @@ function dedupeEntriesByEmail(entries, incoming) {
   return { entries: filtered, accepted: true };
 }
 
+// PII-containing ranking data uses sessionStorage (cleared when tab closes)
 function _loadStoredArray(key) {
   try {
-    const raw = localStorage.getItem(key);
+    const raw = sessionStorage.getItem(key);
     if (raw == null || raw === '') return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
@@ -4267,7 +4288,7 @@ function _loadStoredArray(key) {
 function _saveStoredArray(key, entries) {
   const serialized = JSON.stringify(Array.isArray(entries) ? entries : []);
   try {
-    localStorage.setItem(key, serialized);
+    sessionStorage.setItem(key, serialized);
     delete ARCADE_FALLBACK_STORAGE[key];
     return true;
   } catch (_) {
@@ -4277,7 +4298,7 @@ function _saveStoredArray(key, entries) {
 }
 
 function _removeStoredKey(key) {
-  try { localStorage.removeItem(key); } catch (_) {}
+  try { sessionStorage.removeItem(key); } catch (_) {}
   delete ARCADE_FALLBACK_STORAGE[key];
   delete ARCADE_FALLBACK_VALUES[key];
 }
@@ -4350,19 +4371,69 @@ function exportAllRankingsCSV() {
   return true;
 }
 
-// XOR-encoded admin PIN — key 0x5A, encoded bytes spell "CS2026!"
-function _checkAdminPin() {
-  const _k = 90;
-  const _e = [25,9,104,106,104,108,123];
-  const _p = _e.map(b => String.fromCharCode(b ^ _k)).join('');
+// SHA-256 hashed admin PIN — no plaintext or reversible encoding in source
+// Hash of correct PIN stored as hex; compared via constant-time-safe digest match
+const _ADMIN_PIN_HASH = 'aae57fd93ad3233623c8e5bf1c9483bd7065e5ea8f4083eec8fef2c3f1c00463';
+let _adminPinAttempts = 0;
+let _adminPinLockUntil = 0;
+async function _checkAdminPin() {
+  if (Date.now() < _adminPinLockUntil) { alert(T('admin_locked')); return false; }
   const entry = prompt(T('admin_pin_prompt'));
-  return entry === _p;
+  if (!entry) return false;
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(entry));
+  const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  if (hex === _ADMIN_PIN_HASH) { _adminPinAttempts = 0; return true; }
+  _adminPinAttempts++;
+  if (_adminPinAttempts >= 3) { _adminPinLockUntil = Date.now() + 60000; _adminPinAttempts = 0; }
+  return false;
 }
 
 function clearAllRankings() {
   ARCADE_RANKING_KEYS.forEach(key => _removeStoredKey(key));
+  try { localStorage.removeItem('cs_arcade_ranking_backup'); } catch(_){}
   _refreshPodium();
 }
+
+// Auto-backup: snapshot ranking data to localStorage every 15 min
+// sessionStorage holds live PII rankings; this backup survives tab crash
+(function _initRankingAutoBackup(){
+  const BACKUP_KEY = 'cs_arcade_ranking_backup';
+  const INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
+  function _doBackup(){
+    const snapshot = {};
+    let hasData = false;
+    ARCADE_RANKING_KEYS.forEach(key => {
+      const entries = _loadStoredArray(key);
+      if (entries.length) { snapshot[key] = entries; hasData = true; }
+    });
+    if (!hasData) return;
+    try { localStorage.setItem(BACKUP_KEY, JSON.stringify({ts:Date.now(),booth:_BOOTH_ID,data:snapshot})); }
+    catch(_){}
+  }
+  // Restore from backup on load if sessionStorage is empty (e.g. after tab crash)
+  try {
+    const raw = localStorage.getItem(BACKUP_KEY);
+    if (raw) {
+      const backup = JSON.parse(raw);
+      if (backup?.data) {
+        let restored = 0;
+        ARCADE_RANKING_KEYS.forEach(key => {
+          if (Array.isArray(backup.data[key]) && backup.data[key].length > 0) {
+            const existing = _loadStoredArray(key);
+            if (existing.length === 0) {
+              _saveStoredArray(key, backup.data[key]);
+              restored += backup.data[key].length;
+            }
+          }
+        });
+        if (restored > 0) console.log(`[Arcade] Restored ${restored} ranking entries from backup (${new Date(backup.ts).toLocaleString()})`);
+      }
+    }
+  } catch(_){}
+  setInterval(_doBackup, INTERVAL_MS);
+  // Also backup on visibility change (tab about to close)
+  document.addEventListener('visibilitychange', () => { if (document.hidden) _doBackup(); });
+})();
 
 let _dashboardRankingCarouselTimer = null;
 let _dashboardRankingFadeTimers = [];
@@ -5945,9 +6016,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ArcadeSonic.focus();
     exportAllRankingsCSV() && ArcadeSonic.confirm();
   });
-  document.getElementById('dashboard-reset-btn')?.addEventListener('click', () => {
+  document.getElementById('dashboard-reset-btn')?.addEventListener('click', async () => {
     ArcadeSonic.focus();
-    if (_checkAdminPin() && confirm(T('dash_clear_all_confirm'))) {
+    if (await _checkAdminPin() && confirm(T('dash_clear_all_confirm'))) {
       clearAllRankings();
       ArcadeSonic.warning();
     }
@@ -5970,10 +6041,12 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     if (e.ctrlKey && e.shiftKey && e.code === 'KeyR') {
-      if (_checkAdminPin() && confirm(T('dash_clear_all_confirm'))) {
-        clearAllRankings();
-        ArcadeSonic.warning();
-      }
+      (async () => {
+        if (await _checkAdminPin() && confirm(T('dash_clear_all_confirm'))) {
+          clearAllRankings();
+          ArcadeSonic.warning();
+        }
+      })();
       e.preventDefault();
       return;
     }
@@ -6769,9 +6842,11 @@ const FalconRanking = (function () {
       if (!c || c.style.display === 'none') return;
       if (e.ctrlKey && e.shiftKey && e.code === CFG.adminKey) exportCSV();
       if (e.ctrlKey && e.shiftKey && e.code === CFG.clearKey) {
-        if (_checkAdminPin() && confirm(T('lb_clear_all_confirm'))) {
-          Store.clear(); _toast(T('lb_cleared'),'#ff5a4d');
-        }
+        (async () => {
+          if (await _checkAdminPin() && confirm(T('lb_clear_all_confirm'))) {
+            Store.clear(); _toast(T('lb_cleared'),'#ff5a4d');
+          }
+        })();
       }
     });
   }
@@ -6951,6 +7026,11 @@ const FalconRanking = (function () {
       </div>
       <div class="fr-consent">
         ${T('lb_consent')}
+        <label style="display:flex;align-items:center;gap:8px;margin-top:8px;cursor:pointer;font-size:11px;color:#cdf;user-select:none;">
+          <input type="checkbox" id="fr-consent-cb" style="accent-color:#e04040;width:16px;height:16px;cursor:pointer;"/>
+          ${T('lb_consent_check')}
+        </label>
+        <span class="fr-hint" id="fr-consent-hint" style="color:#ff5a4d;font-size:10px;"></span>
       </div>
     `;
     _overlayEl.appendChild(panel);
@@ -6963,7 +7043,17 @@ const FalconRanking = (function () {
     setTimeout(() => document.getElementById('fr-name')?.focus(), 450);
 
     // Submit
-    document.getElementById('fr-submit').addEventListener('click', () => {
+    document.getElementById('fr-submit').addEventListener('click', function() {
+      const _submitBtn = this; if (_submitBtn.disabled) return; _submitBtn.disabled = true;
+      const consentCb = document.getElementById('fr-consent-cb');
+      const consentHint = document.getElementById('fr-consent-hint');
+      if (!consentCb?.checked) {
+        if (consentHint) consentHint.textContent = T('lb_consent_required');
+        consentCb?.focus();
+        _submitBtn.disabled = false;
+        return;
+      }
+      if (consentHint) consentHint.textContent = '';
       const validation = validateLeadCaptureEntry({
         name: document.getElementById('fr-name').value,
         company: document.getElementById('fr-company').value,
@@ -6972,7 +7062,7 @@ const FalconRanking = (function () {
       if (validation.errors.name) _fieldError('fr-name', 'fr-name-hint', validation.errors.name);
       if (validation.errors.company) _fieldError('fr-company', 'fr-company-hint', validation.errors.company);
       if (validation.errors.email) _fieldError('fr-email', 'fr-email-hint', validation.errors.email);
-      if (!validation.ok) return;
+      if (!validation.ok) { _submitBtn.disabled = false; return; }
       const { name, company, email } = validation.cleaned;
 
       // Save entry
@@ -7037,17 +7127,16 @@ const FalconRanking = (function () {
     panel.appendChild(div);
     try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'){const _mat=window.generateQRMatrix('https://www.crowdstrike.com/en-us/global-threat-report/'),_N=_mat.length,_mod=_N<=25?3:2,_qz=2,_qx=_qc.getContext('2d');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<_N;r++)for(let c=0;c<_N;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){}
 
-    // Hold for 40 s then CTA (if configured) else direct dismiss
+    // Dismiss on click/key after short anti-bounce delay; CTA overlay after 40s if configured
     setTimeout(() => {
-      if (window._showPostGameCTA) {
-        window._showPostGameCTA(() => _closeForm());
-      } else {
-        const dismiss = () => { _closeForm(); div.removeEventListener('click',dismiss); };
-        div.addEventListener('click', dismiss);
-        const kd = () => { _closeForm(); document.removeEventListener('keydown',kd); };
-        document.addEventListener('keydown', kd);
-      }
-    }, 40000);
+      const dismiss = () => { _closeForm(); div.removeEventListener('click',dismiss); document.removeEventListener('keydown',kd); };
+      const kd = () => { _closeForm(); div.removeEventListener('click',dismiss); document.removeEventListener('keydown',kd); };
+      div.addEventListener('click', dismiss);
+      document.addEventListener('keydown', kd);
+    }, 2000);
+    if (window._showPostGameCTA) {
+      setTimeout(() => { window._showPostGameCTA(() => _closeForm()); }, 40000);
+    }
   }
 
   function _closeForm() {
@@ -7245,9 +7334,8 @@ const FalconRanking = (function () {
     exportCSV,
 
     /** Clear the leaderboard (shows confirmation dialog). */
-    clearAll() {
-      const _p=[25,9,104,106,104,108,123].map(b=>String.fromCharCode(b^90)).join('');
-      if (prompt(T('admin_pin_prompt'))===_p && confirm(T('lb_clear_all_confirm'))) {
+    async clearAll() {
+      if (await _checkAdminPin() && confirm(T('lb_clear_all_confirm'))) {
         Store.clear(); _toast(T('lb_cleared'),'#ff5a4d');
       }
     },
@@ -8518,7 +8606,7 @@ const PHASES=[
 ];
 
 // ── LOLBin Pool ───────────────────────────────────────────────────────
-const LOLBIN_POOL=['powershell','wmiExec','bitsAdmin','cloneVM','certUtil','rundll32','schtasks','mshta'];
+const LOLBIN_POOL=['powershell','wmiExec','bitsAdmin','eventvwr','certUtil','rundll32','schtasks','mshta'];
 
 // ── World / River ─────────────────────────────────────────────────────
 const W={ scroll:0, speed:88, segments:[], segH:100, progressMax:16000,
@@ -8645,7 +8733,7 @@ function addEnemy(type,wy,x,lane='air'){
     case 'powershell':  Object.assign(e,{w:46,h:30,hp:3,maxHp:3,score:185,vx:rnd(-28,28),stealth:true,revealed:false,shoot:rnd(1.2,2.2)*sm}); break;
     case 'wmiExec':     Object.assign(e,{w:44,h:30,hp:2,maxHp:2,score:155,vx:rnd(-36,36),stealth:true,revealed:false,shoot:rnd(1.6,2.8)*sm}); break;
     case 'bitsAdmin':   Object.assign(e,{w:46,h:30,hp:1,score:140,vx:rnd(-18,18),stealth:true,revealed:false,shoot:rnd(2.2,3.8)*sm,dropsPickup:true}); break;
-    case 'cloneVM':     Object.assign(e,{w:48,h:32,hp:2,maxHp:2,score:210,vx:rnd(-22,22),stealth:true,revealed:false,shoot:rnd(1.8,3.0)*sm,cloneFlash:0}); break;
+    case 'eventvwr':     Object.assign(e,{w:48,h:32,hp:2,maxHp:2,score:210,vx:rnd(-22,22),stealth:true,revealed:false,shoot:rnd(1.8,3.0)*sm,cloneFlash:0}); break;
     case 'certUtil':    Object.assign(e,{w:44,h:30,hp:2,maxHp:2,score:148,vx:rnd(-16,16),stealth:true,revealed:false,shoot:rnd(1.8,3.2)*sm}); break;
     case 'rundll32':    Object.assign(e,{w:46,h:30,hp:3,maxHp:3,score:195,vx:rnd(-20,20),stealth:true,revealed:false,shoot:rnd(1.4,2.6)*sm}); break;
     case 'schtasks':    Object.assign(e,{w:46,h:30,hp:2,maxHp:2,score:168,vx:rnd(-22,22),stealth:true,revealed:false,shoot:rnd(1.6,2.8)*sm,respawned:false}); break;
@@ -9185,7 +9273,7 @@ function killE(e){
     addPickup(e.wy,e.x,'module',MKEYS[sri(0,MKEYS.length-1)]);
     COMMS(T('iz_comms_bits'),'#8ab4cc');
   }
-  if(e.type==='cloneVM') burst(e.x+rnd(-24,24),w2s(e.wy),16,['#00ff88','#ffffff','#aaffcc'],100,0.5);
+  if(e.type==='eventvwr') burst(e.x+rnd(-24,24),w2s(e.wy),16,['#00ff88','#ffffff','#aaffcc'],100,0.5);
   if(seededRng()<(hasMod('charlotte')?0.33:0.11)*pickupDropRate())
     addPickup(e.wy,e.x,'module',MKEYS[sri(0,MKEYS.length-1)]);
   // NGSIEM: Correlated kill bonus — same-type enemy within 320px = +100 correlation bonus
@@ -9521,7 +9609,7 @@ function updEnemies(dt){
         if(hasMod('xdr')||hasMod('intel')) e.revealed=true;
         if((e.shoot-=dt)<=0&&sy>20&&sy<VH-48&&canSeeE(e)){ e.shoot=rnd(2.2,3.8); addBullet(e.x,sy+10,rnd(-40,40),195,1,'#8ab4cc',true); }
         break;
-      case 'cloneVM': {
+      case 'eventvwr': {
         // ARCH: wrapped in {} block so const clonePause is block-scoped,
         // not shared with other cases in the same switch lexical scope.
         e.wy-=8*dt;
@@ -9709,7 +9797,7 @@ function bossPhase(ph){
   const n=BOSS.name,col=BOSS.color;
   if(n==='FANCY BEAR')         { for(let i=0;i<3+ph;i++) addEnemy(ph===2?'stealthJet':'lolBin',W.scroll+210+i*46,rnd(VW*0.34,VW*0.66),'air'); COMMS(ph===2?'FANCY BEAR: Final assault — stealthJet carrying stolen NATO cert. X-Agent C2 is live. 60 seconds.':ph===1?'FANCY BEAR escalating — X-Agent lateral pivot to NATO finance nodes. OverWatch operator active.':'FANCY BEAR: powershell.exe LOLBin wave deploying — GRU cross-domain pivot. XDR sees the chain.',col); }
   else if(n==='SCATTERED SPIDER'){ for(let i=0;i<3+ph;i++) addEnemy(ph===2?'idGhost':'vishDrone',W.scroll+200+i*44,rnd(VW*0.33,VW*0.67),'air'); COMMS('SCATTERED SPIDER: SIM-swap complete. C-suite MFA is gone. Social engineering — no malware, just access.',col); }
-  else if(n==='WICKED PANDA')  { for(let i=0;i<2+ph;i++) addEnemy('poisonBarge',W.scroll+210+i*62,rnd(VW*0.37,VW*0.63),'river'); COMMS(ph>=1?'WICKED PANDA escalating — cloneVM cloud lateral movement detected. 847 downstream orgs. Stop every barge.':'WICKED PANDA: Second PoisonBarge wave — bitsAdmin LOLBin staging payload. 847 orgs downstream.',col); }
+  else if(n==='WICKED PANDA')  { for(let i=0;i<2+ph;i++) addEnemy('poisonBarge',W.scroll+210+i*62,rnd(VW*0.37,VW*0.63),'river'); COMMS(ph>=1?'WICKED PANDA escalating — eventvwr UAC bypass detected for privilege escalation. 847 downstream orgs. Stop every barge.':'WICKED PANDA: Second PoisonBarge wave — bitsAdmin LOLBin staging payload. 847 orgs downstream.',col); }
   else if(n==='COZY BEAR')     { for(let i=0;i<4+ph;i++) addEnemy('tokenDrone',W.scroll+200+i*38,rnd(VW*0.34,VW*0.66),'air'); COMMS('COZY BEAR: Golden SAML forgery wave — every cloud tenant is now exposed. Signal — enforce zero privileges.',col); }
   else if(n==='LABYRINTH CHOLLIMA'){ for(let i=0;i<4+ph;i++) addEnemy('runnerBoat',W.scroll+200+i*36,rnd(VW*0.36,VW*0.64),'river'); COMMS('LABYRINTH CHOLLIMA: ExfilRunner fleet deploying — rundll32.exe active. Every boat that clears funds DPRK weapons.',col); }
   else if(n==='CARBON SPIDER')  { for(let i=0;i<5+ph;i++) addEnemy('mine',W.scroll+180+i*30,rnd(VW*0.36,VW*0.64),'river'); COMMS('CARBON SPIDER: ZeroDayMine field live — BlackCat Rust variant deploying. 90 seconds to full corridor encryption.',col); }
@@ -10435,7 +10523,7 @@ function drawEnemies(){
         }
         break;
 
-      case 'cloneVM':
+      case 'eventvwr':
         if(vis&&e.cloneFlash>0){
           CX.globalAlpha=e.cloneFlash*0.5; CX.fillStyle='#00ff88';
           CX.fillRect(-e.w/2+12,-e.h/2+6,e.w,e.h);
@@ -12141,7 +12229,7 @@ function frame(ts){
     case S.BOSS_FIGHT:
       if(hk('KeyI')) intelOpen=!intelOpen;
       if(hk('KeyP')||(PAUSED&&hk('Space'))) PAUSED=!PAUSED;
-      if(hk('Escape')){ PAUSED=false; STATE=S.TITLE; }
+      if(hk('Escape')){ PAUSED=true; if(confirm(T('g_exit_confirm'))){ PAUSED=false; STATE=S.TITLE; } else { PAUSED=false; } }
       if(!PAUSED){ update(dt); window._boothPing?.(); }
       break;
 
@@ -12989,9 +13077,11 @@ const FalconRanking = (function () {
       if (!c || c.style.display === 'none') return;
       if (e.ctrlKey && e.shiftKey && e.code === CFG.adminKey) exportCSV();
       if (e.ctrlKey && e.shiftKey && e.code === CFG.clearKey) {
-        if (_checkAdminPin() && confirm(T('lb_clear_all_confirm'))) {
-          Store.clear(); _toast(T('lb_cleared'),'#ff5a4d');
-        }
+        (async () => {
+          if (await _checkAdminPin() && confirm(T('lb_clear_all_confirm'))) {
+            Store.clear(); _toast(T('lb_cleared'),'#ff5a4d');
+          }
+        })();
       }
     });
   }
@@ -13134,7 +13224,7 @@ const FalconRanking = (function () {
       <div class="fr-score-badge">
         <div class="fr-score-num" id="fr-score-display">0</div>
         <div class="fr-score-meta">
-          <div><strong>Phase:</strong> ${_esc(data.phase||'Unknown')}</div>
+          <div><strong>${T('lb_phase')}:</strong> ${_esc(data.phase||'Unknown')}</div>
           <div><strong>${T('lb_adversary')}:</strong> ${_esc(data.adversary||'—')}</div>
           <div><strong>${T('lb_grade')}:</strong> ${_esc(data.grade||'—')}</div>
           <div><strong>${T('lb_projected_rank')}:</strong> #${tempRank}</div>
@@ -13173,6 +13263,11 @@ const FalconRanking = (function () {
       </div>
       <div class="fr-consent">
         ${T('lb_consent')}
+        <label style="display:flex;align-items:center;gap:8px;margin-top:8px;cursor:pointer;font-size:11px;color:#cdf;user-select:none;">
+          <input type="checkbox" id="fr-consent-cb" style="accent-color:#e04040;width:16px;height:16px;cursor:pointer;"/>
+          ${T('lb_consent_check')}
+        </label>
+        <span class="fr-hint" id="fr-consent-hint" style="color:#ff5a4d;font-size:10px;"></span>
       </div>
     `;
     _overlayEl.appendChild(panel);
@@ -13185,7 +13280,17 @@ const FalconRanking = (function () {
     setTimeout(() => document.getElementById('fr-name')?.focus(), 450);
 
     // Submit
-    document.getElementById('fr-submit').addEventListener('click', () => {
+    document.getElementById('fr-submit').addEventListener('click', function() {
+      const _submitBtn = this; if (_submitBtn.disabled) return; _submitBtn.disabled = true;
+      const consentCb = document.getElementById('fr-consent-cb');
+      const consentHint = document.getElementById('fr-consent-hint');
+      if (!consentCb?.checked) {
+        if (consentHint) consentHint.textContent = T('lb_consent_required');
+        consentCb?.focus();
+        _submitBtn.disabled = false;
+        return;
+      }
+      if (consentHint) consentHint.textContent = '';
       const validation = validateLeadCaptureEntry({
         name: document.getElementById('fr-name').value,
         company: document.getElementById('fr-company').value,
@@ -13194,7 +13299,7 @@ const FalconRanking = (function () {
       if (validation.errors.name) _fieldError('fr-name', 'fr-name-hint', validation.errors.name);
       if (validation.errors.company) _fieldError('fr-company', 'fr-company-hint', validation.errors.company);
       if (validation.errors.email) _fieldError('fr-email', 'fr-email-hint', validation.errors.email);
-      if (!validation.ok) return;
+      if (!validation.ok) { _submitBtn.disabled = false; return; }
       const { name, company, email } = validation.cleaned;
 
       // Save entry
@@ -13259,17 +13364,16 @@ const FalconRanking = (function () {
     panel.appendChild(div);
     try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'){const _mat=window.generateQRMatrix('https://www.crowdstrike.com/en-us/global-threat-report/'),_N=_mat.length,_mod=_N<=25?3:2,_qz=2,_qx=_qc.getContext('2d');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<_N;r++)for(let c=0;c<_N;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){}
 
-    // Hold for 40 s then CTA (if configured) else direct dismiss
+    // Dismiss on click/key after short anti-bounce delay; CTA overlay after 40s if configured
     setTimeout(() => {
-      if (window._showPostGameCTA) {
-        window._showPostGameCTA(() => _closeForm());
-      } else {
-        const dismiss = () => { _closeForm(); div.removeEventListener('click',dismiss); };
-        div.addEventListener('click', dismiss);
-        const kd = () => { _closeForm(); document.removeEventListener('keydown',kd); };
-        document.addEventListener('keydown', kd);
-      }
-    }, 40000);
+      const dismiss = () => { _closeForm(); div.removeEventListener('click',dismiss); document.removeEventListener('keydown',kd); };
+      const kd = () => { _closeForm(); div.removeEventListener('click',dismiss); document.removeEventListener('keydown',kd); };
+      div.addEventListener('click', dismiss);
+      document.addEventListener('keydown', kd);
+    }, 2000);
+    if (window._showPostGameCTA) {
+      setTimeout(() => { window._showPostGameCTA(() => _closeForm()); }, 40000);
+    }
   }
 
   function _closeForm() {
@@ -13467,9 +13571,8 @@ const FalconRanking = (function () {
     exportCSV,
 
     /** Clear the leaderboard (shows confirmation dialog). */
-    clearAll() {
-      const _p=[25,9,104,106,104,108,123].map(b=>String.fromCharCode(b^90)).join('');
-      if (prompt(T('admin_pin_prompt'))===_p && confirm(T('lb_clear_all_confirm'))) {
+    async clearAll() {
+      if (await _checkAdminPin() && confirm(T('lb_clear_all_confirm'))) {
         Store.clear(); _toast(T('lb_cleared'),'#ff5a4d');
       }
     },
@@ -13534,7 +13637,7 @@ const DEFENSE_MODULE_LOCALE = Object.freeze({
     INSIGHT:{tagline:"Detecção e resposta estendidas",desc:"Visibilidade total da superfície de ataque. Correlaciona cada sinal em uma única história.",mechanic:"Revela inimigos ocultos. Abates correlacionados rendem combo 2x."},
     IDENTITY:{tagline:"Detecção de ameaças de identidade",desc:"Detecta abuso de credenciais e desvio de MFA no instante em que acontecem.",mechanic:"Bloqueia um impacto. Expõe impostores. Desativa sinais falsos."},
     CLOUD:{tagline:"Proteção nativa de nuvem",desc:"CNAPP protegendo workloads, contêineres e serviços em nuvem.",mechanic:"Abre a rota cloud. Elimina pivôs de nuvem. 20s de contenção assistida."},
-    FEM:{tagline:"Gestão da superfície de ataque",desc:"Descobre ativos expostos antes que os adversários os explorem.",mechanic:"Revela nós ocultos. Reduz a velocidade dos inimigos em 40%. Marca pontos fracos."},
+    EXP:{tagline:"Gestão da superfície de ataque",desc:"Descobre ativos expostos antes que os adversários os explorem.",mechanic:"Revela nós ocultos. Reduz a velocidade dos inimigos em 40%. Marca pontos fracos."},
     CHARLOTTE:{tagline:"Segurança com IA generativa",desc:"Copiloto de IA que neutraliza autonomamente as cinco ameaças de maior valor.",mechanic:"Alvo automático em 5 ameaças prioritárias. Mira aprimorada por 15s."},
     PANGEA:{tagline:"Inteligência global de ameaças",desc:"Inteligência em escala planetária. Bloqueia infraestrutura adversária globalmente.",mechanic:"Congela todos os inimigos por 7s. Marca alvos prioritários. Limpa projéteis ativos."},
     OVERWATCH:{tagline:"Caça gerenciada 24/7",desc:"Caçadores de elite rastreando adversários o tempo todo.",mechanic:"Caça 3 alvos de elite. Prevê a próxima rota de ataque. Marca trilhas."},
@@ -13545,7 +13648,7 @@ const DEFENSE_MODULE_LOCALE = Object.freeze({
     INSIGHT:{tagline:"Detección y respuesta extendidas",desc:"Visibilidad total de la superficie de ataque. Correlaciona cada señal en una sola historia.",mechanic:"Revela enemigos ocultos. Las bajas correlacionadas dan combo 2x."},
     IDENTITY:{tagline:"Detección de amenazas de identidad",desc:"Detecta abuso de credenciales y bypass de MFA en el momento en que ocurren.",mechanic:"Bloquea un impacto. Expone impostores. Desactiva señales falsas."},
     CLOUD:{tagline:"Protección cloud nativa",desc:"CNAPP protegiendo workloads, contenedores y servicios cloud.",mechanic:"Abre la ruta cloud. Elimina pivotes cloud. 20s de contención asistida."},
-    FEM:{tagline:"Gestión de superficie de ataque",desc:"Descubre activos expuestos antes de que los adversarios los exploten.",mechanic:"Revela nodos ocultos. Reduce la velocidad enemiga un 40%. Marca puntos débiles."},
+    EXP:{tagline:"Gestión de superficie de ataque",desc:"Descubre activos expuestos antes de que los adversarios los exploten.",mechanic:"Revela nodos ocultos. Reduce la velocidad enemiga un 40%. Marca puntos débiles."},
     CHARLOTTE:{tagline:"Seguridad con IA generativa",desc:"Copiloto de IA que neutraliza de forma autónoma las cinco amenazas de mayor valor.",mechanic:"Apunta automáticamente a 5 amenazas prioritarias. Mira mejorada durante 15s."},
     PANGEA:{tagline:"Inteligencia global de amenazas",desc:"Inteligencia a escala planetaria. Bloquea infraestructura adversaria globalmente.",mechanic:"Congela a todos los enemigos 7s. Marca objetivos prioritarios. Limpia proyectiles activos."},
     OVERWATCH:{tagline:"Threat hunting gestionado 24/7",desc:"Hunters de élite rastreando adversarios sin descanso.",mechanic:"Caza 3 objetivos de élite. Predice la siguiente ruta de ataque. Marca la cacería."},
@@ -13556,7 +13659,7 @@ const DEFENSE_MODULE_LOCALE = Object.freeze({
     INSIGHT:{tagline:"拡張検知と対応",desc:"攻撃面を全面可視化。すべての信号を1本の攻撃ストーリーに関連付ける。",mechanic:"隠れた敵を可視化。相関キルでコンボ2倍。"},
     IDENTITY:{tagline:"ID脅威検知",desc:"認証情報の悪用とMFA回避を発生した瞬間に検知。",mechanic:"1回の被弾を防ぐ。なりすましを暴き、偽シグナルを無効化。"},
     CLOUD:{tagline:"クラウドネイティブ保護",desc:"CNAPPがすべてのワークロード、コンテナ、クラウドサービスを保護。",mechanic:"クラウドルートを解放。クラウドピボット敵を排除。20秒の支援封じ込め。"},
-    FEM:{tagline:"攻撃対象領域管理",desc:"敵が悪用する前に露出資産を発見。",mechanic:"隠れノードを可視化。敵速度を40%低下。弱点を表示。"},
+    EXP:{tagline:"攻撃対象領域管理",desc:"敵が悪用する前に露出資産を発見。",mechanic:"隠れノードを可視化。敵速度を40%低下。弱点を表示。"},
     CHARLOTTE:{tagline:"生成AIセキュリティ",desc:"価値の高い5つの脅威を自律的に無力化するAIコパイロット。",mechanic:"優先脅威5体を自動照準。15秒間エイム強化。"},
     PANGEA:{tagline:"グローバル脅威インテリジェンス",desc:"地球規模の脅威情報で敵対インフラを広域遮断。",mechanic:"全敵を7秒凍結。優先目標をマーク。飛来弾を消去。"},
     OVERWATCH:{tagline:"24/7マネージドハンティング",desc:"エリートハンターが常時敵対者を追跡。",mechanic:"エリート目標3体を追跡。次の攻撃経路を予測。ハントマーカーを表示。"},
@@ -13571,9 +13674,9 @@ const DEFENSE_PHASE_LOCALE = Object.freeze({
     carbon_spider:{shortNation:'🌐 Sindicato eCrime',vector:'RaaS · Malware POS',environment:'ENDPOINTS DE VAREJO / REDE POS',threatCard:'CARBON SPIDER prepara ransomware na rede de varejo. Inimigos lentos viram rápidos quando a preparação fecha.',moduleNarrative:{PREVENT:'Varredura de memória e IA comportamental barram ransomware sem arquivo.',COMPLETE:'Analistas MDR contêm o incidente antes que o ransomware chegue aos sistemas críticos.',OVERWATCH:'Caçadores detectam preparação pré-ransomware e escalada de privilégio.',INSIGHT:'XDR correlaciona a cadeia completa do ransomware.'},deathMessages:{PREVENT:{headline:'SEM FALCON PREVENT — PREPARAÇÃO DE RANSOMWARE AVANÇOU',body:'CARBON SPIDER preparou o ransomware em memória. Sem detecção comportamental, a criptografia começou sem aviso.',cta:'Falcon Prevent: IA comportamental para parar ransomware antes da criptografia.'}},incidentReport:{title:'PREPARAÇÃO DE RANSOMWARE INTERROMPIDA',stopped:'Preparação pré-ransomware detectada e neutralizada antes da criptografia.',keyLesson:'Ransomware é parado na preparação, não na criptografia.',moduleHighlight:'PREVENT'}},
     cozy_bear:{shortNation:'🇷🇺 Rússia — SVR',vector:'Infraestrutura cloud · Abuso de OAuth',environment:'TENANT CLOUD / AMBIENTE DE CONTAINERS',threatCard:'COZY BEAR roubou tokens OAuth. Inimigos somem do endpoint e reaparecem na nuvem. Sem Cloud Security, você não os acerta.',moduleNarrative:{CLOUD:'Proteção em runtime para cada workload cloud; bloqueia abuso de OAuth.',INSIGHT:'Correlaciona chamadas de API cloud e sinais de endpoint.',OVERWATCH:'Caçadores procuram TTPs cloud-native de COZY BEAR.',IDENTITY:'Detecta roubo de token OAuth e abuso de conta de serviço antes da persistência.'},deathMessages:{CLOUD:{headline:'SEM CLOUD SECURITY — AMBIENTE CLOUD FICOU CEGO',body:'COZY BEAR migrou totalmente para a nuvem, fora do alcance das ferramentas de endpoint. Operou por 47 dias.',cta:'Falcon Cloud Security: proteção CNAPP para cada workload cloud.'}},incidentReport:{title:'PIVÔ PARA CLOUD BLOQUEADO',stopped:'Abuso de token OAuth detectado e movimento lateral na nuvem contido.',keyLesson:'Ferramentas de endpoint não veem ataques cloud-native.',moduleHighlight:'CLOUD'}},
     scattered_spider:{shortNation:'🌐 eCrime ocidental',vector:'Engenharia social · Bypass de MFA',environment:'COMMS EXEC / PROVEDOR DE IDENTIDADE',threatCard:'SCATTERED SPIDER está entre seus funcionários. Alguns inimigos parecem aliados. Sem Identity, sinal falso custa uma vida.',moduleNarrative:{IDENTITY:'Detecta anomalias de reset de MFA e expõe impostores no instante da ativação.',COMPLETE:'Analistas MDR recebem o alerta em menos de 60s e contêm a intrusão.',OVERWATCH:'Caçadores reconhecem o padrão pós-acesso de SCATTERED SPIDER.',INSIGHT:'XDR correlaciona vishing, acesso e persistência.'},deathMessages:{IDENTITY:{headline:'SEM FALCON IDENTITY — BYPASS DE MFA PASSOU',body:'SCATTERED SPIDER enganou o helpdesk, resetou MFA e entrou com credenciais válidas. Sem análise comportamental, pareceu legítimo.',cta:'Falcon Identity: análise comportamental contra credenciais válidas roubadas.'}},incidentReport:{title:'CAMPANHA DE ENGENHARIA SOCIAL NEUTRALIZADA',stopped:'Tentativa de bypass de MFA detectada. Conta impostora isolada antes do movimento lateral.',keyLesson:'Sem malware: analytics de identidade param o que o endpoint não vê.',moduleHighlight:'IDENTITY'}},
-    volt_typhoon:{shortNation:'🇨🇳 China — PLA',vector:'LOTL · Infraestrutura crítica',environment:'REDE OT / INFRAESTRUTURA CRÍTICA',threatCard:'VOLT TYPHOON quase não aparece. Nós ocultos serão ativados se você não os revelar. Use Exposure Management.',moduleNarrative:{FEM:'Mapeia cada ativo OT exposto antes que VOLT TYPHOON o encontre.',INSIGHT:'Detecta abuso de LOLBins ao baselinar uso legítimo de admin.',OVERWATCH:'Caçadores identificam pré-posicionamento lento ao longo de meses.',PREVENT:'IA comportamental detecta abuso de binários legítimos mesmo sem malware.'},deathMessages:{FEM:{headline:'SEM EXPOSURE MANAGEMENT — VOLT TYPHOON ACHOU O QUE VOCÊ NÃO VIA',body:'VOLT TYPHOON encontrou 23 ativos expostos que a equipe nem conhecia. A visibilidade da superfície de ataque faltou.',cta:'Falcon Exposure Management: conheça a superfície antes do adversário.'}},incidentReport:{title:'PRÉ-POSICIONAMENTO OT INTERROMPIDO',stopped:'Preparação em infraestrutura oculta detectada antes da ativação. OT protegido.',keyLesson:'Os adversários mais perigosos fazem pouco ruído. É preciso visibilidade ativa.',moduleHighlight:'FEM'}},
+    volt_typhoon:{shortNation:'🇨🇳 China — PLA',vector:'LOTL · Infraestrutura crítica',environment:'REDE OT / INFRAESTRUTURA CRÍTICA',threatCard:'VOLT TYPHOON quase não aparece. Nós ocultos serão ativados se você não os revelar. Use Exposure Management.',moduleNarrative:{EXP:'Mapeia cada ativo OT exposto antes que VOLT TYPHOON o encontre.',INSIGHT:'Detecta abuso de LOLBins ao baselinar uso legítimo de admin.',OVERWATCH:'Caçadores identificam pré-posicionamento lento ao longo de meses.',PREVENT:'IA comportamental detecta abuso de binários legítimos mesmo sem malware.'},deathMessages:{EXP:{headline:'SEM EXPOSURE MANAGEMENT — VOLT TYPHOON ACHOU O QUE VOCÊ NÃO VIA',body:'VOLT TYPHOON encontrou 23 ativos expostos que a equipe nem conhecia. A visibilidade da superfície de ataque faltou.',cta:'Falcon Exposure Management: conheça a superfície antes do adversário.'}},incidentReport:{title:'PRÉ-POSICIONAMENTO OT INTERROMPIDO',stopped:'Preparação em infraestrutura oculta detectada antes da ativação. OT protegido.',keyLesson:'Os adversários mais perigosos fazem pouco ruído. É preciso visibilidade ativa.',moduleHighlight:'EXP'}},
     midnight_blizzard_boss:{shortNation:'🇷🇺 Rússia — SVR',vector:'Supply chain · Bypass de MFA · Abuso de fornecedor',environment:'CADEIA DE SUPRIMENTOS DE SOFTWARE',threatCard:'MIDNIGHT BLIZZARD comprometeu um fornecedor confiável. Um bloco já está corrompido e um inimigo por linha parece aliado.',moduleNarrative:{COMPLETE:'Analistas MDR com experiência em NOBELIUM respondem aos sinais de supply chain.',IDENTITY:'Detecta password spray lento e roubo de token MFA.',OVERWATCH:'Caçadores acompanham TTPs de NOBELIUM globalmente.',INSIGHT:'XDR correlaciona telemetria de supply chain com endpoint e identidade.',PANGEA:'Inteligência global identifica infraestrutura de MIDNIGHT BLIZZARD antes do contato.'},deathMessages:{COMPLETE:{headline:'SEM FALCON COMPLETE MDR — COMPROMISSO DE SUPPLY CHAIN SE ESPALHOU',body:'Um fornecedor confiável distribuiu uma atualização maliciosa. Sem a expertise de MDR, os sinais de supply chain passaram.',cta:'Falcon Complete MDR: expertise gerenciada para compromissos de supply chain.'}},incidentReport:{title:'COMPROMISSO DE SUPPLY CHAIN CONTIDO',stopped:'Atualização maliciosa detectada antes da propagação downstream.',keyLesson:'Supply chain ignora o perímetro. Detecção comportamental é essencial.',moduleHighlight:'COMPLETE'}},
-    sandworm:{shortNation:'🇷🇺 Rússia — GRU',vector:'Malware destrutivo · OT/ICS · Wiper',environment:'SISTEMAS INDUSTRIAIS / REDE OT',threatCard:'Tiros de SANDWORM corrompem suas defesas. Blocos corrompidos viram hostis e atiram de volta.',moduleNarrative:{PREVENT:'IA comportamental detecta padrões de wiper antes da destruição do primeiro arquivo.',FEM:'Descobre cada fronteira OT e ICS que SANDWORM pode atingir.',COMPLETE:'Contenção imediata para isolar sistemas afetados antes da propagação.',OVERWATCH:'Caçadores identificam a preparação pré-destruição antes da detonação.'},deathMessages:{PREVENT:{headline:'SEM FALCON PREVENT — WIPER EXECUTOU',body:'O wiper de SANDWORM era inédito. Sem IA comportamental, sobrescrita em massa e destruição de MBR passaram sem bloqueio.',cta:'Falcon Prevent: para malware destrutivo antes do primeiro arquivo apagado.'}},incidentReport:{title:'CAMPANHA DE WIPER BLOQUEADA',stopped:'Execução do wiper bloqueada antes de alcançar os sistemas OT.',keyLesson:'Ataques destrutivos não se remedeiam. Só se previnem.',moduleHighlight:'PREVENT'}},
+    sandworm:{shortNation:'🇷🇺 Rússia — GRU',vector:'Malware destrutivo · OT/ICS · Wiper',environment:'SISTEMAS INDUSTRIAIS / REDE OT',threatCard:'Tiros de SANDWORM corrompem suas defesas. Blocos corrompidos viram hostis e atiram de volta.',moduleNarrative:{PREVENT:'IA comportamental detecta padrões de wiper antes da destruição do primeiro arquivo.',EXP:'Descobre cada fronteira OT e ICS que SANDWORM pode atingir.',COMPLETE:'Contenção imediata para isolar sistemas afetados antes da propagação.',OVERWATCH:'Caçadores identificam a preparação pré-destruição antes da detonação.'},deathMessages:{PREVENT:{headline:'SEM FALCON PREVENT — WIPER EXECUTOU',body:'O wiper de SANDWORM era inédito. Sem IA comportamental, sobrescrita em massa e destruição de MBR passaram sem bloqueio.',cta:'Falcon Prevent: para malware destrutivo antes do primeiro arquivo apagado.'}},incidentReport:{title:'CAMPANHA DE WIPER BLOQUEADA',stopped:'Execução do wiper bloqueada antes de alcançar os sistemas OT.',keyLesson:'Ataques destrutivos não se remedeiam. Só se previnem.',moduleHighlight:'PREVENT'}},
     blackcat_boss:{shortNation:'🌐 Operador RaaS',vector:'RaaS · Tripla extorsão',environment:'AMBIENTE HÍBRIDO / INFRA ESXi',threatCard:'Afiliados BLACKCAT atacam por vários vetores ao mesmo tempo. O volume de alertas bagunça o HUD. Charlotte AI é essencial.',moduleNarrative:{PREVENT:'IA comportamental detecta o payload Rust de BLACKCAT; linguagem não importa.',COMPLETE:'Analistas MDR detectam e expulsam o broker de acesso antes do deploy.',CHARLOTTE:'IA autônoma neutraliza a atividade multi-vetor que satura equipes humanas.',OVERWATCH:'Caçadores veem a preparação pré-ransomware: credenciais, ESXi e backups.',INSIGHT:'XDR correlaciona toda a cadeia BLACKCAT em todos os domínios.'},deathMessages:{CHARLOTTE:{headline:'SEM CHARLOTTE AI — DEPLOY MULTI-VETOR PASSOU',body:'BLACKCAT criptografou endpoints, hosts ESXi e backups ao mesmo tempo. O volume de alertas atropelou a equipe.',cta:'Charlotte AI: resposta autônoma que não quebra sob volume de alertas.'}},incidentReport:{title:'RANSOMWARE MULTI-VETOR CONTIDO',stopped:'Tentativa simultânea de criptografia em endpoint, servidor e ESXi bloqueada.',keyLesson:'RaaS foi feito para saturar. Resposta autônoma não é opcional.',moduleHighlight:'CHARLOTTE'}},
     lazarus_final:{shortNation:'🇰🇵 Coreia do Norte',vector:'Roubo financeiro · Cripto · Destrutivo',environment:'TESOURARIA CRIPTO / SISTEMAS PRIVILEGIADOS',threatCard:'LAZARUS GROUP opera em três fases: ROUBO, FURTIVIDADE e DESTRUIÇÃO. Cada fase muda as regras. A plataforma completa é exigida.',moduleNarrative:{COMPLETE:'Resposta MDR guiada por especialistas é essencial para expulsar um ator estatal.',PREVENT:'IA comportamental bloqueia o malware customizado de LAZARUS, por mais bespoke que seja.',IDENTITY:'Detecta abuso de credencial e reconhecimento de contas privilegiadas.',CHARLOTTE:'IA autônoma processa o grande volume de telemetria gerado por LAZARUS.',OVERWATCH:'Uma década caçando LAZARUS: OverWatch conhece sua infra e seu timing.',PANGEA:'Inteligência global identifica a infraestrutura de mixing antes do contato.'},deathMessages:{COMPLETE:{headline:'SEM FALCON COMPLETE MDR — LAZARUS VOLTOU',body:'A equipe removeu o implante inicial, mas LAZARUS já tinha múltiplos mecanismos de persistência. A remediação ficou incompleta.',cta:'Falcon Complete MDR: expulsão completa de ator estatal, não só contenção.'}},incidentReport:{title:'OPERAÇÃO ESTATAL NEUTRALIZADA',stopped:'Operação multi-fase de LAZARUS interrompida nas três etapas.',keyLesson:'Atores estatais exigem a plataforma completa; uma ferramenta só não basta.',moduleHighlight:'COMPLETE'}},
   },
@@ -13583,9 +13686,9 @@ const DEFENSE_PHASE_LOCALE = Object.freeze({
     carbon_spider:{shortNation:'🌐 Sindicato eCrime',vector:'RaaS · Malware POS',environment:'ENDPOINTS DE RETAIL / RED POS',threatCard:'CARBON SPIDER prepara ransomware en tu red retail. Los enemigos lentos se aceleran cuando termina el staging.',moduleNarrative:{PREVENT:'Escaneo de memoria e IA conductual frenan ransomware sin archivos.',COMPLETE:'Analistas MDR contienen el incidente antes de que llegue a sistemas críticos.',OVERWATCH:'Los hunters detectan staging previo al ransomware y escalada de privilegios.',INSIGHT:'XDR correlaciona la cadena completa del ransomware.'},deathMessages:{PREVENT:{headline:'SIN FALCON PREVENT — EL STAGING DEL RANSOMWARE AVANZÓ',body:'CARBON SPIDER preparó el ransomware en memoria. Sin detección conductual, la cifración empezó sin aviso.',cta:'Falcon Prevent: IA conductual para detener ransomware antes del cifrado.'}},incidentReport:{title:'STAGING DE RANSOMWARE INTERRUMPIDO',stopped:'Staging previo al ransomware detectado y neutralizado antes del cifrado.',keyLesson:'El ransomware se frena en el staging, no en el cifrado.',moduleHighlight:'PREVENT'}},
     cozy_bear:{shortNation:'🇷🇺 Rusia — SVR',vector:'Infraestructura cloud · Abuso de OAuth',environment:'TENANT CLOUD / ENTORNO DE CONTENEDORES',threatCard:'COZY BEAR robó tokens OAuth. Los enemigos desaparecen del endpoint y reaparecen en la nube. Sin Cloud Security, no puedes alcanzarlos.',moduleNarrative:{CLOUD:'Protección en runtime para cada workload cloud; bloquea abuso de OAuth.',INSIGHT:'Correlaciona llamadas API cloud con señales de endpoint.',OVERWATCH:'Los hunters buscan TTPs cloud-native de COZY BEAR.',IDENTITY:'Detecta robo de token OAuth y abuso de cuentas de servicio antes de la persistencia.'},deathMessages:{CLOUD:{headline:'SIN CLOUD SECURITY — EL ENTORNO CLOUD QUEDÓ CIEGO',body:'COZY BEAR pivotó por completo a la nube, fuera del alcance de las herramientas de endpoint. Operó allí 47 días.',cta:'Falcon Cloud Security: protección CNAPP para cada workload cloud.'}},incidentReport:{title:'PIVOT A CLOUD BLOQUEADO',stopped:'Abuso de token OAuth detectado y movimiento lateral cloud contenido.',keyLesson:'Las herramientas de endpoint no ven ataques cloud-native.',moduleHighlight:'CLOUD'}},
     scattered_spider:{shortNation:'🌐 eCrime occidental',vector:'Ingeniería social · Bypass de MFA',environment:'COMMS EJEC / PROVEEDOR DE IDENTIDAD',threatCard:'SCATTERED SPIDER está entre tus empleados. Algunos enemigos parecen aliados. Sin Identity, una señal falsa cuesta una vida.',moduleNarrative:{IDENTITY:'Detecta anomalías en resets de MFA y expone impostores al activarse.',COMPLETE:'Analistas MDR reciben la alerta en menos de 60s y contienen la intrusión.',OVERWATCH:'Los hunters reconocen el patrón post-acceso de SCATTERED SPIDER.',INSIGHT:'XDR correlaciona vishing, acceso y persistencia.'},deathMessages:{IDENTITY:{headline:'SIN FALCON IDENTITY — EL BYPASS DE MFA PASÓ',body:'SCATTERED SPIDER engañó al helpdesk, reinició MFA y entró con credenciales válidas. Sin análisis conductual, pareció legítimo.',cta:'Falcon Identity: analítica conductual contra credenciales válidas robadas.'}},incidentReport:{title:'CAMPAÑA DE INGENIERÍA SOCIAL NEUTRALIZADA',stopped:'Intento de bypass de MFA detectado. Cuenta impostora aislada antes del movimiento lateral.',keyLesson:'Sin malware: la analítica de identidad detiene lo que el endpoint no ve.',moduleHighlight:'IDENTITY'}},
-    volt_typhoon:{shortNation:'🇨🇳 China — PLA',vector:'LOTL · Infraestructura crítica',environment:'RED OT / INFRAESTRUCTURA CRÍTICA',threatCard:'VOLT TYPHOON casi no se ve. Los nodos ocultos se activarán si no los revelas. Usa Exposure Management.',moduleNarrative:{FEM:'Mapea cada activo OT expuesto antes de que VOLT TYPHOON lo encuentre.',INSIGHT:'Detecta abuso de LOLBins al baselinar el uso legítimo de admin.',OVERWATCH:'Los hunters identifican preposicionamiento lento durante meses.',PREVENT:'La IA conductual detecta abuso de binarios legítimos incluso sin malware.'},deathMessages:{FEM:{headline:'SIN EXPOSURE MANAGEMENT — VOLT TYPHOON ENCONTRÓ LO QUE NO VEÍAS',body:'VOLT TYPHOON halló 23 activos expuestos que el equipo ni conocía. Faltó visibilidad de superficie de ataque.',cta:'Falcon Exposure Management: conoce la superficie antes que el adversario.'}},incidentReport:{title:'PREPOSICIONAMIENTO OT INTERRUMPIDO',stopped:'Preparación oculta detectada antes de la activación. OT protegido.',keyLesson:'Los adversarios más peligrosos hacen poco ruido. Se necesita visibilidad activa.',moduleHighlight:'FEM'}},
+    volt_typhoon:{shortNation:'🇨🇳 China — PLA',vector:'LOTL · Infraestructura crítica',environment:'RED OT / INFRAESTRUCTURA CRÍTICA',threatCard:'VOLT TYPHOON casi no se ve. Los nodos ocultos se activarán si no los revelas. Usa Exposure Management.',moduleNarrative:{EXP:'Mapea cada activo OT expuesto antes de que VOLT TYPHOON lo encuentre.',INSIGHT:'Detecta abuso de LOLBins al baselinar el uso legítimo de admin.',OVERWATCH:'Los hunters identifican preposicionamiento lento durante meses.',PREVENT:'La IA conductual detecta abuso de binarios legítimos incluso sin malware.'},deathMessages:{EXP:{headline:'SIN EXPOSURE MANAGEMENT — VOLT TYPHOON ENCONTRÓ LO QUE NO VEÍAS',body:'VOLT TYPHOON halló 23 activos expuestos que el equipo ni conocía. Faltó visibilidad de superficie de ataque.',cta:'Falcon Exposure Management: conoce la superficie antes que el adversario.'}},incidentReport:{title:'PREPOSICIONAMIENTO OT INTERRUMPIDO',stopped:'Preparación oculta detectada antes de la activación. OT protegido.',keyLesson:'Los adversarios más peligrosos hacen poco ruido. Se necesita visibilidad activa.',moduleHighlight:'EXP'}},
     midnight_blizzard_boss:{shortNation:'🇷🇺 Rusia — SVR',vector:'Cadena de suministro · Bypass de MFA · Abuso de proveedor',environment:'CADENA DE SUMINISTRO DE SOFTWARE',threatCard:'MIDNIGHT BLIZZARD comprometió a un proveedor confiable. Un bloque ya está corrupto y un enemigo por fila parece aliado.',moduleNarrative:{COMPLETE:'Analistas MDR con experiencia en NOBELIUM responden a señales de cadena de suministro.',IDENTITY:'Detecta password spray lento y robo de token MFA.',OVERWATCH:'Los hunters siguen TTPs de NOBELIUM a escala global.',INSIGHT:'XDR correlaciona telemetría de supply chain con endpoint e identidad.',PANGEA:'Inteligencia global identifica infraestructura de MIDNIGHT BLIZZARD antes del contacto.'},deathMessages:{COMPLETE:{headline:'SIN FALCON COMPLETE MDR — EL COMPROMISO DE SUPPLY CHAIN SE PROPAGÓ',body:'Un proveedor confiable distribuyó una actualización maliciosa. Sin la experiencia de MDR, las señales de supply chain pasaron.',cta:'Falcon Complete MDR: experiencia gestionada para compromisos de supply chain.'}},incidentReport:{title:'COMPROMISO DE SUPPLY CHAIN CONTENIDO',stopped:'Actualización maliciosa detectada antes de la propagación downstream.',keyLesson:'Supply chain evita el perímetro. La detección conductual es clave.',moduleHighlight:'COMPLETE'}},
-    sandworm:{shortNation:'🇷🇺 Rusia — GRU',vector:'Malware destructivo · OT/ICS · Wiper',environment:'SISTEMAS INDUSTRIALES / RED OT',threatCard:'Los disparos de SANDWORM corrompen tus defensas. Los bloques corruptos se vuelven hostiles y disparan de vuelta.',moduleNarrative:{PREVENT:'La IA conductual detecta patrones de wiper antes de destruir el primer archivo.',FEM:'Descubre cada frontera OT e ICS que SANDWORM puede golpear.',COMPLETE:'Contención inmediata para aislar sistemas afectados antes de propagarse.',OVERWATCH:'Los hunters identifican la preparación previa a la destrucción.'},deathMessages:{PREVENT:{headline:'SIN FALCON PREVENT — EL WIPER SE EJECUTÓ',body:'El wiper de SANDWORM era inédito. Sin IA conductual, la sobreescritura masiva y la destrucción de MBR pasaron sin bloqueo.',cta:'Falcon Prevent: detiene malware destructivo antes del primer archivo borrado.'}},incidentReport:{title:'CAMPAÑA DE WIPER BLOQUEADA',stopped:'Ejecución del wiper bloqueada antes de alcanzar sistemas OT.',keyLesson:'Los ataques destructivos no se remedian. Solo se previenen.',moduleHighlight:'PREVENT'}},
+    sandworm:{shortNation:'🇷🇺 Rusia — GRU',vector:'Malware destructivo · OT/ICS · Wiper',environment:'SISTEMAS INDUSTRIALES / RED OT',threatCard:'Los disparos de SANDWORM corrompen tus defensas. Los bloques corruptos se vuelven hostiles y disparan de vuelta.',moduleNarrative:{PREVENT:'La IA conductual detecta patrones de wiper antes de destruir el primer archivo.',EXP:'Descubre cada frontera OT e ICS que SANDWORM puede golpear.',COMPLETE:'Contención inmediata para aislar sistemas afectados antes de propagarse.',OVERWATCH:'Los hunters identifican la preparación previa a la destrucción.'},deathMessages:{PREVENT:{headline:'SIN FALCON PREVENT — EL WIPER SE EJECUTÓ',body:'El wiper de SANDWORM era inédito. Sin IA conductual, la sobreescritura masiva y la destrucción de MBR pasaron sin bloqueo.',cta:'Falcon Prevent: detiene malware destructivo antes del primer archivo borrado.'}},incidentReport:{title:'CAMPAÑA DE WIPER BLOQUEADA',stopped:'Ejecución del wiper bloqueada antes de alcanzar sistemas OT.',keyLesson:'Los ataques destructivos no se remedian. Solo se previenen.',moduleHighlight:'PREVENT'}},
     blackcat_boss:{shortNation:'🌐 Operador RaaS',vector:'RaaS · Triple extorsión',environment:'ENTORNO HÍBRIDO / INFRA ESXi',threatCard:'Afiliados BLACKCAT atacan desde varios vectores a la vez. La avalancha de alertas desordena el HUD. Charlotte AI es clave.',moduleNarrative:{PREVENT:'La IA conductual detecta el payload Rust de BLACKCAT; el lenguaje no importa.',COMPLETE:'Analistas MDR detectan y expulsan al broker de acceso antes del despliegue.',CHARLOTTE:'La IA autónoma neutraliza la actividad multivector que satura a equipos humanos.',OVERWATCH:'Los hunters ven preparación pre-ransomware: credenciales, ESXi y backups.',INSIGHT:'XDR correlaciona toda la kill chain de BLACKCAT en todos los dominios.'},deathMessages:{CHARLOTTE:{headline:'SIN CHARLOTTE AI — EL DESPLIEGUE MULTIVECTOR PASÓ',body:'BLACKCAT cifró endpoints, hosts ESXi y backups al mismo tiempo. El volumen de alertas aplastó al equipo.',cta:'Charlotte AI: respuesta autónoma que no cae ante una avalancha de alertas.'}},incidentReport:{title:'RANSOMWARE MULTIVECTOR CONTENIDO',stopped:'Intento simultáneo de cifrado en endpoint, servidor y ESXi bloqueado.',keyLesson:'RaaS fue diseñado para saturar. La respuesta autónoma no es opcional.',moduleHighlight:'CHARLOTTE'}},
     lazarus_final:{shortNation:'🇰🇵 Corea del Norte',vector:'Robo financiero · Cripto · Destructivo',environment:'TESORERÍA CRIPTO / SISTEMAS PRIVILEGIADOS',threatCard:'LAZARUS GROUP opera en tres fases: ROBO, SIGILO y DESTRUCCIÓN. Cada fase cambia las reglas. Se necesita la plataforma completa.',moduleNarrative:{COMPLETE:'La respuesta MDR guiada por expertos es clave para expulsar a un actor estatal.',PREVENT:'La IA conductual bloquea el malware personalizado de LAZARUS por muy bespoke que sea.',IDENTITY:'Detecta abuso de credenciales y reconocimiento de cuentas privilegiadas.',CHARLOTTE:'La IA autónoma procesa el gran volumen de telemetría generado por LAZARUS.',OVERWATCH:'Una década cazando a LAZARUS: OverWatch conoce su infraestructura y timing.',PANGEA:'Inteligencia global identifica infraestructura de mixing antes del contacto.'},deathMessages:{COMPLETE:{headline:'SIN FALCON COMPLETE MDR — LAZARUS VOLVIÓ',body:'El equipo quitó el implante inicial, pero LAZARUS ya tenía múltiples mecanismos de persistencia. La remediación quedó incompleta.',cta:'Falcon Complete MDR: expulsión completa de actor estatal, no solo contención.'}},incidentReport:{title:'OPERACIÓN ESTATAL NEUTRALIZADA',stopped:'Operación multifase de LAZARUS interrumpida en las tres etapas.',keyLesson:'Los actores estatales exigen la plataforma completa; una sola herramienta no basta.',moduleHighlight:'COMPLETE'}},
   },
@@ -13595,9 +13698,9 @@ const DEFENSE_PHASE_LOCALE = Object.freeze({
     carbon_spider:{shortNation:'🌐 eCrime組織',vector:'RaaS · POSマルウェア',environment:'小売端末 / POSネットワーク',threatCard:'CARBON SPIDERは小売網でランサムウェアを準備中。準備完了後は一気に加速する。',moduleNarrative:{PREVENT:'メモリ監視と振る舞いAIで、ファイルレス型ランサムウェアを阻止。',COMPLETE:'MDRアナリストが重要システム到達前に封じ込める。',OVERWATCH:'権限昇格を伴う事前準備をハンターが検知。',INSIGHT:'XDRがランサムウェアの全連鎖を相関。'},deathMessages:{PREVENT:{headline:'Falcon Preventなし — ランサムウェア準備が進行',body:'CARBON SPIDERはメモリ上で準備を完了した。振る舞い検知がなく、暗号化開始まで見逃した。',cta:'Falcon Prevent: 暗号化前に止める振る舞いAI。'}},incidentReport:{title:'ランサムウェア準備を阻止',stopped:'暗号化段階前に準備行為を検知して無力化。',keyLesson:'ランサムウェアは暗号化前の準備段階で止める。',moduleHighlight:'PREVENT'}},
     cozy_bear:{shortNation:'🇷🇺 ロシア — SVR',vector:'クラウド基盤 · OAuth悪用',environment:'クラウドテナント / コンテナ環境',threatCard:'COZY BEARはOAuthトークンを奪取。敵は端末から消え、クラウド側で再出現する。',moduleNarrative:{CLOUD:'全クラウドワークロードをランタイム保護し、OAuth悪用を阻止。',INSIGHT:'クラウドAPI呼び出しと端末信号を関連付ける。',OVERWATCH:'COZY BEARのcloud-native TTPをハンターが追う。',IDENTITY:'OAuthトークン窃取とサービスアカウント悪用を持続化前に検知。'},deathMessages:{CLOUD:{headline:'Falcon Cloud Securityなし — クラウドが無監視',body:'COZY BEARは全面的にクラウドへピボットし、エンドポイント防御の外で47日動いた。',cta:'Falcon Cloud Security: 全クラウド向けCNAPP保護。'}},incidentReport:{title:'クラウド基盤へのピボットを阻止',stopped:'OAuthトークン悪用を検知し、クラウド横展開を封じ込め。',keyLesson:'エンドポイント製品だけではクラウドネイティブ攻撃は見えない。',moduleHighlight:'CLOUD'}},
     scattered_spider:{shortNation:'🌐 西側eCrime',vector:'ソーシャルエンジニアリング · MFA回避',environment:'経営陣通信 / IDプロバイダー',threatCard:'SCATTERED SPIDERは従業員になりすます。味方に見える敵や偽シグナルに注意。',moduleNarrative:{IDENTITY:'MFAリセット異常を検知し、起動直後になりすましを暴く。',COMPLETE:'MDRアナリストが60秒未満で把握し、侵入を封じ込める。',OVERWATCH:'侵入後の行動パターンをハンターが見抜く。',INSIGHT:'XDRがvishing、アクセス、持続化を関連付ける。'},deathMessages:{IDENTITY:{headline:'Falcon Identityなし — MFA回避を見逃した',body:'SCATTERED SPIDERはヘルプデスクを欺きMFAをリセットし、有効な認証情報で侵入した。行動分析がなければ正当に見える。',cta:'Falcon Identity: 盗まれた有効認証情報を武器にさせない。'}},incidentReport:{title:'ソーシャルエンジニアリング攻撃を無力化',stopped:'MFA回避を検知し、なりすましアカウントを横展開前に隔離。',keyLesson:'マルウェア不要の攻撃は、ID分析で止める。',moduleHighlight:'IDENTITY'}},
-    volt_typhoon:{shortNation:'🇨🇳 中国 — PLA',vector:'LOTL · 重要インフラ',environment:'OTネットワーク / 重要インフラ',threatCard:'VOLT TYPHOONはほぼ見えない。隠しノードを見つけないと起動する。Exposure Managementを使え。',moduleNarrative:{FEM:'露出したOT資産を洗い出し、VOLT TYPHOONより先に把握。',INSIGHT:'正規管理ツール利用の基準化でLOTL悪用を検知。',OVERWATCH:'数か月単位の静かな事前配置をハンターが発見。',PREVENT:'マルウェアがなくても正規バイナリの悪用を検知。'},deathMessages:{FEM:{headline:'Falcon Exposure Managementなし — 見えていない資産を突かれた',body:'VOLT TYPHOONはチームが把握していない露出資産23台を発見した。攻撃面の可視化が欠けていた。',cta:'Falcon Exposure Management: 攻撃面を相手より先に把握。'}},incidentReport:{title:'OT事前配置を阻止',stopped:'隠れた基盤準備を起動前に検知。OTを保護。',keyLesson:'最も危険な相手ほど静かだ。能動的な可視性が必要。',moduleHighlight:'FEM'}},
+    volt_typhoon:{shortNation:'🇨🇳 中国 — PLA',vector:'LOTL · 重要インフラ',environment:'OTネットワーク / 重要インフラ',threatCard:'VOLT TYPHOONはほぼ見えない。隠しノードを見つけないと起動する。Exposure Managementを使え。',moduleNarrative:{EXP:'露出したOT資産を洗い出し、VOLT TYPHOONより先に把握。',INSIGHT:'正規管理ツール利用の基準化でLOTL悪用を検知。',OVERWATCH:'数か月単位の静かな事前配置をハンターが発見。',PREVENT:'マルウェアがなくても正規バイナリの悪用を検知。'},deathMessages:{EXP:{headline:'Falcon Exposure Managementなし — 見えていない資産を突かれた',body:'VOLT TYPHOONはチームが把握していない露出資産23台を発見した。攻撃面の可視化が欠けていた。',cta:'Falcon Exposure Management: 攻撃面を相手より先に把握。'}},incidentReport:{title:'OT事前配置を阻止',stopped:'隠れた基盤準備を起動前に検知。OTを保護。',keyLesson:'最も危険な相手ほど静かだ。能動的な可視性が必要。',moduleHighlight:'EXP'}},
     midnight_blizzard_boss:{shortNation:'🇷🇺 ロシア — SVR',vector:'サプライチェーン · MFA回避 · ベンダー悪用',environment:'ソフトウェア供給網',threatCard:'MIDNIGHT BLIZZARDは信頼済みベンダーを侵害した。汚染ブロックと偽装した敵が混ざる。',moduleNarrative:{COMPLETE:'NOBELIUM対応経験のあるMDRアナリストが供給網兆候に対応。',IDENTITY:'低速パスワードスプレーとMFAトークン窃取を検知。',OVERWATCH:'NOBELIUMのTTPを世界規模で追跡。',INSIGHT:'供給網テレメトリを端末・ID信号と関連付ける。',PANGEA:'MIDNIGHT BLIZZARD基盤を接触前に特定する全球インテリジェンス。'},deathMessages:{COMPLETE:{headline:'Falcon Complete MDRなし — 供給網侵害が拡散',body:'信頼ベンダーの更新が悪用された。MDRの専門性がなく、供給網侵害の兆候を見抜けなかった。',cta:'Falcon Complete MDR: サプライチェーン侵害に対する運用専門性。'}},incidentReport:{title:'サプライチェーン侵害を封じ込め',stopped:'悪性アップデートを下流展開前に検知。',keyLesson:'供給網攻撃は境界防御を迂回する。行動検知が必須。',moduleHighlight:'COMPLETE'}},
-    sandworm:{shortNation:'🇷🇺 ロシア — GRU',vector:'破壊型マルウェア · OT/ICS · Wiper',environment:'産業システム / OTネットワーク',threatCard:'SANDWORMの弾は防御を汚染する。汚染されたブロックは敵化して撃ち返す。',moduleNarrative:{PREVENT:'破壊前にWiperの実行パターンを振る舞いAIで検知。',FEM:'SANDWORMが狙えるOT/ICS境界を可視化。',COMPLETE:'拡散前に影響範囲を即時隔離。',OVERWATCH:'破壊前の準備行動をハンターが早期発見。'},deathMessages:{PREVENT:{headline:'Falcon Preventなし — Wiperが実行',body:'SANDWORMのWiperは未知で、シグネチャはなかった。振る舞いAIがなければ大量上書きとMBR破壊を止められない。',cta:'Falcon Prevent: 最初の破壊前に止める振る舞いAI。'}},incidentReport:{title:'破壊型Wiper攻撃を阻止',stopped:'OT到達前にWiper実行を遮断。',keyLesson:'破壊型攻撃は修復ではなく予防で止める。',moduleHighlight:'PREVENT'}},
+    sandworm:{shortNation:'🇷🇺 ロシア — GRU',vector:'破壊型マルウェア · OT/ICS · Wiper',environment:'産業システム / OTネットワーク',threatCard:'SANDWORMの弾は防御を汚染する。汚染されたブロックは敵化して撃ち返す。',moduleNarrative:{PREVENT:'破壊前にWiperの実行パターンを振る舞いAIで検知。',EXP:'SANDWORMが狙えるOT/ICS境界を可視化。',COMPLETE:'拡散前に影響範囲を即時隔離。',OVERWATCH:'破壊前の準備行動をハンターが早期発見。'},deathMessages:{PREVENT:{headline:'Falcon Preventなし — Wiperが実行',body:'SANDWORMのWiperは未知で、シグネチャはなかった。振る舞いAIがなければ大量上書きとMBR破壊を止められない。',cta:'Falcon Prevent: 最初の破壊前に止める振る舞いAI。'}},incidentReport:{title:'破壊型Wiper攻撃を阻止',stopped:'OT到達前にWiper実行を遮断。',keyLesson:'破壊型攻撃は修復ではなく予防で止める。',moduleHighlight:'PREVENT'}},
     blackcat_boss:{shortNation:'🌐 RaaSオペレーター',vector:'RaaS · 三重恐喝',environment:'ハイブリッド環境 / ESXi基盤',threatCard:'BLACKCATは複数方向から同時攻撃する。アラート洪水でHUDが乱れる。Charlotte AIが鍵だ。',moduleNarrative:{PREVENT:'BLACKCATのRust製ペイロードを振る舞いで検知。言語は関係ない。',COMPLETE:'MDRアナリストが初期アクセスブローカーを展開前に排除。',CHARLOTTE:'人手を飽和させる多ベクトル活動を自律AIで無力化。',OVERWATCH:'認証情報収集、ESXi列挙、バックアップ破壊をハンターが見抜く。',INSIGHT:'BLACKCATの全キルチェーンをドメイン横断で相関。'},deathMessages:{CHARLOTTE:{headline:'Charlotte AIなし — 多ベクトル展開が成功',body:'BLACKCATは端末、ESXi、バックアップを同時暗号化した。アラート量がチームを圧倒した。',cta:'Charlotte AI: アラート洪水に負けない自律応答。'}},incidentReport:{title:'多ベクトルランサムウェアを封じ込め',stopped:'端末・サーバー・ESXiへの同時暗号化を阻止。',keyLesson:'RaaSは飽和を狙う。自律応答は必須。',moduleHighlight:'CHARLOTTE'}},
     lazarus_final:{shortNation:'🇰🇵 北朝鮮',vector:'金融窃取 · 暗号資産 · 破壊',environment:'暗号資産金庫 / 特権システム',threatCard:'LAZARUS GROUPは窃取、ステルス、破壊の3段階で動く。各段階でルールが変わる。',moduleNarrative:{COMPLETE:'国家級アクターを完全排除するには専門家主導MDRが必要。',PREVENT:'LAZARUSの特注マルウェアを振る舞いで阻止。',IDENTITY:'認証情報悪用と特権アカウント偵察を検知。',CHARLOTTE:'LAZARUSが生む大量テレメトリを自律AIで処理。',OVERWATCH:'OverWatchは長年の追跡で基盤とタイミングを把握。',PANGEA:'接触前に暗号資産ミキシング基盤を特定する全球インテリジェンス。'},deathMessages:{COMPLETE:{headline:'Falcon Complete MDRなし — LAZARUSが再侵入',body:'初期インプラントは除去できても、LAZARUSは複数の持続化を残していた。対応は不完全だった。',cta:'Falcon Complete MDR: 国家級アクターを完全排除。'}},incidentReport:{title:'国家級オペレーションを無力化',stopped:'LAZARUSの多段階作戦を3段階すべてで阻止。',keyLesson:'国家級アクターにはプラットフォーム全体が必要。単独製品では足りない。',moduleHighlight:'COMPLETE'}},
   },
@@ -13683,7 +13786,7 @@ const MODULES = Object.freeze({
     desc:"CNAPP securing every workload, container and cloud service.",
     mechanic:"Opens cloud lane. Eliminates cloud-pivot enemies. 20s assisted containment.",
     emoji:"☁️",color:CS.ORANGE,duration:20},
-  FEM:{id:"FEM",name:"Falcon Exposure Mgmt",shortName:"EXPOSURE",
+  EXP:{id:"EXP",name:"Falcon Exposure Mgmt",shortName:"EXPOSURE",
     tagline:"Attack Surface Management",
     desc:"Discovers exposed assets before adversaries exploit them.",
     mechanic:"Reveals hidden nodes. Slows enemies 40%. Marks weak points.",
@@ -13741,6 +13844,7 @@ const SOC_COMMS = {
     "Falcon Identity: impossible travel verified — session hard-frozen in real time.",
     "Insight XDR: helpdesk compromise correlated to finance lateral movement — one attack story.",
     "OverWatch: GRU unit 26165 toolset fingerprinted — TTPs match 9 prior campaigns exactly.",
+    "Charlotte AI: triaging credential spray — 2,400 events distilled to 3 critical leads in 0.8s.",
   ],
   ai_syndicate:[
     "LLM-generated phishing — zero grammar errors, zero signatures.",
@@ -13758,6 +13862,7 @@ const SOC_COMMS = {
     "Charlotte AI: triage complete — 5 critical vectors ranked and queued in 0.3 seconds.",
     "Falcon Prevent: ML model stopped zero-day payload — no signature, pure behaviour analysis.",
     "Insight XDR: 847 low-noise events correlated into a single attack story in real time.",
+    "Charlotte AI: detected novel malware family — auto-generated IOC set pushed to all sensors in 1.2s.",
   ],
   carbon_spider:[
     "Staging phase detected: credential harvest under way.",
@@ -13775,6 +13880,7 @@ const SOC_COMMS = {
     "Falcon Complete MDR: analyst team deployed — containment playbook executing now.",
     "Falcon Prevent: memory scanning quarantined fileless ransomware before a single byte wrote.",
     "Exposure Management: unpatched RDP was visible for 11 days — attack path now sealed.",
+    "Charlotte AI: ransomware pre-staging activity triaged — containment recommendation issued in 0.5s.",
   ],
   cozy_bear:[
     "OAuth consent spike detected — cloud pivot likely.",
@@ -13792,6 +13898,7 @@ const SOC_COMMS = {
     "Cloud Security CSPM: misconfiguration opened lateral path to production data — now remediated.",
     "Falcon Identity: token reuse flagged — JIT access enforced, standing privileges revoked.",
     "Insight XDR: OAuth consent anomaly correlated with 23 downstream cloud API calls.",
+    "Charlotte AI: cloud token compromise triaged — lateral blast radius mapped to 12 services in 0.9s.",
   ],
   scattered_spider:[
     "Vishing call active right now. Helpdesk is being targeted.",
@@ -13809,6 +13916,7 @@ const SOC_COMMS = {
     "Falcon Identity: account logged in from UK and Lagos simultaneously — session terminated.",
     "OverWatch: SCATTERED SPIDER vishing call script matched against known playbook variant.",
     "Falcon Complete: social engineering case escalated — executive and HR notified.",
+    "Charlotte AI: identity-based attack triaged — helpdesk reset correlated with vishing attempt in 0.4s.",
   ],
   volt_typhoon:[
     "Stealth movement detected near OT boundary",
@@ -13826,6 +13934,7 @@ const SOC_COMMS = {
     "Exposure Management: 3 legacy PLCs visible from internet — attack surface mapped in 90 seconds.",
     "Insight XDR: low-and-slow lateral movement correlated across 47 separate log sources.",
     "OverWatch: VOLT TYPHOON hunter embedded — adversary dwell confirmed, eviction authorised.",
+    "Charlotte AI: low-and-slow LOLBin activity triaged — 300-day dwell pattern reconstructed in 2.1s.",
   ],
   midnight_blizzard_boss:[
     "Supply chain alert: vendor update package shows code anomaly.",
@@ -13860,6 +13969,7 @@ const SOC_COMMS = {
     "Falcon Prevent: wiper behavioural signature matched — MBR overwrite blocked at memory level.",
     "Falcon Complete: destructive incident response team deployed — OT isolation order issued.",
     "Exposure Management: 8 OT assets had zero prior visibility — Falcon now deployed on all.",
+    "Charlotte AI: wiper staging triaged — 14 PLCs flagged for emergency isolation in 0.6s.",
   ],
   blackcat_boss:[
     "BLACKCAT affiliate active — Rust-based payload confirmed.",
@@ -13943,7 +14053,7 @@ const PHASES = [
       corruptedAsset:false,multiPhase:false,multiLane:false,
       alertFlood:false,esxiRow:false,adaptivePatterns:false,encryptionRush:false,
     },
-    drops:{IDENTITY:0.38,INSIGHT:0.28,PREVENT:0.24,FEM:0.10},
+    drops:{IDENTITY:0.38,INSIGHT:0.28,PREVENT:0.24,EXP:0.10},
     deathMessages:{
       IDENTITY:{
         headline:"NO IDENTITY PROTECTION — CREDENTIAL ATTACK SUCCEEDED",
@@ -13986,7 +14096,7 @@ const PHASES = [
       corruptedAsset:false,multiPhase:false,multiLane:false,
       alertFlood:false,esxiRow:false,encryptionRush:false,
     },
-    drops:{PREVENT:0.30,IDENTITY:0.28,INSIGHT:0.22,FEM:0.12,PANGEA:0.08},
+    drops:{PREVENT:0.30,IDENTITY:0.28,INSIGHT:0.22,EXP:0.12,PANGEA:0.08},
     deathMessages:{
       CHARLOTTE:{
         headline:"NO AI DEFENCE — AI ATTACK OPERATED UNOPPOSED",
@@ -14029,7 +14139,7 @@ const PHASES = [
       corruptedAsset:false,multiPhase:false,multiLane:false,
       alertFlood:false,esxiRow:false,adaptivePatterns:false,
     },
-    drops:{PREVENT:0.28,COMPLETE:0.20,OVERWATCH:0.18,INSIGHT:0.14,PANGEA:0.10,FEM:0.06,CHARLOTTE:0.04},
+    drops:{PREVENT:0.28,COMPLETE:0.20,OVERWATCH:0.18,INSIGHT:0.14,PANGEA:0.10,EXP:0.06,CHARLOTTE:0.04},
     deathMessages:{
       PREVENT:{
         headline:"LEGACY ANTIVIRUS INSTALLED — FILELESS RANSOMWARE EXECUTED FREELY",
@@ -14072,7 +14182,7 @@ const PHASES = [
       multiPhase:false,multiLane:false,alertFlood:false,
       esxiRow:false,adaptivePatterns:false,encryptionRush:false,
     },
-    drops:{CLOUD:0.30,INSIGHT:0.22,OVERWATCH:0.18,IDENTITY:0.14,FEM:0.08,PANGEA:0.06,CHARLOTTE:0.02},
+    drops:{CLOUD:0.30,INSIGHT:0.22,OVERWATCH:0.18,IDENTITY:0.14,EXP:0.08,PANGEA:0.06,CHARLOTTE:0.02},
     deathMessages:{
       CLOUD:{
         headline:"NO CLOUD SECURITY — ENTIRE CLOUD ESTATE UNMONITORED",
@@ -14143,9 +14253,9 @@ const PHASES = [
     desc:"Chinese state-sponsored group pre-positioning inside US critical infrastructure.",
     attackDesc:"VOLT TYPHOON uses exclusively built-in Windows tools. No malware, no custom code. They blend into legitimate network administration traffic completely.",
     falconFix:"Falcon Exposure Management discovers every asset VOLT TYPHOON could target.",
-    keyModules:["FEM","INSIGHT","OVERWATCH","PREVENT"],
+    keyModules:["EXP","INSIGHT","OVERWATCH","PREVENT"],
     moduleNarrative:{
-      FEM:"Maps every exposed OT asset VOLT TYPHOON could exploit before they find it.",
+      EXP:"Maps every exposed OT asset VOLT TYPHOON could exploit before they find it.",
       INSIGHT:"Detects living-off-the-land abuse by baselining legitimate admin tool usage.",
       OVERWATCH:"Hunters identify slow pre-positioning activity that spans months.",
       PREVENT:"Behavioural AI detects misuse of legitimate binaries even without malware.",
@@ -14158,9 +14268,9 @@ const PHASES = [
       multiPhase:false,multiLane:false,alertFlood:false,
       esxiRow:false,adaptivePatterns:false,encryptionRush:false,
     },
-    drops:{FEM:0.30,INSIGHT:0.24,OVERWATCH:0.20,PREVENT:0.14,PANGEA:0.08,CHARLOTTE:0.04},
+    drops:{EXP:0.30,INSIGHT:0.24,OVERWATCH:0.20,PREVENT:0.14,PANGEA:0.08,CHARLOTTE:0.04},
     deathMessages:{
-      FEM:{
+      EXP:{
         headline:"NO EXPOSURE MANAGEMENT — VOLT TYPHOON FOUND ASSETS YOU DIDN'T KNOW EXISTED",
         body:"VOLT TYPHOON's reconnaissance identified 23 internet-exposed legacy systems the security team had no record of. Falcon Exposure Management continuously discovers and prioritises every exposed asset.",
         cta:"Falcon Exposure Management: know your attack surface before adversaries do. crowdstrike.com/exposure-management",
@@ -14170,7 +14280,7 @@ const PHASES = [
       title:"OT PRE-POSITIONING DISRUPTED",
       stopped:"Pre-positioned OT implants neutralised 72 hours before scheduled activation. VOLT TYPHOON interrupted mid-preparation.",
       keyLesson:"certutil, netsh, wmiexec — all legitimate Windows tools. No signatures. Only behavioural baselines expose 300-day pre-positioning.",
-      moduleHighlight:"FEM",
+      moduleHighlight:"EXP",
     },
   },
   {
@@ -14202,7 +14312,7 @@ const PHASES = [
       stagingPhase:false,multiPhase:false,multiLane:false,
       alertFlood:false,esxiRow:false,adaptivePatterns:false,encryptionRush:false,
     },
-    drops:{COMPLETE:0.26,IDENTITY:0.22,OVERWATCH:0.20,INSIGHT:0.14,PANGEA:0.12,FEM:0.06},
+    drops:{COMPLETE:0.26,IDENTITY:0.22,OVERWATCH:0.20,INSIGHT:0.14,PANGEA:0.12,EXP:0.06},
     deathMessages:{
       COMPLETE:{
         headline:"NO MDR CAPABILITY — SUPPLY CHAIN COMPROMISE PROPAGATED",
@@ -14230,10 +14340,10 @@ const PHASES = [
     desc:"The most destructive cyber threat actor ever documented. Caused the first confirmed power outage via cyberattack.",
     attackDesc:"SANDWORM deploys wiper malware designed to permanently destroy data and render systems unrecoverable.",
     falconFix:"Falcon Prevent's behavioural AI detects wiper malware execution before destruction begins.",
-    keyModules:["PREVENT","FEM","COMPLETE","OVERWATCH"],
+    keyModules:["PREVENT","EXP","COMPLETE","OVERWATCH"],
     moduleNarrative:{
       PREVENT:"Behavioural AI detects wiper malware execution patterns before a single file is destroyed.",
-      FEM:"Discovers every OT and ICS boundary SANDWORM could target.",
+      EXP:"Discovers every OT and ICS boundary SANDWORM could target.",
       COMPLETE:"Immediate containment to isolate affected systems before wiper propagates.",
       OVERWATCH:"Hunters identify SANDWORM's pre-destruction staging before detonation.",
     },
@@ -14245,7 +14355,7 @@ const PHASES = [
       multiPhase:false,multiLane:false,alertFlood:false,
       esxiRow:false,adaptivePatterns:false,encryptionRush:false,
     },
-    drops:{PREVENT:0.28,FEM:0.22,COMPLETE:0.20,OVERWATCH:0.18,INSIGHT:0.08,PANGEA:0.04},
+    drops:{PREVENT:0.28,EXP:0.22,COMPLETE:0.20,OVERWATCH:0.18,INSIGHT:0.08,PANGEA:0.04},
     deathMessages:{
       PREVENT:{
         headline:"NO BEHAVIOURAL AI — WIPER EXECUTED AND DESTROYED 40,000 ENDPOINTS",
@@ -14508,7 +14618,7 @@ class AudioEngine{
     this.#tone({type:"sawtooth",f0:55,f1:18,dur:1.1,gain:0.5,filt:300});
     this.#tone({type:"square",f0:80,f1:25,dur:0.9,gain:0.3,det:30,delay:80});
   }
-  fem(){
+  exp(){
     this.#tone({type:"sine",f0:440,f1:880,dur:0.3,gain:0.2});
     this.#tone({type:"triangle",f0:330,f1:660,dur:0.25,gain:0.15,delay:60});
   }
@@ -14613,7 +14723,7 @@ class ModuleChoiceScreen{
     );
     // If filtering removed all key modules, fall back to safe modules
     const safePool = keyPool.length >= 2 ? keyPool :
-      ["PREVENT","INSIGHT","IDENTITY","FEM","PANGEA"].filter(id => !NUCLEAR_MODULE_IDS.has(id));
+      ["PREVENT","INSIGHT","IDENTITY","EXP","PANGEA"].filter(id => !NUCLEAR_MODULE_IDS.has(id));
 
     for(let i=safePool.length-1;i>0;i--){
       const j=Math.floor(Math.random()*(i+1));
@@ -15567,7 +15677,7 @@ class PowerUp{
         ctx.beginPath();ctx.moveTo(_cx+9,_cy-3);ctx.lineTo(_cx+9,_cy+5);ctx.stroke();
         ctx.setLineDash([]);ctx.globalAlpha=fade*pulse;break;
       }
-      case'FEM':{
+      case'EXP':{
         // Radar arcs + animated sweep ray + exposure dot at tip
         const _fsw=_t*1.8;
         [9,6,3].forEach((_r,_ri)=>{
@@ -15770,11 +15880,11 @@ class Boss{
 
 // ─── HUD ─────────────────────────────────────────────────────────
 class HUD{
-  #s=0;#hi=0;#lives=3;#wave=1;#combo=1;#mods={};#pangeaT=0;#env="";#grace=0;
-  setState(s,hi,lives,wave,combo,mods,pangeaT,env,grace){
+  #s=0;#hi=0;#lives=3;#wave=1;#combo=1;#mods={};#pangeaT=0;#env="";#grace=0;#bossModId="";
+  setState(s,hi,lives,wave,combo,mods,pangeaT,env,grace,bossModId){
     this.#s=s;this.#hi=hi;this.#lives=lives;this.#wave=wave;
     this.#combo=combo;this.#mods=mods;this.#pangeaT=pangeaT;
-    this.#env=env;this.#grace=grace;
+    this.#env=env;this.#grace=grace;this.#bossModId=bossModId||"";
   }
   draw(ctx,w){
     this.#lbl(ctx,`⭐ ${formatLocaleNumber(this.#s)}`,10,28,19,CS.ORANGE);
@@ -15788,6 +15898,19 @@ class HUD{
       ctx.fillStyle="rgba(4,1,18,0.90)";ctx.fillRect(w/2-140,54,280,14);
       ctx.fillStyle=CS.GREY;ctx.shadowBlur=0;
       ctx.fillText(`${T('def_defending')}: ${this.#env}`,w/2,64);ctx.restore();
+    }
+    // Boss counter-module hint
+    if(this.#bossModId){
+      const bm=localizeDefenseModule(MODULES[this.#bossModId]);
+      if(bm){
+        ctx.save();ctx.font="bold 10px 'Courier New'";ctx.textAlign="center";
+        ctx.fillStyle="rgba(4,1,18,0.92)";ctx.fillRect(w/2-160,70,320,16);
+        ctx.strokeStyle=bm.color;ctx.lineWidth=1;ctx.strokeRect(w/2-160,70,320,16);
+        const blink=Math.sin(performance.now()*0.005)>0?1:0.5;
+        ctx.globalAlpha=blink;ctx.fillStyle=bm.color;ctx.shadowColor=bm.color;ctx.shadowBlur=8;
+        ctx.fillText(`⚡ ${TF('def_boss_counter_hint',{mod:bm.shortName})} ⚡`,w/2,82);
+        ctx.restore();
+      }
     }
     // Grace period indicator — green countdown bar at top
     if(this.#grace>0){
@@ -16222,7 +16345,7 @@ class Game{
   #hitPause  =0;#lastTime=0;
 
   #px=0;#py=0;#canShoot=true;
-  #mods={PREVENT:0,INSIGHT:0,IDENTITY:0,PANGEA:0,FEM:0,COMPLETE:0,CHARLOTTE_AIM:0,CLOUD:0};
+  #mods={PREVENT:0,INSIGHT:0,IDENTITY:0,PANGEA:0,EXP:0,COMPLETE:0,CHARLOTTE_AIM:0,CLOUD:0};
   #pangeaT=0;
   #modulesCollected=new Set();
 
@@ -16339,7 +16462,12 @@ class Game{
     this.#stars.update(dt);this.#parts.update(dt);
     this.#fx.update(dt);this.#floats.update(dt);this.#notify.update(dt);
     this.#blinkT+=dt;if(this.#blinkT>0.5){this.#blinkSkip=!this.#blinkSkip;this.#blinkT=0;}
-    if(this.#input.consume("Escape")&&this.#state!==STATE.TITLE){this.#backToTitle();return;}
+    if(this.#input.consume("Escape")&&this.#state!==STATE.TITLE){
+      if(this.#state===STATE.PLAYING||this.#state===STATE.BOSS){
+        if(!confirm(T('g_exit_confirm')))return;
+      }
+      this.#backToTitle();return;
+    }
     switch(this.#state){
         case STATE.TITLE:
   this.#title.update(dt);
@@ -16673,7 +16801,7 @@ class Game{
     this.#score=0;this.#lives=CFG.PLR_LIVES;this.#combo=1;this.#comboT=0;
     this.#maxCombo=1; 
     this.#waveIdx=0;this.#dir=1;
-    this.#mods={PREVENT:0,INSIGHT:0,IDENTITY:0,PANGEA:0,FEM:0,COMPLETE:0,CHARLOTTE_AIM:0,CLOUD:0};
+    this.#mods={PREVENT:0,INSIGHT:0,IDENTITY:0,PANGEA:0,EXP:0,COMPLETE:0,CHARLOTTE_AIM:0,CLOUD:0};
     this.#pangeaT=0;this.#deathCtx=null;
     this.#buildPhaseOrder();   // ← new: randomise order each playthrough
     this.#audio.startBGM();this.#beginWave();
@@ -16729,7 +16857,7 @@ class Game{
 
     this.#mods = {
       PREVENT:0,INSIGHT:0,IDENTITY:0,PANGEA:0,
-      FEM:0,COMPLETE:0,CHARLOTTE_AIM:0,CLOUD:0,
+      EXP:0,COMPLETE:0,CHARLOTTE_AIM:0,CLOUD:0,
     };
     this.#pangeaT = 0;
 
@@ -17180,15 +17308,16 @@ class Game{
 
   #moveAttackers(dt){
     const beh=this.#currentPhase?.behavior;
-    const baseSpd=CFG.ATK_BLT_SPEED*0.28*(1+this.#waveIdx*0.13);
-    const femFactor=this.#mods.FEM>0?0.62:1.0;
+    const _spdRamp=Math.min(this.#waveIdx*0.13, 0.52+Math.log(1+Math.max(0,this.#waveIdx-4)*0.15)*0.3);
+    const baseSpd=CFG.ATK_BLT_SPEED*0.28*(1+_spdRamp);
+    const expFactor=this.#mods.EXP>0?0.62:1.0;
     let stageFactor=1.0;
     if(beh?.stagingPhase)
       stageFactor=this.#stagingComplete?(beh.encryptionRush?2.0:1.4):0.42;
     const stealthFactor=beh?.slowStealth?0.28:1.0;
     // Grace period: full slowdown for first CFG.WAVE_GRACE_S seconds
     const graceFactor=this.#waveGraceT>0?0.28:1.0;
-    const spd=baseSpd*femFactor*stageFactor*stealthFactor*graceFactor;
+    const spd=baseSpd*expFactor*stageFactor*stealthFactor*graceFactor;
 
     let edge=false;
     for(let c=0;c<CFG.COLS;c++)
@@ -17376,7 +17505,7 @@ class Game{
           this.#aBullets.push(this.#bltPool.acquire({
             x:a.x+CFG.ATK_W/2-CFG.BLT_W/2,y:a.y+CFG.ATK_H,
             vx:a.isTrusted?(Math.random()-0.5)*40:0,
-            vy:CFG.ATK_BLT_SPEED*(0.9+this.#waveIdx*0.08),
+            vy:CFG.ATK_BLT_SPEED*(0.9+Math.min(this.#waveIdx*0.08,0.32+Math.log(1+Math.max(0,this.#waveIdx-4)*0.12)*0.2)),
             w:CFG.BLT_W,h:CFG.BLT_H,boss:false,
             corrupt:beh?.corruption??false,fromBlock:false,
           }));
@@ -17424,7 +17553,7 @@ class Game{
   }
   #tickCombo(dt){if(this.#combo>1){this.#comboT-=dt;if(this.#comboT<=0)this.#combo=1;}}
   #tickMods(dt){
-    for(const k of["PREVENT","INSIGHT","IDENTITY","FEM","COMPLETE","CHARLOTTE_AIM","CLOUD"])
+    for(const k of["PREVENT","INSIGHT","IDENTITY","EXP","COMPLETE","CHARLOTTE_AIM","CLOUD"])
       if(this.#mods[k]>0)this.#mods[k]=Math.max(0,this.#mods[k]-dt);
     if(this.#pangeaT>0){this.#pangeaT=Math.max(0,this.#pangeaT-dt);this.#mods.PANGEA=this.#pangeaT;}
   }
@@ -17439,7 +17568,7 @@ class Game{
     this.#lives--;
     this.#parts.playerHit(this.#px+CFG.PLR_W/2,this.#py+CFG.PLR_H/2);
     this.#fx.shake(0.5);this.#fx.flash(224,0,60,0.6);
-    this.#fx.chroma(0.04);this.#audio.playerHit();this.#combo=1;
+    this.#fx.chroma(0.04);this.#audio.playerHit();this.#combo=Math.max(1,Math.ceil(this.#combo/2));
     if(this.#lives<=0){this.#gameOver();return;}
     this.#hitPause=CFG.HIT_PAUSE_MS/1000;
     this.#px=LW/2-CFG.PLR_W/2;this.#canShoot=true;
@@ -17495,7 +17624,7 @@ class Game{
         this.#floats.spawn(this.#px+CFG.PLR_W/2,this.#py-10,T('def_pickup_identity'),CS.YELLOW,12);
         this.#floats.spawn(LW/2,LH*0.35,T('def_act_identity'),CS.YELLOW,11);break;
       case"CLOUD":   this.#doCloud();break;
-      case"FEM":     this.#doFEM();break;
+      case"EXP":     this.#doEXP();break;
       case"CHARLOTTE":this.#doCharlotte();break;
       case"PANGEA":  this.#doPangea();break;
       case"OVERWATCH":this.#doOverwatch();break;
@@ -17526,9 +17655,9 @@ class Game{
     this.#aBullets.forEach(b=>this.#bltPool.release(b));this.#aBullets=[];
   }
 
-  #doFEM(){
-    this.#audio.fem();this.#fx.flash(0,255,208,0.3);this.#fx.shake(0.12);
-    this.#mods.FEM=MODULES.FEM.duration;
+  #doEXP(){
+    this.#audio.exp();this.#fx.flash(0,255,208,0.3);this.#fx.shake(0.12);
+    this.#mods.EXP=MODULES.EXP.duration;
     let _femRevealed=0;
     for(let c=0;c<CFG.COLS;c++)
       for(let r=0;r<CFG.ROWS;r++){
@@ -17538,8 +17667,8 @@ class Game{
         a.vanished=false;
         if(a.alive)this.#parts.femReveal(a.x+CFG.ATK_W/2,a.y+CFG.ATK_H/2);
       }
-    this.#floats.spawn(LW/2,LH/2-20,T('def_pickup_fem'),CS.TEAL,14);
-    this.#floats.spawn(LW/2,LH*0.35,TF('def_act_fem_exposed',{count:_femRevealed||CFG.COLS*CFG.ROWS}),CS.TEAL,11);
+    this.#floats.spawn(LW/2,LH/2-20,T('def_pickup_exp'),CS.TEAL,14);
+    this.#floats.spawn(LW/2,LH*0.35,TF('def_act_exp_exposed',{count:_femRevealed||CFG.COLS*CFG.ROWS}),CS.TEAL,11);
   }
 
   #doCharlotte(){
@@ -17689,7 +17818,7 @@ class Game{
     this.#fx.restoreShake(ctx);
     this.#hud.setState(this.#score,this.#hi,this.#lives,this.#waveIdx+1,
       this.#combo,this.#mods,this.#pangeaT,localizeDefensePhase(this.#currentPhase)?.environment??"",
-      this.#waveGraceT);
+      this.#waveGraceT,this.#boss?.alive?this.#currentPhase?.incidentReport?.moduleHighlight:"");
     this.#hud.draw(ctx,W);
     this.#notify.draw(ctx,W);
     this.#socFeed.draw(ctx,W,H);
@@ -17702,7 +17831,7 @@ class Game{
       for(let r=0;r<CFG.ROWS;r++){
         const a=this.#attackers[c]?.[r];if(!a?.alive)continue;
         if(a.isHidden){
-          if(this.#mods.FEM>0){
+          if(this.#mods.EXP>0){
             ctx.save();ctx.globalAlpha=0.28;ctx.strokeStyle=CS.TEAL;ctx.lineWidth=1.5;
             ctx.shadowColor=CS.TEAL;ctx.shadowBlur=8;
             ctx.beginPath();ctx.roundRect(a.x,a.y,CFG.ATK_W,CFG.ATK_H,3);ctx.stroke();
@@ -17755,7 +17884,7 @@ class Game{
           ctx.fillStyle=CS.BLUE;ctx.shadowColor=CS.BLUE;ctx.shadowBlur=5;
           ctx.fillText(T('g_apt_label'),a.x+CFG.ATK_W/2,a.y+bob-3);
         }
-        if(this.#mods.FEM>0){
+        if(this.#mods.EXP>0){
           ctx.font="9px 'Courier New'";ctx.textAlign="center";
           ctx.fillStyle=CS.TEAL;ctx.shadowColor=CS.TEAL;ctx.shadowBlur=4;
           ctx.fillText(T('def_status_exposed'),a.x+CFG.ATK_W/2,a.y+bob+CFG.ATK_H+10);
@@ -18009,8 +18138,8 @@ class Game{
       }
       ctx.setLineDash([]);ctx.shadowBlur=0;ctx.restore();
     }
-    // ─ FEM: orange pulse ring + radar sweep highlighting enemies ───
-    if(this.#mods.FEM>0){
+    // ─ EXP: orange pulse ring + radar sweep highlighting enemies ───
+    if(this.#mods.EXP>0){
       const _fp=(_t*0.55)%1;
       const _fr=_fp*LH*0.55;
       ctx.save();ctx.globalAlpha=(1-_fp)*0.32;
@@ -18572,7 +18701,7 @@ const FalconRanking=(function(){'use strict';
   function _getPrizeTier(rank){const tiers=[...CFG.prizeTiers].reverse();for(const t of tiers)if(rank<=t.rank)return t;return CFG.prizeTiers[CFG.prizeTiers.length-1];}
   function _injectCSS(){if(document.getElementById('fr-styles-hunt'))return;const s=document.createElement('style');s.id='fr-styles-hunt';s.textContent=`#fr-overlay-hunt{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;font-family:ui-monospace,monospace;overflow:hidden}#fr-overlay-hunt.fr-visible{display:flex}#fr-matrix{position:absolute;inset:0;opacity:0.18;pointer-events:none}.fr-backdrop{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(170,0,255,0.08) 0%,rgba(2,3,8,0.94) 65%);backdrop-filter:blur(2px)}.fr-scanlines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.18) 2px,rgba(0,0,0,0.18) 4px);pointer-events:none}.fr-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(170,0,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(170,0,255,0.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}#fr-toast-hunt{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:10px 24px;border-radius:4px;font:bold 12px/1 monospace;color:#fff;background:rgba(0,0,0,0.88);border:1px solid currentColor;opacity:0;pointer-events:none;z-index:10001;transition:opacity 0.3s;white-space:nowrap}#fr-toast-hunt.fr-show{opacity:1}#fr-form-panel{position:relative;z-index:2;width:min(560px,94vw);background:rgba(4,8,12,0.96);border:1px solid rgba(170,0,255,0.6);border-radius:2px;padding:0;box-shadow:0 0 60px rgba(170,0,255,0.18);animation:fr-panel-in 0.45s cubic-bezier(0.22,1,0.36,1) both;overflow:visible}@keyframes fr-panel-in{from{opacity:0;transform:translateY(32px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}.fr-form-header{background:linear-gradient(135deg,rgba(170,0,255,0.22),rgba(10,14,18,0));border-bottom:1px solid rgba(170,0,255,0.3);padding:22px 28px 18px}.fr-form-header .fr-eyebrow{font-size:9px;letter-spacing:3px;color:#AA00FF;text-transform:uppercase;margin-bottom:6px}.fr-form-header h2{font-size:20px;color:#f4f7fa;margin:0 0 4px}.fr-form-header .fr-sub{font-size:10px;color:#7f8b96}.fr-score-badge{display:flex;align-items:center;gap:14px;padding:14px 28px;border-bottom:1px solid rgba(255,255,255,0.06)}.fr-score-num{font-size:36px;font-weight:bold;color:#ffd84d;min-width:120px}.fr-score-meta{font-size:10px;color:#7f8b96;line-height:1.8}.fr-score-meta strong{color:#d5dde5}.fr-prize{display:inline-block;padding:3px 10px;border-radius:2px;font-size:9px;font-weight:bold;border:1px solid currentColor;margin-top:4px}.fr-fields{padding:20px 28px;display:flex;flex-direction:column;gap:14px}.fr-field{display:flex;flex-direction:column;gap:5px}.fr-field label{font-size:9px;letter-spacing:2px;color:#7f8b96;text-transform:uppercase}.fr-field input{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.10);border-radius:2px;padding:10px 12px;color:#f4f7fa;font:13px monospace;outline:none;width:100%;box-sizing:border-box}.fr-field input:focus{border-color:rgba(170,0,255,0.7);box-shadow:0 0 0 3px rgba(170,0,255,0.12)}.fr-field input.fr-error{border-color:rgba(255,90,60,0.8)}.fr-field .fr-hint{font-size:9px;color:#ff5a4d;min-height:12px}.fr-actions{padding:0 28px 24px;display:flex;gap:10px}.fr-btn{flex:1;padding:13px 0;border:none;border-radius:2px;font:bold 11px monospace;letter-spacing:1px;cursor:pointer;text-transform:uppercase}.fr-btn-primary{background:#AA00FF;color:#fff}.fr-btn-primary:hover{background:#cc22ff}.fr-btn-secondary{background:rgba(255,255,255,0.04);color:#7f8b96;border:1px solid rgba(255,255,255,0.08)}.fr-consent{padding:0 28px 20px;font-size:9px;color:#555;line-height:1.6;text-align:center}#fr-burst-canvas{position:absolute;inset:0;pointer-events:none;z-index:10}#fr-attract{position:relative;z-index:2;width:min(780px,96vw);height:min(88vh,600px);display:flex;flex-direction:column;animation:fr-panel-in 0.6s cubic-bezier(0.22,1,0.36,1) both;overflow:hidden}.fr-attract-header{text-align:center;padding:22px 0 14px;flex-shrink:0}.fr-attract-header .fr-cs-logo{font-size:11px;letter-spacing:4px;color:#AA00FF;text-transform:uppercase;margin-bottom:6px}.fr-attract-header h1{font-size:clamp(20px,3vw,28px);color:#fff;margin:0;text-shadow:0 0 30px rgba(170,0,255,0.6)}.fr-attract-header .fr-event-name{font-size:10px;color:#7f8b96;margin-top:4px}.fr-divider{height:1px;margin:0 20px;background:linear-gradient(90deg,transparent,rgba(170,0,255,0.6),rgba(255,216,77,0.4),rgba(170,0,255,0.6),transparent);flex-shrink:0}.fr-lb-viewport{flex:1;overflow:hidden;position:relative;mask-image:linear-gradient(to bottom,transparent 0%,black 8%,black 85%,transparent 100%)}.fr-lb-scroll{display:flex;flex-direction:column;gap:0;will-change:transform}.fr-entry{display:grid;grid-template-columns:48px 1fr 140px 110px;align-items:center;padding:11px 24px;border-bottom:1px solid rgba(255,255,255,0.04)}.fr-rank{font-size:18px;font-weight:bold;color:var(--fr-entry-color,#555);line-height:1}.fr-entry[data-rank="1"]{background:rgba(255,216,77,0.05);border-left:3px solid #ffd84d}.fr-player{min-width:0}.fr-player-name{font-size:13px;font-weight:bold;color:#f4f7fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fr-player-company{font-size:9px;color:#7f8b96;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fr-entry-score{font-size:15px;font-weight:bold;text-align:right;color:var(--fr-entry-color,#d5dde5)}.fr-entry-grade{font-size:8px;font-weight:bold;text-align:right;padding-right:4px;color:var(--fr-entry-color,#555)}.fr-attract-footer{flex-shrink:0;padding:14px 24px 20px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,0.05)}.fr-cta{font-size:13px;font-weight:bold;color:#ffd84d;animation:fr-blink-cta 1.1s step-end infinite}@keyframes fr-blink-cta{0%,49%{opacity:1}50%,100%{opacity:0}}.fr-lb-header{display:grid;grid-template-columns:48px 1fr 140px 110px;padding:8px 24px;border-bottom:1px solid rgba(170,0,255,0.3);flex-shrink:0}.fr-lb-header span{font-size:8px;letter-spacing:2px;color:#7f8b96;text-transform:uppercase}#fr-rank-confirm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(2,4,8,0.92);animation:fr-panel-in 0.5s cubic-bezier(0.22,1,0.36,1) both}.fr-rank-card{text-align:center;padding:32px 48px;background:rgba(4,8,12,0.98);border:1px solid var(--fr-confirm-color,#ffd84d);max-width:380px}.fr-rank-card .fr-rank-pos{font-size:64px;font-weight:bold;color:var(--fr-confirm-color,#ffd84d);line-height:1}.fr-rank-card .fr-rank-label{font-size:11px;color:var(--fr-confirm-color,#ffd84d);margin:8px 0 16px}.fr-rank-card .fr-rank-name{font-size:18px;font-weight:bold;color:#fff;margin-bottom:6px}.fr-rank-card .fr-rank-score{font-size:13px;color:#7f8b96}.fr-rank-card .fr-rank-prize{display:inline-block;margin-top:14px;padding:6px 16px;border:1px solid var(--fr-confirm-color,#ffd84d);font-size:10px;font-weight:bold;color:var(--fr-confirm-color,#ffd84d)}.fr-rank-card .fr-rank-dismiss{display:block;margin-top:22px;font-size:9px;color:#444}`;
     document.head.appendChild(s);}
-  function _mountOverlay(){if(_overlayEl)return;const el=document.createElement('div');el.id = 'fr-overlay-hunt';el.innerHTML=`<canvas id="fr-matrix"></canvas><div class="fr-backdrop"></div><div class="fr-grid"></div><div class="fr-scanlines"></div>`;(document.getElementById('game-hunt-container')||document.body).appendChild(el);_overlayEl=el;const toast=document.createElement('div');toast.id = 'fr-toast-hunt';(document.getElementById('game-hunt-container')||document.body).appendChild(toast);document.addEventListener('keydown',e=>{const _c=document.getElementById('game-hunt-container');if(!_c||_c.style.display==='none')return;if(e.ctrlKey&&e.shiftKey&&e.code===CFG.adminKey)exportCSV();if(e.ctrlKey&&e.shiftKey&&e.code===CFG.clearKey){const _p=[25,9,104,106,104,108,123].map(b=>String.fromCharCode(b^90)).join('');if(prompt(T('admin_pin_prompt'))===_p&&confirm(T('lb_clear_all_confirm'))){Store.clear();_toast(T('lb_cleared'),'#ff5a4d');}}});}
+  function _mountOverlay(){if(_overlayEl)return;const el=document.createElement('div');el.id = 'fr-overlay-hunt';el.innerHTML=`<canvas id="fr-matrix"></canvas><div class="fr-backdrop"></div><div class="fr-grid"></div><div class="fr-scanlines"></div>`;(document.getElementById('game-hunt-container')||document.body).appendChild(el);_overlayEl=el;const toast=document.createElement('div');toast.id = 'fr-toast-hunt';(document.getElementById('game-hunt-container')||document.body).appendChild(toast);document.addEventListener('keydown',e=>{const _c=document.getElementById('game-hunt-container');if(!_c||_c.style.display==='none')return;if(e.ctrlKey&&e.shiftKey&&e.code===CFG.adminKey)exportCSV();if(e.ctrlKey&&e.shiftKey&&e.code===CFG.clearKey){(async()=>{if(await _checkAdminPin()&&confirm(T('lb_clear_all_confirm'))){Store.clear();_toast(T('lb_cleared'),'#ff5a4d');}})();}});}
   function _showOverlay(){_overlayEl.classList.add('fr-visible');_startMatrix();}
   function _hideOverlay(){_overlayEl.classList.remove('fr-visible');_stopMatrix();}
   function _clearContent(){['fr-form-panel','fr-attract','fr-burst-canvas'].forEach(id=>{const el=document.getElementById(id);if(el)el.remove();});}
@@ -18583,13 +18712,13 @@ const FalconRanking=(function(){'use strict';
   function _toast(msg,color='#74ff88'){const el=document.getElementById('fr-toast-hunt');if(!el)return;el.textContent=msg;el.style.borderColor=color;el.style.color=color;el.classList.add('fr-show');clearTimeout(_toastTimer);_toastTimer=setTimeout(()=>el.classList.remove('fr-show'),2800);}
   function _animateCounter(el,target,duration=1200){const start=performance.now();function step(now){const p=Math.min(1,(now-start)/duration),eased=1-Math.pow(1-p,3);el.textContent=Math.floor(eased*target).toLocaleString();if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
   function _esc(str){return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-  function showForm(data){if(_formOpen)return;_formOpen=true;_clearContent();_showOverlay();const entries=Store.load(),tempRank=entries.filter(e=>e.score>=data.score).length+1,tier=_getPrizeTier(tempRank);const panel=document.createElement('div');panel.id='fr-form-panel';panel.innerHTML=`<div class="fr-form-header"><div class="fr-eyebrow">◈ ${_esc(CFG.gameName)} · ${_esc(CFG.eventName)}</div><h2>${T('lb_enter')}</h2><div class="fr-sub">${T('lb_sub')}</div></div><div class="fr-score-badge"><div class="fr-score-num" id="fr-score-display">0</div><div class="fr-score-meta"><div><strong>${T('lb_case')}:</strong> ${_esc(data.phase||'Unknown')}</div><div><strong>${T('lb_adversary')}:</strong> ${_esc(data.adversary||'—')}</div><div><strong>${T('lb_grade')}:</strong> ${_esc(data.grade||'—')}</div><div><strong>${T('lb_projected_rank')}:</strong> #${tempRank}</div><span class="fr-prize" style="color:${tier.color};border-color:${tier.color}">${_esc(tier.label)}</span></div></div><div class="fr-fields"><div class="fr-field"><label>${T('lb_agent_name')}</label><input id="fr-name" type="text" placeholder="${T('lb_name_placeholder')}" autocomplete="name" maxlength="60"/><span class="fr-hint" id="fr-name-hint"></span></div><div class="fr-field"><label>${T('lb_company')}</label><input id="fr-company" type="text" placeholder="${T('lb_company_placeholder')}" autocomplete="organization" maxlength="80"/><span class="fr-hint" id="fr-company-hint"></span></div><div class="fr-field"><label>${T('lb_work_email')}</label><input id="fr-email" type="email" placeholder="${T('lb_email_placeholder')}" autocomplete="email" maxlength="100"/><span class="fr-hint" id="fr-email-hint"></span></div></div><div class="fr-actions"><button class="fr-btn fr-btn-primary" id="fr-submit">${T('lb_submit')}</button><button class="fr-btn fr-btn-secondary" id="fr-skip">${T('lb_skip')}</button></div><div class="fr-consent">${T('lb_consent')}</div>`;  // QR is now on the rank confirm card — see _showRankConfirm
+  function showForm(data){if(_formOpen)return;_formOpen=true;_clearContent();_showOverlay();const entries=Store.load(),tempRank=entries.filter(e=>e.score>=data.score).length+1,tier=_getPrizeTier(tempRank);const panel=document.createElement('div');panel.id='fr-form-panel';panel.innerHTML=`<div class="fr-form-header"><div class="fr-eyebrow">◈ ${_esc(CFG.gameName)} · ${_esc(CFG.eventName)}</div><h2>${T('lb_enter')}</h2><div class="fr-sub">${T('lb_sub')}</div></div><div class="fr-score-badge"><div class="fr-score-num" id="fr-score-display">0</div><div class="fr-score-meta"><div><strong>${T('lb_case')}:</strong> ${_esc(data.phase||'Unknown')}</div><div><strong>${T('lb_adversary')}:</strong> ${_esc(data.adversary||'—')}</div><div><strong>${T('lb_grade')}:</strong> ${_esc(data.grade||'—')}</div><div><strong>${T('lb_projected_rank')}:</strong> #${tempRank}</div><span class="fr-prize" style="color:${tier.color};border-color:${tier.color}">${_esc(tier.label)}</span></div></div><div class="fr-fields"><div class="fr-field"><label>${T('lb_agent_name')}</label><input id="fr-name" type="text" placeholder="${T('lb_name_placeholder')}" autocomplete="name" maxlength="60"/><span class="fr-hint" id="fr-name-hint"></span></div><div class="fr-field"><label>${T('lb_company')}</label><input id="fr-company" type="text" placeholder="${T('lb_company_placeholder')}" autocomplete="organization" maxlength="80"/><span class="fr-hint" id="fr-company-hint"></span></div><div class="fr-field"><label>${T('lb_work_email')}</label><input id="fr-email" type="email" placeholder="${T('lb_email_placeholder')}" autocomplete="email" maxlength="100"/><span class="fr-hint" id="fr-email-hint"></span></div></div><div class="fr-actions"><button class="fr-btn fr-btn-primary" id="fr-submit">${T('lb_submit')}</button><button class="fr-btn fr-btn-secondary" id="fr-skip">${T('lb_skip')}</button></div><div class="fr-consent">${T('lb_consent')}<label style="display:flex;align-items:center;gap:8px;margin-top:8px;cursor:pointer;font-size:11px;color:#cdf;user-select:none;"><input type="checkbox" id="fr-consent-cb" style="accent-color:#e04040;width:16px;height:16px;cursor:pointer;"/>${T('lb_consent_check')}</label><span class="fr-hint" id="fr-consent-hint" style="color:#ff5a4d;font-size:10px;"></span></div>`;  // QR is now on the rank confirm card — see _showRankConfirm
     _overlayEl.appendChild(panel);
     setTimeout(()=>_animateCounter(document.getElementById('fr-score-display'),data.score,1400),200);setTimeout(()=>document.getElementById('fr-name')?.focus(),450);
-    document.getElementById('fr-submit').addEventListener('click',()=>{const validation=validateLeadCaptureEntry({name:document.getElementById('fr-name').value,company:document.getElementById('fr-company').value,email:document.getElementById('fr-email').value});if(validation.errors.name)_fieldError('fr-name','fr-name-hint',validation.errors.name);if(validation.errors.company)_fieldError('fr-company','fr-company-hint',validation.errors.company);if(validation.errors.email)_fieldError('fr-email','fr-email-hint',validation.errors.email);if(!validation.ok)return;const { name, company, email }=validation.cleaned;const finalRank=Store.add({name,company,email,score:data.score,phase:data.phase||'',adversary:data.adversary||'',grade:data.grade||'',maxStreak:data.maxStreak||0,lives:data.lives||0,gameId:CFG.gameName,event:CFG.eventName});_burstParticles(panel);panel.querySelectorAll('input,button').forEach(el=>el.disabled=true);setTimeout(()=>_showRankConfirm(panel,finalRank,name,data.score,data.difficulty,data.multiplier),700);});
+    document.getElementById('fr-submit').addEventListener('click',function(){const _sb=this;if(_sb.disabled)return;_sb.disabled=true;const _ccb=document.getElementById('fr-consent-cb'),_chn=document.getElementById('fr-consent-hint');if(!_ccb?.checked){if(_chn)_chn.textContent=T('lb_consent_required');_ccb?.focus();_sb.disabled=false;return;}if(_chn)_chn.textContent='';const validation=validateLeadCaptureEntry({name:document.getElementById('fr-name').value,company:document.getElementById('fr-company').value,email:document.getElementById('fr-email').value});if(validation.errors.name)_fieldError('fr-name','fr-name-hint',validation.errors.name);if(validation.errors.company)_fieldError('fr-company','fr-company-hint',validation.errors.company);if(validation.errors.email)_fieldError('fr-email','fr-email-hint',validation.errors.email);if(!validation.ok){_sb.disabled=false;return;}const { name, company, email }=validation.cleaned;const finalRank=Store.add({name,company,email,score:data.score,phase:data.phase||'',adversary:data.adversary||'',grade:data.grade||'',maxStreak:data.maxStreak||0,lives:data.lives||0,gameId:CFG.gameName,event:CFG.eventName});_burstParticles(panel);panel.querySelectorAll('input,button').forEach(el=>el.disabled=true);setTimeout(()=>_showRankConfirm(panel,finalRank,name,data.score,data.difficulty,data.multiplier),700);});
     document.getElementById('fr-skip').addEventListener('click',()=>_closeForm());}
   function _fieldError(inputId,hintId,msg){const inp=document.getElementById(inputId),hint=document.getElementById(hintId);if(inp){inp.classList.add('fr-error');setTimeout(()=>inp.classList.remove('fr-error'),500);}if(hint)hint.textContent=msg;}
-  function _showRankConfirm(panel,rank,name,score,difficulty,multiplier){const tier=_getPrizeTier(rank),div=document.createElement('div');div.id='fr-rank-confirm';div.style.setProperty('--fr-confirm-color',tier.color);const _db=(difficulty>0&&difficulty!=null)?`<div style="font-size:10px;letter-spacing:1.5px;color:${tier.color};opacity:0.85;margin:2px 0 8px;font-weight:700;">TIER ${difficulty} · ×${(multiplier||1).toFixed(1)}x</div>`:'';div.innerHTML=`<div class="fr-rank-card"><div class="fr-rank-pos">#${rank}</div><div class="fr-rank-label">${T('lb_your_rank')}</div>${_db}<div class="fr-rank-name">${_esc(name)}</div><div class="fr-rank-score">${score.toLocaleString()} pts</div><div class="fr-rank-prize">${_esc(tier.label)}</div><canvas id="fr-qr-rank-canvas" width="88" height="88" style="display:block;margin:16px auto 4px;image-rendering:pixelated;border:2px solid currentColor;border-radius:2px;opacity:0.85;"></canvas><span class="fr-rank-dismiss">${T('lb_press_continue')}</span></div>`;panel.appendChild(div);try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'){const _mat=window.generateQRMatrix(HUNT_SHARE_URL),_N=_mat.length,_mod=_N<=25?3:2,_qz=2,_qx=_qc.getContext('2d');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<_N;r++)for(let c=0;c<_N;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){}setTimeout(()=>{if(window._showPostGameCTA){window._showPostGameCTA(()=>_closeForm());}else{const dismiss=()=>{_closeForm();div.removeEventListener('click',dismiss);};div.addEventListener('click',dismiss);const kd=()=>{_closeForm();document.removeEventListener('keydown',kd);};document.addEventListener('keydown',kd);}},40000);}
+  function _showRankConfirm(panel,rank,name,score,difficulty,multiplier){const tier=_getPrizeTier(rank),div=document.createElement('div');div.id='fr-rank-confirm';div.style.setProperty('--fr-confirm-color',tier.color);const _db=(difficulty>0&&difficulty!=null)?`<div style="font-size:10px;letter-spacing:1.5px;color:${tier.color};opacity:0.85;margin:2px 0 8px;font-weight:700;">TIER ${difficulty} · ×${(multiplier||1).toFixed(1)}x</div>`:'';div.innerHTML=`<div class="fr-rank-card"><div class="fr-rank-pos">#${rank}</div><div class="fr-rank-label">${T('lb_your_rank')}</div>${_db}<div class="fr-rank-name">${_esc(name)}</div><div class="fr-rank-score">${score.toLocaleString()} pts</div><div class="fr-rank-prize">${_esc(tier.label)}</div><canvas id="fr-qr-rank-canvas" width="88" height="88" style="display:block;margin:16px auto 4px;image-rendering:pixelated;border:2px solid currentColor;border-radius:2px;opacity:0.85;"></canvas><span class="fr-rank-dismiss">${T('lb_press_continue')}</span></div>`;panel.appendChild(div);try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'){const _mat=window.generateQRMatrix(HUNT_SHARE_URL),_N=_mat.length,_mod=_N<=25?3:2,_qz=2,_qx=_qc.getContext('2d');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<_N;r++)for(let c=0;c<_N;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){}setTimeout(()=>{const dismiss=()=>{_closeForm();div.removeEventListener('click',dismiss);document.removeEventListener('keydown',kd);};const kd=()=>{_closeForm();div.removeEventListener('click',dismiss);document.removeEventListener('keydown',kd);};div.addEventListener('click',dismiss);document.addEventListener('keydown',kd);},2000);if(window._showPostGameCTA){setTimeout(()=>{window._showPostGameCTA(()=>_closeForm());},40000);}}
   function _closeForm(){_formOpen=false;_clearContent();_hideOverlay();if(CFG.onFormClose)CFG.onFormClose();}
   function showAttract(){if(_formOpen||_attractOpen)return;_attractOpen=true;_clearContent();_showOverlay();const top=Store.topN(CFG.topN),isEmpty=top.length===0;const attract=document.createElement('div');attract.id='fr-attract';attract.innerHTML=`<div class="fr-attract-header"><div class="fr-cs-logo">◈ CrowdStrike OverWatch</div><h1>${_esc(CFG.gameName)}</h1><div class="fr-event-name">${_esc(CFG.eventName)} ${isEmpty?' — '+T('lb_first_board'):'— '+T('lb_top_agents')}</div></div><div class="fr-divider"></div><div class="fr-lb-header"><span>${T('lb_rank')}</span><span>${T('lb_agent')}</span><span style="text-align:right">${T('lb_score')}</span><span style="text-align:right">${T('lb_grade_short')}</span></div><div class="fr-lb-viewport" id="fr-lb-viewport"><div class="fr-lb-scroll" id="fr-lb-scroll">${_renderEntries(top)}${_renderEntries(top)}</div></div><div class="fr-divider"></div><div class="fr-attract-footer"><span class="fr-cta">${T('lb_press_begin')}</span><span style="font-size:8px;color:#2a3a4a;letter-spacing:1px">${T('lb_admin_hint')}</span></div>`;_overlayEl.appendChild(attract);_attractY=0;const scrollEl=document.getElementById('fr-lb-scroll');let lastT=0;let half=0;function scrollStep(ts){if(half===0)half=scrollEl.scrollHeight/2;const dt=Math.min(0.05,(ts-lastT)/1000||0.016);lastT=ts;if(!isEmpty){_attractY+=CFG.attractSpeed*dt;if(half>0&&_attractY>=half)_attractY=0;scrollEl.style.transform=`translateY(${-_attractY}px)`;}  _attractAF=requestAnimationFrame(scrollStep);}_attractAF=requestAnimationFrame(scrollStep);const kd=(e)=>{if(['Control','Shift','Alt','Meta'].includes(e.key))return;document.removeEventListener('keydown',kd);_closeAttract();};const dismiss=()=>{document.removeEventListener('keydown',kd);_closeAttract();};document.addEventListener('keydown',kd);attract.addEventListener('click',dismiss);}
   function _renderEntries(entries){if(!entries.length)return Array.from({length:10},(_,i)=>`<div class="fr-entry" data-rank="${i+1}" style="--fr-entry-color:#1a2a3a"><div class="fr-rank">${i+1}</div><div class="fr-player"><div class="fr-player-name">———</div><div class="fr-player-company">${T('lb_first_player')}</div></div><div class="fr-entry-score">—</div><div class="fr-entry-grade">—</div></div>`).join('');return entries.map((e,i)=>{const rank=i+1,tier=_getPrizeTier(rank);return`<div class="fr-entry" data-rank="${rank}" style="--fr-entry-color:${tier.color}"><div class="fr-rank">${rank}</div><div class="fr-player"><div class="fr-player-name">${_esc(e.name)}</div><div class="fr-player-company">${_esc(e.company)}</div></div><div class="fr-entry-score">${Number(e.score).toLocaleString()}</div><div class="fr-entry-grade">${_esc(e.grade||'—')}</div></div>`;}).join('');}
@@ -18601,7 +18730,7 @@ const FalconRanking=(function(){'use strict';
     init(config={}){if(_initialized)return;CFG={...DEFAULTS,...config};_injectCSS();_mountOverlay();_initialized=true;},
     onGameEnd(data){stopIdleWatch();showForm(data);},
     startIdleWatch,stopIdleWatch,showAttract,exportCSV,
-    clearAll(){const _p=[25,9,104,106,104,108,123].map(b=>String.fromCharCode(b^90)).join('');if(prompt(T('admin_pin_prompt'))===_p&&confirm(T('lb_clear_all_confirm'))){Store.clear();_toast(T('lb_cleared'),'#ff5a4d');}},
+    async clearAll(){if(await _checkAdminPin()&&confirm(T('lb_clear_all_confirm'))){Store.clear();_toast(T('lb_cleared'),'#ff5a4d');}},
     getEntries(){return Store.load();}
   };
 })();
@@ -18896,7 +19025,7 @@ const RADIO_MSGS={
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"schtasks establishes persistence that survives reboots. When you neutralise it and it comes back — the adversary re-registered the task. XDR sees both events. That sequence is the fingerprint."},
     {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"mshta.exe executes remote HTML applications from a URL. STAR KITTEN used it in the NokNok campaign. One click. Full device access. Identity Protection sees the process tree before the payload runs."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"rundll32 can load arbitrary DLL code from a path the adversary controls. FANCY BEAR, COZY BEAR, Lazarus — all use it. OverWatch hunts the abnormal parent-child relationship, not the binary."},
-    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"cloneVM is cloud-native tradecraft. Adversaries clone a VM to dump credentials offline without touching the live system. Falcon Cloud Security sees the API call that no legitimate admin makes at 3am."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"eventvwr is a classic UAC bypass LOLBin. Adversaries abuse the Event Viewer auto-elevation to execute payloads at high integrity without a UAC prompt. Falcon Prevent detects the registry hijack and blocks the payload before it spawns."},
     // Identity, OverWatch, SGNL deep dives
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"CrowdStrike OverWatch interrupted SANDWORM inside a Ukrainian power grid 72 hours before the attack would have taken down the eastern grid. Human hunters. That is the difference."},
     {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"Identity is the new perimeter. 79 percent of intrusions use no malware — just stolen credentials and living-off-the-land binaries. Every signature-based tool in your stack is blind to this class of attack."},
@@ -25808,7 +25937,7 @@ function frame(ts){
       if(MOUSE.clicked) handleInvestigationClick();
       // Allow manual advance to deduction
       if(hk('Space')&&collectedClues.length>=2){buildDeductionChoices();deductionTimeLeft=DEDUCTION_TIMER;deductionT=0;_deductTierPlayed=0;gameState=STATE.DEDUCTION;SFX.click();}
-      if(hk('Escape')){gameState=STATE.CASE_SELECT;FalconRanking.startIdleWatch();}
+      if(hk('Escape')){if(confirm(T('g_exit_confirm'))){gameState=STATE.CASE_SELECT;FalconRanking.startIdleWatch();}}
       if(hk('KeyM'))MUTED=!MUTED;
       break;
 
@@ -25838,7 +25967,7 @@ function frame(ts){
       }
       if(deductionTimeLeft<=0&&!deductionLocked) deductionTimeout();
       if(MOUSE.clicked&&!deductionLocked) handleDeductionClick();
-      if(hk('Escape')){gameState=STATE.CASE_SELECT;caseSel=0;caseSelectEntryT=0;score=0;}
+      if(hk('Escape')){if(confirm(T('g_exit_confirm'))){gameState=STATE.CASE_SELECT;caseSel=0;caseSelectEntryT=0;score=0;}}
       if(hk('KeyM'))MUTED=!MUTED;
       break;
 
