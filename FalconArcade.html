@@ -1361,6 +1361,9 @@ const TRANSLATIONS = {
     h_case_posture:'THREAT POSTURE',
     h_case_hops:'hops',
     h_case_nav:'[←][→] Cycle cases   [Space] lock target',
+    tut_start_here:'⊳ START HERE — {name} (TIER {tier})',
+    tut_nav:'Click a case to begin · ◀ ▶ to browse · SPACE to launch · ESC to go back',
+    tut_skip:'ESC to skip tutorial',
     h_case_launch:'▶  PRESS SPACE TO LAUNCH LIVE HUNT  ◀',
     h_brief_open:'Open with',
     h_brief_impact:'Impact module',
@@ -1878,6 +1881,9 @@ const TRANSLATIONS = {
     h_case_posture:'POSTURA DA AMEAÇA',
     h_case_hops:'saltos',
     h_case_nav:'[←][→] Alternar casos   [ESPAÇO] travar alvo',
+    tut_start_here:'⊳ COMECE AQUI — {name} (NÍVEL {tier})',
+    tut_nav:'Clique para começar · ◀ ▶ navegar · ESPAÇO lançar · ESC voltar',
+    tut_skip:'ESC para pular tutorial',
     h_case_launch:'▶  ESPAÇO PARA INICIAR A CAÇA AO VIVO  ◀',
     h_brief_open:'Iniciar com',
     h_brief_impact:'Módulo de impacto',
@@ -2393,6 +2399,9 @@ const TRANSLATIONS = {
     h_case_posture:'POSTURA DE AMENAZA',
     h_case_hops:'saltos',
     h_case_nav:'[←][→] Cambiar casos   [Espacio] fijar objetivo',
+    tut_start_here:'⊳ EMPIECE AQUÍ — {name} (NIVEL {tier})',
+    tut_nav:'Clic para comenzar · ◀ ▶ navegar · ESPACIO lanzar · ESC volver',
+    tut_skip:'ESC para saltar tutorial',
     h_case_launch:'▶  ESPACIO PARA INICIAR LA CAZA EN VIVO  ◀',
     h_brief_open:'Abrir con',
     h_brief_impact:'Módulo de impacto',
@@ -2908,6 +2917,9 @@ const TRANSLATIONS = {
     h_case_posture:'脅威体勢',
     h_case_hops:'ホップ',
     h_case_nav:'[←][→] ケース切替   [スペース] 標的を固定',
+    tut_start_here:'⊳ ここから始める — {name} (ティア {tier})',
+    tut_nav:'クリックで選択 · ◀ ▶ 参照 · スペースで開始 · ESC 戻る',
+    tut_skip:'ESC でチュートリアルをスキップ',
     h_case_launch:'▶  スペースでライブハント開始  ◀',
     h_brief_open:'開始レンズ',
     h_brief_impact:'効果モジュール',
@@ -22810,7 +22822,7 @@ function drawHeatZones(){
   }
 }
 
-function drawWorldMap(){
+function drawWorldMap(showNodes=true){
   // Background + dot-matrix map (cached)
   ctx.fillStyle='#020308'; ctx.fillRect(0,0,LW,LH);
   drawStars();
@@ -22873,8 +22885,9 @@ function drawWorldMap(){
   }
 
   // Draw nodes — ALL nodes get labels for map readability
+  // (suppressed in case-select screen via showNodes=false)
   const _ui=huntUiScale();
-  for(const[id,node] of Object.entries(NODES)){
+  if(showNodes) for(const[id,node] of Object.entries(NODES)){
     const isAdv=isAdvNode(id), isPlayer=isPlayerNode(id);
     const isObj=caseRoute.length&&id===caseRoute[caseRoute.length-1];
     const onRt=caseRoute.includes(id);
@@ -24393,23 +24406,27 @@ function drawTutorialTooltip(t) {
   const ui = huntUiScale();
   const pulse = 0.7 + 0.3 * Math.sin(t * 3.2);
   const fadeIn = Math.min(1, t / 0.6);
-
-  ctx.save();
-  // Arrow pointing at first case card (top-left of grid)
+  // Use same grid geometry as drawCaseSelect so ring aligns perfectly
   const cols = 5;
-  const cw = Math.round(196 * huntTitleScale());
-  const ch = Math.round(86 * huntTitleScale());
-  const gap = Math.round(10 * huntTitleScale());
+  const _tui = huntTitleScale();
+  const cw = Math.round(196 * _tui);
+  const ch = Math.round(86 * _tui);
+  const gap = Math.round(10 * _tui);
   const sx = (LW - (cols * cw + (cols - 1) * gap)) / 2;
-  const sy = 112;
+  const _csL4 = Math.max(58, Math.round(88 * _tui));
+  const sy = Math.round(_csL4 + Math.round(16 * _tui));  // matches drawCaseSelect
+  // Use SCATTERED SPIDER's own color so highlight looks deliberate, not glitchy
+  const tutCol = ADVERSARIES[0]?.color || '#FF62FF';
   const targetX = sx + cw / 2;
   const targetY = sy + ch + Math.round(18 * ui);
 
-  // Pulsing circle around first card
-  ctx.globalAlpha = fadeIn * pulse * 0.6;
-  ctx.strokeStyle = '#39FF14';
+  ctx.save();
+
+  // Pulsing ring around first card — matches the card's own color
+  ctx.globalAlpha = fadeIn * pulse * 0.65;
+  ctx.strokeStyle = tutCol;
   ctx.lineWidth = Math.round(2.5 * ui);
-  ctx.shadowColor = '#39FF14';
+  ctx.shadowColor = tutCol;
   ctx.shadowBlur = Math.round(18 * ui);
   ctx.beginPath();
   ctx.roundRect(sx - Math.round(4*ui), sy - Math.round(4*ui), cw + Math.round(8*ui), ch + Math.round(8*ui), Math.round(8*ui));
@@ -24422,8 +24439,8 @@ function drawTutorialTooltip(t) {
   const tipY = targetY + Math.round(10 * ui);
 
   ctx.globalAlpha = fadeIn * 0.92;
-  ctx.fillStyle = 'rgba(2,8,6,0.92)';
-  ctx.strokeStyle = '#39FF14';
+  ctx.fillStyle = 'rgba(4,1,18,0.94)';
+  ctx.strokeStyle = tutCol;
   ctx.lineWidth = Math.round(1.5 * ui);
   ctx.shadowBlur = Math.round(14 * ui);
   ctx.beginPath(); ctx.roundRect(tipX, tipY, tipW, tipH, Math.round(6*ui)); ctx.fill(); ctx.stroke();
@@ -24432,18 +24449,18 @@ function drawTutorialTooltip(t) {
   ctx.textAlign = 'left';
   ctx.globalAlpha = fadeIn;
   ctx.font = huntFont(Math.max(10, Math.round(12.5 * ui)), 'bold');
-  ctx.fillStyle = '#39FF14';
-  ctx.fillText('⊳ START HERE — SCATTERED SPIDER (TIER 1)', tipX + Math.round(14 * ui), tipY + Math.round(tipH * 0.34));
+  ctx.fillStyle = tutCol;
+  ctx.fillText(TF('tut_start_here', {name: ADVERSARIES[0]?.name || 'SCATTERED SPIDER', tier: 1}), tipX + Math.round(14 * ui), tipY + Math.round(tipH * 0.34));
   ctx.font = huntFont(Math.max(9, Math.round(10.5 * ui)));
   ctx.fillStyle = '#aabcd0';
-  ctx.fillText('Click a case to begin · Use ◀ ▶ to browse · SPACE to launch · ESC to go back', tipX + Math.round(14 * ui), tipY + Math.round(tipH * 0.68), tipW - Math.round(28 * ui));
+  ctx.fillText(T('tut_nav'), tipX + Math.round(14 * ui), tipY + Math.round(tipH * 0.68), tipW - Math.round(28 * ui));
 
   // ESC to skip hint
   ctx.textAlign = 'center';
   ctx.globalAlpha = fadeIn * 0.45;
   ctx.font = huntFont(Math.max(9, Math.round(9.5 * ui)));
   ctx.fillStyle = '#7f8b96';
-  ctx.fillText('ESC to skip tutorial', LW / 2, tipY + tipH + Math.round(16 * ui));
+  ctx.fillText(T('tut_skip'), LW / 2, tipY + tipH + Math.round(16 * ui));
 
   ctx.restore();
 }
@@ -24464,7 +24481,7 @@ function drawCaseSelect(dt){
 
   ctx.fillStyle='#020308'; ctx.fillRect(0,0,LW,LH);
   drawStars();
-  drawWorldMap();
+  drawWorldMap(false); // hide hex nodes in case select — cards are the focus
 
   const veil=ctx.createLinearGradient(0,0,0,LH);
   veil.addColorStop(0,'rgba(2,3,8,0.58)');
