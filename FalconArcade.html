@@ -13184,21 +13184,23 @@ function drawPhaseIntro(){
   CX.restore();
 }
 
-// ── Screen: Deploy Cinematic (Combined Briefing + Insertion) ──────────
-// ARCH: Single pre-gameplay screen combining phase briefing + cinematic deployment.
-// This replaces the old TITLE → PHASE_INTRO → DEPLOY_CINEMATIC three-screen flow.
-// t = window._deployT (seconds, from initPhase reset).
+// ── Screen: Deploy Cinematic — Unified Intro + Briefing + Insertion ───
+// ARCH: Single cinematic combining all three former screens:
+//   TITLE → PHASE_INTRO → DEPLOY_CINEMATIC are now one seamless sequence.
+// t = window._deployT (seconds from initPhase reset).
 // Timeline:
 //   0.0–0.4  FLASH   — white burst → black
-//   0.4–1.4  BOOT    — typewriter op-name + adversary on black w/ scanlines
-//   1.4–2.4  REVEAL  — black veil dissolves; briefing panel slides in left
-//   2.4+     LIVE    — full briefing panel LEFT; river action RIGHT; SPACE prompt
-//   5.5      AUTO    — auto-transition to PLAYING if player hasn't pressed SPACE
+//   0.4–2.5  TITLE   — brand + INCIDENT ZERO + adversary list + HI score
+//   2.5–3.3  BOOT    — world fades in, op-name typewriters, adversary
+//   3.3–4.1  REVEAL  — briefing panel slides in from left
+//   4.1+     LIVE    — full briefing LEFT, river action RIGHT, PRESS SPACE
+//   9.0      AUTO    — auto-transition to PLAYING if no SPACE
+// SPACE skips to PLAYING at any time after t>=1.0s.
 function drawDeployCinematic(){
   const t=window._deployT||0;
   const cx=VW/2;
 
-  // Gather briefing data (same as drawPhaseIntro)
+  // ── Briefing data (used from t>=2.5) ───────────────────────────────
   const ph=PHASES[phIdx], ad=ph.adversary?ADV[ph.adversary]:null, act=getAct(phIdx);
   const phaseKey=ph.id===0?T('iz_phase0_key'):ph.key;
   const phaseSeason=ph.id===0?T('iz_phase0_season'):ph.season;
@@ -13209,14 +13211,19 @@ function drawDeployCinematic(){
     : ph.objectives;
   const locAct=localizeIZAct(act);
 
-  // Always render world as base layer (boat positioned by update loop)
-  drawWorld(0.016);
-  if(t>1.4) drawPlayer();
+  // ── World + player (visible from t>=2.5) ───────────────────────────
+  if(t>=2.5){
+    const wAlpha=Math.min(1,(t-2.5)/0.7);
+    CX.save(); CX.globalAlpha=wAlpha;
+    drawWorld(0.016);
+    if(t>3.3) drawPlayer();
+    CX.restore();
+  }
 
   CX.save();
   CX.textAlign='center';
 
-  // ── Phase: FLASH (0–0.4s) ──────────────────────────────────────────
+  // ── FLASH (0–0.4s) ─────────────────────────────────────────────────
   if(t<0.4){
     const flashAlpha=Math.max(0,1-(t/0.12));
     const blackAlpha=Math.min(1,t/0.28);
@@ -13225,185 +13232,254 @@ function drawDeployCinematic(){
     CX.globalAlpha=1;
   }
 
-  // ── Phase: BOOT (0.4–1.4s) — black screen with op/adversary typewriter ─
-  if(t>=0.4&&t<1.4){
-    const bootP=Math.min(1,(t-0.4)/0.8);
-    CX.globalAlpha=1;
-    CX.fillStyle='#000'; CX.fillRect(0,0,VW,VH);
-    // Red scanning bar
-    CX.fillStyle='rgba(220,48,48,0.9)'; CX.fillRect(0,0,VW*bootP,3);
+  // ── TITLE PHASE (0.4–2.5s) — INCIDENT ZERO branding ───────────────
+  if(t>=0.4&&t<2.5){
+    const titleP=Math.min(1,(t-0.4)/0.6); // 0→1 over 0.6s (fade in)
+    const titleOut=t>=1.9?Math.min(1,(t-1.9)/0.5):0; // fade out at 1.9s
+
+    // Solid dark background (starfield feel)
+    CX.fillStyle='#020406'; CX.fillRect(0,0,VW,VH);
     // Scanlines
-    CX.globalAlpha=0.06;
+    CX.globalAlpha=0.055;
     for(let sy=0;sy<VH;sy+=4){ CX.fillStyle='#fff'; CX.fillRect(0,sy,VW,1); }
+    CX.globalAlpha=1-titleOut;
+
+    // Red scanning bar at top
+    CX.fillStyle='rgba(220,48,48,0.9)'; CX.fillRect(0,0,VW*titleP,3);
+
+    // CROWDSTRIKE brand
+    CX.globalAlpha=(1-titleOut)*Math.min(1,titleP*2.5);
+    CX.shadowBlur=28; CX.shadowColor='#e0003c'; CX.fillStyle='#e0003c';
+    CX.font='bold 16px monospace';
+    CX.fillText(T('g_brand_name'),cx,70); CX.shadowBlur=0;
+
+    // INCIDENT ZERO — large glowing title
+    CX.globalAlpha=(1-titleOut)*Math.min(1,titleP*2);
+    CX.shadowBlur=32; CX.shadowColor='#ffffff'; CX.fillStyle='#ffffff';
+    CX.font='bold 44px monospace';
+    CX.fillText(T('g_incident_zero'),cx,120); CX.shadowBlur=0;
+
+    // Subtitle
+    CX.globalAlpha=(1-titleOut)*Math.min(1,(titleP-0.2)*3);
+    CX.fillStyle='#7f8b96'; CX.font='10px monospace';
+    CX.fillText(T('iz_subtitle'),cx,142);
+
+    // ACT tabs (4 acts, compact row)
+    const actRowY=162;
+    ACTS.forEach((a,i)=>{
+      const locA=localizeIZAct(a);
+      const aW=130, aX=cx-270+i*140;
+      CX.globalAlpha=(1-titleOut)*Math.min(1,(titleP-0.15*i)*4)*0.9;
+      CX.fillStyle='rgba(0,0,0,0.6)'; CX.fillRect(aX,actRowY,aW,30);
+      CX.strokeStyle=a.col; CX.lineWidth=1.2; CX.strokeRect(aX,actRowY,aW,30);
+      CX.fillStyle=a.col; CX.font='bold 8px monospace'; CX.textAlign='left';
+      CX.fillText(T('g_act')+a.num+': '+locA.title.toUpperCase(),aX+6,actRowY+13);
+      CX.fillStyle='#777'; CX.font='7px monospace';
+      CX.fillText(locA.subtitle.slice(0,22),aX+6,actRowY+24);
+      CX.textAlign='center';
+    });
+
+    // Mission pitch text (condensed into one line)
+    CX.globalAlpha=(1-titleOut)*Math.min(1,(titleP-0.3)*3);
+    CX.fillStyle='rgba(0,0,0,0.5)'; CX.fillRect(cx-340,200,680,52);
+    CX.strokeStyle='rgba(224,0,60,0.3)'; CX.lineWidth=1; CX.strokeRect(cx-340,200,680,52);
+    CX.fillStyle='#c8d4dc'; CX.font='10px monospace';
+    CX.fillText(T('iz_title_line1'),cx,218);
+    CX.fillStyle='#a8b4bc'; CX.font='9px monospace';
+    CX.fillText(T('iz_title_line2'),cx,233);
+    CX.fillStyle='#7f8b96'; CX.fillText(T('iz_title_line3'),cx,247);
+
+    // Controls hint (single compact line)
+    CX.globalAlpha=(1-titleOut)*Math.min(1,(titleP-0.35)*3);
+    CX.fillStyle='rgba(0,0,0,0.48)'; CX.fillRect(cx-340,262,680,30);
+    CX.strokeStyle='rgba(66,217,255,0.22)'; CX.strokeRect(cx-340,262,680,30);
+    CX.fillStyle='#d5dde5'; CX.font='9px monospace';
+    CX.fillText(T('g_controls_full'),cx,273);
+    CX.fillStyle='#42d9ff'; CX.font='8px monospace';
+    CX.fillText(T('iz_tip_fuel'),cx,284);
+
+    // Adversary icons row
+    CX.globalAlpha=(1-titleOut)*Math.min(1,(titleP-0.4)*4);
+    CX.fillStyle='rgba(0,0,0,0.44)'; CX.fillRect(cx-340,302,680,34);
+    CX.fillStyle='#ffd84d'; CX.font='bold 8px monospace';
+    CX.fillText(T('iz_named_adv'),cx,317);
+    CX.font='7px monospace';
+    Object.keys(ADV).forEach((n,i)=>{
+      const advX=cx-330+(i%Object.keys(ADV).length)*74;
+      CX.fillStyle=ADV[n].color;
+      CX.fillText(ADV[n].icon+' '+n.split(' ')[0],advX,330);
+    });
+
+    // HI SCORE
+    CX.globalAlpha=(1-titleOut)*Math.min(1,(titleP-0.45)*4);
+    CX.fillStyle='#7f8b96'; CX.font='10px monospace';
+    CX.fillText(T('g_hi')+String(HISCORE).padStart(8,'0'),cx,354);
+
+    // PRESS SPACE blinking (during title phase)
+    CX.globalAlpha=(1-titleOut)*Math.min(1,(titleP-0.5)*4);
+    if(Math.floor(Date.now()/400)%2===0){
+      CX.shadowBlur=12; CX.shadowColor='#ffd84d'; CX.fillStyle='#ffd84d';
+      CX.font='bold 13px monospace';
+      CX.fillText(T('g_press_deploy'),cx,390); CX.shadowBlur=0;
+    }
+
     CX.globalAlpha=1;
-    // Centre crosshair
+  }
+
+  // ── BOOT (2.5–3.3s) — world fades in, op-name typewriters ──────────
+  if(t>=2.5&&t<3.3){
+    const bootP=Math.min(1,(t-2.5)/0.7);
+    // Veil on top of fading-in world
+    const veilA=Math.max(0,1-bootP*1.6);
+    CX.globalAlpha=veilA; CX.fillStyle='#000'; CX.fillRect(0,0,VW,VH); CX.globalAlpha=1;
+
+    // Red bar
+    CX.fillStyle='rgba(220,48,48,0.7)'; CX.fillRect(0,0,VW,3);
+
+    // Crosshair acquires
     const ch=bootP*bootP;
-    CX.save();
-    CX.globalAlpha=ch*0.35; CX.strokeStyle='#ff3030'; CX.lineWidth=1;
-    CX.beginPath(); CX.moveTo(cx-50,VH/2); CX.lineTo(cx+50,VH/2); CX.stroke();
-    CX.beginPath(); CX.moveTo(cx,VH/2-35); CX.lineTo(cx,VH/2+35); CX.stroke();
-    CX.globalAlpha=ch*0.22; CX.beginPath(); CX.arc(cx,VH/2,40,0,TAU); CX.stroke();
+    CX.save(); CX.globalAlpha=ch*0.32; CX.strokeStyle='#ff3030'; CX.lineWidth=1;
+    CX.beginPath(); CX.moveTo(cx-50,VH*0.4); CX.lineTo(cx+50,VH*0.4); CX.stroke();
+    CX.beginPath(); CX.moveTo(cx,VH*0.4-35); CX.lineTo(cx,VH*0.4+35); CX.stroke();
     CX.restore();
-    // Operation name typewriter (large)
+
+    // Operation name typewriter
     const revealed=Math.floor(phaseKey.length*bootP);
-    const displayText=phaseKey.slice(0,revealed)+(bootP<1&&Math.floor(Date.now()/220)%2===0?'█':'');
-    CX.globalAlpha=Math.min(1,bootP*2.2);
-    CX.font='bold 22px monospace'; CX.fillStyle=ph.col;
-    CX.shadowBlur=20; CX.shadowColor=ph.col+'88';
-    CX.fillText(displayText,cx,VH/2-8); CX.shadowBlur=0;
-    // Adversary line fades in at bootP>0.55
+    const displayText=phaseKey.slice(0,revealed)+(bootP<1&&Math.floor(Date.now()/200)%2===0?'█':'');
+    CX.globalAlpha=Math.min(1,bootP*2.5);
+    CX.font='bold 20px monospace'; CX.fillStyle=ph.col;
+    CX.shadowBlur=18; CX.shadowColor=ph.col+'88';
+    CX.fillText(displayText,cx,VH*0.4); CX.shadowBlur=0;
+
+    // Adversary line
     if(bootP>0.55&&ad){
-      const subA=Math.min(1,(bootP-0.55)*4.5);
-      CX.globalAlpha=subA; CX.font='bold 13px monospace'; CX.fillStyle=ad.color;
-      CX.shadowBlur=10; CX.shadowColor=ad.color;
-      CX.fillText(T('g_adversary_prefix')+ph.adversary,cx,VH/2+18); CX.shadowBlur=0;
-      CX.globalAlpha=subA*0.6; CX.font='10px monospace'; CX.fillStyle='#aaa';
-      CX.fillText(ad?ad.nation:'',cx,VH/2+34);
+      const subA=Math.min(1,(bootP-0.55)*5);
+      CX.globalAlpha=subA; CX.font='bold 12px monospace'; CX.fillStyle=ad.color;
+      CX.shadowBlur=8; CX.shadowColor=ad.color;
+      CX.fillText(T('g_adversary_prefix')+ph.adversary,cx,VH*0.4+22); CX.shadowBlur=0;
+      CX.globalAlpha=subA*0.65; CX.font='9px monospace'; CX.fillStyle='#aaa';
+      CX.fillText(ad.nation,cx,VH*0.4+36);
     }
-    CX.globalAlpha=0.35; CX.fillStyle='#555'; CX.font='10px monospace';
-    CX.fillText('▰▰▰▱▱▱▱▱',cx,VH-22); CX.globalAlpha=1;
+    CX.globalAlpha=1;
   }
 
-  // ── Phase: REVEAL (1.4–2.4s) — black veil lifts, briefing panel slides in ─
-  if(t>=1.4&&t<2.4){
-    const revP=Math.min(1,(t-1.4)/0.9);
-    const veilAlpha=Math.max(0,1-revP*1.5);
-    CX.globalAlpha=veilAlpha; CX.fillStyle='#000'; CX.fillRect(0,0,VW,VH); CX.globalAlpha=1;
-    // Corner brackets
-    if(revP>0.25){
-      const hudA=Math.min(1,(revP-0.25)/0.35);
-      CX.globalAlpha=hudA*0.55; CX.strokeStyle='#ff3030'; CX.lineWidth=2;
-      const m=14,s=28;
-      CX.beginPath();
-      CX.moveTo(m+s,m); CX.lineTo(m,m); CX.lineTo(m,m+s);
-      CX.moveTo(VW-m-s,m); CX.lineTo(VW-m,m); CX.lineTo(VW-m,m+s);
-      CX.moveTo(m+s,VH-m); CX.lineTo(m,VH-m); CX.lineTo(m,VH-m-s);
-      CX.moveTo(VW-m-s,VH-m); CX.lineTo(VW-m,VH-m); CX.lineTo(VW-m,VH-m-s);
-      CX.stroke(); CX.globalAlpha=1;
-    }
-    // Op name persists at top-left during reveal
-    if(revP>0.4){
-      const nameA=Math.min(1,(revP-0.4)*4);
-      CX.globalAlpha=nameA;
-      CX.font='bold 13px monospace'; CX.fillStyle=ph.col; CX.textAlign='left';
-      CX.shadowBlur=10; CX.shadowColor=ph.col+'88';
-      CX.fillText(phaseKey,22,50); CX.shadowBlur=0;
-      if(ad){ CX.font='bold 11px monospace'; CX.fillStyle=ad.color; CX.fillText(T('g_adversary_prefix')+ph.adversary,22,66); }
-      CX.textAlign='center'; CX.globalAlpha=1;
-    }
-    CX.globalAlpha=0.45; CX.fillStyle='#777'; CX.font='10px monospace';
-    CX.fillText('▰▰▰▰▰▱▱▱',cx,VH-22); CX.globalAlpha=1;
+  // ── REVEAL (3.3–4.1s) — corner brackets + briefing panel starts ────
+  if(t>=3.3&&t<4.1){
+    const revP=Math.min(1,(t-3.3)/0.7);
+    // Corner HUD brackets
+    CX.globalAlpha=Math.min(1,revP*2)*0.55; CX.strokeStyle='#ff3030'; CX.lineWidth=1.8;
+    const m=14,s=26;
+    CX.beginPath();
+    CX.moveTo(m+s,m); CX.lineTo(m,m); CX.lineTo(m,m+s);
+    CX.moveTo(VW-m-s,m); CX.lineTo(VW-m,m); CX.lineTo(VW-m,m+s);
+    CX.moveTo(m+s,VH-m); CX.lineTo(m,VH-m); CX.lineTo(m,VH-m-s);
+    CX.moveTo(VW-m-s,VH-m); CX.lineTo(VW-m,VH-m); CX.lineTo(VW-m,VH-m-s);
+    CX.stroke(); CX.globalAlpha=1;
+    // Op name anchors top-center
+    CX.globalAlpha=Math.min(1,revP*3);
+    CX.font='bold 12px monospace'; CX.fillStyle=ph.col;
+    CX.shadowBlur=8; CX.shadowColor=ph.col+'88';
+    CX.fillText(phaseKey,cx,38); CX.shadowBlur=0;
+    if(ad){ CX.globalAlpha=Math.min(1,revP*2.5)*0.8; CX.font='bold 10px monospace'; CX.fillStyle=ad.color; CX.fillText(T('g_adversary_prefix')+ph.adversary,cx,52); }
+    CX.globalAlpha=1;
   }
 
-  // ── Phase: LIVE (t>=2.4s) — full briefing panel LEFT + tactical overlay RIGHT ─
-  if(t>=2.4){
-    const liveP=Math.min(1,(t-2.4)/0.7); // 0→1 over 0.7s (slide-in ease)
-    const panSlide=Math.max(0,1-liveP); // 0=fully visible, 1=off screen
-    const panAlpha=Math.min(1,liveP*2);
+  // ── LIVE (t>=4.1s) — full briefing panel LEFT, river RIGHT ─────────
+  if(t>=4.1){
+    const liveP=Math.min(1,(t-4.1)/0.65);
+    const panSlide=Math.max(0,1-liveP);
+    const panAlpha=Math.min(1,liveP*2.2);
 
-    // Briefing panel (slides in from left)
-    const pw=Math.min(VW*0.48,440);
-    const ph2=VH-48;
-    const panX=20-pw*panSlide;
-    const panY=24;
+    const pw=Math.min(VW*0.46,430);
+    const ph2=VH-42;
+    const panX=18-pw*panSlide;
+    const panY=22;
 
-    CX.save();
-    CX.globalAlpha=panAlpha;
+    // ── Briefing panel ─────────────────────────────────────────────────
+    CX.save(); CX.globalAlpha=panAlpha;
 
-    // Panel background
-    CX.fillStyle='rgba(2,6,10,0.92)';
+    CX.fillStyle='rgba(2,6,10,0.93)';
     CX.beginPath(); CX.roundRect(panX,panY,pw,ph2,4); CX.fill();
     CX.strokeStyle=ph.col; CX.lineWidth=1.8;
     CX.beginPath(); CX.roundRect(panX,panY,pw,ph2,4); CX.stroke();
 
-    // Act badge row
-    CX.fillStyle='rgba(0,0,0,0.8)';
-    CX.fillRect(panX,panY,pw,20);
-    CX.fillStyle=act.col; CX.font='bold 9px monospace'; CX.textAlign='left';
-    CX.fillText(T('g_act')+act.num+': '+locAct.title.toUpperCase()+'  —  '+locAct.subtitle,panX+8,panY+13);
+    // Act badge
+    CX.fillStyle='rgba(0,0,0,0.8)'; CX.fillRect(panX,panY,pw,20);
+    CX.fillStyle=act.col; CX.font='bold 8px monospace'; CX.textAlign='left';
+    CX.fillText(T('g_act')+act.num+': '+locAct.title.toUpperCase()+'  —  '+locAct.subtitle,panX+7,panY+13);
 
-    // Phase number + season
     CX.fillStyle='#7f8b96'; CX.font='9px monospace';
-    CX.fillText(T('g_phase')+(phIdx+1)+'/10  ·  '+phaseSeason,panX+8,panY+33);
+    CX.fillText(T('g_phase')+(phIdx+1)+'/10  ·  '+phaseSeason,panX+7,panY+32);
 
-    // Operation name
-    CX.shadowBlur=14; CX.shadowColor=ph.col;
-    CX.fillStyle=ph.col; CX.font='bold 15px monospace';
-    CX.fillText(phaseKey,panX+8,panY+52); CX.shadowBlur=0;
+    CX.shadowBlur=12; CX.shadowColor=ph.col;
+    CX.fillStyle=ph.col; CX.font='bold 14px monospace';
+    CX.fillText(phaseKey,panX+7,panY+50); CX.shadowBlur=0;
 
-    // Adversary
     if(ad){
-      CX.shadowBlur=8; CX.shadowColor=ad.color;
-      CX.fillStyle=ad.color; CX.font='bold 11px monospace';
-      CX.fillText(T('g_adversary_prefix')+ph.adversary,panX+8,panY+70); CX.shadowBlur=0;
+      CX.shadowBlur=7; CX.shadowColor=ad.color;
+      CX.fillStyle=ad.color; CX.font='bold 10px monospace';
+      CX.fillText(T('g_adversary_prefix')+ph.adversary,panX+7,panY+67); CX.shadowBlur=0;
       CX.fillStyle='#888'; CX.font='9px monospace';
-      CX.fillText(ad.nation,panX+8,panY+82);
+      CX.fillText(ad.nation,panX+7,panY+79);
     }
 
-    // Divider
     CX.strokeStyle='rgba(255,255,255,0.07)'; CX.lineWidth=1;
-    CX.beginPath(); CX.moveTo(panX+8,panY+90); CX.lineTo(panX+pw-8,panY+90); CX.stroke();
+    CX.beginPath(); CX.moveTo(panX+7,panY+87); CX.lineTo(panX+pw-7,panY+87); CX.stroke();
 
-    // Situation
     CX.fillStyle='#ffd84d'; CX.font='bold 9px monospace';
-    CX.fillText(T('g_situation'),panX+8,panY+102);
+    CX.fillText(T('g_situation'),panX+7,panY+99);
+    const sumLines=wrapTextPx(CX, phaseSummary, pw-16);
     CX.fillStyle='#c8d4dc'; CX.font='9px monospace';
-    const sumLines=wrapTextPx(CX, phaseSummary, pw-18);
-    sumLines.slice(0,3).forEach((l,i)=>CX.fillText(l,panX+8,panY+113+i*12));
+    sumLines.slice(0,3).forEach((l,i)=>CX.fillText(l,panX+7,panY+110+i*12));
 
-    // Mission
-    const mBase=panY+113+Math.min(sumLines.length,3)*12+8;
+    const mBase=panY+110+Math.min(sumLines.length,3)*12+7;
     CX.fillStyle='#ffd84d'; CX.font='bold 9px monospace';
-    CX.fillText(T('g_mission'),panX+8,mBase);
+    CX.fillText(T('g_mission'),panX+7,mBase);
     CX.fillStyle='#74ff88'; CX.font='9px monospace';
-    const misLines=wrapTextPx(CX, phaseMission, pw-18);
-    misLines.slice(0,2).forEach((l,i)=>CX.fillText(l,panX+8,mBase+11+i*12));
+    const misLines=wrapTextPx(CX, phaseMission, pw-16);
+    misLines.slice(0,2).forEach((l,i)=>CX.fillText(l,panX+7,mBase+11+i*12));
 
-    // Objectives
-    const oBase=mBase+11+Math.min(misLines.length,2)*12+8;
+    const oBase=mBase+11+Math.min(misLines.length,2)*12+7;
     CX.fillStyle='#ffd84d'; CX.font='bold 9px monospace';
-    CX.fillText(T('g_objectives'),panX+8,oBase);
+    CX.fillText(T('g_objectives'),panX+7,oBase);
     phaseObjectives.forEach((o,i)=>{
       CX.fillStyle='#42d9ff'; CX.font='9px monospace';
-      CX.fillText('○ '+o.text.slice(0,46),panX+8,oBase+11+i*13);
+      CX.fillText('○ '+o.text.slice(0,48),panX+7,oBase+11+i*13);
     });
 
-    // TTPs + Counter
     if(ad){
       const tBase=oBase+11+phaseObjectives.length*13+6;
       CX.strokeStyle='rgba(255,255,255,0.05)'; CX.lineWidth=1;
-      CX.beginPath(); CX.moveTo(panX+8,tBase-3); CX.lineTo(panX+pw-8,tBase-3); CX.stroke();
-      CX.fillStyle='#666'; CX.font='8px monospace';
-      CX.fillText(T('iz_known_ttps')+ad.ttp.slice(0,52),panX+8,tBase+8);
-      CX.fillStyle='rgba(66,217,255,0.08)'; CX.fillRect(panX+8,tBase+12,pw-16,32);
-      CX.strokeStyle='rgba(66,217,255,0.18)'; CX.strokeRect(panX+8,tBase+12,pw-16,32);
-      CX.fillStyle='#42d9ff'; CX.font='bold 9px monospace';
-      CX.fillText(T('g_counter')+ad.counter.slice(0,50),panX+8,tBase+24);
-      CX.fillStyle='#74ff88'; CX.font='bold 9px monospace';
-      CX.fillText(T('g_featured_module')+ph.module,panX+8,tBase+38);
+      CX.beginPath(); CX.moveTo(panX+7,tBase-3); CX.lineTo(panX+pw-7,tBase-3); CX.stroke();
+      CX.fillStyle='#555'; CX.font='8px monospace';
+      CX.fillText(T('iz_known_ttps')+ad.ttp.slice(0,54),panX+7,tBase+8);
+      CX.fillStyle='rgba(66,217,255,0.08)'; CX.fillRect(panX+7,tBase+12,pw-14,32);
+      CX.strokeStyle='rgba(66,217,255,0.18)'; CX.strokeRect(panX+7,tBase+12,pw-14,32);
+      CX.fillStyle='#42d9ff'; CX.font='bold 8px monospace';
+      CX.fillText(T('g_counter')+ad.counter.slice(0,52),panX+7,tBase+24);
+      CX.fillStyle='#74ff88'; CX.font='bold 8px monospace';
+      CX.fillText(T('g_featured_module')+ph.module,panX+7,tBase+38);
     }
 
-    // Boss warning banner at bottom of panel
     if(ph.boss){
-      CX.fillStyle='rgba(255,80,50,0.14)'; CX.fillRect(panX,panY+ph2-36,pw,36);
-      CX.strokeStyle='rgba(255,80,50,0.35)'; CX.strokeRect(panX,panY+ph2-36,pw,36);
-      CX.fillStyle='#ff5a4d'; CX.font='bold 9px monospace';
-      CX.fillText(T('g_boss_encounter')+ph.boss+'  —  '+(ADV[ph.boss]?.nation||''),panX+8,panY+ph2-16);
+      CX.fillStyle='rgba(255,80,50,0.13)'; CX.fillRect(panX,panY+ph2-32,pw,32);
+      CX.strokeStyle='rgba(255,80,50,0.32)'; CX.strokeRect(panX,panY+ph2-32,pw,32);
+      CX.fillStyle='#ff5a4d'; CX.font='bold 8px monospace';
+      CX.fillText(T('g_boss_encounter')+ph.boss+'  —  '+(ADV[ph.boss]?.nation||''),panX+7,panY+ph2-13);
     }
 
-    CX.restore(); // restore globalAlpha
+    CX.restore(); // end panel globalAlpha
 
-    // ── Tactical grid overlay (right half) ─────────────────────────────
-    CX.globalAlpha=Math.min(0.05,liveP*0.05);
-    CX.strokeStyle='#42d9ff'; CX.lineWidth=0.5;
+    // ── Tactical grid right half ───────────────────────────────────────
+    CX.globalAlpha=liveP*0.045; CX.strokeStyle='#42d9ff'; CX.lineWidth=0.5;
     const gStep=38;
     for(let gx=pw+30;gx<VW;gx+=gStep){ CX.beginPath(); CX.moveTo(gx,0); CX.lineTo(gx,VH); CX.stroke(); }
     for(let gy=0;gy<VH;gy+=gStep){ CX.beginPath(); CX.moveTo(pw+30,gy); CX.lineTo(VW,gy); CX.stroke(); }
     CX.globalAlpha=1;
 
-    // ── HUD corner brackets ────────────────────────────────────────────
-    CX.globalAlpha=liveP*0.5; CX.strokeStyle='#ff3030'; CX.lineWidth=1.8;
-    const m=14, s=26;
+    // ── Corner HUD brackets ───────────────────────────────────────────
+    CX.globalAlpha=liveP*0.45; CX.strokeStyle='#ff3030'; CX.lineWidth=1.8;
+    const m=14, s=24;
     CX.beginPath();
     CX.moveTo(m+s,m); CX.lineTo(m,m); CX.lineTo(m,m+s);
     CX.moveTo(VW-m-s,m); CX.lineTo(VW-m,m); CX.lineTo(VW-m,m+s);
@@ -13411,35 +13487,36 @@ function drawDeployCinematic(){
     CX.moveTo(VW-m-s,VH-m); CX.lineTo(VW-m,VH-m); CX.lineTo(VW-m,VH-m-s);
     CX.stroke(); CX.globalAlpha=1;
 
-    // ── "WEAPONS FREE" label — top right of river area ─────────────────
-    const wpA=Math.min(1,(t-2.9)*3);
+    // ── WEAPONS FREE + asset tag (right side) ─────────────────────────
+    const wpA=Math.min(1,(t-4.5)*2.5);
     if(wpA>0){
       CX.globalAlpha=wpA;
-      CX.font='bold 14px monospace'; CX.fillStyle='#74ff88';
-      CX.shadowBlur=14; CX.shadowColor='#74ff88aa';
-      CX.fillText(T('iz_deploy_weapons'),VW*0.78,52); CX.shadowBlur=0;
-      CX.globalAlpha=wpA*0.65; CX.font='10px monospace'; CX.fillStyle='#42d9ff';
-      CX.fillText(T('iz_deploy_asset'),VW*0.78,66);
+      CX.font='bold 13px monospace'; CX.fillStyle='#74ff88';
+      CX.shadowBlur=12; CX.shadowColor='#74ff88aa';
+      CX.fillText(T('iz_deploy_weapons'),VW*0.77,46); CX.shadowBlur=0;
+      CX.globalAlpha=wpA*0.6; CX.font='9px monospace'; CX.fillStyle='#42d9ff';
+      CX.fillText(T('iz_deploy_asset'),VW*0.77,59);
       CX.globalAlpha=1;
     }
 
-    // ── PRESS SPACE prompt blinks after t>=3.5s ─────────────────────────
-    if(t>=3.5){
-      const promptA=Math.min(1,(t-3.5)*2.5);
-      if(promptA>0&&Math.floor(Date.now()/440)%2===0){
+    // ── PRESS SPACE prompt blinks after 5.5s ──────────────────────────
+    if(t>=5.5){
+      const promptA=Math.min(1,(t-5.5)*2);
+      if(promptA>0&&Math.floor(Date.now()/430)%2===0){
         CX.globalAlpha=promptA;
-        CX.font='bold 12px monospace'; CX.fillStyle='#ffffff';
-        CX.shadowBlur=16; CX.shadowColor='rgba(255,255,255,0.6)';
-        CX.fillText(T('g_press_deploy'),VW*0.76,VH-30); CX.shadowBlur=0;
+        CX.shadowBlur=18; CX.shadowColor='rgba(255,255,255,0.5)';
+        CX.fillStyle='#ffffff'; CX.font='bold 11px monospace';
+        CX.fillText(T('g_press_deploy'),VW*0.77,VH-28); CX.shadowBlur=0;
         CX.globalAlpha=1;
       }
     }
 
-    // Progress bar (bottom strip)
-    const prog=Math.min(1,(t-2.4)/3.1);
-    CX.globalAlpha=0.4; CX.fillStyle='#333';
-    CX.fillRect(pw+40,VH-8,VW-pw-50,4);
-    CX.fillStyle=ph.col; CX.fillRect(pw+40,VH-8,(VW-pw-50)*prog,4);
+    // ── Progress bar (right side, bottom) ─────────────────────────────
+    const prog=Math.min(1,(t-4.1)/4.9);
+    CX.globalAlpha=0.38; CX.fillStyle='#2a2a2a';
+    CX.fillRect(pw+32,VH-7,VW-pw-42,3);
+    CX.fillStyle=ph.col;
+    CX.fillRect(pw+32,VH-7,(VW-pw-42)*prog,3);
     CX.globalAlpha=1;
   }
 
@@ -13713,8 +13790,8 @@ function drawPause(){
 function render(dt){
   CX.save(); applyShake();
   switch(STATE){
-    case S.TITLE:            drawTitle();           break;
-    case S.PHASE_INTRO:      drawPhaseIntro();      break;
+    case S.TITLE:            drawDeployCinematic(); break; // TITLE absorbed into cinematic
+    case S.PHASE_INTRO:      drawDeployCinematic(); break; // PHASE_INTRO absorbed into cinematic
     case S.DEPLOY_CINEMATIC: drawDeployCinematic(); break;
     case S.BOSS_INTRO:       drawBossIntro();       break;
     case S.PHASE_END:   drawPhaseEnd();   break;
@@ -13790,15 +13867,15 @@ function frame(ts){
     case S.DEPLOY_CINEMATIC:
       window._deployT=(window._deployT||0)+dt;
       updShake(dt); updParts(dt); updActAnn(dt);
-      // Animate player boat dropping into position during REVEAL phase (t=1.4-2.5)
-      if(window._deployT<4.3){
-        const dEase=Math.min(1,Math.max(0,(window._deployT-1.4)/1.1));
+      // Animate player boat dropping into position during REVEAL phase (t=3.3-4.4)
+      if(window._deployT>=3.3){
+        const dEase=Math.min(1,Math.max(0,(window._deployT-3.3)/1.0));
         const dEase2=dEase*dEase; // quadratic ease-in (slow start)
         PL.y=-80+dEase2*(VH*0.72);
-        PL.x=VW/2+40; // offset right of center so briefing panel has space
+        PL.x=VW/2+52; // offset right of center so briefing panel has space
       }
-      // SPACE after t>=1.5 skips directly to gameplay; auto-exit after 5.5s
-      if(window._deployT>=5.5||(window._deployT>=1.5&&hk('Space'))){ SFX.scan(); STATE=S.PLAYING; }
+      // SPACE after t>=1.0 skips to gameplay; auto-exit after 9.0s
+      if(window._deployT>=9.0||(window._deployT>=1.0&&hk('Space'))){ SFX.scan(); STATE=S.PLAYING; }
       break;
 
     case S.BOSS_INTRO:
