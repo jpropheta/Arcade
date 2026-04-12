@@ -9877,15 +9877,98 @@ function drawWorld(dt){
   const lgR=CX.createLinearGradient(VW,0,VW*0.64,0);
   lgR.addColorStop(0,ph.land2); lgR.addColorStop(0.5,ph.land1); lgR.addColorStop(1,'rgba(10,14,8,0)');
   CX.fillStyle=lgR; CX.fill(); CX.restore();
-  const swy=Math.floor(W.scroll/28)*28;
-  for(let wy=swy;wy<=W.scroll+VH+32;wy+=28){
-    const sy=w2s(wy); if(sy<-24||sy>VH+24) continue;
-    const r=getRivW(wy), lx=r.cx-r.cw/2, rx=r.cx+r.cw/2;
-    const sa=Math.sin(wy*0.17+phIdx*2.9), sb=Math.sin(wy*0.11+phIdx*4.2+1.8);
-    const leftW=lx-4;
-    if(leftW>8){ const ldx=clamp(lx-14-((sa+1)*0.5)*Math.min(48,leftW*0.65),4,lx-8); CX.fillStyle='rgba(255,255,255,0.018)'; CX.fillRect(ldx,sy-1,Math.min(14,(sa+1)*0.5*16),2); if(wy%56===0&&leftW>20){ CX.fillStyle='rgba(50,80,25,0.28)'; CX.beginPath(); CX.ellipse(ldx,sy,Math.min(13,leftW*0.48),4,0,0,TAU); CX.fill(); } }
-    const rightW=VW-rx-4;
-    if(rightW>8){ const rdx=clamp(rx+14+((sb+1)*0.5)*Math.min(48,rightW*0.65),rx+8,VW-4); CX.fillStyle='rgba(255,255,255,0.018)'; CX.fillRect(rdx-7,sy-1,Math.min(14,(sb+1)*0.5*14),2); if(wy%56===0&&rightW>20){ CX.fillStyle='rgba(50,80,25,0.26)'; CX.beginPath(); CX.ellipse(rdx,sy,Math.min(11,rightW*0.46),4,0,0,TAU); CX.fill(); } }
+  // ── Cinematic Shoreline — Forest, Terrain & Vegetation ─────────────────
+  const animT_sw=W.scroll*0.012;
+  // [1] Deep forest vignette — outer screen edges read as impenetrable far woodland
+  CX.save();
+  const fvL=CX.createLinearGradient(0,0,VW*0.15,0);
+  fvL.addColorStop(0,'rgba(0,0,0,0.46)'); fvL.addColorStop(1,'rgba(0,0,0,0)');
+  CX.fillStyle=fvL; CX.fillRect(0,0,VW*0.15,VH);
+  const fvR=CX.createLinearGradient(VW,0,VW*0.85,0);
+  fvR.addColorStop(0,'rgba(0,0,0,0.46)'); fvR.addColorStop(1,'rgba(0,0,0,0)');
+  CX.fillStyle=fvR; CX.fillRect(VW*0.85,0,VW*0.15,VH);
+  CX.restore();
+  // [2] Per-strip terrain detail: mud bank, rocks, undergrowth, tree canopies (top-down)
+  // All moduli are multiples of step 22 → guaranteed to fire at fixed world positions
+  const swy_c=Math.floor(W.scroll/22)*22;
+  for(let wy=swy_c;wy<=W.scroll+VH+110;wy+=22){
+    const sy=w2s(wy); if(sy<-90||sy>VH+30) continue;
+    const rv=getRivW(wy);
+    const lx=rv.cx-rv.cw/2, rx2=rv.cx+rv.cw/2;
+    const lAv=lx, rAv=VW-rx2;
+    // ── Wet mud / soil strip right at water's edge ───────────────────
+    if(lAv>6){ CX.fillStyle='rgba(134,108,74,0.28)'; CX.fillRect(lx-7,sy-1,7,2); }
+    if(rAv>6){ CX.fillStyle='rgba(134,108,74,0.28)'; CX.fillRect(rx2,sy-1,7,2); }
+    // ── Rocks (every 66 world units = 3×22) ──────────────────────────
+    if(wy%66===0){
+      const rSz=4.5+Math.abs(Math.sin(wy*0.37))*5;
+      const rOff=1+Math.abs(Math.sin(wy*0.53))*3;
+      if(lAv>rSz+6){
+        CX.fillStyle='rgba(78,72,62,0.82)';
+        CX.beginPath(); CX.ellipse(lx-rOff-rSz*0.5,sy+Math.sin(wy*0.19)*2,rSz,rSz*0.55,0.22,0,TAU); CX.fill();
+        CX.strokeStyle='rgba(255,255,255,0.15)'; CX.lineWidth=0.8;
+        CX.beginPath(); CX.arc(lx-rOff-rSz*0.5,sy+Math.sin(wy*0.19)*2-1.5,rSz*0.58,Math.PI,0); CX.stroke();
+      }
+      if(rAv>rSz+6){
+        CX.fillStyle='rgba(78,72,62,0.82)';
+        CX.beginPath(); CX.ellipse(rx2+rOff+rSz*0.5,sy+Math.sin(wy*0.23)*2,rSz,rSz*0.55,-0.22,0,TAU); CX.fill();
+        CX.strokeStyle='rgba(255,255,255,0.15)'; CX.lineWidth=0.8;
+        CX.beginPath(); CX.arc(rx2+rOff+rSz*0.5,sy+Math.sin(wy*0.23)*2-1.5,rSz*0.58,Math.PI,0); CX.stroke();
+      }
+    }
+    // ── Undergrowth / brush clusters (every 44 units = 2×22) ─────────
+    if(wy%44===0){
+      const bOff=13+Math.abs(Math.sin(wy*0.09))*15;
+      const bW=7+Math.abs(Math.sin(wy*0.27))*6, bH=3.5+Math.abs(Math.sin(wy*0.43))*2.5;
+      CX.fillStyle='rgba(24,46,13,0.70)';
+      if(lAv>bOff+bW){
+        CX.beginPath(); CX.ellipse(lx-bOff,sy,bW,bH,0,0,TAU); CX.fill();
+        CX.beginPath(); CX.ellipse(lx-bOff-bW*0.82,sy+2,bW*0.62,bH*0.72,0,0,TAU); CX.fill();
+      }
+      if(rAv>bOff+bW){
+        CX.beginPath(); CX.ellipse(rx2+bOff,sy,bW,bH,0,0,TAU); CX.fill();
+        CX.beginPath(); CX.ellipse(rx2+bOff+bW*0.82,sy+2,bW*0.62,bH*0.72,0,0,TAU); CX.fill();
+      }
+    }
+    // ── Tree canopies — top-down view (every 88 units, half-offset at 44) ──
+    const tmod=wy%88;
+    if(tmod===0||tmod===44){
+      const isSmall=tmod===44;
+      const tOff=32+Math.abs(Math.sin(wy*0.13))*20;
+      const tR=isSmall?9+Math.abs(Math.sin(wy*0.21))*5:14+Math.abs(Math.sin(wy*0.17))*8;
+      const sway=Math.sin(animT_sw*1.3+wy*0.05)*2.5;
+      if(lAv>tOff+tR+4){
+        const tx=lx-tOff+sway;
+        // Elongated ground shadow (sun from upper-left)
+        CX.fillStyle='rgba(0,0,0,0.24)';
+        CX.beginPath(); CX.ellipse(tx+6,sy+6,tR*0.88,tR*0.48,0.3,0,TAU); CX.fill();
+        // Main canopy (dark forest floor seen from above)
+        CX.fillStyle='rgba(17,38,10,0.94)';
+        CX.beginPath(); CX.arc(tx,sy,tR,0,TAU); CX.fill();
+        // Mid-tone lit zone
+        CX.fillStyle='rgba(42,70,18,0.76)';
+        CX.beginPath(); CX.arc(tx-tR*0.3,sy-tR*0.3,tR*0.62,0,TAU); CX.fill();
+        // Bright sunlit highlight
+        CX.fillStyle='rgba(62,94,24,0.52)';
+        CX.beginPath(); CX.arc(tx-tR*0.44,sy-tR*0.44,tR*0.30,0,TAU); CX.fill();
+        // Phase color tint (subtle threat atmosphere on canopy)
+        CX.save(); CX.globalAlpha=0.09; CX.fillStyle=ph.col;
+        CX.beginPath(); CX.arc(tx,sy,tR,0,TAU); CX.fill(); CX.restore();
+      }
+      if(rAv>tOff+tR+4){
+        const tx=rx2+tOff-sway;
+        CX.fillStyle='rgba(0,0,0,0.24)';
+        CX.beginPath(); CX.ellipse(tx+6,sy+6,tR*0.88,tR*0.48,-0.3,0,TAU); CX.fill();
+        CX.fillStyle='rgba(17,38,10,0.94)';
+        CX.beginPath(); CX.arc(tx,sy,tR,0,TAU); CX.fill();
+        CX.fillStyle='rgba(42,70,18,0.76)';
+        CX.beginPath(); CX.arc(tx-tR*0.3,sy-tR*0.3,tR*0.62,0,TAU); CX.fill();
+        CX.fillStyle='rgba(62,94,24,0.52)';
+        CX.beginPath(); CX.arc(tx-tR*0.44,sy-tR*0.44,tR*0.30,0,TAU); CX.fill();
+        CX.save(); CX.globalAlpha=0.09; CX.fillStyle=ph.col;
+        CX.beginPath(); CX.arc(tx,sy,tR,0,TAU); CX.fill(); CX.restore();
+      }
+    }
   }
   CX.save();
   CX.beginPath(); smPath(L); for(let i=R.length-1;i>=0;i--) CX.lineTo(R[i][0],R[i][1]); CX.closePath();
@@ -11339,29 +11422,190 @@ function drawGround(){
 }
 
 function drawBridges(){
+  CX.save();
+  const animT=W.scroll*0.012; // free animation driver, no new variable
   for(const br of BRIDGES){
     if(!br.alive) continue;
     const sy=w2s(br.wy); if(sy<-54||sy>VH+54) continue;
-    const rx=br.cx-br.bw/2,rw=br.bw,rh=19;
-    CX.fillStyle='rgba(0,0,0,0.28)'; CX.fillRect(rx+6,sy-rh/2+7,rw,rh);
-    CX.fillStyle=br.boss?'#6e2418':'#5a3a28'; CX.fillRect(rx,sy-rh/2,rw,rh);
-    CX.fillStyle=br.boss?'#8a3e2e':'#785040';
-    for(let x=rx+20;x<rx+rw-12;x+=22) CX.fillRect(x,sy-rh/2+2,10,rh-4);
-    CX.fillStyle='rgba(0,0,0,0.26)';
-    for(let x=rx+16;x<rx+rw-10;x+=48){ CX.fillRect(x,sy+rh/2,6,13); CX.fillRect(x+38,sy+rh/2,6,13); }
-    CX.strokeStyle=br.boss?'#ff7050':'#c09878'; CX.lineWidth=2; CX.strokeRect(rx,sy-rh/2,rw,rh);
-    CX.strokeStyle='rgba(255,255,255,0.11)'; CX.lineWidth=1;
-    CX.beginPath(); CX.moveTo(rx,sy-rh/2+2); CX.lineTo(rx+rw,sy-rh/2+2); CX.stroke();
-    CX.fillStyle='rgba(0,0,0,0.72)'; CX.fillRect(rx,sy-rh/2-11,rw,6);
-    CX.fillStyle=br.boss?'#ff7050':'#ffd84d'; CX.fillRect(rx,sy-rh/2-11,rw*(br.hp/br.maxHp),6);
-    CX.strokeStyle='rgba(255,255,255,0.14)'; CX.lineWidth=1; CX.strokeRect(rx,sy-rh/2-11,rw,6);
-    if(br.boss){
-      CX.strokeStyle='#ff7050'; CX.lineWidth=1.5; CX.beginPath();
-      for(let x=rx+10;x<rx+rw-8;x+=32){ CX.moveTo(x,sy-rh/2); CX.lineTo(x+14,sy-rh/2-13); CX.lineTo(x+28,sy-rh/2); }
-      CX.stroke();
-      CX.fillStyle='rgba(255,90,60,0.13)'; CX.fillRect(rx,sy-rh/2,rw,rh);
+    const rx=br.cx-br.bw/2, rw=br.bw, rh=20;
+    const cx=br.cx, hp01=br.hp/br.maxHp;
+    const isBoss=br.boss;
+    const deckY=sy-rh/2;
+
+    // ── 1. River shadow / depth under bridge ─────────────────────────────
+    CX.save();
+    CX.globalAlpha=0.38;
+    CX.fillStyle='#000';
+    CX.beginPath(); CX.ellipse(cx,sy+4,rw*0.52,7,0,0,Math.PI*2); CX.fill();
+    CX.restore();
+
+    // ── 2. Underwater support pylons (3 piers, animated sway) ───────────
+    CX.fillStyle=isBoss?'#2a1210':'#202830';
+    const pyPos=[cx-Math.round(rw*0.32), cx, cx+Math.round(rw*0.32)];
+    for(let pi=0;pi<3;pi++){
+      const sway=Math.sin(animT*1.4+pi*1.1)*2.5;
+      const px=pyPos[pi]+sway;
+      // tapered pier: wider at water, narrow at deck
+      CX.beginPath();
+      CX.moveTo(px-5, sy+rh/2+28);
+      CX.lineTo(px+5, sy+rh/2+28);
+      CX.lineTo(px+3, deckY+rh);
+      CX.lineTo(px-3, deckY+rh);
+      CX.closePath(); CX.fill();
+      // pier cap
+      CX.fillStyle=isBoss?'#4a1a14':'#384858';
+      CX.fillRect(px-5, deckY+rh-3, 10, 6);
+      CX.fillStyle=isBoss?'#2a1210':'#202830';
     }
+
+    // ── 3. Under-deck cross-bracing (X pattern between piers) ───────────
+    CX.strokeStyle=isBoss?'#6a2820':'#4a5e72';
+    CX.lineWidth=1.2; CX.globalAlpha=0.7;
+    for(let pi=0;pi<2;pi++){
+      const x0=pyPos[pi], x1=pyPos[pi+1];
+      const y0=deckY+rh, y1=sy+rh/2+20;
+      CX.beginPath(); CX.moveTo(x0,y0); CX.lineTo(x1,y1); CX.stroke();
+      CX.beginPath(); CX.moveTo(x1,y0); CX.lineTo(x0,y1); CX.stroke();
+    }
+    CX.globalAlpha=1;
+
+    // ── 4. Main deck ─────────────────────────────────────────────────────
+    if(isBoss){
+      CX.save();
+      CX.shadowColor='#ff3300'; CX.shadowBlur=18;
+      CX.fillStyle='#5a1a0a'; CX.fillRect(rx,deckY,rw,rh);
+      CX.restore();
+    } else {
+      CX.fillStyle='#3d5060'; CX.fillRect(rx,deckY,rw,rh);
+    }
+
+    // ── 5. Deck surface texture (riveted steel plates) ───────────────────
+    CX.strokeStyle=isBoss?'rgba(180,80,40,0.22)':'rgba(100,140,170,0.18)';
+    CX.lineWidth=1;
+    for(let x=rx+16;x<rx+rw-8;x+=16){
+      CX.beginPath(); CX.moveTo(x,deckY+2); CX.lineTo(x,deckY+rh-2); CX.stroke();
+    }
+    // horizontal weld seam
+    CX.strokeStyle=isBoss?'rgba(255,120,60,0.18)':'rgba(150,200,230,0.14)';
+    CX.beginPath(); CX.moveTo(rx,deckY+rh*0.5); CX.lineTo(rx+rw,deckY+rh*0.5); CX.stroke();
+
+    // ── 6. Above-deck truss (A-frame triangles) ──────────────────────────
+    const trussStep=Math.round(rw/Math.max(4,Math.round(rw/32)));
+    const trussH=isBoss?22:18;
+    CX.strokeStyle=isBoss?'#8a3030':'#5a7a90';
+    CX.lineWidth=isBoss?2:1.5;
+    // top chord (horizontal rail)
+    CX.beginPath(); CX.moveTo(rx,deckY-trussH); CX.lineTo(rx+rw,deckY-trussH); CX.stroke();
+    // vertical posts + diagonals
+    CX.lineWidth=1.2;
+    for(let x=rx;x<=rx+rw;x+=trussStep){
+      // vertical post
+      CX.beginPath(); CX.moveTo(x,deckY); CX.lineTo(x,deckY-trussH); CX.stroke();
+    }
+    // diagonal bracing (alternating Z-pattern)
+    CX.lineWidth=1;
+    CX.strokeStyle=isBoss?'#6a2020':'#4a6a80';
+    for(let i=0;i<Math.floor(rw/trussStep);i++){
+      const x0=rx+i*trussStep, x1=x0+trussStep;
+      if(i%2===0){
+        CX.beginPath(); CX.moveTo(x0,deckY); CX.lineTo(x1,deckY-trussH); CX.stroke();
+      } else {
+        CX.beginPath(); CX.moveTo(x0,deckY-trussH); CX.lineTo(x1,deckY); CX.stroke();
+      }
+    }
+
+    // ── 7. Railing posts + handrail ──────────────────────────────────────
+    const railColor=isBoss?'#b06040':'#7a9aaa';
+    CX.strokeStyle=railColor; CX.lineWidth=1;
+    for(let x=rx+6;x<=rx+rw-6;x+=18){
+      CX.beginPath(); CX.moveTo(x,deckY); CX.lineTo(x,deckY-trussH-4); CX.stroke();
+    }
+    CX.lineWidth=1.8;
+    CX.beginPath(); CX.moveTo(rx,deckY-trussH-4); CX.lineTo(rx+rw,deckY-trussH-4); CX.stroke();
+
+    // ── 8. Water shimmer at bridge ends ──────────────────────────────────
+    CX.strokeStyle=isBoss?'rgba(255,100,60,0.22)':'rgba(80,180,255,0.22)';
+    CX.lineWidth=1.5;
+    for(let xi=0;xi<3;xi++){
+      const shimY=sy+rh/2+8+xi*5;
+      // left end shimmer
+      CX.beginPath(); CX.moveTo(rx-4,shimY);
+      for(let xx=rx-4;xx<rx+14;xx+=4) CX.lineTo(xx, shimY+Math.sin(animT*2.8+xx*0.18)*3);
+      CX.stroke();
+      // right end shimmer
+      CX.beginPath(); CX.moveTo(rx+rw-14,shimY);
+      for(let xx=rx+rw-14;xx<rx+rw+4;xx+=4) CX.lineTo(xx, shimY+Math.sin(animT*2.8+xx*0.18+3)*3);
+      CX.stroke();
+    }
+
+    // ── 9. Boss-specific: fortified bunker towers at each end ────────────
+    if(isBoss){
+      const tW=18, tH=28;
+      const towers=[[rx-tW+4, deckY-tH],[rx+rw-4, deckY-tH]];
+      for(const [tx,ty] of towers){
+        // tower body
+        CX.fillStyle='#380a00'; CX.fillRect(tx,ty,tW,tH+rh);
+        // merlons (battlements) on top
+        CX.fillStyle='#4a1000';
+        for(let mi=0;mi<3;mi++) CX.fillRect(tx+mi*7,ty-6,5,8);
+        // arrow-slit windows
+        CX.fillStyle='rgba(255,80,0,0.35)';
+        CX.fillRect(tx+6,ty+8,4,10);
+        CX.fillRect(tx+6,ty+22,4,8);
+        // pulsing beacon at top
+        const blink=Math.sin(animT*6)>0;
+        CX.save();
+        if(blink){ CX.shadowColor='#ff2200'; CX.shadowBlur=12; }
+        CX.fillStyle=blink?'#ff2200':'#880000';
+        CX.beginPath(); CX.arc(tx+tW/2,ty-8,3,0,Math.PI*2); CX.fill();
+        CX.restore();
+        // border
+        CX.strokeStyle='#ff5030'; CX.lineWidth=1.2; CX.strokeRect(tx,ty,tW,tH+rh);
+      }
+      // barbed wire above railing
+      CX.strokeStyle='rgba(255,130,60,0.65)'; CX.lineWidth=1;
+      CX.beginPath();
+      for(let x=rx;x<rx+rw;x+=3){
+        const spike=Math.sin(animT*14+x*0.5)*2.8;
+        CX.lineTo(x, deckY-trussH-6+spike);
+      }
+      CX.stroke();
+    }
+
+    // ── 10. Deck edge outline ─────────────────────────────────────────────
+    CX.strokeStyle=isBoss?'#ff6040':'#6090b0';
+    CX.lineWidth=isBoss?2:1.5;
+    CX.strokeRect(rx,deckY,rw,rh);
+    // top highlight
+    CX.strokeStyle=isBoss?'rgba(255,180,120,0.28)':'rgba(180,220,255,0.18)';
+    CX.lineWidth=1;
+    CX.beginPath(); CX.moveTo(rx,deckY+1); CX.lineTo(rx+rw,deckY+1); CX.stroke();
+
+    // ── 11. Damage flash (hp < 50%) ───────────────────────────────────────
+    if(hp01<0.5){
+      const flicker=0.08+0.07*Math.abs(Math.sin(animT*9));
+      CX.fillStyle=`rgba(255,60,0,${flicker.toFixed(3)})`;
+      CX.fillRect(rx,deckY,rw,rh);
+    }
+
+    // ── 12. Health bar — segmented (5 cells) ─────────────────────────────
+    const hbY=deckY-trussH-18, hbH=5, segCount=5, segGap=2;
+    const segW=(rw-(segCount-1)*segGap)/segCount;
+    const filledSegs=Math.ceil(hp01*segCount);
+    CX.fillStyle='rgba(0,0,0,0.75)'; CX.fillRect(rx,hbY,rw,hbH);
+    for(let s=0;s<segCount;s++){
+      const sx2=rx+s*(segW+segGap);
+      if(s<filledSegs){
+        CX.fillStyle=isBoss
+          ?(hp01>0.5?'#ff7050':`rgba(255,${Math.round(112*hp01*2)},80,1)`)
+          :(hp01>0.5?'#ffd84d':`rgba(255,${Math.round(216*hp01*2)},77,1)`);
+        CX.fillRect(sx2,hbY,segW,hbH);
+      }
+    }
+    CX.strokeStyle='rgba(255,255,255,0.12)'; CX.lineWidth=1;
+    for(let s=0;s<segCount;s++) CX.strokeRect(rx+s*(segW+segGap),hbY,segW,hbH);
   }
+  CX.restore();
 }
 
 // ── Cinematic Billboard Renderer ──────────────────────────────────────────
