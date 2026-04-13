@@ -7375,36 +7375,32 @@ function startAmbient(){
 }
 
 function stopAmbient(){
-  if(_activeGameId !== 'zero') return;
+  // Guard on _ambientRunning (not _activeGameId) — must stop even when switching games
+  if(!_ambientRunning) return;
+  _ambientRunning=false; // mark stopped immediately so startAmbient() can restart cleanly
   try{
-    const ac=AC();
-    const now=ac.currentTime;
-    // Clear intervals
-    if(_pingInterval) {clearInterval(_pingInterval); _pingInterval=null;}
-    if(_blipInterval) {clearInterval(_blipInterval); _blipInterval=null;}
-    // Fade out all sources over 1.5s
-    if(_ambientGain){
-      _ambientGain.gain.linearRampToValueAtTime(0.001,now+1.5);
-      setTimeout(()=>{
-        try{
-          if(_serverHumOsc){_serverHumOsc.stop();_serverHumOsc=null;}
-          if(_harmOvertoneOsc){_harmOvertoneOsc.stop();_harmOvertoneOsc=null;}
-          if(_serverHumLfo){_serverHumLfo.stop();_serverHumLfo=null;}
-          if(_coolingFanNoise){_coolingFanNoise.stop();_coolingFanNoise=null;}
-          if(_dataStreamNoise){_dataStreamNoise.stop();_dataStreamNoise=null;}
-          if(_packetGateLfo){_packetGateLfo.stop();_packetGateLfo=null;}
-          if(_dataStream2Noise){_dataStream2Noise.stop();_dataStream2Noise=null;}
-          if(_packetGate2Lfo){_packetGate2Lfo.stop();_packetGate2Lfo=null;}
-          if(_tensOscA){_tensOscA.stop();_tensOscA=null;}
-          if(_tensOscB){_tensOscB.stop();_tensOscB=null;}
-          if(_tensFilterLfo){_tensFilterLfo.stop();_tensFilterLfo=null;}
-          _ambientGain=null;
-          _tensionGain=null;
-          _ambientRunning=false;
-          _ambBossActive=false;
-        }catch(_){}
-      },1600);
-    }
+    // Clear intervals immediately — no more pings or blips
+    if(_pingInterval){clearInterval(_pingInterval);_pingInterval=null;}
+    if(_blipInterval){clearInterval(_blipInterval);_blipInterval=null;}
+    // Disconnect ambient from master chain instantly — stops all bleed to dashboard/other games
+    try{if(_ambientGain) _ambientGain.disconnect();}catch(_){}
+    try{if(_tensionGain) _tensionGain.disconnect();}catch(_){}
+    // Null out gain nodes immediately so startAmbient() guard works on next session
+    _ambientGain=null; _tensionGain=null; _ambBossActive=false; _ambLastFuelStage=-1; _ambLastBoss=false;
+    // Stop oscillators with tiny delay (browser needs a tick to release audio graph)
+    setTimeout(()=>{
+      try{if(_serverHumOsc){_serverHumOsc.stop();_serverHumOsc=null;}}catch(_){}
+      try{if(_harmOvertoneOsc){_harmOvertoneOsc.stop();_harmOvertoneOsc=null;}}catch(_){}
+      try{if(_serverHumLfo){_serverHumLfo.stop();_serverHumLfo=null;}}catch(_){}
+      try{if(_coolingFanNoise){_coolingFanNoise.stop();_coolingFanNoise=null;}}catch(_){}
+      try{if(_dataStreamNoise){_dataStreamNoise.stop();_dataStreamNoise=null;}}catch(_){}
+      try{if(_packetGateLfo){_packetGateLfo.stop();_packetGateLfo=null;}}catch(_){}
+      try{if(_dataStream2Noise){_dataStream2Noise.stop();_dataStream2Noise=null;}}catch(_){}
+      try{if(_packetGate2Lfo){_packetGate2Lfo.stop();_packetGate2Lfo=null;}}catch(_){}
+      try{if(_tensOscA){_tensOscA.stop();_tensOscA=null;}}catch(_){}
+      try{if(_tensOscB){_tensOscB.stop();_tensOscB=null;}}catch(_){}
+      try{if(_tensFilterLfo){_tensFilterLfo.stop();_tensFilterLfo=null;}}catch(_){}
+    },80);
   }catch(_){}
 }
 
@@ -7438,8 +7434,12 @@ function shutdownIncidentZeroRuntime(){
     STATE=S.TITLE;
     window._sgnlActive=false; window._sgnlTimer=0;
   }catch(_){}
-  // Keep the unlocked AudioContext alive so attract-mode handoffs retain sound
-  // across scene transitions. stopBossMusic() above handles the only continuous loop.
+  // Restore master gain and mute flag so next session starts with full audio
+  MUTED=false;
+  if(_masterGain&&AC_CTX){
+    _masterGain.gain.cancelScheduledValues(AC_CTX.currentTime);
+    _masterGain.gain.value=0.82;
+  }
 }
 registerArcadeRuntimeResetter('incident_zero', shutdownIncidentZeroRuntime);
 
