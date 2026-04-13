@@ -9059,7 +9059,7 @@ function killE(e){
   burst(e.x,w2s(e.wy),22,['#e0003c','#ff7a00','#fff','#42d9ff'],125,0.72);
   ring(e.x,w2s(e.wy),'#ff7a00',95,0.48);
   // Ground-impact dust for enemies near ground
-  if(e.type.includes('Turret')||e.type.includes('ground')||e.wy>LH*0.75){
+  if(e.type.includes('Turret')||e.type.includes('ground')||w2s(e.wy)>VH*0.75){
     for(let i=0;i<6;i++){
       const a=rnd(0,TAU),s=rnd(40,60);
       PARTS.push({x:e.x,y:w2s(e.wy),vx:Math.cos(a)*s,vy:rnd(-10,10),
