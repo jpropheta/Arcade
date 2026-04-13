@@ -7089,6 +7089,14 @@ function clrJP(){ for(const k in JP) delete JP[k]; }
 // ══════════════════════════════════════════════════════════════════════
 let AC_CTX=null, MUTED=false;
 let _masterGain=null, _compressor=null, _reverb=null, _dryGain=null, _wetGain=null;
+// Ambient soundscape system
+let _ambientGain=null, _tensionGain=null, _ambientRunning=false;
+let _pingInterval=null, _blipInterval=null, _ambBossActive=false;
+let _serverHumOsc=null, _harmOvertoneOsc=null, _coolingFanNoise=null, _serverHumLfo=null;
+let _dataStreamNoise=null, _dataStreamFilt=null, _packetGateLfo=null;
+let _dataStream2Noise=null, _dataStream2Filt=null, _packetGate2Lfo=null;
+let _tensOscA=null, _tensOscB=null, _tensFilt=null, _tensFilterLfo=null;
+let _ambLastBoss=false, _ambLastFuelStage=-1;
 
 function AC(){
   if(AC_CTX){
@@ -7188,15 +7196,238 @@ function startBossMusic(){
     _bossOsc.connect(_bossGain);
     _bossOsc.start(); _bossLFO.start();
     _bossGain.gain.linearRampToValueAtTime(0.055,ac.currentTime+1.2);
+    // SOUND DESIGN: Duck ambient when boss appears
+    _ambBossActive=true;
+    if(_ambientGain) _ambientGain.gain.linearRampToValueAtTime(0.22,ac.currentTime+3.5);
+    if(_tensionGain) _tensionGain.gain.linearRampToValueAtTime(0.035,ac.currentTime+2.5);
+    if(_pingInterval) clearInterval(_pingInterval);
+    _pingInterval=setInterval(()=>{
+      if(!_ambientRunning||_activeGameId!=='zero') return;
+      const pingAc=AC();
+      const pingSweep=pingAc.createOscillator();
+      const pingGain=pingAc.createGain();
+      pingSweep.type='sine'; pingSweep.frequency.setValueAtTime(220,pingAc.currentTime);
+      pingSweep.frequency.exponentialRampToValueAtTime(440,pingAc.currentTime+1.1);
+      pingGain.gain.setValueAtTime(0.004,pingAc.currentTime);
+      pingGain.gain.exponentialRampToValueAtTime(0.0001,pingAc.currentTime+1.4);
+      pingSweep.connect(pingGain); pingGain.connect(_wetGain);
+      pingSweep.start(); pingSweep.stop(pingAc.currentTime+1.4);
+    },1800); // Double rate during boss
   }catch(_){}
 }
 function stopBossMusic(){
   if (_activeGameId !== 'zero') return;
   try{ if(_bossOsc){_bossOsc.stop();_bossOsc=null;}
        if(_bossLFO){_bossLFO.stop();_bossLFO=null;} }catch(_){}
+  // SOUND DESIGN: Restore ambient when boss dies
+  _ambBossActive=false;
+  try{
+    const ac=AC();
+    if(_ambientGain) _ambientGain.gain.linearRampToValueAtTime(1.0,ac.currentTime+3.0);
+    if(_tensionGain) _tensionGain.gain.linearRampToValueAtTime(0,ac.currentTime+1.8);
+    if(_pingInterval) {clearInterval(_pingInterval); _pingInterval=null;}
+    // Restore normal ping rate if ambient still running
+    if(_ambientRunning) _restartPingInterval();
+  }catch(_){}
 }
+
+// ── AMBIENT SOUNDSCAPE SYSTEM ─────────────────────────────────────────
+// Helper: create a white noise buffer for reuse
+function _makeNoiseBuffer(ac,durationSec=2){
+  const buf=ac.createBuffer(1,Math.floor(ac.sampleRate*durationSec),ac.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  return buf;
+}
+
+// Helper: start ping sweeps on interval
+function _restartPingInterval(){
+  if(_pingInterval) clearInterval(_pingInterval);
+  _pingInterval=setInterval(()=>{
+    if(!_ambientRunning||_activeGameId!=='zero') return;
+    const pingAc=AC();
+    const pingSweep=pingAc.createOscillator();
+    const pingGain=pingAc.createGain();
+    pingSweep.type='sine'; pingSweep.frequency.setValueAtTime(220,pingAc.currentTime);
+    pingSweep.frequency.exponentialRampToValueAtTime(440,pingAc.currentTime+1.1);
+    pingGain.gain.setValueAtTime(0.004,pingAc.currentTime);
+    pingGain.gain.exponentialRampToValueAtTime(0.0001,pingAc.currentTime+1.4);
+    pingSweep.connect(pingGain); pingGain.connect(_wetGain);
+    pingSweep.start(); pingSweep.stop(pingAc.currentTime+1.4);
+  },4200+Math.random()*400);
+}
+
+// Helper: start cipher blips on interval
+function _restartBlipInterval(){
+  if(_blipInterval) clearInterval(_blipInterval);
+  _blipInterval=setInterval(()=>{
+    if(!_ambientRunning||_activeGameId!=='zero') return;
+    const blipAc=AC();
+    const freqs=[440,523,659,784,880,1047];
+    const freq=freqs[Math.floor(Math.random()*freqs.length)];
+    const blipOsc=blipAc.createOscillator();
+    const blipGain=blipAc.createGain();
+    blipOsc.type='square'; blipOsc.frequency.value=freq;
+    blipGain.gain.setValueAtTime(0.007,blipAc.currentTime);
+    blipGain.gain.exponentialRampToValueAtTime(0.0001,blipAc.currentTime+0.09);
+    blipOsc.connect(blipGain); blipGain.connect(_dest());
+    blipOsc.start(); blipOsc.stop(blipAc.currentTime+0.09);
+  },2800+Math.random()*1400);
+}
+
+function startAmbient(){
+  if(_activeGameId !== 'zero') return;
+  if(_ambientGain) return; // already running
+  try{
+    const ac=AC();
+    // Master ambient gain
+    _ambientGain=ac.createGain(); _ambientGain.gain.value=1.0;
+    _ambientGain.connect(_dest());
+
+    // ─ LAYER 1: Server Room Foundation ─
+    // Primary hum: 58Hz sine
+    _serverHumOsc=ac.createOscillator(); _serverHumOsc.type='sine'; _serverHumOsc.frequency.value=58;
+    const serverGain=ac.createGain(); serverGain.gain.value=0.028;
+
+    // Harmonic overtone: 116Hz (2nd harmonic)
+    _harmOvertoneOsc=ac.createOscillator(); _harmOvertoneOsc.type='sine'; _harmOvertoneOsc.frequency.value=116;
+    const harmGain=ac.createGain(); harmGain.gain.value=0.012;
+
+    // Cooling fan flutter: white noise lowpass
+    const fanBuf=_makeNoiseBuffer(ac,3);
+    _coolingFanNoise=ac.createBufferSource(); _coolingFanNoise.buffer=fanBuf; _coolingFanNoise.loop=true;
+    const fanFilt=ac.createBiquadFilter(); fanFilt.type='lowpass'; fanFilt.frequency.value=180; fanFilt.Q.value=2.4;
+    const fanGain=ac.createGain(); fanGain.gain.value=0.014;
+
+    // Slow LFO on primary hum (0.05Hz breathing pulse)
+    _serverHumLfo=ac.createOscillator(); _serverHumLfo.type='sine'; _serverHumLfo.frequency.value=0.05;
+    const serverLfoGain=ac.createGain(); serverLfoGain.gain.value=0.006;
+
+    _serverHumLfo.connect(serverLfoGain); serverLfoGain.connect(serverGain.gain);
+    _serverHumOsc.connect(serverGain); serverGain.connect(_ambientGain);
+    _harmOvertoneOsc.connect(harmGain); harmGain.connect(_ambientGain);
+    _coolingFanNoise.connect(fanFilt); fanFilt.connect(fanGain); fanGain.connect(_ambientGain);
+
+    _serverHumOsc.start(); _harmOvertoneOsc.start(); _coolingFanNoise.start(); _serverHumLfo.start();
+
+    // ─ LAYER 2: Data Stream (digital packet flow) ─
+    const dataBuf1=_makeNoiseBuffer(ac,3);
+    _dataStreamNoise=ac.createBufferSource(); _dataStreamNoise.buffer=dataBuf1; _dataStreamNoise.loop=true;
+    _dataStreamFilt=ac.createBiquadFilter(); _dataStreamFilt.type='bandpass'; _dataStreamFilt.frequency.value=520; _dataStreamFilt.Q.value=1.1;
+    const dataGain1=ac.createGain(); dataGain1.gain.value=0.020;
+
+    // Packet gate LFO at 7.3Hz — amplitude must stay << dataGain1 to avoid phase inversion
+    _packetGateLfo=ac.createOscillator(); _packetGateLfo.type='sine'; _packetGateLfo.frequency.value=7.3;
+    const gateGain1=ac.createGain(); gateGain1.gain.value=0.007;
+
+    _packetGateLfo.connect(gateGain1); gateGain1.connect(dataGain1.gain);
+    _dataStreamNoise.connect(_dataStreamFilt); _dataStreamFilt.connect(dataGain1); dataGain1.connect(_ambientGain);
+    _dataStreamNoise.start(); _packetGateLfo.start();
+
+    // Second data stream layer at 2800Hz
+    const dataBuf2=_makeNoiseBuffer(ac,3);
+    _dataStream2Noise=ac.createBufferSource(); _dataStream2Noise.buffer=dataBuf2; _dataStream2Noise.loop=true;
+    _dataStream2Filt=ac.createBiquadFilter(); _dataStream2Filt.type='bandpass'; _dataStream2Filt.frequency.value=360; _dataStream2Filt.Q.value=0.9;
+    const dataGain2=ac.createGain(); dataGain2.gain.value=0.012;
+
+    // Second gate LFO at 11.7Hz (polyrhythmic) — keep amplitude small
+    _packetGate2Lfo=ac.createOscillator(); _packetGate2Lfo.type='sine'; _packetGate2Lfo.frequency.value=11.7;
+    const gateGain2=ac.createGain(); gateGain2.gain.value=0.005;
+
+    _packetGate2Lfo.connect(gateGain2); gateGain2.connect(dataGain2.gain);
+    _dataStream2Noise.connect(_dataStream2Filt); _dataStream2Filt.connect(dataGain2); dataGain2.connect(_ambientGain);
+    _dataStream2Noise.start(); _packetGate2Lfo.start();
+
+    // ─ LAYER 4: Breach Alert / Tension (Tritone Dissonance) ─
+    _tensionGain=ac.createGain(); _tensionGain.gain.value=0;
+    _tensionGain.connect(_dest());
+
+    // Tritone: 196Hz and 277Hz (devil's interval)
+    _tensOscA=ac.createOscillator(); _tensOscA.type='sawtooth'; _tensOscA.frequency.value=196;
+    _tensOscB=ac.createOscillator(); _tensOscB.type='sawtooth'; _tensOscB.frequency.value=277;
+    _tensFilt=ac.createBiquadFilter(); _tensFilt.type='lowpass'; _tensFilt.frequency.value=320; _tensFilt.Q.value=1.8;
+
+    // Pulsing LFO at 1.8Hz modulates tension gain
+    const tensPulseLfo=ac.createOscillator(); tensPulseLfo.type='sine'; tensPulseLfo.frequency.value=1.8;
+    const tensPulseGain=ac.createGain(); tensPulseGain.gain.value=0.035;
+
+    // Filter sweep LFO at 0.4Hz
+    _tensFilterLfo=ac.createOscillator(); _tensFilterLfo.type='sine'; _tensFilterLfo.frequency.value=0.4;
+    const tensFilterGain=ac.createGain(); tensFilterGain.gain.value=200;
+
+    tensPulseLfo.connect(tensPulseGain); tensPulseGain.connect(_tensionGain.gain);
+    _tensFilterLfo.connect(tensFilterGain); tensFilterGain.connect(_tensFilt.frequency);
+    _tensOscA.connect(_tensFilt); _tensOscB.connect(_tensFilt); _tensFilt.connect(_tensionGain);
+    _tensOscA.start(); _tensOscB.start(); tensPulseLfo.start(); _tensFilterLfo.start();
+
+    // Manually set filter frequency to sweep range
+    _tensFilt.frequency.setValueAtTime(200,ac.currentTime);
+
+    _ambLastBoss=false;
+    _ambLastFuelStage=-1;
+    _ambBossActive=false;
+    _ambientRunning=true;
+
+    // Start ping and blip intervals
+    _restartPingInterval();
+    _restartBlipInterval();
+  }catch(_){}
+}
+
+function stopAmbient(){
+  if(_activeGameId !== 'zero') return;
+  try{
+    const ac=AC();
+    const now=ac.currentTime;
+    // Clear intervals
+    if(_pingInterval) {clearInterval(_pingInterval); _pingInterval=null;}
+    if(_blipInterval) {clearInterval(_blipInterval); _blipInterval=null;}
+    // Fade out all sources over 1.5s
+    if(_ambientGain){
+      _ambientGain.gain.linearRampToValueAtTime(0.001,now+1.5);
+      setTimeout(()=>{
+        try{
+          if(_serverHumOsc){_serverHumOsc.stop();_serverHumOsc=null;}
+          if(_harmOvertoneOsc){_harmOvertoneOsc.stop();_harmOvertoneOsc=null;}
+          if(_serverHumLfo){_serverHumLfo.stop();_serverHumLfo=null;}
+          if(_coolingFanNoise){_coolingFanNoise.stop();_coolingFanNoise=null;}
+          if(_dataStreamNoise){_dataStreamNoise.stop();_dataStreamNoise=null;}
+          if(_packetGateLfo){_packetGateLfo.stop();_packetGateLfo=null;}
+          if(_dataStream2Noise){_dataStream2Noise.stop();_dataStream2Noise=null;}
+          if(_packetGate2Lfo){_packetGate2Lfo.stop();_packetGate2Lfo=null;}
+          if(_tensOscA){_tensOscA.stop();_tensOscA=null;}
+          if(_tensOscB){_tensOscB.stop();_tensOscB=null;}
+          if(_tensFilterLfo){_tensFilterLfo.stop();_tensFilterLfo=null;}
+          _ambientGain=null;
+          _tensionGain=null;
+          _ambientRunning=false;
+          _ambBossActive=false;
+        }catch(_){}
+      },1600);
+    }
+  }catch(_){}
+}
+
+function updateAmbientMix(){
+  if(!_ambientRunning||!AC_CTX||!_ambientGain||!_tensionGain) return;
+  const ac=AC_CTX;
+  const now=ac.currentTime;
+
+  // Check fuel — tension on if fuel low (boss ducking handled separately in startBossMusic/stopBossMusic)
+  const tensionOn=!_ambBossActive&&fuelStage>=2;
+
+  // Tension layer: fade in if fuel is critical (but NOT if boss is active — boss handles that)
+  if(tensionOn&&_ambLastFuelStage<2){
+    _tensionGain.gain.linearRampToValueAtTime(0.035,now+2.0);
+    _ambLastFuelStage=fuelStage;
+  }else if(!tensionOn&&_ambLastFuelStage>=2){
+    _tensionGain.gain.linearRampToValueAtTime(0,now+1.5);
+    _ambLastFuelStage=fuelStage;
+  }
+}
+
 function shutdownIncidentZeroRuntime(){
-  stopBossMusic();
+  stopBossMusic(); stopAmbient();
   bnTime=0; commsQ.length=0; actAnnT=0;
   try{
     CX.globalAlpha=1;
@@ -9037,7 +9268,7 @@ function damagePL(amt=1){
     PL.alive=false; STATE=S.GAME_OVER; goT=0;
     HISCORE=Math.max(HISCORE,SCORE);
     _saveStoredNumber('cs_hiscore_incident_zero_v1',HISCORE);
-    SFX.over(); stopBossMusic();
+    SFX.over(); stopBossMusic(); stopAmbient();
   }
 }
 
@@ -9694,7 +9925,7 @@ function defeatBoss(){
   if(!BOSS) return;
   const bx=BOSS.x,by=BOSS.y,bc=BOSS.color,bn=BOSS.name;
   for(let i=0;i<4;i++) setTimeout(()=>{ burst(bx+rnd(-55,55),by+rnd(-32,32),55,['#fff',bc,'#ff7a00','#ffd84d'],270,1.25); SFX.bigExplode(); },i*200);
-  stopBossMusic(); SFX.win();
+  stopBossMusic(); SFX.win(); // ambient continues through phase transitions — stopped only on game over/exit
   const pts=1900+phIdx*340; SCORE+=pts; phScore+=pts;
   const ad=ADV[bn];
   const dropK=ad?Object.keys(MODS).find(k=>MODS[k].apply===ad.weakness)||MKEYS[0]:MKEYS[0];
@@ -9818,9 +10049,17 @@ function checkStealthDensity(){
   }
 }
 function update(dt){
-  if(hk('KeyM')) MUTED=!MUTED;
+  if(hk('KeyM')){
+    MUTED=!MUTED;
+    if(_masterGain&&AC_CTX){
+      const _mv=MUTED?0:0.82;
+      _masterGain.gain.cancelScheduledValues(AC_CTX.currentTime);
+      _masterGain.gain.linearRampToValueAtTime(_mv,AC_CTX.currentTime+0.08);
+    }
+  }
   if(hk('KeyP')) PAUSED=!PAUSED;
   if(PAUSED) return;
+  updateAmbientMix();
   W.scroll+=W.speed*dt; phTime+=dt;
   pamShieldT=Math.max(0,pamShieldT-dt);
   // JIT shield expiry banner — "ACCESS REVOKED · CREDENTIALS CYCLED"
@@ -14885,8 +15124,8 @@ function frame(ts){
     case S.TITLE:
       // ARCH: TITLE is now absorbed into DEPLOY_CINEMATIC.
       // One-frame pass-through: init a fresh game and enter the unified cinematic.
-      if(hk('KeyM')) MUTED=!MUTED;
-      AC(); startGame(); // startGame sets window._deployT=0, STATE=DEPLOY_CINEMATIC
+      if(hk('KeyM')){MUTED=!MUTED;if(_masterGain&&AC_CTX){const _mv=MUTED?0:0.82;_masterGain.gain.cancelScheduledValues(AC_CTX.currentTime);_masterGain.gain.linearRampToValueAtTime(_mv,AC_CTX.currentTime+0.08);}}
+      AC(); startGame(); startAmbient(); // startGame sets window._deployT=0, STATE=DEPLOY_CINEMATIC; startAmbient begins river soundscape
       break;
 
     case S.PHASE_INTRO:
@@ -14911,7 +15150,7 @@ function frame(ts){
       break;
 
     case S.BOSS_INTRO:
-      if(hk('KeyM')) MUTED=!MUTED;
+      if(hk('KeyM')){MUTED=!MUTED;if(_masterGain&&AC_CTX){const _mv=MUTED?0:0.82;_masterGain.gain.cancelScheduledValues(AC_CTX.currentTime);_masterGain.gain.linearRampToValueAtTime(_mv,AC_CTX.currentTime+0.08);}}
       phTime+=dt; bossIntT+=dt;
       updShake(dt); updAmbient(dt); updParts(dt); updRings(dt); updBanner(dt); updComms(dt); updActAnn(dt);
       if(hk('Space')||bossIntT>7.2) spawnBoss(BQUEUE.shift());
@@ -14936,7 +15175,7 @@ function frame(ts){
           STATE=S.WIN; winT=0;
           HISCORE=Math.max(HISCORE,SCORE);
           _saveStoredNumber('cs_hiscore_incident_zero_v1',HISCORE);
-          SFX.win();
+          SFX.win(); stopAmbient();
           SFX.debrief();
         }
       }
