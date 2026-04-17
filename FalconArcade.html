@@ -10,8 +10,69 @@
 <style>
 
 @property --glow-size { syntax:'<length>'; inherits:false; initial-value:0px; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   FINAL POLISH TOKEN SYSTEM — 2026-04-17
+   Motion curves follow exponential decel (Emil Kowalski + Impeccable).
+   Palette in OKLCH with chroma-controlled neutrals tinted toward brand hue (23°).
+   Typography: cross-platform (macOS + Windows), ZERO external dependencies.
+   ─────────────────────────────────────────────────────────────────────────── */
+:root {
+  /* Motion — exponential curves, no ease-in on entry, no bounce */
+  --ease-out-quart:    cubic-bezier(0.25, 1, 0.5, 1);       /* default entry */
+  --ease-out-quint:    cubic-bezier(0.22, 1, 0.36, 1);      /* dramatic entry */
+  --ease-out-expo:     cubic-bezier(0.16, 1, 0.3, 1);       /* snappy entry */
+  --ease-in-expo:      cubic-bezier(0.7, 0, 0.84, 0);       /* exits */
+  --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);      /* two-way state */
+  --dur-feedback:      140ms;  /* button presses, toggles */
+  --dur-ui:            220ms;  /* hover, dropdown, tooltip */
+  --dur-scene:         480ms;  /* panels, modals, cinematics */
+  --dur-hero:          720ms;  /* staged reveals */
+
+  /* Palette — OKLCH, neutrals tinted 0.012 chroma toward red-heat hue (23°) */
+  --cs-red-heat:       oklch(62% 0.23 24);    /* primary alert red (was #e0003c) */
+  --cs-red-flash:      oklch(72% 0.24 26);    /* hot highlight, bright moments */
+  --cs-red-ember:      oklch(48% 0.19 22);    /* deep border red */
+  --cs-red-blood:      oklch(28% 0.13 20);    /* near-black tinted red */
+  --cs-amber:          oklch(84% 0.16 86);    /* gold / grade-A (was #ffd84d) */
+  --cs-amber-deep:     oklch(70% 0.18 70);    /* darker gold for backgrounds */
+  --cs-cyan:           oklch(78% 0.13 210);   /* cool tech counterpoint */
+  --cs-green-ok:       oklch(74% 0.18 155);   /* success */
+  --cs-violet-hunt:    oklch(62% 0.22 310);   /* threat-hunt signature */
+
+  /* Ink scale — all tinted 0.012 chroma toward 23° (brand red hue) */
+  --ink-0:             oklch(8%  0.008 23);   /* deepest bg (was #020308) */
+  --ink-1:             oklch(12% 0.010 23);   /* panel bg (was #04080c) */
+  --ink-2:             oklch(18% 0.012 23);   /* raised bg */
+  --ink-3:             oklch(28% 0.012 23);   /* border subtle */
+  --ink-4:             oklch(42% 0.012 23);   /* border strong */
+  --ink-5:             oklch(54% 0.012 23);   /* text muted (was #7f8b96) */
+  --ink-6:             oklch(66% 0.010 23);   /* text secondary */
+  --ink-7:             oklch(80% 0.008 23);   /* text primary */
+  --ink-8:             oklch(90% 0.006 23);   /* text emphasis */
+  --ink-9:             oklch(97% 0.004 23);   /* near-white tinted (was #f4f7fa) */
+
+  /* Shadow / glow tokens — color-mix lets intensity scale without re-declaring hue */
+  --glow-red:    0 0 24px color-mix(in oklch, var(--cs-red-heat) 55%, transparent);
+  --glow-amber:  0 0 24px color-mix(in oklch, var(--cs-amber)    55%, transparent);
+  --glow-violet: 0 0 24px color-mix(in oklch, var(--cs-violet-hunt) 55%, transparent);
+
+  /* Typography — no external fonts. macOS + Windows system faces only.
+     Display: SF Pro Display (mac) / Segoe UI Variable Display (win 11) / Segoe UI (win 10)
+     Body:    SF Pro Text     (mac) / Segoe UI Variable Text          (win 11) / Segoe UI
+     Mono:    SF Mono, Menlo  (mac) / Cascadia Mono, Consolas         (win)    */
+  --font-display: 'SF Pro Display','Segoe UI Variable Display','Segoe UI',system-ui,-apple-system,sans-serif;
+  --font-body:    'SF Pro Text','Segoe UI Variable Text','Segoe UI',system-ui,-apple-system,sans-serif;
+  --font-mono:    'SF Mono','Menlo','Cascadia Mono','Cascadia Code','Consolas',ui-monospace,SFMono-Regular,monospace;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-feedback: 1ms; --dur-ui: 1ms; --dur-scene: 1ms; --dur-hero: 1ms;
+  }
+}
+
 *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
-html, body { width:100%; height:100%; background:#020308; overflow:hidden; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color:#f4f7fa; }
+html, body { width:100%; height:100%; background:#020308; overflow:hidden; font-family:var(--font-mono); color:#f4f7fa; font-feature-settings:"ss01","ss02","tnum"; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
 #matrix { position:fixed; inset:0; opacity:0.13; pointer-events:none; z-index:0; }
 .scanlines { position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.15) 2px,rgba(0,0,0,0.15) 4px); pointer-events:none; z-index:1; }
 .grid { position:fixed; inset:0; background-image:linear-gradient(rgba(224,0,60,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(224,0,60,0.03) 1px,transparent 1px); background-size:48px 48px; pointer-events:none; z-index:1; }
@@ -1330,6 +1391,13 @@ const TRANSLATIONS = {
     iz_pause_line2:'Stitched-together tools lose. Unified Falcon platform wins.',
     iz_pause_seed:'Completed run seed: ',
     iz_pause_seed_suffix:' — new seed each game keeps every run fresh',
+    iz_turning_point:'TURNING POINTS',
+    iz_tp_streak:'LONGEST STREAK',
+    iz_tp_integrity:'INTEGRITY HITS',
+    iz_tp_final:'FINAL CORRIDOR',
+    iz_module_validated:'MODULE VALIDATED',
+    iz_module_validated_sub:'Falcon platform · cross-domain correlation held',
+    g_operation_delivered:'OPERATION DELIVERED — {actor} · PHASE {n}',
     iz_deploy_init:'FALCON DEPLOYMENT INITIATING',
     iz_deploy_asset:'ASSET ASSIGNED · FALCON VESSEL ARMED',
     iz_deploy_weapons:'WEAPONS FREE · ENGAGE ADVERSARY',
@@ -1897,6 +1965,13 @@ const TRANSLATIONS = {
     iz_pause_line2:'Ferramentas costuradas perdem. A plataforma Falcon unificada vence.',
     iz_pause_seed:'Seed da rodada concluída: ',
     iz_pause_seed_suffix:' — cada nova partida usa uma seed diferente para manter as execuções únicas',
+    iz_turning_point:'PONTOS DE VIRADA',
+    iz_tp_streak:'MAIOR SEQUÊNCIA',
+    iz_tp_integrity:'IMPACTOS DE INTEGRIDADE',
+    iz_tp_final:'CORREDOR FINAL',
+    iz_module_validated:'MÓDULO VALIDADO',
+    iz_module_validated_sub:'Plataforma Falcon · correlação multi-domínio sustentou',
+    g_operation_delivered:'OPERAÇÃO ENTREGUE — {actor} · FASE {n}',
     iz_deploy_init:'IMPLANTAÇÃO FALCON INICIANDO',
     iz_deploy_asset:'ATIVO DESIGNADO · FALCON VESSEL ARMADO',
     iz_deploy_weapons:'ARMAS LIVRES · ENGAJAR ADVERSÁRIO',
@@ -2462,6 +2537,13 @@ const TRANSLATIONS = {
     iz_pause_line2:'Las herramientas unidas a la fuerza pierden. La plataforma Falcon unificada gana.',
     iz_pause_seed:'Semilla de ejecución completada: ',
     iz_pause_seed_suffix:' — cada nueva partida usa una semilla distinta para mantener cada ejecución fresca',
+    iz_turning_point:'PUNTOS DE INFLEXIÓN',
+    iz_tp_streak:'RACHA MÁS LARGA',
+    iz_tp_integrity:'IMPACTOS DE INTEGRIDAD',
+    iz_tp_final:'CORREDOR FINAL',
+    iz_module_validated:'MÓDULO VALIDADO',
+    iz_module_validated_sub:'Plataforma Falcon · correlación multidominio sostenida',
+    g_operation_delivered:'OPERACIÓN ENTREGADA — {actor} · FASE {n}',
     iz_deploy_init:'DESPLIEGUE FALCON INICIANDO',
     iz_deploy_asset:'ACTIVO ASIGNADO · FALCON VESSEL ARMADO',
     iz_deploy_weapons:'ARMAS LIBRES · COMPROMETER ADVERSARIO',
@@ -3027,6 +3109,13 @@ const TRANSLATIONS = {
     iz_pause_line2:'寄せ集めのツールでは負けます。統合されたFalconプラットフォームが勝ちます。',
     iz_pause_seed:'完了ランのシード: ',
     iz_pause_seed_suffix:' — 新しいゲームごとに新しいシードが使われ、毎回違うランになります',
+    iz_turning_point:'ターニングポイント',
+    iz_tp_streak:'最長ストリーク',
+    iz_tp_integrity:'整合性ヒット',
+    iz_tp_final:'最終コリドー',
+    iz_module_validated:'モジュール検証済み',
+    iz_module_validated_sub:'Falcon プラットフォーム · クロスドメイン相関が保持',
+    g_operation_delivered:'作戦完了 — {actor} · フェーズ {n}',
     iz_deploy_init:'FALCONデプロイメント開始中',
     iz_deploy_asset:'アセット指定済 · FALCONベッセル武装',
     iz_deploy_weapons:'武器解放 · 敵対者と交戦せよ',
@@ -6384,10 +6473,16 @@ const FalconRanking = (function () {
       .fr-btn {
         flex: 1; padding: 13px 0;
         border: none; border-radius: 2px;
-        font: bold 11px monospace; letter-spacing: 1px;
-        cursor: pointer; transition: all 0.18s;
+        font: bold 11px var(--font-mono); letter-spacing: 1px;
+        cursor: pointer;
+        transition: background var(--dur-ui) var(--ease-out-quart),
+                    color      var(--dur-ui) var(--ease-out-quart),
+                    box-shadow var(--dur-ui) var(--ease-out-quart),
+                    transform  var(--dur-feedback) var(--ease-out-quart);
         text-transform: uppercase;
+        will-change: transform;
       }
+      .fr-btn:active { transform: scale(0.97); }
       .fr-btn-primary {
         background: #e0003c; color: #fff;
         box-shadow: 0 0 0 0 rgba(224,0,60,0);
@@ -6436,32 +6531,59 @@ const FalconRanking = (function () {
       .fr-attract-header {
         text-align: center; padding: 22px 0 14px; flex-shrink: 0;
         position: relative;
+        animation: fr-header-in 0.72s cubic-bezier(0.22,1,0.36,1) 0.08s both;
+      }
+      @keyframes fr-header-in {
+        from { opacity: 0; transform: translateY(-6px); }
+        to   { opacity: 1; transform: translateY(0);   }
       }
       .fr-attract-header .fr-cs-logo {
         font-size: 11px; letter-spacing: 4px; color: #e0003c;
         text-transform: uppercase; margin-bottom: 6px;
-        animation: fr-pulse-opacity 2s ease-in-out infinite;
+        animation: fr-breathe-logo 3.6s cubic-bezier(0.45,0,0.55,1) infinite;
       }
       @keyframes fr-pulse-opacity {
         0%,100% { opacity:1; }
         50%      { opacity:0.5; }
       }
+      /* Breathe: replaces the old 2s opacity dip with a softer, slower sine. */
+      @keyframes fr-breathe-logo {
+        0%,100% { opacity: 1; }
+        50%      { opacity: 0.55; }
+      }
       .fr-attract-header h1 {
         font-size: clamp(20px,3vw,28px); color: #fff;
         margin: 0; letter-spacing: -0.5px;
         text-shadow: 0 0 30px rgba(224,0,60,0.6);
+        /* Scanline-clip reveal: title wipes in top→bottom over 0.7s */
+        animation: fr-h1-wipe 0.7s cubic-bezier(0.22,1,0.36,1) 0.28s both;
+      }
+      @keyframes fr-h1-wipe {
+        from { clip-path: inset(0 0 100% 0); opacity: 0; }
+        to   { clip-path: inset(0 0 0 0);    opacity: 1; }
       }
       .fr-attract-header .fr-event-name {
         font-size: 10px; color: #7f8b96; margin-top: 4px;
+        animation: fr-event-in 0.6s cubic-bezier(0.22,1,0.36,1) 0.58s both;
+      }
+      @keyframes fr-event-in {
+        from { opacity: 0; letter-spacing: 0.02em; }
+        to   { opacity: 1; letter-spacing: normal; }
       }
 
-      /* Divider */
+      /* Divider — background drifts 22s so motion is felt more than seen */
       .fr-divider {
         height: 1px; margin: 0 20px;
         background: linear-gradient(90deg,
           transparent, rgba(224,0,60,0.6), rgba(255,216,77,0.4),
           rgba(224,0,60,0.6), transparent);
+        background-size: 200% 100%;
+        animation: fr-divider-drift 22s linear infinite;
         flex-shrink: 0;
+      }
+      @keyframes fr-divider-drift {
+        from { background-position: 0% 0; }
+        to   { background-position: 200% 0; }
       }
 
       /* Scrolling leaderboard viewport */
@@ -6518,9 +6640,42 @@ const FalconRanking = (function () {
         0%,100% { --fr-glow-size: 8px;  }
         50%      { --fr-glow-size: 22px; }
       }
+      /* Rank-1 treatment: gilded horizontal wash + oversized rank number.
+         NO side-stripe (banned pattern). Weight comes from background + type scale. */
       .fr-entry[data-rank="1"] {
-        background: rgba(255,216,77,0.05);
-        border-left: 3px solid #ffd84d;
+        background: linear-gradient(90deg,
+          color-mix(in oklch, var(--cs-amber) 20%, transparent) 0%,
+          color-mix(in oklch, var(--cs-amber) 10%, transparent) 28%,
+          color-mix(in oklch, var(--cs-amber)  3%, transparent) 60%,
+          transparent 92%);
+      }
+      .fr-entry[data-rank="1"] .fr-rank {
+        font-size: 22px;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+      }
+      .fr-entry[data-rank="1"] .fr-player-name {
+        color: var(--ink-9);
+        letter-spacing: 0.01em;
+      }
+      /* Rank-1 shine sweep — a subtle highlight band drifts across once per
+         6.4s cycle. Generous delay ramps it in only after the entry is seated. */
+      .fr-entry[data-rank="1"]::after {
+        content: '';
+        position: absolute; inset: 0;
+        background: linear-gradient(100deg,
+          transparent 0%,
+          transparent 38%,
+          color-mix(in oklch, var(--cs-amber) 24%, transparent) 50%,
+          transparent 62%,
+          transparent 100%);
+        pointer-events: none;
+        transform: translateX(-110%);
+        animation: fr-rank1-shine 6.4s ease-in-out 1.6s infinite;
+      }
+      @keyframes fr-rank1-shine {
+        0%        { transform: translateX(-110%); }
+        52%,100%  { transform: translateX(110%);  }
       }
 
       /* Player info column */
@@ -6565,9 +6720,16 @@ const FalconRanking = (function () {
       }
       .fr-cta {
         font-size: 13px; font-weight: bold; color: #ffd84d;
-        animation: fr-blink-cta 1.1s step-end infinite;
+        /* Smooth breathe (cinBreathe analogue) — softer than the old step-end blink */
+        animation: fr-cta-breathe 1.8s cubic-bezier(0.45,0,0.55,1) infinite;
         letter-spacing: 1px;
+        text-shadow: 0 0 18px rgba(255,216,77,0.35);
       }
+      @keyframes fr-cta-breathe {
+        0%,100% { opacity: 1;    text-shadow: 0 0 22px rgba(255,216,77,0.45); }
+        50%      { opacity: 0.35; text-shadow: 0 0 8px  rgba(255,216,77,0.18); }
+      }
+      /* Keep the old class name alive for legacy references — still exists, now a no-op */
       @keyframes fr-blink-cta {
         0%,49% { opacity:1; }
         50%,100%{ opacity:0; }
@@ -6654,6 +6816,28 @@ const FalconRanking = (function () {
         .fr-entry { grid-template-columns: 38px 1fr 100px; }
         .fr-entry-grade { display: none; }
         .fr-lb-header span:last-child { display: none; }
+      }
+
+      /* ── Reduced motion ── respects OS-level preference. Animations
+         still reveal but collapse to near-instant, infinite loops stop. */
+      @media (prefers-reduced-motion: reduce) {
+        #fr-attract,
+        .fr-attract-header,
+        .fr-attract-header h1,
+        .fr-attract-header .fr-event-name {
+          animation-duration: 0.01ms !important;
+          animation-delay: 0ms !important;
+        }
+        .fr-attract-header .fr-cs-logo,
+        .fr-cta,
+        .fr-divider,
+        .fr-entry[data-rank="1"]::after,
+        .fr-entry[data-rank="1"] .fr-rank,
+        .fr-entry[data-rank="2"] .fr-rank,
+        .fr-entry[data-rank="3"] .fr-rank {
+          animation: none !important;
+        }
+        .fr-entry[data-rank="1"]::after { display: none; }
       }
     `;
     document.head.appendChild(s);
@@ -7201,8 +7385,11 @@ const FalconRanking = (function () {
 
 const CV = document.getElementById('g-zero');
 const CX = CV.getContext('2d',{alpha:false});
-const VW=1280, VH=720;
+const VW=1080, VH=580;
 let SCALE=1;
+// ── Zoom control ──────────────────────────────────────────────────────
+let _izZoom=1.0;
+const IZ_ZOOM_MIN=0.78, IZ_ZOOM_MAX=1.10, IZ_ZOOM_STEP=0.04;
 function resize(){
   const dpr=Math.min(window.devicePixelRatio||1,2);
   SCALE=Math.min(innerWidth/VW,innerHeight/VH);
@@ -7211,6 +7398,17 @@ function resize(){
   CX.setTransform(SCALE*dpr,0,0,SCALE*dpr,0,0);
 }
 window.addEventListener("resize",resize); resize();
+
+// ── Zoom click handler ────────────────────────────────────────────────
+CV.addEventListener('click',function(e){
+  if(STATE!==S.PLAYING&&STATE!==S.BOSS_FIGHT) return;
+  const rect=CV.getBoundingClientRect();
+  const mx=(e.clientX-rect.left)/SCALE, my=(e.clientY-rect.top)/SCALE;
+  // Zoom-out button: top-left (14,54) 28×28
+  if(mx>=14&&mx<=42&&my>=54&&my<=82){ _izZoom=Math.max(IZ_ZOOM_MIN,+((_izZoom-IZ_ZOOM_STEP).toFixed(2))); return; }
+  // Zoom-in button: (48,54) 28×28
+  if(mx>=48&&mx<=76&&my>=54&&my<=82){ _izZoom=Math.min(IZ_ZOOM_MAX,+((_izZoom+IZ_ZOOM_STEP).toFixed(2))); return; }
+});
 
 // ── Game State Constants ──────────────────────────────────────────────
 // ARCH: Frozen object — typos in state strings now throw at assignment,
@@ -8852,7 +9050,9 @@ function s2w(sy){ return W.scroll+(VH-sy); }
 function onLand(x,sy){ const r=getRivS(sy); return x<r.cx-r.cw/2||x>r.cx+r.cw/2; }
 function buildShore(){
   const L=[],R=[];
-  for(let y=-30;y<=VH+30;y+=9){
+  // Extend shore path when zoomed out to cover visible area
+  const yTop=_izZoom<1?Math.floor(-VH*(1/_izZoom-1))-40:-30;
+  for(let y=yTop;y<=VH+30;y+=9){
     const r=getRivS(clamp(y,0,VH));
     L.push([r.cx-r.cw/2,y]); R.push([r.cx+r.cw/2,y]);
   }
@@ -8909,7 +9109,9 @@ let OBJ=[], NARR=[];
 const STARS=Array.from({length:110},()=>({x:rnd(0,VW),y:rnd(0,VH),s:rnd(1,2.8),v:rnd(8,30)}));
 
 // ── Entity Factories ──────────────────────────────────────────────────
+const MAX_EBULLETS=18;
 function addBullet(x,y,vx,vy,dmg,col,en=false,kind=''){
+  if(en&&EBULLETS.length>=MAX_EBULLETS) return;
   (en?EBULLETS:BULLETS).push({x,y,vx,vy,w:en?5:4,h:en?5:12,dmg,col,kind});
 }
 function addPickup(wy,x,kind,data=null){
@@ -9043,7 +9245,7 @@ function initSpawnState(){
 
 function generateEnemiesAhead(){
   const ph=PHASES[phIdx], S=SPAWN_STATE, D=DIFF();
-  const genTarget=W.scroll+VH+208;
+  const genTarget=W.scroll+VH/_izZoom+160;
   while(S.cursor<genTarget&&S.cursor<W.progressMax){
     const wy=S.cursor; S.cursor+=sri(52,88);
     if(wy>S.bossZoneStart) continue;
@@ -9679,8 +9881,8 @@ function updPlayer(dt){
 
   if(KEYS.Space) PL.charge+=dt;
   if(!KEYS.Space&&PL.charge>0){ firePL(PL.charge>0.72); PL.charge=0; }
-  // Hold-space auto-fire: continuous fire while space held, but only if charge hasn't built up
-  if(_spaceHeld&&PL.charge<0.1&&PL.fireCd<=0){ firePL(); PL.fireCd=PL.fireRate; }
+  // Hold-space auto-fire: continuous fire while space held, before charge mode kicks in
+  if(_spaceHeld&&PL.charge<0.30&&PL.fireCd<=0){ firePL(); PL.fireCd=PL.fireRate; PL.charge=0; }
 
   // OverWatch homing missiles
   if(hasMod('overwatch')){
@@ -9787,13 +9989,15 @@ function scanPulse(){
 
 // ── Bullet Update ─────────────────────────────────────────────────────
 function updBullets(dt){
+  // Extend cull margins when zoomed out so bullets don't vanish while visible
+  const zMx=VW*Math.max(0,(1/_izZoom-1))/2+60, zMy=VH*Math.max(0,(1/_izZoom-1))+60;
   for(let i=BULLETS.length-1;i>=0;i--){
     const b=BULLETS[i]; b.x+=b.vx*dt; b.y+=b.vy*dt;
-    if(b.y<-60||b.x<-40||b.x>VW+40) BULLETS.splice(i,1);
+    if(b.y<-zMy||b.x<-zMx||b.x>VW+zMx) BULLETS.splice(i,1);
   }
   for(let i=EBULLETS.length-1;i>=0;i--){
     const b=EBULLETS[i]; b.x+=b.vx*dt; b.y+=b.vy*dt;
-    if(b.y>VH+70||b.x<-40||b.x>VW+40) EBULLETS.splice(i,1);
+    if(b.y>VH+zMy||b.x<-zMx||b.x>VW+zMx) EBULLETS.splice(i,1);
   }
 }
 
@@ -9805,7 +10009,9 @@ function updEnemies(dt){
     e.t+=dt; e.hf=Math.max(0,e.hf-dt);
     const sy=w2s(e.wy);
     const r=getRivW(e.wy), L=r.cx-r.cw/2, R=r.cx+r.cw/2;
-    if(sy<-160||sy>VH+120){ ENEMIES.splice(i,1); continue; }
+    // Cull bounds extend when zoomed out so enemies don't pop in/out
+    const cullTop=-160-VH*Math.max(0,(1/_izZoom-1));
+    if(sy<cullTop||sy>VH+120){ ENEMIES.splice(i,1); continue; }
     if(!e.revealed&&Math.hypot(e.x-PL.x,sy-PL.y)<60) e.revealed=true;
     if(e.type==='mine'&&!e.proxWarn){
       if(Math.hypot(e.x-PL.x,sy-PL.y)<140){ e.proxWarn=true; SFX.mineWarning(); }
@@ -9827,7 +10033,7 @@ function updEnemies(dt){
       case 'stealthJet':
         e.wy-=22*dt; e.x+=Math.sin(e.t*2.5)*42*dt+e.vx*0.5*dt;
         if(hasMod('xdr')||hasMod('siem')) e.revealed=true;
-        if((e.shoot-=dt)<=0&&sy>20&&sy<VH-42&&canSeeE(e)){ e.shoot=rnd(1.1,1.8); addBullet(e.x,sy+10,0,232,1,'#7080ff',true,'stealthShimmer'); }
+        if((e.shoot-=dt)<=0&&sy>20&&sy<VH-42&&canSeeE(e)){ e.shoot=rnd(1.6,2.4); addBullet(e.x,sy+10,0,232,1,'#7080ff',true,'stealthShimmer'); }
         break;
       case 'aiMirage':
         e.wy-=9*dt; e.x+=Math.sin(e.t*1.8)*24*dt+e.vx*0.4*dt;
@@ -9854,11 +10060,11 @@ function updEnemies(dt){
         break;
       case 'cryptoJet':
         e.wy-=20*dt; e.x+=Math.sin(e.t*2.8)*44*dt+e.vx*0.55*dt;
-        if((e.shoot-=dt)<=0&&sy>20&&sy<VH-42){ e.shoot=rnd(1.3,2.0); addBullet(e.x,sy+10,0,235,1,'#2af0d0',true,'cryptoCoin'); } // rate ↑
+        if((e.shoot-=dt)<=0&&sy>20&&sy<VH-42){ e.shoot=rnd(1.8,2.6); addBullet(e.x,sy+10,0,235,1,'#2af0d0',true,'cryptoCoin'); }
         break;
       case 'wiperJet':
         e.wy-=17*dt; e.x+=Math.sin(e.t*1.9)*38*dt+e.vx*0.5*dt;
-        if((e.shoot-=dt)<=0&&sy>20&&sy<VH-42){ e.shoot=rnd(1.4,2.0); // rate ↑ (was 0.78-1.25 × 3 bullets)
+        if((e.shoot-=dt)<=0&&sy>20&&sy<VH-42){ e.shoot=rnd(2.4,3.4); // 3-bullet spread — longer cooldown
           addBullet(e.x-13,sy+10,-26,242,1,'#c850ff',true,'wiperSweep');
           addBullet(e.x,   sy+10,  0,242,1,'#c850ff',true,'wiperSweep');
           addBullet(e.x+13,sy+10, 26,242,1,'#c850ff',true,'wiperSweep'); }
@@ -9886,14 +10092,14 @@ function updEnemies(dt){
         break;
       case 'poisonBarge':
         e.wy-=0.9*dt; e.x=clamp(e.x+Math.sin(e.t*1.1)*6*dt+e.vx*0.2*dt,L+36,R-36);
-        if((e.shoot-=dt)<=0&&sy>10&&sy<VH-52){ e.shoot=rnd(1.4,2.2); // rate ↑ (was 0.88-1.4 × 3 bullets)
+        if((e.shoot-=dt)<=0&&sy>10&&sy<VH-52){ e.shoot=rnd(2.6,3.6); // 3-bullet spread — longer cooldown
           addBullet(e.x-17,sy+10,-22,225,1,'#88ff55',true,'toxicDrip');
           addBullet(e.x,   sy+10,  0,225,1,'#88ff55',true,'toxicDrip');
           addBullet(e.x+17,sy+10, 22,225,1,'#88ff55',true,'toxicDrip'); }
         break;
       case 'armoredBarge':
         e.wy-=0.8*dt; e.x=clamp(e.x+Math.sin(e.t*1.0)*5*dt+e.vx*0.18*dt,L+38,R-38);
-        if((e.shoot-=dt)<=0&&sy>10&&sy<VH-52){ e.shoot=rnd(1.2,1.8); // rate ↑ (was 0.78-1.18 × 3 bullets)
+        if((e.shoot-=dt)<=0&&sy>10&&sy<VH-52){ e.shoot=rnd(2.4,3.2); // 3-bullet spread — longer cooldown
           for(let s=-1;s<=1;s++) addBullet(e.x+s*19,sy+10,s*24,228,1,'#ff5a4d',true,'shellCasing'); }
         break;
       case 'mine':
@@ -9961,6 +10167,8 @@ function updEnemies(dt){
         break;
     }
     if(e.lane==='river') e.x=clamp(e.x,L+16,R-16);
+    // Soft-clamp air enemies to river ± 30px — prevents shore drift
+    else if(e.lane==='air') e.x=clamp(e.x,L-30,R+30);
   }
 }
 
@@ -10344,6 +10552,9 @@ function update(dt){
     }
   }
   if(hk('KeyP')) PAUSED=!PAUSED;
+  // Zoom keyboard shortcuts: - to zoom out, =/+ to zoom in
+  if(hk('Minus'))  _izZoom=Math.max(IZ_ZOOM_MIN,+((_izZoom-IZ_ZOOM_STEP).toFixed(2)));
+  if(hk('Equal'))  _izZoom=Math.min(IZ_ZOOM_MAX,+((_izZoom+IZ_ZOOM_STEP).toFixed(2)));
   if(PAUSED) return;
   updateAmbientMix();
   W.scroll+=W.speed*dt; phTime+=dt;
@@ -10560,14 +10771,17 @@ function drawWorld(dt){
     _cachedPhIdx=phIdx;
   }
 
-  CX.fillStyle='#020406'; CX.fillRect(0,0,VW,VH);
+  // Extend fill area when zoomed out to avoid black corners
+  const _zPx=_izZoom<1?Math.ceil(VW*(1/_izZoom-1)/2)+12:0;
+  const _zPy=_izZoom<1?Math.ceil(VH*(1/_izZoom-1))+12:0;
+  CX.fillStyle='#020406'; CX.fillRect(-_zPx,-_zPy,VW+2*_zPx,VH+_zPy);
   drawStars(dt*60);
   const {L,R}=buildShore();
   CX.save();
-  CX.beginPath(); CX.moveTo(0,0); smPath(L); CX.lineTo(0,VH); CX.closePath();
+  CX.beginPath(); CX.moveTo(-_zPx,-_zPy); smPath(L); CX.lineTo(-_zPx,VH); CX.closePath();
   CX.fillStyle=_cachedLgL; CX.fill(); CX.restore();
   CX.save();
-  CX.beginPath(); CX.moveTo(VW,0); smPath([...R].reverse()); CX.lineTo(VW,VH); CX.closePath();
+  CX.beginPath(); CX.moveTo(VW+_zPx,-_zPy); smPath([...R].reverse()); CX.lineTo(VW+_zPx,VH); CX.closePath();
   CX.fillStyle=_cachedLgR; CX.fill(); CX.restore();
   // ── BOLD Cinematic Shore — Phase-Responsive Threat Landscape ──────────────
   const animT_sw=W.scroll*0.012;
@@ -10578,8 +10792,8 @@ function drawWorld(dt){
   const _tHlt =['rgba(158,72,38,0.50)','rgba(128,52,118,0.50)','rgba(58,138,26,0.50)','rgba(138,88,28,0.50)','rgba(32,108,138,0.50)','rgba(138,72,58,0.50)','rgba(26,116,96,0.50)','rgba(102,32,138,0.50)','rgba(122,102,34,0.50)','rgba(138,68,46,0.50)'][phIdx];
   // [1] Deep forest vignette — outer edges suggest impenetrable far woodland
   CX.save();
-  CX.fillStyle=_cachedFvL; CX.fillRect(0,0,VW*0.15,VH);
-  CX.fillStyle=_cachedFvR; CX.fillRect(VW*0.85,0,VW*0.15,VH);
+  CX.fillStyle=_cachedFvL; CX.fillRect(-_zPx,-_zPy,VW*0.15+_zPx,VH+_zPy);
+  CX.fillStyle=_cachedFvR; CX.fillRect(VW*0.85,0-_zPy,VW*0.15+_zPx,VH+_zPy);
   CX.restore();
   // [2] Per-strip terrain: all moduli are multiples of 22 → fire at fixed world positions
   const swy_c=Math.floor(W.scroll/22)*22;
@@ -14664,6 +14878,30 @@ function drawHUD(){
     }
   }
 
+  // ── Zoom control buttons (top-left, below HUD bar) ──────────────────
+  {
+    const zx=14, zy=54, zs=28, zg=4;
+    // Background pills
+    CX.save();
+    CX.globalAlpha=0.55;
+    CX.fillStyle='#0c1115';
+    CX.beginPath(); CX.roundRect(zx-2,zy-2,zs*2+zg+4,zs+4,4); CX.fill();
+    CX.restore();
+    // Zoom-out (−)
+    CX.strokeStyle='#7f8b96'; CX.lineWidth=1;
+    CX.beginPath(); CX.roundRect(zx,zy,zs,zs,3); CX.stroke();
+    CX.fillStyle='#d5dde5'; CX.font='bold 16px monospace'; CX.textAlign='center';
+    CX.fillText('−',zx+zs/2,zy+zs/2+5);
+    // Zoom-in (+)
+    CX.strokeStyle='#7f8b96';
+    CX.beginPath(); CX.roundRect(zx+zs+zg,zy,zs,zs,3); CX.stroke();
+    CX.fillStyle='#d5dde5'; CX.fillText('+',zx+zs+zg+zs/2,zy+zs/2+5);
+    // Zoom level label
+    CX.fillStyle='#7f8b96'; CX.font='9px monospace';
+    CX.fillText(Math.round(_izZoom*100)+'%',zx+zs+zg/2,zy+zs+12);
+    CX.textAlign='left';
+  }
+
   drawComms(); drawBanner(); drawActAnn();
 }
 
@@ -14677,6 +14915,36 @@ function izFont(size, weight=''){
 }
 
 // ── Screen: Title ─────────────────────────────────────────────────────
+// ── Cinematic easing & motion helpers (Final Polish 2026-04-17) ──────
+// Exponential curves power all deploy-cinematic motion. Linear sine blinks
+// and character-grid cursors have been retired. Entries use ease-out-quart
+// (smooth) or ease-out-expo (snappy). No ease-in on entries. No bounce.
+function ezOutExpo(p){ if(p<=0)return 0; if(p>=1)return 1; return 1-Math.pow(2,-10*p); }
+function ezOutQuart(p){ if(p<=0)return 0; if(p>=1)return 1; return 1-Math.pow(1-p,4); }
+function ezOutQuint(p){ if(p<=0)return 0; if(p>=1)return 1; return 1-Math.pow(1-p,5); }
+function ezInExpo(p){ if(p<=0)return 0; if(p>=1)return 1; return Math.pow(2,10*p-10); }
+// Smooth breath: returns eased opacity between lo..hi, oscillating at period sec.
+function cinBreathe(periodSec, lo, hi){
+  if(lo===undefined) lo=0.38; if(hi===undefined) hi=1.0;
+  const s=0.5-0.5*Math.cos(Date.now()/1000*2*Math.PI/periodSec);
+  return lo+(hi-lo)*s;
+}
+// Stagger: given overall progress p (0..1), item index i, per-item delay and
+// per-item ramp, return 0..1 eased alpha for that item.
+function cinStagger(p, i, step, ramp){
+  if(step===undefined) step=0.10; if(ramp===undefined) ramp=0.30;
+  const q=(p-i*step)/ramp;
+  return ezOutQuart(q);
+}
+// Overshoot: arrives, briefly overshoots ~1.14, settles to 1.0.
+// Used for "lock-in" moments — HUD bracket finalization, badge reveals.
+function cinOvershoot(p){
+  if(p<=0)return 0; if(p>=1)return 1;
+  const base=ezOutQuart(p);
+  const bump=Math.max(0, 1-Math.abs((p-0.82)/0.16));
+  return Math.min(1.14, base + bump*0.14);
+}
+
 function drawTitle(){
   const ui = izUiScale();
   CX.fillStyle='#020406'; CX.fillRect(0,0,VW,VH); drawStars(0.5);
@@ -14714,7 +14982,18 @@ function drawTitle(){
   Object.keys(ADV).forEach((n,i)=>{ const ax=VW/2-350+(i%Object.keys(ADV).length)*78; CX.fillStyle=ADV[n].color; CX.fillText(ADV[n].icon+' '+n.split(' ')[0],ax,452); });
   CX.fillStyle='#7f8b96'; CX.font=izFont(11); CX.fillText(T('g_hi')+String(HISCORE).padStart(8,'0'),VW/2,484);
   CX.fillStyle='#2a3a4a'; CX.font=izFont(9); CX.fillText(T('iz_seed_line'),VW/2,500);
-  if(Math.floor(Date.now()/380)%2===0){ CX.shadowBlur=14; CX.shadowColor='#ffd84d'; CX.fillStyle='#ffd84d'; CX.font=izFont(16,'bold'); CX.fillText(T('g_press_deploy'),VW/2,540); CX.shadowBlur=0; }
+  { // Breathing PRESS SPACE — replaces hard on/off blink with eased sine.
+    const br=cinBreathe(1.4, 0.32, 1.0);
+    CX.save();
+    CX.globalAlpha=br;
+    CX.shadowBlur=6+14*br;
+    CX.shadowColor='#ffd84d';
+    CX.fillStyle='#ffd84d';
+    CX.font=izFont(16,'bold');
+    CX.fillText(T('g_press_deploy'),VW/2,540);
+    CX.shadowBlur=0;
+    CX.restore();
+  }
   CX.textAlign='left';
 }
 
@@ -14886,19 +15165,47 @@ function drawDeployCinematic(){
     CX.fillStyle='#7f8b96'; CX.font=FONT_10;
     CX.fillText(T('iz_subtitle'),cx,142);
 
-    // ACT tabs (4 acts, compact row)
+    // ACT tabs — staggered reveal with scale-in + left-to-right glow sweep.
+    // Each tab enters on its own beat (120ms stagger), eased-out-quart, from
+    // scale 0.94 to 1.0. A thin bright top-border sweeps right-to-left as the
+    // tab finalizes, then fades. No side-stripes, no bounce.
     const actRowY=162;
     ACTS.forEach((a,i)=>{
       const locA=localizeIZAct(a);
       const aW=130, aX=cx-270+i*140;
-      CX.globalAlpha=(1-titleOut)*Math.min(1,(titleP-0.15*i)*4)*0.9;
+      const tabP=cinStagger(titleP, i, 0.12, 0.34);       // per-tab eased progress 0..1
+      const tabA=(1-titleOut)*tabP*0.92;
+      if(tabA<=0){ CX.textAlign='center'; return; }
+      CX.save();
+      CX.globalAlpha=tabA;
+      // Scale-in from 0.94 → 1.0, pivot at tab center
+      const sc=0.94+0.06*tabP;
+      CX.translate(aX+aW/2, actRowY+15);
+      CX.scale(sc, sc);
+      CX.translate(-(aX+aW/2), -(actRowY+15));
       CX.fillStyle='rgba(0,0,0,0.6)'; CX.fillRect(aX,actRowY,aW,30);
       CX.strokeStyle=a.col; CX.lineWidth=1.2; CX.strokeRect(aX,actRowY,aW,30);
+      // Top-edge glow sweep: bright segment that slides right-to-left as tab lands.
+      // Peaks around tabP=0.6, fades by tabP=1.0. Pure color, no gradient-on-text.
+      if(tabP>0.1 && tabP<1.0){
+        const sweepP=Math.min(1,(tabP-0.1)/0.75);
+        const sweepW=aW*0.42;
+        const sweepX=aX + (aW-sweepW) - (aW-sweepW)*sweepP; // right→left
+        const sweepAlpha=(1-Math.abs(sweepP-0.55)*1.6);
+        if(sweepAlpha>0){
+          CX.save();
+          CX.globalAlpha=tabA*sweepAlpha*0.9;
+          CX.fillStyle=a.col;
+          CX.fillRect(sweepX, actRowY, sweepW, 1.5);
+          CX.restore();
+        }
+      }
       CX.fillStyle=a.col; CX.font=FONT_BOLD_8; CX.textAlign='left';
       CX.fillText(T('g_act')+a.num+': '+locA.title.toUpperCase(),aX+6,actRowY+13);
       CX.fillStyle='#777'; CX.font='7px monospace';
       CX.fillText(locA.subtitle.slice(0,22),aX+6,actRowY+24);
       CX.textAlign='center';
+      CX.restore();
     });
 
     // Mission pitch text (condensed into one line)
@@ -14937,12 +15244,17 @@ function drawDeployCinematic(){
     CX.fillStyle='#7f8b96'; CX.font=FONT_10;
     CX.fillText(T('g_hi')+String(HISCORE).padStart(8,'0'),cx,354);
 
-    // PRESS SPACE blinking (during title phase)
-    CX.globalAlpha=(1-titleOut)*Math.min(1,(titleP-0.5)*4);
-    if(Math.floor(Date.now()/400)%2===0){
-      CX.shadowBlur=12; CX.shadowColor='#ffd84d'; CX.fillStyle='#ffd84d';
+    // PRESS SPACE — eased sine breath, no hard on/off. Glow intensifies with opacity.
+    {
+      const breathA=cinBreathe(1.4, 0.35, 1.0);
+      const entryA=(1-titleOut)*Math.min(1,(titleP-0.5)*4);
+      CX.globalAlpha=entryA*breathA;
+      CX.shadowBlur=4+16*breathA;
+      CX.shadowColor='#ffd84d';
+      CX.fillStyle='#ffd84d';
       CX.font='bold 13px monospace';
-      CX.fillText(T('g_press_deploy'),cx,390); CX.shadowBlur=0;
+      CX.fillText(T('g_press_deploy'),cx,390);
+      CX.shadowBlur=0;
     }
 
     CX.globalAlpha=1;
@@ -14965,112 +15277,211 @@ function drawDeployCinematic(){
     CX.beginPath(); CX.moveTo(cx,VH*0.4-35); CX.lineTo(cx,VH*0.4+35); CX.stroke();
     CX.restore();
 
-    // Operation name typewriter
+    // Operation name typewriter.
+    // Cursor decays — opacity and glow fade as the last character is reached,
+    // so the "terminal cursor" doesn't stay mechanical through the full boot.
     const revealed=Math.floor(phaseKey.length*bootP);
-    const displayText=phaseKey.slice(0,revealed)+(bootP<1&&Math.floor(Date.now()/200)%2===0?'█':'');
+    const displayText=phaseKey.slice(0,revealed);
     CX.globalAlpha=Math.min(1,bootP*2.5);
     CX.font='bold 20px monospace'; CX.fillStyle=ph.col;
     CX.shadowBlur=18; CX.shadowColor=ph.col+'88';
     CX.fillText(displayText,cx,VH*0.4); CX.shadowBlur=0;
+    // Cursor — only while typewriter is active (bootP<0.95), with eased decay
+    // in the final 10% and a sine-eased internal flicker.
+    if(bootP<0.98 && revealed<phaseKey.length){
+      const flicker=cinBreathe(0.48, 0.35, 1.0);
+      const decay=bootP<0.85 ? 1 : 1-((bootP-0.85)/0.13);
+      const cursorA=Math.max(0, decay)*flicker*Math.min(1,bootP*2.5);
+      if(cursorA>0.02){
+        CX.save();
+        CX.globalAlpha=cursorA;
+        CX.shadowBlur=10*cursorA; CX.shadowColor=ph.col;
+        CX.fillStyle=ph.col;
+        CX.font='bold 20px monospace';
+        const typedW=CX.measureText(displayText).width;
+        CX.textAlign='left';
+        CX.fillText('▌', cx + typedW/2 + 2, VH*0.4);
+        CX.textAlign='center';
+        CX.restore();
+      }
+    }
 
-    // Adversary line
+    // Adversary line — eased entry with a small horizontal slide from the left
+    // and a clip-path style reveal (via canvas clip rect) rather than a flat fade.
     if(bootP>0.55&&ad){
-      const subA=Math.min(1,(bootP-0.55)*5);
-      CX.globalAlpha=subA; CX.font=FONT_BOLD_12; CX.fillStyle=ad.color;
-      CX.shadowBlur=8; CX.shadowColor=ad.color;
-      CX.fillText(T('g_adversary_prefix')+ph.adversary,cx,VH*0.4+22); CX.shadowBlur=0;
-      CX.globalAlpha=subA*0.65; CX.font=FONT_9; CX.fillStyle='#aaa';
-      CX.fillText(ad.nation,cx,VH*0.4+36);
+      const rawA=Math.min(1,(bootP-0.55)/0.35);
+      const subA=ezOutQuart(rawA);
+      const slideX=(1-subA)*-14; // enters from 14px left
+      CX.save();
+      // Clip reveal: a rect that grows from 0 width outward around the text area
+      const clipY=VH*0.4+10, clipH=36;
+      const clipW=VW * (0.2 + 0.8*subA);
+      const clipX=cx - clipW/2;
+      CX.beginPath();
+      CX.rect(clipX, clipY, clipW, clipH);
+      CX.clip();
+      CX.globalAlpha=subA;
+      CX.font=FONT_BOLD_12; CX.fillStyle=ad.color;
+      CX.shadowBlur=6+8*subA; CX.shadowColor=ad.color;
+      CX.fillText(T('g_adversary_prefix')+ph.adversary, cx+slideX, VH*0.4+22);
+      CX.shadowBlur=0;
+      CX.globalAlpha=subA*0.7;
+      CX.font=FONT_9; CX.fillStyle='#aaa';
+      CX.fillText(ad.nation, cx+slideX*0.6, VH*0.4+36);
+      CX.restore();
     }
     CX.globalAlpha=1;
   }
 
-  // ── REVEAL (3.3–4.1s) — corner brackets + briefing panel starts ────
+  // ── REVEAL (3.3–4.1s) — corner brackets LOCK IN, op-name anchors ─────
   if(t>=3.3&&t<4.1){
     const revP=Math.min(1,(t-3.3)/0.7);
-    // Corner HUD brackets
-    CX.globalAlpha=Math.min(1,revP*2)*0.55; CX.strokeStyle='#ff3030'; CX.lineWidth=1.8;
-    const m=14,s=26;
+    const revE=ezOutQuart(revP);
+    // Corner HUD brackets — stroke width overshoots briefly then settles, and
+    // there's a ~40ms opacity flash when they "lock" near revP≈0.82.
+    const lockPulse=Math.max(0, 1-Math.abs((revP-0.82)/0.08));
+    const strokeW=1.2 + 0.7*revE + lockPulse*0.6;         // 1.2 → 1.9 → 1.6
+    const baseA=revE*0.55 + lockPulse*0.35;
+    CX.save();
+    CX.globalAlpha=baseA;
+    CX.strokeStyle='#ff3030';
+    CX.lineWidth=strokeW;
+    CX.shadowBlur=lockPulse*16; CX.shadowColor='#ff3030';
+    const m=14, s=26;
     CX.beginPath();
     CX.moveTo(m+s,m); CX.lineTo(m,m); CX.lineTo(m,m+s);
     CX.moveTo(VW-m-s,m); CX.lineTo(VW-m,m); CX.lineTo(VW-m,m+s);
     CX.moveTo(m+s,VH-m); CX.lineTo(m,VH-m); CX.lineTo(m,VH-m-s);
     CX.moveTo(VW-m-s,VH-m); CX.lineTo(VW-m,VH-m); CX.lineTo(VW-m,VH-m-s);
-    CX.stroke(); CX.globalAlpha=1;
-    // Op name anchors top-center
-    CX.globalAlpha=Math.min(1,revP*3);
+    CX.stroke();
+    CX.restore();
+    // Op name anchors top-center (eased entry)
+    CX.globalAlpha=ezOutQuart(Math.min(1,revP*1.4));
     CX.font=FONT_BOLD_12; CX.fillStyle=ph.col;
     CX.shadowBlur=8; CX.shadowColor=ph.col+'88';
     CX.fillText(phaseKey,cx,38); CX.shadowBlur=0;
-    if(ad){ CX.globalAlpha=Math.min(1,revP*2.5)*0.8; CX.font=FONT_BOLD_10; CX.fillStyle=ad.color; CX.fillText(T('g_adversary_prefix')+ph.adversary,cx,52); }
+    if(ad){
+      CX.globalAlpha=ezOutQuart(Math.min(1,(revP-0.15)*1.3))*0.82;
+      CX.font=FONT_BOLD_10; CX.fillStyle=ad.color;
+      CX.fillText(T('g_adversary_prefix')+ph.adversary,cx,52);
+    }
     CX.globalAlpha=1;
   }
 
   // ── LIVE (t>=4.1s) — full briefing panel LEFT, river RIGHT ─────────
   if(t>=4.1){
     const liveP=Math.min(1,(t-4.1)/0.65);
-    const panSlide=Math.max(0,1-liveP);
-    const panAlpha=Math.min(1,liveP*2.2);
+    // Exponential-out slide: the panel arrives snappy, decelerates smooth, no linger.
+    const slideE=ezOutExpo(liveP);                      // 0→1 eased
+    const panSlide=1-slideE;                            // 1→0 eased
+    // Panel alpha matches slide curve so arrival feels unified, not a two-step fade.
+    const panAlpha=ezOutQuart(Math.min(1, liveP*1.6));
 
     const pw=Math.min(VW*0.46,430);
     const ph2=VH-42;
     const panX=18-pw*panSlide;
     const panY=22;
 
-    // ── Briefing panel ─────────────────────────────────────────────────
+    // ── Briefing panel — eased entry, staggered section reveals ──────
     CX.save(); CX.globalAlpha=panAlpha;
+
+    // Subtle horizontal "unfurl" — panel arrives 96% width, eases to 100%.
+    // Pivot at left edge so only the right side travels. (Canvas doesn't do true
+    // perspective, but this trapezoidal unfurl reads as depth without breaking
+    // the layout math below.)
+    const unfurlSx=0.96 + 0.04*slideE;
+    CX.save();
+    CX.translate(panX, 0);
+    CX.scale(unfurlSx, 1);
+    CX.translate(-panX, 0);
 
     CX.fillStyle='rgba(2,6,10,0.93)';
     CX.beginPath(); CX.roundRect(panX,panY,pw,ph2,4); CX.fill();
     CX.strokeStyle=ph.col; CX.lineWidth=1.8;
     CX.beginPath(); CX.roundRect(panX,panY,pw,ph2,4); CX.stroke();
 
-    // Act badge
+    // Per-section stagger progress (0..1). step=0.08 gives ~95ms between sections
+    // when panel entry runs across 650ms. Total stagger tail ~560ms — in budget.
+    const secA = (i)=> cinStagger(liveP, i, 0.08, 0.30);
+
+    // [0] Act badge
+    CX.save(); CX.globalAlpha=panAlpha*secA(0);
     CX.fillStyle='rgba(0,0,0,0.8)'; CX.fillRect(panX,panY,pw,20);
     CX.fillStyle=act.col; CX.font=FONT_BOLD_8; CX.textAlign='left';
     CX.fillText(T('g_act')+act.num+': '+locAct.title.toUpperCase()+'  —  '+locAct.subtitle,panX+7,panY+13);
+    CX.restore();
 
+    // [1] Phase / season
+    CX.save(); CX.globalAlpha=panAlpha*secA(1);
+    CX.textAlign='left';
     CX.fillStyle='#7f8b96'; CX.font=FONT_9;
     CX.fillText(T('g_phase')+(phIdx+1)+'/10  ·  '+phaseSeason,panX+7,panY+32);
+    CX.restore();
 
+    // [2] Operation name (hero)
+    CX.save(); CX.globalAlpha=panAlpha*secA(2);
+    CX.textAlign='left';
     CX.shadowBlur=12; CX.shadowColor=ph.col;
     CX.fillStyle=ph.col; CX.font=FONT_BOLD_14;
     CX.fillText(phaseKey,panX+7,panY+50); CX.shadowBlur=0;
+    CX.restore();
 
+    // [3] Adversary identity
     if(ad){
+      CX.save(); CX.globalAlpha=panAlpha*secA(3);
+      CX.textAlign='left';
       CX.shadowBlur=7; CX.shadowColor=ad.color;
       CX.fillStyle=ad.color; CX.font=FONT_BOLD_10;
       CX.fillText(T('g_adversary_prefix')+ph.adversary,panX+7,panY+67); CX.shadowBlur=0;
       CX.fillStyle='#888'; CX.font=FONT_9;
       CX.fillText(ad.nation,panX+7,panY+79);
+      CX.restore();
     }
 
+    // Divider (uses section 3's alpha — travels with adversary identity)
+    CX.save(); CX.globalAlpha=panAlpha*secA(3)*0.9;
     CX.strokeStyle='rgba(255,255,255,0.07)'; CX.lineWidth=1;
     CX.beginPath(); CX.moveTo(panX+7,panY+87); CX.lineTo(panX+pw-7,panY+87); CX.stroke();
+    CX.restore();
 
+    // [4] Situation summary
+    CX.save(); CX.globalAlpha=panAlpha*secA(4);
+    CX.textAlign='left';
     CX.fillStyle='#ffd84d'; CX.font=FONT_BOLD_9;
     CX.fillText(T('g_situation'),panX+7,panY+99);
     const sumLines=wrapTextPx(CX, phaseSummary, pw-16);
     CX.fillStyle='#c8d4dc'; CX.font=FONT_9;
     sumLines.slice(0,3).forEach((l,i)=>CX.fillText(l,panX+7,panY+110+i*12));
+    CX.restore();
 
+    // [5] Mission
     const mBase=panY+110+Math.min(sumLines.length,3)*12+7;
+    CX.save(); CX.globalAlpha=panAlpha*secA(5);
+    CX.textAlign='left';
     CX.fillStyle='#ffd84d'; CX.font=FONT_BOLD_9;
     CX.fillText(T('g_mission'),panX+7,mBase);
     CX.fillStyle='#74ff88'; CX.font=FONT_9;
     const misLines=wrapTextPx(CX, phaseMission, pw-16);
     misLines.slice(0,2).forEach((l,i)=>CX.fillText(l,panX+7,mBase+11+i*12));
+    CX.restore();
 
+    // [6] Objectives
     const oBase=mBase+11+Math.min(misLines.length,2)*12+7;
+    CX.save(); CX.globalAlpha=panAlpha*secA(6);
+    CX.textAlign='left';
     CX.fillStyle='#ffd84d'; CX.font=FONT_BOLD_9;
     CX.fillText(T('g_objectives'),panX+7,oBase);
     phaseObjectives.forEach((o,i)=>{
       CX.fillStyle='#42d9ff'; CX.font=FONT_9;
       CX.fillText('○ '+o.text.slice(0,48),panX+7,oBase+11+i*13);
     });
+    CX.restore();
 
+    // [7] TTP + counter + featured module
     if(ad){
       const tBase=oBase+11+phaseObjectives.length*13+6;
+      CX.save(); CX.globalAlpha=panAlpha*secA(7);
+      CX.textAlign='left';
       CX.strokeStyle='rgba(255,255,255,0.05)'; CX.lineWidth=1;
       CX.beginPath(); CX.moveTo(panX+7,tBase-3); CX.lineTo(panX+pw-7,tBase-3); CX.stroke();
       CX.fillStyle='#555'; CX.font='8px monospace';
@@ -15081,55 +15492,78 @@ function drawDeployCinematic(){
       CX.fillText(T('g_counter')+ad.counter.slice(0,52),panX+7,tBase+24);
       CX.fillStyle='#74ff88'; CX.font=FONT_BOLD_8;
       CX.fillText(T('g_featured_module')+ph.module,panX+7,tBase+38);
+      CX.restore();
     }
 
+    // [8] Boss encounter warning (lands last — lets the threat register)
     if(ph.boss){
+      CX.save(); CX.globalAlpha=panAlpha*secA(8);
+      CX.textAlign='left';
       CX.fillStyle='rgba(255,80,50,0.13)'; CX.fillRect(panX,panY+ph2-32,pw,32);
       CX.strokeStyle='rgba(255,80,50,0.32)'; CX.strokeRect(panX,panY+ph2-32,pw,32);
       CX.fillStyle='#ff5a4d'; CX.font=FONT_BOLD_8;
       CX.fillText(T('g_boss_encounter')+ph.boss+'  —  '+(ADV[ph.boss]?.nation||''),panX+7,panY+ph2-13);
+      CX.restore();
     }
 
+    CX.restore(); // end unfurlSx transform
     CX.restore(); // end panel globalAlpha
 
     // ── Tactical grid right half ───────────────────────────────────────
-    CX.globalAlpha=liveP*0.045; CX.strokeStyle='#42d9ff'; CX.lineWidth=0.5;
+    CX.globalAlpha=ezOutQuart(liveP)*0.045; CX.strokeStyle='#42d9ff'; CX.lineWidth=0.5;
     const gStep=38;
     for(let gx=pw+30;gx<VW;gx+=gStep){ CX.beginPath(); CX.moveTo(gx,0); CX.lineTo(gx,VH); CX.stroke(); }
     for(let gy=0;gy<VH;gy+=gStep){ CX.beginPath(); CX.moveTo(pw+30,gy); CX.lineTo(VW,gy); CX.stroke(); }
     CX.globalAlpha=1;
 
-    // ── Corner HUD brackets ───────────────────────────────────────────
-    CX.globalAlpha=liveP*0.45; CX.strokeStyle='#ff3030'; CX.lineWidth=1.8;
-    const m=14, s=24;
-    CX.beginPath();
-    CX.moveTo(m+s,m); CX.lineTo(m,m); CX.lineTo(m,m+s);
-    CX.moveTo(VW-m-s,m); CX.lineTo(VW-m,m); CX.lineTo(VW-m,m+s);
-    CX.moveTo(m+s,VH-m); CX.lineTo(m,VH-m); CX.lineTo(m,VH-m-s);
-    CX.moveTo(VW-m-s,VH-m); CX.lineTo(VW-m,VH-m); CX.lineTo(VW-m,VH-m-s);
-    CX.stroke(); CX.globalAlpha=1;
-
-    // ── WEAPONS FREE + asset tag (right side) ─────────────────────────
-    const wpA=Math.min(1,(t-4.5)*2.5);
-    if(wpA>0){
-      CX.globalAlpha=wpA;
-      CX.font='bold 13px monospace'; CX.fillStyle='#74ff88';
-      CX.shadowBlur=12; CX.shadowColor='#74ff88aa';
-      CX.fillText(T('iz_deploy_weapons'),VW*0.77,46); CX.shadowBlur=0;
-      CX.globalAlpha=wpA*0.6; CX.font=FONT_9; CX.fillStyle='#42d9ff';
-      CX.fillText(T('iz_deploy_asset'),VW*0.77,59);
-      CX.globalAlpha=1;
+    // ── Corner HUD brackets — overshoot lock-in on liveP≈0.82 ────────
+    {
+      const hudE=ezOutQuart(liveP);
+      const lockPulse=Math.max(0, 1-Math.abs((liveP-0.82)/0.10));
+      const hudA=hudE*0.45 + lockPulse*0.35;
+      const hudW=1.6 + 0.5*hudE + lockPulse*0.5;
+      CX.save();
+      CX.globalAlpha=hudA;
+      CX.strokeStyle='#ff3030';
+      CX.lineWidth=hudW;
+      CX.shadowBlur=lockPulse*14; CX.shadowColor='#ff3030';
+      const m=14, s=24;
+      CX.beginPath();
+      CX.moveTo(m+s,m); CX.lineTo(m,m); CX.lineTo(m,m+s);
+      CX.moveTo(VW-m-s,m); CX.lineTo(VW-m,m); CX.lineTo(VW-m,m+s);
+      CX.moveTo(m+s,VH-m); CX.lineTo(m,VH-m); CX.lineTo(m,VH-m-s);
+      CX.moveTo(VW-m-s,VH-m); CX.lineTo(VW-m,VH-m); CX.lineTo(VW-m,VH-m-s);
+      CX.stroke();
+      CX.restore();
     }
 
-    // ── PRESS SPACE prompt blinks after 5.5s ──────────────────────────
+    // ── WEAPONS FREE + asset tag (right side) — eased entry ──────────
+    const wpRaw=Math.min(1,(t-4.5)/0.4);
+    if(wpRaw>0){
+      const wpA=ezOutQuart(wpRaw);
+      CX.save();
+      CX.globalAlpha=wpA;
+      CX.font='bold 13px monospace'; CX.fillStyle='#74ff88';
+      CX.shadowBlur=8+8*wpA; CX.shadowColor='#74ff88aa';
+      CX.fillText(T('iz_deploy_weapons'),VW*0.77,46); CX.shadowBlur=0;
+      CX.globalAlpha=wpA*0.65; CX.font=FONT_9; CX.fillStyle='#42d9ff';
+      CX.fillText(T('iz_deploy_asset'),VW*0.77,59);
+      CX.restore();
+    }
+
+    // ── PRESS SPACE prompt breathes after 5.5s ────────────────────────
     if(t>=5.5){
-      const promptA=Math.min(1,(t-5.5)*2);
-      if(promptA>0&&Math.floor(Date.now()/430)%2===0){
-        CX.globalAlpha=promptA;
-        CX.shadowBlur=18; CX.shadowColor='rgba(255,255,255,0.5)';
+      const promptE=ezOutQuart(Math.min(1,(t-5.5)/0.5));
+      if(promptE>0){
+        const br=cinBreathe(1.4, 0.40, 1.0);
+        CX.save();
+        CX.globalAlpha=promptE*br;
+        CX.shadowBlur=6+18*br;
+        CX.shadowColor='rgba(255,255,255,0.55)';
         CX.fillStyle='#ffffff'; CX.font=FONT_BOLD_11;
-        CX.fillText(T('g_press_deploy'),VW*0.77,VH-28); CX.shadowBlur=0;
-        CX.globalAlpha=1;
+        CX.fillText(T('g_press_deploy'),VW*0.77,VH-28);
+        CX.shadowBlur=0;
+        CX.restore();
       }
     }
 
@@ -15138,7 +15572,7 @@ function drawDeployCinematic(){
     CX.globalAlpha=0.38; CX.fillStyle='#2a2a2a';
     CX.fillRect(pw+32,VH-7,VW-pw-42,3);
     CX.fillStyle=ph.col;
-    CX.fillRect(pw+32,VH-7,(VW-pw-42)*prog,3);
+    CX.fillRect(pw+32,VH-7,(VW-pw-42)*ezOutQuart(prog),3);
     CX.globalAlpha=1;
   }
 
@@ -15147,6 +15581,90 @@ function drawDeployCinematic(){
 }
 
 // ── Screen: Boss Intro ────────────────────────────────────────────────
+// Per-nation signature sigil — stylised geometric backdrop behind the adversary name.
+// Pure canvas primitives, no external assets. Keyed off the adversary's nation prefix.
+function _sigilKey(nation){
+  if(!nation) return 'other';
+  const n=nation.toLowerCase();
+  if(n.indexOf('russia')>=0) return 'russia';
+  if(n.indexOf('china')>=0) return 'china';
+  if(n.indexOf('north korea')>=0||n.indexOf('dprk')>=0) return 'dprk';
+  if(n.indexOf('iran')>=0) return 'iran';
+  if(n.indexOf('brazil')>=0||n.indexOf('🇧🇷')>=0) return 'brazil';
+  if(n.indexOf('ecrime')>=0) return 'ecrime';
+  return 'other';
+}
+function drawAdversarySigil(cx,x,y,r,col,key,phase){
+  // phase: 0..1 reveal progress used to animate stroke dash
+  cx.save();
+  cx.translate(x,y);
+  cx.strokeStyle=col; cx.lineWidth=1.4;
+  cx.globalAlpha=0.22+0.18*phase;
+  // Outer concentric orbital ring shared across all nations
+  cx.beginPath(); cx.arc(0,0,r,0,Math.PI*2); cx.stroke();
+  cx.globalAlpha=0.14+0.12*phase;
+  cx.setLineDash([2,4]); cx.beginPath(); cx.arc(0,0,r*0.78,0,Math.PI*2); cx.stroke();
+  cx.setLineDash([]);
+  cx.globalAlpha=0.32+0.25*phase;
+  cx.lineWidth=1.6;
+  if(key==='russia'){
+    // 5-point star inscribed — bear constellation nod
+    cx.beginPath();
+    for(let i=0;i<5;i++){
+      const a=-Math.PI/2 + i*2*Math.PI/5;
+      const a2=a + Math.PI/5;
+      const rr=r*0.62, ri=r*0.26;
+      const x1=Math.cos(a)*rr, y1=Math.sin(a)*rr;
+      const x2=Math.cos(a2)*ri, y2=Math.sin(a2)*ri;
+      if(i===0) cx.moveTo(x1,y1); else cx.lineTo(x1,y1);
+      cx.lineTo(x2,y2);
+    }
+    cx.closePath(); cx.stroke();
+  } else if(key==='china'){
+    // Concentric squares rotated — palace gate
+    for(let i=0;i<3;i++){
+      cx.save(); cx.rotate(Math.PI/4 + i*0.14);
+      const s=r*(0.72-i*0.18);
+      cx.strokeRect(-s/2,-s/2,s,s);
+      cx.restore();
+    }
+  } else if(key==='dprk'){
+    // Triangular prism — Juche tower silhouette
+    cx.beginPath();
+    cx.moveTo(0,-r*0.66); cx.lineTo(r*0.56,r*0.36); cx.lineTo(-r*0.56,r*0.36); cx.closePath();
+    cx.stroke();
+    cx.beginPath(); cx.moveTo(0,-r*0.4); cx.lineTo(0,r*0.36); cx.stroke();
+  } else if(key==='iran'){
+    // Crescent
+    cx.beginPath(); cx.arc(-r*0.06,0,r*0.6,-Math.PI*0.82,Math.PI*0.82); cx.stroke();
+    cx.beginPath(); cx.arc(r*0.12,0,r*0.55,-Math.PI*0.75,Math.PI*0.75); cx.stroke();
+  } else if(key==='brazil'){
+    // Rhombus (flag echo)
+    cx.beginPath();
+    cx.moveTo(0,-r*0.58); cx.lineTo(r*0.62,0); cx.lineTo(0,r*0.58); cx.lineTo(-r*0.62,0);
+    cx.closePath(); cx.stroke();
+    cx.beginPath(); cx.arc(0,0,r*0.22,0,Math.PI*2); cx.stroke();
+  } else if(key==='ecrime'){
+    // Web — radial spokes + spiral arc
+    for(let i=0;i<8;i++){
+      const a=i*Math.PI/4;
+      cx.beginPath(); cx.moveTo(0,0); cx.lineTo(Math.cos(a)*r*0.6,Math.sin(a)*r*0.6); cx.stroke();
+    }
+    cx.beginPath();
+    for(let k=0;k<3;k++){
+      const rr=r*(0.22+k*0.18);
+      cx.moveTo(rr,0); cx.arc(0,0,rr,0,Math.PI*2);
+    }
+    cx.stroke();
+  } else {
+    // Reticle crosshair fallback
+    cx.beginPath(); cx.moveTo(-r*0.7,0); cx.lineTo(r*0.7,0);
+    cx.moveTo(0,-r*0.7); cx.lineTo(0,r*0.7); cx.stroke();
+    cx.beginPath(); cx.arc(0,0,r*0.36,0,Math.PI*2); cx.stroke();
+  }
+  cx.restore();
+}
+
 function drawBossIntro(){
   drawWorld(0.04);
   CX.save(); CX.globalAlpha=Math.min(1, phTime/0.55);
@@ -15160,8 +15678,48 @@ function drawBossIntro(){
   CX.fillStyle='#ff5a4d'; CX.font=FONT_BOLD_14; CX.textAlign='center';
   CX.fillText(T('g_contact_detected'),VW/2,90); CX.shadowBlur=0;
 
+  // ── Signature glyph with scanline-clip reveal ────────────────────────
+  // Reveal wipes top→bottom over 0.75s; scanline bar traces the leading edge.
+  const revT=Math.max(0,Math.min(1, phTime/0.75));
+  const revE=(typeof ezOutQuart==='function')?ezOutQuart(revT):revT;
+  const sigR=36;
+  const gx=VW/2 - 168, gy=144;
+  CX.save();
+  // Background sigil (geometry layer) — always visible, builds alpha with reveal
+  drawAdversarySigil(CX, gx, gy, sigR, ad.color, _sigilKey(ad.nation), revE);
+  // Monogram letter with scanline-clip wipe
+  const monogram=(nm||'X').trim().charAt(0).toUpperCase();
+  CX.save();
+  CX.beginPath();
+  const clipH = Math.max(1, (sigR*2+8) * revE);
+  CX.rect(gx-sigR-6, gy-sigR-4, sigR*2+12, clipH);
+  CX.clip();
+  CX.shadowBlur=20; CX.shadowColor=ad.color;
+  CX.fillStyle=ad.color; CX.font='bold 56px monospace'; CX.textAlign='center'; CX.textBaseline='middle';
+  CX.fillText(monogram, gx, gy+2);
+  CX.shadowBlur=0; CX.textBaseline='alphabetic';
+  CX.restore();
+  // Leading scanline bar
+  if(revT>0 && revT<1){
+    const sy = gy-sigR-4 + clipH;
+    CX.globalAlpha=0.9;
+    CX.fillStyle=ad.color;
+    CX.fillRect(gx-sigR-6, sy-1, sigR*2+12, 2);
+    CX.globalAlpha=0.28;
+    CX.fillRect(gx-sigR-6, sy+2, sigR*2+12, 1);
+  }
+  CX.restore();
+
+  // Adversary name — slides in from the right of the sigil with overshoot
+  const nameE=(typeof cinOvershoot==='function')?cinOvershoot(Math.min(1, Math.max(0,(phTime-0.18)/0.5))):Math.min(1,phTime/0.55);
+  CX.save();
+  CX.translate((1-nameE)*22, 0);
+  CX.globalAlpha=Math.min(1, nameE*1.1);
   CX.shadowBlur=24; CX.shadowColor=ad.color;
-  CX.fillStyle=ad.color; CX.font='bold 30px monospace'; CX.fillText(nm,VW/2,134); CX.shadowBlur=0;
+  CX.fillStyle=ad.color; CX.font='bold 30px monospace'; CX.textAlign='center';
+  CX.fillText(nm,VW/2+36,134); CX.shadowBlur=0;
+  CX.restore();
+  CX.textAlign='center';
   CX.fillStyle='#aaaaaa'; CX.font='12px monospace'; CX.fillText(ad.nation,VW/2,158);
   CX.fillStyle='#888';    CX.font=FONT_10; CX.fillText(ad.active||'',VW/2,174);
 
@@ -15220,9 +15778,46 @@ function drawPhaseEnd(){
   CX.fillStyle=g.col; CX.font='bold 20px monospace'; CX.fillText(T('g_corridor_secured'),VW/2,90); CX.shadowBlur=0;
   CX.fillStyle='#fff'; CX.font='bold 13px monospace'; CX.fillText(ph.key,VW/2,114);
 
-  CX.font='26px monospace';
-  for(let i=0;i<5;i++){ CX.fillStyle=i<g.stars?g.col:'#252525'; CX.fillText('★',VW/2-66+i*33,150); }
-  CX.fillStyle=g.col; CX.font='bold 13px monospace'; CX.fillText(T(g.rankKey),VW/2,174);
+  // Sequential star pop — each earned star eases in with a rotation arc
+  // and a brief overshoot; unearned stars fade in last as faint outlines.
+  CX.save();
+  CX.textAlign='center'; CX.textBaseline='middle';
+  const earnedStep=0.12, earnedHead=0.38;  // delay per star, time to settle
+  for(let i=0;i<5;i++){
+    const cx=VW/2-66+i*33, cy=150;
+    const earned = i<g.stars;
+    // Earned stars land first, one after another; unearned stars fade in as the
+    // muted backdrop once all earned stars are seated.
+    const startDelay = earned ? (i*earnedStep) : (g.stars*earnedStep + 0.18 + (i-g.stars)*0.05);
+    const local = Math.max(0, Math.min(1, (endT - startDelay) / (earned ? earnedHead : 0.32)));
+    if(local<=0){ continue; }
+    const e = earned && typeof cinOvershoot==='function' ? cinOvershoot(local) : (typeof ezOutQuart==='function'?ezOutQuart(local):local);
+    const s = 0.65 + 0.35*e;                   // scale 0.65 → 1.00
+    const rot = earned ? (-0.6 + 0.6*e) : 0;   // −0.6 rad → 0
+    const a = earned ? Math.min(1, e*1.15) : Math.min(0.55, e*0.7);
+    CX.save();
+    CX.translate(cx, cy);
+    CX.rotate(rot);
+    CX.scale(s, s);
+    CX.globalAlpha = a;
+    if(earned){
+      // Soft glow behind earned stars at land-in overshoot peak
+      const peak = Math.max(0, 1 - Math.abs((local-0.82)/0.18));
+      CX.shadowBlur = 8 + 18*peak;
+      CX.shadowColor = g.col;
+      CX.fillStyle = g.col;
+    } else {
+      CX.shadowBlur = 0;
+      CX.fillStyle = '#2a2d33';
+    }
+    CX.font = 'bold 26px monospace';
+    CX.fillText('★', 0, 0);
+    CX.shadowBlur = 0;
+    CX.restore();
+  }
+  CX.textBaseline='alphabetic';
+  CX.restore();
+  CX.fillStyle=g.col; CX.font='bold 13px monospace'; CX.textAlign='center'; CX.fillText(T(g.rankKey),VW/2,174);
 
   CX.fillStyle='rgba(255,255,255,0.03)'; CX.fillRect(VW/2-288,188,576,122);
   CX.strokeStyle='rgba(255,255,255,0.05)'; CX.lineWidth=1; CX.strokeRect(VW/2-288,188,576,122);
@@ -15271,14 +15866,49 @@ function drawPhaseEnd(){
 }
 
 // ── Screen: Game Over ─────────────────────────────────────────────────
+// Helper: draw faint 1px RGB-shift chromatic aberration on a line of text.
+// Cheap enough for 6 lines/frame; guards against the shift stacking by
+// keeping the cyan/red passes at low alpha.
+function drawChromaticText(cx, str, x, y, baseFill, font, shift){
+  cx.save();
+  cx.font = font;
+  cx.textAlign = 'center';
+  // Red/cyan split — reads as "signal degraded", not glitchy noise
+  cx.globalAlpha = 0.38;
+  cx.fillStyle = 'rgba(255,80,80,1)';
+  cx.fillText(str, x - shift, y);
+  cx.fillStyle = 'rgba(80,220,255,1)';
+  cx.fillText(str, x + shift, y);
+  cx.globalAlpha = 1;
+  cx.fillStyle = baseFill;
+  cx.fillText(str, x, y);
+  cx.restore();
+}
+
 function drawGameOver(){
-  CX.save(); CX.globalAlpha=Math.min(1, goT/0.55);
+  CX.save();
+  // Slower, weighted scrim ramp — 0.70s ezOutExpo feels like a controlled
+  // fall rather than a hard cut. Aberration and title swap follow.
+  const scrimE = (typeof ezOutExpo==='function') ? ezOutExpo(Math.min(1, goT/0.70)) : Math.min(1, goT/0.70);
+  CX.globalAlpha = scrimE;
+  // Base black scrim layered with a faint red haze that ramps slightly slower
   CX.fillStyle='rgba(0,0,0,0.98)'; CX.fillRect(0,0,VW,VH);
   drawStars(0.18);
-  CX.fillStyle='rgba(80,0,0,0.45)'; CX.fillRect(0,0,VW,VH);
+  const hazeE = (typeof ezOutQuart==='function') ? ezOutQuart(Math.min(1, goT/0.85)) : Math.min(1, goT/0.85);
+  CX.fillStyle = `rgba(80,0,0,${0.45*hazeE})`;
+  CX.fillRect(0,0,VW,VH);
+
+  // ── Title: OPERATION DELIVERED — {actor} · PHASE {n} ─────────────────
+  // Narrative swap: the adversary's operation succeeded. "PHASE {n}" locates
+  // the run; aberration on this line reads as signal distortion under stress.
+  const adversaryName = (PHASES[phIdx] && PHASES[phIdx].adversary) ? PHASES[phIdx].adversary : T('g_breach_completed');
+  const phaseNum = phIdx + 1;
+  const titleStr = TF('g_operation_delivered', { actor: adversaryName, n: phaseNum });
   CX.shadowBlur=38; CX.shadowColor='#e0003c';
-  CX.fillStyle='#e0003c'; CX.font='bold 40px monospace'; CX.textAlign='center';
-  CX.fillText(T('g_breach_completed'),VW/2,120); CX.shadowBlur=0;
+  CX.textAlign='center';
+  // Title uses chromatic aberration with a slightly larger shift for drama
+  drawChromaticText(CX, titleStr, VW/2, 120, '#e0003c', 'bold 34px monospace', 1.6);
+  CX.shadowBlur=0;
   CX.fillStyle='#d5dde5'; CX.font='12px monospace';
   CX.fillText(T('iz_loss_line'),VW/2,154);
   CX.fillStyle='#7f8b96'; CX.font=FONT_10;
@@ -15294,16 +15924,16 @@ function drawGameOver(){
   CX.strokeStyle='rgba(255,255,255,0.05)'; CX.lineWidth=1;
   CX.beginPath(); CX.moveTo(VW/2-290,312); CX.lineTo(VW/2+290,312); CX.stroke();
 
+  // ── Threat report text with faint chromatic aberration ───────────────
+  // 1px RGB shift on the narrative body reads as damaged telemetry.
   CX.fillStyle='#ffd84d'; CX.font=FONT_BOLD_11;
+  CX.textAlign='center';
   CX.fillText(T('iz_report_title'),VW/2,332);
-  CX.fillStyle='#d5dde5'; CX.font=FONT_10;
-    CX.fillText(T('iz_report_line1'),VW/2,352);
-  CX.fillText(T('iz_report_line2'),VW/2,370);
-  CX.fillText(T('iz_report_line3'),VW/2,388);
-  CX.fillStyle='#42d9ff'; CX.font=FONT_10;
-  CX.fillText(T('iz_report_line4'),VW/2,408);
-  CX.fillStyle='#74ff88'; CX.font=FONT_10;
-  CX.fillText(T('iz_report_line5'),VW/2,426);
+  drawChromaticText(CX, T('iz_report_line1'), VW/2, 352, '#d5dde5', FONT_10, 1);
+  drawChromaticText(CX, T('iz_report_line2'), VW/2, 370, '#d5dde5', FONT_10, 1);
+  drawChromaticText(CX, T('iz_report_line3'), VW/2, 388, '#d5dde5', FONT_10, 1);
+  drawChromaticText(CX, T('iz_report_line4'), VW/2, 408, '#42d9ff', FONT_10, 1);
+  drawChromaticText(CX, T('iz_report_line5'), VW/2, 426, '#74ff88', FONT_10, 1);
   CX.fillStyle='#555'; CX.font=FONT_9;
   CX.fillText(T('iz_report_line6'),VW/2,446);
 
@@ -15328,43 +15958,143 @@ function drawWin(){
   CX.fillStyle='#7f8b96'; CX.font='11px monospace';
   CX.fillText(T('g_corridor_secured'),VW/2,162);
 
-  CX.fillStyle='rgba(255,255,255,0.03)'; CX.fillRect(VW/2-320,180,640,100);
-  CX.strokeStyle='rgba(116,255,136,0.28)'; CX.lineWidth=1.5; CX.strokeRect(VW/2-320,180,640,100);
+  // ── MODULE VALIDATED chip (top-right) ───────────────────────────────
+  // Eases in after the title with a short ezOutQuart. Falcon-cyan capsule
+  // announces the platform call-to-action that the run validated.
+  (function(){
+    const chipE = (typeof ezOutQuart==='function') ? ezOutQuart(Math.max(0,Math.min(1,(winT-0.2)/0.5))) : 1;
+    if(chipE<=0) return;
+    CX.save();
+    CX.globalAlpha = chipE;
+    const label = T('iz_module_validated');
+    const sub   = T('iz_module_validated_sub');
+    CX.font = FONT_BOLD_10;
+    const labW = CX.measureText(label).width;
+    CX.font = FONT_9;
+    const subW = CX.measureText(sub).width;
+    const cw = Math.min(VW-40, Math.max(labW, subW) + 28);
+    const ch = 34;
+    const cx = VW - cw - 28;
+    const cy = 40;
+    // Capsule fill + Falcon-cyan border with soft glow
+    CX.fillStyle = 'rgba(0,18,24,0.82)';
+    CX.beginPath(); if(CX.roundRect) CX.roundRect(cx,cy,cw,ch,8); else CX.rect(cx,cy,cw,ch); CX.fill();
+    CX.shadowBlur = 10; CX.shadowColor = '#42d9ff';
+    CX.strokeStyle = 'rgba(66,217,255,0.85)'; CX.lineWidth = 1.4;
+    CX.beginPath(); if(CX.roundRect) CX.roundRect(cx,cy,cw,ch,8); else CX.rect(cx,cy,cw,ch); CX.stroke();
+    CX.shadowBlur = 0;
+    // Status dot
+    CX.fillStyle = '#74ff88';
+    CX.beginPath(); CX.arc(cx+11, cy+ch/2, 3.2, 0, Math.PI*2); CX.fill();
+    CX.fillStyle = 'rgba(116,255,136,0.28)';
+    CX.beginPath(); CX.arc(cx+11, cy+ch/2, 6.0, 0, Math.PI*2); CX.fill();
+    CX.textAlign = 'left'; CX.textBaseline = 'middle';
+    CX.fillStyle = '#d5f4ff'; CX.font = FONT_BOLD_10;
+    CX.fillText(label, cx+22, cy+12);
+    CX.fillStyle = '#6fb7c8'; CX.font = FONT_9;
+    CX.fillText(sub, cx+22, cy+24);
+    CX.textBaseline = 'alphabetic'; CX.textAlign = 'center';
+    CX.restore();
+  })();
+
+  // Debrief box now wraps the TURNING POINTS strip (extended from 100→152)
+  CX.fillStyle='rgba(255,255,255,0.03)'; CX.fillRect(VW/2-320,180,640,152);
+  CX.strokeStyle='rgba(116,255,136,0.28)'; CX.lineWidth=1.5; CX.strokeRect(VW/2-320,180,640,152);
   CX.fillStyle='#ffd84d'; CX.font=FONT_BOLD_11; CX.fillText(T('g_final_debrief'),VW/2,204);
   CX.fillStyle='#f4f7fa'; CX.font='13px monospace';
   CX.fillText(T('g_final_score')+String(SCORE).padStart(8,'0'),VW/2,230);
   CX.fillStyle='#ffd84d'; CX.fillText(T('g_high_score')+String(HISCORE).padStart(8,'0'),VW/2,254);
-  CX.fillStyle='#7f8b96'; CX.font=FONT_10; CX.fillText(T('g_max_streak')+MAXSTREAK,VW/2,272);
+
+  // ── TURNING POINTS strip (inside the debrief panel) ─────────────────
+  // Three compact cells replace the single max_streak line. Cells stagger
+  // in after the debrief box settles, driven by cinStagger+ezOutQuart.
+  (function(){
+    const baseT = Math.max(0, winT - 0.25);
+    // Derive narrative stats from existing run state
+    const finalPh = (PHASES && phIdx<PHASES.length ? PHASES[phIdx] : PHASES[PHASES.length-1]);
+    const finalName = (finalPh && finalPh.adversary) ? finalPh.adversary : '—';
+    const items = [
+      { lbl: T('iz_tp_streak'),    val: String(MAXSTREAK), col: '#74ff88' },
+      { lbl: T('iz_tp_integrity'), val: String(phHits),    col: '#ffd84d' },
+      { lbl: T('iz_tp_final'),     val: finalName.length>14 ? finalName.slice(0,12)+'…' : finalName, col: '#42d9ff' }
+    ];
+    CX.save();
+    // Section label sits above the cards
+    CX.globalAlpha = Math.min(1, baseT*2);
+    CX.fillStyle = '#7f8b96'; CX.font = FONT_9; CX.textAlign='center';
+    CX.fillText(T('iz_turning_point'), VW/2, 280);
+    CX.globalAlpha = 1;
+    const cw = 190, ch = 38, gap = 16, y = 288;
+    const totalW = cw*3 + gap*2;
+    const x0 = VW/2 - totalW/2;
+    for(let i=0;i<3;i++){
+      const p = (typeof cinStagger==='function') ? cinStagger(Math.min(1,baseT/0.6), i, 0.18, 0.35) : Math.min(1,baseT);
+      if(p<=0) continue;
+      const it = items[i];
+      const cx0 = x0 + i*(cw+gap);
+      CX.save();
+      CX.globalAlpha = p;
+      // Slight unfurl from center for a subtle lift
+      const s = 0.96 + 0.04*p;
+      CX.translate(cx0+cw/2, y+ch/2);
+      CX.scale(s, s);
+      CX.translate(-cw/2, -ch/2);
+      // Cell background + border
+      CX.fillStyle = 'rgba(8,14,18,0.72)';
+      CX.beginPath(); if(CX.roundRect) CX.roundRect(0,0,cw,ch,6); else CX.rect(0,0,cw,ch); CX.fill();
+      CX.strokeStyle = it.col;
+      CX.shadowBlur = 8; CX.shadowColor = it.col;
+      CX.lineWidth = 1.2;
+      CX.globalAlpha = p*0.85;
+      CX.beginPath(); if(CX.roundRect) CX.roundRect(0,0,cw,ch,6); else CX.rect(0,0,cw,ch); CX.stroke();
+      CX.shadowBlur = 0;
+      CX.globalAlpha = p;
+      // Inset accent bar (intentionally NOT a flat side-stripe; sits inside the chip)
+      CX.fillStyle = it.col;
+      CX.globalAlpha = p*0.55;
+      CX.fillRect(8, ch*0.22, 2, ch*0.56);
+      CX.globalAlpha = p;
+      // Label + value
+      CX.textAlign = 'left'; CX.textBaseline = 'middle';
+      CX.fillStyle = '#7f8b96'; CX.font = FONT_9;
+      CX.fillText(it.lbl, 18, 12);
+      CX.fillStyle = it.col; CX.font = FONT_BOLD_12;
+      CX.fillText(it.val, 18, 26);
+      CX.textBaseline = 'alphabetic'; CX.textAlign='center';
+      CX.restore();
+    }
+    CX.restore();
+  })();
 
   CX.strokeStyle='rgba(255,255,255,0.05)'; CX.lineWidth=1;
-  CX.beginPath(); CX.moveTo(VW/2-290,292); CX.lineTo(VW/2+290,292); CX.stroke();
+  CX.beginPath(); CX.moveTo(VW/2-290,344); CX.lineTo(VW/2+290,344); CX.stroke();
 
   CX.fillStyle='#7f8b96'; CX.font=FONT_10;
-  CX.fillText(T('iz_named_adv')+':',VW/2,310);
+  CX.fillText(T('iz_named_adv')+':',VW/2,362);
   Object.entries(ADV).forEach(([n,a],i)=>{
     const row=Math.floor(i/5), col=i%5;
     CX.fillStyle=a.color; CX.font=FONT_9; CX.textAlign='left';
-    CX.fillText(a.icon+' '+n,VW/2-280+col*112,328+row*16);
+    CX.fillText(a.icon+' '+n,VW/2-280+col*112,380+row*16);
   });
   CX.textAlign='center';
 
   CX.strokeStyle='rgba(255,255,255,0.05)'; CX.lineWidth=1;
-  CX.beginPath(); CX.moveTo(VW/2-290,364); CX.lineTo(VW/2+290,364); CX.stroke();
+  CX.beginPath(); CX.moveTo(VW/2-290,416); CX.lineTo(VW/2+290,416); CX.stroke();
 
   CX.fillStyle='#42d9ff'; CX.font=FONT_10;
-  CX.fillText(T('iz_pause_line1'),VW/2,382);
-  CX.fillText(T('iz_pause_line2'),VW/2,398);
+  CX.fillText(T('iz_pause_line1'),VW/2,434);
+  CX.fillText(T('iz_pause_line2'),VW/2,450);
   CX.fillStyle='#74ff88'; CX.font=FONT_10;
-  CX.fillText(T('iz_report_line5'),VW/2,416);
+  CX.fillText(T('iz_report_line5'),VW/2,468);
   CX.fillStyle='#555'; CX.font=FONT_9;
-  CX.fillText('crowdstrike.com/adversary-universe',VW/2,436);
+  CX.fillText('crowdstrike.com/adversary-universe',VW/2,488);
   CX.fillStyle='#2a3a4a'; CX.font=FONT_9;
-  CX.fillText(T('iz_pause_seed')+RUN_SEED+T('iz_pause_seed_suffix'),VW/2,456);
+  CX.fillText(T('iz_pause_seed')+RUN_SEED+T('iz_pause_seed_suffix'),VW/2,508);
 
   if(Math.floor(Date.now()/380)%2===0){
     CX.shadowBlur=12; CX.shadowColor='#ffd84d';
     CX.fillStyle='#ffd84d'; CX.font='bold 15px monospace';
-    CX.fillText(T('g_press_again'),VW/2,494); CX.shadowBlur=0;
+    CX.fillText(T('g_press_again'),VW/2,546); CX.shadowBlur=0;
   }
   CX.textAlign='left';
   CX.restore();
@@ -15420,6 +16150,14 @@ function render(dt){
     case S.GAME_OVER:   drawGameOver();   break;
     case S.WIN:         drawWin();        break;
     default:
+      // ── Apply zoom transform (world layer) ──────────────────────────
+      CX.save();
+      if(_izZoom!==1.0){
+        // Anchor at bottom-center so player stays in place
+        const ztx=VW*(1-_izZoom)/2, zty=VH*(1-_izZoom);
+        CX.translate(ztx,zty);
+        CX.scale(_izZoom,_izZoom);
+      }
       drawWorld(dt);
       drawBillboards();
       drawGround();
@@ -15444,6 +16182,8 @@ function render(dt){
       drawPAMShield();
       drawParts();
       drawRings();
+      CX.restore(); // end zoom transform
+      // ── HUD at 1:1 scale (no zoom) ─────────────────────────────────
       drawHUD();
       drawIntelPanel();
       if(PAUSED) drawPause();
@@ -16080,10 +16820,16 @@ const FalconRanking = (function () {
       .fr-btn {
         flex: 1; padding: 13px 0;
         border: none; border-radius: 2px;
-        font: bold 11px monospace; letter-spacing: 1px;
-        cursor: pointer; transition: all 0.18s;
+        font: bold 11px var(--font-mono); letter-spacing: 1px;
+        cursor: pointer;
+        transition: background var(--dur-ui) var(--ease-out-quart),
+                    color      var(--dur-ui) var(--ease-out-quart),
+                    box-shadow var(--dur-ui) var(--ease-out-quart),
+                    transform  var(--dur-feedback) var(--ease-out-quart);
         text-transform: uppercase;
+        will-change: transform;
       }
+      .fr-btn:active { transform: scale(0.97); }
       .fr-btn-primary {
         background: #e0003c; color: #fff;
         box-shadow: 0 0 0 0 rgba(224,0,60,0);
@@ -16132,32 +16878,59 @@ const FalconRanking = (function () {
       .fr-attract-header {
         text-align: center; padding: 22px 0 14px; flex-shrink: 0;
         position: relative;
+        animation: fr-header-in 0.72s cubic-bezier(0.22,1,0.36,1) 0.08s both;
+      }
+      @keyframes fr-header-in {
+        from { opacity: 0; transform: translateY(-6px); }
+        to   { opacity: 1; transform: translateY(0);   }
       }
       .fr-attract-header .fr-cs-logo {
         font-size: 11px; letter-spacing: 4px; color: #e0003c;
         text-transform: uppercase; margin-bottom: 6px;
-        animation: fr-pulse-opacity 2s ease-in-out infinite;
+        animation: fr-breathe-logo 3.6s cubic-bezier(0.45,0,0.55,1) infinite;
       }
       @keyframes fr-pulse-opacity {
         0%,100% { opacity:1; }
         50%      { opacity:0.5; }
       }
+      /* Breathe: replaces the old 2s opacity dip with a softer, slower sine. */
+      @keyframes fr-breathe-logo {
+        0%,100% { opacity: 1; }
+        50%      { opacity: 0.55; }
+      }
       .fr-attract-header h1 {
         font-size: clamp(20px,3vw,28px); color: #fff;
         margin: 0; letter-spacing: -0.5px;
         text-shadow: 0 0 30px rgba(224,0,60,0.6);
+        /* Scanline-clip reveal: title wipes in top→bottom over 0.7s */
+        animation: fr-h1-wipe 0.7s cubic-bezier(0.22,1,0.36,1) 0.28s both;
+      }
+      @keyframes fr-h1-wipe {
+        from { clip-path: inset(0 0 100% 0); opacity: 0; }
+        to   { clip-path: inset(0 0 0 0);    opacity: 1; }
       }
       .fr-attract-header .fr-event-name {
         font-size: 10px; color: #7f8b96; margin-top: 4px;
+        animation: fr-event-in 0.6s cubic-bezier(0.22,1,0.36,1) 0.58s both;
+      }
+      @keyframes fr-event-in {
+        from { opacity: 0; letter-spacing: 0.02em; }
+        to   { opacity: 1; letter-spacing: normal; }
       }
 
-      /* Divider */
+      /* Divider — background drifts 22s so motion is felt more than seen */
       .fr-divider {
         height: 1px; margin: 0 20px;
         background: linear-gradient(90deg,
           transparent, rgba(224,0,60,0.6), rgba(255,216,77,0.4),
           rgba(224,0,60,0.6), transparent);
+        background-size: 200% 100%;
+        animation: fr-divider-drift 22s linear infinite;
         flex-shrink: 0;
+      }
+      @keyframes fr-divider-drift {
+        from { background-position: 0% 0; }
+        to   { background-position: 200% 0; }
       }
 
       /* Scrolling leaderboard viewport */
@@ -16214,9 +16987,42 @@ const FalconRanking = (function () {
         0%,100% { --fr-glow-size: 8px;  }
         50%      { --fr-glow-size: 22px; }
       }
+      /* Rank-1 treatment: gilded horizontal wash + oversized rank number.
+         NO side-stripe (banned pattern). Weight comes from background + type scale. */
       .fr-entry[data-rank="1"] {
-        background: rgba(255,216,77,0.05);
-        border-left: 3px solid #ffd84d;
+        background: linear-gradient(90deg,
+          color-mix(in oklch, var(--cs-amber) 20%, transparent) 0%,
+          color-mix(in oklch, var(--cs-amber) 10%, transparent) 28%,
+          color-mix(in oklch, var(--cs-amber)  3%, transparent) 60%,
+          transparent 92%);
+      }
+      .fr-entry[data-rank="1"] .fr-rank {
+        font-size: 22px;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+      }
+      .fr-entry[data-rank="1"] .fr-player-name {
+        color: var(--ink-9);
+        letter-spacing: 0.01em;
+      }
+      /* Rank-1 shine sweep — a subtle highlight band drifts across once per
+         6.4s cycle. Generous delay ramps it in only after the entry is seated. */
+      .fr-entry[data-rank="1"]::after {
+        content: '';
+        position: absolute; inset: 0;
+        background: linear-gradient(100deg,
+          transparent 0%,
+          transparent 38%,
+          color-mix(in oklch, var(--cs-amber) 24%, transparent) 50%,
+          transparent 62%,
+          transparent 100%);
+        pointer-events: none;
+        transform: translateX(-110%);
+        animation: fr-rank1-shine 6.4s ease-in-out 1.6s infinite;
+      }
+      @keyframes fr-rank1-shine {
+        0%        { transform: translateX(-110%); }
+        52%,100%  { transform: translateX(110%);  }
       }
 
       /* Player info column */
@@ -16261,9 +17067,16 @@ const FalconRanking = (function () {
       }
       .fr-cta {
         font-size: 13px; font-weight: bold; color: #ffd84d;
-        animation: fr-blink-cta 1.1s step-end infinite;
+        /* Smooth breathe (cinBreathe analogue) — softer than the old step-end blink */
+        animation: fr-cta-breathe 1.8s cubic-bezier(0.45,0,0.55,1) infinite;
         letter-spacing: 1px;
+        text-shadow: 0 0 18px rgba(255,216,77,0.35);
       }
+      @keyframes fr-cta-breathe {
+        0%,100% { opacity: 1;    text-shadow: 0 0 22px rgba(255,216,77,0.45); }
+        50%      { opacity: 0.35; text-shadow: 0 0 8px  rgba(255,216,77,0.18); }
+      }
+      /* Keep the old class name alive for legacy references — still exists, now a no-op */
       @keyframes fr-blink-cta {
         0%,49% { opacity:1; }
         50%,100%{ opacity:0; }
@@ -16350,6 +17163,28 @@ const FalconRanking = (function () {
         .fr-entry { grid-template-columns: 38px 1fr 100px; }
         .fr-entry-grade { display: none; }
         .fr-lb-header span:last-child { display: none; }
+      }
+
+      /* ── Reduced motion ── respects OS-level preference. Animations
+         still reveal but collapse to near-instant, infinite loops stop. */
+      @media (prefers-reduced-motion: reduce) {
+        #fr-attract,
+        .fr-attract-header,
+        .fr-attract-header h1,
+        .fr-attract-header .fr-event-name {
+          animation-duration: 0.01ms !important;
+          animation-delay: 0ms !important;
+        }
+        .fr-attract-header .fr-cs-logo,
+        .fr-cta,
+        .fr-divider,
+        .fr-entry[data-rank="1"]::after,
+        .fr-entry[data-rank="1"] .fr-rank,
+        .fr-entry[data-rank="2"] .fr-rank,
+        .fr-entry[data-rank="3"] .fr-rank {
+          animation: none !important;
+        }
+        .fr-entry[data-rank="1"]::after { display: none; }
       }
     `;
     document.head.appendChild(s);
@@ -22081,7 +22916,7 @@ const FalconRanking=(function(){'use strict';
   function exportCSV(){const entries=Store.load();if(!entries.length){_toast(T('lb_no_entries'),'#ff7a00');return;}const h=['BoothID','Rank','Name','Company','Email','Score','Case','Adversary','Grade','Timestamp','Event','Prize'];const rows=entries.map((e,i)=>{const t=_getPrizeTier(i+1);return[window._BOOTH_ID||'',i+1,_safe(e.name),_safe(e.company),_safe(e.email),e.score,_safe(e.phase),_safe(e.adversary||''),_safe(e.grade||''),new Date(e.timestamp).toLocaleString(),_safe(CFG.eventName),_safe(t.label)];});const csv=[h,...rows].map(r=>r.join(',')).join('\n');const blob=new Blob([csv],{type:'text/csv'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`falcon_threat_hunt_${window._BOOTH_ID||''}_${Date.now()}.csv`;a.click();URL.revokeObjectURL(url);_toast('📊 '+T('lb_exported'),'#74ff88');}
   function _safe(v){const s=String(v||'').replace(/"/g,'""');return s.includes(',')||s.includes('"')||s.includes('\n')?`"${s}"`:s;}
   function _getPrizeTier(rank){const tiers=[...CFG.prizeTiers].reverse();for(const t of tiers)if(rank<=t.rank)return t;return CFG.prizeTiers[CFG.prizeTiers.length-1];}
-  function _injectCSS(){if(document.getElementById('fr-styles-hunt'))return;const s=document.createElement('style');s.id='fr-styles-hunt';s.textContent=`#fr-overlay-hunt{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;font-family:ui-monospace,monospace;overflow:hidden}#fr-overlay-hunt.fr-visible{display:flex}#fr-matrix{position:absolute;inset:0;opacity:0.18;pointer-events:none}.fr-backdrop{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(170,0,255,0.08) 0%,rgba(2,3,8,0.94) 65%);backdrop-filter:blur(2px)}.fr-scanlines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.18) 2px,rgba(0,0,0,0.18) 4px);pointer-events:none}.fr-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(170,0,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(170,0,255,0.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}#fr-toast-hunt{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:10px 24px;border-radius:4px;font:bold 12px/1 monospace;color:#fff;background:rgba(0,0,0,0.88);border:1px solid currentColor;opacity:0;pointer-events:none;z-index:10001;transition:opacity 0.3s;white-space:nowrap}#fr-toast-hunt.fr-show{opacity:1}#fr-form-panel{position:relative;z-index:2;width:min(560px,94vw);background:rgba(4,8,12,0.96);border:1px solid rgba(170,0,255,0.6);border-radius:2px;padding:0;box-shadow:0 0 60px rgba(170,0,255,0.18);animation:fr-panel-in 0.45s cubic-bezier(0.22,1,0.36,1) both;overflow:visible}@keyframes fr-panel-in{from{opacity:0;transform:translateY(32px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}.fr-form-header{background:linear-gradient(135deg,rgba(170,0,255,0.22),rgba(10,14,18,0));border-bottom:1px solid rgba(170,0,255,0.3);padding:22px 28px 18px}.fr-form-header .fr-eyebrow{font-size:9px;letter-spacing:3px;color:#AA00FF;text-transform:uppercase;margin-bottom:6px}.fr-form-header h2{font-size:20px;color:#f4f7fa;margin:0 0 4px}.fr-form-header .fr-sub{font-size:10px;color:#7f8b96}.fr-score-badge{display:flex;align-items:center;gap:14px;padding:14px 28px;border-bottom:1px solid rgba(255,255,255,0.06)}.fr-score-num{font-size:36px;font-weight:bold;color:#ffd84d;min-width:120px}.fr-score-meta{font-size:10px;color:#7f8b96;line-height:1.8}.fr-score-meta strong{color:#d5dde5}.fr-prize{display:inline-block;padding:3px 10px;border-radius:2px;font-size:9px;font-weight:bold;border:1px solid currentColor;margin-top:4px}.fr-fields{padding:20px 28px;display:flex;flex-direction:column;gap:14px}.fr-field{display:flex;flex-direction:column;gap:5px}.fr-field label{font-size:9px;letter-spacing:2px;color:#7f8b96;text-transform:uppercase}.fr-field input{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.10);border-radius:2px;padding:10px 12px;color:#f4f7fa;font:13px monospace;outline:none;width:100%;box-sizing:border-box}.fr-field input:focus{border-color:rgba(170,0,255,0.7);box-shadow:0 0 0 3px rgba(170,0,255,0.12)}.fr-field input.fr-error{border-color:rgba(255,90,60,0.8)}.fr-field .fr-hint{font-size:9px;color:#ff5a4d;min-height:12px}.fr-actions{padding:0 28px 24px;display:flex;gap:10px}.fr-btn{flex:1;padding:13px 0;border:none;border-radius:2px;font:bold 11px monospace;letter-spacing:1px;cursor:pointer;text-transform:uppercase}.fr-btn-primary{background:#AA00FF;color:#fff}.fr-btn-primary:hover{background:#cc22ff}.fr-btn-secondary{background:rgba(255,255,255,0.04);color:#7f8b96;border:1px solid rgba(255,255,255,0.08)}.fr-consent{padding:0 28px 20px;font-size:9px;color:#555;line-height:1.6;text-align:center}#fr-burst-canvas{position:absolute;inset:0;pointer-events:none;z-index:10}#fr-attract{position:relative;z-index:2;width:min(780px,96vw);height:min(88vh,600px);display:flex;flex-direction:column;animation:fr-panel-in 0.6s cubic-bezier(0.22,1,0.36,1) both;overflow:hidden}.fr-attract-header{text-align:center;padding:22px 0 14px;flex-shrink:0}.fr-attract-header .fr-cs-logo{font-size:11px;letter-spacing:4px;color:#AA00FF;text-transform:uppercase;margin-bottom:6px}.fr-attract-header h1{font-size:clamp(20px,3vw,28px);color:#fff;margin:0;text-shadow:0 0 30px rgba(170,0,255,0.6)}.fr-attract-header .fr-event-name{font-size:10px;color:#7f8b96;margin-top:4px}.fr-divider{height:1px;margin:0 20px;background:linear-gradient(90deg,transparent,rgba(170,0,255,0.6),rgba(255,216,77,0.4),rgba(170,0,255,0.6),transparent);flex-shrink:0}.fr-lb-viewport{flex:1;overflow:hidden;position:relative;mask-image:linear-gradient(to bottom,transparent 0%,black 8%,black 85%,transparent 100%)}.fr-lb-scroll{display:flex;flex-direction:column;gap:0;will-change:transform}.fr-entry{display:grid;grid-template-columns:48px 1fr 140px 110px;align-items:center;padding:11px 24px;border-bottom:1px solid rgba(255,255,255,0.04)}.fr-rank{font-size:18px;font-weight:bold;color:var(--fr-entry-color,#555);line-height:1}.fr-entry[data-rank="1"]{background:rgba(255,216,77,0.05);border-left:3px solid #ffd84d}.fr-player{min-width:0}.fr-player-name{font-size:13px;font-weight:bold;color:#f4f7fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fr-player-company{font-size:9px;color:#7f8b96;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fr-entry-score{font-size:15px;font-weight:bold;text-align:right;color:var(--fr-entry-color,#d5dde5)}.fr-entry-grade{font-size:8px;font-weight:bold;text-align:right;padding-right:4px;color:var(--fr-entry-color,#555)}.fr-attract-footer{flex-shrink:0;padding:14px 24px 20px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,0.05)}.fr-cta{font-size:13px;font-weight:bold;color:#ffd84d;animation:fr-blink-cta 1.1s step-end infinite}@keyframes fr-blink-cta{0%,49%{opacity:1}50%,100%{opacity:0}}.fr-lb-header{display:grid;grid-template-columns:48px 1fr 140px 110px;padding:8px 24px;border-bottom:1px solid rgba(170,0,255,0.3);flex-shrink:0}.fr-lb-header span{font-size:8px;letter-spacing:2px;color:#7f8b96;text-transform:uppercase}#fr-rank-confirm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(2,4,8,0.92);animation:fr-panel-in 0.5s cubic-bezier(0.22,1,0.36,1) both}.fr-rank-card{text-align:center;padding:32px 48px;background:rgba(4,8,12,0.98);border:1px solid var(--fr-confirm-color,#ffd84d);max-width:380px}.fr-rank-card .fr-rank-pos{font-size:64px;font-weight:bold;color:var(--fr-confirm-color,#ffd84d);line-height:1}.fr-rank-card .fr-rank-label{font-size:11px;color:var(--fr-confirm-color,#ffd84d);margin:8px 0 16px}.fr-rank-card .fr-rank-name{font-size:18px;font-weight:bold;color:#fff;margin-bottom:6px}.fr-rank-card .fr-rank-score{font-size:13px;color:#7f8b96}.fr-rank-card .fr-rank-prize{display:inline-block;margin-top:14px;padding:6px 16px;border:1px solid var(--fr-confirm-color,#ffd84d);font-size:10px;font-weight:bold;color:var(--fr-confirm-color,#ffd84d)}.fr-rank-card .fr-rank-dismiss{display:block;margin-top:22px;font-size:9px;color:#444}`;
+  function _injectCSS(){if(document.getElementById('fr-styles-hunt'))return;const s=document.createElement('style');s.id='fr-styles-hunt';s.textContent=`#fr-overlay-hunt{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;font-family:ui-monospace,monospace;overflow:hidden}#fr-overlay-hunt.fr-visible{display:flex}#fr-matrix{position:absolute;inset:0;opacity:0.18;pointer-events:none}.fr-backdrop{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(170,0,255,0.08) 0%,rgba(2,3,8,0.94) 65%);backdrop-filter:blur(2px)}.fr-scanlines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.18) 2px,rgba(0,0,0,0.18) 4px);pointer-events:none}.fr-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(170,0,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(170,0,255,0.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}#fr-toast-hunt{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:10px 24px;border-radius:4px;font:bold 12px/1 monospace;color:#fff;background:rgba(0,0,0,0.88);border:1px solid currentColor;opacity:0;pointer-events:none;z-index:10001;transition:opacity 0.3s;white-space:nowrap}#fr-toast-hunt.fr-show{opacity:1}#fr-form-panel{position:relative;z-index:2;width:min(560px,94vw);background:rgba(4,8,12,0.96);border:1px solid rgba(170,0,255,0.6);border-radius:2px;padding:0;box-shadow:0 0 60px rgba(170,0,255,0.18);animation:fr-panel-in 0.45s cubic-bezier(0.22,1,0.36,1) both;overflow:visible}@keyframes fr-panel-in{from{opacity:0;transform:translateY(32px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}.fr-form-header{background:linear-gradient(135deg,rgba(170,0,255,0.22),rgba(10,14,18,0));border-bottom:1px solid rgba(170,0,255,0.3);padding:22px 28px 18px}.fr-form-header .fr-eyebrow{font-size:9px;letter-spacing:3px;color:#AA00FF;text-transform:uppercase;margin-bottom:6px}.fr-form-header h2{font-size:20px;color:#f4f7fa;margin:0 0 4px}.fr-form-header .fr-sub{font-size:10px;color:#7f8b96}.fr-score-badge{display:flex;align-items:center;gap:14px;padding:14px 28px;border-bottom:1px solid rgba(255,255,255,0.06)}.fr-score-num{font-size:36px;font-weight:bold;color:#ffd84d;min-width:120px}.fr-score-meta{font-size:10px;color:#7f8b96;line-height:1.8}.fr-score-meta strong{color:#d5dde5}.fr-prize{display:inline-block;padding:3px 10px;border-radius:2px;font-size:9px;font-weight:bold;border:1px solid currentColor;margin-top:4px}.fr-fields{padding:20px 28px;display:flex;flex-direction:column;gap:14px}.fr-field{display:flex;flex-direction:column;gap:5px}.fr-field label{font-size:9px;letter-spacing:2px;color:#7f8b96;text-transform:uppercase}.fr-field input{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.10);border-radius:2px;padding:10px 12px;color:#f4f7fa;font:13px monospace;outline:none;width:100%;box-sizing:border-box}.fr-field input:focus{border-color:rgba(170,0,255,0.7);box-shadow:0 0 0 3px rgba(170,0,255,0.12)}.fr-field input.fr-error{border-color:rgba(255,90,60,0.8)}.fr-field .fr-hint{font-size:9px;color:#ff5a4d;min-height:12px}.fr-actions{padding:0 28px 24px;display:flex;gap:10px}.fr-btn{flex:1;padding:13px 0;border:none;border-radius:2px;font:bold 11px monospace;letter-spacing:1px;cursor:pointer;text-transform:uppercase}.fr-btn-primary{background:#AA00FF;color:#fff}.fr-btn-primary:hover{background:#cc22ff}.fr-btn-secondary{background:rgba(255,255,255,0.04);color:#7f8b96;border:1px solid rgba(255,255,255,0.08)}.fr-consent{padding:0 28px 20px;font-size:9px;color:#555;line-height:1.6;text-align:center}#fr-burst-canvas{position:absolute;inset:0;pointer-events:none;z-index:10}#fr-attract{position:relative;z-index:2;width:min(780px,96vw);height:min(88vh,600px);display:flex;flex-direction:column;animation:fr-panel-in 0.6s cubic-bezier(0.22,1,0.36,1) both;overflow:hidden}.fr-attract-header{text-align:center;padding:22px 0 14px;flex-shrink:0}.fr-attract-header .fr-cs-logo{font-size:11px;letter-spacing:4px;color:#AA00FF;text-transform:uppercase;margin-bottom:6px}.fr-attract-header h1{font-size:clamp(20px,3vw,28px);color:#fff;margin:0;text-shadow:0 0 30px rgba(170,0,255,0.6)}.fr-attract-header .fr-event-name{font-size:10px;color:#7f8b96;margin-top:4px}.fr-divider{height:1px;margin:0 20px;background:linear-gradient(90deg,transparent,rgba(170,0,255,0.6),rgba(255,216,77,0.4),rgba(170,0,255,0.6),transparent);flex-shrink:0}.fr-lb-viewport{flex:1;overflow:hidden;position:relative;mask-image:linear-gradient(to bottom,transparent 0%,black 8%,black 85%,transparent 100%)}.fr-lb-scroll{display:flex;flex-direction:column;gap:0;will-change:transform}.fr-entry{display:grid;grid-template-columns:48px 1fr 140px 110px;align-items:center;padding:11px 24px;border-bottom:1px solid rgba(255,255,255,0.04)}.fr-rank{font-size:18px;font-weight:bold;color:var(--fr-entry-color,#555);line-height:1}.fr-entry[data-rank="1"]{background:linear-gradient(90deg,color-mix(in oklch,var(--cs-amber) 20%,transparent) 0%,color-mix(in oklch,var(--cs-amber) 10%,transparent) 28%,color-mix(in oklch,var(--cs-amber) 3%,transparent) 60%,transparent 92%)}.fr-entry[data-rank="1"] .fr-rank{font-size:22px;letter-spacing:-0.02em;font-variant-numeric:tabular-nums}.fr-player{min-width:0}.fr-player-name{font-size:13px;font-weight:bold;color:#f4f7fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fr-player-company{font-size:9px;color:#7f8b96;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fr-entry-score{font-size:15px;font-weight:bold;text-align:right;color:var(--fr-entry-color,#d5dde5)}.fr-entry-grade{font-size:8px;font-weight:bold;text-align:right;padding-right:4px;color:var(--fr-entry-color,#555)}.fr-attract-footer{flex-shrink:0;padding:14px 24px 20px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,0.05)}.fr-cta{font-size:13px;font-weight:bold;color:#ffd84d;animation:fr-blink-cta 1.1s step-end infinite}@keyframes fr-blink-cta{0%,49%{opacity:1}50%,100%{opacity:0}}.fr-lb-header{display:grid;grid-template-columns:48px 1fr 140px 110px;padding:8px 24px;border-bottom:1px solid rgba(170,0,255,0.3);flex-shrink:0}.fr-lb-header span{font-size:8px;letter-spacing:2px;color:#7f8b96;text-transform:uppercase}#fr-rank-confirm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:rgba(2,4,8,0.92);animation:fr-panel-in 0.5s cubic-bezier(0.22,1,0.36,1) both}.fr-rank-card{text-align:center;padding:32px 48px;background:rgba(4,8,12,0.98);border:1px solid var(--fr-confirm-color,#ffd84d);max-width:380px}.fr-rank-card .fr-rank-pos{font-size:64px;font-weight:bold;color:var(--fr-confirm-color,#ffd84d);line-height:1}.fr-rank-card .fr-rank-label{font-size:11px;color:var(--fr-confirm-color,#ffd84d);margin:8px 0 16px}.fr-rank-card .fr-rank-name{font-size:18px;font-weight:bold;color:#fff;margin-bottom:6px}.fr-rank-card .fr-rank-score{font-size:13px;color:#7f8b96}.fr-rank-card .fr-rank-prize{display:inline-block;margin-top:14px;padding:6px 16px;border:1px solid var(--fr-confirm-color,#ffd84d);font-size:10px;font-weight:bold;color:var(--fr-confirm-color,#ffd84d)}.fr-rank-card .fr-rank-dismiss{display:block;margin-top:22px;font-size:9px;color:#444}`;
     document.head.appendChild(s);}
   function _mountOverlay(){if(_overlayEl)return;const el=document.createElement('div');el.id = 'fr-overlay-hunt';el.innerHTML=`<canvas id="fr-matrix"></canvas><div class="fr-backdrop"></div><div class="fr-grid"></div><div class="fr-scanlines"></div>`;(document.getElementById('game-hunt-container')||document.body).appendChild(el);_overlayEl=el;const toast=document.createElement('div');toast.id = 'fr-toast-hunt';(document.getElementById('game-hunt-container')||document.body).appendChild(toast);document.addEventListener('keydown',e=>{const _c=document.getElementById('game-hunt-container');if(!_c||_c.style.display==='none')return;if(e.ctrlKey&&e.shiftKey&&e.code===CFG.adminKey)exportCSV();if(e.ctrlKey&&e.shiftKey&&e.code===CFG.clearKey){(async()=>{if(await _checkAdminPin()&&confirm(T('lb_clear_all_confirm'))){Store.clear();_toast(T('lb_cleared'),'#ff5a4d');}})();}});}
   function _showOverlay(){_overlayEl.classList.add('fr-visible');_startMatrix();}
