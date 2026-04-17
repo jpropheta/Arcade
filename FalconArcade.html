@@ -5972,6 +5972,11 @@ function _createDashboardAttractDirector() {
     _ensureDashboardAttractOverlay();
     active = true;
     window._simMuted = true; // silence audio during attract simulations
+    // Safety net: silence any ambient drones still running from a prior game session.
+    // This does NOT touch _masterGain, MUTED, or AudioEngine#bgm — so gameplay audio
+    // recovers cleanly the next time the user enters a real game (startGame calls startAmbient).
+    try { window.stopAmbient?.(); } catch (_) {}
+    try { window.stopHuntAmbient?.(); } catch (_) {}
     sceneIdx = 0;
     overlayEl()?.classList.add('is-open');
     renderScene();
@@ -7732,6 +7737,7 @@ function startBossMusic(){
     if(_pingInterval) clearInterval(_pingInterval);
     _pingInterval=setInterval(()=>{
       if(!_ambientRunning||_activeGameId!=='zero') return;
+      if(window._simMuted) return; // silence during attract simulations (does not alter state)
       const pingAc=AC();
       const pingSweep=pingAc.createOscillator();
       const pingGain=pingAc.createGain();
@@ -7774,6 +7780,7 @@ function _restartPingInterval(){
   if(_pingInterval) clearInterval(_pingInterval);
   _pingInterval=setInterval(()=>{
     if(!_ambientRunning||_activeGameId!=='zero') return;
+    if(window._simMuted) return; // silence during attract simulations (does not alter state)
     const pingAc=AC();
     const pingSweep=pingAc.createOscillator();
     const pingGain=pingAc.createGain();
@@ -7791,6 +7798,7 @@ function _restartBlipInterval(){
   if(_blipInterval) clearInterval(_blipInterval);
   _blipInterval=setInterval(()=>{
     if(!_ambientRunning||_activeGameId!=='zero') return;
+    if(window._simMuted) return; // silence during attract simulations (does not alter state)
     const blipAc=AC();
     const freqs=[440,523,659,784,880,1047];
     const freq=freqs[Math.floor(Math.random()*freqs.length)];
@@ -7807,6 +7815,9 @@ function _restartBlipInterval(){
 function startAmbient(){
   if(_ambientRunning) return; // already running — guard on own flag, not external _activeGameId
   if(_ambientGain) return;   // safety fallback
+  // Silence during attract simulations. We do NOT set _ambientRunning, so when the user
+  // enters a real game the next startAmbient() call proceeds cleanly (state is untouched).
+  if(window._simMuted) return;
   try{
     const ac=AC();
     // Master ambient gain
@@ -23143,6 +23154,7 @@ let _huntAmbientRunning=false;
 let _huntAmbientOscillator=null,_huntAmbientGain=null,_huntAmbientFilter=null;
 function startHuntAmbient(){
   if(_huntAmbientRunning||HUNT_MUTED) return;
+  if(window._simMuted) return; // silence during attract simulations; state untouched so real gameplay resumes cleanly
   try{
     const ac=HUNT_AC();
     const osc=ac.createOscillator();
