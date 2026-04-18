@@ -4885,7 +4885,10 @@ function returnToDashboard() {
   const overlay = document.createElement('div');
   overlay.id = 'return-to-menu-overlay';
   overlay.style.cssText = [
-    'position:fixed', 'inset:0', 'z-index:9997',
+    // z:13800 — above mission-brief (12500), deploy (13500), dash-disclaimer (9999),
+    // rankings (12000). Keeps the fade opaque over every dashboard overlay still in
+    // the DOM during the 300ms fade so no text leaks through. (prev: 9997 — too low.)
+    'position:fixed', 'inset:0', 'z-index:13800',
     'background:rgba(0,0,0,0)', 'display:flex', 'align-items:center',
     'justify-content:center', 'pointer-events:none',
     'transition:background 0.3s ease-out'
@@ -8967,12 +8970,21 @@ const SoundEngine={
         if(_ambientGain) _ambientGain.gain.linearRampToValueAtTime(0,t+0.8);
         if(_tensionGain) _tensionGain.gain.linearRampToValueAtTime(0,t+0.8);
         if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0,t+0.8);
+        // v3 fix: silence dedicated Defense/Hunt beds too — they'd otherwise keep
+        // playing after leaving those games (no bed-stop call on 'auto' branch alone).
+        try{ _stopDefenseBed(); }catch(_){}
+        try{ _stopHuntBed(); }catch(_){}
       }else if(scene==='boss'){
         if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0.085,t+1.2);
+        // v3 fix: boss scene is River-only — kill any lingering Defense/Hunt bed.
+        try{ _stopDefenseBed(); }catch(_){}
+        try{ _stopHuntBed(); }catch(_){}
       }else if(scene==='defense'){
         // Defense: dedicated industrial Zimmer bed (C1 sub + ostinato + pulse + strings + swells)
         // Silence the shared River beds so there's no overlap
         try{ _stopCombatBed(); }catch(_){}
+        // v3 fix: also silence Hunt bed if it was running (user swapped games mid-session).
+        try{ _stopHuntBed(); }catch(_){}
         if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0,t+0.6);
         if(_ambientGain) _ambientGain.gain.linearRampToValueAtTime(0,t+0.6);
         if(_tensionGain) _tensionGain.gain.linearRampToValueAtTime(0,t+0.6);
@@ -8980,6 +8992,8 @@ const SoundEngine={
       }else if(scene==='hunt'){
         // Hunt: dedicated Blade Runner 2049 noir bed (A1 sub + filtered minor 7th pad + bells + rain + dial-tone)
         try{ _stopCombatBed(); }catch(_){}
+        // v3 fix: also silence Defense bed if it was running (user swapped games mid-session).
+        try{ _stopDefenseBed(); }catch(_){}
         if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0,t+0.6);
         if(_ambientGain) _ambientGain.gain.linearRampToValueAtTime(0,t+0.6);
         if(_tensionGain) _tensionGain.gain.linearRampToValueAtTime(0,t+0.6);
@@ -8988,8 +9002,15 @@ const SoundEngine={
         if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0,t+0.6);
         if(_tensionGain) _tensionGain.gain.linearRampToValueAtTime(0,t+0.6);
         if(_ambientGain) _ambientGain.gain.linearRampToValueAtTime(0,t+0.6);
+        // v3 fix: menu bed is separate — stop Defense/Hunt beds so only menu bed plays.
+        try{ _stopDefenseBed(); }catch(_){}
+        try{ _stopHuntBed(); }catch(_){}
       }else{
-        // auto — re-apply current intensity
+        // auto — re-apply current intensity (River bed)
+        // v3 fix: silence Defense/Hunt beds on River return. Without this they'd keep
+        // playing over River's aerial palette, which sounds like "River lost its BG sound".
+        try{ _stopDefenseBed(); }catch(_){}
+        try{ _stopHuntBed(); }catch(_){}
         _applyMusicIntensity();
       }
     },
