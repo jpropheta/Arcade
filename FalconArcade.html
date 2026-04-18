@@ -18,13 +18,20 @@
    Typography: cross-platform (macOS + Windows), ZERO external dependencies.
    ─────────────────────────────────────────────────────────────────────────── */
 :root {
-  /* Motion — exponential curves, no ease-in on entry, no bounce */
+  /* Motion — exponential curves, no ease-in on entry, no bounce.
+     Emil Kowalski's recommended strong curves now shipped alongside ours so
+     UI entries/exits and drawer gestures get the exact feel he specifies. */
   --ease-out-quart:    cubic-bezier(0.25, 1, 0.5, 1);       /* default entry */
   --ease-out-quint:    cubic-bezier(0.22, 1, 0.36, 1);      /* dramatic entry */
   --ease-out-expo:     cubic-bezier(0.16, 1, 0.3, 1);       /* snappy entry */
   --ease-in-expo:      cubic-bezier(0.7, 0, 0.84, 0);       /* exits */
   --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);      /* two-way state */
+  --ease-emil-out:     cubic-bezier(0.23, 1, 0.32, 1);      /* Emil: strong ease-out for UI */
+  --ease-emil-in-out:  cubic-bezier(0.77, 0, 0.175, 1);     /* Emil: on-screen movement */
+  --ease-drawer:       cubic-bezier(0.32, 0.72, 0, 1);      /* Emil: iOS drawer curve */
+  --dur-press:         140ms;  /* scale(0.97) button press feedback (Emil 100-160ms) */
   --dur-feedback:      140ms;  /* button presses, toggles */
+  --dur-tooltip:       160ms;  /* tooltips, small popovers (Emil 125-200ms) */
   --dur-ui:            220ms;  /* hover, dropdown, tooltip */
   --dur-scene:         480ms;  /* panels, modals, cinematics */
   --dur-hero:          720ms;  /* staged reveals */
@@ -85,13 +92,22 @@ html, body { width:100%; height:100%; background:#020308; overflow:hidden; font-
 .cs-subtitle { font-size:10px; color:#7f8b96; letter-spacing:2px; }
 .divider { width:min(900px,94vw); height:1px; margin:0 auto 20px; background:linear-gradient(90deg,transparent,rgba(224,0,60,0.7),rgba(255,216,77,0.5),rgba(224,0,60,0.7),transparent); }
 .cards { display:flex; gap:16px; align-items:stretch; flex-wrap:wrap; justify-content:center; width:100%; max-width:1100px; }
-.card { position:relative; width:min(320px,90vw); background:rgba(4,8,12,0.94); border:1px solid rgba(224,0,60,0.35); border-radius:2px; cursor:pointer; overflow:hidden; transition:border-color 0.25s,transform 0.18s,box-shadow 0.25s; text-decoration:none; color:inherit; display:flex; flex-direction:column; }
-.card:hover { border-color:var(--card-color,#e0003c); transform:translateY(-4px); box-shadow:0 0 40px rgba(224,0,60,0.18),0 0 80px rgba(224,0,60,0.08),0 8px 32px rgba(0,0,0,0.6); }
+/* Emil: specify exact properties (no `all`), use custom ease-out, and give the
+   card a press-down state so clicks feel responsive on touch + mouse alike. */
+.card { position:relative; width:min(320px,90vw); background:rgba(4,8,12,0.94); border:1px solid rgba(224,0,60,0.35); border-radius:2px; cursor:pointer; overflow:hidden; transition:border-color 220ms var(--ease-emil-out,cubic-bezier(0.23,1,0.32,1)),transform 180ms var(--ease-emil-out,cubic-bezier(0.23,1,0.32,1)),box-shadow 220ms var(--ease-emil-out,cubic-bezier(0.23,1,0.32,1)); text-decoration:none; color:inherit; display:flex; flex-direction:column; }
+.card:active { transform:translateY(-2px) scale(0.985); transition-duration:120ms; }
+/* Emil: gate hover behind hover-capable + fine pointer so touch devices don't
+   sticky-hover on tap. Touch gets the :active press state instead. */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover { border-color:var(--card-color,#e0003c); transform:translateY(-4px); box-shadow:0 0 40px rgba(224,0,60,0.18),0 0 80px rgba(224,0,60,0.08),0 8px 32px rgba(0,0,0,0.6); }
+}
 .card-accent { height:3px; background:var(--card-color,#e0003c); box-shadow:0 0 12px var(--card-color,#e0003c); flex-shrink:0; }
 .card-preview { height:130px; position:relative; overflow:hidden; flex-shrink:0; background:#020308; display:flex; align-items:center; justify-content:center; }
 .card-preview canvas { position:absolute; inset:0; width:100%; height:100%; }
 .card-preview-label { position:relative; z-index:2; font-size:clamp(14px,2vw,20px); font-weight:bold; color:var(--card-color,#e0003c); text-shadow:0 0 30px var(--card-color,#e0003c); letter-spacing:1px; text-align:center; padding:0 12px; line-height:1.2; transition:text-shadow 0.25s,letter-spacing 0.25s; }
-.card:hover .card-preview-label { text-shadow:-1.8px 0 rgba(255,20,60,0.88),1.8px 0 rgba(0,200,255,0.88),0 0 32px var(--card-color,#e0003c),0 0 64px var(--card-color,#e0003c); letter-spacing:1.5px; }
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .card-preview-label { text-shadow:-1.8px 0 rgba(255,20,60,0.88),1.8px 0 rgba(0,200,255,0.88),0 0 32px var(--card-color,#e0003c),0 0 64px var(--card-color,#e0003c); letter-spacing:1.5px; }
+}
 .card-body { padding:14px 18px 18px; display:flex; flex-direction:column; gap:8px; flex:1; }
 .card-eyebrow { font-size:7px; letter-spacing:3px; color:var(--card-color,#e0003c); text-transform:uppercase; }
 .card-name { font-size:15px; font-weight:bold; color:#f4f7fa; line-height:1.2; }
@@ -101,9 +117,13 @@ html, body { width:100%; height:100%; background:#020308; overflow:hidden; font-
 .tag.highlight { border-color:var(--card-color,#e0003c); color:var(--card-color,#e0003c); }
 .card-cta { margin-top:auto; padding-top:12px; display:flex; align-items:center; justify-content:space-between; }
 .cta-btn { font-size:9px; font-weight:bold; letter-spacing:2px; color:#fff; background:var(--card-color,#e0003c); border:none; padding:8px 16px; cursor:pointer; text-transform:uppercase; transition:filter 0.18s,transform 0.1s; border-radius:1px; pointer-events:none; }
-.card:hover .cta-btn { filter:brightness(1.2); }
-.cta-arrow { font-size:16px; color:var(--card-color,#e0003c); opacity:0; transform:translateX(-8px); transition:opacity 0.2s,transform 0.2s; }
-.card:hover .cta-arrow { opacity:1; transform:translateX(0); }
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .cta-btn { filter:brightness(1.2); }
+}
+.cta-arrow { font-size:16px; color:var(--card-color,#e0003c); opacity:0; transform:translateX(-8px); transition:opacity 200ms var(--ease-emil-out,cubic-bezier(0.23,1,0.32,1)),transform 200ms var(--ease-emil-out,cubic-bezier(0.23,1,0.32,1)); }
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .cta-arrow { opacity:1; transform:translateX(0); }
+}
 .footer { margin-top:16px; text-align:center; }
 .footer-event { font-size:8px; letter-spacing:3px; color:#6a7f8a; text-transform:uppercase; margin-bottom:4px; }
 .footer-hint {
@@ -125,13 +145,21 @@ html, body { width:100%; height:100%; background:#020308; overflow:hidden; font-
   min-width:170px; padding:10px 14px; border:1px solid rgba(255,255,255,0.12);
   background:rgba(255,255,255,0.04); color:#d5dde5; text-decoration:none; cursor:pointer;
   font:700 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:2px; text-transform:uppercase;
-  transition:transform 0.18s, border-color 0.18s, box-shadow 0.18s, color 0.18s;
+  /* Emil: exact property transitions, strong ease-out, short durations */
+  transition:transform 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             border-color 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             box-shadow 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             color 180ms cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
 }
-.dashboard-action-btn:hover {
-  transform:translateY(-2px);
-  color:#fff; border-color:rgba(255,216,77,0.55);
-  box-shadow:0 0 24px rgba(255,216,77,0.16);
+@media (hover: hover) and (pointer: fine) {
+  .dashboard-action-btn:hover {
+    transform:translateY(-2px);
+    color:#fff; border-color:rgba(255,216,77,0.55);
+    box-shadow:0 0 24px rgba(255,216,77,0.16);
+  }
 }
+.dashboard-action-btn:active { transform:scale(0.97); }
 .dashboard-action-btn strong { color:#ffd84d; margin-right:8px; font-weight:700; }
 .ops-strip { display:none; }
 .ops-chip { border:1px solid rgba(255,255,255,0.08); background:linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02)); padding:10px 12px; text-align:left; min-height:58px; }
@@ -178,24 +206,40 @@ body.arcade-loader-active { overflow:hidden; }
   background:rgba(4,1,18,0.62); border:1px solid rgba(224,0,60,0.5);
   color:#e0003c; font:bold 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   letter-spacing:2px; padding:7px 14px; cursor:pointer; text-transform:uppercase;
-  border-radius:2px; transition:background 0.18s,border-color 0.18s,color 0.18s,box-shadow 0.18s;
+  border-radius:2px;
+  /* Emil: strong ease-out; press is fastest (<150ms) */
+  transition:background 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             border-color 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             color 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             box-shadow 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             transform 140ms cubic-bezier(0.23, 1, 0.32, 1);
   text-decoration:none; display:inline-block;
+  will-change: transform;
 }
-.dashboard-btn-cls:hover {
-  background:rgba(224,0,60,0.18); border-color:#e0003c; color:#fff;
-  box-shadow:0 0 16px rgba(224,0,60,0.35);
+@media (hover: hover) and (pointer: fine) {
+  .dashboard-btn-cls:hover {
+    background:rgba(224,0,60,0.18); border-color:#e0003c; color:#fff;
+    box-shadow:0 0 16px rgba(224,0,60,0.35);
+  }
 }
+.dashboard-btn-cls:active { transform:scale(0.97); }
 /* ── LANGUAGE FLAGS ── */
 .lang-flags { position:absolute; top:16px; left:16px; display:flex; gap:8px; z-index:100; }
 .lang-flags span {
   font-size:26px; cursor:pointer; display:inline-block;
   filter:drop-shadow(0 0 5px rgba(224,0,60,0.55)) contrast(1.15) saturate(1.2);
-  transition:transform 0.18s cubic-bezier(0.22,1,0.36,1), filter 0.18s;
+  /* Emil: strong ease-out curve, short duration */
+  transition:transform 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             filter 180ms cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
 }
-.lang-flags span:hover {
-  transform:scale(1.22);
-  filter:drop-shadow(0 0 10px rgba(224,0,60,0.9)) drop-shadow(0 0 22px rgba(224,0,60,0.4)) contrast(1.3) saturate(1.5) brightness(1.1);
+@media (hover: hover) and (pointer: fine) {
+  .lang-flags span:hover {
+    transform:scale(1.22);
+    filter:drop-shadow(0 0 10px rgba(224,0,60,0.9)) drop-shadow(0 0 22px rgba(224,0,60,0.4)) contrast(1.3) saturate(1.5) brightness(1.1);
+  }
 }
+.lang-flags span:active { transform:scale(1.08); }
 /* ── OVERLAY SCOPING — overlays must be absolute inside their containers ── */
 #fr-overlay-zero, #fr-overlay-defense, #fr-overlay-hunt {
   position:absolute !important;
@@ -586,46 +630,57 @@ body.arcade-loader-active { overflow:hidden; }
     radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08), transparent 56%);
   mix-blend-mode:screen;
 }
+/* ══════════════════════════════════════════════════════════════
+   MISSION BRIEF OVERLAY — rebuilt per Emil's design-engineering
+   principles. Flat terminal language consistent with the rest of
+   the arcade: thin 1px borders, monospace labels (10–11px / ls 2px),
+   red accent as line/corner/inner glow only — never as filled slab.
+   No polaroid stacks, no infinite grid-shift, no duplicate titles.
+   Enter uses a 50ms stagger (≤ 360ms total) with a strong ease-out.
+   Scene swap uses transitions (not keyframes) so rapid tab-clicks
+   retarget smoothly. Exit uses a 200ms fade+blur to prevent the
+   "text flash" mid-transition the user reported when returning to
+   the dashboard.
+   ══════════════════════════════════════════════════════════════ */
 #mission-brief-overlay {
   position:fixed; inset:0; z-index:12500; display:none;
   align-items:center; justify-content:center; padding:24px;
   background:rgba(2,3,8,0.82); backdrop-filter:blur(14px);
+  opacity:0;
+  transition:opacity 200ms cubic-bezier(0.23, 1, 0.32, 1);
 }
-#mission-brief-overlay.is-open { display:flex; animation:arcade-fade-in 0.28s cubic-bezier(0.22,1,0.36,1) both; }
+#mission-brief-overlay.is-open { display:flex; opacity:1; }
+#mission-brief-overlay.is-closing { opacity:0; pointer-events:none; }
+
 .mission-brief-shell {
   --brief-accent:#e0003c;
   position:relative; width:min(1240px,95vw); min-height:0; max-height:min(96vh,940px);
   border:1px solid color-mix(in srgb, var(--brief-accent) 26%, rgba(255,255,255,0.08));
   background:
-    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--brief-accent) 16%, transparent), transparent 36%),
+    radial-gradient(circle at 50% -10%, color-mix(in srgb, var(--brief-accent) 14%, transparent), transparent 34%),
     linear-gradient(180deg, rgba(9,11,18,0.98), rgba(3,6,12,0.98));
   box-shadow:
     0 26px 90px rgba(0,0,0,0.52),
     inset 0 0 0 1px rgba(255,255,255,0.03),
-    inset 0 0 72px color-mix(in srgb, var(--brief-accent) 10%, transparent);
+    inset 0 0 72px color-mix(in srgb, var(--brief-accent) 8%, transparent);
   overflow:hidden;
   display:flex; flex-direction:column;
+  transform:translateY(0) scale(1);
+  filter:blur(0);
+  transition:transform 200ms cubic-bezier(0.23, 1, 0.32, 1),
+             filter 200ms cubic-bezier(0.23, 1, 0.32, 1);
 }
-.mission-brief-shell::before,
-.mission-brief-shell::after {
-  content:""; position:absolute; inset:0; pointer-events:none;
+#mission-brief-overlay.is-closing .mission-brief-shell {
+  transform:translateY(4px) scale(.985);
+  filter:blur(6px);
 }
-.mission-brief-shell::before {
-  background:
-    linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent),
-    repeating-linear-gradient(180deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0) 2px, rgba(0,0,0,0.14) 3px, rgba(0,0,0,0.14) 4px);
-  opacity:.46;
-}
-.mission-brief-shell::after {
-  inset:16px;
-  border:1px solid color-mix(in srgb, var(--brief-accent) 22%, rgba(255,255,255,0.06));
-  opacity:.5;
-}
+
+/* Head + footer — consistent rhythm with rest of UI */
 .mission-brief-head,
 .mission-brief-footer {
   position:relative; z-index:1;
   display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:16px;
-  padding:18px 24px;
+  padding:16px 24px;
   border-bottom:1px solid rgba(255,255,255,0.06);
 }
 .mission-brief-footer {
@@ -650,45 +705,49 @@ body.arcade-loader-active { overflow:hidden; }
   appearance:none; cursor:pointer;
   color:#7f8b96; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03);
   padding:8px 12px;
+  transition:background 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             color 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             border-color 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             transform 140ms cubic-bezier(0.23, 1, 0.32, 1);
+  will-change:transform;
 }
+@media (hover: hover) and (pointer: fine) {
+  .mission-brief-exit:hover {
+    color:#dce7ef; border-color:rgba(255,255,255,0.18); background:rgba(255,255,255,0.06);
+  }
+}
+.mission-brief-exit:active { transform:scale(0.97); }
+
 .mission-brief-body {
   position:relative; z-index:1;
-  display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,0.86fr);
+  display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,0.9fr);
   gap:20px; padding:24px; min-height:0; flex:1 1 auto; overflow:auto;
   align-items:start;
 }
+
+/* Stage — no polaroid visual, no inset second border, no ambient grid-shift */
 .mission-brief-stage {
-  position:relative; overflow:hidden;
+  position:relative;
   display:flex; flex-direction:column; gap:clamp(14px,1.3vw,18px);
   min-height:0;
-  padding:28px 30px 28px;
-  border:1px solid color-mix(in srgb, var(--brief-accent) 22%, rgba(255,255,255,0.08));
+  padding:24px 28px;
+  border:1px solid color-mix(in srgb, var(--brief-accent) 20%, rgba(255,255,255,0.08));
   background:
-    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--brief-accent) 12%, transparent), transparent 44%),
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--brief-accent) 10%, transparent), transparent 44%),
     linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
   box-shadow:inset 0 0 50px rgba(0,0,0,0.22);
 }
 .mission-brief-stage > * { min-width:0; }
-.mission-brief-stage.is-swapping .mission-brief-scene-title,
-.mission-brief-stage.is-swapping .mission-brief-scene-body {
-  animation:mission-brief-swap 0.42s cubic-bezier(0.22,1,0.36,1);
-}
-@keyframes mission-brief-swap {
-  from { opacity:0; transform:translateY(14px) scale(.985); filter:blur(8px); }
-  to { opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
-}
+
+/* Meta row: OP plate + corridor status plate */
 .mission-brief-meta {
   display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px;
 }
 .mission-brief-op,
-.mission-brief-status,
-.mission-brief-scene-pill {
+.mission-brief-status {
   padding:7px 10px;
   border:1px solid color-mix(in srgb, var(--brief-accent) 18%, rgba(255,255,255,0.1));
   background:rgba(4,8,14,0.58);
-}
-.mission-brief-op,
-.mission-brief-status {
   min-width:0;
   line-height:1.35;
   white-space:normal;
@@ -696,180 +755,96 @@ body.arcade-loader-active { overflow:hidden; }
 }
 .mission-brief-op { color:#dce7ef; }
 .mission-brief-status { color:#89a8bb; text-align:right; }
+
+/* Title + subtitle — one hero per view */
 .mission-brief-title {
   max-width:22ch;
   color:#f2fbff;
-  font:700 clamp(26px,3.4vw,56px)/1.0 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font:700 clamp(26px,3.2vw,48px)/1.0 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   letter-spacing:-0.04em;
-  text-shadow:0 0 38px color-mix(in srgb, var(--brief-accent) 18%, transparent);
+  text-shadow:0 0 38px color-mix(in srgb, var(--brief-accent) 16%, transparent);
   text-wrap:balance;
 }
 .mission-brief-subtitle {
-  max-width:60ch; color:#9db3c2; font:700 14px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  max-width:60ch; color:#9db3c2;
+  font:700 14px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   text-wrap:pretty;
 }
-.mission-brief-storybar {
-  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,max-content);
-  align-items:end; gap:10px 16px;
-}
-.mission-brief-signal {
-  display:grid; justify-items:end; gap:4px;
-  max-width:min(100%, 32rem);
-  margin-left:auto;
-  padding:9px 12px;
-  border:1px solid color-mix(in srgb, var(--brief-accent) 18%, rgba(255,255,255,0.1));
-  background:rgba(4,8,14,0.58);
-}
-.mission-brief-signal-pill {
+
+/* Story strip label */
+.mission-brief-strip-label {
   color:#89a8bb;
   font:700 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   letter-spacing:2px; text-transform:uppercase;
+  margin-bottom:-6px;
 }
-.mission-brief-signal-title {
-  color:#eef7ff;
-  font:700 12px/1.35 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:1.2px; text-transform:uppercase;
-  text-align:right;
-  text-wrap:balance;
-  overflow-wrap:anywhere;
-}
-.mission-brief-scene-visual {
-  position:relative; min-height:clamp(156px,22vh,220px); overflow:hidden;
-  border:1px solid color-mix(in srgb, var(--brief-accent) 18%, rgba(255,255,255,0.08));
-  background:
-    radial-gradient(circle at 18% 18%, color-mix(in srgb, var(--brief-accent) 24%, transparent), transparent 32%),
-    radial-gradient(circle at 84% 76%, color-mix(in srgb, #ffd84d 14%, transparent), transparent 34%),
-    linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.012));
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,0.03),
-    inset 0 0 42px rgba(0,0,0,0.24);
-}
-.mission-brief-scene-visual::before,
-.mission-brief-scene-visual::after {
-  content:""; position:absolute; inset:0; pointer-events:none;
-}
-.mission-brief-scene-visual::before {
-  background:
-    linear-gradient(90deg, transparent, color-mix(in srgb, var(--brief-accent) 12%, transparent), transparent),
-    repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 44px),
-    repeating-linear-gradient(180deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 38px);
-  opacity:.62;
-  animation:mission-brief-grid-shift 7s ease-in-out infinite alternate;
-}
-.mission-brief-scene-visual::after {
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.04), transparent 22%, transparent 78%, rgba(0,0,0,0.22)),
-    repeating-linear-gradient(180deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0) 2px, rgba(0,0,0,0.1) 3px, rgba(0,0,0,0.1) 4px);
-  opacity:.46;
-}
-.mission-brief-scene-stack {
-  position:absolute; inset:20px;
-}
-.mission-brief-scene-node {
-  appearance:none;
-  position:absolute;
-  min-width:170px;
-  max-width:min(280px,74%);
-  padding:16px 18px 18px;
-  border:1px solid color-mix(in srgb, var(--brief-accent) 22%, rgba(255,255,255,0.08));
-  background:linear-gradient(180deg, rgba(9,14,22,0.92), rgba(5,9,16,0.76));
-  color:#eef7ff;
-  text-align:left;
-  cursor:pointer;
-  transition:
-    transform .46s cubic-bezier(0.22,1,0.36,1),
-    opacity .32s ease,
-    filter .32s ease,
-    border-color .28s ease,
-    box-shadow .28s ease;
-}
-.mission-brief-scene-node::after {
-  content:""; position:absolute; inset:auto 0 0 0; height:2px;
-  background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--brief-accent) 80%, #fff), transparent);
-  opacity:.4;
-}
-.mission-brief-scene-node-k {
-  margin-bottom:10px;
-  color:#89a8bb;
-  font:700 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:2px; text-transform:uppercase;
-}
-.mission-brief-scene-node-v {
-  color:#dce7ef;
-  font:700 clamp(15px,1.35vw,17px)/1.18 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  text-wrap:balance;
-  overflow-wrap:anywhere;
-}
-.mission-brief-scene-node.is-before {
-  top:12px; left:10px;
-  transform:scale(.82) rotate(-5deg);
-  opacity:.44;
-  filter:blur(.8px);
-}
-.mission-brief-scene-node.is-active {
-  top:50%; left:50%;
-  transform:translate(-50%,-50%) scale(1.02);
-  opacity:1;
-  z-index:2;
-  border-color:color-mix(in srgb, var(--brief-accent) 42%, rgba(255,255,255,0.14));
-  box-shadow:
-    0 0 30px color-mix(in srgb, var(--brief-accent) 18%, transparent),
-    inset 0 0 26px color-mix(in srgb, var(--brief-accent) 9%, transparent);
-}
-.mission-brief-scene-node.is-after {
-  right:12px; bottom:12px;
-  transform:scale(.88) rotate(4deg);
-  opacity:.56;
-  filter:blur(.4px);
-}
-.mission-brief-scene-node.is-hidden {
-  opacity:0;
-  pointer-events:none;
-}
-.mission-brief-stage.is-swapping .mission-brief-scene-node.is-active {
-  animation:mission-brief-swap 0.42s cubic-bezier(0.22,1,0.36,1);
-}
-@keyframes mission-brief-grid-shift {
-  from { transform:translate3d(-2%, -1%, 0) scale(1); }
-  to { transform:translate3d(2%, 1%, 0) scale(1.04); }
-}
+
+/* Numbered story strip — three chips, cohesive with .mission-brief-op weight */
 .mission-brief-scene-rail {
-  display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px;
+  display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px;
 }
 .mission-brief-scene-pill {
   appearance:none; cursor:pointer;
-  display:inline-flex; align-items:center; justify-content:center;
+  display:flex; align-items:center; justify-content:flex-start; gap:10px;
   width:100%;
-  min-width:0; min-height:40px;
-  padding:8px 12px;
-  text-align:center;
+  min-width:0; min-height:32px;
+  padding:0 14px;
+  text-align:left;
   line-height:1.1;
   text-wrap:balance;
-  color:#6f8596; transition:transform .18s ease, color .18s ease, border-color .18s ease, background .18s ease;
+  color:#6f8596;
+  border:1px solid color-mix(in srgb, var(--brief-accent) 16%, rgba(255,255,255,0.08));
+  background:rgba(4,8,14,0.58);
+  transition:transform 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             color 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             border-color 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             background 180ms cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+}
+.mission-brief-scene-pill::before {
+  content:attr(data-idx);
+  display:inline-block;
+  color:color-mix(in srgb, var(--brief-accent) 62%, #89a8bb);
+  font-variant-numeric:tabular-nums;
+  opacity:.78;
 }
 .mission-brief-scene-pill.is-active {
   color:#eef7ff;
-  transform:translateY(-1px);
-  border-color:color-mix(in srgb, var(--brief-accent) 42%, rgba(255,255,255,0.12));
-  background:color-mix(in srgb, var(--brief-accent) 12%, rgba(255,255,255,0.02));
+  border-color:color-mix(in srgb, var(--brief-accent) 52%, rgba(255,255,255,0.14));
+  background:color-mix(in srgb, var(--brief-accent) 14%, rgba(255,255,255,0.02));
+  box-shadow:inset 0 0 20px color-mix(in srgb, var(--brief-accent) 14%, transparent);
 }
-.mission-brief-scene-pill:hover {
-  color:#eef7ff;
-  border-color:color-mix(in srgb, var(--brief-accent) 26%, rgba(255,255,255,0.12));
+.mission-brief-scene-pill.is-active::before {
+  color:color-mix(in srgb, var(--brief-accent) 90%, #fff);
+  opacity:1;
 }
-.mission-brief-scene-title {
-  max-width:28ch;
-  color:color-mix(in srgb, var(--brief-accent) 72%, #fff);
-  font:700 clamp(17px,1.6vw,24px)/1.15 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  text-wrap:balance;
-  overflow-wrap:anywhere;
+@media (hover: hover) and (pointer: fine) {
+  .mission-brief-scene-pill:hover {
+    color:#eef7ff;
+    border-color:color-mix(in srgb, var(--brief-accent) 30%, rgba(255,255,255,0.14));
+  }
 }
+.mission-brief-scene-pill:active { transform:scale(0.97); }
+
+/* Scene body — single paragraph, neutral color (no red mid-title duplicate) */
 .mission-brief-scene-body {
   max-width:56ch;
   color:#eef7ff;
   font:700 15px/1.8 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   text-wrap:pretty;
+  opacity:1;
+  transform:translateY(0);
+  filter:blur(0);
+  transition:opacity 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             transform 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             filter 180ms cubic-bezier(0.23, 1, 0.32, 1);
 }
+.mission-brief-stage.is-swapping .mission-brief-scene-body {
+  opacity:0;
+  transform:translateY(6px);
+  filter:blur(2px);
+}
+
 .mission-brief-progress {
   margin-top:auto; width:100%; height:4px; overflow:hidden; border-radius:999px;
   background:rgba(255,255,255,0.08);
@@ -878,8 +853,10 @@ body.arcade-loader-active { overflow:hidden; }
   display:block; height:100%; width:0%;
   background:linear-gradient(90deg, color-mix(in srgb, var(--brief-accent) 78%, #fff), #ffd84d);
   box-shadow:0 0 18px color-mix(in srgb, var(--brief-accent) 28%, transparent);
-  transition:width .24s ease;
+  transition:width .18s linear;
 }
+
+/* Sidebar cards */
 .mission-brief-sidebar {
   display:grid; gap:14px; align-content:start; min-width:0;
 }
@@ -892,7 +869,7 @@ body.arcade-loader-active { overflow:hidden; }
 .mission-brief-card::before {
   content:""; position:absolute; inset:auto 0 0 0; height:2px;
   background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--brief-accent) 78%, #fff), transparent);
-  opacity:.42;
+  opacity:.36;
 }
 .mission-brief-card-k { color:#89a8bb; margin-bottom:12px; }
 .mission-brief-command-list,
@@ -929,19 +906,57 @@ body.arcade-loader-active { overflow:hidden; }
 }
 .mission-brief-confirm {
   border:none; cursor:pointer;
-  padding:13px 20px;
+  padding:12px 22px;
   background:linear-gradient(90deg, color-mix(in srgb, var(--brief-accent) 92%, #fff), color-mix(in srgb, var(--brief-accent) 74%, #ffd84d));
   color:#fff;
   font:700 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   letter-spacing:2px; text-transform:uppercase;
-  box-shadow:0 0 24px color-mix(in srgb, var(--brief-accent) 28%, transparent);
+  box-shadow:0 0 24px color-mix(in srgb, var(--brief-accent) 26%, transparent);
+  transition:transform 140ms cubic-bezier(0.23, 1, 0.32, 1),
+             box-shadow 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             filter 180ms cubic-bezier(0.23, 1, 0.32, 1);
+  will-change:transform;
 }
+@media (hover: hover) and (pointer: fine) {
+  .mission-brief-confirm:hover {
+    filter:brightness(1.08);
+    box-shadow:0 0 32px color-mix(in srgb, var(--brief-accent) 36%, transparent);
+  }
+}
+.mission-brief-confirm:active { transform:scale(0.97); }
+
+/* ── Enter stagger ── (Emil: 40–80ms between items; total ≤ 360ms) */
+@keyframes mb-enter {
+  from { opacity:0; transform:translateY(6px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+#mission-brief-overlay.is-open .mission-brief-head,
+#mission-brief-overlay.is-open .mission-brief-meta,
+#mission-brief-overlay.is-open .mission-brief-title,
+#mission-brief-overlay.is-open .mission-brief-subtitle,
+#mission-brief-overlay.is-open .mission-brief-strip-label,
+#mission-brief-overlay.is-open .mission-brief-scene-rail,
+#mission-brief-overlay.is-open .mission-brief-scene-body,
+#mission-brief-overlay.is-open .mission-brief-sidebar > *,
+#mission-brief-overlay.is-open .mission-brief-footer {
+  animation:mb-enter 320ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+#mission-brief-overlay.is-open .mission-brief-head          { animation-delay: 0ms;   }
+#mission-brief-overlay.is-open .mission-brief-meta          { animation-delay: 40ms;  }
+#mission-brief-overlay.is-open .mission-brief-title         { animation-delay: 80ms;  }
+#mission-brief-overlay.is-open .mission-brief-subtitle      { animation-delay: 120ms; }
+#mission-brief-overlay.is-open .mission-brief-strip-label   { animation-delay: 160ms; }
+#mission-brief-overlay.is-open .mission-brief-scene-rail    { animation-delay: 180ms; }
+#mission-brief-overlay.is-open .mission-brief-scene-body    { animation-delay: 220ms; }
+#mission-brief-overlay.is-open .mission-brief-sidebar > *:nth-child(1) { animation-delay: 180ms; }
+#mission-brief-overlay.is-open .mission-brief-sidebar > *:nth-child(2) { animation-delay: 220ms; }
+#mission-brief-overlay.is-open .mission-brief-sidebar > *:nth-child(3) { animation-delay: 260ms; }
+#mission-brief-overlay.is-open .mission-brief-footer        { animation-delay: 300ms; }
+
+/* Responsive */
 @media (max-width: 1120px) {
   .mission-brief-body { grid-template-columns:minmax(0,1fr); }
   .mission-brief-title { max-width:none; }
-  .mission-brief-storybar { grid-template-columns:minmax(0,1fr); align-items:start; }
-  .mission-brief-signal { margin-left:0; justify-items:start; }
-  .mission-brief-signal-title { text-align:left; }
 }
 @media (max-width: 980px) {
   .mission-brief-head,
@@ -951,55 +966,51 @@ body.arcade-loader-active { overflow:hidden; }
   }
   .mission-brief-confirm { width:100%; }
   .dash-attract-panel { height:min(84vh,920px); }
-  .mission-brief-scene-title { font-size:20px; }
 }
 @media (max-height: 900px) {
   .mission-brief-shell { max-height:min(98vh,960px); }
-  .mission-brief-stage { padding:20px 22px 22px; }
-  .mission-brief-title { font-size:clamp(24px,3.2vw,48px); }
-  .mission-brief-scene-visual { min-height:130px; }
-  .mission-brief-scene-pill { min-height:36px; }
+  .mission-brief-stage { padding:20px 22px; }
+  .mission-brief-title { font-size:clamp(24px,3vw,40px); }
   .mission-brief-body { gap:14px; padding:16px; }
 }
 @media (max-height: 820px) {
   .mission-brief-shell { width:min(1120px,96vw); max-height:96vh; }
   .mission-brief-body { grid-template-columns:minmax(0,1fr); padding:14px; gap:12px; }
-  .mission-brief-stage { padding:16px 18px 18px; gap:10px; }
-  .mission-brief-title { font-size:clamp(22px,2.8vw,40px); }
-  .mission-brief-scene-visual { min-height:110px; }
+  .mission-brief-stage { padding:16px 18px; gap:10px; }
+  .mission-brief-title { font-size:clamp(22px,2.6vw,36px); }
 }
 @media (max-width: 720px) {
   #mission-brief-overlay { padding:12px; }
   .mission-brief-head, .mission-brief-footer, .mission-brief-body { padding:16px; }
-  .mission-brief-stage { padding:20px 18px 22px; }
-  .mission-brief-title { font-size:clamp(28px,9vw,42px); }
-  .mission-brief-storybar { grid-template-columns:minmax(0,1fr); align-items:start; }
-  .mission-brief-signal { justify-items:start; margin-left:0; }
-  .mission-brief-signal-title { text-align:left; }
-  .mission-brief-scene-visual { min-height:176px; }
-  .mission-brief-scene-stack { inset:14px; }
-  .mission-brief-scene-node { min-width:0; max-width:82%; padding:14px 14px 16px; }
-  .mission-brief-scene-node-v { font-size:14px; }
-  .mission-brief-scene-node.is-before { top:6px; left:4px; }
-  .mission-brief-scene-node.is-after { right:4px; bottom:6px; }
-  .mission-brief-scene-pill { min-width:0; padding:9px 10px; }
+  .mission-brief-stage { padding:18px 16px; }
+  .mission-brief-title { font-size:clamp(26px,8vw,38px); }
+  .mission-brief-scene-pill { padding:0 10px; gap:8px; }
   .mission-brief-subtitle, .mission-brief-scene-body { font-size:13px; }
   .mission-brief-confirm { width:100%; }
 }
+
+/* Reduced motion: collapse to opacity-only; no translate/scale/blur */
 @media (prefers-reduced-motion: reduce) {
-  #mission-brief-overlay.is-open,
-  .mission-brief-stage.is-swapping .mission-brief-scene-title,
-  .mission-brief-stage.is-swapping .mission-brief-scene-body,
-  .mission-brief-stage.is-swapping .mission-brief-scene-node.is-active,
-  .mission-brief-scene-node,
+  #mission-brief-overlay,
+  #mission-brief-overlay.is-closing .mission-brief-shell,
+  .mission-brief-scene-body,
   .mission-brief-scene-pill,
+  .mission-brief-exit,
+  .mission-brief-confirm,
   .mission-brief-progress > span,
-  .mission-brief-confirm {
+  #mission-brief-overlay.is-open .mission-brief-head,
+  #mission-brief-overlay.is-open .mission-brief-meta,
+  #mission-brief-overlay.is-open .mission-brief-title,
+  #mission-brief-overlay.is-open .mission-brief-subtitle,
+  #mission-brief-overlay.is-open .mission-brief-strip-label,
+  #mission-brief-overlay.is-open .mission-brief-scene-rail,
+  #mission-brief-overlay.is-open .mission-brief-scene-body,
+  #mission-brief-overlay.is-open .mission-brief-sidebar > *,
+  #mission-brief-overlay.is-open .mission-brief-footer {
     animation:none !important;
-    transition:none !important;
-  }
-  .mission-brief-scene-visual::before {
-    animation:none !important;
+    transition:opacity 160ms linear !important;
+    transform:none !important;
+    filter:none !important;
   }
 }
 /* ── FADE-IN ── */
@@ -1273,6 +1284,7 @@ const TRANSLATIONS = {
     g_score:'SCORE',             g_hi:'HI SCORE',
     g_phase:'PHASE',             g_lives:'LIVES',
     g_paused:'PAUSED',           g_fuel:'FUEL',
+    g_resume_hint:'PRESS P TO RESUME',
     g_scan:'SCAN',               g_scan_ready:'SCAN ready [S]',
     g_mission:'MISSION',         g_objectives:'OBJECTIVES',
     g_controls:'CONTROLS',       g_mute:'MUTE',
@@ -1871,6 +1883,7 @@ const TRANSLATIONS = {
     g_score:'PONTOS',            g_hi:'RECORDE',
     g_phase:'FASE',              g_lives:'VIDAS',
     g_paused:'PAUSADO',          g_fuel:'COMBUSTÍVEL',
+    g_resume_hint:'PRESSIONE P PARA RETOMAR',
     g_scan:'VARREDURA',          g_scan_ready:'VARREDURA pronta [S]',
     g_mission:'MISSÃO',          g_objectives:'OBJETIVOS',
     g_controls:'CONTROLES',      g_mute:'MUDO',
@@ -2467,6 +2480,7 @@ const TRANSLATIONS = {
     g_score:'PUNTOS',            g_hi:'RÉCORD',
     g_phase:'FASE',              g_lives:'VIDAS',
     g_paused:'PAUSADO',          g_fuel:'COMBUSTIBLE',
+    g_resume_hint:'PULSA P PARA REANUDAR',
     g_scan:'EXPLORACIÓN',        g_scan_ready:'EXPLORACIÓN lista [S]',
     g_mission:'MISIÓN',          g_objectives:'OBJETIVOS',
     g_controls:'CONTROLES',      g_mute:'SILENCIO',
@@ -3063,6 +3077,7 @@ const TRANSLATIONS = {
     g_score:'スコア',              g_hi:'ハイスコア',
     g_phase:'フェーズ',            g_lives:'ライフ',
     g_paused:'一時停止',           g_fuel:'燃料',
+    g_resume_hint:'Pキーで再開',
     g_scan:'スキャン',             g_scan_ready:'スキャン準備完了 [S]',
     g_mission:'ミッション',        g_objectives:'目標',
     g_controls:'操作方法',         g_mute:'ミュート',
@@ -3980,18 +3995,8 @@ function _ensureMissionBriefOverlay() {
           </div>
           <div class="mission-brief-title" id="mission-brief-title"></div>
           <div class="mission-brief-subtitle" id="mission-brief-subtitle"></div>
-          <div class="mission-brief-storybar">
-            <div class="mission-brief-card-k" id="mission-brief-story-label"></div>
-            <div class="mission-brief-signal" id="mission-brief-signal">
-              <div class="mission-brief-signal-pill" id="mission-brief-signal-pill"></div>
-              <div class="mission-brief-signal-title" id="mission-brief-signal-title"></div>
-            </div>
-          </div>
-          <div class="mission-brief-scene-visual">
-            <div class="mission-brief-scene-stack" id="mission-brief-scene-stack"></div>
-          </div>
+          <div class="mission-brief-strip-label" id="mission-brief-strip-label"></div>
           <div class="mission-brief-scene-rail" id="mission-brief-scene-rail"></div>
-          <div class="mission-brief-scene-title" id="mission-brief-scene-title"></div>
           <div class="mission-brief-scene-body" id="mission-brief-scene-body"></div>
           <div class="mission-brief-progress"><span id="mission-brief-progress-bar"></span></div>
         </section>
@@ -4028,13 +4033,8 @@ function _ensureMissionBriefOverlay() {
     status:overlay.querySelector('#mission-brief-status'),
     title:overlay.querySelector('#mission-brief-title'),
     subtitle:overlay.querySelector('#mission-brief-subtitle'),
-    storyLabel:overlay.querySelector('#mission-brief-story-label'),
-    signal:overlay.querySelector('#mission-brief-signal'),
-    signalPill:overlay.querySelector('#mission-brief-signal-pill'),
-    signalTitle:overlay.querySelector('#mission-brief-signal-title'),
-    sceneStack:overlay.querySelector('#mission-brief-scene-stack'),
+    stripLabel:overlay.querySelector('#mission-brief-strip-label'),
     rail:overlay.querySelector('#mission-brief-scene-rail'),
-    sceneTitle:overlay.querySelector('#mission-brief-scene-title'),
     sceneBody:overlay.querySelector('#mission-brief-scene-body'),
     progress:overlay.querySelector('#mission-brief-progress-bar'),
     controlsLabel:overlay.querySelector('#mission-brief-controls-label'),
@@ -4104,43 +4104,18 @@ function _ensureMissionBriefOverlay() {
     });
   }
 
-  function renderSceneStack(scenes) {
-    refs.sceneStack.innerHTML = '';
-    scenes.forEach((scene, idx) => {
-      const node = document.createElement('button');
-      node.type = 'button';
-      node.className = 'mission-brief-scene-node';
-      const index = document.createElement('div');
-      index.className = 'mission-brief-scene-node-k';
-      index.textContent = `${String(idx + 1).padStart(2, '0')} / ${String(scenes.length).padStart(2, '0')}`;
-      const value = document.createElement('div');
-      value.className = 'mission-brief-scene-node-v';
-      value.textContent = scene.title;
-      node.append(index, value);
-      node.addEventListener('click', () => applyScene(idx));
-      refs.sceneStack.appendChild(node);
-    });
-  }
-
   function applyScene(nextIndex) {
     if (!currentData) return;
     const scene = currentData.scenes[nextIndex];
     sceneIndex = nextIndex;
-    refs.stage.classList.remove('is-swapping');
-    void refs.stage.offsetWidth;
+    // Interruptible crossfade: retrigger class via rAF so rapid rail clicks retarget.
     refs.stage.classList.add('is-swapping');
-    refs.sceneTitle.textContent = scene.title;
-    refs.sceneBody.textContent = scene.body;
-    refs.status.textContent = `${currentData.shared.status} · ${nextIndex + 1}/${currentData.scenes.length}`;
-    refs.signalPill.textContent = scene.pill;
-    refs.signalTitle.textContent = scene.title;
-    Array.from(refs.rail.children).forEach((node, idx) => node.classList.toggle('is-active', idx === nextIndex));
-    Array.from(refs.sceneStack.children).forEach((node, idx) => {
-      node.classList.remove('is-before', 'is-active', 'is-after', 'is-hidden');
-      if (idx === nextIndex) node.classList.add('is-active');
-      else if (idx === (nextIndex - 1 + currentData.scenes.length) % currentData.scenes.length) node.classList.add('is-before');
-      else if (idx === (nextIndex + 1) % currentData.scenes.length) node.classList.add('is-after');
-      else node.classList.add('is-hidden');
+    requestAnimationFrame(() => {
+      refs.sceneBody.textContent = scene.body;
+      refs.status.textContent = `${currentData.shared.status} · ${nextIndex + 1}/${currentData.scenes.length}`;
+      Array.from(refs.rail.children).forEach((node, idx) => node.classList.toggle('is-active', idx === nextIndex));
+      // Release the blur/opacity on the next frame, so the transition plays.
+      requestAnimationFrame(() => refs.stage.classList.remove('is-swapping'));
     });
   }
 
@@ -4165,7 +4140,7 @@ function _ensureMissionBriefOverlay() {
     refs.op.textContent = currentData.shared.kicker;
     refs.title.textContent = currentData.title;
     refs.subtitle.textContent = currentData.subtitle;
-    refs.storyLabel.textContent = currentData.shared.story;
+    refs.stripLabel.textContent = currentData.shared.story;
     refs.controlsLabel.textContent = currentData.shared.controls;
     refs.objectivesLabel.textContent = currentData.shared.objectives;
     refs.edgeLabel.textContent = currentData.shared.edge;
@@ -4176,11 +4151,11 @@ function _ensureMissionBriefOverlay() {
       const pill = document.createElement('button');
       pill.type = 'button';
       pill.className = 'mission-brief-scene-pill';
+      pill.dataset.idx = String(idx + 1).padStart(2, '0');
       pill.textContent = scene.pill;
       pill.addEventListener('click', () => applyScene(idx));
       refs.rail.appendChild(pill);
     });
-    renderSceneStack(currentData.scenes);
     renderCommands(currentData.commands);
     renderObjectives(currentData.objectives);
     applyScene(Math.min(activeIndex, currentData.scenes.length - 1));
@@ -4188,23 +4163,40 @@ function _ensureMissionBriefOverlay() {
 
   function close() {
     stopTimer();
-    refs.overlay.classList.remove('is-open');
     try{document.activeElement?.blur();}catch(_){}
     refs.overlay.setAttribute('aria-hidden', 'true');
     refs.progress.style.width = '0%';
     pendingLaunch = null;
     currentData = null;
-    _dashboardAttract?.resetIdle?.();
+    // Fade+blur exit so the dashboard never flashes overlapping text.
+    // Total ≤ 200ms — transition defined on #mission-brief-overlay and .mission-brief-shell.
+    if (!refs.overlay.classList.contains('is-open')) {
+      _dashboardAttract?.resetIdle?.();
+      return;
+    }
+    refs.overlay.classList.add('is-closing');
+    const done = () => {
+      refs.overlay.classList.remove('is-open', 'is-closing');
+      _dashboardAttract?.resetIdle?.();
+    };
+    let settled = false;
+    const finishOnce = () => { if (settled) return; settled = true; done(); };
+    refs.overlay.addEventListener('transitionend', function handler(ev) {
+      if (ev.target !== refs.overlay || ev.propertyName !== 'opacity') return;
+      refs.overlay.removeEventListener('transitionend', handler);
+      finishOnce();
+    });
+    // Safety: always finish even if transitionend is dropped.
+    setTimeout(finishOnce, 240);
   }
 
   function confirmLaunch() {
     if (!pendingLaunch) return;
     const launch = pendingLaunch;
     ArcadeSonic.confirm();
+    // Launch before the fade-out so the deploy overlay paints on top — the brief fades beneath it.
+    showDeployOverlay(() => _launchGameRuntime(launch.containerId, launch.initFn));
     close();
-    setTimeout(() => {
-      showDeployOverlay(() => _launchGameRuntime(launch.containerId, launch.initFn));
-    }, 120);
   }
 
   overlay.addEventListener('click', e => {
@@ -4280,6 +4272,7 @@ const ArcadeSonic = (() => {
     return ac;
   }
   function tone({ f0, f1, dur = 0.16, type = 'sine', gain = 0.05, delay = 0 }) {
+    if (window._simMuted) return; // defense-in-depth: UI SFX silent during attract simulations
     try {
       const audio = ctx();
       const now = audio.currentTime + delay;
@@ -4681,8 +4674,12 @@ function _ensureDashboardRankingOverlay() {
     .dash-rank-shell::after { content:''; position:absolute; inset:0; background:repeating-linear-gradient(180deg, transparent 0 2px, rgba(0,0,0,0.12) 3px 4px); opacity:.35; pointer-events:none; }
     .dash-rank-top { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:20px; position:relative; z-index:1; }
     .dash-rank-top strong { font:700 18px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:4px; color:#f4f7fa; text-transform:uppercase; }
-    .dash-rank-top button { border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.03); color:#f4f7fa; padding:12px 18px; cursor:pointer; font:700 15px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:2px; transition:background .2s ease,border-color .2s ease,transform .2s ease; }
-    .dash-rank-top button:hover { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.26); transform:translateY(-1px); }
+    /* Emil: custom ease-out, exact properties, press feedback, hover-gated. */
+    .dash-rank-top button { border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.03); color:#f4f7fa; padding:12px 18px; cursor:pointer; font:700 15px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:2px; transition:background 180ms cubic-bezier(0.23,1,0.32,1),border-color 180ms cubic-bezier(0.23,1,0.32,1),transform 160ms cubic-bezier(0.23,1,0.32,1); }
+    @media (hover: hover) and (pointer: fine) {
+      .dash-rank-top button:hover { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.26); transform:translateY(-1px); }
+    }
+    .dash-rank-top button:active { transform:scale(0.97); transition-duration:120ms; }
     .dash-rank-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; position:relative; z-index:1; }
     .dash-rank-card { border:1px solid color-mix(in srgb, var(--dash-rank-color) 55%, transparent); background:
       radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--dash-rank-color) 10%, transparent), transparent 48%),
@@ -4880,6 +4877,8 @@ function returnToDashboard() {
   _dashboardAttract?.stop?.('return');
   ArcadeSonic.return();
   closeDashboardRankings();
+  // Menu bed: start HQ atmosphere when returning to dashboard from any game
+  try{ window._startMenuBed?.(0.5); }catch(_){}
 
   // Create fade-out overlay for game container
   const overlay = document.createElement('div');
@@ -4922,6 +4921,8 @@ function _launchGameRuntime(containerId, initFn) {
   resetArcadeRuntime();
   _dashboardAttract?.stop?.('launch');
   _arcadeDashVisible = false;
+  // Menu bed: stop HQ atmosphere on game entry — game's own scene takes over
+  try{ window._stopMenuBed?.(); }catch(_){}
   _activeGameId = containerId === 'game-zero-container' ? 'zero'
                : containerId === 'game-defense-container' ? 'defense'
                : containerId === 'game-hunt-container' ? 'hunt' : null;
@@ -5344,6 +5345,8 @@ const CyberBootLoader = (() => {
     document.getElementById('cyber-loader')?.classList.add('is-done');
     document.body.classList.remove('arcade-loader-active');
     _dashboardAttract?.resetIdle?.();
+    // Menu bed: start HQ atmosphere on first entry to dashboard (after user gesture)
+    try{ window._startMenuBed?.(0.5); }catch(_){}
   }
 
   function onKey(e) {
@@ -5960,6 +5963,8 @@ function _createDashboardAttractDirector() {
   function stop(reason='manual') {
     active = false;
     window._simMuted = false; // restore audio for real gameplay
+    // Restore menu bed to full volume if still active (exiting attract back to dashboard)
+    try{ if(_arcadeDashVisible) window._menuBedSetVolume?.(0.5); }catch(_){}
     stopFrame();
     overlayEl()?.classList.remove('is-open');
     const stage = stageEl();
@@ -5977,6 +5982,9 @@ function _createDashboardAttractDirector() {
     // recovers cleanly the next time the user enters a real game (startGame calls startAmbient).
     try { window.stopAmbient?.(); } catch (_) {}
     try { window.stopHuntAmbient?.(); } catch (_) {}
+    // Attract mode: menu bed plays at reduced volume (0.3) for ambience without overpowering
+    try{ window._startMenuBed?.(0.3); }catch(_){}
+    try{ window._menuBedSetVolume?.(0.3); }catch(_){}
     sceneIdx = 0;
     overlayEl()?.classList.add('is-open');
     renderScene();
@@ -6587,21 +6595,29 @@ const FalconRanking = (function () {
       .fr-btn-primary {
         background: #e0003c; color: #fff;
         box-shadow: 0 0 0 0 rgba(224,0,60,0);
-        transition: background 0.18s, box-shadow 0.18s, transform 0.1s;
+        /* Emil: strong ease-out; exact property transitions; press fastest */
+        transition: background 180ms cubic-bezier(0.23, 1, 0.32, 1),
+                    box-shadow 180ms cubic-bezier(0.23, 1, 0.32, 1),
+                    transform  140ms cubic-bezier(0.23, 1, 0.32, 1);
       }
-      .fr-btn-primary:hover {
-        background: #ff1a52;
-        box-shadow: 0 0 24px rgba(224,0,60,0.5);
-        transform: translateY(-1px);
+      @media (hover: hover) and (pointer: fine) {
+        .fr-btn-primary:hover {
+          background: #ff1a52;
+          box-shadow: 0 0 24px rgba(224,0,60,0.5);
+          transform: translateY(-1px);
+        }
       }
-      .fr-btn-primary:active { transform: translateY(0); }
+      .fr-btn-primary:active { transform: scale(0.97); }
       .fr-btn-secondary {
         background: rgba(255,255,255,0.04);
         color: #7f8b96; border: 1px solid rgba(255,255,255,0.08);
       }
-      .fr-btn-secondary:hover {
-        background: rgba(255,255,255,0.08); color: #d5dde5;
+      @media (hover: hover) and (pointer: fine) {
+        .fr-btn-secondary:hover {
+          background: rgba(255,255,255,0.08); color: #d5dde5;
+        }
       }
+      .fr-btn-secondary:active { transform: scale(0.97); }
 
       /* Consent line */
       .fr-consent {
@@ -6721,7 +6737,9 @@ const FalconRanking = (function () {
         opacity: 0;
         transition: opacity 0.3s;
       }
-      .fr-entry:hover::before { opacity: 1; }
+      @media (hover: hover) and (pointer: fine) {
+        .fr-entry:hover::before { opacity: 1; }
+      }
 
       /* Rank number */
       .fr-rank {
@@ -7635,10 +7653,16 @@ let _ambLastBoss=false, _ambLastFuelStage=-1;
 function AC(){
   if(AC_CTX){
     if(AC_CTX.state !== 'running') AC_CTX.resume();
+    // SDD spec-river-cinematic-audio v1.1 §A3: ensure cinematic engine is initialized
+    // (idempotent — safe to call on every AC() invocation)
+    try{ if(!_engineInit) _initSoundEngine(); }catch(_){ }
     return AC_CTX;
   }
   AC_CTX = new(window.AudioContext||window.webkitAudioContext)();
   _buildMasterChain();
+  // SDD spec-river-cinematic-audio v1.1 §A3: build buses + IR presets the moment the
+  // AudioContext exists, so SFX/stingers can fire without a race on first gesture.
+  try{ _initSoundEngine(); }catch(_){ }
   return AC_CTX;
 }
 function _buildMasterChain(){
@@ -7820,98 +7844,136 @@ function startAmbient(){
   if(window._simMuted) return;
   try{
     const ac=AC();
-    // Master ambient gain
+    // Master ambient gain — the Zimmer aerial palette routes everything through here.
     _ambientGain=ac.createGain(); _ambientGain.gain.value=1.0;
     _ambientGain.connect(_dest());
 
-    // ─ LAYER 1: Server Room Foundation ─
-    // Primary hum: 58Hz sine
-    _serverHumOsc=ac.createOscillator(); _serverHumOsc.type='sine'; _serverHumOsc.frequency.value=58;
-    const serverGain=ac.createGain(); serverGain.gain.value=0.028;
+    // ════════════════════════════════════════════════════════════════════
+    //  RIVER CINEMATIC AMBIENT v2 — Zimmer aerial palette
+    //  Replaces server-hum + data-stream palette with a mission atmosphere:
+    //  sub drone + low-brass pad + wind shimmer + distant percussion.
+    //  The legacy _serverHumOsc / _dataStreamNoise / _tensOscA identifiers
+    //  are kept as null holders so stopAmbient()'s teardown block stays safe.
+    // ════════════════════════════════════════════════════════════════════
 
-    // Harmonic overtone: 116Hz (2nd harmonic)
-    _harmOvertoneOsc=ac.createOscillator(); _harmOvertoneOsc.type='sine'; _harmOvertoneOsc.frequency.value=116;
-    const harmGain=ac.createGain(); harmGain.gain.value=0.012;
+    // ─ LAYER 1: Sub drone — A1 (55Hz) with slow breath LFO ─
+    _serverHumOsc=ac.createOscillator(); _serverHumOsc.type='sine'; _serverHumOsc.frequency.value=55;
+    const subGain=ac.createGain(); subGain.gain.value=0.055;
+    _serverHumLfo=ac.createOscillator(); _serverHumLfo.type='sine'; _serverHumLfo.frequency.value=0.08;
+    const subLfoGain=ac.createGain(); subLfoGain.gain.value=0.018;
+    _serverHumLfo.connect(subLfoGain); subLfoGain.connect(subGain.gain);
+    _serverHumOsc.connect(subGain); subGain.connect(_ambientGain);
+    _serverHumOsc.start(); _serverHumLfo.start();
+    _regLFO(_serverHumLfo, 0.08);
 
-    // Cooling fan flutter: white noise lowpass
-    const fanBuf=_makeNoiseBuffer(ac,3);
-    _coolingFanNoise=ac.createBufferSource(); _coolingFanNoise.buffer=fanBuf; _coolingFanNoise.loop=true;
-    const fanFilt=ac.createBiquadFilter(); fanFilt.type='lowpass'; fanFilt.frequency.value=180; fanFilt.Q.value=2.4;
-    const fanGain=ac.createGain(); fanGain.gain.value=0.014;
+    // ─ LAYER 2: Low-brass pad — detuned sawtooths A2 + E3 through slow lowpass ─
+    _harmOvertoneOsc=ac.createOscillator(); _harmOvertoneOsc.type='sawtooth'; _harmOvertoneOsc.frequency.value=110;
+    _harmOvertoneOsc.detune.value=-9;
+    const brassB=ac.createOscillator(); brassB.type='sawtooth'; brassB.frequency.value=165;
+    brassB.detune.value=+9;
+    const brassFilt=ac.createBiquadFilter(); brassFilt.type='lowpass'; brassFilt.frequency.value=320; brassFilt.Q.value=0.9;
+    const brassGain=ac.createGain(); brassGain.gain.value=0.022;
+    // Slow filter sweep — gives the pad a breathing, evolving quality
+    const brassSweepLfo=ac.createOscillator(); brassSweepLfo.type='sine'; brassSweepLfo.frequency.value=0.06;
+    const brassSweepAmt=ac.createGain(); brassSweepAmt.gain.value=140;
+    brassSweepLfo.connect(brassSweepAmt); brassSweepAmt.connect(brassFilt.frequency);
+    _harmOvertoneOsc.connect(brassFilt); brassB.connect(brassFilt);
+    brassFilt.connect(brassGain); brassGain.connect(_ambientGain);
+    _harmOvertoneOsc.start(); brassB.start(); brassSweepLfo.start();
+    _regLFO(brassSweepLfo, 0.06);
+    // Stash brassB + sweep LFO on _dataStreamNoise / _dataStream2Noise holder slots so
+    // the existing stopAmbient teardown captures them. (Compat shim — holder names are
+    // legacy but node types are what matters when .stop()/.disconnect() fire.)
+    _dataStreamNoise=brassB;
+    _dataStream2Noise=brassSweepLfo;
 
-    // Slow LFO on primary hum (0.05Hz breathing pulse)
-    _serverHumLfo=ac.createOscillator(); _serverHumLfo.type='sine'; _serverHumLfo.frequency.value=0.05;
-    const serverLfoGain=ac.createGain(); serverLfoGain.gain.value=0.006;
+    // ─ LAYER 3: Wind shimmer — bandpass-filtered noise with slow stereo wander ─
+    const windBuf=_makeNoiseBuffer(ac,4);
+    _coolingFanNoise=ac.createBufferSource(); _coolingFanNoise.buffer=windBuf; _coolingFanNoise.loop=true;
+    const windFilt=ac.createBiquadFilter(); windFilt.type='bandpass'; windFilt.frequency.value=2400; windFilt.Q.value=1.0;
+    const windGain=ac.createGain(); windGain.gain.value=0.008;
+    let windPanner=null;
+    try{ windPanner=ac.createStereoPanner(); windPanner.pan.value=0; }catch(_){ windPanner=null; }
+    const windPanLfo=ac.createOscillator(); windPanLfo.type='sine'; windPanLfo.frequency.value=0.11;
+    const windPanAmt=ac.createGain(); windPanAmt.gain.value=0.6;
+    windPanLfo.connect(windPanAmt);
+    if(windPanner){ windPanAmt.connect(windPanner.pan); }
+    _coolingFanNoise.connect(windFilt);
+    if(windPanner){ windFilt.connect(windPanner); windPanner.connect(windGain); }
+    else { windFilt.connect(windGain); }
+    windGain.connect(_ambientGain);
+    _coolingFanNoise.start(); windPanLfo.start();
+    _regLFO(windPanLfo, 0.11);
+    _packetGateLfo=windPanLfo; // stash on legacy holder so stopAmbient kills it
 
-    _serverHumLfo.connect(serverLfoGain); serverLfoGain.connect(serverGain.gain);
-    _serverHumOsc.connect(serverGain); serverGain.connect(_ambientGain);
-    _harmOvertoneOsc.connect(harmGain); harmGain.connect(_ambientGain);
-    _coolingFanNoise.connect(fanFilt); fanFilt.connect(fanGain); fanGain.connect(_ambientGain);
+    // ─ LAYER 4: High brass overtone — 440Hz, gated by slow LFO, adds air ─
+    _packetGate2Lfo=ac.createOscillator(); _packetGate2Lfo.type='sine'; _packetGate2Lfo.frequency.value=440;
+    const overGain=ac.createGain(); overGain.gain.value=0.004;
+    const overGateLfo=ac.createOscillator(); overGateLfo.type='sine'; overGateLfo.frequency.value=0.04;
+    const overGateAmt=ac.createGain(); overGateAmt.gain.value=0.003;
+    overGateLfo.connect(overGateAmt); overGateAmt.connect(overGain.gain);
+    _packetGate2Lfo.connect(overGain); overGain.connect(_ambientGain);
+    _packetGate2Lfo.start(); overGateLfo.start();
+    _regLFO(overGateLfo, 0.04);
 
-    _serverHumOsc.start(); _harmOvertoneOsc.start(); _coolingFanNoise.start(); _serverHumLfo.start();
-
-    // ─ LAYER 2: Data Stream (digital packet flow) ─
-    const dataBuf1=_makeNoiseBuffer(ac,3);
-    _dataStreamNoise=ac.createBufferSource(); _dataStreamNoise.buffer=dataBuf1; _dataStreamNoise.loop=true;
-    _dataStreamFilt=ac.createBiquadFilter(); _dataStreamFilt.type='bandpass'; _dataStreamFilt.frequency.value=520; _dataStreamFilt.Q.value=1.1;
-    const dataGain1=ac.createGain(); dataGain1.gain.value=0.020;
-
-    // Packet gate LFO at 7.3Hz — amplitude must stay << dataGain1 to avoid phase inversion
-    _packetGateLfo=ac.createOscillator(); _packetGateLfo.type='sine'; _packetGateLfo.frequency.value=7.3;
-    const gateGain1=ac.createGain(); gateGain1.gain.value=0.007;
-
-    _packetGateLfo.connect(gateGain1); gateGain1.connect(dataGain1.gain);
-    _dataStreamNoise.connect(_dataStreamFilt); _dataStreamFilt.connect(dataGain1); dataGain1.connect(_ambientGain);
-    _dataStreamNoise.start(); _packetGateLfo.start();
-
-    // Second data stream layer at 2800Hz
-    const dataBuf2=_makeNoiseBuffer(ac,3);
-    _dataStream2Noise=ac.createBufferSource(); _dataStream2Noise.buffer=dataBuf2; _dataStream2Noise.loop=true;
-    _dataStream2Filt=ac.createBiquadFilter(); _dataStream2Filt.type='bandpass'; _dataStream2Filt.frequency.value=360; _dataStream2Filt.Q.value=0.9;
-    const dataGain2=ac.createGain(); dataGain2.gain.value=0.012;
-
-    // Second gate LFO at 11.7Hz (polyrhythmic) — keep amplitude small
-    _packetGate2Lfo=ac.createOscillator(); _packetGate2Lfo.type='sine'; _packetGate2Lfo.frequency.value=11.7;
-    const gateGain2=ac.createGain(); gateGain2.gain.value=0.005;
-
-    _packetGate2Lfo.connect(gateGain2); gateGain2.connect(dataGain2.gain);
-    _dataStream2Noise.connect(_dataStream2Filt); _dataStream2Filt.connect(dataGain2); dataGain2.connect(_ambientGain);
-    _dataStream2Noise.start(); _packetGate2Lfo.start();
-
-    // ─ LAYER 4: Breach Alert / Tension (Tritone Dissonance) ─
+    // ─ LAYER 5: Tension pad — kept as intensity-driven bed, recolored minor 6th ─
     _tensionGain=ac.createGain(); _tensionGain.gain.value=0;
     _tensionGain.connect(_dest());
-
-    // Tritone: 196Hz and 277Hz (devil's interval)
-    _tensOscA=ac.createOscillator(); _tensOscA.type='sawtooth'; _tensOscA.frequency.value=196;
-    _tensOscB=ac.createOscillator(); _tensOscB.type='sawtooth'; _tensOscB.frequency.value=277;
-    _tensFilt=ac.createBiquadFilter(); _tensFilt.type='lowpass'; _tensFilt.frequency.value=320; _tensFilt.Q.value=1.8;
-
-    // Pulsing LFO at 1.8Hz modulates tension gain
-    const tensPulseLfo=ac.createOscillator(); tensPulseLfo.type='sine'; tensPulseLfo.frequency.value=1.8;
-    const tensPulseGain=ac.createGain(); tensPulseGain.gain.value=0.035;
-
-    // Filter sweep LFO at 0.4Hz
-    _tensFilterLfo=ac.createOscillator(); _tensFilterLfo.type='sine'; _tensFilterLfo.frequency.value=0.4;
-    const tensFilterGain=ac.createGain(); tensFilterGain.gain.value=200;
-
-    tensPulseLfo.connect(tensPulseGain); tensPulseGain.connect(_tensionGain.gain);
-    _tensFilterLfo.connect(tensFilterGain); tensFilterGain.connect(_tensFilt.frequency);
+    _tensOscA=ac.createOscillator(); _tensOscA.type='sawtooth'; _tensOscA.frequency.value=165; // E3
+    _tensOscB=ac.createOscillator(); _tensOscB.type='sawtooth'; _tensOscB.frequency.value=261; // C4 (minor 6th over G)
+    _tensFilt=ac.createBiquadFilter(); _tensFilt.type='lowpass'; _tensFilt.frequency.value=380; _tensFilt.Q.value=1.4;
+    _tensFilterLfo=ac.createOscillator(); _tensFilterLfo.type='sine'; _tensFilterLfo.frequency.value=0.25;
+    const tensFiltAmt=ac.createGain(); tensFiltAmt.gain.value=160;
+    _tensFilterLfo.connect(tensFiltAmt); tensFiltAmt.connect(_tensFilt.frequency);
     _tensOscA.connect(_tensFilt); _tensOscB.connect(_tensFilt); _tensFilt.connect(_tensionGain);
-    _tensOscA.start(); _tensOscB.start(); tensPulseLfo.start(); _tensFilterLfo.start();
+    _tensOscA.start(); _tensOscB.start(); _tensFilterLfo.start();
+    _regLFO(_tensFilterLfo, 0.25);
 
-    // Manually set filter frequency to sweep range
-    _tensFilt.frequency.setValueAtTime(200,ac.currentTime);
+    // ─ LAYER 6: Distant percussion scheduler — sparse impact hits through reverb ─
+    _startDistantPercussion();
 
     _ambLastBoss=false;
     _ambLastFuelStage=-1;
     _ambBossActive=false;
     _ambientRunning=true;
 
-    // Start ping and blip intervals
+    // Start ping and blip intervals (legacy — now mixed very low for texture)
     _restartPingInterval();
     _restartBlipInterval();
+
+    // SDD spec-river-cinematic-audio v1.1: start the combat bed muted behind _combatGain.
+    // _applyMusicIntensity() will crossfade it in as enemies/boss escalate.
+    try{ _startCombatBed(); }catch(_){}
   }catch(_){}
+}
+
+// ─── Distant percussion scheduler (Zimmer sparse-hit texture) ────────────
+// Fires a pre-rendered impact (transient + sub decay + bandpass grit) through
+// the reverb tail every 11-19 seconds. Creates the "something is out there"
+// feeling without rhythmic prediction.
+let _distantPercTimer=null;
+function _startDistantPercussion(){
+  if(_distantPercTimer) return;
+  const scheduleNext=()=>{
+    const waitMs=11000+Math.random()*8000; // 11-19s
+    _distantPercTimer=setTimeout(()=>{
+      try{
+        if(!_ambientRunning||!AC_CTX||window._simMuted||window._pausedAmbientLock) { scheduleNext(); return; }
+        _playLayered({
+          bus:'sfx', gainDb:-8, pan:(Math.random()*1.4-0.7), reverbWet:0.55,
+          transient:{ type:'noise', dur:0.045, gainDb:-6, filter:{type:'highpass',freq:1200,Q:0.7} },
+          body:    { type:'sine', f0:80, f1:30, dur:0.9, gainDb:-4, attack:0.005, release:0.85 },
+          sub:     { type:'sine', f0:45, f1:24, dur:1.2, gainDb:-3, attack:0.008, release:1.1 },
+          grit:    { type:'noise', dur:0.35, gainDb:-12, filter:{type:'bandpass',freq:2200,Q:1.4} }
+        });
+      }catch(_){}
+      scheduleNext();
+    }, waitMs);
+  };
+  scheduleNext();
+}
+function _stopDistantPercussion(){
+  if(_distantPercTimer){ clearTimeout(_distantPercTimer); _distantPercTimer=null; }
 }
 
 function stopAmbient(){
@@ -7940,6 +8002,10 @@ function stopAmbient(){
       try{if(_tensOscA){_tensOscA.stop();_tensOscA=null;}}catch(_){}
       try{if(_tensOscB){_tensOscB.stop();_tensOscB=null;}}catch(_){}
       try{if(_tensFilterLfo){_tensFilterLfo.stop();_tensFilterLfo=null;}}catch(_){}
+      // SDD spec-river-cinematic-audio v1.1: tear down combat bed alongside ambient
+      try{ _stopCombatBed(); }catch(_){}
+      // SDD spec-cinematic-v2: tear down distant percussion scheduler
+      try{ _stopDistantPercussion(); }catch(_){}
     },80);
   }catch(_){}
 }
@@ -7949,10 +8015,14 @@ function updateAmbientMix(){
   const ac=AC_CTX;
   const now=ac.currentTime;
 
-  // Check fuel — tension on if fuel low (boss ducking handled separately in startBossMusic/stopBossMusic)
-  const tensionOn=!_ambBossActive&&fuelStage>=2;
+  // SDD spec-river-cinematic-audio v1.1 §A2: route legacy ambient tension through the adaptive
+  // music engine. The engine reads live game state (enemies/fuelStage/boss/hpRatio/phase) and
+  // crossfades ambient↔tension↔combat beds — richer than the binary fuel-gate this used to be.
+  try{ if(window.SoundEngine&&SoundEngine.music&&SoundEngine.music._update) SoundEngine.music._update(); }catch(_){ }
 
-  // Tension layer: fade in if fuel is critical (but NOT if boss is active — boss handles that)
+  // Legacy fallback — kept for compatibility with fuelStage hysteresis (boss ducking still
+  // handled separately in startBossMusic/stopBossMusic).
+  const tensionOn=!_ambBossActive&&fuelStage>=2;
   if(tensionOn&&_ambLastFuelStage<2){
     _tensionGain.gain.linearRampToValueAtTime(0.035,now+2.0);
     _ambLastFuelStage=fuelStage;
@@ -7983,72 +8053,1157 @@ function shutdownIncidentZeroRuntime(){
 }
 registerArcadeRuntimeResetter('incident_zero', shutdownIncidentZeroRuntime);
 
+// ══════════════════════════════════════════════════════════════════════
+//  CINEMATIC SOUND ENGINE (River Corridor)
+//  Zimmer/Richard-King-direction layered recipes — every SFX is
+//  transient + tonal body + noise grit + reverb tail, with humanization.
+//  See: /outputs/spec-river-cinematic-audio.md (v1.1)
+// ══════════════════════════════════════════════════════════════════════
+let _sfxBus=null, _alertBus=null, _stingerBus=null, _combatGain=null;
+let _sfxSidechain=null;
+let _irPresets=null, _irPresets_reduced=null;
+let _activeLFOs=[];
+let _reducedAudio=false;
+let _engineInit=false;
+let _musicIntensity=0;
+let _irIdx=0;
+
+function _regLFO(lfo,origHz){
+  if(!lfo) return lfo;
+  lfo._origHz=(origHz!==undefined)?origHz:(lfo.frequency&&lfo.frequency.value)||0;
+  _activeLFOs.push(lfo);
+  return lfo;
+}
+function _pauseLFOs(){
+  if(!AC_CTX) return;
+  const t=AC_CTX.currentTime;
+  for(const lfo of _activeLFOs){
+    try{ lfo.frequency.cancelScheduledValues(t); lfo.frequency.setValueAtTime(0,t); }catch(_){}
+  }
+}
+function _resumeLFOs(){
+  if(!AC_CTX) return;
+  const t=AC_CTX.currentTime;
+  for(const lfo of _activeLFOs){
+    try{ lfo.frequency.cancelScheduledValues(t);
+         lfo.frequency.setValueAtTime(lfo._origHz||1,t); }catch(_){}
+  }
+}
+
+// Pre-render impulse responses via OfflineAudioContext for 4-layer tails.
+// Shape: exponentially decaying white noise, stereo, varying decay/tone.
+function _renderIR(decaySec, tone /* 0..1, 0=dark, 1=bright */, reduced){
+  try{
+    const sr=(AC_CTX&&AC_CTX.sampleRate)||44100;
+    const effDecay=reduced?decaySec*0.6:decaySec;
+    const oc=new OfflineAudioContext(2, Math.max(1024, Math.floor(sr*effDecay)), sr);
+    const buf=oc.createBuffer(2,Math.floor(sr*effDecay),sr);
+    for(let c=0;c<2;c++){
+      const ch=buf.getChannelData(c);
+      const len=ch.length;
+      for(let i=0;i<len;i++){
+        const p=1-i/len;
+        // Tone shaping: brighter → less lowpass bias
+        const n=Math.random()*2-1;
+        ch[i]=n*Math.pow(p,2.6+(1-tone)*1.8);
+      }
+    }
+    // Return the buffer directly — rendering is for shape; tone is baked above.
+    return buf;
+  }catch(_){ return null; }
+}
+function _buildIRPresets(){
+  try{
+    _irPresets={
+      ambient:   _renderIR(3.2, 0.55, false),
+      spatial:   _renderIR(2.8, 0.70, false),
+      boss_dark: _renderIR(2.6, 0.30, false),
+      bright:    _renderIR(2.0, 0.92, false),
+      combat:    _renderIR(2.4, 0.60, false)
+    };
+    _irPresets_reduced={
+      ambient:   _renderIR(3.2, 0.55, true),
+      spatial:   _renderIR(2.8, 0.70, true),
+      boss_dark: _renderIR(2.6, 0.30, true),
+      bright:    _renderIR(2.0, 0.92, true),
+      combat:    _renderIR(2.4, 0.60, true)
+    };
+  }catch(_){ _irPresets=null; _irPresets_reduced=null; }
+}
+function _getIR(name){
+  const pool=_reducedAudio?_irPresets_reduced:_irPresets;
+  return pool&&pool[name]?pool[name]:null;
+}
+const _IR_POOL_NAMES=['spatial','bright','ambient'];
+function _nextIRBuffer(){
+  const name=_IR_POOL_NAMES[_irIdx%_IR_POOL_NAMES.length];
+  _irIdx++;
+  return _getIR(name);
+}
+
+function _initSoundEngine(){
+  if(_engineInit) return;
+  if(!AC_CTX){ AC(); }
+  const ac=AC_CTX;
+  // SFX bus — all one-shots route here, feeds master
+  _sfxBus=ac.createGain(); _sfxBus.gain.value=1.0;
+  _sfxBus.connect(_dest());
+  // Alert bus — fuel alarms, proximity warnings
+  _alertBus=ac.createGain(); _alertBus.gain.value=1.0;
+  _alertBus.connect(_dest());
+  // Stinger bus — cinematic one-shots (bossAlert, win, over), sends harder to reverb
+  _stingerBus=ac.createGain(); _stingerBus.gain.value=1.0;
+  _stingerBus.connect(_dest());
+  try{ if(_wetGain){ const send=ac.createGain(); send.gain.value=0.55; _stingerBus.connect(send); send.connect(_wetGain); } }catch(_){}
+  // Combat bed — new music layer, gated by intensity
+  _combatGain=ac.createGain(); _combatGain.gain.value=0;
+  _combatGain.connect(_dest());
+  // SFX sidechain: a compressor that the music beds pass through, driven by SFX activity
+  _sfxSidechain=ac.createDynamicsCompressor();
+  _sfxSidechain.threshold.value=-26; _sfxSidechain.knee.value=10;
+  _sfxSidechain.ratio.value=3; _sfxSidechain.attack.value=0.008; _sfxSidechain.release.value=0.14;
+  _buildIRPresets();
+  _engineInit=true;
+}
+
+// ── Combat bed: Zimmer low-brass ostinato (Dunkirk / Dark Knight palette) ──
+// Pattern: pulsing detuned sawtooth stack through a lowpass that opens on each
+// note, articulating a brass-like attack. A sub drone at 55Hz anchors the root.
+// Sits muted behind _combatGain (created in _initSoundEngine). _applyMusicIntensity
+// raises _combatGain as enemy count / boss activity climbs. Started by startAmbient,
+// stopped by stopAmbient. All oscillator nodes are registered via _regLFO so the
+// pause system can freeze them without node churn.
+let _combatOscA=null, _combatOscB=null, _combatSubOsc=null;
+let _combatFilt=null, _combatFiltLfo=null, _combatPulseLfo=null;
+let _combatSubLfo=null, _combatSequencerTimer=null;
+
+function _startCombatBed(){
+  try{
+    if(!_engineInit) _initSoundEngine();
+    if(_combatOscA) return; // already running
+    const ac=AC_CTX; if(!ac||!_combatGain) return;
+
+    // Low-brass ostinato: root minor third pattern [A2, F2, G2, A2] — 88 BPM
+    const NOTES=[110.00, 87.31, 98.00, 110.00]; // A2, F2, G2, A2 (natural minor flavor)
+    const BPM=88; const BEAT_MS=60000/BPM;
+
+    // Two detuned sawtooth oscillators — the classic horn stack
+    _combatOscA=ac.createOscillator(); _combatOscA.type='sawtooth'; _combatOscA.frequency.value=NOTES[0];
+    _combatOscB=ac.createOscillator(); _combatOscB.type='sawtooth'; _combatOscB.frequency.value=NOTES[0];
+    _combatOscA.detune.value=-8; _combatOscB.detune.value=+8;
+
+    // Lowpass filter — starts dark, opens briefly on each note pulse for articulation
+    _combatFilt=ac.createBiquadFilter(); _combatFilt.type='lowpass';
+    _combatFilt.frequency.value=260; _combatFilt.Q.value=1.4;
+
+    // Filter pulse LFO at note rate creates the ostinato "push"
+    _combatPulseLfo=ac.createOscillator(); _combatPulseLfo.type='sine';
+    _combatPulseLfo.frequency.value=BPM/60; // 1.467 Hz = quarter notes at 88 BPM
+    const pulseGain=ac.createGain(); pulseGain.gain.value=180; // adds ±180Hz to lowpass
+    _combatPulseLfo.connect(pulseGain); pulseGain.connect(_combatFilt.frequency);
+
+    // Slow filter breath — opens the whole bed as it builds
+    _combatFiltLfo=ac.createOscillator(); _combatFiltLfo.type='sine';
+    _combatFiltLfo.frequency.value=0.08;
+    const filtBreath=ac.createGain(); filtBreath.gain.value=80;
+    _combatFiltLfo.connect(filtBreath); filtBreath.connect(_combatFilt.frequency);
+
+    // Sub-bass root drone at 55Hz (A1) with 0.12Hz LFO breathing
+    _combatSubOsc=ac.createOscillator(); _combatSubOsc.type='sine'; _combatSubOsc.frequency.value=55;
+    const subGain=ac.createGain(); subGain.gain.value=0.32;
+    _combatSubLfo=ac.createOscillator(); _combatSubLfo.type='sine'; _combatSubLfo.frequency.value=0.12;
+    const subLfoGain=ac.createGain(); subLfoGain.gain.value=0.08;
+    _combatSubLfo.connect(subLfoGain); subLfoGain.connect(subGain.gain);
+
+    // Stack gain — blends the two detuned saws
+    const stackGain=ac.createGain(); stackGain.gain.value=0.55;
+    _combatOscA.connect(_combatFilt); _combatOscB.connect(_combatFilt);
+    _combatFilt.connect(stackGain); stackGain.connect(_combatGain);
+    _combatSubOsc.connect(subGain); subGain.connect(_combatGain);
+
+    _combatOscA.start(); _combatOscB.start(); _combatSubOsc.start();
+    _combatPulseLfo.start(); _combatFiltLfo.start(); _combatSubLfo.start();
+
+    // Register LFOs with the pause registry so _pauseLFOs can freeze them
+    _regLFO(_combatPulseLfo, BPM/60);
+    _regLFO(_combatFiltLfo, 0.08);
+    _regLFO(_combatSubLfo, 0.12);
+
+    // Sequencer: step through NOTES[] every beat for the ostinato rhythm
+    let step=0;
+    _combatSequencerTimer=setInterval(()=>{
+      try{
+        if(!_combatOscA||!_combatOscB||!AC_CTX) return;
+        step=(step+1)%NOTES.length;
+        const f=NOTES[step];
+        const t=AC_CTX.currentTime;
+        _combatOscA.frequency.cancelScheduledValues(t);
+        _combatOscB.frequency.cancelScheduledValues(t);
+        _combatOscA.frequency.linearRampToValueAtTime(f, t+0.08);
+        _combatOscB.frequency.linearRampToValueAtTime(f, t+0.08);
+      }catch(_){}
+    }, BEAT_MS);
+  }catch(_){}
+}
+
+function _stopCombatBed(){
+  try{
+    if(_combatSequencerTimer){ clearInterval(_combatSequencerTimer); _combatSequencerTimer=null; }
+    [_combatOscA,_combatOscB,_combatSubOsc,_combatPulseLfo,_combatFiltLfo,_combatSubLfo].forEach(n=>{
+      try{ if(n){ n.stop(); n.disconnect(); } }catch(_){}
+    });
+    try{ if(_combatFilt) _combatFilt.disconnect(); }catch(_){}
+    // Prune from LFO registry
+    _activeLFOs=_activeLFOs.filter(l=>l!==_combatPulseLfo&&l!==_combatFiltLfo&&l!==_combatSubLfo);
+    _combatOscA=_combatOscB=_combatSubOsc=_combatFilt=null;
+    _combatPulseLfo=_combatFiltLfo=_combatSubLfo=null;
+  }catch(_){}
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Menu bed — unified HQ command-center atmosphere (dashboard/ranking/attract)
+//  Layers: C1 sub drone (32.7Hz) · minor-pentatonic pad (C3/Eb3/G3) ·
+//          data shimmer (bandpass noise) · distant HQ pulse (55Hz blip)
+// ══════════════════════════════════════════════════════════════════════
+let _menuBedGain=null, _menuSubOsc=null, _menuSubLfo=null;
+let _menuPadOscs=[], _menuPadFilt=null, _menuPadLfo=null;
+let _menuShimSrc=null, _menuShimFilt=null, _menuShimGain=null, _menuShimPanLfo=null, _menuShimPan=null;
+let _menuPulseTimer=null;
+let _menuBedActive=false;
+
+function _startMenuBed(volume){
+  if(!_engineInit) _initSoundEngine();
+  if(_menuBedActive){
+    // Just retarget gain
+    try{ if(_menuBedGain){ const ac=AC(); _menuBedGain.gain.cancelScheduledValues(ac.currentTime); _menuBedGain.gain.linearRampToValueAtTime(volume||0.5,ac.currentTime+0.6);} }catch(_){}
+    return;
+  }
+  const ac=AC(); const now=ac.currentTime;
+  _menuBedActive=true;
+
+  _menuBedGain=ac.createGain();
+  _menuBedGain.gain.value=0;
+  _menuBedGain.connect(_musicBus||_dest());
+  // Fade in
+  _menuBedGain.gain.linearRampToValueAtTime(volume||0.5, now+0.8);
+
+  // — Sub drone C1 (32.7Hz) with 0.04Hz breath —
+  _menuSubOsc=ac.createOscillator();
+  _menuSubOsc.type='sine';
+  _menuSubOsc.frequency.value=32.7;
+  const subG=ac.createGain(); subG.gain.value=0.22;
+  _menuSubLfo=ac.createOscillator();
+  _menuSubLfo.type='sine'; _menuSubLfo.frequency.value=0.04;
+  const subLfoG=ac.createGain(); subLfoG.gain.value=0.9;
+  _menuSubLfo.connect(subLfoG); subLfoG.connect(_menuSubOsc.frequency);
+  _menuSubOsc.connect(subG); subG.connect(_menuBedGain);
+  _menuSubOsc.start(now); _menuSubLfo.start(now);
+  _regLFO(_menuSubLfo, 0.04);
+
+  // — Minor-pentatonic pad (C3 131Hz, Eb3 156Hz, G3 196Hz) through lowpass 480Hz —
+  _menuPadFilt=ac.createBiquadFilter();
+  _menuPadFilt.type='lowpass';
+  _menuPadFilt.frequency.value=480;
+  _menuPadFilt.Q.value=0.5;
+  _menuPadFilt.connect(_menuBedGain);
+  const padFreqs=[131,156,196];
+  _menuPadOscs=[];
+  padFreqs.forEach((f,i)=>{
+    const osc=ac.createOscillator();
+    osc.type='sine';
+    osc.frequency.value=f;
+    osc.detune.value=(i-1)*4; // slight stack detune
+    const g=ac.createGain();
+    g.gain.value=[0.10,0.085,0.075][i];
+    osc.connect(g); g.connect(_menuPadFilt);
+    osc.start(now);
+    _menuPadOscs.push(osc);
+  });
+  // Slow filter sweep on the pad
+  _menuPadLfo=ac.createOscillator();
+  _menuPadLfo.type='sine'; _menuPadLfo.frequency.value=0.07;
+  const padLfoG=ac.createGain(); padLfoG.gain.value=140;
+  _menuPadLfo.connect(padLfoG); padLfoG.connect(_menuPadFilt.frequency);
+  _menuPadLfo.start(now);
+  _regLFO(_menuPadLfo, 0.07);
+
+  // — Data shimmer (bandpass noise at 3600Hz, very faint) —
+  if(!window._prefersReducedMotion || !window._prefersReducedMotion()){
+    const sr=ac.sampleRate;
+    const noiseBuf=ac.createBuffer(1, sr*3, sr);
+    const nd=noiseBuf.getChannelData(0);
+    for(let i=0;i<nd.length;i++) nd[i]=(Math.random()*2-1)*0.3;
+    _menuShimSrc=ac.createBufferSource();
+    _menuShimSrc.buffer=noiseBuf; _menuShimSrc.loop=true;
+    _menuShimFilt=ac.createBiquadFilter();
+    _menuShimFilt.type='bandpass'; _menuShimFilt.frequency.value=3600; _menuShimFilt.Q.value=3.0;
+    _menuShimGain=ac.createGain(); _menuShimGain.gain.value=0.004;
+    if(typeof ac.createStereoPanner==='function'){
+      _menuShimPan=ac.createStereoPanner(); _menuShimPan.pan.value=0;
+      _menuShimPanLfo=ac.createOscillator();
+      _menuShimPanLfo.type='sine'; _menuShimPanLfo.frequency.value=0.14;
+      const panLfoG=ac.createGain(); panLfoG.gain.value=0.6;
+      _menuShimPanLfo.connect(panLfoG); panLfoG.connect(_menuShimPan.pan);
+      _menuShimSrc.connect(_menuShimFilt); _menuShimFilt.connect(_menuShimGain);
+      _menuShimGain.connect(_menuShimPan); _menuShimPan.connect(_menuBedGain);
+      _menuShimPanLfo.start(now); _regLFO(_menuShimPanLfo, 0.14);
+    }else{
+      _menuShimSrc.connect(_menuShimFilt); _menuShimFilt.connect(_menuShimGain);
+      _menuShimGain.connect(_menuBedGain);
+    }
+    _menuShimSrc.start(now);
+  }
+
+  // — Distant HQ pulse: every 9-15s a very soft 55Hz blip through reverb —
+  function _scheduleMenuPulse(){
+    const delay=9000+Math.random()*6000;
+    _menuPulseTimer=setTimeout(()=>{
+      if(!_menuBedActive) return;
+      try{
+        const tac=AC(); const t=tac.currentTime;
+        const p=tac.createOscillator(); p.type='sine'; p.frequency.value=55;
+        const pg=tac.createGain(); pg.gain.value=0;
+        pg.gain.linearRampToValueAtTime(0.045, t+0.04);
+        pg.gain.exponentialRampToValueAtTime(0.0001, t+0.28);
+        p.connect(pg);
+        // Route through reverb if available
+        if(_revWetFull){
+          pg.connect(_revWetFull);
+        }else{
+          pg.connect(_menuBedGain);
+        }
+        p.start(t); p.stop(t+0.32);
+      }catch(_){}
+      _scheduleMenuPulse();
+    }, delay);
+  }
+  _scheduleMenuPulse();
+}
+
+function _stopMenuBed(){
+  if(!_menuBedActive) return;
+  const ac=AC(); const now=ac.currentTime;
+  try{ if(_menuBedGain){ _menuBedGain.gain.cancelScheduledValues(now); _menuBedGain.gain.linearRampToValueAtTime(0, now+0.8); } }catch(_){}
+  const stopAt=now+0.9;
+  setTimeout(()=>{
+    try{ if(_menuSubOsc){ _menuSubOsc.stop(); _menuSubOsc.disconnect(); } }catch(_){}
+    try{ if(_menuSubLfo){ _menuSubLfo.stop(); _menuSubLfo.disconnect(); } }catch(_){}
+    _menuPadOscs.forEach(o=>{ try{ o.stop(); o.disconnect(); }catch(_){} });
+    _menuPadOscs=[];
+    try{ if(_menuPadLfo){ _menuPadLfo.stop(); _menuPadLfo.disconnect(); } }catch(_){}
+    try{ if(_menuPadFilt) _menuPadFilt.disconnect(); }catch(_){}
+    try{ if(_menuShimSrc){ _menuShimSrc.stop(); _menuShimSrc.disconnect(); } }catch(_){}
+    try{ if(_menuShimFilt) _menuShimFilt.disconnect(); }catch(_){}
+    try{ if(_menuShimGain) _menuShimGain.disconnect(); }catch(_){}
+    try{ if(_menuShimPan) _menuShimPan.disconnect(); }catch(_){}
+    try{ if(_menuShimPanLfo){ _menuShimPanLfo.stop(); _menuShimPanLfo.disconnect(); } }catch(_){}
+    try{ if(_menuBedGain) _menuBedGain.disconnect(); }catch(_){}
+    // Prune LFO registry
+    _activeLFOs=_activeLFOs.filter(l=>l!==_menuSubLfo && l!==_menuPadLfo && l!==_menuShimPanLfo);
+    _menuSubOsc=_menuSubLfo=_menuPadLfo=_menuPadFilt=null;
+    _menuShimSrc=_menuShimFilt=_menuShimGain=_menuShimPan=_menuShimPanLfo=null;
+    _menuBedGain=null;
+  }, 950);
+  if(_menuPulseTimer){ clearTimeout(_menuPulseTimer); _menuPulseTimer=null; }
+  _menuBedActive=false;
+}
+
+function _menuBedSetVolume(v){
+  if(!_menuBedActive || !_menuBedGain) return;
+  try{ const ac=AC(); _menuBedGain.gain.cancelScheduledValues(ac.currentTime); _menuBedGain.gain.linearRampToValueAtTime(Math.max(0,Math.min(1,v)), ac.currentTime+0.4); }catch(_){}
+}
+
+// ── Layered SFX primitive ─────────────────────────────────────────────
+// opts: { bus: 'sfx'|'alert'|'stinger', gainDb: 0, pan: 0, reverbWet: 0..1,
+//         transient:{type,f,d,g,filt:{type,f,Q},filtEnvTo},
+//         body:{type,f,toF,d,g,filt:{type,f,Q},filtEnvTo},
+//         sub:{type,f,d,g},
+//         grit:{d,g,lpf,hpf},
+//         subs:[{...}]     extra body layers
+//       }
+function _playLayered(opts){
+  if(MUTED||window._simMuted||!_masterGain) return;
+  if(!_engineInit) _initSoundEngine();
+  try{
+    const ac=AC();
+    const now=ac.currentTime+0.001;
+    const busNode= opts.bus==='alert'?_alertBus : opts.bus==='stinger'?_stingerBus : _sfxBus;
+    // Master gain for this event (linear): dB → linear
+    const evGain=ac.createGain();
+    const linGain=Math.pow(10,(opts.gainDb||0)/20);
+    evGain.gain.value=linGain;
+    // Stereo panner
+    let panNode=null;
+    if(typeof ac.createStereoPanner==='function'){
+      panNode=ac.createStereoPanner();
+      panNode.pan.value=Math.max(-1,Math.min(1,(opts.pan||0)/45));
+      evGain.connect(panNode); panNode.connect(busNode);
+    }else{
+      evGain.connect(busNode);
+    }
+    // Helper: connect a mono voice to the event mix
+    const connectVoice=(node)=>node.connect(evGain);
+
+    // Transient layer (short high-freq punch)
+    if(opts.transient){
+      const T=opts.transient;
+      const sr=ac.sampleRate;
+      const tDur=T.d||0.02;
+      if(T.noise){
+        const buf=ac.createBuffer(1,Math.max(32,Math.floor(sr*tDur)),sr);
+        const d=buf.getChannelData(0);
+        for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length);
+        const src=ac.createBufferSource(); src.buffer=buf;
+        const filt=ac.createBiquadFilter();
+        filt.type=(T.filt&&T.filt.type)||'bandpass';
+        filt.frequency.value=(T.filt&&T.filt.f)||5000;
+        filt.Q.value=(T.filt&&T.filt.Q)||1.2;
+        const g=ac.createGain();
+        g.gain.setValueAtTime(T.g||0.5,now);
+        g.gain.exponentialRampToValueAtTime(0.0001,now+tDur);
+        src.connect(filt); filt.connect(g); connectVoice(g);
+        src.start(now); src.stop(now+tDur+0.02);
+      }else{
+        const o=ac.createOscillator(); o.type=T.type||'triangle';
+        o.frequency.value=T.f||6000;
+        const filt=ac.createBiquadFilter();
+        filt.type=(T.filt&&T.filt.type)||'highpass';
+        filt.frequency.value=(T.filt&&T.filt.f)||2000;
+        filt.Q.value=(T.filt&&T.filt.Q)||0.8;
+        const g=ac.createGain();
+        g.gain.setValueAtTime(T.g||0.4,now);
+        g.gain.exponentialRampToValueAtTime(0.0001,now+tDur);
+        o.connect(filt); filt.connect(g); connectVoice(g);
+        o.start(now); o.stop(now+tDur+0.02);
+      }
+    }
+    // Tonal body (optionally with pitch sweep)
+    const bodies=[];
+    if(opts.body) bodies.push(opts.body);
+    if(opts.subs) for(const b of opts.subs) bodies.push(b);
+    for(const B of bodies){
+      const bDur=B.d||0.15;
+      const o=ac.createOscillator(); o.type=B.type||'sine';
+      const f0=B.f||440;
+      o.frequency.setValueAtTime(f0,now);
+      if(B.toF&&B.toF!==f0){
+        const target=Math.max(1,B.toF);
+        o.frequency.exponentialRampToValueAtTime(target,now+bDur);
+      }
+      let outNode=o;
+      if(B.filt){
+        const filt=ac.createBiquadFilter();
+        filt.type=B.filt.type||'lowpass';
+        filt.frequency.setValueAtTime(B.filt.f||3000,now);
+        filt.Q.value=B.filt.Q||1.0;
+        if(B.filtEnvTo!=null) filt.frequency.exponentialRampToValueAtTime(Math.max(30,B.filtEnvTo),now+bDur);
+        o.connect(filt); outNode=filt;
+      }
+      const g=ac.createGain();
+      const atk=B.attack!=null?B.attack:Math.min(0.008,bDur*0.1);
+      g.gain.setValueAtTime(0.0001,now);
+      g.gain.exponentialRampToValueAtTime(Math.max(0.0005,B.g||0.08),now+atk);
+      g.gain.exponentialRampToValueAtTime(0.0001,now+bDur);
+      outNode.connect(g); connectVoice(g);
+      o.start(now); o.stop(now+bDur+0.05);
+    }
+    // Sub-bass layer
+    if(opts.sub){
+      const S=opts.sub;
+      const sDur=S.d||0.2;
+      const o=ac.createOscillator(); o.type=S.type||'sine';
+      o.frequency.value=S.f||55;
+      if(S.toF) o.frequency.exponentialRampToValueAtTime(Math.max(10,S.toF),now+sDur);
+      const g=ac.createGain();
+      const atk=S.attack!=null?S.attack:Math.min(0.03,sDur*0.15);
+      g.gain.setValueAtTime(0.0001,now);
+      g.gain.exponentialRampToValueAtTime(Math.max(0.0005,S.g||0.05),now+atk);
+      g.gain.exponentialRampToValueAtTime(0.0001,now+sDur);
+      o.connect(g); connectVoice(g);
+      o.start(now); o.stop(now+sDur+0.05);
+    }
+    // Noise/grit layer
+    if(opts.grit){
+      const G=opts.grit;
+      const gDur=G.d||0.1;
+      const sr=ac.sampleRate;
+      const buf=ac.createBuffer(1,Math.max(64,Math.floor(sr*gDur)),sr);
+      const data=buf.getChannelData(0);
+      for(let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*(1-i/data.length);
+      const src=ac.createBufferSource(); src.buffer=buf;
+      const filt=ac.createBiquadFilter();
+      filt.type=G.filtType||'bandpass';
+      filt.frequency.value=G.f||3500;
+      filt.Q.value=G.Q||1.0;
+      const g=ac.createGain();
+      g.gain.setValueAtTime(G.g||0.1,now);
+      g.gain.exponentialRampToValueAtTime(0.0001,now+gDur);
+      src.connect(filt); filt.connect(g); connectVoice(g);
+      src.start(now);
+    }
+    // Reverb tail — connect event mix to rotating IR convolver
+    if(opts.reverbWet&&opts.reverbWet>0 && !_reducedAudio){
+      const irBuf=_nextIRBuffer();
+      if(irBuf){
+        const conv=ac.createConvolver(); conv.normalize=true; conv.buffer=irBuf;
+        const wet=ac.createGain(); wet.gain.value=Math.min(0.9,opts.reverbWet);
+        (panNode||evGain).connect(conv); conv.connect(wet); wet.connect(busNode);
+        // Auto-disconnect after tail decays (buf duration + a safety margin)
+        const tailMs=(irBuf.duration||2)*1000+180;
+        setTimeout(()=>{ try{ conv.disconnect(); wet.disconnect(); }catch(_){} }, tailMs);
+      }
+    }
+  }catch(_){}
+}
+
+// Small humanizer
+function _rnd(a,b){ return a+Math.random()*(b-a); }
+
+// ══════════════════════════════════════════════════════════════════════
+//  SoundEngine public API + stinger recipes
+// ══════════════════════════════════════════════════════════════════════
+const SoundEngine={
+  init(){ _initSoundEngine(); },
+  resume(){ try{ if(AC_CTX&&AC_CTX.state!=='running') AC_CTX.resume(); }catch(_){} },
+  setMuted(on){ MUTED=!!on; if(_masterGain&&AC_CTX){
+      const t=AC_CTX.currentTime; _masterGain.gain.cancelScheduledValues(t);
+      _masterGain.gain.linearRampToValueAtTime(on?0:0.82,t+0.12);
+  } },
+  setPaused(on){ try{ _setPaused(!!on); }catch(_){} },
+  setReducedMotion(on){ _reducedAudio=!!on; if(on) _pauseLFOs(); else _resumeLFOs(); },
+  setBusVolume(busName,v){
+    const map={sfx:_sfxBus,alert:_alertBus,stinger:_stingerBus,ambient:_ambientGain,tension:_tensionGain,combat:_combatGain,boss:_bossGain};
+    const n=map[busName]; if(!n||!AC_CTX) return;
+    const t=AC_CTX.currentTime;
+    n.gain.cancelScheduledValues(t);
+    n.gain.linearRampToValueAtTime(Math.max(0,Math.min(1,v)),t+0.4);
+  },
+  setReverbDry(v){ if(_dryGain&&_wetGain&&AC_CTX){
+      const t=AC_CTX.currentTime; _dryGain.gain.linearRampToValueAtTime(Math.max(0,Math.min(1,v)),t+0.3);
+      _wetGain.gain.linearRampToValueAtTime(Math.max(0,Math.min(1,1-v)),t+0.3);
+  } },
+  music:{
+    setIntensity(val){ _musicIntensity=Math.max(0,Math.min(1,val)); _applyMusicIntensity(); },
+    getIntensity(){ return _musicIntensity; },
+    setScene(scene){
+      // scenes: 'auto' (intensity-driven), 'boss' (combat+boss up), 'silence',
+      //         'defense' (Dark Knight combat bed continuous), 'hunt' (detective synth bed),
+      //         'menu' (game beds silenced, menu bed handled separately)
+      if(!AC_CTX) return; const t=AC_CTX.currentTime;
+      if(scene==='silence'){
+        if(_ambientGain) _ambientGain.gain.linearRampToValueAtTime(0,t+0.8);
+        if(_tensionGain) _tensionGain.gain.linearRampToValueAtTime(0,t+0.8);
+        if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0,t+0.8);
+      }else if(scene==='boss'){
+        if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0.085,t+1.2);
+      }else if(scene==='defense'){
+        // Defense: start combat bed at sustained level (Zimmer industrial ostinato)
+        try{ _startCombatBed(); }catch(_){}
+        if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0.07,t+1.5);
+        if(_ambientGain) _ambientGain.gain.linearRampToValueAtTime(0.04,t+1.2);
+        if(_tensionGain) _tensionGain.gain.linearRampToValueAtTime(0.02,t+1.0);
+      }else if(scene==='hunt'){
+        // Hunt: subdued tension bed + narrow combat color (Blade Runner 2049 detective)
+        try{ _startCombatBed(); }catch(_){}
+        if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0.045,t+1.5);
+        if(_tensionGain) _tensionGain.gain.linearRampToValueAtTime(0.035,t+1.0);
+        if(_ambientGain) _ambientGain.gain.linearRampToValueAtTime(0.05,t+1.2);
+      }else if(scene==='menu'){
+        if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0,t+0.6);
+        if(_tensionGain) _tensionGain.gain.linearRampToValueAtTime(0,t+0.6);
+        if(_ambientGain) _ambientGain.gain.linearRampToValueAtTime(0,t+0.6);
+      }else{
+        // auto — re-apply current intensity
+        _applyMusicIntensity();
+      }
+    },
+    _update(){ _recalcMusicIntensity(); }
+  },
+  sfx:{ play(name,opts){ _sfxRecipe(name,opts||{}); } },
+  stinger:{ fire(name,opts){ _stingerRecipe(name,opts||{}); } },
+  ambient:{
+    start(){ startAmbient(); },
+    stop(){ stopAmbient(); },
+    setTension(v){ if(_tensionGain&&AC_CTX){
+      const t=AC_CTX.currentTime; _tensionGain.gain.cancelScheduledValues(t);
+      _tensionGain.gain.linearRampToValueAtTime(Math.max(0,Math.min(0.08,v)),t+0.8);
+    } }
+  }
+};
+
+function _recalcMusicIntensity(){
+  // Read available game globals defensively
+  let enemies=0; try{ enemies=(window._enemies||window.ENEMIES||[]).length||0; }catch(_){}
+  let fs=0; try{ fs=(typeof fuelStage==='number')?fuelStage:0; }catch(_){}
+  let bossActive=!!_ambBossActive;
+  let hpRatio=1; try{ if(window.PL&&PL.maxhp) hpRatio=(PL.hp||0)/PL.maxhp; }catch(_){}
+  let phaseNorm=0; try{ phaseNorm=Math.min(1,((typeof phIdx==='number')?phIdx:0)/8); }catch(_){}
+  const intensity=Math.max(0,Math.min(1,
+    (Math.min(enemies,8)/8)*0.28 +
+    (fs/3)*0.26 +
+    (bossActive?0.30:0) +
+    (1-hpRatio)*0.10 +
+    phaseNorm*0.06
+  ));
+  _musicIntensity=intensity;
+  _applyMusicIntensity();
+}
+function _applyMusicIntensity(){
+  if(!AC_CTX) return;
+  const t=AC_CTX.currentTime;
+  const I=_musicIntensity;
+  // ambient drops as intensity rises (but keep floor 0.32 unless boss is active — boss ducks deeper)
+  if(_ambientGain && !_ambBossActive){
+    const target=Math.max(0.32, 1.0 - I*0.55);
+    _ambientGain.gain.cancelScheduledValues(t);
+    _ambientGain.gain.linearRampToValueAtTime(target, t+0.8);
+  }
+  // tension rises from ~0.2 intensity, peaks at ~0.7
+  if(_tensionGain && !_ambBossActive){
+    const tens=(I<0.2?0:Math.min(0.045, (I-0.2)*0.09));
+    _tensionGain.gain.cancelScheduledValues(t);
+    _tensionGain.gain.linearRampToValueAtTime(tens, t+0.8);
+  }
+  // combat bed rises from 0.55 intensity
+  if(_combatGain){
+    const com=(I<0.55?0:Math.min(0.085,(I-0.55)*0.2));
+    _combatGain.gain.cancelScheduledValues(t);
+    _combatGain.gain.linearRampToValueAtTime(com, t+0.8);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  MODULE LEITMOTIFS — each Falcon module has a unique chord + timbre
+//  Each entry: roots (Hz array, played staggered for arpeggio feel)
+//              timbre: 'brass'|'strings'|'bell'|'pad'|'synth'|'choral'
+//              dur: tail sustain in seconds
+//              wet: reverb send (0-1)
+//              feel: quick human hint for maintainers
+// ══════════════════════════════════════════════════════════════════════
+const _moduleLeitmotifs={
+  'Falcon Prevent':           { roots:[165,196,247], timbre:'brass',   dur:0.20, wet:0.30, feel:'aggressive NGAV, minor+5th power' },
+  'Falcon Insight XDR':       { roots:[294,370,440,554], timbre:'bell', dur:0.28, wet:0.38, feel:'maj9 cluster, correlation shimmer' },
+  'Falcon Identity Protection':{ roots:[349,415,523], timbre:'pad',    dur:0.26, wet:0.34, feel:'watchful minor 6th' },
+  'Falcon Cloud Security':    { roots:[494,622,784], timbre:'bell',   dur:0.22, wet:0.40, feel:'bright maj7 with lightning crackle' },
+  'Falcon Intelligence':      { roots:[196,247,294], timbre:'brass',  dur:0.28, wet:0.36, feel:'heroic major triad' },
+  'Charlotte AI':             { roots:[262,330,392,494], timbre:'choral', dur:0.36, wet:0.52, feel:'choir maj9, airy AI presence' },
+  'Falcon OverWatch':         { roots:[196,294,392,784], timbre:'brass', dur:0.30, wet:0.44, feel:'ascending P5 fanfare, elite' },
+  'Falcon Complete MDR':      { roots:[110,147,220], timbre:'brass',  dur:0.32, wet:0.38, feel:'warm managed brass major' },
+  'Fusion SOAR':              { roots:[523,659,784,932], timbre:'synth', dur:0.16, wet:0.28, feel:'staccato add9 automation burst' },
+  'Exposure Management':      { roots:[147,220,330], timbre:'pad',    dur:0.34, wet:0.40, feel:'sweeping radar pad' },
+  'Falcon Data Protection':   { roots:[329,392,440], timbre:'strings',dur:0.26, wet:0.32, feel:'sus4 protective' },
+  'Next-Gen SIEM':            { roots:[440,554,659,880], timbre:'bell',dur:0.34, wet:0.46, feel:'bright crystalline analysis' },
+  'Just in Time Access':      { roots:[247,330,415], timbre:'bell',   dur:0.20, wet:0.30, feel:'crystalline vault, precise' },
+  'CrowdStrike Signal':       { roots:[175,261,349,523], timbre:'synth',dur:0.28, wet:0.34, feel:'open 5th dorian, identity chain' },
+  'Falcon Flex':              { roots:[262,330,392,523,659], timbre:'brass', dur:0.42, wet:0.54, feel:'full orchestral swell' }
+};
+
+// Timbre → layered-recipe template. Each returns parameters for _playLayered per root.
+function _timbreTemplate(timbre, f, i, total, dur, wet){
+  const stagger=i*0.025; // base arpeggio stagger per note
+  switch(timbre){
+    case 'brass': return {
+      bus:'sfx', pan:_rnd(-1.5,1.5), gainDb:-2+_rnd(-0.5,0.5), reverbWet:wet,
+      transient:{ noise:true, d:0.012, g:0.14, filt:{type:'bandpass',f:f*1.2,Q:1.1} },
+      body:{ type:'sawtooth', f:f, d:dur, g:0.05, filt:{type:'lowpass',f:f*3,Q:1.2}, filtEnvTo:f*4, attack:0.02+stagger, release:dur*0.7 },
+      subs:[{ type:'sawtooth', f:f*0.99, d:dur, g:0.04, attack:0.025+stagger, release:dur*0.7 }],
+      grit:{ d:dur*0.5, g:0.02, filtType:'bandpass', f:f*2.4, Q:1.0 }
+    };
+    case 'strings': return {
+      bus:'sfx', pan:_rnd(-1.5,1.5), gainDb:-2, reverbWet:wet,
+      transient:{ noise:true, d:0.02, g:0.08, filt:{type:'bandpass',f:f*3,Q:0.9} },
+      body:{ type:'sawtooth', f:f, d:dur, g:0.04, filt:{type:'lowpass',f:f*2.5,Q:2.4}, attack:0.06+stagger, release:dur*0.9 },
+      subs:[{ type:'sawtooth', f:f*1.003, d:dur, g:0.035, attack:0.065+stagger, release:dur*0.9 }]
+    };
+    case 'bell': return {
+      bus:'sfx', pan:_rnd(-1.5,1.5), gainDb:-1, reverbWet:wet,
+      transient:{ type:'sine', f:f*4, d:0.008, g:0.08 },
+      body:{ type:'sine', f:f, d:dur, g:0.06, attack:0.002+stagger, release:dur },
+      subs:[
+        { type:'sine', f:f*2, d:dur*0.7, g:0.04, attack:0.004+stagger, release:dur*0.7 },
+        { type:'sine', f:f*3, d:dur*0.5, g:0.025, attack:0.008+stagger, release:dur*0.5 }
+      ]
+    };
+    case 'pad': return {
+      bus:'sfx', pan:_rnd(-1.2,1.2), gainDb:-2, reverbWet:wet,
+      body:{ type:'sine', f:f, d:dur, g:0.05, attack:0.04+stagger, release:dur },
+      subs:[
+        { type:'triangle', f:f*1.005, d:dur, g:0.03, attack:0.06+stagger, release:dur },
+        { type:'sine', f:f*0.5, d:dur, g:0.025, attack:0.05+stagger, release:dur }
+      ]
+    };
+    case 'synth': return {
+      bus:'sfx', pan:_rnd(-1.8,1.8), gainDb:-2, reverbWet:wet,
+      transient:{ noise:true, d:0.005, g:0.1, filt:{type:'highpass',f:3000,Q:0.7} },
+      body:{ type:'square', f:f, d:dur, g:0.035, filt:{type:'lowpass',f:f*2.8,Q:3.2}, filtEnvTo:f*5, attack:0.005+stagger, release:dur*0.7 },
+      subs:[{ type:'triangle', f:f*2, d:dur*0.6, g:0.025, attack:0.01+stagger }]
+    };
+    case 'choral': return {
+      bus:'sfx', pan:_rnd(-1.5,1.5), gainDb:-3, reverbWet:wet,
+      body:{ type:'sine', f:f, d:dur, g:0.05, attack:0.08+stagger, release:dur*1.2 },
+      subs:[
+        { type:'triangle', f:f*1.01, d:dur, g:0.035, attack:0.09+stagger, release:dur*1.2 },
+        { type:'sine', f:f*2, d:dur*0.8, g:0.022, attack:0.06+stagger }
+      ],
+      grit:{ d:dur*0.8, g:0.012, filtType:'bandpass', f:f*3, Q:0.8 }
+    };
+    default: return {
+      bus:'sfx', pan:0, gainDb:-1, reverbWet:wet,
+      body:{ type:'sine', f:f, d:dur, g:0.05, attack:0.01+stagger, release:dur }
+    };
+  }
+}
+
+// Combo tracker + phase module chord builder
+let _moduleComboCount=0;
+let _moduleComboT=0;   // performance.now() of last module pickup
+let _phaseModulesCollected=[];   // names, reset on initPhase
+
+function _playModuleLeitmotif(name){
+  const L=_moduleLeitmotifs[name];
+  if(!L){
+    // fallback to generic pickup chord
+    return _playLayered({
+      bus:'sfx', pan:0, gainDb:0.4,
+      body:{ type:'sine', f:440, d:0.14, g:0.08, filt:{type:'lowpass',f:2400,Q:1.6} },
+      subs:[
+        { type:'sine', f:554, d:0.14, g:0.07, attack:0.015 },
+        { type:'sine', f:659, d:0.14, g:0.07, attack:0.03 }
+      ],
+      reverbWet:0.38
+    });
+  }
+  // Play each root as a staggered arpeggio using the timbre template
+  L.roots.forEach((f,i)=>{
+    const tpl=_timbreTemplate(L.timbre, f, i, L.roots.length, L.dur, L.wet);
+    if(i===0){ _playLayered(tpl); }
+    else { setTimeout(()=>_playLayered(tpl), i*32); } // 32ms arpeggio stagger
+  });
+  // Track for combo + phase chord
+  try{
+    const now=(typeof performance!=='undefined')?performance.now():Date.now();
+    if(now-_moduleComboT<8000){ _moduleComboCount++; } else { _moduleComboCount=1; }
+    _moduleComboT=now;
+    if(!_phaseModulesCollected.includes(name)) _phaseModulesCollected.push(name);
+
+    // Combo stinger — 3 within 8s → brass swell at this module's root; 5 → full orchestra
+    if(_moduleComboCount===3){
+      setTimeout(()=>_playComboSwell(L.roots[0]||220, 'triple'), 180);
+    } else if(_moduleComboCount>=5){
+      setTimeout(()=>_playComboSwell(L.roots[0]||220, 'penta'), 180);
+      _moduleComboCount=0;
+    }
+  }catch(_){}
+}
+
+function _playComboSwell(rootHz, kind){
+  try{
+    const wet=(kind==='penta')?0.62:0.48;
+    // Brass swell at root + fifth + octave
+    const f1=rootHz, f2=rootHz*1.5, f3=rootHz*2;
+    _playLayered({
+      bus:'stinger', pan:0, gainDb:1, reverbWet:wet,
+      transient:{ noise:true, d:0.04, g:0.22, filt:{type:'bandpass',f:f2*1.5,Q:1.0} },
+      body:{ type:'sawtooth', f:f1, d:0.46, g:0.10, filt:{type:'lowpass',f:f2*1.8,Q:1.0}, filtEnvTo:f2*3, attack:0.04, release:0.42 },
+      subs:[
+        { type:'sawtooth', f:f2, d:0.42, g:0.08, attack:0.05, release:0.40 },
+        { type:'sawtooth', f:f3, d:0.38, g:0.06, attack:0.06, release:0.36 },
+        { type:'sine', f:f1*0.5, d:0.50, g:0.09, attack:0.04, release:0.46 }
+      ],
+      grit:{ d:0.30, g:0.06, filtType:'bandpass', f:f2*2, Q:0.9 }
+    });
+    if(kind==='penta'){
+      // Add ascending arpeggio for 5-combo celebration
+      [f2*1.25, f2*1.5, f2*2].forEach((f,i)=>setTimeout(()=>_playLayered({
+        bus:'stinger', pan:_rnd(-2,2), gainDb:-1, reverbWet:0.5,
+        body:{ type:'sine', f:f, d:0.24, g:0.055, attack:0.004, release:0.22 },
+        subs:[{ type:'sine', f:f*2, d:0.18, g:0.025, attack:0.008 }]
+      }), 120+i*110));
+    }
+  }catch(_){}
+}
+
+// Phase chord — called by SFX.win() to replay the collected modules as a final chord.
+function _playPhaseSignatureChord(){
+  if(!_phaseModulesCollected.length) return;
+  // Collect unique first-root per module, blended into a single chord
+  const freqs=_phaseModulesCollected
+    .map(n=>_moduleLeitmotifs[n]&&_moduleLeitmotifs[n].roots&&_moduleLeitmotifs[n].roots[0])
+    .filter(Boolean)
+    .slice(0,6);
+  if(!freqs.length) return;
+  freqs.forEach((f,i)=>setTimeout(()=>_playLayered({
+    bus:'stinger', pan:_rnd(-2,2), gainDb:-2, reverbWet:0.58,
+    body:{ type:'sine', f:f, d:0.9, g:0.055, attack:0.05+i*0.02, release:0.86 },
+    subs:[
+      { type:'triangle', f:f*1.004, d:0.9, g:0.03, attack:0.06+i*0.02, release:0.86 },
+      { type:'sine', f:f*2, d:0.7, g:0.022, attack:0.08+i*0.02 }
+    ]
+  }), i*40));
+  // Sub anchor under the chord
+  setTimeout(()=>_playLayered({
+    bus:'stinger', pan:0, gainDb:0, reverbWet:0.5,
+    body:{ type:'sine', f:55, d:1.2, g:0.08, attack:0.04, release:1.1 },
+    subs:[{ type:'sine', f:27.5, d:1.4, g:0.06, attack:0.05, release:1.3 }]
+  }), 20);
+}
+
+// Reset combo + phase chord state — called from initPhase() via window.* shim
+function _resetModuleComboState(){
+  _moduleComboCount=0;
+  _moduleComboT=0;
+  _phaseModulesCollected=[];
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  SFX recipe dispatch (cinematic, layered)
+// ══════════════════════════════════════════════════════════════════════
+function _sfxRecipe(name,opts){
+  switch(name){
+    case 'shot':
+      _playLayered({
+        bus:'sfx', pan:_rnd(-2,2), gainDb:_rnd(-1.2,1.2),
+        transient:{ noise:true, d:0.008, g:0.55, filt:{type:'bandpass',f:6000+_rnd(-400,400),Q:1.6} },
+        body:{ type:'sine', f:760+_rnd(-20,20), toF:360, d:0.055, g:0.09,
+               filt:{type:'lowpass',f:8000,Q:1.2}, filtEnvTo:400 },
+        sub:{ type:'sine', f:110, d:0.05, g:0.06 },
+        grit:{ d:0.022, g:0.08, filtType:'bandpass', f:5800, Q:1.1 },
+        reverbWet:0.12
+      }); break;
+    case 'shot_charged': case 'shotCharged':
+      _playLayered({
+        bus:'sfx', pan:_rnd(-1,1), gainDb:0,
+        transient:{ type:'triangle', f:2400, d:0.02, g:0.3, filt:{type:'highpass',f:800,Q:0.7} },
+        body:{ type:'sawtooth', f:200, toF:1200, d:0.16, g:0.08, filt:{type:'lowpass',f:8000,Q:1.4}, filtEnvTo:1200 },
+        subs:[
+          { type:'sine', f:600+_rnd(-6,6), toF:1200, d:0.12, g:0.06, filt:{type:'lowpass',f:5000,Q:1.0} },
+          { type:'sine', f:1200+_rnd(-6,6), d:0.08, g:0.05 }
+        ],
+        sub:{ type:'sine', f:60, d:0.18, g:0.07 },
+        reverbWet:0.2
+      }); break;
+    case 'hit':
+      _playLayered({
+        bus:'sfx', pan:_rnd(-3,3), gainDb:_rnd(-1.5,1.5),
+        transient:{ noise:true, d:0.012, g:0.55, filt:{type:'bandpass',f:2800,Q:1.2} },
+        body:{ type:'sawtooth', f:160+_rnd(-6,6), toF:80, d:0.12, g:0.09,
+               filt:{type:'lowpass',f:3000,Q:1.3}, filtEnvTo:800 },
+        grit:{ d:0.1, g:0.12, filtType:'bandpass', f:2200, Q:1.0 },
+        reverbWet:0.22
+      }); break;
+    case 'player_hit':
+      _playLayered({
+        bus:'sfx', pan:_rnd(-4,4), gainDb:0.6,
+        transient:{ type:'triangle', f:2400, d:0.018, g:0.5, filt:{type:'bandpass',f:2400,Q:2.2} },
+        body:{ type:'sawtooth', f:220, toF:110, d:0.14, g:0.1, filt:{type:'lowpass',f:900,Q:1.4}, filtEnvTo:300 },
+        subs:[{ type:'sawtooth', f:247, toF:124, d:0.14, g:0.09, filt:{type:'lowpass',f:900,Q:1.4}, filtEnvTo:300 }],
+        grit:{ d:0.08, g:0.11, filtType:'bandpass', f:8000, Q:0.9 },
+        reverbWet:0.28
+      }); break;
+    case 'explode':
+      _playLayered({
+        bus:'sfx', pan:_rnd(-3,3), gainDb:_rnd(-1.5,2),
+        transient:{ noise:true, d:0.035, g:0.6, filt:{type:'bandpass',f:2200,Q:0.7} },
+        body:{ type:'sawtooth', f:80+_rnd(-4,4), toF:32, d:0.14, g:0.11,
+               filt:{type:'bandpass',f:900,Q:2.8}, filtEnvTo:260 },
+        sub:{ type:'sine', f:55+_rnd(-2,2), toF:36, d:0.22, g:0.14 },
+        grit:{ d:0.06, g:0.16, filtType:'bandpass', f:5000, Q:0.8 },
+        reverbWet:0.4
+      });
+      try{ SHAKE(4.5,0.20); }catch(_){}
+      break;
+    case 'big_explode': case 'bigExplode':
+      _playLayered({
+        bus:'sfx', pan:_rnd(-2,2), gainDb:2.2,
+        transient:{ noise:true, d:0.05, g:0.75, filt:{type:'bandpass',f:900,Q:0.6} },
+        body:{ type:'sawtooth', f:80, toF:32, d:0.28, g:0.13,
+               filt:{type:'bandpass',f:700,Q:3.2}, filtEnvTo:180 },
+        subs:[
+          { type:'sine', f:55, toF:30, d:0.36, g:0.16, filt:{type:'lowpass',f:240,Q:1.2} },
+          { type:'sine', f:110, toF:60, d:0.22, g:0.10 }
+        ],
+        sub:{ type:'sine', f:40, toF:22, d:0.5, g:0.17 },
+        grit:{ d:0.22, g:0.18, filtType:'bandpass', f:2800, Q:0.9 },
+        reverbWet:0.5
+      });
+      try{ SHAKE(7.5,0.32); }catch(_){}
+      break;
+    case 'pickup':
+      _playLayered({
+        bus:'sfx', pan:_rnd(0,3), gainDb:_rnd(-1.2,1.2),
+        transient:{ noise:true, d:0.012, g:0.3, filt:{type:'bandpass',f:7000,Q:1.4} },
+        body:{ type:'sine', f:660+_rnd(-6,6), toF:1100, d:0.08, g:0.08,
+               filt:{type:'lowpass',f:3000,Q:1.6}, filtEnvTo:6000 },
+        subs:[{ type:'sine', f:1320, d:0.04, g:0.05, attack:0.02 }],
+        reverbWet:0.32
+      }); break;
+    case 'refuel':
+      _playLayered({
+        bus:'sfx', pan:_rnd(-2,2), gainDb:0,
+        body:{ type:'sine', f:440, d:0.11, g:0.06 },
+        subs:[{ type:'sine', f:660, d:0.14, g:0.06, attack:0.04 }],
+        reverbWet:0.22
+      }); break;
+    case 'module_pickup': case 'module':
+      _playLayered({
+        bus:'sfx', pan:0, gainDb:0.4,
+        body:{ type:'sine', f:440, d:0.14, g:0.08, filt:{type:'lowpass',f:2400,Q:1.6} },
+        subs:[
+          { type:'sine', f:554, d:0.14, g:0.07, attack:0.015 },
+          { type:'sine', f:659, d:0.14, g:0.07, attack:0.03 },
+          { type:'sine', f:880, d:0.18, g:0.09, attack:0.05 },
+          { type:'sine', f:110, d:0.28, g:0.05, attack:0.04 }
+        ],
+        reverbWet:0.38
+      }); break;
+    case 'scan':
+      _playLayered({
+        bus:'sfx', pan:_rnd(-3,3), gainDb:0,
+        transient:{ noise:true, d:0.02, g:0.35, filt:{type:'bandpass',f:10000,Q:1.2} },
+        body:{ type:'sine', f:800, toF:1600, d:0.14, g:0.06, filt:{type:'lowpass',f:8000,Q:1.0}, filtEnvTo:3000 },
+        subs:[{ type:'sine', f:1200, toF:1800, d:0.1, g:0.05, attack:0.015 }],
+        grit:{ d:0.18, g:0.06, filtType:'bandpass', f:9000, Q:1.0 },
+        reverbWet:0.3
+      }); break;
+    case 'comms':
+      _playLayered({
+        bus:'sfx', pan:_rnd(-2,2), gainDb:-1,
+        transient:{ noise:true, d:0.008, g:0.25, filt:{type:'bandpass',f:8000,Q:2.0} },
+        body:{ type:'sine', f:1400, d:0.04, g:0.04 },
+        subs:[{ type:'sine', f:700, d:0.07, g:0.035, attack:0.025 }],
+        reverbWet:0.18
+      }); break;
+    case 'bridge_fall': case 'bridge':
+      _playLayered({
+        bus:'sfx', pan:_rnd(-3,3), gainDb:1,
+        transient:{ noise:true, d:0.05, g:0.55, filt:{type:'lowpass',f:1400,Q:0.7} },
+        body:{ type:'sawtooth', f:95, toF:44, d:0.24, g:0.11, filt:{type:'lowpass',f:800,Q:2.6}, filtEnvTo:200 },
+        sub:{ type:'sine', f:22, d:0.36, g:0.14, attack:0.06 },
+        grit:{ d:0.22, g:0.12, filtType:'bandpass', f:1600, Q:0.8 },
+        reverbWet:0.44
+      });
+      try{ SHAKE(6,0.28); }catch(_){}
+      break;
+    case 'mine_warn': case 'mineWarning': {
+      _playLayered({
+        bus:'alert', pan:-2, gainDb:0,
+        transient:{ type:'triangle', f:6000, d:0.012, g:0.3, filt:{type:'highpass',f:2000,Q:0.8} },
+        body:{ type:'sine', f:880, d:0.06, g:0.06, filt:{type:'lowpass',f:3200,Q:1.2} },
+        sub:{ type:'sine', f:220, d:0.1, g:0.04, attack:0.02 },
+        reverbWet:0.22
+      });
+      setTimeout(()=>_playLayered({
+        bus:'alert', pan:2, gainDb:0,
+        body:{ type:'sine', f:880, d:0.06, g:0.06, filt:{type:'lowpass',f:3200,Q:1.2} },
+        reverbWet:0.22
+      }),120);
+      break;
+    }
+    case 'alarm_1': case 'alarm_2': case 'alarm_3': {
+      const lvl=(name==='alarm_3')?3:(name==='alarm_2')?2:1;
+      _stingerAlarm(lvl); break;
+    }
+    case 'obj':
+      _playLayered({ bus:'sfx', gainDb:0,
+        body:{ type:'sine', f:660, d:0.1, g:0.06 },
+        subs:[
+          { type:'sine', f:880, d:0.1, g:0.06, attack:0.02 },
+          { type:'sine', f:1100, d:0.14, g:0.07, attack:0.05 }
+        ],
+        reverbWet:0.25
+      }); break;
+    case 'bossHit': {
+      const bonus=opts&&opts.bonus;
+      if(bonus){
+        _playLayered({ bus:'sfx', pan:_rnd(-2,2), gainDb:1.5,
+          transient:{ noise:true, d:0.02, g:0.5, filt:{type:'bandpass',f:7000,Q:1.6} },
+          body:{ type:'sine', f:1100, d:0.08, g:0.09 },
+          subs:[{ type:'sine', f:2200, d:0.06, g:0.06, attack:0.015 }],
+          reverbWet:0.34
+        });
+      }else{
+        _playLayered({ bus:'sfx', pan:_rnd(-2,2), gainDb:0,
+          transient:{ noise:true, d:0.012, g:0.35, filt:{type:'bandpass',f:3200,Q:1.0} },
+          body:{ type:'sawtooth', f:300, toF:180, d:0.06, g:0.06, filt:{type:'lowpass',f:2400,Q:1.4} },
+          reverbWet:0.22
+        });
+      }
+      break;
+    }
+    default: break;
+  }
+}
+
+// Fuel-alarm cinematic (level 1/2/3)
+function _stingerAlarm(level){
+  const seq=[];
+  if(level>=3){
+    seq.push({t:0,f:620,d:0.1},{t:90,f:410,d:0.12},{t:180,f:620,d:0.1},{t:320,f:300,d:0.14});
+  }else if(level===2){
+    seq.push({t:0,f:560,d:0.1},{t:110,f:430,d:0.11},{t:220,f:560,d:0.1});
+  }else{
+    seq.push({t:0,f:500,d:0.11},{t:120,f:380,d:0.11},{t:240,f:500,d:0.11});
+  }
+  for(const s of seq){
+    setTimeout(()=>_playLayered({
+      bus:'alert', pan:_rnd(-3,3), gainDb:level>=3?0.8:0,
+      transient:{ noise:true, d:0.008, g:0.22, filt:{type:'bandpass',f:8000,Q:1.4} },
+      body:{ type:'sawtooth', f:s.f+_rnd(-4,4), d:s.d, g:0.085, filt:{type:'lowpass',f:1800,Q:1.2} },
+      sub:{ type:'sine', f:100+level*12, d:s.d+0.06, g:0.05, attack:0.03 },
+      reverbWet:level>=3?0.3:0.22
+    }),s.t);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Cinematic Stinger Recipes (trailer-beat one-shots)
+// ══════════════════════════════════════════════════════════════════════
+function _stingerRecipe(name,opts){
+  switch(name){
+    case 'boss_alert': {
+      // BRAAAM — detuned low brass stab, sub drop, noise bloom, long tail.
+      _playLayered({
+        bus:'stinger', pan:-1, gainDb:3.2,
+        transient:{ noise:true, d:0.04, g:0.75, filt:{type:'bandpass',f:3200,Q:0.8} },
+        body:{ type:'sawtooth', f:220, toF:108, d:0.55, g:0.13, filt:{type:'lowpass',f:700,Q:3.2}, filtEnvTo:260 },
+        subs:[
+          { type:'sawtooth', f:218, toF:106, d:0.55, g:0.12, filt:{type:'lowpass',f:700,Q:3.2}, filtEnvTo:260 },
+          { type:'sawtooth', f:222, toF:110, d:0.55, g:0.12, filt:{type:'lowpass',f:700,Q:3.2}, filtEnvTo:260 },
+          { type:'sine',     f:55,  d:0.9,  g:0.15, attack:0.05 },
+          { type:'sine',     f:27,  d:1.1,  g:0.10, attack:0.08 }
+        ],
+        grit:{ d:0.4, g:0.16, filtType:'bandpass', f:1800, Q:0.7 },
+        reverbWet:0.62
+      });
+      // Second shot 180ms later — rising descent
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:1, gainDb:2.2,
+        body:{ type:'sawtooth', f:160, toF:82, d:0.5, g:0.12, filt:{type:'lowpass',f:620,Q:3.0}, filtEnvTo:220 },
+        subs:[
+          { type:'sawtooth', f:158, toF:80, d:0.5, g:0.11, filt:{type:'lowpass',f:620,Q:3.0}, filtEnvTo:220 }
+        ],
+        reverbWet:0.55
+      }),180);
+      try{ SHAKE(9,0.55); }catch(_){}
+      break;
+    }
+    case 'phase_ascent': case 'phase_win': {
+      // Triumphant orchestral-stack ascending 6 pitches, detuned sine pairs.
+      const notes=[262,330,392,523,659,784];
+      notes.forEach((f,i)=>setTimeout(()=>_playLayered({
+        bus:'stinger', pan:_rnd(-2,2), gainDb:0.6,
+        body:{ type:'sine', f:f+_rnd(-2,2), d:0.22, g:0.07, filt:{type:'lowpass',f:4000,Q:1.2} },
+        subs:[
+          { type:'sine', f:f*2+_rnd(-3,3), d:0.16, g:0.045, attack:0.02 }
+        ],
+        sub: i<2 ? { type:'sine', f:55, d:0.4, g:0.08, attack:0.05 } : null,
+        reverbWet:0.5
+      }),i*60));
+      // Choir wash
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:0, gainDb:0,
+        body:{ type:'sawtooth', f:131, d:0.8, g:0.05, filt:{type:'lowpass',f:900,Q:1.4} },
+        subs:[
+          { type:'sawtooth', f:98, d:0.8, g:0.045, filt:{type:'lowpass',f:900,Q:1.4} },
+          { type:'sawtooth', f:262, d:0.7, g:0.04, filt:{type:'lowpass',f:1400,Q:1.4} }
+        ],
+        reverbWet:0.65
+      }),80);
+      break;
+    }
+    case 'module_validated': case 'debrief': {
+      // Warm orchestral confirmation — D/A/F chord over sub anchor.
+      const chord=[196,294,392,587];  // G Maj-ish
+      chord.forEach((f,i)=>setTimeout(()=>_playLayered({
+        bus:'stinger', pan:_rnd(-2,2), gainDb:-0.6,
+        body:{ type:'sine', f:f+_rnd(-2,2), d:0.42, g:0.06, filt:{type:'lowpass',f:3000,Q:1.2} },
+        subs:[{ type:'sine', f:f*2, d:0.3, g:0.04, attack:0.04 }],
+        reverbWet:0.58
+      }),i*80));
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:0, gainDb:-1,
+        sub:{ type:'sine', f:49, d:1.1, g:0.11, attack:0.1 },
+        reverbWet:0.45
+      }),20);
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:0, gainDb:-2,
+        grit:{ d:0.5, g:0.04, filtType:'bandpass', f:5000, Q:1.0 },
+        reverbWet:0.3
+      }),200);
+      break;
+    }
+    case 'mission_fail': case 'over': {
+      // Sub drop + glass-shatter + low brass descent + long tail.
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:1.5,
+        transient:{ noise:true, d:0.06, g:0.7, filt:{type:'bandpass',f:4200,Q:0.8} },
+        sub:{ type:'sine', f:85, toF:28, d:1.6, g:0.2, attack:0.05 },
+        grit:{ d:0.55, g:0.22, filtType:'bandpass', f:6200, Q:1.0 },
+        reverbWet:0.7
+      });
+      // Descending doubled saws
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:-2, gainDb:0.8,
+        body:{ type:'sawtooth', f:260, toF:90, d:1.1, g:0.1, filt:{type:'lowpass',f:800,Q:2.8}, filtEnvTo:220 },
+        subs:[
+          { type:'sawtooth', f:258, toF:88, d:1.1, g:0.09, filt:{type:'lowpass',f:800,Q:2.8}, filtEnvTo:220 }
+        ],
+        reverbWet:0.55
+      }),220);
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:2, gainDb:0.6,
+        body:{ type:'sawtooth', f:130, toF:60, d:1.2, g:0.09, filt:{type:'lowpass',f:520,Q:2.6}, filtEnvTo:160 },
+        reverbWet:0.55
+      }),420);
+      try{ SHAKE(5,0.4); }catch(_){}
+      break;
+    }
+    case 'act_intro': case 'act': {
+      const idx=(opts&&typeof opts.idx==='number')?opts.idx:0;
+      const chords=[[262,330,392],[294,370,440],[330,415,494],[349,440,523]];
+      const c=chords[idx%chords.length];
+      c.forEach((f,i)=>setTimeout(()=>_playLayered({
+        bus:'stinger', pan:_rnd(-2,2), gainDb:0.4,
+        body:{ type:'sine', f:f+_rnd(-2,2), d:0.32, g:0.07, filt:{type:'lowpass',f:3200,Q:1.1} },
+        subs:[{ type:'sine', f:f*2, d:0.2, g:0.04, attack:0.03 }],
+        reverbWet:0.5
+      }),i*70));
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:0, gainDb:-0.5,
+        sub:{ type:'sine', f:65, d:0.8, g:0.08, attack:0.06 },
+        reverbWet:0.4
+      }),0);
+      break;
+    }
+    default: break;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  SFX object — legacy keys, cinematic bodies
+// ══════════════════════════════════════════════════════════════════════
 const SFX={
-  shot(){ beep(820,0.05,'square',0.032,480); },
-  shotCharged(){
-    phrase([{f:200,d:0.04,type:'sawtooth',g:0.06},{f:600,d:0.06,type:'square',g:0.05},{f:1200,d:0.05,type:'sine',g:0.04}],0);
-  },
-  hit(){ noise(0.12,0.08,3200); beep(160,0.08,'sawtooth',0.04,80); },
-  explode(){ noise(0.22,0.12,5000); beep(80,0.14,'sawtooth',0.036,32); SHAKE(4.5,0.20); },
-  bigExplode(){ noise(0.36,0.18,7000); beep(55,0.22,'sawtooth',0.048,22); SHAKE(7.5,0.32); },
-  pickup(){ beep(660,0.06,'sine',0.05,1100); },
-  refuel(){ phrase([{f:440,d:0.09,type:'sine',g:0.04},{f:660,d:0.09,type:'sine',g:0.04}]); },
-  module(){ phrase([{f:440,d:0.10,type:'sine',g:0.045},{f:554,d:0.10,type:'sine',g:0.045},{f:659,d:0.10,type:'sine',g:0.045},{f:880,d:0.14,type:'sine',g:0.06}]); },
-  alarm(level=1){
-    if(level>=3){
-      beep(620,0.08,'sawtooth',0.08);
-      setTimeout(()=>beep(410,0.11,'sawtooth',0.085),90);
-      setTimeout(()=>beep(620,0.08,'sawtooth',0.08),180);
-      setTimeout(()=>beep(300,0.12,'triangle',0.06),320);
-      return;
-    }
-    if(level===2){
-      beep(560,0.08,'sawtooth',0.072);
-      setTimeout(()=>beep(430,0.09,'sawtooth',0.074),110);
-      setTimeout(()=>beep(560,0.08,'sawtooth',0.072),220);
-      return;
-    }
-    beep(500,0.09,'sawtooth',0.07);
-    setTimeout(()=>beep(380,0.09,'sawtooth',0.07),120);
-    setTimeout(()=>beep(500,0.09,'sawtooth',0.07),240);
-  },
-  bossAlert(){
-    phrase([{f:220,d:0.12,type:'sawtooth',g:0.08},{f:160,d:0.12,type:'sawtooth',g:0.08},{f:110,d:0.18,type:'sawtooth',g:0.09}]);
-    noise(0.4,0.18,2000); SHAKE(9,0.55);
-  },
-  bridge(){ noise(0.26,0.16,5000); beep(95,0.20,'square',0.05,44); },
-  win(){
-    phrase([{f:523,d:0.14,type:'sine',g:0.05},{f:659,d:0.14,type:'sine',g:0.05},{f:784,d:0.14,type:'sine',g:0.05},
-            {f:1047,d:0.16,type:'sine',g:0.055},{f:1318,d:0.20,type:'sine',g:0.06},{f:1568,d:0.24,type:'sine',g:0.065}]);
-  },
-  debrief(){
-    phrase([
-      {f:392,d:0.12,type:'triangle',g:0.03},
-      {f:523,d:0.12,type:'triangle',g:0.032,gap:0.04},
-      {f:659,d:0.16,type:'sine',g:0.038,gap:0.05},
-      {f:988,d:0.26,type:'sine',g:0.042}
-    ],0.42);
-    setTimeout(()=>noise(0.18,0.022,2600),260);
-  },
-  over(){
-    phrase([{f:260,d:0.22,type:'sawtooth',g:0.06},{f:180,d:0.22,type:'sawtooth',g:0.06},
-            {f:130,d:0.22,type:'sawtooth',g:0.07},{f:90,d:0.30,type:'sawtooth',g:0.08}]);
-  },
-  obj(){ phrase([{f:660,d:0.10,type:'sine',g:0.05},{f:880,d:0.10,type:'sine',g:0.05},{f:1100,d:0.14,type:'sine',g:0.06}]); },
-  comms(){ beep(1400,0.03,'square',0.025); setTimeout(()=>beep(700,0.06,'square',0.02),50); },
-  scan(){
-    phrase([{f:800,d:0.06,type:'sine',g:0.04},{f:1200,d:0.06,type:'sine',g:0.04},{f:1600,d:0.10,type:'sine',g:0.05}]);
-    noise(0.20,0.06,8000);
-  },
-  bossHit(bonus){
-    if(bonus){ beep(1100,0.06,'sine',0.07); noise(0.08,0.05,6000); }
-    else beep(300,0.04,'sawtooth',0.04);
-  },
-  act(n){
-    const chords=[[262,330,392],[294,370,440],[330,415,494],[349,440,523]];
-    chords[n%chords.length].forEach((f,i)=>phrase([{f,d:0.22,type:'sine',g:0.04}],i*0.02));
-  },
-  mineWarning(){ beep(880,0.05,'square',0.04); setTimeout(()=>beep(880,0.05,'square',0.04),100); },
+  shot(){ _sfxRecipe('shot'); },
+  shotCharged(){ _sfxRecipe('shot_charged'); },
+  hit(){ _sfxRecipe('hit'); },
+  playerHit(){ _sfxRecipe('player_hit'); },
+  explode(){ _sfxRecipe('explode'); },
+  bigExplode(){ _sfxRecipe('big_explode'); },
+  pickup(){ _sfxRecipe('pickup'); },
+  refuel(){ _sfxRecipe('refuel'); },
+  module(name){ if(name){ try{ _playModuleLeitmotif(name); return; }catch(_){} } _sfxRecipe('module_pickup'); },
+  alarm(level=1){ _sfxRecipe('alarm_'+Math.max(1,Math.min(3,level|0))); },
+  bossAlert(){ _stingerRecipe('boss_alert'); },
+  bridge(){ _sfxRecipe('bridge_fall'); },
+  win(){ try{ _playPhaseSignatureChord(); }catch(_){} _stingerRecipe('phase_ascent'); },
+  debrief(){ _stingerRecipe('module_validated'); },
+  over(){ _stingerRecipe('mission_fail'); },
+  obj(){ _sfxRecipe('obj'); },
+  comms(){ _sfxRecipe('comms'); },
+  scan(){ _sfxRecipe('scan'); },
+  bossHit(bonus){ _sfxRecipe('bossHit',{bonus:!!bonus}); },
+  act(n){ _stingerRecipe('act_intro',{idx:n|0}); },
+  mineWarning(){ _sfxRecipe('mine_warn'); },
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────
@@ -9178,6 +10333,25 @@ function smPath(pts){
 // ── Game State ────────────────────────────────────────────────────────
 // ARCH: STATE uses S.* constants everywhere — no bare string literals.
 let STATE=S.TITLE, PAUSED=false;
+// Centralized pause setter — also silences ambient + boss music + SFX by ramping _masterGain.
+// Entry points (hk('KeyP') + Esc-confirm) route through this so audio state never desynchronizes.
+function _setPaused(on){
+  on=!!on;
+  if(PAUSED===on) return;
+  PAUSED=on;
+  try{
+    if(_masterGain&&AC_CTX){
+      const target = on ? 0 : (MUTED ? 0 : 0.82);
+      _masterGain.gain.cancelScheduledValues(AC_CTX.currentTime);
+      _masterGain.gain.linearRampToValueAtTime(target, AC_CTX.currentTime + (on?0.08:0.12));
+    }
+    // Suspend the ambient scheduler too: stop its lfo updates while paused so mix doesn't drift.
+    window._pausedAmbientLock = on;
+    // SDD spec-river-cinematic-audio v1.1 §A5: pause/resume all SoundEngine LFOs atomically
+    // (set freq to 0 instead of stop/recreate — avoids node churn and preserves phase continuity)
+    try{ if(on) _pauseLFOs(); else _resumeLFOs(); }catch(_){ }
+  }catch(_){ }
+}
 let phIdx=0;
 // Cached gradients for shore rendering — recreated only when phIdx changes
 let _cachedPhIdx=-1;
@@ -9486,6 +10660,7 @@ function resetPhaseState(){
 function initPhase(idx){
   phIdx=idx;
   resetPhaseState();
+  try{ _resetModuleComboState(); }catch(_){}
 
   // Player reset
   PL.x=VW/2; PL.y=VH-88;
@@ -9650,14 +10825,14 @@ function activateMod(name){
     spawnBossFuelWave(true,5);
     const flexCols=['#e0003c','#42d9ff','#ff62ff','#4ab6ff','#ff8d39','#b86bff','#74ff88','#ff7a00','#ff5a4d','#ff9a48','#caffb2','#ffd84d','#fff274','#ffffff'];
     for(let i=0;i<6;i++) setTimeout(()=>{ burst(rnd(VW*0.2,VW*0.8),rnd(VH*0.1,VH*0.7),32,flexCols,260,1.4); SFX.bigExplode(); },i*120);
-    FLASH('#ffffff',0.28); SHAKE(14,0.7); SFX.module();
+    FLASH('#ffffff',0.28); SHAKE(14,0.7); SFX.module(name);
     BANNER(T('iz_banner_falcon_flex'),4.0,'#ffffff');
     COMMS(T('iz_comms_falcon_flex'),'#ffffff');
     return;
   }
 
   AMODS[m.apply]=m.dur;
-  SFX.module(); FLASH(m.col,0.10);
+  SFX.module(name); FLASH(m.col,0.10);
   BANNER(TF('iz_banner_module_active',{name}),3.0,m.col);
   COMMS(TF('iz_comms_module_active',{name}),m.col);
 
@@ -9756,7 +10931,7 @@ function activateMod(name){
     case 'intel':
       revealAll(); FLASH('#ff8d39',0.12);
       burst(PL.x,PL.y,44,['#ff8d39','#ffaa44','#ff6600','#fff'],200,1.1);
-      SFX.module();
+      SFX.module(name);
       COMMS(T('iz_comms_intel'),'#ff8d39'); break;
 
     case 'overwatch':
@@ -9766,7 +10941,7 @@ function activateMod(name){
       setTimeout(()=>burst(VW*0.18,VH*0.28,22,['#74ff88','#00ff44','#fff'],175,0.75),80);
       setTimeout(()=>burst(VW*0.82,VH*0.38,22,['#74ff88','#00ff44','#fff'],175,0.75),155);
       setTimeout(()=>burst(VW*0.5,VH*0.62,22,['#74ff88','#b8ffcc','#fff'],175,0.75),230);
-      SFX.module();
+      SFX.module(name);
       BANNER(T('iz_banner_overwatch_deployed'),2.4,'#74ff88');
       COMMS(T('iz_comms_overwatch'),'#74ff88'); break;
 
@@ -10658,7 +11833,7 @@ function update(dt){
       _masterGain.gain.linearRampToValueAtTime(_mv,AC_CTX.currentTime+0.08);
     }
   }
-  if(hk('KeyP')) PAUSED=!PAUSED;
+  if(hk('KeyP')) _setPaused(!PAUSED);
   // Zoom keyboard shortcuts: - to zoom out, =/+ to zoom in
   if(hk('Minus'))  _izZoom=Math.max(IZ_ZOOM_MIN,+((_izZoom-IZ_ZOOM_STEP).toFixed(2)));
   if(hk('Equal'))  _izZoom=Math.min(IZ_ZOOM_MAX,+((_izZoom+IZ_ZOOM_STEP).toFixed(2)));
@@ -15030,6 +16205,21 @@ function ezOutExpo(p){ if(p<=0)return 0; if(p>=1)return 1; return 1-Math.pow(2,-
 function ezOutQuart(p){ if(p<=0)return 0; if(p>=1)return 1; return 1-Math.pow(1-p,4); }
 function ezOutQuint(p){ if(p<=0)return 0; if(p>=1)return 1; return 1-Math.pow(1-p,5); }
 function ezInExpo(p){ if(p<=0)return 0; if(p>=1)return 1; return Math.pow(2,10*p-10); }
+// ── prefers-reduced-motion — global flag for canvas cinematics ──
+// When set, signature moments (boss intro, phase end, win, loss) skip their
+// exponential reveal and render at final state. Respects user OS setting and
+// stays reactive if the user toggles the preference mid-session.
+(function(){
+  try{
+    const mq=window.matchMedia('(prefers-reduced-motion: reduce)');
+    window._reduceMotion = !!mq.matches;
+    if(mq.addEventListener) mq.addEventListener('change', e=>{ window._reduceMotion = !!e.matches; });
+    else if(mq.addListener) mq.addListener(e=>{ window._reduceMotion = !!e.matches; });
+  }catch(_){ window._reduceMotion = false; }
+})();
+// Clamp progress to 1 when the user prefers reduced motion — cinematic reveals
+// collapse to their settled state instead of animating in.
+function rmP(p){ return window._reduceMotion ? 1 : p; }
 // Smooth breath: returns eased opacity between lo..hi, oscillating at period sec.
 function cinBreathe(periodSec, lo, hi){
   if(lo===undefined) lo=0.38; if(hi===undefined) hi=1.0;
@@ -15774,20 +16964,22 @@ function drawAdversarySigil(cx,x,y,r,col,key,phase){
 
 function drawBossIntro(){
   drawWorld(0.04);
-  CX.save(); CX.globalAlpha=Math.min(1, phTime/0.55);
+  CX.save(); CX.globalAlpha=Math.min(1, rmP(phTime/0.55));
   const nm=BQUEUE[0]||'BOSS';
   const ad=ADV[nm]||{color:'#ff476a',nation:'Unknown',active:'',ttp:'',intel:'',counter:'',weakness:''};
   CX.fillStyle='rgba(0,0,0,0.93)'; CX.fillRect(68,52,VW-136,VH-104);
   CX.strokeStyle='#ff5a4d'; CX.lineWidth=2.5; CX.strokeRect(68,52,VW-136,VH-104);
 
-  const pulse=0.5+0.5*Math.sin(Date.now()*0.009);
+  // Pulse is paused under reduced-motion — steady glow, no oscillation.
+  const pulse = window._reduceMotion ? 0.75 : (0.5+0.5*Math.sin(Date.now()*0.009));
   CX.shadowBlur=Math.max(10,20*pulse); CX.shadowColor='#ff5a4d';
   CX.fillStyle='#ff5a4d'; CX.font=FONT_BOLD_14; CX.textAlign='center';
   CX.fillText(T('g_contact_detected'),VW/2,90); CX.shadowBlur=0;
 
   // ── Signature glyph with scanline-clip reveal ────────────────────────
   // Reveal wipes top→bottom over 0.75s; scanline bar traces the leading edge.
-  const revT=Math.max(0,Math.min(1, phTime/0.75));
+  // Under reduced-motion the sigil renders fully formed (no wipe, no bar).
+  const revT=Math.max(0,Math.min(1, rmP(phTime/0.75)));
   const revE=(typeof ezOutQuart==='function')?ezOutQuart(revT):revT;
   const sigR=36;
   const gx=VW/2 - 168, gy=144;
@@ -15817,8 +17009,10 @@ function drawBossIntro(){
   }
   CX.restore();
 
-  // Adversary name — slides in from the right of the sigil with overshoot
-  const nameE=(typeof cinOvershoot==='function')?cinOvershoot(Math.min(1, Math.max(0,(phTime-0.18)/0.5))):Math.min(1,phTime/0.55);
+  // Adversary name — slides in from the right of the sigil with overshoot.
+  // Under reduced-motion the slide and overshoot collapse to the settled state.
+  const nameP = rmP(Math.min(1, Math.max(0,(phTime-0.18)/0.5)));
+  const nameE=(typeof cinOvershoot==='function')?cinOvershoot(nameP):nameP;
   CX.save();
   CX.translate((1-nameE)*22, 0);
   CX.globalAlpha=Math.min(1, nameE*1.1);
@@ -15873,7 +17067,7 @@ function drawPhaseEnd(){
   const panX=58, panY=42, panW=VW-116, panH=VH-84;
   CX.fillStyle='rgba(0,0,0,0.92)'; CX.fillRect(panX,panY,panW,panH);
   CX.strokeStyle=g.col; CX.lineWidth=2.5; CX.strokeRect(panX,panY,panW,panH);
-  CX.save(); CX.globalAlpha=Math.min(1, endT/0.55);
+  CX.save(); CX.globalAlpha=Math.min(1, rmP(endT/0.55));
   CX.beginPath(); CX.rect(panX+2,panY+2,panW-4,panH-4); CX.clip();
 
   CX.fillStyle='rgba(0,0,0,0.7)'; CX.fillRect(panX,panY,panW,20);
@@ -15996,12 +17190,12 @@ function drawGameOver(){
   CX.save();
   // Slower, weighted scrim ramp — 0.70s ezOutExpo feels like a controlled
   // fall rather than a hard cut. Aberration and title swap follow.
-  const scrimE = (typeof ezOutExpo==='function') ? ezOutExpo(Math.min(1, goT/0.70)) : Math.min(1, goT/0.70);
+  const scrimE = (typeof ezOutExpo==='function') ? ezOutExpo(Math.min(1, rmP(goT/0.70))) : Math.min(1, rmP(goT/0.70));
   CX.globalAlpha = scrimE;
   // Base black scrim layered with a faint red haze that ramps slightly slower
   CX.fillStyle='rgba(0,0,0,0.98)'; CX.fillRect(0,0,VW,VH);
   drawStars(0.18);
-  const hazeE = (typeof ezOutQuart==='function') ? ezOutQuart(Math.min(1, goT/0.85)) : Math.min(1, goT/0.85);
+  const hazeE = (typeof ezOutQuart==='function') ? ezOutQuart(Math.min(1, rmP(goT/0.85))) : Math.min(1, rmP(goT/0.85));
   CX.fillStyle = `rgba(80,0,0,${0.45*hazeE})`;
   CX.fillRect(0,0,VW,VH);
 
@@ -16338,12 +17532,14 @@ function frame(ts){
     case S.DEPLOY_CINEMATIC:
       window._deployT=(window._deployT||0)+dt;
       updShake(dt); updAmbient(dt); updParts(dt); updRings(dt); updActAnn(dt);
-      // Animate player boat dropping into position during REVEAL phase (t=3.3-4.4)
+      // Animate player boat dropping into BOTTOM spawn during REVEAL phase (t=3.3-4.4)
+      // Arcade convention: shooter spawns bottom-center (Galaga/1942 style).
       if(window._deployT>=3.3){
         const dEase=Math.min(1,Math.max(0,(window._deployT-3.3)/1.0));
         const dEase2=dEase*dEase; // quadratic ease-in (slow start)
-        PL.y=-80+dEase2*(VH*0.72);
-        PL.x=VW/2+52; // offset right of center so briefing panel has space
+        const spawnY=VH-88;        // matches initPhase() bottom spawn
+        PL.y=-80+dEase2*(spawnY-(-80));
+        PL.x=VW/2;                 // center — briefing panel has already faded by t=3.3
       }
       // SPACE after t>=1.0 skips to gameplay; auto-exit after 9.0s
       if(window._deployT>=9.0||(window._deployT>=1.0&&hk('Space'))){ SFX.scan(); STATE=S.PLAYING; }
@@ -16359,8 +17555,8 @@ function frame(ts){
     case S.PLAYING:
     case S.BOSS_FIGHT:
       if(hk('KeyI')) intelOpen=!intelOpen;
-      if(hk('KeyP')||(PAUSED&&hk('Space'))) PAUSED=!PAUSED;
-      if(hk('Escape')){ PAUSED=true; if(confirm(T('g_exit_confirm'))){ PAUSED=false; STATE=S.TITLE; } else { PAUSED=false; } }
+      if(hk('KeyP')||(PAUSED&&hk('Space'))) _setPaused(!PAUSED);
+      if(hk('Escape')){ _setPaused(true); if(confirm(T('g_exit_confirm'))){ _setPaused(false); STATE=S.TITLE; } else { _setPaused(false); } }
       if(!PAUSED){ update(dt); window._boothPing?.(); }
       break;
 
@@ -16467,7 +17663,7 @@ window.__zeroSim = {
   startAttractDemo(){
     try{ AC(); }catch(_){}
     MUTED=false;
-    PAUSED=false;
+    _setPaused(false);
     intelOpen=false;
     _rankingShown=false;
     FalconRanking.stopIdleWatch();
@@ -16573,6 +17769,27 @@ resetWorld();
 requestAnimationFrame(t=>{ LAST=t; requestAnimationFrame(frame); });
   })();
 }
+
+// ── SDD spec-river-cinematic-audio v1.1 §A3 — Cross-block exports ────────────
+// The cinematic SoundEngine + SFX live in script block 2 as `const` declarations
+// (block-scoped). Script blocks 3 (Defense) and 4 (Hunt) cannot see them without
+// these window.* shims. CLAUDE.md mandate: cross-block identifiers MUST be
+// exposed on window and referenced as window.X at call sites.
+try{
+  window.SoundEngine = SoundEngine;
+  window.SFX = SFX;
+  window.startAmbient = ()=>{ try{ SoundEngine.ambient.start(); }catch(_){ } };
+  window.stopAmbient  = ()=>{ try{ SoundEngine.ambient.stop();  }catch(_){ } };
+  window.startBossMusic = ()=>{ try{ SoundEngine.music.setScene('boss'); startBossMusic(); }catch(_){ } };
+  window.stopBossMusic  = ()=>{ try{ SoundEngine.music.setScene('auto'); stopBossMusic();  }catch(_){ } };
+  window.updateAmbientMix = ()=>{ try{ updateAmbientMix(); }catch(_){ } };
+  window._pauseLFOs = _pauseLFOs;
+  window._resumeLFOs = _resumeLFOs;
+  // Menu bed — unified HQ atmosphere for dashboard/ranking/attract
+  window._startMenuBed = (vol)=>{ try{ _startMenuBed(vol); }catch(_){ } };
+  window._stopMenuBed  = ()=>{ try{ _stopMenuBed(); }catch(_){ } };
+  window._menuBedSetVolume = (v)=>{ try{ _menuBedSetVolume(v); }catch(_){ } };
+}catch(_){ }
 
 </script>
 
@@ -16940,21 +18157,29 @@ const FalconRanking = (function () {
       .fr-btn-primary {
         background: #e0003c; color: #fff;
         box-shadow: 0 0 0 0 rgba(224,0,60,0);
-        transition: background 0.18s, box-shadow 0.18s, transform 0.1s;
+        /* Emil: strong ease-out; exact property transitions; press fastest */
+        transition: background 180ms cubic-bezier(0.23, 1, 0.32, 1),
+                    box-shadow 180ms cubic-bezier(0.23, 1, 0.32, 1),
+                    transform  140ms cubic-bezier(0.23, 1, 0.32, 1);
       }
-      .fr-btn-primary:hover {
-        background: #ff1a52;
-        box-shadow: 0 0 24px rgba(224,0,60,0.5);
-        transform: translateY(-1px);
+      @media (hover: hover) and (pointer: fine) {
+        .fr-btn-primary:hover {
+          background: #ff1a52;
+          box-shadow: 0 0 24px rgba(224,0,60,0.5);
+          transform: translateY(-1px);
+        }
       }
-      .fr-btn-primary:active { transform: translateY(0); }
+      .fr-btn-primary:active { transform: scale(0.97); }
       .fr-btn-secondary {
         background: rgba(255,255,255,0.04);
         color: #7f8b96; border: 1px solid rgba(255,255,255,0.08);
       }
-      .fr-btn-secondary:hover {
-        background: rgba(255,255,255,0.08); color: #d5dde5;
+      @media (hover: hover) and (pointer: fine) {
+        .fr-btn-secondary:hover {
+          background: rgba(255,255,255,0.08); color: #d5dde5;
+        }
       }
+      .fr-btn-secondary:active { transform: scale(0.97); }
 
       /* Consent line */
       .fr-consent {
@@ -17074,7 +18299,9 @@ const FalconRanking = (function () {
         opacity: 0;
         transition: opacity 0.3s;
       }
-      .fr-entry:hover::before { opacity: 1; }
+      @media (hover: hover) and (pointer: fine) {
+        .fr-entry:hover::before { opacity: 1; }
+      }
 
       /* Rank number */
       .fr-rank {
@@ -18809,12 +20036,14 @@ class Pool{
 
 // ─── AUDIO ───────────────────────────────────────────────────────
 class AudioEngine{
+  // v2 port: every method routes through window.SoundEngine / window.SFX cinematic engine
+  // when available. Legacy #tone kept as fallback only if SoundEngine hasn't initialized yet.
   #ac=null;#bgm=false;
-  constructor(){/* AudioContext created lazily on first sound to satisfy browser autoplay policy */}
+  constructor(){/* AudioContext created lazily — SoundEngine owns its own graph */}
   #getAC(){if(!this.#ac)this.#ac=new(window.AudioContext||window.webkitAudioContext)();return this.#ac;}
   #resume(){const ac=this.#getAC();if(ac.state!=="running")ac.resume();}
   #tone({type="square",f0,f1,dur,gain=0.22,filt=null,det=0,delay=0}){
-    if(window._simMuted) return; // silent during attract simulation
+    if(window._simMuted) return;
     setTimeout(()=>{
       this.#resume();
       const ac=this.#getAC(),osc=ac.createOscillator(),g=ac.createGain();
@@ -18829,61 +20058,68 @@ class AudioEngine{
       g.connect(ac.destination);osc.start();osc.stop(ac.currentTime+dur);
     },delay);
   }
-  laser(){this.#tone({type:"sawtooth",f0:900,f1:200,dur:0.12,gain:0.2});}
-  boom(){
+  #se(){ return (typeof window!=='undefined' && window.SoundEngine) ? window.SoundEngine : null; }
+  #sfx(){ return (typeof window!=='undefined' && window.SFX) ? window.SFX : null; }
+  // Every public method: prefer cinematic SoundEngine recipe; fall back to legacy #tone.
+  laser(){ const s=this.#sfx(); if(s){ try{ s.shot(); return; }catch(_){} }
+    this.#tone({type:"sawtooth",f0:900,f1:200,dur:0.12,gain:0.2}); }
+  boom(){ const s=this.#sfx(); if(s){ try{ s.bigExplode(); return; }catch(_){} }
     this.#tone({type:"square",f0:300,f1:30,dur:0.45,gain:0.32,filt:600});
-    this.#tone({type:"sawtooth",f0:150,f1:20,dur:0.3,gain:0.18,delay:80});
-  }
-  playerHit(){
+    this.#tone({type:"sawtooth",f0:150,f1:20,dur:0.3,gain:0.18,delay:80}); }
+  playerHit(){ const s=this.#sfx(); if(s){ try{ s.playerHit(); return; }catch(_){} }
     this.#tone({type:"triangle",f0:520,f1:80,dur:0.55,gain:0.3});
-    this.#tone({type:"sawtooth",f0:300,f1:60,dur:0.4,gain:0.15,det:15});
-  }
-  moduleUp(){[0,100,200,310].forEach((d,i)=>this.#tone({type:"sine",f0:330+i*165,dur:0.16,gain:0.2,delay:d}));}
-  bonusModule(){
-    // Distinct golden chime for bonus module drops
-    [0,80,160,260,400].forEach((d,i)=>
-      this.#tone({type:"sine",f0:440*Math.pow(1.25,i),dur:0.22,gain:0.18,delay:d}));
-  }
-  pangea(){
+    this.#tone({type:"sawtooth",f0:300,f1:60,dur:0.4,gain:0.15,det:15}); }
+  moduleUp(){ const s=this.#sfx(); if(s){ try{ s.module('Falcon Prevent'); return; }catch(_){} }
+    [0,100,200,310].forEach((d,i)=>this.#tone({type:"sine",f0:330+i*165,dur:0.16,gain:0.2,delay:d})); }
+  bonusModule(){ const s=this.#sfx(); if(s){ try{ s.module('Falcon Insight XDR'); return; }catch(_){} }
+    [0,80,160,260,400].forEach((d,i)=>this.#tone({type:"sine",f0:440*Math.pow(1.25,i),dur:0.22,gain:0.18,delay:d})); }
+  pangea(){ const s=this.#sfx(); if(s){ try{ s.module('Exposure Management'); return; }catch(_){} }
     this.#tone({type:"sine",f0:200,f1:60,dur:1.2,gain:0.3,filt:500});
-    this.#tone({type:"square",f0:100,f1:30,dur:1.0,gain:0.2,delay:60});
-  }
-  overwatch(){
+    this.#tone({type:"square",f0:100,f1:30,dur:1.0,gain:0.2,delay:60}); }
+  overwatch(){ const s=this.#sfx(); if(s){ try{ s.module('Falcon OverWatch'); return; }catch(_){} }
     this.#tone({type:"sawtooth",f0:55,f1:220,dur:0.9,gain:0.4,filt:800});
-    this.#tone({type:"square",f0:110,f1:440,dur:0.7,gain:0.25,delay:200});
-  }
-  complete(){[0,80,180,320,500].forEach((d,i)=>this.#tone({type:"sawtooth",f0:80*Math.pow(1.4,i),f1:30,dur:0.7,gain:0.35,filt:700,delay:d}));}
-  charlotte(){
+    this.#tone({type:"square",f0:110,f1:440,dur:0.7,gain:0.25,delay:200}); }
+  complete(){ const s=this.#sfx(); if(s){ try{ s.module('Falcon Complete MDR'); return; }catch(_){} }
+    [0,80,180,320,500].forEach((d,i)=>this.#tone({type:"sawtooth",f0:80*Math.pow(1.4,i),f1:30,dur:0.7,gain:0.35,filt:700,delay:d})); }
+  charlotte(){ const s=this.#sfx(); if(s){ try{ s.module('Charlotte AI'); return; }catch(_){} }
     this.#tone({type:"sine",f0:880,f1:1760,dur:0.25,gain:0.18});
-    this.#tone({type:"sine",f0:440,f1:1320,dur:0.2,gain:0.12,delay:30});
-  }
-  ufoBeep(){this.#tone({type:"sine",f0:720,f1:360,dur:0.07,gain:0.12});}
-  levelUp(){[0,120,240,400].forEach((d,i)=>this.#tone({type:"square",f0:220*Math.pow(1.5,i),dur:0.18,gain:0.18,delay:d}));}
-  bossRoar(){
+    this.#tone({type:"sine",f0:440,f1:1320,dur:0.2,gain:0.12,delay:30}); }
+  ufoBeep(){ const s=this.#sfx(); if(s){ try{ s.comms(); return; }catch(_){} }
+    this.#tone({type:"sine",f0:720,f1:360,dur:0.07,gain:0.12}); }
+  levelUp(){ const s=this.#sfx(); if(s){ try{ s.win(); return; }catch(_){} }
+    [0,120,240,400].forEach((d,i)=>this.#tone({type:"square",f0:220*Math.pow(1.5,i),dur:0.18,gain:0.18,delay:d})); }
+  bossRoar(){ const s=this.#sfx(); if(s){ try{ s.bossAlert(); return; }catch(_){} }
     this.#tone({type:"sawtooth",f0:55,f1:18,dur:1.1,gain:0.5,filt:300});
-    this.#tone({type:"square",f0:80,f1:25,dur:0.9,gain:0.3,det:30,delay:80});
-  }
-  exp(){
+    this.#tone({type:"square",f0:80,f1:25,dur:0.9,gain:0.3,det:30,delay:80}); }
+  exp(){ const s=this.#sfx(); if(s){ try{ s.pickup(); return; }catch(_){} }
     this.#tone({type:"sine",f0:440,f1:880,dur:0.3,gain:0.2});
-    this.#tone({type:"triangle",f0:330,f1:660,dur:0.25,gain:0.15,delay:60});
-  }
-  corruptAlert(){this.#tone({type:"square",f0:220,f1:110,dur:0.3,gain:0.25,filt:400});}
-  gameOver(){
-    // Heavy descending dread — four falling tones
-    [0,180,360,560].forEach((d,i)=>this.#tone({type:"sawtooth",f0:200-i*35,f1:40,dur:0.55,gain:0.32-i*0.04,filt:500,delay:d}));
-  }
-  phaseTransition(){[0,60,140,260].forEach((d,i)=>this.#tone({type:"sawtooth",f0:440-i*80,dur:0.4,gain:0.28,filt:600,delay:d}));}
-  socComm(){this.#tone({type:"sine",f0:660,f1:440,dur:0.08,gain:0.08});}
+    this.#tone({type:"triangle",f0:330,f1:660,dur:0.25,gain:0.15,delay:60}); }
+  corruptAlert(){ const s=this.#sfx(); if(s){ try{ s.alarm(2); return; }catch(_){} }
+    this.#tone({type:"square",f0:220,f1:110,dur:0.3,gain:0.25,filt:400}); }
+  gameOver(){ const s=this.#sfx(); if(s){ try{ s.over(); return; }catch(_){} }
+    [0,180,360,560].forEach((d,i)=>this.#tone({type:"sawtooth",f0:200-i*35,f1:40,dur:0.55,gain:0.32-i*0.04,filt:500,delay:d})); }
+  phaseTransition(){ const s=this.#sfx(); if(s){ try{ s.act(1); return; }catch(_){} }
+    [0,60,140,260].forEach((d,i)=>this.#tone({type:"sawtooth",f0:440-i*80,dur:0.4,gain:0.28,filt:600,delay:d})); }
+  socComm(){ const s=this.#sfx(); if(s){ try{ s.comms(); return; }catch(_){} }
+    this.#tone({type:"sine",f0:660,f1:440,dur:0.08,gain:0.08}); }
   startBGM(){
     if(this.#bgm)return;
-    if(window._simMuted)return; // silent during attract simulation
-    this.#bgm=true;this.#resume();
+    if(window._simMuted)return;
+    this.#bgm=true;
+    // v2: route to SoundEngine defense scene — silences menu bed, activates combat bed
+    const se=this.#se();
+    if(se){
+      try{ window._stopMenuBed?.(); }catch(_){}
+      try{ se.music.setScene('defense'); return; }catch(_){}
+    }
+    // Fallback: legacy retro bass+melody loop
+    this.#resume();
     const ac=this.#getAC();
     const bass=[55,55,65,55,49,49,55,49],mel=[220,262,220,196,175,196,220,175];
     const step=60/148;let beat=0;
     const tick=()=>{
       if(!this.#bgm)return;
-      if(window._simMuted){this.#bgm=false;return;} // stop if simulation starts mid-game
+      if(window._simMuted){this.#bgm=false;return;}
       const now=ac.currentTime;
       [bass,mel].forEach((seq,si)=>{
         const osc=ac.createOscillator(),g=ac.createGain();
@@ -18897,7 +20133,11 @@ class AudioEngine{
       beat++;setTimeout(tick,step*1000);
     };tick();
   }
-  stopBGM(){this.#bgm=false;}
+  stopBGM(){
+    this.#bgm=false;
+    const se=this.#se();
+    if(se){ try{ se.music.setScene('auto'); }catch(_){} }
+  }
   shutdown(){
     this.stopBGM();
     if(this.#ac&&this.#ac.state!=='closed'){
@@ -20613,6 +21853,7 @@ class Game{
 
   #score     =0;#waveScore=0;#hi=0;#lives=CFG.PLR_LIVES;
   #hitPause  =0;#lastTime=0;
+  #paused    =false;
 
   #px=0;#py=0;#canShoot=true;
   #mods={PREVENT:0,INSIGHT:0,IDENTITY:0,PANGEA:0,EXP:0,COMPLETE:0,CHARLOTTE_AIM:0,CLOUD:0};
@@ -20728,13 +21969,36 @@ class Game{
   // Returns the PHASES entry for the current wave slot
   get #phase(){ return PHASES[this.#phaseOrder[this.#waveIdx]]??PHASES[this.#waveIdx]; }
 
+  #setPaused(on){
+    on=!!on;
+    if(this.#paused===on) return;
+    this.#paused=on;
+    // Suspend BGM when entering pause; restart it when leaving pause (only if still in a combat state).
+    try{
+      if(on){
+        this.#audio?.stopBGM?.();
+      } else if(this.#state===STATE.PLAYING||this.#state===STATE.BOSS){
+        this.#audio?.startBGM?.();
+      }
+    }catch(_){ }
+  }
+
   #update(dt){
     this.#stars.update(dt);this.#parts.update(dt);
     this.#fx.update(dt);this.#floats.update(dt);this.#notify.update(dt);
     this.#blinkT+=dt;if(this.#blinkT>0.5){this.#blinkSkip=!this.#blinkSkip;this.#blinkT=0;}
+    // P toggles pause, but only inside actual combat states (not title/menus).
+    const inCombat=(this.#state===STATE.PLAYING||this.#state===STATE.BOSS);
+    if((this.#input.consumePressed?.("p")||this.#input.consumePressed?.("P")) && (inCombat||this.#paused)){
+      this.#setPaused(!this.#paused);
+    }
+    if(this.#paused){
+      // While paused: skip gameplay update but keep ambient FX (stars/blink) moving so the screen feels alive.
+      return;
+    }
     if(this.#input.consume("Escape")&&this.#state!==STATE.TITLE){
       if(this.#state===STATE.PLAYING||this.#state===STATE.BOSS){
-        if(!confirm(T('g_exit_confirm')))return;
+        if(!confirm(T('g_exit_confirm'))){ this.#setPaused(false); return; }
       }
       this.#backToTitle();return;
     }
@@ -21200,6 +22464,7 @@ class Game{
 
   #backToTitle(){
     this.#cloudCancelToken++;
+    this.#paused=false;
     this.#audio.stopBGM();this.#socFeed.stop();this.#state=STATE.TITLE;
     this.#title.reset();
     this.#pBullets=[];this.#aBullets=[];this.#powerUps=[];
@@ -22049,7 +23314,9 @@ class Game{
         this.#renderGame(W,H);this.#fcSystem.draw(ctx,W,H);break;
       case STATE.PLAYING:
       case STATE.BOSS:
-        this.#renderGame(W,H);break;
+        this.#renderGame(W,H);
+        if(this.#paused) this.#drawPauseOverlay(ctx,W,H);
+        break;
       case STATE.INCIDENT_REPORT:
         this.#renderGame(W,H);
         drawIncidentReport(ctx,W,H,this.#currentPhase,this.#waveScore,
@@ -22653,6 +23920,22 @@ class Game{
     ctx.restore();
   }
 
+  #drawPauseOverlay(ctx,w,h){
+    ctx.save();
+    ctx.fillStyle="rgba(2,3,8,0.62)";
+    ctx.fillRect(0,0,w,h);
+    ctx.textAlign="center";
+    ctx.font='bold 28px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace';
+    ctx.fillStyle="#f4f7fa";
+    ctx.shadowColor=CS.RED||"#e0003c";ctx.shadowBlur=18;
+    ctx.fillText(T('g_paused'),w/2,h*0.46);
+    ctx.shadowBlur=0;
+    ctx.font='bold 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace';
+    ctx.fillStyle="#89a8bb";
+    ctx.fillText(T('g_resume_hint'),w/2,h*0.46+26);
+    ctx.restore();
+  }
+
   #drawGameOver(ctx,w,h){
     const dc=this.#deathCtx;
     ctx.save();ctx.globalAlpha=Math.min(1,this.#goT/0.6);
@@ -23144,28 +24427,55 @@ const TAU=Math.PI*2;
 // duplicate 'let MUTED' / 'let AC_CTX' with the IZ script block (block 2).
 // Chrome treats top-level 'let' as global-declarative and throws on re-declaration.
 let HUNT_MUTED=false;
+// Pause state (P key). Toggled only from active gameplay states — NOT menus.
+let HUNT_PAUSED=false;
+function setHuntPaused(on){
+  on=!!on;
+  if(HUNT_PAUSED===on) return;
+  HUNT_PAUSED=on;
+  try{
+    if(on){
+      stopHuntAmbient();
+    } else {
+      // Ambient restarts when the normal state gate re-opens in the main loop.
+    }
+  }catch(_){ }
+}
 
 // ─── AUDIO ───────────────────────────────────────────────────────
 let HUNT_AC_CTX=null;
 function HUNT_AC(){if(!HUNT_AC_CTX){HUNT_AC_CTX=new(window.AudioContext||window.webkitAudioContext)();}if(HUNT_AC_CTX.state!=='running')HUNT_AC_CTX.resume();return HUNT_AC_CTX;}
 
-// Ambient audio loop (low hum)
+// Ambient audio — v2 cinematic: delegates to window.SoundEngine 'hunt' scene.
+// Legacy 55Hz oscillator retained as fallback if SoundEngine not yet available.
 let _huntAmbientRunning=false;
 let _huntAmbientOscillator=null,_huntAmbientGain=null,_huntAmbientFilter=null;
+let _huntSceneActive=false;
 function startHuntAmbient(){
   if(_huntAmbientRunning||HUNT_MUTED) return;
   if(window._simMuted) return; // silence during attract simulations; state untouched so real gameplay resumes cleanly
+  // v2: prefer cinematic SoundEngine hunt scene
+  try{
+    if(window.SoundEngine && window.SoundEngine.music){
+      try{ window._stopMenuBed?.(); }catch(_){}
+      window.SoundEngine.music.setScene('hunt');
+      _huntSceneActive=true;
+      _huntAmbientRunning=true;
+      return;
+    }
+  }catch(_){}
+  // Fallback: legacy 55Hz hum
   try{
     const ac=HUNT_AC();
     const osc=ac.createOscillator();
     const gain=ac.createGain();
     const filter=ac.createBiquadFilter();
     osc.type='sine';
-    osc.frequency.setValueAtTime(55,ac.currentTime); // Very low 55Hz tone
+    osc.frequency.setValueAtTime(55,ac.currentTime);
     filter.type='lowpass';
     filter.frequency.setValueAtTime(180,ac.currentTime);
     filter.Q.setValueAtTime(0.5,ac.currentTime);
-    gain.gain.setValueAtTime(0.035,ac.currentTime); // Very subtle
+    gain.gain.setValueAtTime(0.035,ac.currentTime);
     osc.connect(filter);
     filter.connect(gain);
     gain.connect(ac.destination);
@@ -23178,6 +24488,12 @@ function startHuntAmbient(){
 }
 function stopHuntAmbient(){
   if(!_huntAmbientRunning) return;
+  if(_huntSceneActive){
+    try{ if(window.SoundEngine && window.SoundEngine.music) window.SoundEngine.music.setScene('auto'); }catch(_){}
+    _huntSceneActive=false;
+    _huntAmbientRunning=false;
+    return;
+  }
   try{
     if(_huntAmbientOscillator){
       _huntAmbientOscillator.stop();
@@ -23192,45 +24508,63 @@ function stopHuntAmbient(){
   _huntAmbientFilter=null;
 }
 function beep({f0,f1,dur,type='square',gain=0.15,delay=0}){if(HUNT_MUTED||window._simMuted)return;try{const ac=HUNT_AC(),o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.setValueAtTime(f0,ac.currentTime+delay);if(f1)o.frequency.exponentialRampToValueAtTime(f1,ac.currentTime+delay+dur);g.gain.setValueAtTime(0,ac.currentTime+delay);g.gain.linearRampToValueAtTime(gain,ac.currentTime+delay+0.01);g.gain.exponentialRampToValueAtTime(0.0001,ac.currentTime+delay+dur);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+delay);o.stop(ac.currentTime+delay+dur);}catch(_){}}
+// v2 port: Hunt SFX routes through window.SoundEngine (Blade Runner 2049 detective flavor)
+// with legacy beep() calls preserved as fallback if SoundEngine is not yet initialized.
+const _hSE=()=>(typeof window!=='undefined' && window.SoundEngine) ? window.SoundEngine : null;
+const _hSFX=()=>(typeof window!=='undefined' && window.SFX) ? window.SFX : null;
 const HUNT_SFX={
-  click(){beep({f0:600,f1:900,dur:0.08,gain:0.12});},
-  collect(){[0,80,160].forEach((d,i)=>beep({f0:440+i*220,dur:0.12,type:'sine',gain:0.16,delay:d/1000}));},
-  correct(){[0,100,220,380].forEach((d,i)=>beep({f0:330*Math.pow(1.5,i),dur:0.16,type:'sine',gain:0.18,delay:d/1000}));},
-  wrong(){[0,60].forEach((d,i)=>beep({f0:200-i*60,dur:0.25,type:'sawtooth',gain:0.22,delay:d/1000}));},
-  intercept(){[0,80,180,320,500].forEach((d,i)=>beep({f0:220*Math.pow(1.4,i),dur:0.22,type:'sine',gain:0.2,delay:d/1000}));},
-  breach(){[0,80,160].forEach((d,i)=>beep({f0:300-i*60,f1:50,dur:0.4,type:'sawtooth',gain:0.25,delay:d/1000}));},
-  move(){beep({f0:400,f1:800,dur:0.15,type:'sine',gain:0.1});},
-  deploy(){beep({f0:800,f1:1600,dur:0.2,type:'sine',gain:0.14});},
-  pulse(){beep({f0:110,f1:140,dur:0.55,type:'triangle',gain:0.028}); beep({f0:440,f1:520,dur:0.12,type:'sine',gain:0.018,delay:0.09});},
-  dossier(){[0,0.06,0.12].forEach((d,i)=>beep({f0:[240,360,520][i],dur:0.15,type:'triangle',gain:0.045,delay:d}));},
-  comms(){beep({f0:880,f1:1220,dur:0.06,type:'sine',gain:0.04}); beep({f0:620,f1:760,dur:0.08,type:'triangle',gain:0.03,delay:0.07});},
-  tension(level=1){
+  click(){ const s=_hSFX(); if(s){ try{ s.obj(); return; }catch(_){} }
+    beep({f0:600,f1:900,dur:0.08,gain:0.12}); },
+  collect(){ const s=_hSFX(); if(s){ try{ s.pickup(); return; }catch(_){} }
+    [0,80,160].forEach((d,i)=>beep({f0:440+i*220,dur:0.12,type:'sine',gain:0.16,delay:d/1000})); },
+  correct(){ const s=_hSFX(); if(s){ try{ s.module('Just in Time Access'); return; }catch(_){} }
+    [0,100,220,380].forEach((d,i)=>beep({f0:330*Math.pow(1.5,i),dur:0.16,type:'sine',gain:0.18,delay:d/1000})); },
+  wrong(){ const s=_hSFX(); if(s){ try{ s.alarm(2); return; }catch(_){} }
+    [0,60].forEach((d,i)=>beep({f0:200-i*60,dur:0.25,type:'sawtooth',gain:0.22,delay:d/1000})); },
+  intercept(){ const s=_hSFX(); if(s){ try{ s.module('Falcon OverWatch'); return; }catch(_){} }
+    [0,80,180,320,500].forEach((d,i)=>beep({f0:220*Math.pow(1.4,i),dur:0.22,type:'sine',gain:0.2,delay:d/1000})); },
+  breach(){ const s=_hSFX(); if(s){ try{ s.bridge(); return; }catch(_){} }
+    [0,80,160].forEach((d,i)=>beep({f0:300-i*60,f1:50,dur:0.4,type:'sawtooth',gain:0.25,delay:d/1000})); },
+  move(){ const s=_hSFX(); if(s){ try{ s.scan(); return; }catch(_){} }
+    beep({f0:400,f1:800,dur:0.15,type:'sine',gain:0.1}); },
+  deploy(){ const s=_hSFX(); if(s){ try{ s.module('Fusion SOAR'); return; }catch(_){} }
+    beep({f0:800,f1:1600,dur:0.2,type:'sine',gain:0.14}); },
+  pulse(){ const s=_hSFX(); if(s){ try{ s.comms(); return; }catch(_){} }
+    beep({f0:110,f1:140,dur:0.55,type:'triangle',gain:0.028}); beep({f0:440,f1:520,dur:0.12,type:'sine',gain:0.018,delay:0.09}); },
+  dossier(){ const s=_hSFX(); if(s){ try{ s.obj(); return; }catch(_){} }
+    [0,0.06,0.12].forEach((d,i)=>beep({f0:[240,360,520][i],dur:0.15,type:'triangle',gain:0.045,delay:d})); },
+  comms(){ const s=_hSFX(); if(s){ try{ s.comms(); return; }catch(_){} }
+    beep({f0:880,f1:1220,dur:0.06,type:'sine',gain:0.04}); beep({f0:620,f1:760,dur:0.08,type:'triangle',gain:0.03,delay:0.07}); },
+  tension(level=1){ const s=_hSFX(); if(s){ try{ s.alarm(Math.max(1,Math.min(3,level|0))); return; }catch(_){} }
     const base=level>=3?150:level===2?185:230;
     beep({f0:base,f1:base*0.78,dur:0.24,type:'sawtooth',gain:0.05+level*0.01});
-    beep({f0:base*1.9,f1:base*1.3,dur:0.16,type:'triangle',gain:0.026+level*0.006,delay:0.06});
-  },
-  lock(){[0,0.08].forEach((d,i)=>beep({f0:i===0?520:780,f1:i===0?640:980,dur:0.14,type:'sine',gain:0.045,delay:d}));},
-  collectEnhanced(clueType){
+    beep({f0:base*1.9,f1:base*1.3,dur:0.16,type:'triangle',gain:0.026+level*0.006,delay:0.06}); },
+  lock(){ const s=_hSFX(); if(s){ try{ s.module('Just in Time Access'); return; }catch(_){} }
+    [0,0.08].forEach((d,i)=>beep({f0:i===0?520:780,f1:i===0?640:980,dur:0.14,type:'sine',gain:0.045,delay:d})); },
+  collectEnhanced(clueType){ const s=_hSFX(); if(s){
+      try{ // Map clue types to module leitmotifs for signature audio cues
+        const mod=clueType==='CREDENTIAL'?'Falcon Identity Protection'
+                 :clueType==='MALWARE'?'Falcon Prevent'
+                 :clueType==='EXFIL'?'Falcon Data Protection'
+                 :'Next-Gen SIEM';
+        s.module(mod); return;
+      }catch(_){} }
     const base=clueType==='CREDENTIAL'?550:clueType==='MALWARE'?440:clueType==='EXFIL'?660:500;
     [0,80,180,320].forEach((d,i)=>beep({f0:base*Math.pow(1.35,i),f1:base*Math.pow(1.35,i)*1.2,dur:0.14,type:'sine',gain:0.18,delay:d/1000}));
-    beep({f0:base*3,f1:base*4,dur:0.22,type:'triangle',gain:0.1,delay:0.38});
-  },
-  deployEnhanced(){
+    beep({f0:base*3,f1:base*4,dur:0.22,type:'triangle',gain:0.1,delay:0.38}); },
+  deployEnhanced(){ const s=_hSFX(); if(s){ try{ s.module('Fusion SOAR'); return; }catch(_){} }
     beep({f0:600,f1:1200,dur:0.12,type:'sine',gain:0.16});
     beep({f0:900,f1:1800,dur:0.18,type:'sine',gain:0.14,delay:0.12});
-    beep({f0:1200,f1:2400,dur:0.22,type:'triangle',gain:0.10,delay:0.28});
-  },
-  victoryFanfare(){
+    beep({f0:1200,f1:2400,dur:0.22,type:'triangle',gain:0.10,delay:0.28}); },
+  victoryFanfare(){ const s=_hSFX(); if(s){ try{ s.win(); return; }catch(_){} }
     [0,120,260,420,620].forEach((d,i)=>{
       const f=[440,550,660,880,1100][i];
       beep({f0:f,f1:f*1.25,dur:0.28,type:'sine',gain:0.22,delay:d/1000});
     });
-    beep({f0:1760,f1:2200,dur:0.5,type:'triangle',gain:0.15,delay:0.72});
-  },
-  breachAlarm(){
+    beep({f0:1760,f1:2200,dur:0.5,type:'triangle',gain:0.15,delay:0.72}); },
+  breachAlarm(){ const s=_hSFX(); if(s){ try{ s.alarm(3); return; }catch(_){} }
     [0,0.3,0.6,0.9].forEach(d=>beep({f0:440,f1:220,dur:0.25,type:'sawtooth',gain:0.18,delay:d}));
-    [0.15,0.45,0.75].forEach(d=>beep({f0:330,f1:165,dur:0.2,type:'sawtooth',gain:0.12,delay:d}));
-  },
+    [0.15,0.45,0.75].forEach(d=>beep({f0:330,f1:165,dur:0.2,type:'sawtooth',gain:0.12,delay:d})); },
 };
 
 const HUNT_AUDIO={state:'',pulseT:0,caseSel:-1,pursuitTier:-1,lastRadioMsg:'',titleSweepT:0};
@@ -23282,6 +24616,7 @@ function resetThreatHuntRuntimeState(opts={}){
   RADIO.t=0;
   RADIO.nextT=20+Math.random()*15;
   RADIO.msg=null;
+  HUNT_PAUSED=false;
   resetHuntAudioState();
   _hideHuntRankingOverlay();
   clrJP();
@@ -29214,8 +30549,7 @@ function drawDeduction(dt){
     ctx.fillText(T('g_hunt_clues_collected').replace('{count}',collectedClues.length),LW/2,LH*0.27);
   }
 
-  // Timer
-  const dedTime=getDeductionTime();
+  // Timer — dedTime is already declared above (line 30072); reuse it
   const timerCol=deductionTimeLeft>15?'#39FF14':deductionTimeLeft>10?'#FFE600':'#FF1744';
   ctx.font=huntFont(deductionTimeLeft<=10?20:16,'bold'); ctx.fillStyle=timerCol; ctx.shadowColor=timerCol; ctx.shadowBlur=deductionTimeLeft<=10?12:4;
   ctx.fillText(`⏱ ${Math.ceil(deductionTimeLeft)}s`,LW/2,LH*0.35); ctx.shadowBlur=0;
@@ -31200,6 +32534,44 @@ function frame(ts){
   if(_arcadeDashVisible||_activeGameId!=='hunt'){ requestAnimationFrame(frame); return; }
   const dt=Math.min(0.05,(ts-lastT)/1000||0.016); lastT=ts; gameT+=dt;
   updShake(dt); updFlash(dt); updParts(dt); updFloats(dt); updRadio(dt);
+  // Pause gate: P toggles pause when inside a real gameplay state (not title/menus/intercept).
+  // Ambient audio suspends; overlays for TITLE/CASE_SELECT/BRIEFING/BREACH/INTERCEPT/etc. bypass.
+  const _huntActiveGameplay =
+       gameState===STATE.WORLD_MAP
+    || gameState===STATE.INVESTIGATION
+    || gameState===STATE.DEDUCTION
+    || gameState===STATE.EVIDENCE_CARD;
+  if(hk('KeyP') && (_huntActiveGameplay || HUNT_PAUSED)){
+    setHuntPaused(!HUNT_PAUSED);
+  }
+  if(HUNT_PAUSED){
+    // While paused: freeze gameplay but keep a lightweight render + overlay.
+    ctx.fillStyle='#020308'; ctx.fillRect(0,0,LW,LH);
+    ctx.save();
+    switch(gameState){
+      case STATE.WORLD_MAP: try{drawWorldMap?.();drawHUD?.();drawWorldMapHUD?.();}catch(_){ } break;
+      case STATE.INVESTIGATION: try{drawInvestigation?.();drawHUD?.();}catch(_){ } break;
+      case STATE.EVIDENCE_CARD: try{drawInvestigation?.();drawHUD?.();if(activeEvidenceCard&&typeof drawEvidenceCard==='function') drawEvidenceCard(0);}catch(_){ } break;
+      case STATE.DEDUCTION: try{drawDeduction?.(0);}catch(_){ } break;
+    }
+    ctx.restore();
+    // Overlay
+    ctx.save();
+    ctx.fillStyle='rgba(2,3,8,0.62)';
+    ctx.fillRect(0,0,LW,LH);
+    ctx.textAlign='center';
+    ctx.font='bold 28px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace';
+    ctx.fillStyle='#f4f7fa';
+    ctx.shadowColor='#AA00FF';ctx.shadowBlur=18;
+    ctx.fillText(T('g_paused'),LW/2,LH*0.46);
+    ctx.shadowBlur=0;
+    ctx.font='bold 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace';
+    ctx.fillStyle='#89a8bb';
+    ctx.fillText(T('g_resume_hint'),LW/2,LH*0.46+26);
+    ctx.restore();
+    requestAnimationFrame(frame);
+    return;
+  }
   syncHuntSoundscape(dt);
   canvas.style.cursor='default';
 
@@ -31470,7 +32842,9 @@ console.log(
       display:flex;align-items:center;gap:6px;
       transition:color 0.4s;
     }
-    #cs-version-badge:hover{color:rgba(170,0,255,0.8);}
+    @media (hover: hover) and (pointer: fine) {
+      #cs-version-badge:hover{color:rgba(170,0,255,0.8);}
+    }
     .vb-falcon{
       font-size:12px;
       animation:vb-pulse 3s ease-in-out infinite;
