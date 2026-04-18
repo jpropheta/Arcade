@@ -739,7 +739,7 @@ body.arcade-loader-active { overflow:hidden; }
 }
 .mission-brief-stage > * { min-width:0; }
 
-/* Meta row: OP plate + corridor status plate */
+/* Meta row: OP plate + threat vector status plate */
 .mission-brief-meta {
   display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px;
 }
@@ -1086,7 +1086,7 @@ body.arcade-loader-active { overflow:hidden; }
         <div class="card-accent"></div>
         <div class="card-preview"><canvas id="canvas-zero"></canvas><div class="card-preview-label">INCIDENT ZERO</div></div>
         <div class="card-body">
-          <div class="card-eyebrow" data-i18n="c1eye">Operation 01 · River Corridor</div>
+          <div class="card-eyebrow" data-i18n="c1eye">Operation 01 · River Threat Vector</div>
           <div class="card-name" data-i18n="c1name">CrowdStrike:<br>Incident Zero</div>
           <div class="card-desc" data-i18n="c1desc">Pilot Falcon through 10 adversary campaigns. Detect · Contain · Mitigate · Eliminate.</div>
           <div class="card-tags"><span class="tag highlight">10 Phases</span><span class="tag highlight">Named Bosses</span><span class="tag">River Shooter</span><span class="tag">14 Modules</span><span class="tag">Leaderboard</span></div>
@@ -1192,7 +1192,7 @@ const TRANSLATIONS = {
     eyebrow:'◈ CrowdStrike Arcade Series 2026', title:'MISSION SELECT',
     subtitle:'Choose your operation · Real adversary intelligence · Unified Falcon platform',
     deploy:'DEPLOY NOW',
-    c1eye:'Operation 01 · River Corridor', c1name:'CrowdStrike:<br>Incident Zero',
+    c1eye:'Operation 01 · River Threat Vector', c1name:'CrowdStrike:<br>Incident Zero',
     c1desc:'Pilot Falcon through 10 adversary campaigns. Detect · Contain · Mitigate · Eliminate. Named bosses, real TTPs, unified platform wins.',
     c2eye:'Operation 02 · Wave Defense', c2name:'CrowdStrike:<br>Falcon Defense',
     c2desc:'Defend the perimeter against 10 waves of named adversary threats. Deploy Falcon modules. Stop every attack vector.',
@@ -1295,7 +1295,7 @@ const TRANSLATIONS = {
     g_press_engage:'PRESS SPACE TO ENGAGE',
     g_press_deploy:'PRESS SPACE TO DEPLOY',
     g_press_deploy_arr:'▶  PRESS SPACE TO DEPLOY  ◀',
-    g_corridor_secured:'CORRIDOR SECURED',
+    g_corridor_secured:'THREAT VECTOR SECURED',
     g_breach_contained:'BREACH CONTAINED',
     g_breach_succeeded:'BREACH SUCCEEDED',
     g_breach_completed:'BREACH COMPLETED',
@@ -1379,7 +1379,7 @@ const TRANSLATIONS = {
     iz_failed:'FAILED',
     iz_next_phase:'PRESS SPACE — NEXT PHASE',
     iz_final_phase:'PRESS SPACE — FINAL PHASE',
-    iz_loss_line:'Adversary objective achieved. The corridor has been lost.',
+    iz_loss_line:'Adversary objective achieved. The threat vector has been lost.',
     iz_report_title:'CrowdStrike 2024 Global Threat Report — Key Findings',
     iz_report_line1:'Average adversary breakout time: 62 minutes in 2024. Fastest observed: 2 min 7 sec.',
     iz_report_line2:'79% of attacks to gain initial access are malware-free — identity and LOLBin abuse dominate.',
@@ -1406,7 +1406,7 @@ const TRANSLATIONS = {
     iz_turning_point:'TURNING POINTS',
     iz_tp_streak:'LONGEST STREAK',
     iz_tp_integrity:'INTEGRITY HITS',
-    iz_tp_final:'FINAL CORRIDOR',
+    iz_tp_final:'FINAL VECTOR',
     iz_module_validated:'MODULE VALIDATED',
     iz_module_validated_sub:'Falcon platform · cross-domain correlation held',
     g_operation_delivered:'OPERATION DELIVERED — {actor} · PHASE {n}',
@@ -1415,7 +1415,7 @@ const TRANSLATIONS = {
     iz_deploy_weapons:'WEAPONS FREE · ENGAGE ADVERSARY',
     iz_deploy_go:'GO DARK',
     iz_act1_title:'DETECT',
-    iz_act1_subtitle:'Anomaly detected. Sensors active. Adversary in the corridor.',
+    iz_act1_subtitle:'Anomaly detected. Sensors active. Adversary in the threat vector.',
     iz_phase0_key:'OPERATION IRON FOREST',
     iz_phase0_season:'Eastern Europe · 2024 · ACT I: DETECT',
     iz_phase0_summary:'GRU Unit 26165 launches coordinated spear-phishing against NATO defense contractors. X-Agent payloads delivered via trojanized conference invites.',
@@ -1617,7 +1617,7 @@ const TRANSLATIONS = {
     def_multi_lane:'⚠ MULTI-LANE STRIKE — SIMULTANEOUS VECTORS',
     def_boss_phase:'{name} — PHASE {phase} OF 3',
     def_boss_second_contact:'{name} neutralised — second contact incoming',
-    def_boss_corridor_secured:'{name} neutralised — corridor secured',
+    def_boss_corridor_secured:'{name} neutralised — vector secured',
     def_boss_report_filed:'Adversary {name} evicted. Post-incident report filed.',
     def_ally_assist_incoming:'✨ ALLY ASSIST INCOMING',
     def_ally_assist_bonus:'✨ ALLY ASSIST +{bonus}',
@@ -1638,7 +1638,7 @@ const TRANSLATIONS = {
     iz_pause_fuel_barge:'◆ Fly OVER green FUEL barges (river) to refuel — no key needed',
     iz_pause_fuel_depot:'◆ Near a land FUEL DEPOT? Proximity auto-recharges telemetry',
     iz_best_module_bonus:' — ×2.2 damage',
-    iz_banner_stealth_corridor:'STEALTH CORRIDOR — collect modules or press [S] to reveal hidden threats',
+    iz_banner_stealth_corridor:'STEALTH VECTOR — collect modules or press [S] to reveal hidden threats',
     iz_comms_stealth_identity:'INTEL: {adversary} uses no malware — threats operate in the identity layer',
     iz_banner_falcon_flex:'⚡ FALCON FLEX — ALL MODULES ACTIVE — FULL PLATFORM UNIFIED ⚡',
     iz_comms_falcon_flex:'FALCON FLEX: Complete CrowdStrike platform online — every capability active simultaneously',
@@ -1792,7 +1792,7 @@ const TRANSLATIONS = {
     eyebrow:'◈ CrowdStrike Série Arcade 2026', title:'SELEÇÃO DE MISSÃO',
     subtitle:'Escolha sua operação · Inteligência real de adversários · Plataforma Falcon unificada',
     deploy:'ATIVAR AGORA',
-    c1eye:'Operação 01 · Corredor do Rio', c1name:'CrowdStrike:<br>Incidente Zero',
+    c1eye:'Operação 01 · Vetor de Ameaça do Rio', c1name:'CrowdStrike:<br>Incidente Zero',
     c1desc:'Pilote o Falcon em 10 campanhas de adversários. Detecte · Contenha · Mitigue · Elimine.',
     c2eye:'Operação 02 · Defesa de Ondas', c2name:'CrowdStrike:<br>Falcon Defense',
     c2desc:'Defenda o perímetro contra 10 ondas de ameaças. Acione módulos Falcon.',
@@ -1894,7 +1894,7 @@ const TRANSLATIONS = {
     g_press_engage:'ESPAÇO PARA INICIAR',
     g_press_deploy:'ESPAÇO PARA ACIONAR',
     g_press_deploy_arr:'▶  ESPAÇO PARA ACIONAR  ◀',
-    g_corridor_secured:'CORREDOR PROTEGIDO',
+    g_corridor_secured:'VETOR PROTEGIDO',
     g_breach_contained:'VIOLAÇÃO CONTIDA',
     g_breach_succeeded:'VIOLAÇÃO OCORRIDA',
     g_breach_completed:'VIOLAÇÃO CONCLUÍDA',
@@ -1978,7 +1978,7 @@ const TRANSLATIONS = {
     iz_failed:'FALHOU',
     iz_next_phase:'ESPAÇO — PRÓXIMA FASE',
     iz_final_phase:'ESPAÇO — FASE FINAL',
-    iz_loss_line:'O adversário alcançou o objetivo. O corredor foi perdido.',
+    iz_loss_line:'O adversário alcançou o objetivo. O vetor de ameaça foi perdido.',
     iz_report_title:'Relatório Global de Ameaças CrowdStrike 2024 — Destaques',
     iz_report_line1:'Tempo médio de movimentação lateral: 62 minutos em 2024. Mais rápido observado: 2 min 7 s.',
     iz_report_line2:'79% dos ataques de acesso inicial não usam malware — identidade e LOLBins dominam.',
@@ -2005,7 +2005,7 @@ const TRANSLATIONS = {
     iz_turning_point:'PONTOS DE VIRADA',
     iz_tp_streak:'MAIOR SEQUÊNCIA',
     iz_tp_integrity:'IMPACTOS DE INTEGRIDADE',
-    iz_tp_final:'CORREDOR FINAL',
+    iz_tp_final:'VETOR FINAL',
     iz_module_validated:'MÓDULO VALIDADO',
     iz_module_validated_sub:'Plataforma Falcon · correlação multi-domínio sustentou',
     g_operation_delivered:'OPERAÇÃO ENTREGUE — {actor} · FASE {n}',
@@ -2014,7 +2014,7 @@ const TRANSLATIONS = {
     iz_deploy_weapons:'ARMAS LIVRES · ENGAJAR ADVERSÁRIO',
     iz_deploy_go:'MODO SOMBRA ATIVADO',
     iz_act1_title:'DETECTAR',
-    iz_act1_subtitle:'Anomalia detectada. Sensores ativos. O adversário está no corredor.',
+    iz_act1_subtitle:'Anomalia detectada. Sensores ativos. O adversário está no vetor de ameaça.',
     iz_phase0_key:'OPERAÇÃO FLORESTA DE FERRO',
     iz_phase0_season:'Leste Europeu · 2024 · ATO I: DETECTAR',
     iz_phase0_summary:'A unidade GRU 26165 lança spear-phishing coordenado contra contratantes de defesa da OTAN. Cargas X-Agent são entregues por convites de conferência trojanizados.',
@@ -2214,7 +2214,7 @@ const TRANSLATIONS = {
     def_multi_lane:'⚠ ATAQUE EM MÚLTIPLAS FAIXAS — VETORES SIMULTÂNEOS',
     def_boss_phase:'{name} — FASE {phase} DE 3',
     def_boss_second_contact:'{name} neutralizado — segundo contato chegando',
-    def_boss_corridor_secured:'{name} neutralizado — corredor protegido',
+    def_boss_corridor_secured:'{name} neutralizado — vetor protegido',
     def_boss_report_filed:'Adversário {name} expulso. Relatório pós-incidente registrado.',
     def_ally_assist_incoming:'✨ SUPORTE ALIADO A CAMINHO',
     def_ally_assist_bonus:'✨ SUPORTE ALIADO +{bonus}',
@@ -2235,7 +2235,7 @@ const TRANSLATIONS = {
     iz_pause_fuel_barge:'◆ Passe SOBRE barcaças verdes de COMBUSTÍVEL para reabastecer — sem tecla extra',
     iz_pause_fuel_depot:'◆ Perto de um DEPÓSITO de COMBUSTÍVEL em terra? A proximidade recarrega a telemetria',
     iz_best_module_bonus:' — ×2.2 de dano',
-    iz_banner_stealth_corridor:'CORREDOR FURTIVO — colete módulos ou pressione [S] para revelar ameaças ocultas',
+    iz_banner_stealth_corridor:'VETOR FURTIVO — colete módulos ou pressione [S] para revelar ameaças ocultas',
     iz_comms_stealth_identity:'INTEL: {adversary} não usa malware — as ameaças operam na camada de identidade',
     iz_banner_falcon_flex:'⚡ FALCON FLEX — TODOS OS MÓDULOS ATIVOS — PLATAFORMA TOTAL UNIFICADA ⚡',
     iz_comms_falcon_flex:'FALCON FLEX: plataforma CrowdStrike completa online — todas as capacidades ativas ao mesmo tempo',
@@ -2389,7 +2389,7 @@ const TRANSLATIONS = {
     eyebrow:'◈ Serie Arcade CrowdStrike 2026', title:'SELECCIÓN DE MISIÓN',
     subtitle:'Elige tu operación · Inteligencia real de adversarios · Plataforma Falcon unificada',
     deploy:'DESPLEGAR AHORA',
-    c1eye:'Operación 01 · Corredor del Río', c1name:'CrowdStrike:<br>Incidente Cero',
+    c1eye:'Operación 01 · Vector de Amenaza del Río', c1name:'CrowdStrike:<br>Incidente Cero',
     c1desc:'Pilota Falcon en 10 campañas. Detecta · Contiene · Mitiga · Elimina. Jefes nombrados, TTPs reales.',
     c2eye:'Operación 02 · Defensa de Olas', c2name:'CrowdStrike:<br>Falcon Defense',
     c2desc:'Defiende el perímetro contra 10 olas de amenazas. Despliega módulos Falcon.',
@@ -2491,7 +2491,7 @@ const TRANSLATIONS = {
     g_press_engage:'ESPACIO PARA COMENZAR',
     g_press_deploy:'ESPACIO PARA DESPLEGAR',
     g_press_deploy_arr:'▶  ESPACIO PARA DESPLEGAR  ◀',
-    g_corridor_secured:'CORREDOR ASEGURADO',
+    g_corridor_secured:'VECTOR ASEGURADO',
     g_breach_contained:'BRECHA CONTENIDA',
     g_breach_succeeded:'BRECHA EXITOSA',
     g_breach_completed:'BRECHA COMPLETADA',
@@ -2575,7 +2575,7 @@ const TRANSLATIONS = {
     iz_failed:'FALLÓ',
     iz_next_phase:'ESPACIO — SIGUIENTE FASE',
     iz_final_phase:'ESPACIO — FASE FINAL',
-    iz_loss_line:'El adversario logró su objetivo. El corredor se ha perdido.',
+    iz_loss_line:'El adversario logró su objetivo. El vector de amenaza se ha perdido.',
     iz_report_title:'Informe Global de Amenazas CrowdStrike 2024 — Hallazgos clave',
     iz_report_line1:'Tiempo medio de movimiento lateral: 62 minutos en 2024. El más rápido observado: 2 min 7 s.',
     iz_report_line2:'El 79% de los ataques para acceso inicial no usan malware — identidad y LOLBins dominan.',
@@ -2602,7 +2602,7 @@ const TRANSLATIONS = {
     iz_turning_point:'PUNTOS DE INFLEXIÓN',
     iz_tp_streak:'RACHA MÁS LARGA',
     iz_tp_integrity:'IMPACTOS DE INTEGRIDAD',
-    iz_tp_final:'CORREDOR FINAL',
+    iz_tp_final:'VECTOR FINAL',
     iz_module_validated:'MÓDULO VALIDADO',
     iz_module_validated_sub:'Plataforma Falcon · correlación multidominio sostenida',
     g_operation_delivered:'OPERACIÓN ENTREGADA — {actor} · FASE {n}',
@@ -2611,7 +2611,7 @@ const TRANSLATIONS = {
     iz_deploy_weapons:'ARMAS LIBRES · COMPROMETER ADVERSARIO',
     iz_deploy_go:'MODO OSCURO ACTIVADO',
     iz_act1_title:'DETECTAR',
-    iz_act1_subtitle:'Anomalía detectada. Sensores activos. El adversario está en el corredor.',
+    iz_act1_subtitle:'Anomalía detectada. Sensores activos. El adversario está en el vector de amenaza.',
     iz_phase0_key:'OPERACIÓN BOSQUE DE HIERRO',
     iz_phase0_season:'Europa del Este · 2024 · ACTO I: DETECTAR',
     iz_phase0_summary:'La unidad GRU 26165 lanza spear-phishing coordinado contra contratistas de defensa de la OTAN. Las cargas X-Agent llegan mediante invitaciones de conferencia troyanizadas.',
@@ -2811,7 +2811,7 @@ const TRANSLATIONS = {
     def_multi_lane:'⚠ ATAQUE MULTICARRIL — VECTORES SIMULTÁNEOS',
     def_boss_phase:'{name} — FASE {phase} DE 3',
     def_boss_second_contact:'{name} neutralizado — segundo contacto entrante',
-    def_boss_corridor_secured:'{name} neutralizado — corredor asegurado',
+    def_boss_corridor_secured:'{name} neutralizado — vector asegurado',
     def_boss_report_filed:'Adversario {name} expulsado. Informe posincidente registrado.',
     def_ally_assist_incoming:'✨ APOYO ALIADO EN CAMINO',
     def_ally_assist_bonus:'✨ APOYO ALIADO +{bonus}',
@@ -2832,7 +2832,7 @@ const TRANSLATIONS = {
     iz_pause_fuel_barge:'◆ Vuela SOBRE las barcazas verdes de COMBUSTIBLE para reabastecerse — sin tecla extra',
     iz_pause_fuel_depot:'◆ ¿Cerca de un DEPÓSITO de COMBUSTIBLE en tierra? La proximidad recarga la telemetría',
     iz_best_module_bonus:' — ×2.2 de daño',
-    iz_banner_stealth_corridor:'CORREDOR DE SIGILO — recoge módulos o pulsa [S] para revelar amenazas ocultas',
+    iz_banner_stealth_corridor:'VECTOR DE SIGILO — recoge módulos o pulsa [S] para revelar amenazas ocultas',
     iz_comms_stealth_identity:'INTEL: {adversary} no usa malware — las amenazas operan en la capa de identidad',
     iz_banner_falcon_flex:'⚡ FALCON FLEX — TODOS LOS MÓDULOS ACTIVOS — PLATAFORMA TOTAL UNIFICADA ⚡',
     iz_comms_falcon_flex:'FALCON FLEX: plataforma CrowdStrike completa online — todas las capacidades activas al mismo tiempo',
@@ -2986,7 +2986,7 @@ const TRANSLATIONS = {
     eyebrow:'◈ CrowdStrike アーケードシリーズ 2026', title:'ミッション選択',
     subtitle:'オペレーションを選択 · 実際の攻撃者のインテリジェンス · 統合Falconプラットフォーム',
     deploy:'今すぐ展開',
-    c1eye:'オペレーション 01 · リバーコリドー', c1name:'CrowdStrike:<br>インシデントゼロ',
+    c1eye:'オペレーション 01 · リバー脅威ベクトル', c1name:'CrowdStrike:<br>インシデントゼロ',
     c1desc:'10の攻撃者キャンペーンでFalconを操縦。検出·封じ込め·軽減·排除。',
     c2eye:'オペレーション 02 · ウェーブディフェンス', c2name:'CrowdStrike:<br>Falcon Defense',
     c2desc:'10ウェーブの脅威から境界を防衛。Falconモジュールを展開せよ。',
@@ -3088,7 +3088,7 @@ const TRANSLATIONS = {
     g_press_engage:'スペースで開始',
     g_press_deploy:'スペースで展開',
     g_press_deploy_arr:'▶  スペースで展開  ◀',
-    g_corridor_secured:'コリドー確保',
+    g_corridor_secured:'脅威ベクトル確保',
     g_breach_contained:'侵害を封じ込めました',
     g_breach_succeeded:'侵害が成功しました',
     g_breach_completed:'侵害完了',
@@ -3172,7 +3172,7 @@ const TRANSLATIONS = {
     iz_failed:'失敗',
     iz_next_phase:'スペース — 次のフェーズ',
     iz_final_phase:'スペース — 最終フェーズ',
-    iz_loss_line:'敵対者が目的を達成しました。コリドーは失われました。',
+    iz_loss_line:'敵対者が目的を達成しました。脅威ベクトルは失われました。',
     iz_report_title:'CrowdStrike 2024 グローバル脅威レポート — 主要ポイント',
     iz_report_line1:'平均ブレイクアウト時間は2024年で62分。最速観測は2分7秒。',
     iz_report_line2:'初期侵入攻撃の79%はマルウェア不要 — ID悪用とLOLBinsが主流です。',
@@ -3199,7 +3199,7 @@ const TRANSLATIONS = {
     iz_turning_point:'ターニングポイント',
     iz_tp_streak:'最長ストリーク',
     iz_tp_integrity:'整合性ヒット',
-    iz_tp_final:'最終コリドー',
+    iz_tp_final:'最終ベクトル',
     iz_module_validated:'モジュール検証済み',
     iz_module_validated_sub:'Falcon プラットフォーム · クロスドメイン相関が保持',
     g_operation_delivered:'作戦完了 — {actor} · フェーズ {n}',
@@ -3208,7 +3208,7 @@ const TRANSLATIONS = {
     iz_deploy_weapons:'武器解放 · 敵対者と交戦せよ',
     iz_deploy_go:'暗闇へ突入',
     iz_act1_title:'検知',
-    iz_act1_subtitle:'異常を検知。センサー稼働中。敵対者がコリドー内に侵入しています。',
+    iz_act1_subtitle:'異常を検知。センサー稼働中。敵対者が脅威ベクトルに侵入しています。',
     iz_phase0_key:'オペレーション・アイアンフォレスト',
     iz_phase0_season:'東ヨーロッパ · 2024 · ACT I: 検知',
     iz_phase0_summary:'GRU Unit 26165 が NATO 防衛請負業者に対して連携したスピアフィッシングを開始。X-Agent ペイロードは改ざんされた会議招待経由で配信されています。',
@@ -3405,7 +3405,7 @@ const TRANSLATIONS = {
     def_multi_lane:'⚠ マルチレーン攻撃 — 同時ベクトル',
     def_boss_phase:'{name} — フェーズ {phase}/3',
     def_boss_second_contact:'{name} を無力化 — 第2接触が接近中',
-    def_boss_corridor_secured:'{name} を無力化 — コリドー確保',
+    def_boss_corridor_secured:'{name} を無力化 — ベクトル確保',
     def_boss_report_filed:'敵対者 {name} を排除。事後インシデント報告を記録しました。',
     def_ally_assist_incoming:'✨ 味方支援が接近中',
     def_ally_assist_bonus:'✨ 味方支援 +{bonus}',
@@ -3426,7 +3426,7 @@ const TRANSLATIONS = {
     iz_pause_fuel_barge:'◆ 緑のFUELバージを上空通過して補給 — 追加キー不要',
     iz_pause_fuel_depot:'◆ 陸上FUELデポ付近では近接でテレメトリが回復',
     iz_best_module_bonus:' — ×2.2 ダメージ',
-    iz_banner_stealth_corridor:'ステルス回廊 — モジュールを回収するか [S] で隠れた脅威を可視化',
+    iz_banner_stealth_corridor:'ステルスベクトル — モジュールを回収するか [S] で隠れた脅威を可視化',
     iz_comms_stealth_identity:'INTEL: {adversary} はマルウェアを使わない — 脅威はIDレイヤーで活動中',
     iz_banner_falcon_flex:'⚡ FALCON FLEX — 全モジュール起動 — 完全統合プラットフォーム ⚡',
     iz_comms_falcon_flex:'FALCON FLEX: CrowdStrike 完全プラットフォームがオンライン — 全機能を同時起動',
@@ -3647,21 +3647,21 @@ const MISSION_BRIEF_COPY = Object.freeze({
     missions: {
       zero: {
         color:'#e0003c',
-        eyebrow:'Operation 01 · River Corridor',
+        eyebrow:'Operation 01 · River Threat Vector',
         title:'CrowdStrike: Incident Zero',
-        subtitle:'Telemetry, fuel pressure, stealth scans, and boss counters converge in one live breach-response corridor.',
+        subtitle:'Telemetry, fuel pressure, stealth scans, and boss counters converge in one live breach-response threat vector.',
         scenes:[
-          { pill:'Detect', title:'Detect the breach', body:'Pilot Falcon through ten named adversary campaigns. The corridor stays open only if you keep integrity intact, preserve fuel, and read each threat pattern fast.' },
+          { pill:'Detect', title:'Detect the breach', body:'Pilot Falcon through ten named adversary campaigns. The threat vector stays open only if you keep integrity intact, preserve fuel, and read each threat pattern fast.' },
           { pill:'Pilot', title:'Pilot like a responder', body:'Arrow keys thread the river. Space fires. S burns fuel for a full scan pulse. I opens intel. P pauses. M mutes. The run rewards control, not drift.' },
           { pill:'Counter', title:'Turn telemetry into advantage', body:'Every phase teaches the right countermeasure: expose stealth, recover fuel, and deploy the correct Falcon module before boss contact for decisive damage.' }
         ],
         commands:[
-          { key:'ARROWS', text:'Thread Falcon through the corridor and line up fuel, bridges, and targets.' },
+          { key:'ARROWS', text:'Thread Falcon through the threat vector and line up fuel, bridges, and targets.' },
           { key:'SPACE', text:'Fire continuously and keep pressure on dense formations and boss phases.' },
           { key:'S / I / P / M', text:'Scan stealth threats, open intel, pause, or mute without losing tempo.' }
         ],
         objectives:[
-          'Clear all 10 adversary phases before corridor integrity collapses.',
+          'Clear all 10 adversary phases before threat vector integrity collapses.',
           'Refuel from barges and depots so scan pulses and mobility stay online.',
           'Deploy the right Falcon module before each boss to break the campaign fast.'
         ],
@@ -3727,21 +3727,21 @@ const MISSION_BRIEF_COPY = Object.freeze({
     missions: {
       zero: {
         color:'#e0003c',
-        eyebrow:'Operacao 01 · Corredor do Rio',
+        eyebrow:'Operacao 01 · Vetor de Ameaca do Rio',
         title:'CrowdStrike: Incident Zero',
-        subtitle:'Telemetria, pressao de combustivel, varredura de furtividade e contra-ataque a chefes se unem em um corredor vivo de resposta a incidente.',
+        subtitle:'Telemetria, pressao de combustivel, varredura de furtividade e contra-ataque a chefes se unem em um vetor de ameaca vivo de resposta a incidente.',
         scenes:[
-          { pill:'Detectar', title:'Detecte a ruptura', body:'Pilote o Falcon por dez campanhas de adversarios nomeados. O corredor so continua aberto se voce preservar integridade, combustivel e leitura rapida do padrao de ameaca.' },
+          { pill:'Detectar', title:'Detecte a ruptura', body:'Pilote o Falcon por dez campanhas de adversarios nomeados. O vetor de ameaca so continua aberto se voce preservar integridade, combustivel e leitura rapida do padrao de ameaca.' },
           { pill:'Pilotar', title:'Pilote como resposta', body:'As setas cruzam o rio. ESPAÇO atira. S consome combustivel para um pulso total de varredura. I abre intel. P pausa. M silencia. A corrida premia controle.' },
           { pill:'Responder', title:'Transforme telemetria em vantagem', body:'Cada fase ensina a contramedida correta: expor furtividade, recuperar combustivel e implantar o modulo Falcon certo antes do contato com o chefe.' }
         ],
         commands:[
-          { key:'SETAS', text:'Conduza o Falcon pelo corredor e alinhe combustivel, pontes e alvos.' },
+          { key:'SETAS', text:'Conduza o Falcon pelo vetor de ameaca e alinhe combustivel, pontes e alvos.' },
           { key:'ESPAÇO', text:'Atire sem perder ritmo e mantenha pressao nas formacoes densas e nos chefes.' },
           { key:'S / I / P / M', text:'Revele ameacas furtivas, abra intel, pause ou silencie sem perder o fluxo.' }
         ],
         objectives:[
-          'Conclua as 10 fases antes que a integridade do corredor acabe.',
+          'Conclua as 10 fases antes que a integridade do vetor de ameaca acabe.',
           'Reabasteca em barcaças e depositos para manter varredura e mobilidade.',
           'Implante o modulo Falcon correto antes de cada chefe para quebrar a campanha rapido.'
         ],
@@ -3807,21 +3807,21 @@ const MISSION_BRIEF_COPY = Object.freeze({
     missions: {
       zero: {
         color:'#e0003c',
-        eyebrow:'Operacion 01 · Corredor Fluvial',
+        eyebrow:'Operacion 01 · Vector de Amenaza Fluvial',
         title:'CrowdStrike: Incident Zero',
-        subtitle:'Telemetria, presion de combustible, escaneo de sigilo y contraataque a jefes se unen en un corredor vivo de respuesta a brechas.',
+        subtitle:'Telemetria, presion de combustible, escaneo de sigilo y contraataque a jefes se unen en un vector de amenaza vivo de respuesta a brechas.',
         scenes:[
-          { pill:'Detectar', title:'Detecta la brecha', body:'Pilota Falcon a traves de diez campanas de adversarios nombrados. El corredor solo sigue abierto si conservas integridad, combustible y lectura rapida del patron de amenaza.' },
+          { pill:'Detectar', title:'Detecta la brecha', body:'Pilota Falcon a traves de diez campanas de adversarios nombrados. El vector de amenaza solo sigue abierto si conservas integridad, combustible y lectura rapida del patron de amenaza.' },
           { pill:'Pilotar', title:'Pilota como respuesta', body:'Las flechas atraviesan el rio. Espacio dispara. S consume combustible para un pulso total de escaneo. I abre intel. P pausa. M silencia. La partida recompensa control.' },
           { pill:'Contrarrestar', title:'Convierte telemetria en ventaja', body:'Cada fase ensena la contramedida correcta: exponer sigilo, recuperar combustible y desplegar el modulo Falcon adecuado antes del contacto con el jefe.' }
         ],
         commands:[
-          { key:'FLECHAS', text:'Guia Falcon por el corredor y alinea combustible, puentes y objetivos.' },
+          { key:'FLECHAS', text:'Guia Falcon por el vector de amenaza y alinea combustible, puentes y objetivos.' },
           { key:'ESPACIO', text:'Dispara sin perder ritmo y mantén presion sobre formaciones densas y jefes.' },
           { key:'S / I / P / M', text:'Revela amenazas sigilosas, abre intel, pausa o silencia sin romper el flujo.' }
         ],
         objectives:[
-          'Completa las 10 fases antes de que colapse la integridad del corredor.',
+          'Completa las 10 fases antes de que colapse la integridad del vector de amenaza.',
           'Reposta en barcazas y depositos para mantener escaneo y movilidad activos.',
           'Despliega el modulo Falcon correcto antes de cada jefe para romper la campana rapido.'
         ],
@@ -3887,21 +3887,21 @@ const MISSION_BRIEF_COPY = Object.freeze({
     missions: {
       zero: {
         color:'#e0003c',
-        eyebrow:'オペレーション 01 · リバーコリドー',
+        eyebrow:'オペレーション 01 · リバー脅威ベクトル',
         title:'CrowdStrike: Incident Zero',
-        subtitle:'テレメトリ、燃料管理、ステルススキャン、ボス対抗策が一つの生きた侵害対応コリドーに集約される。',
+        subtitle:'テレメトリ、燃料管理、ステルススキャン、ボス対抗策が一つの生きた侵害対応脅威ベクトルに集約される。',
         scenes:[
-          { pill:'検知', title:'侵害を検知する', body:'10の命名済み敵対者キャンペーンをFalconで突破する。コリドーは、整合性と燃料を維持し、脅威パターンを素早く読めた時だけ開き続ける。' },
+          { pill:'検知', title:'侵害を検知する', body:'10の命名済み敵対者キャンペーンをFalconで突破する。脅威ベクトルは、整合性と燃料を維持し、脅威パターンを素早く読めた時だけ開き続ける。' },
           { pill:'操縦', title:'対応者として操縦する', body:'矢印キーで河川を抜ける。スペースで射撃。Sは燃料を使って全面スキャン。Iでインテル。Pで一時停止。Mでミュート。漂うより制御が重要。' },
           { pill:'対抗', title:'テレメトリを優位に変える', body:'各フェーズは正しい対抗策を教える。ステルスを露出し、燃料を回復し、ボス接触前に正しいFalconモジュールを展開する。' }
         ],
         commands:[
-          { key:'矢印キー', text:'Falconをコリドーへ通し、燃料、橋、目標に正確に合わせる。' },
+          { key:'矢印キー', text:'Falconを脅威ベクトルへ通し、燃料、橋、目標に正確に合わせる。' },
           { key:'スペース', text:'密集編隊とボス戦で圧力を維持しながら連続射撃する。' },
           { key:'S / I / P / M', text:'ステルス脅威を露出し、インテルを開き、一時停止やミュートを行う。' }
         ],
         objectives:[
-          'コリドー整合性が尽きる前に10フェーズすべてを突破する。',
+          '脅威ベクトルの整合性が尽きる前に10フェーズすべてを突破する。',
           'バージと補給拠点で燃料を回復し、スキャンと機動力を維持する。',
           '各ボス前に正しいFalconモジュールを展開して素早く突破する。'
         ],
@@ -4194,9 +4194,10 @@ function _ensureMissionBriefOverlay() {
     if (!pendingLaunch) return;
     const launch = pendingLaunch;
     ArcadeSonic.confirm();
-    // Launch before the fade-out so the deploy overlay paints on top — the brief fades beneath it.
-    showDeployOverlay(() => _launchGameRuntime(launch.containerId, launch.initFn));
+    // Close the mission brief FIRST so it starts fading out, then paint the deploy overlay
+    // above it (deploy z:13500 > mission-brief z:12500) so no text overlap is visible.
     close();
+    showDeployOverlay(() => _launchGameRuntime(launch.containerId, launch.initFn));
   }
 
   overlay.addEventListener('click', e => {
@@ -4838,7 +4839,7 @@ function showDeployOverlay(callback) {
   const overlay = document.createElement('div');
   overlay.id = 'deploy-overlay';
   overlay.style.cssText = [
-    'position:fixed', 'inset:0', 'z-index:9998',
+    'position:fixed', 'inset:0', 'z-index:13500',
     'background:rgba(0,0,0,0.9)', 'display:flex', 'align-items:center',
     'justify-content:center', 'opacity:0', 'transition:opacity 0.2s ease-out',
     'pointer-events:none'
@@ -7499,7 +7500,7 @@ const FalconRanking = (function () {
 //  ACT I  DETECT   : Phases 1–2   (anomaly spotted, sensors up)
 //  ACT II CONTAIN  : Phases 3–4   (lateral movement blocked)
 //  ACT III MITIGATE: Phases 5–7   (payload neutralised, damage limited)
-//  ACT IV ELIMINATE: Phases 8–10  (adversary evicted, corridor secured)
+//  ACT IV ELIMINATE: Phases 8–10  (adversary evicted, threat vector secured)
 // ════════════════════════════════════════════════════════════════════
 
 const CV = document.getElementById('g-zero');
@@ -8054,7 +8055,7 @@ function shutdownIncidentZeroRuntime(){
 registerArcadeRuntimeResetter('incident_zero', shutdownIncidentZeroRuntime);
 
 // ══════════════════════════════════════════════════════════════════════
-//  CINEMATIC SOUND ENGINE (River Corridor)
+//  CINEMATIC SOUND ENGINE (River Threat Vector)
 //  Zimmer/Richard-King-direction layered recipes — every SFX is
 //  transient + tonal body + noise grit + reverb tail, with humanization.
 //  See: /outputs/spec-river-cinematic-audio.md (v1.1)
@@ -8413,6 +8414,378 @@ function _menuBedSetVolume(v){
   try{ const ac=AC(); _menuBedGain.gain.cancelScheduledValues(ac.currentTime); _menuBedGain.gain.linearRampToValueAtTime(Math.max(0,Math.min(1,v)), ac.currentTime+0.4); }catch(_){}
 }
 
+// ══════════════════════════════════════════════════════════════════════
+//  Defense bed — Richard King / Dark Knight Rises industrial palette
+//  Layers:
+//   1) Sub drone C1 (32.7Hz) with slow breath LFO
+//   2) Low-brass ostinato (108 BPM, C2→Eb2→G2→C2 — natural minor root)
+//      detuned sawtooth stack through lowpass, beat-synced filter pulse
+//   3) Industrial pulse (55Hz triangle through bandpass @1800Hz metallic ring)
+//      scheduled every beat for "impact hall" feel
+//   4) High strings pad (bowed sines at C4/Eb4/G4 with tremolo)
+//   5) Cymbal swell every 8-16 beats — bandpass noise crescendo
+//   6) Metallic ping scheduler every 3-7 beats for industrial atmosphere
+// ══════════════════════════════════════════════════════════════════════
+let _defenseBedGain=null, _defenseBedActive=false;
+let _defSubOsc=null, _defSubLfo=null;
+let _defBrassOscA=null, _defBrassOscB=null, _defBrassFilt=null;
+let _defBrassPulseLfo=null, _defBrassFiltLfo=null, _defBrassSeqTimer=null;
+let _defStringsOscs=[], _defStringsGain=null, _defStringsTrem=null;
+let _defPulseTimer=null, _defSwellTimer=null, _defPingTimer=null;
+
+function _startDefenseBed(volume){
+  if(_defenseBedActive) { try{ _defenseBedSetVolume(volume); }catch(_){} return; }
+  if(!_engineInit) _initSoundEngine();
+  const ac=AC(); if(!ac) return;
+  const now=ac.currentTime;
+  const vol=Math.max(0, Math.min(1, (typeof volume==='number'?volume:0.55)));
+
+  // Master bus for Defense bed — routes to master
+  _defenseBedGain=ac.createGain();
+  _defenseBedGain.gain.setValueAtTime(0.0001, now);
+  _defenseBedGain.gain.exponentialRampToValueAtTime(Math.max(0.0005,vol), now+1.6);
+  _defenseBedGain.connect(_dest());
+
+  // ── 1) Sub drone C1 (32.7Hz) with slow breath LFO ─────────────────
+  _defSubOsc=ac.createOscillator(); _defSubOsc.type='sine'; _defSubOsc.frequency.value=32.7;
+  const subGain=ac.createGain(); subGain.gain.value=0.34;
+  _defSubLfo=ac.createOscillator(); _defSubLfo.type='sine'; _defSubLfo.frequency.value=0.08;
+  const subLfoGain=ac.createGain(); subLfoGain.gain.value=0.10;
+  _defSubLfo.connect(subLfoGain); subLfoGain.connect(subGain.gain);
+  _defSubOsc.connect(subGain); subGain.connect(_defenseBedGain);
+  _defSubOsc.start(now); _defSubLfo.start(now);
+  _regLFO(_defSubLfo, 0.08);
+
+  // ── 2) Low-brass ostinato — 108 BPM, C minor 7th cell [C2, Eb2, G2, C2] ──
+  const BRASS_NOTES=[65.41, 77.78, 98.00, 65.41]; // C2, Eb2, G2, C2
+  const BPM=108; const BEAT_MS=60000/BPM;
+  _defBrassOscA=ac.createOscillator(); _defBrassOscA.type='sawtooth'; _defBrassOscA.frequency.value=BRASS_NOTES[0];
+  _defBrassOscB=ac.createOscillator(); _defBrassOscB.type='sawtooth'; _defBrassOscB.frequency.value=BRASS_NOTES[0];
+  _defBrassOscA.detune.value=-9; _defBrassOscB.detune.value=+9;
+  _defBrassFilt=ac.createBiquadFilter(); _defBrassFilt.type='lowpass';
+  _defBrassFilt.frequency.value=220; _defBrassFilt.Q.value=1.6;
+  // Beat-synced filter pulse (1.8Hz = quarter notes at 108 BPM)
+  _defBrassPulseLfo=ac.createOscillator(); _defBrassPulseLfo.type='sine';
+  _defBrassPulseLfo.frequency.value=BPM/60;
+  const pulseGain=ac.createGain(); pulseGain.gain.value=170;
+  _defBrassPulseLfo.connect(pulseGain); pulseGain.connect(_defBrassFilt.frequency);
+  // Slow filter breath — opens the bed organically
+  _defBrassFiltLfo=ac.createOscillator(); _defBrassFiltLfo.type='sine';
+  _defBrassFiltLfo.frequency.value=0.07;
+  const filtBreath=ac.createGain(); filtBreath.gain.value=95;
+  _defBrassFiltLfo.connect(filtBreath); filtBreath.connect(_defBrassFilt.frequency);
+  const brassStack=ac.createGain(); brassStack.gain.value=0.42;
+  _defBrassOscA.connect(_defBrassFilt); _defBrassOscB.connect(_defBrassFilt);
+  _defBrassFilt.connect(brassStack); brassStack.connect(_defenseBedGain);
+  _defBrassOscA.start(now); _defBrassOscB.start(now);
+  _defBrassPulseLfo.start(now); _defBrassFiltLfo.start(now);
+  _regLFO(_defBrassPulseLfo, BPM/60);
+  _regLFO(_defBrassFiltLfo, 0.07);
+  // Sequencer — step through notes
+  let step=0;
+  _defBrassSeqTimer=setInterval(()=>{
+    try{
+      if(!_defBrassOscA||!_defBrassOscB||!AC_CTX) return;
+      step=(step+1)%BRASS_NOTES.length;
+      const f=BRASS_NOTES[step];
+      const t=AC_CTX.currentTime;
+      _defBrassOscA.frequency.cancelScheduledValues(t);
+      _defBrassOscB.frequency.cancelScheduledValues(t);
+      _defBrassOscA.frequency.linearRampToValueAtTime(f, t+0.08);
+      _defBrassOscB.frequency.linearRampToValueAtTime(f, t+0.08);
+    }catch(_){}
+  }, BEAT_MS);
+
+  // ── 3) High strings pad — C4/Eb4/G4 bowed with tremolo ────────────
+  _defStringsGain=ac.createGain(); _defStringsGain.gain.value=0.06;
+  const stringsFilt=ac.createBiquadFilter(); stringsFilt.type='lowpass';
+  stringsFilt.frequency.value=2400; stringsFilt.Q.value=0.6;
+  // Tremolo LFO on gain
+  _defStringsTrem=ac.createOscillator(); _defStringsTrem.type='sine';
+  _defStringsTrem.frequency.value=4.2;
+  const tremDepth=ac.createGain(); tremDepth.gain.value=0.018;
+  _defStringsTrem.connect(tremDepth); tremDepth.connect(_defStringsGain.gain);
+  const STR_FREQS=[261.63, 311.13, 392.00]; // C4, Eb4, G4
+  STR_FREQS.forEach((f,i)=>{
+    const o=ac.createOscillator(); o.type='sine'; o.frequency.value=f;
+    o.detune.value=(i-1)*6; // subtle chorus
+    o.connect(stringsFilt);
+    _defStringsOscs.push(o);
+    o.start(now);
+  });
+  stringsFilt.connect(_defStringsGain); _defStringsGain.connect(_defenseBedGain);
+  _defStringsTrem.start(now);
+  _regLFO(_defStringsTrem, 4.2);
+
+  // ── 4) Industrial pulse scheduler — 55Hz triangle through bandpass 1800Hz ──
+  // Fires every beat with metallic ring, slight humanization
+  const schedulePulse=()=>{
+    if(!_defenseBedActive||!AC_CTX) return;
+    try{
+      const t=AC_CTX.currentTime+0.002;
+      const o=AC_CTX.createOscillator(); o.type='triangle';
+      o.frequency.setValueAtTime(55, t);
+      o.frequency.exponentialRampToValueAtTime(42, t+0.35);
+      const bp=AC_CTX.createBiquadFilter(); bp.type='bandpass';
+      bp.frequency.value=1800+_rnd(-120,120); bp.Q.value=8;
+      const g=AC_CTX.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.09, t+0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+0.40);
+      o.connect(bp); bp.connect(g); g.connect(_defenseBedGain);
+      o.start(t); o.stop(t+0.45);
+    }catch(_){}
+  };
+  // Every 2 beats (half-note pulses — not every beat to avoid mudding ostinato)
+  _defPulseTimer=setInterval(schedulePulse, BEAT_MS*2);
+
+  // ── 5) Cymbal swell scheduler — every 8-16 beats ──────────────────
+  const scheduleSwell=()=>{
+    if(!_defenseBedActive||!AC_CTX) return;
+    try{
+      const t=AC_CTX.currentTime+0.002;
+      const sr=AC_CTX.sampleRate;
+      const dur=1.4+_rnd(0,0.6);
+      const buf=AC_CTX.createBuffer(1, Math.floor(sr*dur), sr);
+      const d=buf.getChannelData(0);
+      for(let i=0;i<d.length;i++){
+        // swell envelope built into the noise itself
+        const env=Math.sin(Math.PI*i/d.length);
+        d[i]=(Math.random()*2-1)*env;
+      }
+      const src=AC_CTX.createBufferSource(); src.buffer=buf;
+      const bp=AC_CTX.createBiquadFilter(); bp.type='bandpass';
+      bp.frequency.setValueAtTime(3800, t);
+      bp.frequency.exponentialRampToValueAtTime(7200, t+dur*0.6);
+      bp.Q.value=1.4;
+      const g=AC_CTX.createGain(); g.gain.value=0.06;
+      src.connect(bp); bp.connect(g); g.connect(_defenseBedGain);
+      src.start(t);
+    }catch(_){}
+    // Schedule next
+    const next=BEAT_MS*(8+Math.floor(Math.random()*9));
+    _defSwellTimer=setTimeout(scheduleSwell, next);
+  };
+  _defSwellTimer=setTimeout(scheduleSwell, BEAT_MS*8);
+
+  // ── 6) Metallic ping scheduler — every 3-7 beats ──────────────────
+  const schedulePing=()=>{
+    if(!_defenseBedActive||!AC_CTX) return;
+    try{
+      const t=AC_CTX.currentTime+0.002;
+      const o=AC_CTX.createOscillator(); o.type='sine';
+      const base=[880, 1046.5, 1318.5, 1760][Math.floor(Math.random()*4)];
+      o.frequency.setValueAtTime(base*2, t);
+      o.frequency.exponentialRampToValueAtTime(base, t+0.02);
+      const bp=AC_CTX.createBiquadFilter(); bp.type='highpass';
+      bp.frequency.value=700; bp.Q.value=0.8;
+      const g=AC_CTX.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.028, t+0.005);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+0.22);
+      const pan=AC_CTX.createStereoPanner?.(); if(pan) pan.pan.value=_rnd(-0.4,0.4);
+      o.connect(bp); bp.connect(g);
+      if(pan){ g.connect(pan); pan.connect(_defenseBedGain); } else g.connect(_defenseBedGain);
+      o.start(t); o.stop(t+0.26);
+    }catch(_){}
+    const next=BEAT_MS*(3+Math.floor(Math.random()*5));
+    _defPingTimer=setTimeout(schedulePing, next);
+  };
+  _defPingTimer=setTimeout(schedulePing, BEAT_MS*2);
+
+  _defenseBedActive=true;
+}
+
+function _stopDefenseBed(){
+  if(!_defenseBedActive) return;
+  const ac=AC(); const now=ac?ac.currentTime:0;
+  try{ if(_defenseBedGain){ _defenseBedGain.gain.cancelScheduledValues(now); _defenseBedGain.gain.linearRampToValueAtTime(0, now+0.9); } }catch(_){}
+  _defenseBedActive=false;
+  if(_defBrassSeqTimer){ clearInterval(_defBrassSeqTimer); _defBrassSeqTimer=null; }
+  if(_defPulseTimer){ clearInterval(_defPulseTimer); _defPulseTimer=null; }
+  if(_defSwellTimer){ clearTimeout(_defSwellTimer); _defSwellTimer=null; }
+  if(_defPingTimer){ clearTimeout(_defPingTimer); _defPingTimer=null; }
+  setTimeout(()=>{
+    [_defSubOsc,_defSubLfo,_defBrassOscA,_defBrassOscB,_defBrassPulseLfo,_defBrassFiltLfo,_defStringsTrem].forEach(n=>{
+      try{ if(n){ n.stop(); n.disconnect(); } }catch(_){}
+    });
+    _defStringsOscs.forEach(o=>{ try{ o.stop(); o.disconnect(); }catch(_){} });
+    _defStringsOscs=[];
+    try{ if(_defBrassFilt) _defBrassFilt.disconnect(); }catch(_){}
+    try{ if(_defStringsGain) _defStringsGain.disconnect(); }catch(_){}
+    try{ if(_defenseBedGain) _defenseBedGain.disconnect(); }catch(_){}
+    _activeLFOs=_activeLFOs.filter(l=>l!==_defSubLfo&&l!==_defBrassPulseLfo&&l!==_defBrassFiltLfo&&l!==_defStringsTrem);
+    _defSubOsc=_defSubLfo=_defBrassOscA=_defBrassOscB=_defBrassFilt=null;
+    _defBrassPulseLfo=_defBrassFiltLfo=_defStringsTrem=_defStringsGain=_defenseBedGain=null;
+  }, 1000);
+}
+
+function _defenseBedSetVolume(v){
+  if(!_defenseBedActive||!_defenseBedGain) return;
+  try{ const ac=AC(); _defenseBedGain.gain.cancelScheduledValues(ac.currentTime); _defenseBedGain.gain.linearRampToValueAtTime(Math.max(0,Math.min(1,v)), ac.currentTime+0.5); }catch(_){}
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Hunt bed — Blade Runner 2049 noir palette (detective subdued)
+//  Layers:
+//   1) Sub drone A1 (55Hz) with slow breath LFO
+//   2) Minor 7th pad (A3/C4/E4/G4) through narrow bandpass 620Hz Q=3.8
+//      — that iconic filtered-pad BR2049 color
+//   3) Cold bell FM — occasional sparse chime from a small pitch set
+//   4) Rain-stick — filtered noise rustle at very low volume
+//   5) Dial-tone pulse — low 220Hz comms beep every 6-10s
+// ══════════════════════════════════════════════════════════════════════
+let _huntBedGain=null, _huntBedActive=false;
+let _huntSubOsc=null, _huntSubLfo=null;
+let _huntPadOscs=[], _huntPadFilt=null, _huntPadFiltLfo=null, _huntPadGain=null;
+let _huntRainSrc=null, _huntRainFilt=null, _huntRainGain=null;
+let _huntBellTimer=null, _huntPulseTimer=null;
+
+function _startHuntBed(volume){
+  if(_huntBedActive) { try{ _huntBedSetVolume(volume); }catch(_){} return; }
+  if(!_engineInit) _initSoundEngine();
+  const ac=AC(); if(!ac) return;
+  const now=ac.currentTime;
+  const vol=Math.max(0, Math.min(1, (typeof volume==='number'?volume:0.45)));
+
+  _huntBedGain=ac.createGain();
+  _huntBedGain.gain.setValueAtTime(0.0001, now);
+  _huntBedGain.gain.exponentialRampToValueAtTime(Math.max(0.0005,vol), now+1.8);
+  _huntBedGain.connect(_dest());
+
+  // ── 1) Sub drone A1 (55Hz) ─────────────────────────────────────────
+  _huntSubOsc=ac.createOscillator(); _huntSubOsc.type='sine'; _huntSubOsc.frequency.value=55;
+  const subGain=ac.createGain(); subGain.gain.value=0.28;
+  _huntSubLfo=ac.createOscillator(); _huntSubLfo.type='sine'; _huntSubLfo.frequency.value=0.06;
+  const subLfoGain=ac.createGain(); subLfoGain.gain.value=0.08;
+  _huntSubLfo.connect(subLfoGain); subLfoGain.connect(subGain.gain);
+  _huntSubOsc.connect(subGain); subGain.connect(_huntBedGain);
+  _huntSubOsc.start(now); _huntSubLfo.start(now);
+  _regLFO(_huntSubLfo, 0.06);
+
+  // ── 2) Minor 7th pad through narrow bandpass 620Hz Q=3.8 ──────────
+  // Notes: A3 (220), C4 (261.63), E4 (329.63), G4 (392) — A minor 7th
+  _huntPadGain=ac.createGain(); _huntPadGain.gain.value=0.09;
+  _huntPadFilt=ac.createBiquadFilter(); _huntPadFilt.type='bandpass';
+  _huntPadFilt.frequency.value=620; _huntPadFilt.Q.value=3.8;
+  // Slow filter sweep LFO — the iconic breathing noir pad
+  _huntPadFiltLfo=ac.createOscillator(); _huntPadFiltLfo.type='sine';
+  _huntPadFiltLfo.frequency.value=0.05;
+  const padFiltDepth=ac.createGain(); padFiltDepth.gain.value=160;
+  _huntPadFiltLfo.connect(padFiltDepth); padFiltDepth.connect(_huntPadFilt.frequency);
+  const PAD_FREQS=[220, 261.63, 329.63, 392.00];
+  PAD_FREQS.forEach((f,i)=>{
+    const o=ac.createOscillator(); o.type='sawtooth'; o.frequency.value=f;
+    o.detune.value=(i-1.5)*5;
+    o.connect(_huntPadFilt);
+    _huntPadOscs.push(o);
+    o.start(now);
+  });
+  _huntPadFilt.connect(_huntPadGain); _huntPadGain.connect(_huntBedGain);
+  _huntPadFiltLfo.start(now);
+  _regLFO(_huntPadFiltLfo, 0.05);
+
+  // ── 3) Cold bell FM chime — sparse, from small pitch set ──────────
+  const BELL_FREQS=[523.25, 622.25, 659.25, 783.99]; // C5, Eb5, E5, G5
+  const scheduleBell=()=>{
+    if(!_huntBedActive||!AC_CTX) return;
+    try{
+      const t=AC_CTX.currentTime+0.002;
+      const base=BELL_FREQS[Math.floor(Math.random()*BELL_FREQS.length)];
+      // Carrier
+      const carrier=AC_CTX.createOscillator(); carrier.type='sine'; carrier.frequency.value=base;
+      // Modulator (FM)
+      const mod=AC_CTX.createOscillator(); mod.type='sine';
+      mod.frequency.value=base*1.414; // inharmonic ratio for bell timbre
+      const modGain=AC_CTX.createGain(); modGain.gain.value=base*0.8;
+      mod.connect(modGain); modGain.connect(carrier.frequency);
+      const g=AC_CTX.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.055, t+0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+3.2);
+      const pan=AC_CTX.createStereoPanner?.(); if(pan) pan.pan.value=_rnd(-0.5,0.5);
+      carrier.connect(g);
+      if(pan){ g.connect(pan); pan.connect(_huntBedGain); } else g.connect(_huntBedGain);
+      carrier.start(t); mod.start(t);
+      carrier.stop(t+3.3); mod.stop(t+3.3);
+    }catch(_){}
+    const next=(12+Math.random()*10)*1000;
+    _huntBellTimer=setTimeout(scheduleBell, next);
+  };
+  _huntBellTimer=setTimeout(scheduleBell, 4000);
+
+  // ── 4) Rain-stick — slow filtered noise rustle ────────────────────
+  const sr=ac.sampleRate;
+  const rainDur=8; // long looped buffer
+  const rainBuf=ac.createBuffer(1, Math.floor(sr*rainDur), sr);
+  const rd=rainBuf.getChannelData(0);
+  for(let i=0;i<rd.length;i++){
+    // Sparse droplets: gated noise with random envelope
+    const gate=Math.random()<0.0008 ? 1 : 0;
+    rd[i]=(Math.random()*2-1)*gate;
+  }
+  _huntRainSrc=ac.createBufferSource(); _huntRainSrc.buffer=rainBuf; _huntRainSrc.loop=true;
+  _huntRainFilt=ac.createBiquadFilter(); _huntRainFilt.type='bandpass';
+  _huntRainFilt.frequency.value=4800; _huntRainFilt.Q.value=2.2;
+  _huntRainGain=ac.createGain(); _huntRainGain.gain.value=0.25;
+  _huntRainSrc.connect(_huntRainFilt); _huntRainFilt.connect(_huntRainGain); _huntRainGain.connect(_huntBedGain);
+  _huntRainSrc.start(now);
+
+  // ── 5) Dial-tone pulse — low 220Hz comms beep every 6-10s ─────────
+  const schedulePulse=()=>{
+    if(!_huntBedActive||!AC_CTX) return;
+    try{
+      const t=AC_CTX.currentTime+0.002;
+      const o=AC_CTX.createOscillator(); o.type='sine'; o.frequency.value=220;
+      const bp=AC_CTX.createBiquadFilter(); bp.type='bandpass';
+      bp.frequency.value=440; bp.Q.value=4.6;
+      const g=AC_CTX.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.045, t+0.3);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+1.6);
+      const pan=AC_CTX.createStereoPanner?.(); if(pan) pan.pan.value=_rnd(-0.3,0.3);
+      o.connect(bp); bp.connect(g);
+      if(pan){ g.connect(pan); pan.connect(_huntBedGain); } else g.connect(_huntBedGain);
+      o.start(t); o.stop(t+1.7);
+    }catch(_){}
+    const next=(6+Math.random()*4)*1000;
+    _huntPulseTimer=setTimeout(schedulePulse, next);
+  };
+  _huntPulseTimer=setTimeout(schedulePulse, 5500);
+
+  _huntBedActive=true;
+}
+
+function _stopHuntBed(){
+  if(!_huntBedActive) return;
+  const ac=AC(); const now=ac?ac.currentTime:0;
+  try{ if(_huntBedGain){ _huntBedGain.gain.cancelScheduledValues(now); _huntBedGain.gain.linearRampToValueAtTime(0, now+1.0); } }catch(_){}
+  _huntBedActive=false;
+  if(_huntBellTimer){ clearTimeout(_huntBellTimer); _huntBellTimer=null; }
+  if(_huntPulseTimer){ clearTimeout(_huntPulseTimer); _huntPulseTimer=null; }
+  setTimeout(()=>{
+    try{ if(_huntSubOsc){ _huntSubOsc.stop(); _huntSubOsc.disconnect(); } }catch(_){}
+    try{ if(_huntSubLfo){ _huntSubLfo.stop(); _huntSubLfo.disconnect(); } }catch(_){}
+    _huntPadOscs.forEach(o=>{ try{ o.stop(); o.disconnect(); }catch(_){} });
+    _huntPadOscs=[];
+    try{ if(_huntPadFiltLfo){ _huntPadFiltLfo.stop(); _huntPadFiltLfo.disconnect(); } }catch(_){}
+    try{ if(_huntPadFilt) _huntPadFilt.disconnect(); }catch(_){}
+    try{ if(_huntPadGain) _huntPadGain.disconnect(); }catch(_){}
+    try{ if(_huntRainSrc){ _huntRainSrc.stop(); _huntRainSrc.disconnect(); } }catch(_){}
+    try{ if(_huntRainFilt) _huntRainFilt.disconnect(); }catch(_){}
+    try{ if(_huntRainGain) _huntRainGain.disconnect(); }catch(_){}
+    try{ if(_huntBedGain) _huntBedGain.disconnect(); }catch(_){}
+    _activeLFOs=_activeLFOs.filter(l=>l!==_huntSubLfo&&l!==_huntPadFiltLfo);
+    _huntSubOsc=_huntSubLfo=_huntPadFilt=_huntPadFiltLfo=_huntPadGain=null;
+    _huntRainSrc=_huntRainFilt=_huntRainGain=_huntBedGain=null;
+  }, 1100);
+}
+
+function _huntBedSetVolume(v){
+  if(!_huntBedActive||!_huntBedGain) return;
+  try{ const ac=AC(); _huntBedGain.gain.cancelScheduledValues(ac.currentTime); _huntBedGain.gain.linearRampToValueAtTime(Math.max(0,Math.min(1,v)), ac.currentTime+0.5); }catch(_){}
+}
+
 // ── Layered SFX primitive ─────────────────────────────────────────────
 // opts: { bus: 'sfx'|'alert'|'stinger', gainDb: 0, pan: 0, reverbWet: 0..1,
 //         transient:{type,f,d,g,filt:{type,f,Q},filtEnvTo},
@@ -8597,17 +8970,20 @@ const SoundEngine={
       }else if(scene==='boss'){
         if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0.085,t+1.2);
       }else if(scene==='defense'){
-        // Defense: start combat bed at sustained level (Zimmer industrial ostinato)
-        try{ _startCombatBed(); }catch(_){}
-        if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0.07,t+1.5);
-        if(_ambientGain) _ambientGain.gain.linearRampToValueAtTime(0.04,t+1.2);
-        if(_tensionGain) _tensionGain.gain.linearRampToValueAtTime(0.02,t+1.0);
+        // Defense: dedicated industrial Zimmer bed (C1 sub + ostinato + pulse + strings + swells)
+        // Silence the shared River beds so there's no overlap
+        try{ _stopCombatBed(); }catch(_){}
+        if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0,t+0.6);
+        if(_ambientGain) _ambientGain.gain.linearRampToValueAtTime(0,t+0.6);
+        if(_tensionGain) _tensionGain.gain.linearRampToValueAtTime(0,t+0.6);
+        try{ _startDefenseBed(0.55); }catch(_){}
       }else if(scene==='hunt'){
-        // Hunt: subdued tension bed + narrow combat color (Blade Runner 2049 detective)
-        try{ _startCombatBed(); }catch(_){}
-        if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0.045,t+1.5);
-        if(_tensionGain) _tensionGain.gain.linearRampToValueAtTime(0.035,t+1.0);
-        if(_ambientGain) _ambientGain.gain.linearRampToValueAtTime(0.05,t+1.2);
+        // Hunt: dedicated Blade Runner 2049 noir bed (A1 sub + filtered minor 7th pad + bells + rain + dial-tone)
+        try{ _stopCombatBed(); }catch(_){}
+        if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0,t+0.6);
+        if(_ambientGain) _ambientGain.gain.linearRampToValueAtTime(0,t+0.6);
+        if(_tensionGain) _tensionGain.gain.linearRampToValueAtTime(0,t+0.6);
+        try{ _startHuntBed(0.45); }catch(_){}
       }else if(scene==='menu'){
         if(_combatGain) _combatGain.gain.linearRampToValueAtTime(0,t+0.6);
         if(_tensionGain) _tensionGain.gain.linearRampToValueAtTime(0,t+0.6);
@@ -9052,6 +9428,634 @@ function _stingerAlarm(level){
       sub:{ type:'sine', f:100+level*12, d:s.d+0.06, g:0.05, attack:0.03 },
       reverbWet:level>=3?0.3:0.22
     }),s.t);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Defense SFX Recipes — industrial Zimmer palette (Richard King flavor)
+//  Flavored 4-layer recipes that sit on top of the Defense bed.
+//  Called from Defense AudioEngine via window._defenseSfxRecipe(name,opts).
+// ══════════════════════════════════════════════════════════════════════
+function _defenseSfxRecipe(name,opts){
+  switch(name){
+    case 'def_laser': {
+      // Anti-aircraft cannon — short metallic burst, not a sci-fi zap
+      _playLayered({
+        bus:'sfx', pan:_rnd(-3,3), gainDb:_rnd(-1.5,1.0),
+        transient:{ noise:true, d:0.012, g:0.52, filt:{type:'bandpass',f:5200+_rnd(-300,300),Q:1.4} },
+        body:{ type:'sawtooth', f:620+_rnd(-18,18), toF:160, d:0.09, g:0.09,
+               filt:{type:'lowpass',f:3200,Q:1.8}, filtEnvTo:420 },
+        sub:{ type:'sine', f:80, d:0.07, g:0.07 },
+        grit:{ d:0.045, g:0.10, filtType:'bandpass', f:2800, Q:1.1 },
+        reverbWet:0.15
+      }); break;
+    }
+    case 'def_boom': {
+      // Heavy ordnance — low body boom + metallic shrapnel + sub shake
+      _playLayered({
+        bus:'sfx', pan:_rnd(-6,6), gainDb:1.6,
+        transient:{ noise:true, d:0.025, g:0.72, filt:{type:'bandpass',f:1400,Q:0.8} },
+        body:{ type:'sawtooth', f:95+_rnd(-4,4), toF:38, d:0.55, g:0.15,
+               filt:{type:'lowpass',f:600,Q:2.6}, filtEnvTo:140 },
+        subs:[
+          { type:'sawtooth', f:98, toF:40, d:0.55, g:0.11, filt:{type:'lowpass',f:600,Q:2.6}, filtEnvTo:140 },
+          { type:'sine',     f:44, toF:22, d:0.8,  g:0.14, attack:0.02 }
+        ],
+        sub:{ type:'sine', f:32, d:1.1, g:0.13, attack:0.05 },
+        grit:{ d:0.45, g:0.28, filtType:'bandpass', f:2400, Q:0.6 },
+        reverbWet:0.42
+      }); break;
+    }
+    case 'def_base_hit': {
+      // Base takes damage — alarming metallic impact with siren undertone
+      _playLayered({
+        bus:'alert', pan:_rnd(-5,5), gainDb:1.0,
+        transient:{ noise:true, d:0.02, g:0.55, filt:{type:'bandpass',f:2200,Q:1.0} },
+        body:{ type:'sawtooth', f:220, toF:108, d:0.26, g:0.12, filt:{type:'lowpass',f:900,Q:1.6}, filtEnvTo:320 },
+        subs:[{ type:'sawtooth', f:223, toF:110, d:0.26, g:0.10, filt:{type:'lowpass',f:900,Q:1.6}, filtEnvTo:320 }],
+        sub:{ type:'sine', f:55, d:0.5, g:0.11, attack:0.03 },
+        grit:{ d:0.18, g:0.15, filtType:'bandpass', f:1600, Q:0.8 },
+        reverbWet:0.3
+      }); break;
+    }
+    case 'def_wave_cleared': {
+      // Wave cleared — brass rise + cymbal + sub settle (mini trailer beat)
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:2.0,
+        transient:{ noise:true, d:0.03, g:0.45, filt:{type:'bandpass',f:4200,Q:0.8} },
+        body:{ type:'sawtooth', f:98, toF:196, d:0.9, g:0.11, filt:{type:'lowpass',f:1200,Q:1.4}, filtEnvTo:2600 },
+        subs:[
+          { type:'sawtooth', f:100, toF:200, d:0.9, g:0.09, filt:{type:'lowpass',f:1200,Q:1.4}, filtEnvTo:2600 },
+          { type:'sine', f:392, d:0.9, g:0.06, attack:0.12 },
+          { type:'sine', f:523.25, d:0.9, g:0.05, attack:0.18 }
+        ],
+        sub:{ type:'sine', f:49, d:1.3, g:0.12, attack:0.05 },
+        grit:{ d:0.7, g:0.14, filtType:'bandpass', f:5200, Q:0.6 },
+        reverbWet:0.55
+      }); break;
+    }
+    case 'def_boss_reveal': {
+      // Adversary reveal — BRAAAM with metallic pre-hit and long tail
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:-2, gainDb:0.5,
+        transient:{ noise:true, d:0.04, g:0.5, filt:{type:'bandpass',f:1800,Q:0.6} },
+        body:{ type:'sawtooth', f:1600, toF:220, d:0.08, g:0.08, filt:{type:'lowpass',f:4000,Q:1.0} },
+        grit:{ d:0.06, g:0.18, filtType:'bandpass', f:3600, Q:0.7 }
+      }),0);
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:1, gainDb:3.8,
+        transient:{ noise:true, d:0.05, g:0.8, filt:{type:'bandpass',f:2600,Q:0.7} },
+        body:{ type:'sawtooth', f:210, toF:98, d:1.2, g:0.16, filt:{type:'lowpass',f:700,Q:3.0}, filtEnvTo:300 },
+        subs:[
+          { type:'sawtooth', f:213, toF:100, d:1.2, g:0.13, filt:{type:'lowpass',f:700,Q:3.0}, filtEnvTo:300 },
+          { type:'sine', f:55, d:1.6, g:0.17, attack:0.04 },
+          { type:'sine', f:27.5, d:1.8, g:0.14, attack:0.08 }
+        ],
+        sub:{ type:'sine', f:33, d:2.0, g:0.16, attack:0.06 },
+        grit:{ d:0.6, g:0.2, filtType:'bandpass', f:1400, Q:0.6 },
+        reverbWet:0.62
+      }),260); break;
+    }
+    case 'def_exp_pickup': {
+      // XP pickup — short glimmer + warm body
+      _playLayered({
+        bus:'sfx', pan:_rnd(-4,4), gainDb:_rnd(-1,1),
+        transient:{ noise:true, d:0.01, g:0.28, filt:{type:'bandpass',f:7200,Q:1.6} },
+        body:{ type:'sine', f:880+_rnd(-12,12), toF:1320, d:0.12, g:0.07, filt:{type:'lowpass',f:6000,Q:0.9} },
+        subs:[{ type:'sine', f:660, d:0.08, g:0.05 }],
+        reverbWet:0.22
+      }); break;
+    }
+    case 'def_corrupt': {
+      // Corrupted module alert — bitcrushed warning
+      _playLayered({
+        bus:'alert', pan:_rnd(-4,4), gainDb:0.6,
+        transient:{ type:'square', f:1200, d:0.015, g:0.32, filt:{type:'highpass',f:700,Q:1.2} },
+        body:{ type:'square', f:180, toF:92, d:0.22, g:0.09, filt:{type:'bandpass',f:1800,Q:5.4}, filtEnvTo:900 },
+        sub:{ type:'sine', f:62, d:0.26, g:0.09 },
+        grit:{ d:0.18, g:0.15, filtType:'bandpass', f:3400, Q:2.1 },
+        reverbWet:0.25
+      }); break;
+    }
+    case 'def_base_fallen': {
+      // Base falls — long descending collapse + sub slam + debris
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:3.2,
+        transient:{ noise:true, d:0.06, g:0.8, filt:{type:'bandpass',f:1200,Q:0.6} },
+        body:{ type:'sawtooth', f:196, toF:49, d:1.4, g:0.18, filt:{type:'lowpass',f:500,Q:3.2}, filtEnvTo:130 },
+        subs:[
+          { type:'sawtooth', f:200, toF:50, d:1.4, g:0.15, filt:{type:'lowpass',f:500,Q:3.2}, filtEnvTo:130 },
+          { type:'sine',     f:49,  toF:24.5, d:2.0, g:0.2, attack:0.06 }
+        ],
+        sub:{ type:'sine', f:27, d:2.6, g:0.18, attack:0.10 },
+        grit:{ d:1.2, g:0.3, filtType:'bandpass', f:1800, Q:0.5 },
+        reverbWet:0.7
+      }); break;
+    }
+    case 'def_phase': {
+      // Phase change — ascending brass swell (lighter than wave_cleared)
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:1.4,
+        transient:{ noise:true, d:0.02, g:0.32, filt:{type:'bandpass',f:3600,Q:0.9} },
+        body:{ type:'sawtooth', f:130.8, toF:261.6, d:0.75, g:0.10, filt:{type:'lowpass',f:1200,Q:1.5}, filtEnvTo:2400 },
+        subs:[
+          { type:'sawtooth', f:134, toF:268, d:0.75, g:0.08, filt:{type:'lowpass',f:1200,Q:1.5}, filtEnvTo:2400 },
+          { type:'sine', f:523, d:0.75, g:0.05, attack:0.12 }
+        ],
+        sub:{ type:'sine', f:55, d:1.0, g:0.1, attack:0.05 },
+        reverbWet:0.5
+      }); break;
+    }
+    case 'def_soc_chatter': {
+      // SOC comms chatter — bandpassed squelch
+      _playLayered({
+        bus:'sfx', pan:_rnd(-2,2), gainDb:-2.5,
+        transient:{ noise:true, d:0.02, g:0.22, filt:{type:'bandpass',f:3200,Q:1.2} },
+        body:{ type:'sawtooth', f:840+_rnd(-20,20), toF:560, d:0.14, g:0.045, filt:{type:'bandpass',f:1800,Q:2.4} },
+        grit:{ d:0.12, g:0.09, filtType:'bandpass', f:2600, Q:1.6 },
+        reverbWet:0.08
+      }); break;
+    }
+    case 'def_ufo_beep': {
+      // Alien comms — cold FM beep
+      _playLayered({
+        bus:'sfx', pan:_rnd(-2,2), gainDb:-1,
+        transient:{ type:'sine', f:3200, d:0.01, g:0.3, filt:{type:'bandpass',f:3200,Q:2.2} },
+        body:{ type:'sine', f:1320, toF:1760, d:0.14, g:0.08, filt:{type:'bandpass',f:2400,Q:2.8} },
+        subs:[{ type:'sine', f:660, d:0.14, g:0.05 }],
+        reverbWet:0.28
+      }); break;
+    }
+    default: break;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Hunt SFX Recipes — Blade Runner 2049 noir palette (narrow bandpass color)
+//  Flavored 4-layer recipes that sit on top of the Hunt bed.
+//  Called from Hunt game via window._huntSfxRecipe(name,opts).
+// ══════════════════════════════════════════════════════════════════════
+function _huntSfxRecipe(name,opts){
+  switch(name){
+    case 'hunt_select': {
+      // UI click — cold metallic detent through narrow bandpass
+      _playLayered({
+        bus:'sfx', pan:_rnd(-1.5,1.5), gainDb:-0.5,
+        transient:{ type:'triangle', f:2200, d:0.012, g:0.32, filt:{type:'bandpass',f:620,Q:3.0} },
+        body:{ type:'sine', f:440, toF:360, d:0.09, g:0.05, filt:{type:'bandpass',f:620,Q:2.6} },
+        reverbWet:0.18
+      }); break;
+    }
+    case 'hunt_collect': {
+      // Evidence pickup — warm chime through noir filter
+      _playLayered({
+        bus:'sfx', pan:_rnd(-3,3), gainDb:0.2,
+        transient:{ noise:true, d:0.01, g:0.25, filt:{type:'bandpass',f:4200,Q:1.6} },
+        body:{ type:'sine', f:523.25, toF:783.99, d:0.22, g:0.07, filt:{type:'bandpass',f:900,Q:1.6} },
+        subs:[{ type:'sine', f:659.25, d:0.18, g:0.05, attack:0.04 }],
+        reverbWet:0.32
+      }); break;
+    }
+    case 'hunt_evidence_link': {
+      // Correct deduction — rising FM bell arpeggio
+      const notes=[440, 523.25, 659.25, 880];
+      notes.forEach((f,i)=>setTimeout(()=>_playLayered({
+        bus:'stinger', pan:_rnd(-2,2), gainDb:0.6,
+        transient:{ type:'sine', f:f*2, d:0.008, g:0.22, filt:{type:'bandpass',f:f*2,Q:3.2} },
+        body:{ type:'sine', f:f, d:0.36, g:0.08, filt:{type:'bandpass',f:f,Q:4.0} },
+        subs:[{ type:'sine', f:f*1.414, d:0.28, g:0.04, attack:0.02 }],
+        reverbWet:0.42
+      }), i*90));
+      break;
+    }
+    case 'hunt_miss': {
+      // Wrong deduction — descending dissonant thud
+      _playLayered({
+        bus:'alert', pan:_rnd(-3,3), gainDb:0,
+        transient:{ noise:true, d:0.014, g:0.36, filt:{type:'bandpass',f:1400,Q:0.9} },
+        body:{ type:'sawtooth', f:200, toF:80, d:0.3, g:0.08, filt:{type:'lowpass',f:700,Q:2.8}, filtEnvTo:200 },
+        subs:[{ type:'sawtooth', f:196, toF:78, d:0.3, g:0.06, filt:{type:'lowpass',f:700,Q:2.8}, filtEnvTo:200 }],
+        sub:{ type:'sine', f:55, d:0.5, g:0.1, attack:0.03 },
+        grit:{ d:0.25, g:0.1, filtType:'bandpass', f:1200, Q:0.9 },
+        reverbWet:0.35
+      }); break;
+    }
+    case 'hunt_intercept': {
+      // Adversary intercepted — urgent detective reveal
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:1.6,
+        transient:{ noise:true, d:0.025, g:0.44, filt:{type:'bandpass',f:2800,Q:1.0} },
+        body:{ type:'sawtooth', f:110, toF:440, d:0.7, g:0.11, filt:{type:'bandpass',f:620,Q:3.6}, filtEnvTo:1400 },
+        subs:[
+          { type:'sawtooth', f:112, toF:446, d:0.7, g:0.09, filt:{type:'bandpass',f:620,Q:3.6}, filtEnvTo:1400 },
+          { type:'sine', f:880, d:0.6, g:0.06, attack:0.08 }
+        ],
+        sub:{ type:'sine', f:55, d:0.9, g:0.11, attack:0.04 },
+        reverbWet:0.55
+      }); break;
+    }
+    case 'hunt_breach': {
+      // Network breach alarm — cold siren through bandpass
+      [0,140,280].forEach((delay,i)=>setTimeout(()=>_playLayered({
+        bus:'alert', pan:i%2?2:-2, gainDb:0.5,
+        transient:{ noise:true, d:0.008, g:0.18, filt:{type:'bandpass',f:3800,Q:1.2} },
+        body:{ type:'sawtooth', f:440+i*60, toF:280, d:0.28, g:0.09, filt:{type:'bandpass',f:620,Q:4.2} },
+        sub:{ type:'sine', f:82.4, d:0.36, g:0.08, attack:0.02 },
+        reverbWet:0.28
+      }),delay));
+      break;
+    }
+    case 'hunt_move': {
+      // Map navigation — soft detective tick
+      _playLayered({
+        bus:'sfx', pan:_rnd(-2,2), gainDb:-2,
+        transient:{ type:'triangle', f:1600, d:0.008, g:0.22, filt:{type:'bandpass',f:1600,Q:2.4} },
+        body:{ type:'sine', f:620, toF:880, d:0.12, g:0.04, filt:{type:'bandpass',f:620,Q:2.2} },
+        reverbWet:0.14
+      }); break;
+    }
+    case 'hunt_deploy': {
+      // Deploy countermeasure — tactical confirmation sweep
+      _playLayered({
+        bus:'sfx', pan:_rnd(-1,1), gainDb:0.5,
+        transient:{ noise:true, d:0.014, g:0.3, filt:{type:'bandpass',f:2400,Q:1.2} },
+        body:{ type:'sawtooth', f:220, toF:660, d:0.28, g:0.08, filt:{type:'bandpass',f:620,Q:3.0}, filtEnvTo:1800 },
+        subs:[{ type:'sine', f:523.25, d:0.2, g:0.05, attack:0.08 }],
+        sub:{ type:'sine', f:110, d:0.3, g:0.07 },
+        reverbWet:0.28
+      }); break;
+    }
+    case 'hunt_heartbeat': {
+      // Heartbeat / tension pulse
+      _playLayered({
+        bus:'sfx', pan:0, gainDb:-1.5,
+        transient:{ noise:true, d:0.02, g:0.18, filt:{type:'lowpass',f:160,Q:1.2} },
+        body:{ type:'sine', f:62, toF:48, d:0.25, g:0.1, filt:{type:'lowpass',f:180,Q:1.4} },
+        sub:{ type:'sine', f:38, d:0.3, g:0.08, attack:0.02 },
+        reverbWet:0.12
+      }); break;
+    }
+    case 'hunt_dossier': {
+      // Case file open — three-note file-flip triad
+      const notes=[261.63, 329.63, 392];
+      notes.forEach((f,i)=>setTimeout(()=>_playLayered({
+        bus:'sfx', pan:_rnd(-1,1), gainDb:-1,
+        transient:{ type:'triangle', f:f*2, d:0.008, g:0.16, filt:{type:'bandpass',f:f*2,Q:2.8} },
+        body:{ type:'sine', f:f, d:0.18, g:0.06, filt:{type:'bandpass',f:620,Q:3.0} },
+        reverbWet:0.24
+      }),i*70));
+      break;
+    }
+    case 'hunt_comms': {
+      // Radio chatter — bandpassed squelch
+      _playLayered({
+        bus:'sfx', pan:_rnd(-2,2), gainDb:-3,
+        transient:{ noise:true, d:0.012, g:0.18, filt:{type:'bandpass',f:2400,Q:1.6} },
+        body:{ type:'sawtooth', f:620+_rnd(-20,20), toF:440, d:0.1, g:0.035, filt:{type:'bandpass',f:1800,Q:3.2} },
+        grit:{ d:0.1, g:0.08, filtType:'bandpass', f:2200, Q:1.8 },
+        reverbWet:0.1
+      }); break;
+    }
+    case 'hunt_tension': {
+      // Pursuit tension tick (level 1-3)
+      const level=Math.max(1, Math.min(3, (opts&&opts.level)|0 || 1));
+      const base=level>=3?150:level===2?185:230;
+      _playLayered({
+        bus:'alert', pan:_rnd(-3,3), gainDb:level*0.4,
+        transient:{ noise:true, d:0.008, g:0.16+level*0.04, filt:{type:'bandpass',f:3400,Q:1.6} },
+        body:{ type:'sawtooth', f:base, toF:base*0.78, d:0.22, g:0.06+level*0.02, filt:{type:'bandpass',f:620,Q:4.4} },
+        sub:{ type:'sine', f:base*0.5, d:0.28, g:0.07, attack:0.03 },
+        reverbWet:0.22
+      }); break;
+    }
+    case 'hunt_lock': {
+      // Verified lock — precision detective click
+      _playLayered({
+        bus:'sfx', pan:0, gainDb:0,
+        transient:{ type:'triangle', f:1800, d:0.01, g:0.28, filt:{type:'bandpass',f:1800,Q:3.2} },
+        body:{ type:'sine', f:523.25, toF:783.99, d:0.14, g:0.06, filt:{type:'bandpass',f:620,Q:3.0} },
+        subs:[{ type:'sine', f:659.25, d:0.1, g:0.05, attack:0.03 }],
+        reverbWet:0.32
+      }); break;
+    }
+    case 'hunt_case_closed': {
+      // Case closed — triumphant but restrained noir fanfare
+      const notes=[220, 329.63, 440, 659.25, 880];
+      notes.forEach((f,i)=>setTimeout(()=>_playLayered({
+        bus:'stinger', pan:(i-2)*0.8, gainDb:i===4?2.6:1.2,
+        transient:{ noise:true, d:0.018, g:0.28, filt:{type:'bandpass',f:f*3,Q:1.4} },
+        body:{ type:'sine', f:f, d:0.45, g:0.09, filt:{type:'bandpass',f:620,Q:3.2} },
+        subs:[
+          { type:'sawtooth', f:f*0.5, d:0.45, g:0.06, filt:{type:'lowpass',f:1200,Q:2.0} },
+          { type:'sine', f:f*1.414, d:0.35, g:0.045, attack:0.08 }
+        ],
+        sub:{ type:'sine', f:f*0.25, d:0.6, g:0.1, attack:0.04 },
+        reverbWet:0.62
+      }), i*180));
+      break;
+    }
+    case 'hunt_red_alert': {
+      // Full breach alert — cold siren waves
+      [0,280,560,840].forEach((delay,i)=>setTimeout(()=>_playLayered({
+        bus:'alert', pan:i%2?4:-4, gainDb:1.2,
+        transient:{ noise:true, d:0.012, g:0.22, filt:{type:'bandpass',f:4200,Q:1.4} },
+        body:{ type:'sawtooth', f:440, toF:220, d:0.26, g:0.11, filt:{type:'bandpass',f:620,Q:4.8} },
+        subs:[{ type:'sawtooth', f:330, toF:165, d:0.22, g:0.08, filt:{type:'bandpass',f:620,Q:4.8}, filtEnvTo:620 }],
+        sub:{ type:'sine', f:55, d:0.35, g:0.1, attack:0.02 },
+        reverbWet:0.3
+      }),delay));
+      break;
+    }
+    default: break;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Enemy Destruction Leitmotifs — per-type 4-layer cinematic recipes
+//  Each enemy type has a signature destruction sound instead of a generic explode.
+//  Dispatched via _playEnemyDestruction(type). Unknown types fall through.
+// ══════════════════════════════════════════════════════════════════════
+function _playEnemyDestruction(type){
+  switch(type){
+    case 'trojan': {
+      // Digital decay crunch — low saw body + bitcrushed glitch
+      _playLayered({
+        bus:'sfx', pan:_rnd(-4,4), gainDb:_rnd(-1,1),
+        transient:{ noise:true, d:0.014, g:0.42, filt:{type:'bandpass',f:1800,Q:1.1} },
+        body:{ type:'sawtooth', f:180+_rnd(-8,8), toF:60, d:0.22, g:0.1, filt:{type:'lowpass',f:1400,Q:2.2}, filtEnvTo:300 },
+        sub:{ type:'sine', f:55, d:0.3, g:0.08 },
+        grit:{ d:0.18, g:0.16, filtType:'bandpass', f:2200, Q:1.6 },
+        reverbWet:0.22
+      }); break;
+    }
+    case 'lolBin': case 'lolbinTower': {
+      // System-level glitch pop — short metallic zap + noise splutter
+      _playLayered({
+        bus:'sfx', pan:_rnd(-4,4), gainDb:_rnd(-0.5,1.2),
+        transient:{ type:'square', f:1800, d:0.012, g:0.38, filt:{type:'highpass',f:800,Q:1.2} },
+        body:{ type:'sawtooth', f:440, toF:120, d:0.12, g:0.08, filt:{type:'bandpass',f:1800,Q:3.4} },
+        grit:{ d:0.12, g:0.14, filtType:'bandpass', f:3800, Q:1.2 },
+        reverbWet:0.2
+      }); break;
+    }
+    case 'zeroDay': case 'zeroDayJet': {
+      // Zero-day shatter — bright high-freq glass crack + sub slam
+      _playLayered({
+        bus:'sfx', pan:_rnd(-3,3), gainDb:1.2,
+        transient:{ noise:true, d:0.02, g:0.55, filt:{type:'bandpass',f:7200,Q:1.4} },
+        body:{ type:'triangle', f:2400, toF:480, d:0.2, g:0.08, filt:{type:'highpass',f:900,Q:0.9} },
+        subs:[
+          { type:'sine', f:1200, toF:3200, d:0.15, g:0.06, attack:0.002 },
+          { type:'sawtooth', f:220, toF:80, d:0.3, g:0.09, filt:{type:'lowpass',f:800,Q:1.6} }
+        ],
+        sub:{ type:'sine', f:48, d:0.4, g:0.11, attack:0.02 },
+        grit:{ d:0.22, g:0.22, filtType:'bandpass', f:5800, Q:0.7 },
+        reverbWet:0.35
+      }); break;
+    }
+    case 'stealthJet': case 'phishDrone': case 'vishDrone': case 'wiperJet': {
+      // Jet disintegration — fast body dive + metal shear
+      _playLayered({
+        bus:'sfx', pan:_rnd(-5,5), gainDb:_rnd(-0.5,1.4),
+        transient:{ noise:true, d:0.018, g:0.48, filt:{type:'bandpass',f:3600,Q:1.0} },
+        body:{ type:'sawtooth', f:320, toF:80, d:0.28, g:0.11, filt:{type:'lowpass',f:2400,Q:1.6}, filtEnvTo:500 },
+        subs:[{ type:'sawtooth', f:318, toF:78, d:0.28, g:0.09, filt:{type:'lowpass',f:2400,Q:1.6}, filtEnvTo:500 }],
+        sub:{ type:'sine', f:55, d:0.36, g:0.09, attack:0.02 },
+        grit:{ d:0.22, g:0.18, filtType:'bandpass', f:4200, Q:0.8 },
+        reverbWet:0.3
+      }); break;
+    }
+    case 'idGhost': case 'credentialGhost': {
+      // Ethereal ghost dissipation — reverse-feeling vocal pad fade
+      _playLayered({
+        bus:'sfx', pan:_rnd(-4,4), gainDb:-0.5,
+        transient:{ type:'sine', f:1600, d:0.02, g:0.18, filt:{type:'bandpass',f:1600,Q:3.0} },
+        body:{ type:'sine', f:880, toF:440, d:0.42, g:0.09, filt:{type:'bandpass',f:1200,Q:2.6} },
+        subs:[
+          { type:'sine', f:660, toF:330, d:0.42, g:0.07, filt:{type:'bandpass',f:900,Q:2.4} },
+          { type:'triangle', f:1760, toF:880, d:0.3, g:0.04, attack:0.06 }
+        ],
+        sub:{ type:'sine', f:110, d:0.5, g:0.06, attack:0.05 },
+        reverbWet:0.55
+      }); break;
+    }
+    case 'tokenDrone': {
+      // Token shatter — cold chime break + glass tinkle
+      _playLayered({
+        bus:'sfx', pan:_rnd(-4,4), gainDb:0.4,
+        transient:{ type:'triangle', f:2640, d:0.01, g:0.36, filt:{type:'bandpass',f:2640,Q:2.8} },
+        body:{ type:'sine', f:880, toF:1760, d:0.2, g:0.08, filt:{type:'bandpass',f:1400,Q:2.0} },
+        subs:[{ type:'sine', f:1320, d:0.16, g:0.06, attack:0.01 }],
+        grit:{ d:0.2, g:0.12, filtType:'bandpass', f:6800, Q:1.2 },
+        reverbWet:0.42
+      }); break;
+    }
+    case 'tokenSkiff': case 'idSkiff': case 'skiff': {
+      // Watercraft wreck — data crunch + water splash
+      _playLayered({
+        bus:'sfx', pan:_rnd(-3,3), gainDb:0.8,
+        transient:{ noise:true, d:0.025, g:0.5, filt:{type:'bandpass',f:2400,Q:0.9} },
+        body:{ type:'sawtooth', f:140, toF:52, d:0.34, g:0.11, filt:{type:'lowpass',f:900,Q:1.8}, filtEnvTo:240 },
+        sub:{ type:'sine', f:44, d:0.5, g:0.1, attack:0.03 },
+        grit:{ d:0.28, g:0.2, filtType:'bandpass', f:3400, Q:0.7 },
+        reverbWet:0.4
+      }); break;
+    }
+    case 'poisonBarge': case 'armoredBarge': {
+      // Heavy barge explosion — green hiss + deep slam
+      _playLayered({
+        bus:'sfx', pan:_rnd(-4,4), gainDb:2.0,
+        transient:{ noise:true, d:0.03, g:0.7, filt:{type:'bandpass',f:1200,Q:0.6} },
+        body:{ type:'sawtooth', f:100, toF:40, d:0.6, g:0.14, filt:{type:'lowpass',f:500,Q:2.4}, filtEnvTo:150 },
+        subs:[
+          { type:'sawtooth', f:98, toF:38, d:0.6, g:0.11, filt:{type:'lowpass',f:500,Q:2.4}, filtEnvTo:150 },
+          { type:'sine', f:55, toF:28, d:0.9, g:0.14, attack:0.03 }
+        ],
+        sub:{ type:'sine', f:34, d:1.1, g:0.14, attack:0.05 },
+        grit:{ d:0.4, g:0.26, filtType:'bandpass', f:2400, Q:0.6 },
+        reverbWet:0.48
+      }); break;
+    }
+    case 'mine': {
+      // Proximity pop — sharp metallic crack + short tail
+      _playLayered({
+        bus:'sfx', pan:_rnd(-6,6), gainDb:1.5,
+        transient:{ noise:true, d:0.016, g:0.6, filt:{type:'bandpass',f:3200,Q:1.0} },
+        body:{ type:'square', f:440, toF:100, d:0.14, g:0.1, filt:{type:'bandpass',f:1800,Q:2.4} },
+        sub:{ type:'sine', f:60, d:0.2, g:0.1, attack:0.01 },
+        grit:{ d:0.15, g:0.18, filtType:'bandpass', f:5200, Q:0.8 },
+        reverbWet:0.32
+      }); break;
+    }
+    case 'oauthRelay': case 'certRelay': {
+      // Relay collapse — network fizzle down
+      _playLayered({
+        bus:'sfx', pan:_rnd(-3,3), gainDb:0.6,
+        transient:{ noise:true, d:0.02, g:0.38, filt:{type:'bandpass',f:2800,Q:1.2} },
+        body:{ type:'sawtooth', f:660, toF:110, d:0.3, g:0.09, filt:{type:'lowpass',f:2400,Q:1.8}, filtEnvTo:300 },
+        subs:[{ type:'square', f:440, toF:80, d:0.26, g:0.07, filt:{type:'bandpass',f:1400,Q:3.0} }],
+        sub:{ type:'sine', f:82, d:0.36, g:0.08 },
+        grit:{ d:0.24, g:0.14, filtType:'bandpass', f:3400, Q:1.4 },
+        reverbWet:0.28
+      }); break;
+    }
+    case 'vishRelay': case 'sniperPost': {
+      // Phone-line cut — screech to silence
+      _playLayered({
+        bus:'sfx', pan:_rnd(-3,3), gainDb:0.3,
+        transient:{ type:'sawtooth', f:1800, d:0.03, g:0.45, filt:{type:'bandpass',f:1800,Q:3.2} },
+        body:{ type:'sawtooth', f:620, toF:220, d:0.28, g:0.1, filt:{type:'bandpass',f:1200,Q:2.6}, filtEnvTo:440 },
+        subs:[{ type:'square', f:480, toF:180, d:0.22, g:0.07, filt:{type:'bandpass',f:2200,Q:2.8} }],
+        sub:{ type:'sine', f:110, d:0.3, g:0.08, attack:0.02 },
+        grit:{ d:0.2, g:0.14, filtType:'bandpass', f:2600, Q:1.4 },
+        reverbWet:0.26
+      }); break;
+    }
+    case 'insiderRelay': case 'jammerTower': case 'wiperRelay': case 'edgeTurret': {
+      // Low confidence whisper death — muffled industrial crunch
+      _playLayered({
+        bus:'sfx', pan:_rnd(-3,3), gainDb:0.2,
+        transient:{ noise:true, d:0.022, g:0.38, filt:{type:'lowpass',f:1400,Q:0.9} },
+        body:{ type:'sawtooth', f:220, toF:82, d:0.32, g:0.1, filt:{type:'lowpass',f:700,Q:2.4}, filtEnvTo:200 },
+        subs:[{ type:'sawtooth', f:218, toF:80, d:0.32, g:0.08, filt:{type:'lowpass',f:700,Q:2.4}, filtEnvTo:200 }],
+        sub:{ type:'sine', f:49, d:0.45, g:0.1, attack:0.03 },
+        grit:{ d:0.26, g:0.18, filtType:'bandpass', f:1600, Q:0.8 },
+        reverbWet:0.3
+      }); break;
+    }
+    default: return false;
+  }
+  return true;
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  Adversary Defeat Stingers — cinematic boss-kill recipes per adversary
+//  Dispatched via _playAdversaryDefeat(bossName).
+// ══════════════════════════════════════════════════════════════════════
+function _playAdversaryDefeat(name){
+  // Normalize "FANCY BEAR 2" / "COZY BEAR 2" phase variants to base
+  const n=(name||'').replace(/\s+\d+$/,'').toUpperCase().trim();
+  switch(n){
+    case 'FANCY BEAR': {
+      // GRU militaristic brass fall — descending three-note brass + sub slam
+      const notes=[110, 82.41, 55];
+      notes.forEach((f,i)=>setTimeout(()=>_playLayered({
+        bus:'stinger', pan:(i-1)*1.2, gainDb:i===0?3.2:i===1?2.6:2.0,
+        transient:{ noise:true, d:0.03, g:0.5+(i===0?0.2:0), filt:{type:'bandpass',f:2800-i*400,Q:0.8} },
+        body:{ type:'sawtooth', f:f, toF:f*0.5, d:0.55, g:0.14, filt:{type:'lowpass',f:780-i*120,Q:2.8}, filtEnvTo:f*0.7 },
+        subs:[
+          { type:'sawtooth', f:f*1.01, toF:f*0.5, d:0.55, g:0.12, filt:{type:'lowpass',f:780-i*120,Q:2.8}, filtEnvTo:f*0.7 },
+          { type:'sine', f:f*0.5, d:0.7, g:0.12, attack:0.04 }
+        ],
+        sub:{ type:'sine', f:f*0.25, d:0.9, g:0.12, attack:0.06 },
+        grit:{ d:0.4, g:0.18, filtType:'bandpass', f:2000, Q:0.7 },
+        reverbWet:0.55
+      }),i*240));
+      break;
+    }
+    case 'COZY BEAR': {
+      // SVR elegant descent — cold bells cascading + low pad
+      const bells=[659.25, 523.25, 440, 329.63];
+      bells.forEach((f,i)=>setTimeout(()=>_playLayered({
+        bus:'stinger', pan:_rnd(-3,3), gainDb:1.8-i*0.3,
+        transient:{ type:'sine', f:f*2, d:0.01, g:0.3, filt:{type:'bandpass',f:f*2,Q:3.0} },
+        body:{ type:'sine', f:f, d:0.6, g:0.1, filt:{type:'bandpass',f:f,Q:3.8} },
+        subs:[{ type:'sine', f:f*1.414, d:0.5, g:0.05, attack:0.04 }],
+        sub:{ type:'sine', f:f*0.25, d:0.8, g:0.08, attack:0.04 },
+        reverbWet:0.65
+      }),i*180));
+      // Rumbling pad underneath
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:2.2,
+        body:{ type:'sawtooth', f:110, toF:55, d:1.6, g:0.11, filt:{type:'bandpass',f:620,Q:4.2}, filtEnvTo:220 },
+        subs:[{ type:'sawtooth', f:108, toF:54, d:1.6, g:0.09, filt:{type:'bandpass',f:620,Q:4.2}, filtEnvTo:220 }],
+        sub:{ type:'sine', f:41, d:2.0, g:0.13, attack:0.08 },
+        reverbWet:0.6
+      });
+      break;
+    }
+    case 'VOODOO BEAR': {
+      // Sandworm destructive wreck — industrial grit + cataclysmic sub + wiper screech
+      _playLayered({
+        bus:'stinger', pan:-2, gainDb:3.8,
+        transient:{ noise:true, d:0.05, g:0.85, filt:{type:'bandpass',f:1600,Q:0.5} },
+        body:{ type:'sawtooth', f:98, toF:38, d:1.4, g:0.18, filt:{type:'lowpass',f:520,Q:3.4}, filtEnvTo:130 },
+        subs:[
+          { type:'sawtooth', f:100, toF:40, d:1.4, g:0.15, filt:{type:'lowpass',f:520,Q:3.4}, filtEnvTo:130 },
+          { type:'sine', f:49, toF:24, d:2.0, g:0.2, attack:0.06 }
+        ],
+        sub:{ type:'sine', f:27, d:2.4, g:0.18, attack:0.08 },
+        grit:{ d:1.4, g:0.35, filtType:'bandpass', f:2800, Q:0.5 },
+        reverbWet:0.7
+      });
+      // Wiper screech on top
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:2, gainDb:1.4,
+        transient:{ type:'sawtooth', f:2400, d:0.04, g:0.35, filt:{type:'bandpass',f:2400,Q:2.2} },
+        body:{ type:'sawtooth', f:1200, toF:220, d:0.9, g:0.09, filt:{type:'bandpass',f:1800,Q:2.6}, filtEnvTo:440 },
+        grit:{ d:0.8, g:0.18, filtType:'bandpass', f:4400, Q:1.2 },
+        reverbWet:0.5
+      }), 220);
+      break;
+    }
+    case 'WIZARD SPIDER': {
+      // Malicious giggle-to-dissonance — bright mocking bell cluster fading into minor chord
+      const cluster=[880, 932.33, 1108.73, 1174.66];
+      cluster.forEach((f,i)=>setTimeout(()=>_playLayered({
+        bus:'stinger', pan:_rnd(-4,4), gainDb:1.2,
+        transient:{ type:'sine', f:f*2, d:0.008, g:0.28, filt:{type:'bandpass',f:f*2,Q:3.2} },
+        body:{ type:'sine', f:f, d:0.34, g:0.08, filt:{type:'bandpass',f:f,Q:3.0} },
+        subs:[{ type:'sine', f:f*1.414, d:0.28, g:0.05, attack:0.01 }],
+        reverbWet:0.5
+      }),i*70));
+      // Minor chord settle
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:0, gainDb:2.2,
+        body:{ type:'sawtooth', f:220, toF:110, d:1.3, g:0.12, filt:{type:'lowpass',f:800,Q:2.6}, filtEnvTo:280 },
+        subs:[
+          { type:'sawtooth', f:261.63, toF:130, d:1.3, g:0.1, filt:{type:'lowpass',f:800,Q:2.6}, filtEnvTo:280 },
+          { type:'sawtooth', f:329.63, toF:165, d:1.3, g:0.08, filt:{type:'lowpass',f:800,Q:2.6}, filtEnvTo:280 }
+        ],
+        sub:{ type:'sine', f:55, d:1.8, g:0.13, attack:0.06 },
+        reverbWet:0.58
+      }), 360);
+      break;
+    }
+    case 'SCATTERED SPIDER': {
+      // Telephone chaos to silence — dial-up squeal + voice modem cut + noir settle
+      _playLayered({
+        bus:'stinger', pan:-2, gainDb:1.6,
+        transient:{ noise:true, d:0.025, g:0.4, filt:{type:'bandpass',f:3600,Q:1.4} },
+        body:{ type:'sawtooth', f:1800, toF:440, d:0.5, g:0.09, filt:{type:'bandpass',f:1800,Q:3.4}, filtEnvTo:660 },
+        subs:[{ type:'square', f:1100, toF:330, d:0.45, g:0.07, filt:{type:'bandpass',f:1600,Q:3.0} }],
+        grit:{ d:0.5, g:0.22, filtType:'bandpass', f:3200, Q:1.0 },
+        reverbWet:0.42
+      });
+      // Noir settle chord
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:2, gainDb:2.0,
+        body:{ type:'sawtooth', f:196, toF:98, d:1.2, g:0.11, filt:{type:'bandpass',f:620,Q:4.2}, filtEnvTo:240 },
+        subs:[
+          { type:'sawtooth', f:261.63, toF:130, d:1.2, g:0.09, filt:{type:'bandpass',f:620,Q:4.2}, filtEnvTo:240 },
+          { type:'sine', f:523.25, d:0.9, g:0.06, attack:0.08 }
+        ],
+        sub:{ type:'sine', f:49, d:1.5, g:0.13, attack:0.06 },
+        reverbWet:0.62
+      }), 340);
+      break;
+    }
+    default: {
+      // Generic boss defeat — triple staggered bigExplode-style recipe
+      [0,180,360].forEach(delay=>setTimeout(()=>_playLayered({
+        bus:'stinger', pan:_rnd(-5,5), gainDb:2.4,
+        transient:{ noise:true, d:0.035, g:0.65, filt:{type:'bandpass',f:1800,Q:0.7} },
+        body:{ type:'sawtooth', f:140, toF:55, d:0.7, g:0.14, filt:{type:'lowpass',f:600,Q:2.8}, filtEnvTo:180 },
+        sub:{ type:'sine', f:40, d:1.0, g:0.14, attack:0.04 },
+        grit:{ d:0.55, g:0.22, filtType:'bandpass', f:2400, Q:0.6 },
+        reverbWet:0.55
+      }), delay));
+      break;
+    }
   }
 }
 
@@ -10051,7 +11055,7 @@ const MKEYS=Object.keys(MODS);
 
 // ── Act Definitions ───────────────────────────────────────────────────
 const ACTS=[
-  { num:1, title:'DETECT',   subtitle:'Anomaly detected. Sensors active. Adversary in the corridor.',   col:'#42d9ff', phases:[0,1] },
+  { num:1, title:'DETECT',   subtitle:'Anomaly detected. Sensors active. Adversary in the threat vector.',   col:'#42d9ff', phases:[0,1] },
   { num:2, title:'CONTAIN',  subtitle:'Lateral movement blocked. Perimeter holding. Push them back.',    col:'#ffd84d', phases:[2,3] },
   { num:3, title:'MITIGATE', subtitle:'Payload neutralised. Damage limited. Counter-operations active.', col:'#ff7a00', phases:[4,5,6] },
   { num:4, title:'ELIMINATE',subtitle:'Adversary eviction in progress. Breach contained. Hunt active.',  col:'#74ff88', phases:[7,8,9] },
@@ -10086,7 +11090,7 @@ const PHASES=[
       {t:16,msg:'INTEL: Stolen NATO contractor cert detected in outbound traffic — credential exfil imminent',col:'#ff8d39'},
       {t:28,msg:'OVERWATCH: powershell.exe LOLBin — encoded payload executing on compromised endpoint. Hands-on-keyboard confirmed.',col:'#74ff88'},
       {t:38,msg:'ALERT: GRU exfil node activated — XDR cross-domain correlation active — 90 seconds to data loss',col:'#ff5a4d'},
-      {t:44,msg:'XDR: X-Agent C2 channels severed across all endpoints — FANCY BEAR evicted from corridor',col:'#42d9ff'},
+      {t:44,msg:'XDR: X-Agent C2 channels severed across all endpoints — FANCY BEAR evicted from threat vector',col:'#42d9ff'},
     ],
   },
   { id:1, key:'OPERATION PHANTOM HELPDESK', adversary:'SCATTERED SPIDER',
@@ -10192,7 +11196,7 @@ const PHASES=[
   { id:6, key:'OPERATION AXIE HEIST', adversary:'FAMOUS CHOLLIMA',
     season:'Crypto sector, Global · 2022 · ACT III: MITIGATE', actNum:3,
     summary:'DPRK TraderTraitor campaign targets Ronin Network via trojanised job offer. $625M Ethereum stolen. LinkedIn used as primary infection vector.',
-    mission:'Intercept crypto exfil skiffs before they clear the corridor. Block browser-in-browser phishing towers.',
+    mission:'Intercept crypto exfil skiffs before they clear the threat vector. Block browser-in-browser phishing towers.',
     col:'#2af0d0', water1:'#081816', water2:'#102e2a', land1:'#141f1e', land2:'#1e3330',
     debrief:'One fake PDF job offer — one employee opened it — $625M gone 6 days later. SIEM behavioural analytics would have caught it in minutes.',
     module:'Next-Gen SIEM', dur:54, speed:112,
@@ -10251,7 +11255,7 @@ const PHASES=[
   },
   { id:9, key:'OPERATION ECLIPSE ZERO — FINAL', adversary:'ECLIPSE SPIDER',
     season:'Global — All Sectors · 2024 · ACT IV: ELIMINATE', actNum:4,
-    summary:'FINAL CAMPAIGN. MOVEit zero-day exploited simultaneously across 2,600 organisations in 72 hours. Every Falcon module required. The corridor must hold.',
+    summary:'FINAL CAMPAIGN. MOVEit zero-day exploited simultaneously across 2,600 organisations in 72 hours. Every Falcon module required. The threat vector must hold.',
     mission:'Final defence. All adversary TTPs active simultaneously. Unified Falcon platform or nothing.',
     col:'#ff9060', water1:'#0e0c0e', water2:'#1c181e', land1:'#1a1a18', land2:'#2c2c26',
     debrief:'The MOVEit campaign was the largest single-vulnerability mass exploitation in history. Unification is the only answer.',
@@ -10268,7 +11272,7 @@ const PHASES=[
       {t:5, msg:'ECLIPSE SPIDER: CVE-2023-34362 SQL injection — MOVEit authentication bypassed. No malware. No noise.',col:'#ff9060'},
       {t:14,msg:'EXPOSURE MGMT: 2,847 internet-facing MOVEit instances identified — emergency containment alerts dispatched',col:'#ff9a48'},
       {t:22,msg:'MASS EXFIL: 160 gigabytes per minute across 2,600 organisations — automated pipeline, zero human operators',col:'#ff5a4d'},
-      {t:34,msg:'ALL MODULES: Endpoint. Identity. Cloud. Data. Unified Falcon platform or the corridor falls. Final stand.',col:'#ffd84d'},
+      {t:34,msg:'ALL MODULES: Endpoint. Identity. Cloud. Data. Unified Falcon platform or the threat vector falls. Final stand.',col:'#ffd84d'},
       {t:48,msg:'BREACH CONTAINED — single unified platform. 2,847 instances patched. Cross-domain correlation wins.',col:'#74ff88'},
     ],
   },
@@ -11039,7 +12043,10 @@ function killE(e){
   const pts=e.score*mult;
   SCORE+=pts; phScore+=pts; phKills++; STREAK++; _scoreFlash=0.4;
   MAXSTREAK=Math.max(MAXSTREAK,STREAK);
-  SFX.explode();
+  // v3: prefer per-enemy-type destruction leitmotif; fall back to generic SFX.explode()
+  const _ed=(typeof _playEnemyDestruction==='function')?_playEnemyDestruction:null;
+  let _played=false; if(_ed){ try{ _played=_ed(e.type)===true; }catch(_){} }
+  if(!_played){ SFX.explode(); }
   burst(e.x,w2s(e.wy),22,['#e0003c','#ff7a00','#fff','#42d9ff'],125,0.72);
   ring(e.x,w2s(e.wy),'#ff7a00',95,0.48);
   // Ground-impact dust for enemies near ground
@@ -11644,11 +12651,11 @@ function bossPhase(ph){
   else if(n==='WICKED PANDA')  { for(let i=0;i<2+ph;i++) addEnemy('poisonBarge',W.scroll+210+i*62,rnd(VW*0.37,VW*0.63),'river'); COMMS(ph>=1?'WICKED PANDA escalating — eventvwr UAC bypass detected for privilege escalation. 847 downstream orgs. Stop every barge.':'WICKED PANDA: Second PoisonBarge wave — bitsAdmin LOLBin staging payload. 847 orgs downstream.',col); }
   else if(n==='COZY BEAR')     { for(let i=0;i<4+ph;i++) addEnemy('tokenDrone',W.scroll+200+i*38,rnd(VW*0.34,VW*0.66),'air'); COMMS('COZY BEAR: Golden SAML forgery wave — every cloud tenant is now exposed. Signal — enforce zero privileges.',col); }
   else if(n==='LABYRINTH CHOLLIMA'){ for(let i=0;i<4+ph;i++) addEnemy('runnerBoat',W.scroll+200+i*36,rnd(VW*0.36,VW*0.64),'river'); COMMS('LABYRINTH CHOLLIMA: ExfilRunner fleet deploying — rundll32.exe active. Every boat that clears funds DPRK weapons.',col); }
-  else if(n==='CARBON SPIDER')  { for(let i=0;i<5+ph;i++) addEnemy('mine',W.scroll+180+i*30,rnd(VW*0.36,VW*0.64),'river'); COMMS('CARBON SPIDER: ZeroDayMine field live — BlackCat Rust variant deploying. 90 seconds to full corridor encryption.',col); }
+  else if(n==='CARBON SPIDER')  { for(let i=0;i<5+ph;i++) addEnemy('mine',W.scroll+180+i*30,rnd(VW*0.36,VW*0.64),'river'); COMMS('CARBON SPIDER: ZeroDayMine field live — BlackCat Rust variant deploying. 90 seconds to full threat vector encryption.',col); }
   else if(n==='FAMOUS CHOLLIMA'){ for(let i=0;i<4+ph;i++) addEnemy('tokenSkiff',W.scroll+200+i*40,rnd(VW*0.37,VW*0.63),'river'); COMMS('FAMOUS CHOLLIMA: OAuthSkiff drain fleet — mshta.exe active on all validators. $625M clearing in 6 minutes.',col); }
   else if(n==='VOODOO BEAR')   { for(let i=0;i<3+ph;i++) addEnemy('wiperJet',W.scroll+190+i*46,rnd(VW*0.34,VW*0.66),'air'); COMMS('VOODOO BEAR: WhisperGate wiper wave. No ransom. No decryption key. Stop them or the grid goes dark forever.',col); }
   else if(n==='STAR KITTEN')   { for(let i=0;i<3+ph;i++) addEnemy('nokNok',W.scroll+200+i*44,rnd(VW*0.34,VW*0.66),'air'); COMMS('STAR KITTEN: NokNok surveillance wave — mshta.exe on nuclear negotiator devices. IRGC watching in real time.',col); }
-  else                          { for(let i=0;i<4+ph;i++) addEnemy(ph===2?'wiperJet':'cryptoJet',W.scroll+180+i*40,rnd(VW*0.33,VW*0.67),'air'); addEnemy('armoredBarge',W.scroll+200,getRivW(W.scroll+200).cx,'river'); COMMS('ECLIPSE SPIDER: MOVEit zero-day — 160GB/minute across 2,600 orgs. Machine speed. Full platform or the corridor falls.',col); }
+  else                          { for(let i=0;i<4+ph;i++) addEnemy(ph===2?'wiperJet':'cryptoJet',W.scroll+180+i*40,rnd(VW*0.33,VW*0.67),'air'); addEnemy('armoredBarge',W.scroll+200,getRivW(W.scroll+200).cx,'river'); COMMS('ECLIPSE SPIDER: MOVEit zero-day — 160GB/minute across 2,600 orgs. Machine speed. Full platform or the threat vector falls.',col); }
   BANNER(TF('def_boss_phase',{name:BOSS.name,phase:ph+1}),2.2,BOSS.color);
   FLASH(BOSS.color,0.11);
   spawnBossFuelWave(true,2);
@@ -11694,6 +12701,8 @@ function defeatBoss(){
   // Staggered explosions with screen shake
   for(let i=0;i<4;i++) setTimeout(()=>{ burst(bx+rnd(-55,55),by+rnd(-32,32),55,['#fff',bc,'#ff7a00','#ffd84d'],270,1.25); SFX.bigExplode(); },i*180);
   SHAKE(5,1.2);
+  // v3: adversary-specific defeat stinger (per-boss leitmotif)
+  try{ if(typeof _playAdversaryDefeat==='function') _playAdversaryDefeat(bn); }catch(_){}
   stopBossMusic(); SFX.win(); // ambient continues through phase transitions — stopped only on game over/exit
   const pts=1900+phIdx*340; SCORE+=pts; phScore+=pts;
   const ad=ADV[bn];
@@ -17789,6 +18798,16 @@ try{
   window._startMenuBed = (vol)=>{ try{ _startMenuBed(vol); }catch(_){ } };
   window._stopMenuBed  = ()=>{ try{ _stopMenuBed(); }catch(_){ } };
   window._menuBedSetVolume = (v)=>{ try{ _menuBedSetVolume(v); }catch(_){ } };
+  window._startDefenseBed = (vol)=>{ try{ _startDefenseBed(vol); }catch(_){ } };
+  window._stopDefenseBed  = ()=>{ try{ _stopDefenseBed(); }catch(_){ } };
+  window._defenseBedSetVolume = (v)=>{ try{ _defenseBedSetVolume(v); }catch(_){ } };
+  window._defenseSfxRecipe = (name,opts)=>{ try{ _defenseSfxRecipe(name,opts||{}); }catch(_){ } };
+  window._startHuntBed = (vol)=>{ try{ _startHuntBed(vol); }catch(_){ } };
+  window._stopHuntBed  = ()=>{ try{ _stopHuntBed(); }catch(_){ } };
+  window._huntBedSetVolume = (v)=>{ try{ _huntBedSetVolume(v); }catch(_){ } };
+  window._huntSfxRecipe = (name,opts)=>{ try{ _huntSfxRecipe(name,opts||{}); }catch(_){ } };
+  window._playEnemyDestruction = (type)=>{ try{ return _playEnemyDestruction(type); }catch(_){ return false; } };
+  window._playAdversaryDefeat  = (name)=>{ try{ _playAdversaryDefeat(name); }catch(_){ } };
 }catch(_){ }
 
 </script>
@@ -20060,13 +21079,19 @@ class AudioEngine{
   }
   #se(){ return (typeof window!=='undefined' && window.SoundEngine) ? window.SoundEngine : null; }
   #sfx(){ return (typeof window!=='undefined' && window.SFX) ? window.SFX : null; }
-  // Every public method: prefer cinematic SoundEngine recipe; fall back to legacy #tone.
-  laser(){ const s=this.#sfx(); if(s){ try{ s.shot(); return; }catch(_){} }
+  #dfx(){ return (typeof window!=='undefined' && typeof window._defenseSfxRecipe==='function') ? window._defenseSfxRecipe : null; }
+  // v3: combat/impact events go through DEFENSE-FLAVORED recipes (industrial Zimmer palette).
+  // Module pickups keep their River-shared leitmotifs (module identity is cross-game).
+  // Falls back to legacy #tone only if neither cinematic engine is available.
+  laser(){ const d=this.#dfx(); if(d){ try{ d('def_laser'); return; }catch(_){} }
+    const s=this.#sfx(); if(s){ try{ s.shot(); return; }catch(_){} }
     this.#tone({type:"sawtooth",f0:900,f1:200,dur:0.12,gain:0.2}); }
-  boom(){ const s=this.#sfx(); if(s){ try{ s.bigExplode(); return; }catch(_){} }
+  boom(){ const d=this.#dfx(); if(d){ try{ d('def_boom'); return; }catch(_){} }
+    const s=this.#sfx(); if(s){ try{ s.bigExplode(); return; }catch(_){} }
     this.#tone({type:"square",f0:300,f1:30,dur:0.45,gain:0.32,filt:600});
     this.#tone({type:"sawtooth",f0:150,f1:20,dur:0.3,gain:0.18,delay:80}); }
-  playerHit(){ const s=this.#sfx(); if(s){ try{ s.playerHit(); return; }catch(_){} }
+  playerHit(){ const d=this.#dfx(); if(d){ try{ d('def_base_hit'); return; }catch(_){} }
+    const s=this.#sfx(); if(s){ try{ s.playerHit(); return; }catch(_){} }
     this.#tone({type:"triangle",f0:520,f1:80,dur:0.55,gain:0.3});
     this.#tone({type:"sawtooth",f0:300,f1:60,dur:0.4,gain:0.15,det:15}); }
   moduleUp(){ const s=this.#sfx(); if(s){ try{ s.module('Falcon Prevent'); return; }catch(_){} }
@@ -20084,23 +21109,31 @@ class AudioEngine{
   charlotte(){ const s=this.#sfx(); if(s){ try{ s.module('Charlotte AI'); return; }catch(_){} }
     this.#tone({type:"sine",f0:880,f1:1760,dur:0.25,gain:0.18});
     this.#tone({type:"sine",f0:440,f1:1320,dur:0.2,gain:0.12,delay:30}); }
-  ufoBeep(){ const s=this.#sfx(); if(s){ try{ s.comms(); return; }catch(_){} }
+  ufoBeep(){ const d=this.#dfx(); if(d){ try{ d('def_ufo_beep'); return; }catch(_){} }
+    const s=this.#sfx(); if(s){ try{ s.comms(); return; }catch(_){} }
     this.#tone({type:"sine",f0:720,f1:360,dur:0.07,gain:0.12}); }
-  levelUp(){ const s=this.#sfx(); if(s){ try{ s.win(); return; }catch(_){} }
+  levelUp(){ const d=this.#dfx(); if(d){ try{ d('def_wave_cleared'); return; }catch(_){} }
+    const s=this.#sfx(); if(s){ try{ s.win(); return; }catch(_){} }
     [0,120,240,400].forEach((d,i)=>this.#tone({type:"square",f0:220*Math.pow(1.5,i),dur:0.18,gain:0.18,delay:d})); }
-  bossRoar(){ const s=this.#sfx(); if(s){ try{ s.bossAlert(); return; }catch(_){} }
+  bossRoar(){ const d=this.#dfx(); if(d){ try{ d('def_boss_reveal'); return; }catch(_){} }
+    const s=this.#sfx(); if(s){ try{ s.bossAlert(); return; }catch(_){} }
     this.#tone({type:"sawtooth",f0:55,f1:18,dur:1.1,gain:0.5,filt:300});
     this.#tone({type:"square",f0:80,f1:25,dur:0.9,gain:0.3,det:30,delay:80}); }
-  exp(){ const s=this.#sfx(); if(s){ try{ s.pickup(); return; }catch(_){} }
+  exp(){ const d=this.#dfx(); if(d){ try{ d('def_exp_pickup'); return; }catch(_){} }
+    const s=this.#sfx(); if(s){ try{ s.pickup(); return; }catch(_){} }
     this.#tone({type:"sine",f0:440,f1:880,dur:0.3,gain:0.2});
     this.#tone({type:"triangle",f0:330,f1:660,dur:0.25,gain:0.15,delay:60}); }
-  corruptAlert(){ const s=this.#sfx(); if(s){ try{ s.alarm(2); return; }catch(_){} }
+  corruptAlert(){ const d=this.#dfx(); if(d){ try{ d('def_corrupt'); return; }catch(_){} }
+    const s=this.#sfx(); if(s){ try{ s.alarm(2); return; }catch(_){} }
     this.#tone({type:"square",f0:220,f1:110,dur:0.3,gain:0.25,filt:400}); }
-  gameOver(){ const s=this.#sfx(); if(s){ try{ s.over(); return; }catch(_){} }
+  gameOver(){ const d=this.#dfx(); if(d){ try{ d('def_base_fallen'); return; }catch(_){} }
+    const s=this.#sfx(); if(s){ try{ s.over(); return; }catch(_){} }
     [0,180,360,560].forEach((d,i)=>this.#tone({type:"sawtooth",f0:200-i*35,f1:40,dur:0.55,gain:0.32-i*0.04,filt:500,delay:d})); }
-  phaseTransition(){ const s=this.#sfx(); if(s){ try{ s.act(1); return; }catch(_){} }
+  phaseTransition(){ const d=this.#dfx(); if(d){ try{ d('def_phase'); return; }catch(_){} }
+    const s=this.#sfx(); if(s){ try{ s.act(1); return; }catch(_){} }
     [0,60,140,260].forEach((d,i)=>this.#tone({type:"sawtooth",f0:440-i*80,dur:0.4,gain:0.28,filt:600,delay:d})); }
-  socComm(){ const s=this.#sfx(); if(s){ try{ s.comms(); return; }catch(_){} }
+  socComm(){ const d=this.#dfx(); if(d){ try{ d('def_soc_chatter'); return; }catch(_){} }
+    const s=this.#sfx(); if(s){ try{ s.comms(); return; }catch(_){} }
     this.#tone({type:"sine",f0:660,f1:440,dur:0.08,gain:0.08}); }
   startBGM(){
     if(this.#bgm)return;
@@ -22936,6 +23969,9 @@ class Game{
             },delay)
           );
           this.#audio.bossRoar();
+          try{ if(typeof window!=='undefined' && window._playAdversaryDefeat)
+            window._playAdversaryDefeat(this.#boss?.phase?.shortName || 'DEFENSE_BOSS');
+          }catch(_){}
           const pts=CFG.SCORE_BOSS*this.#combo;
           this.#addScore(pts,bx,by-30,`🦅 BREACH PREVENTED +${pts}`);
         }
@@ -24508,41 +25544,57 @@ function stopHuntAmbient(){
   _huntAmbientFilter=null;
 }
 function beep({f0,f1,dur,type='square',gain=0.15,delay=0}){if(HUNT_MUTED||window._simMuted)return;try{const ac=HUNT_AC(),o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.setValueAtTime(f0,ac.currentTime+delay);if(f1)o.frequency.exponentialRampToValueAtTime(f1,ac.currentTime+delay+dur);g.gain.setValueAtTime(0,ac.currentTime+delay);g.gain.linearRampToValueAtTime(gain,ac.currentTime+delay+0.01);g.gain.exponentialRampToValueAtTime(0.0001,ac.currentTime+delay+dur);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+delay);o.stop(ac.currentTime+delay+dur);}catch(_){}}
-// v2 port: Hunt SFX routes through window.SoundEngine (Blade Runner 2049 detective flavor)
-// with legacy beep() calls preserved as fallback if SoundEngine is not yet initialized.
+// v3 port: Hunt SFX routes through _huntSfxRecipe (dedicated Blade Runner 2049 noir recipes).
+// Falls back to window.SFX (River recipes) when Hunt recipes aren't available, then legacy beep().
 const _hSE=()=>(typeof window!=='undefined' && window.SoundEngine) ? window.SoundEngine : null;
 const _hSFX=()=>(typeof window!=='undefined' && window.SFX) ? window.SFX : null;
+const _hHFX=()=>(typeof window!=='undefined' && typeof window._huntSfxRecipe==='function') ? window._huntSfxRecipe : null;
 const HUNT_SFX={
-  click(){ const s=_hSFX(); if(s){ try{ s.obj(); return; }catch(_){} }
+  click(){ const h=_hHFX(); if(h){ try{ h('hunt_select'); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.obj(); return; }catch(_){} }
     beep({f0:600,f1:900,dur:0.08,gain:0.12}); },
-  collect(){ const s=_hSFX(); if(s){ try{ s.pickup(); return; }catch(_){} }
+  collect(){ const h=_hHFX(); if(h){ try{ h('hunt_collect'); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.pickup(); return; }catch(_){} }
     [0,80,160].forEach((d,i)=>beep({f0:440+i*220,dur:0.12,type:'sine',gain:0.16,delay:d/1000})); },
-  correct(){ const s=_hSFX(); if(s){ try{ s.module('Just in Time Access'); return; }catch(_){} }
+  correct(){ const h=_hHFX(); if(h){ try{ h('hunt_evidence_link'); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.module('Just in Time Access'); return; }catch(_){} }
     [0,100,220,380].forEach((d,i)=>beep({f0:330*Math.pow(1.5,i),dur:0.16,type:'sine',gain:0.18,delay:d/1000})); },
-  wrong(){ const s=_hSFX(); if(s){ try{ s.alarm(2); return; }catch(_){} }
+  wrong(){ const h=_hHFX(); if(h){ try{ h('hunt_miss'); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.alarm(2); return; }catch(_){} }
     [0,60].forEach((d,i)=>beep({f0:200-i*60,dur:0.25,type:'sawtooth',gain:0.22,delay:d/1000})); },
-  intercept(){ const s=_hSFX(); if(s){ try{ s.module('Falcon OverWatch'); return; }catch(_){} }
+  intercept(){ const h=_hHFX(); if(h){ try{ h('hunt_intercept'); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.module('Falcon OverWatch'); return; }catch(_){} }
     [0,80,180,320,500].forEach((d,i)=>beep({f0:220*Math.pow(1.4,i),dur:0.22,type:'sine',gain:0.2,delay:d/1000})); },
-  breach(){ const s=_hSFX(); if(s){ try{ s.bridge(); return; }catch(_){} }
+  breach(){ const h=_hHFX(); if(h){ try{ h('hunt_breach'); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.bridge(); return; }catch(_){} }
     [0,80,160].forEach((d,i)=>beep({f0:300-i*60,f1:50,dur:0.4,type:'sawtooth',gain:0.25,delay:d/1000})); },
-  move(){ const s=_hSFX(); if(s){ try{ s.scan(); return; }catch(_){} }
+  move(){ const h=_hHFX(); if(h){ try{ h('hunt_move'); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.scan(); return; }catch(_){} }
     beep({f0:400,f1:800,dur:0.15,type:'sine',gain:0.1}); },
-  deploy(){ const s=_hSFX(); if(s){ try{ s.module('Fusion SOAR'); return; }catch(_){} }
+  deploy(){ const h=_hHFX(); if(h){ try{ h('hunt_deploy'); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.module('Fusion SOAR'); return; }catch(_){} }
     beep({f0:800,f1:1600,dur:0.2,type:'sine',gain:0.14}); },
-  pulse(){ const s=_hSFX(); if(s){ try{ s.comms(); return; }catch(_){} }
+  pulse(){ const h=_hHFX(); if(h){ try{ h('hunt_heartbeat'); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.comms(); return; }catch(_){} }
     beep({f0:110,f1:140,dur:0.55,type:'triangle',gain:0.028}); beep({f0:440,f1:520,dur:0.12,type:'sine',gain:0.018,delay:0.09}); },
-  dossier(){ const s=_hSFX(); if(s){ try{ s.obj(); return; }catch(_){} }
+  dossier(){ const h=_hHFX(); if(h){ try{ h('hunt_dossier'); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.obj(); return; }catch(_){} }
     [0,0.06,0.12].forEach((d,i)=>beep({f0:[240,360,520][i],dur:0.15,type:'triangle',gain:0.045,delay:d})); },
-  comms(){ const s=_hSFX(); if(s){ try{ s.comms(); return; }catch(_){} }
+  comms(){ const h=_hHFX(); if(h){ try{ h('hunt_comms'); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.comms(); return; }catch(_){} }
     beep({f0:880,f1:1220,dur:0.06,type:'sine',gain:0.04}); beep({f0:620,f1:760,dur:0.08,type:'triangle',gain:0.03,delay:0.07}); },
-  tension(level=1){ const s=_hSFX(); if(s){ try{ s.alarm(Math.max(1,Math.min(3,level|0))); return; }catch(_){} }
+  tension(level=1){ const h=_hHFX(); if(h){ try{ h('hunt_tension',{level:Math.max(1,Math.min(3,level|0))}); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.alarm(Math.max(1,Math.min(3,level|0))); return; }catch(_){} }
     const base=level>=3?150:level===2?185:230;
     beep({f0:base,f1:base*0.78,dur:0.24,type:'sawtooth',gain:0.05+level*0.01});
     beep({f0:base*1.9,f1:base*1.3,dur:0.16,type:'triangle',gain:0.026+level*0.006,delay:0.06}); },
-  lock(){ const s=_hSFX(); if(s){ try{ s.module('Just in Time Access'); return; }catch(_){} }
+  lock(){ const h=_hHFX(); if(h){ try{ h('hunt_lock'); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.module('Just in Time Access'); return; }catch(_){} }
     [0,0.08].forEach((d,i)=>beep({f0:i===0?520:780,f1:i===0?640:980,dur:0.14,type:'sine',gain:0.045,delay:d})); },
-  collectEnhanced(clueType){ const s=_hSFX(); if(s){
-      try{ // Map clue types to module leitmotifs for signature audio cues
+  collectEnhanced(clueType){
+    // Module leitmotif still drives identity per clue type (cross-game signature).
+    const s=_hSFX(); if(s){
+      try{
         const mod=clueType==='CREDENTIAL'?'Falcon Identity Protection'
                  :clueType==='MALWARE'?'Falcon Prevent'
                  :clueType==='EXFIL'?'Falcon Data Protection'
@@ -24552,17 +25604,20 @@ const HUNT_SFX={
     const base=clueType==='CREDENTIAL'?550:clueType==='MALWARE'?440:clueType==='EXFIL'?660:500;
     [0,80,180,320].forEach((d,i)=>beep({f0:base*Math.pow(1.35,i),f1:base*Math.pow(1.35,i)*1.2,dur:0.14,type:'sine',gain:0.18,delay:d/1000}));
     beep({f0:base*3,f1:base*4,dur:0.22,type:'triangle',gain:0.1,delay:0.38}); },
-  deployEnhanced(){ const s=_hSFX(); if(s){ try{ s.module('Fusion SOAR'); return; }catch(_){} }
+  deployEnhanced(){ const h=_hHFX(); if(h){ try{ h('hunt_deploy'); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.module('Fusion SOAR'); return; }catch(_){} }
     beep({f0:600,f1:1200,dur:0.12,type:'sine',gain:0.16});
     beep({f0:900,f1:1800,dur:0.18,type:'sine',gain:0.14,delay:0.12});
     beep({f0:1200,f1:2400,dur:0.22,type:'triangle',gain:0.10,delay:0.28}); },
-  victoryFanfare(){ const s=_hSFX(); if(s){ try{ s.win(); return; }catch(_){} }
+  victoryFanfare(){ const h=_hHFX(); if(h){ try{ h('hunt_case_closed'); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.win(); return; }catch(_){} }
     [0,120,260,420,620].forEach((d,i)=>{
       const f=[440,550,660,880,1100][i];
       beep({f0:f,f1:f*1.25,dur:0.28,type:'sine',gain:0.22,delay:d/1000});
     });
     beep({f0:1760,f1:2200,dur:0.5,type:'triangle',gain:0.15,delay:0.72}); },
-  breachAlarm(){ const s=_hSFX(); if(s){ try{ s.alarm(3); return; }catch(_){} }
+  breachAlarm(){ const h=_hHFX(); if(h){ try{ h('hunt_red_alert'); return; }catch(_){} }
+    const s=_hSFX(); if(s){ try{ s.alarm(3); return; }catch(_){} }
     [0,0.3,0.6,0.9].forEach(d=>beep({f0:440,f1:220,dur:0.25,type:'sawtooth',gain:0.18,delay:d}));
     [0.15,0.45,0.75].forEach(d=>beep({f0:330,f1:165,dur:0.2,type:'sawtooth',gain:0.12,delay:d})); },
 };
@@ -24764,7 +25819,7 @@ const RADIO_MSGS={
     {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"GTR 2026: Supply chain attacks increased 200 percent year-over-year. One compromised vendor library becomes a simultaneous weapon against every downstream organisation that trusts it."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"GTR 2026: Charlotte AI reduced alert triage time by 80 percent in enterprise SOC environments. At one trillion events per week, human-only triage is not a failure mode — it is a mathematical impossibility."},
     // Cinematic/dramatic closes
-    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"The adversaries in this corridor are real. Every TTP you are seeing — the LOLBins, the credential theft, the OAuth abuse — these techniques were caught in live customer networks by the CrowdStrike OverWatch team."},
+    {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"The adversaries in this threat vector are real. Every TTP you are seeing — the LOLBins, the credential theft, the OAuth abuse — these techniques were caught in live customer networks by the CrowdStrike OverWatch team."},
     {op:'ADAM MEYERS',cs:'INTEL-ACTUAL',col:'#FF8D39',msg:"The adversary does not know they have been detected. That asymmetry is your greatest advantage. OverWatch maintains it. Use it before they change their tradecraft."},
     {op:'DIRECTOR OVERWATCH',cs:'OVERWATCH-1',col:'#42d9ff',msg:"You are operating on intelligence gathered from 230 named adversaries across 29 countries. This is not a simulation of the threat landscape. This is CrowdStrike's actual order of battle."},
   ],
