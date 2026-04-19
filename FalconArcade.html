@@ -96,6 +96,10 @@ html, body { width:100%; height:100%; background:#020308; overflow:hidden; font-
    card a press-down state so clicks feel responsive on touch + mouse alike. */
 .card { position:relative; width:min(320px,90vw); background:rgba(4,8,12,0.94); border:1px solid rgba(224,0,60,0.35); border-radius:2px; cursor:pointer; overflow:hidden; transition:border-color 220ms var(--ease-emil-out,cubic-bezier(0.23,1,0.32,1)),transform 180ms var(--ease-emil-out,cubic-bezier(0.23,1,0.32,1)),box-shadow 220ms var(--ease-emil-out,cubic-bezier(0.23,1,0.32,1)); text-decoration:none; color:inherit; display:flex; flex-direction:column; }
 .card:active { transform:translateY(-2px) scale(0.985); transition-duration:120ms; }
+/* Closure pass 2.B: keyboard focus ring — honors card accent color, respects
+   Emil's rule that focus-visible must be visible but not shouty. */
+.card:focus-visible { outline:2px solid var(--card-color,#e0003c); outline-offset:4px; box-shadow:0 0 24px rgba(224,0,60,0.28),0 0 48px rgba(224,0,60,0.12); }
+.card:focus:not(:focus-visible) { outline:none; }
 /* Emil: gate hover behind hover-capable + fine pointer so touch devices don't
    sticky-hover on tap. Touch gets the :active press state instead. */
 @media (hover: hover) and (pointer: fine) {
@@ -1296,11 +1300,11 @@ const TRANSLATIONS = {
     subtitle:'Choose your operation · Real adversary intelligence · Unified Falcon platform',
     deploy:'DEPLOY NOW',
     c1eye:'Operation 01 · River Threat Vector', c1name:'CrowdStrike:<br>Incident Zero',
-    c1desc:'Pilot Falcon through 10 adversary campaigns. Detect · Contain · Mitigate · Eliminate. Named bosses, real TTPs, unified platform wins.',
+    c1desc:'Ten adversary campaigns. Named bosses, real TTPs. Fly Falcon through every one.',
     c2eye:'Operation 02 · Wave Defense', c2name:'CrowdStrike:<br>Falcon Defense',
-    c2desc:'Defend the perimeter against 10 waves of named adversary threats. Deploy Falcon modules. Stop every attack vector.',
+    c2desc:'Ten waves. Named adversaries. Hold the perimeter.',
     c3eye:'Operation 03 · Global Network Hunt', c3name:'CrowdStrike:<br>Threat Hunt',
-    c3desc:'You ARE the OverWatch hunter. Chase 9 named adversaries across a live global cyber network. Collect real TTP evidence.',
+    c3desc:'You ARE the hunter. Chase nine adversaries across a live global network.',
     podZero:'INCIDENT ZERO', podDef:'DEFENSE', podHunt:'THREAT HUNT',
     dash_chip1_k:'Watch', dash_chip1_v:'Spectators can read the action in seconds.',
     dash_chip2_k:'Play', dash_chip2_v:'Three fast demos, one Falcon platform story.',
@@ -1497,8 +1501,8 @@ const TRANSLATIONS = {
     iz_known_ttps:'KNOWN TTPs: ',
     iz_boss_module:'Equip the correct Falcon module for ×2.2 DAMAGE against this adversary.',
     iz_max_streak:'Max streak multiplier: ×',
-    iz_complete:'COMPLETE',
-    iz_failed:'FAILED',
+    iz_complete:'BREACH CONTAINED',
+    iz_failed:'BREACH COMPLETED',
     iz_next_phase:'PRESS SPACE — NEXT PHASE',
     iz_final_phase:'PRESS SPACE — FINAL PHASE',
     iz_loss_line:'Adversary objective achieved. The threat vector has been lost.',
@@ -1685,6 +1689,14 @@ const TRANSLATIONS = {
     def_defending:'DEFENDING',
     def_wave_label:'WAVE',
     def_chain:'CHAIN',
+    def_sb_waves:'WAVES',
+    def_sb_combo:'PEAK CHAIN',
+    def_sb_kills:'KILLS',
+    def_pb_delta:'PB +{delta}',
+    iz_sb_phase_reached:'PHASE: {phase}',
+    rank_local_1:'LOCAL #1',
+    rank_local_2:'LOCAL #2',
+    rank_local_3:'LOCAL #3',
     def_boss_counter_hint:'USE {mod} FOR 2.2× DAMAGE',
     def_network_initializing:'NETWORK INITIALIZING',
     def_threat_active:'THREAT ACTIVE',
@@ -1802,9 +1814,9 @@ const TRANSLATIONS = {
     iz_banner_telemetry_falling:'⚠ TELEMETRY FALLING — green FUEL barges are now mission-critical',
     iz_comms_telemetry_falling:'Telemetry reserve dropping. Plot your next refuel run now.',
     iz_banner_low_telemetry:'⚠ LOW TELEMETRY — refuel immediately or integrity loss will begin',
-    iz_comms_low_telemetry:'Critical telemetry threshold. Abort risky lines and intercept fuel barges now.',
+    iz_comms_low_telemetry:'Telemetry critical. Intercept supply now.',
     iz_banner_telemetry_emergency:'⚠ TELEMETRY EMERGENCY — final reserve active',
-    iz_comms_telemetry_emergency:'Emergency reserve active. One more lapse and Falcon starts taking damage.',
+    iz_comms_telemetry_emergency:'Reserve active. Next lapse = damage.',
     iz_comms_emergency_supply_final:'Emergency telemetry supply deployed — last reserve window',
     iz_comms_emergency_supply_critical:'Emergency telemetry supply deployed — critical level',
     iz_comms_fuel_critical:'FUEL CRITICAL — emergency supply barge deployed',
@@ -1916,11 +1928,11 @@ const TRANSLATIONS = {
     subtitle:'Escolha sua operação · Inteligência real de adversários · Plataforma Falcon unificada',
     deploy:'ATIVAR AGORA',
     c1eye:'Operação 01 · Vetor de Ameaça do Rio', c1name:'CrowdStrike:<br>Incidente Zero',
-    c1desc:'Pilote o Falcon em 10 campanhas de adversários. Detecte · Contenha · Mitigue · Elimine.',
+    c1desc:'Dez campanhas de adversários. Chefes reais, TTPs reais. Pilote o Falcon em todas.',
     c2eye:'Operação 02 · Defesa de Ondas', c2name:'CrowdStrike:<br>Falcon Defense',
-    c2desc:'Defenda o perímetro contra 10 ondas de ameaças. Acione módulos Falcon.',
+    c2desc:'Dez ondas. Adversários reais. Mantenha o perímetro.',
     c3eye:'Operação 03 · Caça na Rede Global', c3name:'CrowdStrike:<br>Threat Hunt',
-    c3desc:'Você É o caçador OverWatch. Persiga 9 adversários em uma rede cibernética global ao vivo.',
+    c3desc:'Você É o caçador. Persiga nove adversários em uma rede global ao vivo.',
     podZero:'INCIDENTE ZERO', podDef:'DEFESA', podHunt:'CAÇA A AMEAÇAS',
     dash_chip1_k:'Assistir', dash_chip1_v:'Quem está perto entende a ação em poucos segundos.',
     dash_chip2_k:'Jogar', dash_chip2_v:'Três demos rápidas, uma história única da plataforma Falcon.',
@@ -2115,8 +2127,8 @@ const TRANSLATIONS = {
     iz_known_ttps:'TTPs CONHECIDOS: ',
     iz_boss_module:'Equipe o módulo Falcon correto para causar ×2.2 de DANO contra este adversário.',
     iz_max_streak:'Multiplicador máximo de sequência: ×',
-    iz_complete:'CONCLUÍDO',
-    iz_failed:'FALHOU',
+    iz_complete:'INVASÃO CONTIDA',
+    iz_failed:'INVASÃO CONCLUÍDA',
     iz_next_phase:'ESPAÇO — PRÓXIMA FASE',
     iz_final_phase:'ESPAÇO — FASE FINAL',
     iz_loss_line:'O adversário alcançou o objetivo. O vetor de ameaça foi perdido.',
@@ -2302,6 +2314,14 @@ const TRANSLATIONS = {
     def_defending:'DEFENDENDO',
     def_wave_label:'ONDA',
     def_chain:'COMBO',
+    def_sb_waves:'ONDAS',
+    def_sb_combo:'PICO DE COMBO',
+    def_sb_kills:'ABATES',
+    def_pb_delta:'PB +{delta}',
+    iz_sb_phase_reached:'FASE: {phase}',
+    rank_local_1:'LOCAL #1',
+    rank_local_2:'LOCAL #2',
+    rank_local_3:'LOCAL #3',
     def_boss_counter_hint:'USE {mod} PARA 2.2× DE DANO',
     def_network_initializing:'REDE INICIALIZANDO',
     def_threat_active:'AMEAÇA ATIVA',
@@ -2418,9 +2438,9 @@ const TRANSLATIONS = {
     iz_banner_telemetry_falling:'⚠ TELEMETRIA CAINDO — barcaças verdes de COMBUSTÍVEL agora são críticas',
     iz_comms_telemetry_falling:'Reserva de telemetria caindo. Planeje sua próxima rota de reabastecimento agora.',
     iz_banner_low_telemetry:'⚠ TELEMETRIA BAIXA — reabasteça agora ou a perda de integridade vai começar',
-    iz_comms_low_telemetry:'Limite crítico de telemetria. Abandone linhas arriscadas e intercepte barcaças de combustível agora.',
+    iz_comms_low_telemetry:'Telemetria crítica. Intercepte suprimento agora.',
     iz_banner_telemetry_emergency:'⚠ EMERGÊNCIA DE TELEMETRIA — reserva final ativa',
-    iz_comms_telemetry_emergency:'Reserva de emergência ativa. Mais uma falha e o Falcon começa a sofrer dano.',
+    iz_comms_telemetry_emergency:'Reserva ativa. Próxima falha = dano.',
     iz_comms_emergency_supply_final:'Suprimento emergencial de telemetria lançado — janela final de reserva',
     iz_comms_emergency_supply_critical:'Suprimento emergencial de telemetria lançado — nível crítico',
     iz_comms_fuel_critical:'COMBUSTÍVEL CRÍTICO — barcaça de suprimento emergencial lançada',
@@ -2532,11 +2552,11 @@ const TRANSLATIONS = {
     subtitle:'Elige tu operación · Inteligencia real de adversarios · Plataforma Falcon unificada',
     deploy:'DESPLEGAR AHORA',
     c1eye:'Operación 01 · Vector de Amenaza del Río', c1name:'CrowdStrike:<br>Incidente Cero',
-    c1desc:'Pilota Falcon en 10 campañas. Detecta · Contiene · Mitiga · Elimina. Jefes nombrados, TTPs reales.',
+    c1desc:'Diez campañas. Jefes nombrados, TTPs reales. Pilota Falcon en todas.',
     c2eye:'Operación 02 · Defensa de Olas', c2name:'CrowdStrike:<br>Falcon Defense',
-    c2desc:'Defiende el perímetro contra 10 olas de amenazas. Despliega módulos Falcon.',
+    c2desc:'Diez olas. Adversarios nombrados. Mantén el perímetro.',
     c3eye:'Operación 03 · Caza de Red Global', c3name:'CrowdStrike:<br>Threat Hunt',
-    c3desc:'Tú ERES el cazador OverWatch. Persigue 9 adversarios en una red cibernética global en vivo.',
+    c3desc:'Tú ERES el cazador. Persigue nueve adversarios en una red global en vivo.',
     podZero:'INCIDENTE CERO', podDef:'DEFENSA', podHunt:'CAZA DE AMENAZAS',
     dash_chip1_k:'Ver', dash_chip1_v:'Los espectadores entienden la acción en segundos.',
     dash_chip2_k:'Jugar', dash_chip2_v:'Tres demos rápidas, una sola historia de la plataforma Falcon.',
@@ -2731,8 +2751,8 @@ const TRANSLATIONS = {
     iz_known_ttps:'TTPs CONOCIDOS: ',
     iz_boss_module:'Equipa el módulo Falcon correcto para causar ×2.2 de DAÑO contra este adversario.',
     iz_max_streak:'Multiplicador máximo de racha: ×',
-    iz_complete:'COMPLETO',
-    iz_failed:'FALLÓ',
+    iz_complete:'INTRUSIÓN CONTENIDA',
+    iz_failed:'INTRUSIÓN CONSUMADA',
     iz_next_phase:'ESPACIO — SIGUIENTE FASE',
     iz_final_phase:'ESPACIO — FASE FINAL',
     iz_loss_line:'El adversario logró su objetivo. El vector de amenaza se ha perdido.',
@@ -2918,6 +2938,14 @@ const TRANSLATIONS = {
     def_defending:'DEFENDIENDO',
     def_wave_label:'OLA',
     def_chain:'COMBO',
+    def_sb_waves:'OLAS',
+    def_sb_combo:'PICO DE COMBO',
+    def_sb_kills:'BAJAS',
+    def_pb_delta:'PB +{delta}',
+    iz_sb_phase_reached:'FASE: {phase}',
+    rank_local_1:'LOCAL #1',
+    rank_local_2:'LOCAL #2',
+    rank_local_3:'LOCAL #3',
     def_boss_counter_hint:'USA {mod} PARA 2.2× DAÑO',
     def_network_initializing:'RED INICIALIZÁNDOSE',
     def_threat_active:'AMENAZA ACTIVA',
@@ -3034,9 +3062,9 @@ const TRANSLATIONS = {
     iz_banner_telemetry_falling:'⚠ TELEMETRÍA BAJANDO — las barcazas verdes de COMBUSTIBLE ahora son críticas',
     iz_comms_telemetry_falling:'La reserva de telemetría está bajando. Planea ahora tu próxima ruta de recarga.',
     iz_banner_low_telemetry:'⚠ TELEMETRÍA BAJA — recarga ya o comenzará la pérdida de integridad',
-    iz_comms_low_telemetry:'Umbral crítico de telemetría. Abandona líneas arriesgadas e intercepta barcazas de combustible ahora.',
+    iz_comms_low_telemetry:'Telemetría crítica. Intercepta suministro ahora.',
     iz_banner_telemetry_emergency:'⚠ EMERGENCIA DE TELEMETRÍA — reserva final activa',
-    iz_comms_telemetry_emergency:'Reserva de emergencia activa. Un fallo más y Falcon empezará a sufrir daño.',
+    iz_comms_telemetry_emergency:'Reserva activa. Próximo fallo = daño.',
     iz_comms_emergency_supply_final:'Suministro de telemetría de emergencia desplegado — ventana final de reserva',
     iz_comms_emergency_supply_critical:'Suministro de telemetría de emergencia desplegado — nivel crítico',
     iz_comms_fuel_critical:'COMBUSTIBLE CRÍTICO — barcaza de suministro de emergencia desplegada',
@@ -3148,11 +3176,11 @@ const TRANSLATIONS = {
     subtitle:'オペレーションを選択 · 実際の攻撃者のインテリジェンス · 統合Falconプラットフォーム',
     deploy:'今すぐ展開',
     c1eye:'オペレーション 01 · リバー脅威ベクトル', c1name:'CrowdStrike:<br>インシデントゼロ',
-    c1desc:'10の攻撃者キャンペーンでFalconを操縦。検出·封じ込め·軽減·排除。',
+    c1desc:'10の攻撃者キャンペーン。実在のTTPと名のある脅威。全てをFalconで飛ぶ。',
     c2eye:'オペレーション 02 · ウェーブディフェンス', c2name:'CrowdStrike:<br>Falcon Defense',
-    c2desc:'10ウェーブの脅威から境界を防衛。Falconモジュールを展開せよ。',
+    c2desc:'10ウェーブ。名のある脅威。境界を守れ。',
     c3eye:'オペレーション 03 · グローバルネットワークハント', c3name:'CrowdStrike:<br>Threat Hunt',
-    c3desc:'あなたはOverWatchハンター。ライブのグローバルサイバーネットワークで9人の攻撃者を追跡せよ。',
+    c3desc:'あなたがハンターだ。9人の攻撃者をグローバルネットワークで追跡せよ。',
     podZero:'インシデントゼロ', podDef:'ディフェンス', podHunt:'スレットハント',
     dash_chip1_k:'観戦', dash_chip1_v:'観客は数秒で状況を理解できます。',
     dash_chip2_k:'体験', dash_chip2_v:'3つの短いデモでFalconプラットフォームの物語を伝えます。',
@@ -3347,8 +3375,8 @@ const TRANSLATIONS = {
     iz_known_ttps:'既知のTTP: ',
     iz_boss_module:'この敵対者には正しいFalconモジュールで ×2.2 ダメージを与えられます。',
     iz_max_streak:'最大ストリーク倍率: ×',
-    iz_complete:'完了',
-    iz_failed:'失敗',
+    iz_complete:'侵入阻止',
+    iz_failed:'侵入完遂',
     iz_next_phase:'スペース — 次のフェーズ',
     iz_final_phase:'スペース — 最終フェーズ',
     iz_loss_line:'敵対者が目的を達成しました。脅威ベクトルは失われました。',
@@ -3531,6 +3559,14 @@ const TRANSLATIONS = {
     def_defending:'防衛中',
     def_wave_label:'ウェーブ',
     def_chain:'コンボ',
+    def_sb_waves:'ウェーブ',
+    def_sb_combo:'最大コンボ',
+    def_sb_kills:'撃破数',
+    def_pb_delta:'自己ベスト +{delta}',
+    iz_sb_phase_reached:'到達: {phase}',
+    rank_local_1:'ローカル #1',
+    rank_local_2:'ローカル #2',
+    rank_local_3:'ローカル #3',
     def_boss_counter_hint:'{mod} で2.2倍ダメージ',
     def_network_initializing:'ネットワーク初期化中',
     def_threat_active:'脅威アクティブ',
@@ -3647,9 +3683,9 @@ const TRANSLATIONS = {
     iz_banner_telemetry_falling:'⚠ テレメトリ低下 — 緑のFUELバージが最重要',
     iz_comms_telemetry_falling:'テレメトリ備蓄が低下中。次の補給ルートを今すぐ計画してください。',
     iz_banner_low_telemetry:'⚠ 低テレメトリ — 直ちに補給しないと整合性損失が始まります',
-    iz_comms_low_telemetry:'テレメトリが危険域です。危険なラインを離れ、燃料バージを迎撃してください。',
+    iz_comms_low_telemetry:'テレメトリ危機。補給を迎撃せよ。',
     iz_banner_telemetry_emergency:'⚠ テレメトリ緊急 — 最終予備が有効',
-    iz_comms_telemetry_emergency:'緊急予備が有効です。もう一度失うとFalconがダメージを受け始めます。',
+    iz_comms_telemetry_emergency:'予備稼働中。次の失陥=損傷。',
     iz_comms_emergency_supply_final:'緊急テレメトリ補給を展開 — 最終予備ウィンドウ',
     iz_comms_emergency_supply_critical:'緊急テレメトリ補給を展開 — 危機レベル',
     iz_comms_fuel_critical:'燃料危機 — 緊急補給バージを展開',
@@ -7710,6 +7746,22 @@ document.addEventListener('DOMContentLoaded', () => {
     try{ window.SoundEngine?.stinger?.fire('zimmer_card_commit'); }catch(_){}
     launchGame('game-hunt-container', initGameHunt);
   });
+  // Closure pass 2.A: first-hover piano chime — one note per card per session.
+  // Gated by dataset flag so mouse jitter / re-entry never retriggers. Skipped
+  // on touch (no mouse hover semantics) and when audio is globally muted.
+  ['card-zero','card-defense','card-hunt'].forEach(id=>{
+    const el=document.getElementById(id); if(!el) return;
+    el.addEventListener('mouseenter', ev=>{
+      try{
+        if(el.dataset.everHovered==='1') return;
+        if(ev && ev.pointerType==='touch') return;
+        if(window._simMuted) return;
+        if(typeof MUTED!=='undefined' && MUTED) return;
+        el.dataset.everHovered='1';
+        window.SoundEngine?.stinger?.fire('card_first_hover');
+      }catch(_){}
+    }, {passive:true});
+  });
   document.getElementById('dashboard-rankings-btn')?.addEventListener('click', () => {
     ArcadeSonic.focus();
     openDashboardRankings();
@@ -9515,7 +9567,15 @@ function _restartBlipInterval(){
 
 function startAmbient(){
   if(_ambientRunning) return; // already running — guard on own flag, not external _activeGameId
-  if(_ambientGain) return;   // safety fallback
+  // HOTFIX 2026-04-19: self-heal a stuck-state leak. If a prior startAmbient() threw
+  // AFTER assigning _ambientGain but BEFORE setting _ambientRunning=true, the old
+  // "if(_ambientGain) return;" guard would lock out every subsequent call permanently
+  // (user's booth feedback: "bg is not working on river"). Clear the leaked ref and
+  // proceed with a fresh init instead of bailing.
+  if(_ambientGain){
+    try{ _ambientGain.disconnect(); }catch(_){}
+    _ambientGain=null;
+  }
   // Silence during attract simulations. We do NOT set _ambientRunning, so when the user
   // enters a real game the next startAmbient() call proceeds cleanly (state is untouched).
   if(window._simMuted) return;
@@ -9621,7 +9681,16 @@ function startAmbient(){
     // SDD spec-river-cinematic-audio v1.1: start the combat bed muted behind _combatGain.
     // _applyMusicIntensity() will crossfade it in as enemies/boss escalate.
     try{ _startCombatBed(); }catch(_){}
-  }catch(_){}
+  }catch(_){
+    // HOTFIX 2026-04-19: on ANY init failure, wipe the partial state so the next call
+    // can self-heal cleanly. Without this, _ambientGain stays non-null, _ambientRunning
+    // stays false, and every subsequent startAmbient() call bailed via the old guard.
+    try{ if(_ambientGain) _ambientGain.disconnect(); }catch(_){}
+    _ambientGain=null;
+    try{ if(_tensionGain) _tensionGain.disconnect(); }catch(_){}
+    _tensionGain=null;
+    _ambientRunning=false;
+  }
 }
 
 // ─── Distant percussion scheduler (Zimmer sparse-hit texture) ────────────
@@ -10248,6 +10317,17 @@ let _defBrassOscA=null, _defBrassOscB=null, _defBrassFilt=null;
 let _defBrassPulseLfo=null, _defBrassFiltLfo=null, _defBrassSeqTimer=null;
 let _defStringsOscs=[], _defStringsGain=null, _defStringsTrem=null;
 let _defPulseTimer=null, _defSwellTimer=null, _defPingTimer=null;
+// ── Zimmer v2: "Agent of Chaos" cello crescendo layer + wave-intensity modulation ──
+// The cello is the FOREGROUND motif that was missing from Phase 1. Two detuned saws
+// sweep A1→A2 over 8s, then silence 8s, repeat. Filter cutoff rises with the pitch
+// to open the tone as it climbs (450→1100Hz). Master gain modulated by
+// _defWaveIntensity (0..1) so late waves push the cello louder. This is the bed
+// element that makes Defense READ as Zimmer rather than just "textured industrial."
+let _defCelloOscA=null, _defCelloOscB=null, _defCelloFilt=null, _defCelloGain=null;
+let _defCelloTimer=null, _defCelloCurrentCycle=null;
+let _defWaveIntensity=0; // 0..1, climbs with this.#waveIdx / (PHASES.length-1)
+let _defBrassStackGain=null; // retained ref so intensity changes can modulate the brass bus
+let _defCelloBaseGain=0.09;   // target peak before intensity scaling
 
 function _startDefenseBed(volume){
   if(_defenseBedActive) { try{ _defenseBedSetVolume(volume); }catch(_){} return; }
@@ -10291,6 +10371,7 @@ function _startDefenseBed(volume){
   const filtBreath=ac.createGain(); filtBreath.gain.value=95;
   _defBrassFiltLfo.connect(filtBreath); filtBreath.connect(_defBrassFilt.frequency);
   const brassStack=ac.createGain(); brassStack.gain.value=0.42;
+  _defBrassStackGain=brassStack; // Zimmer v2 — retained so intensity hook can modulate live
   _defBrassOscA.connect(_defBrassFilt); _defBrassOscB.connect(_defBrassFilt);
   _defBrassFilt.connect(brassStack); brassStack.connect(_defenseBedGain);
   _defBrassOscA.start(now); _defBrassOscB.start(now);
@@ -10409,6 +10490,65 @@ function _startDefenseBed(volume){
   };
   _defPingTimer=setTimeout(schedulePing, BEAT_MS*2);
 
+  // ── 7) Zimmer v2: "Agent of Chaos" cello crescendo — foreground motif ─
+  // Two detuned saw voices, A1→A2 over 8s, 8s silence, loop.
+  // Filter cutoff rides up with the pitch to open the tone. Gain modulated
+  // by wave-intensity so early waves are restrained, late waves push hard.
+  // reduced-motion: skip this layer (leaves the sub/brass/strings intact).
+  const _prefersRM = (typeof window._prefersReducedMotion==='function') ? !!window._prefersReducedMotion() : false;
+  if(!_prefersRM){
+    _defCelloFilt=ac.createBiquadFilter();
+    _defCelloFilt.type='lowpass';
+    _defCelloFilt.frequency.value=450; _defCelloFilt.Q.value=3.2;
+    _defCelloGain=ac.createGain();
+    // Base gain × wave-intensity multiplier (0.6 + 0.8·v)
+    const _celloMul = 0.6 + 0.8 * Math.max(0,Math.min(1,_defWaveIntensity));
+    _defCelloGain.gain.value=_defCelloBaseGain * _celloMul;
+    _defCelloFilt.connect(_defCelloGain); _defCelloGain.connect(_defenseBedGain);
+
+    _defCelloOscA=ac.createOscillator(); _defCelloOscA.type='sawtooth';
+    _defCelloOscB=ac.createOscillator(); _defCelloOscB.type='sawtooth';
+    _defCelloOscA.detune.value=-4; _defCelloOscB.detune.value=+4;
+    _defCelloOscA.connect(_defCelloFilt); _defCelloOscB.connect(_defCelloFilt);
+
+    // Schedule one crescendo cycle: ramp pitch + filter, then drop gain, then silence.
+    const _scheduleCelloCycle = (tStart)=>{
+      if(!_defenseBedActive||!AC_CTX) return;
+      try{
+        const riseDur=8.0;
+        // Pitch: A1 → A2 (and detuned pair)
+        _defCelloOscA.frequency.cancelScheduledValues(tStart);
+        _defCelloOscB.frequency.cancelScheduledValues(tStart);
+        _defCelloOscA.frequency.setValueAtTime(55.00, tStart);
+        _defCelloOscB.frequency.setValueAtTime(55.60, tStart);
+        _defCelloOscA.frequency.exponentialRampToValueAtTime(110.00, tStart+riseDur);
+        _defCelloOscB.frequency.exponentialRampToValueAtTime(111.20, tStart+riseDur);
+        // Filter cutoff: 450 → 1100 Hz
+        _defCelloFilt.frequency.cancelScheduledValues(tStart);
+        _defCelloFilt.frequency.setValueAtTime(450, tStart);
+        _defCelloFilt.frequency.exponentialRampToValueAtTime(1100, tStart+riseDur);
+        // Gain envelope: attack=1.5s (fade-in with the rise), hold 5.5s, release 1.0s
+        const mul = 0.6 + 0.8 * Math.max(0,Math.min(1,_defWaveIntensity));
+        const peak = Math.max(0.0005, _defCelloBaseGain * mul);
+        _defCelloGain.gain.cancelScheduledValues(tStart);
+        _defCelloGain.gain.setValueAtTime(0.0001, tStart);
+        _defCelloGain.gain.exponentialRampToValueAtTime(peak, tStart+1.5);
+        _defCelloGain.gain.setValueAtTime(peak, tStart+7.0);
+        _defCelloGain.gain.exponentialRampToValueAtTime(0.0001, tStart+riseDur);
+      }catch(_){}
+    };
+    // Start the first cycle 0.6s into the bed (let the sub + ostinato establish)
+    _scheduleCelloCycle(now+0.6);
+    // Oscillators start ONCE and are frequency-ramped repeatedly; gain envelopes re-arm each cycle.
+    try{ _defCelloOscA.start(now); _defCelloOscB.start(now); }catch(_){}
+    // Re-arm loop every 16s (8s rise + 8s silence)
+    const CYCLE_MS = 16000;
+    _defCelloTimer = setInterval(()=>{
+      if(!_defenseBedActive||!AC_CTX) return;
+      try{ _scheduleCelloCycle(AC_CTX.currentTime+0.02); }catch(_){}
+    }, CYCLE_MS);
+  }
+
   _defenseBedActive=true;
 }
 
@@ -10421,19 +10561,75 @@ function _stopDefenseBed(){
   if(_defPulseTimer){ clearInterval(_defPulseTimer); _defPulseTimer=null; }
   if(_defSwellTimer){ clearTimeout(_defSwellTimer); _defSwellTimer=null; }
   if(_defPingTimer){ clearTimeout(_defPingTimer); _defPingTimer=null; }
+  // Zimmer v2: cello cycle timer clears with the same pattern as the swell/ping timers.
+  if(_defCelloTimer){ clearInterval(_defCelloTimer); _defCelloTimer=null; }
+  // HOTFIX 2026-04-19: snapshot module-level node refs into locals BEFORE the 1s
+  // teardown timer fires. Previously the setTimeout captured the module vars by
+  // closure, so if _startDefenseBed ran again within 1s, the stale timer would
+  // stop() + disconnect() the NEW nodes (user's booth feedback: "Zimmer bed not
+  // playing in Defense" after rapid game-swap).
+  const _defSubOscSnap=_defSubOsc, _defSubLfoSnap=_defSubLfo;
+  const _defBrassOscASnap=_defBrassOscA, _defBrassOscBSnap=_defBrassOscB;
+  const _defBrassPulseLfoSnap=_defBrassPulseLfo, _defBrassFiltLfoSnap=_defBrassFiltLfo;
+  const _defStringsTremSnap=_defStringsTrem;
+  const _defStringsOscsSnap=_defStringsOscs;
+  const _defBrassFiltSnap=_defBrassFilt;
+  const _defStringsGainSnap=_defStringsGain;
+  const _defenseBedGainSnap=_defenseBedGain;
+  const _defBrassStackGainSnap=_defBrassStackGain;
+  // Zimmer v2 cello snapshot — same race-safety pattern.
+  const _defCelloOscASnap=_defCelloOscA, _defCelloOscBSnap=_defCelloOscB;
+  const _defCelloFiltSnap=_defCelloFilt, _defCelloGainSnap=_defCelloGain;
+  // Null the module vars IMMEDIATELY so any new _startDefenseBed call creates
+  // fresh slots; the teardown operates only on the snapshotted locals.
+  _defSubOsc=_defSubLfo=_defBrassOscA=_defBrassOscB=_defBrassFilt=null;
+  _defBrassPulseLfo=_defBrassFiltLfo=_defStringsTrem=_defStringsGain=_defenseBedGain=null;
+  _defStringsOscs=[];
+  _defCelloOscA=_defCelloOscB=_defCelloFilt=_defCelloGain=null;
+  _defBrassStackGain=null;
   setTimeout(()=>{
-    [_defSubOsc,_defSubLfo,_defBrassOscA,_defBrassOscB,_defBrassPulseLfo,_defBrassFiltLfo,_defStringsTrem].forEach(n=>{
+    [_defSubOscSnap,_defSubLfoSnap,_defBrassOscASnap,_defBrassOscBSnap,_defBrassPulseLfoSnap,_defBrassFiltLfoSnap,_defStringsTremSnap,_defCelloOscASnap,_defCelloOscBSnap].forEach(n=>{
       try{ if(n){ n.stop(); n.disconnect(); } }catch(_){}
     });
-    _defStringsOscs.forEach(o=>{ try{ o.stop(); o.disconnect(); }catch(_){} });
-    _defStringsOscs=[];
-    try{ if(_defBrassFilt) _defBrassFilt.disconnect(); }catch(_){}
-    try{ if(_defStringsGain) _defStringsGain.disconnect(); }catch(_){}
-    try{ if(_defenseBedGain) _defenseBedGain.disconnect(); }catch(_){}
-    _activeLFOs=_activeLFOs.filter(l=>l!==_defSubLfo&&l!==_defBrassPulseLfo&&l!==_defBrassFiltLfo&&l!==_defStringsTrem);
-    _defSubOsc=_defSubLfo=_defBrassOscA=_defBrassOscB=_defBrassFilt=null;
-    _defBrassPulseLfo=_defBrassFiltLfo=_defStringsTrem=_defStringsGain=_defenseBedGain=null;
+    _defStringsOscsSnap.forEach(o=>{ try{ o.stop(); o.disconnect(); }catch(_){} });
+    try{ if(_defBrassFiltSnap) _defBrassFiltSnap.disconnect(); }catch(_){}
+    try{ if(_defStringsGainSnap) _defStringsGainSnap.disconnect(); }catch(_){}
+    try{ if(_defBrassStackGainSnap) _defBrassStackGainSnap.disconnect(); }catch(_){}
+    try{ if(_defCelloFiltSnap) _defCelloFiltSnap.disconnect(); }catch(_){}
+    try{ if(_defCelloGainSnap) _defCelloGainSnap.disconnect(); }catch(_){}
+    try{ if(_defenseBedGainSnap) _defenseBedGainSnap.disconnect(); }catch(_){}
+    _activeLFOs=_activeLFOs.filter(l=>l!==_defSubLfoSnap&&l!==_defBrassPulseLfoSnap&&l!==_defBrassFiltLfoSnap&&l!==_defStringsTremSnap);
   }, 1000);
+}
+
+// Zimmer v2: wave-intensity hook — Defense `beginWave()` calls this with
+// (this.#waveIdx / (PHASES.length-1)), which rescales the cello gain target and
+// the brass stack gain live so late waves feel heavier than early waves.
+function _defenseBedSetWaveIntensity(v){
+  _defWaveIntensity = Math.max(0, Math.min(1, Number(v)||0));
+  if(!_defenseBedActive) return;
+  try{
+    const ac=AC(); if(!ac) return;
+    const t=ac.currentTime;
+    // Brass stack: 0.42 → 0.42 × (1 + 0.35·v)
+    if(_defBrassStackGain){
+      const newBrass = 0.42 * (1 + 0.35 * _defWaveIntensity);
+      _defBrassStackGain.gain.cancelScheduledValues(t);
+      _defBrassStackGain.gain.linearRampToValueAtTime(newBrass, t+0.9);
+    }
+    // Cello: next cycle will read updated _defWaveIntensity; also retarget
+    // the current envelope peak so mid-cycle ramps don't drop to zero.
+    if(_defCelloGain){
+      const mul = 0.6 + 0.8 * _defWaveIntensity;
+      const target = _defCelloBaseGain * mul;
+      // Only raise if currently below target — do not interrupt a release phase.
+      const cur = _defCelloGain.gain.value;
+      if(cur > 0.001 && cur < target){
+        _defCelloGain.gain.cancelScheduledValues(t);
+        _defCelloGain.gain.linearRampToValueAtTime(target, t+0.9);
+      }
+    }
+  }catch(_){}
 }
 
 function _defenseBedSetVolume(v){
@@ -10456,6 +10652,14 @@ let _huntSubOsc=null, _huntSubLfo=null;
 let _huntPadOscs=[], _huntPadFilt=null, _huntPadFiltLfo=null, _huntPadGain=null;
 let _huntRainSrc=null, _huntRainFilt=null, _huntRainGain=null;
 let _huntBellTimer=null, _huntPulseTimer=null;
+// ── Zimmer v2: Dark Knight piano motif + Shepard tension voices ──
+// Piano: two-chord slow progression fired every 28-48s, G minor cadence,
+// sine voices through the reverb send for the iconic "detective theme" warmth.
+// Shepard: 3 sawtooth voices in 8× crossfaded ascent, 16s sweep, 40 arms
+// (≈10.5 minutes of continuous dwell before re-arming). Quieter than menu
+// Shepard (0.014 vs 0.018) so it reads as sub-atmosphere.
+let _huntPianoTimer=null;
+let _huntShepOscs=[], _huntShepGains=[], _huntShepFilt=null, _huntShepBus=null;
 
 function _startHuntBed(volume){
   if(_huntBedActive) { try{ _huntBedSetVolume(volume); }catch(_){} return; }
@@ -10569,6 +10773,88 @@ function _startHuntBed(volume){
   };
   _huntPulseTimer=setTimeout(schedulePulse, 5500);
 
+  // ── 6) Zimmer v2: Dark Knight piano motif (every 28-48s) ──────────
+  // Chord A: G2 (98) + Eb3 (155.56) + Bb3 (233.08) — G minor triad
+  // Chord B at t+2.8s: F2 (87.31) + D3 (146.83) + A3 (220) — F major relative lift
+  // Sine voices, attack 0.01s, release 2.6s, master gain 0.036, through reverb if available.
+  // Skipped under prefers-reduced-motion (keeps the bed calmer for sensitivity).
+  const _huntReducedMotion = (typeof window._prefersReducedMotion==='function') ? !!window._prefersReducedMotion() : false;
+  if(!_huntReducedMotion){
+    const _schedHuntPiano=()=>{
+      const delay = 28000 + Math.random()*20000;
+      _huntPianoTimer=setTimeout(()=>{
+        if(!_huntBedActive) return;
+        try{
+          const tac=AC(); const t0=tac.currentTime;
+          // Chord A — G minor
+          const chordA=[98.00, 155.56, 233.08];
+          const chordB=[87.31, 146.83, 220.00];
+          const _playChord=(freqs, tBase, pan)=>{
+            freqs.forEach((f,idx)=>{
+              const o=tac.createOscillator(); o.type='sine'; o.frequency.value=f;
+              const g=tac.createGain(); g.gain.value=0.0001;
+              const tOn = tBase + idx*0.035;
+              g.gain.setValueAtTime(0.0001, tOn);
+              g.gain.exponentialRampToValueAtTime(Math.max(0.0005, 0.036*(1 - idx*0.12)), tOn+0.01);
+              g.gain.exponentialRampToValueAtTime(0.0001, tOn+0.01+2.6);
+              let sink=_huntBedGain;
+              if(typeof tac.createStereoPanner==='function'){
+                const p=tac.createStereoPanner(); p.pan.value=pan;
+                g.connect(p);
+                if(_revWetFull){ p.connect(_revWetFull); } else { p.connect(_huntBedGain); }
+              } else {
+                if(_revWetFull){ g.connect(_revWetFull); } else { g.connect(_huntBedGain); }
+              }
+              o.connect(g);
+              o.start(tOn); o.stop(tOn+0.01+2.6+0.08);
+            });
+          };
+          const panA = (Math.random()*0.6)-0.3;
+          const panB = (Math.random()*0.6)-0.3;
+          _playChord(chordA, t0, panA);
+          _playChord(chordB, t0+2.8, panB);
+        }catch(_){}
+        _schedHuntPiano();
+      }, delay);
+    };
+    _schedHuntPiano();
+
+    // ── 7) Zimmer v2: Shepard tension voice bank ────────────────────
+    _huntShepFilt=ac.createBiquadFilter();
+    _huntShepFilt.type='lowpass';
+    _huntShepFilt.frequency.value=820; _huntShepFilt.Q.value=0.7;
+    _huntShepBus=ac.createGain();
+    _huntShepBus.gain.value=0.014;
+    _huntShepFilt.connect(_huntShepBus); _huntShepBus.connect(_huntBedGain);
+    const HSHEP_BASE=[55, 87.31, 138.59]; // A1, F2, C#3
+    const HSHEP_SWEEP_SEC=16;
+    const HSHEP_VOICES=HSHEP_BASE.length;
+    _huntShepOscs=[]; _huntShepGains=[];
+    HSHEP_BASE.forEach((baseF, i)=>{
+      const osc=ac.createOscillator(); osc.type='sawtooth';
+      osc.frequency.setValueAtTime(baseF, now);
+      const ARMS=40;
+      for(let k=0; k<ARMS; k++){
+        const tStart=now + k*HSHEP_SWEEP_SEC + (i*HSHEP_SWEEP_SEC/HSHEP_VOICES);
+        const tEnd  =tStart + HSHEP_SWEEP_SEC;
+        osc.frequency.setValueAtTime(baseF, tStart);
+        osc.frequency.exponentialRampToValueAtTime(baseF*8, tEnd);
+      }
+      const g=ac.createGain(); g.gain.value=0.0001;
+      for(let k=0; k<40; k++){
+        const tStart=now + k*HSHEP_SWEEP_SEC + (i*HSHEP_SWEEP_SEC/HSHEP_VOICES);
+        const tMid  =tStart + HSHEP_SWEEP_SEC*0.5;
+        const tEnd  =tStart + HSHEP_SWEEP_SEC;
+        g.gain.setValueAtTime(0.0001, tStart);
+        g.gain.linearRampToValueAtTime(0.28, tMid);
+        g.gain.linearRampToValueAtTime(0.0001, tEnd);
+      }
+      osc.connect(g); g.connect(_huntShepFilt);
+      osc.start(now);
+      _huntShepOscs.push(osc); _huntShepGains.push(g);
+    });
+  }
+
   _huntBedActive=true;
 }
 
@@ -10579,21 +10865,42 @@ function _stopHuntBed(){
   _huntBedActive=false;
   if(_huntBellTimer){ clearTimeout(_huntBellTimer); _huntBellTimer=null; }
   if(_huntPulseTimer){ clearTimeout(_huntPulseTimer); _huntPulseTimer=null; }
+  // Zimmer v2: clear the piano scheduler before its next tick.
+  if(_huntPianoTimer){ clearTimeout(_huntPianoTimer); _huntPianoTimer=null; }
+  // HOTFIX 2026-04-19: same race fix as Defense — snapshot module-level node refs
+  // into locals BEFORE the 1.1s teardown fires, then null the module vars so a
+  // re-entry call to _startHuntBed within 1.1s gets fresh slots instead of having
+  // its new nodes torn down by the stale timer (user's booth feedback: "Zimmer
+  // bed not playing in Hunt" after rapid game-swap).
+  const _huntSubOscSnap=_huntSubOsc, _huntSubLfoSnap=_huntSubLfo;
+  const _huntPadOscsSnap=_huntPadOscs;
+  const _huntPadFiltSnap=_huntPadFilt, _huntPadFiltLfoSnap=_huntPadFiltLfo, _huntPadGainSnap=_huntPadGain;
+  const _huntRainSrcSnap=_huntRainSrc, _huntRainFiltSnap=_huntRainFilt, _huntRainGainSnap=_huntRainGain;
+  const _huntBedGainSnap=_huntBedGain;
+  // Zimmer v2 Shepard snapshot — same race-safety pattern.
+  const _huntShepOscsSnap=_huntShepOscs, _huntShepGainsSnap=_huntShepGains;
+  const _huntShepFiltSnap=_huntShepFilt, _huntShepBusSnap=_huntShepBus;
+  _huntSubOsc=_huntSubLfo=_huntPadFilt=_huntPadFiltLfo=_huntPadGain=null;
+  _huntRainSrc=_huntRainFilt=_huntRainGain=_huntBedGain=null;
+  _huntPadOscs=[];
+  _huntShepOscs=[]; _huntShepGains=[]; _huntShepFilt=_huntShepBus=null;
   setTimeout(()=>{
-    try{ if(_huntSubOsc){ _huntSubOsc.stop(); _huntSubOsc.disconnect(); } }catch(_){}
-    try{ if(_huntSubLfo){ _huntSubLfo.stop(); _huntSubLfo.disconnect(); } }catch(_){}
-    _huntPadOscs.forEach(o=>{ try{ o.stop(); o.disconnect(); }catch(_){} });
-    _huntPadOscs=[];
-    try{ if(_huntPadFiltLfo){ _huntPadFiltLfo.stop(); _huntPadFiltLfo.disconnect(); } }catch(_){}
-    try{ if(_huntPadFilt) _huntPadFilt.disconnect(); }catch(_){}
-    try{ if(_huntPadGain) _huntPadGain.disconnect(); }catch(_){}
-    try{ if(_huntRainSrc){ _huntRainSrc.stop(); _huntRainSrc.disconnect(); } }catch(_){}
-    try{ if(_huntRainFilt) _huntRainFilt.disconnect(); }catch(_){}
-    try{ if(_huntRainGain) _huntRainGain.disconnect(); }catch(_){}
-    try{ if(_huntBedGain) _huntBedGain.disconnect(); }catch(_){}
-    _activeLFOs=_activeLFOs.filter(l=>l!==_huntSubLfo&&l!==_huntPadFiltLfo);
-    _huntSubOsc=_huntSubLfo=_huntPadFilt=_huntPadFiltLfo=_huntPadGain=null;
-    _huntRainSrc=_huntRainFilt=_huntRainGain=_huntBedGain=null;
+    try{ if(_huntSubOscSnap){ _huntSubOscSnap.stop(); _huntSubOscSnap.disconnect(); } }catch(_){}
+    try{ if(_huntSubLfoSnap){ _huntSubLfoSnap.stop(); _huntSubLfoSnap.disconnect(); } }catch(_){}
+    _huntPadOscsSnap.forEach(o=>{ try{ o.stop(); o.disconnect(); }catch(_){} });
+    try{ if(_huntPadFiltLfoSnap){ _huntPadFiltLfoSnap.stop(); _huntPadFiltLfoSnap.disconnect(); } }catch(_){}
+    try{ if(_huntPadFiltSnap) _huntPadFiltSnap.disconnect(); }catch(_){}
+    try{ if(_huntPadGainSnap) _huntPadGainSnap.disconnect(); }catch(_){}
+    try{ if(_huntRainSrcSnap){ _huntRainSrcSnap.stop(); _huntRainSrcSnap.disconnect(); } }catch(_){}
+    try{ if(_huntRainFiltSnap) _huntRainFiltSnap.disconnect(); }catch(_){}
+    try{ if(_huntRainGainSnap) _huntRainGainSnap.disconnect(); }catch(_){}
+    // Zimmer v2: clean Shepard voices + bus.
+    _huntShepOscsSnap.forEach(o=>{ try{ o.stop(); o.disconnect(); }catch(_){} });
+    _huntShepGainsSnap.forEach(g=>{ try{ g.disconnect(); }catch(_){} });
+    try{ if(_huntShepFiltSnap) _huntShepFiltSnap.disconnect(); }catch(_){}
+    try{ if(_huntShepBusSnap) _huntShepBusSnap.disconnect(); }catch(_){}
+    try{ if(_huntBedGainSnap) _huntBedGainSnap.disconnect(); }catch(_){}
+    _activeLFOs=_activeLFOs.filter(l=>l!==_huntSubLfoSnap&&l!==_huntPadFiltLfoSnap);
   }, 1100);
 }
 
@@ -11327,6 +11634,25 @@ function _defenseSfxRecipe(name,opts){
         grit:{ d:0.7, g:0.14, filtType:'bandpass', f:5200, Q:0.6 },
         reverbWet:0.55
       }); break;
+    }
+    case 'def_boss_preriser': {
+      // ── Zimmer v2: pre-boss Shepard-tone riser (1.8s) ─────────────
+      // Fires 1.8s BEFORE def_boss_reveal. Four saw voices at 110/220/440/880Hz,
+      // each swept 2× over 1.8s, crossfaded gains for the classic Shepard
+      // illusion of infinite ascent. Filter lowpass 2400Hz Q=1.0. Reverb wet
+      // 0.58. This primes the ear for the braam without duplicating the
+      // metallic pre-hit (that stays in def_boss_reveal).
+      const bases=[110, 220, 440, 880];
+      bases.forEach((f,i)=>{
+        setTimeout(()=>_playLayered({
+          bus:'stinger', pan:_rnd(-3,3), gainDb:-3 + i*-0.3,
+          body:{ type:'sawtooth', f:f, toF:f*2, d:1.8, g:0.032,
+                 filt:{type:'lowpass',f:2400,Q:1.0}, filtEnvTo:3600,
+                 attack:0.5, release:0.2 },
+          reverbWet:0.58
+        }), i*40);
+      });
+      break;
     }
     case 'def_boss_reveal': {
       // Adversary reveal — BRAAAM with metallic pre-hit and long tail
@@ -12090,6 +12416,142 @@ function _stingerRecipe(name,opts){
         ],
         reverbWet:0.62
       }),180);
+      break;
+    }
+    case 'card_first_hover': {
+      // ── Closure pass 2.A: once-per-card piano chime on first dashboard hover
+      // Single FM-ish piano note (A5 carrier with 1245Hz overtone shadow).
+      // 180ms decay, gainDb -6, pan-slight-left. No reverb send — the room
+      // already breathes via the dashboard attract bed. Fire-and-forget;
+      // self-stops inside 0.3s. Caller throttles via dataset.everHovered.
+      _playLayered({
+        bus:'stinger', pan:-0.25, gainDb:-6,
+        body:{ type:'sine', f:880, d:0.28, g:0.022, attack:0.004, release:0.18, filt:{type:'lowpass',f:4200,Q:1.0} },
+        subs:[
+          { type:'sine', f:1245, d:0.22, g:0.010, attack:0.006, release:0.16 }
+        ],
+        reverbWet:0.22
+      });
+      break;
+    }
+    case 'combo_punch': {
+      // ── Closure pass 3.A: percussive tier-up hit for Defense combo 3/5/8.
+      // Transient noise + short sub + mid-body with fast filter envelope.
+      // gainDb -9 keeps it sub-HUD and readable under hit/explosion layer.
+      // Self-stops in 0.22s; zero persistent state.
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:-9,
+        transient:{ noise:true, d:0.02, g:0.22, filt:{type:'bandpass',f:2800,Q:0.9} },
+        body:{ type:'triangle', f:260, toF:130, d:0.20, g:0.08, filt:{type:'lowpass',f:1800,Q:1.4}, filtEnvTo:420, attack:0.004, release:0.16 },
+        subs:[
+          { type:'sine', f:65, d:0.22, g:0.06, attack:0.005, release:0.18 }
+        ],
+        reverbWet:0.28
+      });
+      break;
+    }
+    case 'defense_low_hp_heartbeat': {
+      // ── Closure pass 4.B: near-death chest thump. Layered sub + sine tail
+      // with a tight bandpass shell. ~180ms total decay; fires every 900ms
+      // while player is on their last life. gainDb -5 reads as body thump,
+      // not alarm. All 4 nodes self-stop inside 0.22s.
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:-5,
+        transient:{ type:'triangle', f:42, toF:30, d:0.04, g:0.22, filt:{type:'bandpass',f:180,Q:1.1}, attack:0.002, release:0.035 },
+        body:{ type:'sine', f:55, d:0.18, g:0.16, filt:{type:'lowpass',f:220,Q:1.3}, attack:0.004, release:0.16 },
+        subs:[
+          { type:'sine', f:38, d:0.22, g:0.10, attack:0.005, release:0.18 }
+        ],
+        reverbWet:0.18
+      });
+      break;
+    }
+    // ── Zimmer v2: end-state cinematic chords ───────────────────────────
+    //  win_chord  — "A Watchful Guardian" minor→major lift
+    //    stage 1 (t=0)    : C minor triad (C3 Eb3 G3) — the cost
+    //    stage 2 (t=1800) : C major lift (C3 E3 G3) — the vindication (Eb→E)
+    //    stage 3 (t=1850) : E6 solo piano bell — the clarity
+    //    sub   throughout : C2 drone
+    //  loss_chord — "The Fire Rises" descending piano + sub drop
+    //    stage 1 (t=0)    : sub drop 65→28Hz + noise transient
+    //    stage 2 (t=220)  : descending piano A4 G4 F4 Eb4 (180ms apart)
+    //    stage 3 (t=900)  : low-brass braam 120→55Hz with lowpass sweep
+    //    stage 4 (t=1600) : final A2 piano — the last breath
+    case 'win_chord': case 'winChord': {
+      // Stage 1: C minor triad — the cost
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:0.4,
+        body:{ type:'sine', f:130.81, d:1.6, g:0.07, filt:{type:'lowpass',f:1800,Q:1.1}, attack:0.8, release:0.8 },
+        subs:[
+          { type:'sine', f:155.56, d:1.6, g:0.06, attack:0.8, release:0.8 },
+          { type:'sine', f:196.00, d:1.6, g:0.055, attack:0.8, release:0.8 }
+        ],
+        reverbWet:0.72
+      });
+      // Sub C2 drone (throughout the chord)
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:-1.5,
+        sub:{ type:'sine', f:65.41, d:3.6, g:0.09, attack:0.3 },
+        reverbWet:0.55
+      });
+      // Stage 2 (t=1800ms): C major lift — Eb raises to E
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:0, gainDb:0.6,
+        body:{ type:'sine', f:130.81, d:2.0, g:0.075, filt:{type:'lowpass',f:2200,Q:1.1}, attack:0.4, release:1.2 },
+        subs:[
+          { type:'sine', f:164.81, d:2.0, g:0.065, attack:0.4, release:1.2 },
+          { type:'sine', f:196.00, d:2.0, g:0.06, attack:0.4, release:1.2 }
+        ],
+        reverbWet:0.72
+      }), 1800);
+      // Stage 3 (t=1850ms): solo piano bell E6 — clarity
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:0.6, gainDb:-2.0,
+        body:{ type:'sine', f:1318.51, d:1.8, g:0.028, filt:{type:'lowpass',f:5200,Q:1.0}, attack:0.005, release:1.6 },
+        subs:[
+          { type:'sine', f:2637.02, d:1.2, g:0.016, attack:0.008, release:1.0 }
+        ],
+        reverbWet:0.70
+      }), 1850);
+      break;
+    }
+    case 'loss_chord': case 'lossChord': {
+      // Stage 1 (t=0): sub drop + transient
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:1.2,
+        transient:{ noise:true, d:0.06, g:0.5, filt:{type:'bandpass',f:3400,Q:0.9} },
+        sub:{ type:'sine', f:65, toF:28, d:2.2, g:0.18, attack:0.05 },
+        reverbWet:0.70
+      });
+      // Stage 2 (t=220ms..760ms): descending piano A4 G4 F4 Eb4
+      {
+        const notes=[440.00, 392.00, 349.23, 311.13];
+        notes.forEach((f,i)=>{
+          setTimeout(()=>_playLayered({
+            bus:'stinger', pan:-0.1 - i*0.15, gainDb:-2.5,
+            body:{ type:'sine', f:f, d:0.9, g:0.04, filt:{type:'lowpass',f:3600,Q:1.0}, attack:0.006, release:0.7 },
+            reverbWet:0.62
+          }), 220 + i*180);
+        });
+      }
+      // Stage 3 (t=900ms): low-brass descending braam
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:0, gainDb:0.2,
+        body:{ type:'sawtooth', f:120, toF:55, d:1.6, g:0.12, filt:{type:'lowpass',f:460,Q:2.8}, filtEnvTo:180, attack:0.06, release:1.1 },
+        subs:[
+          { type:'sawtooth', f:120.5, toF:55.3, d:1.6, g:0.10, filt:{type:'lowpass',f:460,Q:2.8}, filtEnvTo:180, attack:0.07, release:1.1 }
+        ],
+        reverbWet:0.68
+      }), 900);
+      // Stage 4 (t=1600ms): final A2 piano — the last breath
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:0.2, gainDb:-3.0,
+        body:{ type:'sine', f:110.00, d:2.0, g:0.055, filt:{type:'lowpass',f:2400,Q:1.1}, attack:0.01, release:1.8 },
+        subs:[
+          { type:'sine', f:55.00, d:2.2, g:0.06, attack:0.03, release:1.9 }
+        ],
+        reverbWet:0.66
+      }), 1600);
       break;
     }
     // ── Phase 2 Zimmer mission-brief / deploy corridor ──────────────────
@@ -13562,6 +14024,10 @@ let _muzzleFlash=null; // {x, y, t} for muzzle flash
 let _dmgDir=null;      // {x, y, t} for damage direction vignette
 
 let SCORE=0, HISCORE=_loadStoredNumber('cs_hiscore_incident_zero_v1',0);
+// Closure pass 5.B: previous PB snapshot captured at startGame(), BEFORE any
+// endPhase() or WIN transition writes a new HISCORE. Used for honest PB delta
+// chip on end-states (SCORE - _prevHISCORE when positive).
+let _prevHISCORE = HISCORE;
 let LIVES=5, FUEL=100, STREAK=0, MAXSTREAK=0;
 let intelOpen=false;
 // Gameplay juice improvements
@@ -13968,6 +14434,9 @@ function initPhase(idx){
 
 function startGame(){
   SCORE=0; LIVES=5; MAXSTREAK=0;
+  // Snapshot PB at run start so end-state chips compare against the stored
+  // value rather than the endPhase()-mutated HISCORE.
+  _prevHISCORE = _loadStoredNumber('cs_hiscore_incident_zero_v1',0);
   // ARCH: zero-seed guard — xorshift32 with seed=0 produces 0 forever.
   RUN_SEED=Math.random()*999999|0;
   if(!RUN_SEED) RUN_SEED=1;
@@ -14202,6 +14671,10 @@ function damagePL(amt=1){
     HISCORE=Math.max(HISCORE,SCORE);
     _saveStoredNumber('cs_hiscore_incident_zero_v1',HISCORE);
     SFX.over(); stopBossMusic(); stopAmbient();
+    // Zimmer v2: River loss — "The Fire Rises" descending piano + sub-drop.
+    // Layered over SFX.over()/stopAmbient() so the legacy loss-transient
+    // still punches while the descending piano settles on top.
+    try{ if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('loss_chord'); }catch(_){}
     // Game-over explosion sequence
     SHAKE(5,1.2);
     for(let i=0;i<4;i++){
@@ -20431,9 +20904,59 @@ function drawGameOver(){
   CX.fillStyle='#555'; CX.font=FONT_9;
   CX.fillText(T('iz_report_line6'),VW/2,446);
 
+  // ═══════════ Closure Pass 5.B: Replay prestige chip row ═══════════
+  // PHASE REACHED (always shown) + PB delta (when SCORE exceeds pre-run PB)
+  // + local rank badge (top-3 of cs_ranking_incident_zero_v1). All reads live
+  // state — no fabricated values.
+  {
+    const rdP = (typeof ezOutQuart==='function') ? ezOutQuart(Math.max(0,Math.min(1,(goT-0.9)/0.6))) : Math.max(0,Math.min(1,(goT-0.9)/0.6));
+    if(rdP>0.01){
+      const rowY = 468;
+      const chips = [];
+      const phaseName = (PHASES[phIdx] && PHASES[phIdx].adversary) ? PHASES[phIdx].adversary : '—';
+      chips.push({ label: TF('iz_sb_phase_reached', {phase: phaseName}), color:'#42d9ff' });
+      const delta = (SCORE|0) - (_prevHISCORE|0);
+      if(_prevHISCORE>0 && delta>0){
+        chips.push({ label: TF('def_pb_delta', {delta: String(delta).padStart(1,'0')}), color:'#74ff88' });
+      }
+      try{
+        const rankArr = (window.FalconArcade && FalconArcade.Store && FalconArcade.Store.load) ? FalconArcade.Store.load('incident_zero') : [];
+        const sorted = rankArr.slice().sort((a,b)=>(Number(b.score)|0)-(Number(a.score)|0));
+        let rankIdx = -1;
+        for(let i=0;i<sorted.length && i<10;i++){
+          if((Number(sorted[i].score)|0)===(SCORE|0)){ rankIdx=i; break; }
+        }
+        if(rankIdx>=0 && rankIdx<3){
+          const keys = ['rank_local_1','rank_local_2','rank_local_3'];
+          chips.push({ label: T(keys[rankIdx]), color:'#ffd84d' });
+        }
+      }catch(_){}
+      CX.save();
+      CX.globalAlpha = rdP;
+      CX.textAlign = 'center';
+      CX.font = FONT_BOLD_10;
+      const pads=10, chipH=18, gap=8;
+      const widths = chips.map(c=>CX.measureText(c.label).width + pads*2);
+      const totalW = widths.reduce((a,b)=>a+b,0) + gap*Math.max(0,chips.length-1);
+      let cx = (VW-totalW)/2;
+      for(let i=0;i<chips.length;i++){
+        const cw = widths[i];
+        CX.fillStyle='rgba(14,20,30,0.80)';
+        CX.strokeStyle=chips[i].color;CX.lineWidth=1;
+        CX.shadowColor=chips[i].color;CX.shadowBlur=10;
+        CX.beginPath(); if(CX.roundRect) CX.roundRect(cx, rowY-chipH/2, cw, chipH, 4); else CX.rect(cx, rowY-chipH/2, cw, chipH); CX.fill();CX.stroke();
+        CX.shadowBlur=0;
+        CX.fillStyle=chips[i].color;
+        CX.fillText(chips[i].label, cx+cw/2, rowY+4);
+        cx += cw + gap;
+      }
+      CX.restore();
+    }
+  }
+
   if(Math.floor(Date.now()/380)%2===0){
     CX.fillStyle='#ffd84d'; CX.font=FONT_BOLD_14;
-    CX.fillText(T('g_press_retry'),VW/2,490);
+    CX.fillText(T('g_press_retry'),VW/2,506);
   }
   CX.textAlign='left';
   CX.restore();
@@ -20585,10 +21108,57 @@ function drawWin(){
   CX.fillStyle='#2a3a4a'; CX.font=FONT_9;
   CX.fillText(T('iz_pause_seed')+RUN_SEED+T('iz_pause_seed_suffix'),VW/2,508);
 
+  // ═══════════ Closure Pass 5.B: PB delta + rank chip (win parity) ═══════════
+  {
+    const rdP = (typeof ezOutQuart==='function') ? ezOutQuart(Math.max(0,Math.min(1,(winT-0.7)/0.5))) : Math.max(0,Math.min(1,(winT-0.7)/0.5));
+    if(rdP>0.01){
+      const rowY = 528;
+      const chips = [];
+      const delta = (SCORE|0) - (_prevHISCORE|0);
+      if(_prevHISCORE>0 && delta>0){
+        chips.push({ label: TF('def_pb_delta', {delta: String(delta)}), color:'#74ff88' });
+      }
+      try{
+        const rankArr = (window.FalconArcade && FalconArcade.Store && FalconArcade.Store.load) ? FalconArcade.Store.load('incident_zero') : [];
+        const sorted = rankArr.slice().sort((a,b)=>(Number(b.score)|0)-(Number(a.score)|0));
+        let rankIdx = -1;
+        for(let i=0;i<sorted.length && i<10;i++){
+          if((Number(sorted[i].score)|0)===(SCORE|0)){ rankIdx=i; break; }
+        }
+        if(rankIdx>=0 && rankIdx<3){
+          const keys = ['rank_local_1','rank_local_2','rank_local_3'];
+          chips.push({ label: T(keys[rankIdx]), color:'#ffd84d' });
+        }
+      }catch(_){}
+      if(chips.length>0){
+        CX.save();
+        CX.globalAlpha = rdP;
+        CX.textAlign='center';
+        CX.font=FONT_BOLD_10;
+        const pads=10, chipH=18, gap=8;
+        const widths = chips.map(c=>CX.measureText(c.label).width + pads*2);
+        const totalW = widths.reduce((a,b)=>a+b,0) + gap*Math.max(0,chips.length-1);
+        let cx = (VW-totalW)/2;
+        for(let i=0;i<chips.length;i++){
+          const cw = widths[i];
+          CX.fillStyle='rgba(14,20,30,0.80)';
+          CX.strokeStyle=chips[i].color;CX.lineWidth=1;
+          CX.shadowColor=chips[i].color;CX.shadowBlur=10;
+          CX.beginPath(); if(CX.roundRect) CX.roundRect(cx, rowY-chipH/2, cw, chipH, 4); else CX.rect(cx, rowY-chipH/2, cw, chipH); CX.fill();CX.stroke();
+          CX.shadowBlur=0;
+          CX.fillStyle=chips[i].color;
+          CX.fillText(chips[i].label, cx+cw/2, rowY+4);
+          cx += cw + gap;
+        }
+        CX.restore();
+      }
+    }
+  }
+
   if(Math.floor(Date.now()/380)%2===0){
     CX.shadowBlur=12; CX.shadowColor='#ffd84d';
     CX.fillStyle='#ffd84d'; CX.font='bold 15px monospace';
-    CX.fillText(T('g_press_again'),VW/2,546); CX.shadowBlur=0;
+    CX.fillText(T('g_press_again'),VW/2,552); CX.shadowBlur=0;
   }
   CX.textAlign='left';
   CX.restore();
@@ -20766,6 +21336,10 @@ function frame(ts){
           _saveStoredNumber('cs_hiscore_incident_zero_v1',HISCORE);
           SFX.win(); stopAmbient();
           SFX.debrief();
+          // Zimmer v2: River full-campaign victory — "A Watchful Guardian"
+          // cadence layered on top of the existing win/debrief cues. Same
+          // sonic identity as Defense's YOU_WIN so the two games feel kin.
+          try{ if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('win_chord'); }catch(_){}
         }
       }
       break;
@@ -20989,6 +21563,8 @@ try{
   window._startDefenseBed = (vol)=>{ try{ _startDefenseBed(vol); }catch(_){ } };
   window._stopDefenseBed  = ()=>{ try{ _stopDefenseBed(); }catch(_){ } };
   window._defenseBedSetVolume = (v)=>{ try{ _defenseBedSetVolume(v); }catch(_){ } };
+  // Zimmer v2: wave-intensity hook. Defense `beginWave` passes waveIdx/(total-1) → 0..1.
+  window._defenseBedSetWaveIntensity = (v)=>{ try{ _defenseBedSetWaveIntensity(v); }catch(_){ } };
   window._defenseSfxRecipe = (name,opts)=>{ try{ _defenseSfxRecipe(name,opts||{}); }catch(_){ } };
   window._startHuntBed = (vol)=>{ try{ _startHuntBed(vol); }catch(_){ } };
   window._stopHuntBed  = ()=>{ try{ _stopHuntBed(); }catch(_){ } };
@@ -23352,7 +23928,19 @@ class AudioEngine{
   levelUp(){ const d=this.#dfx(); if(d){ try{ d('def_wave_cleared'); return; }catch(_){} }
     const s=this.#sfx(); if(s){ try{ s.win(); return; }catch(_){} }
     [0,120,240,400].forEach((d,i)=>this.#tone({type:"square",f0:220*Math.pow(1.5,i),dur:0.18,gain:0.18,delay:d})); }
-  bossRoar(){ const d=this.#dfx(); if(d){ try{ d('def_boss_reveal'); return; }catch(_){} }
+  bossRoar(){
+    // Zimmer v2: pre-boss Shepard riser (1.8s) → def_boss_reveal.
+    // The riser primes the ear for the braam; the reveal lands on top at the
+    // far end of the riser envelope. Falls through to legacy only if no recipe
+    // engine is present.
+    const d=this.#dfx();
+    if(d){
+      try{
+        d('def_boss_preriser');
+        setTimeout(()=>{ try{ d('def_boss_reveal'); }catch(_){} }, 1800);
+        return;
+      }catch(_){}
+    }
     const s=this.#sfx(); if(s){ try{ s.bossAlert(); return; }catch(_){} }
     this.#tone({type:"sawtooth",f0:55,f1:18,dur:1.1,gain:0.5,filt:300});
     this.#tone({type:"square",f0:80,f1:25,dur:0.9,gain:0.3,det:30,delay:80}); }
@@ -23405,6 +23993,8 @@ class AudioEngine{
   }
   stopBGM(){
     this.#bgm=false;
+    // Closure pass 4.B: clear heartbeat on any BGM stop (win/lose/exit).
+    this.stopLowHPHeartbeat();
     const se=this.#se();
     if(se){ try{ se.music.setScene('auto'); }catch(_){} }
   }
@@ -23414,6 +24004,33 @@ class AudioEngine{
       this.#ac.close().catch(()=>{});
       this.#ac=null;
     }
+  }
+  // ── Closure pass 4.B: near-death heartbeat (Defense only). ─────────────
+  // 900ms interval firing `defense_low_hp_heartbeat` recipe. Entered when the
+  // player is on their last life; cleared on recovery, win, loss, or exit.
+  // Instance-scoped (no module-level timer) so concurrent game runs cannot
+  // collide on teardown.
+  #heartbeatTimer=null;
+  #lowHPActive=false;
+  setLowHPHeartbeat(on){
+    if(on && !this.#lowHPActive) this.startLowHPHeartbeat();
+    else if(!on && this.#lowHPActive) this.stopLowHPHeartbeat();
+  }
+  startLowHPHeartbeat(){
+    if(this.#lowHPActive) return;
+    if(window._simMuted) return;
+    this.#lowHPActive=true;
+    const pulse=()=>{
+      if(!this.#lowHPActive) return;
+      if(window._simMuted){ this.stopLowHPHeartbeat(); return; }
+      try{ window.SoundEngine?.stinger?.fire('defense_low_hp_heartbeat'); }catch(_){}
+    };
+    pulse(); // fire once immediately on entry
+    this.#heartbeatTimer=setInterval(pulse,900);
+  }
+  stopLowHPHeartbeat(){
+    this.#lowHPActive=false;
+    if(this.#heartbeatTimer){ clearInterval(this.#heartbeatTimer); this.#heartbeatTimer=null; }
   }
 }
 
@@ -24661,10 +25278,13 @@ class Boss{
 // ─── HUD ─────────────────────────────────────────────────────────
 class HUD{
   #s=0;#hi=0;#lives=3;#wave=1;#combo=1;#mods={};#pangeaT=0;#env="";#grace=0;#bossModId="";
-  setState(s,hi,lives,wave,combo,mods,pangeaT,env,grace,bossModId){
+  // Closure pass 3.A: combo-punch scale state (ms remaining in 340ms window).
+  #comboPunchT=0;
+  setState(s,hi,lives,wave,combo,mods,pangeaT,env,grace,bossModId,comboPunchT){
     this.#s=s;this.#hi=hi;this.#lives=lives;this.#wave=wave;
     this.#combo=combo;this.#mods=mods;this.#pangeaT=pangeaT;
     this.#env=env;this.#grace=grace;this.#bossModId=bossModId||"";
+    this.#comboPunchT=comboPunchT||0;
   }
   draw(ctx,w){
     this.#lbl(ctx,`⭐ ${formatLocaleNumber(this.#s)}`,10,28,19,CS.ORANGE);
@@ -24672,7 +25292,23 @@ class HUD{
     const hearts="🟥".repeat(Math.max(0,this.#lives))||"💀";
     this.#lbl(ctx,hearts,w-12,28,17,CS.RED,"right");
     this.#lbl(ctx,`${T('def_wave_label')} ${this.#wave}`,w-12,46,10,CS.RED,"right");
-    if(this.#combo>1)this.#lbl(ctx,`🔥 x${this.#combo} ${T('def_chain')}`,10,46,12,CS.RED_GLOW);
+    if(this.#combo>1){
+      // Closure pass 3.A: scale the combo pill around its anchor when a
+      // prestige threshold just fired. Scale factor 1 + 0.22*(t/340), decays
+      // to 1.0 as t → 0. Anchor ~ (40, 46) — mid of the combo label baseline.
+      if(this.#comboPunchT>0){
+        const k=Math.max(0,Math.min(1,this.#comboPunchT/340));
+        const s=1+0.22*k;
+        ctx.save();
+        ctx.translate(40,46);
+        ctx.scale(s,s);
+        ctx.translate(-40,-46);
+        this.#lbl(ctx,`🔥 x${this.#combo} ${T('def_chain')}`,10,46,12,CS.RED_GLOW);
+        ctx.restore();
+      } else {
+        this.#lbl(ctx,`🔥 x${this.#combo} ${T('def_chain')}`,10,46,12,CS.RED_GLOW);
+      }
+    }
     if(this.#env){
       ctx.save();ctx.font=FONT3_BOLD_9_CN;ctx.textAlign="center";
       ctx.fillStyle="rgba(4,1,18,0.90)";ctx.fillRect(w/2-140,54,280,14);
@@ -25131,6 +25767,15 @@ class Game{
   #modulesCollected=new Set();
 
   #combo=1;#comboT=0;
+  // Closure pass 3.A: combo-threshold punch. Countdown ms window during which
+  // HUD scales the combo pill to signal a prestige tier crossing (3 / 5 / 8).
+  #comboPunchT=0;
+  // Closure pass 5.A: session kill counter for end-state breakdown chip.
+  // Counted once per #bumpCombo invocation (one kill → one combo bump).
+  #kills=0;
+  // Closure pass 5.B: PB snapshot captured at end-state entry BEFORE #saveHi()
+  // commits the new PB. Used for honest PB delta chip (score - prevHi).
+  #prevHi=0;
   #attackers=[];
   #sideEnemies=[];
   #pBullets=[];#aBullets=[];
@@ -25611,7 +26256,7 @@ class Game{
     _ph4_winStingerFired = false;
     _ph4_loseStingerFired = false;
     this.#score=0;this.#lives=CFG.PLR_LIVES;this.#combo=1;this.#comboT=0;
-    this.#maxCombo=1;
+    this.#maxCombo=1;this.#kills=0;this.#comboPunchT=0;
     this.#waveIdx=0;this.#dir=1;
     this.#mods={PREVENT:0,INSIGHT:0,IDENTITY:0,PANGEA:0,EXP:0,COMPLETE:0,CHARLOTTE_AIM:0,CLOUD:0};
     this.#pangeaT=0;this.#deathCtx=null;
@@ -25628,6 +26273,9 @@ class Game{
       setTimeout(()=>this.#audio.levelUp(),480);
       this.#saveHi();
       markCampaignBeat('defense');
+      // Zimmer v2: defense final-wave victory — "A Watchful Guardian" cadence.
+      // Fired AFTER complete()/levelUp() so the chord settles over the warp.
+      try{ if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('win_chord'); }catch(_){}
       FalconRanking.onGameEnd({
         score:     this.#score,
         phase:     T('def_all_waves_complete'),
@@ -25649,6 +26297,18 @@ class Game{
     const phase          = this.#phase;
     this.#currentPhase   = phase;
     this.#bannerBoss     = phase.isBoss;
+
+    // Zimmer v2: push wave-intensity (0..1) to the Defense bed so the cello
+    // crescendo + brass stack gain scale with how deep the player is in the
+    // campaign. PHASES drives waveIdx; normalize by (length-1) so the final
+    // wave peaks at intensity=1. Defensively guards against length===1.
+    try{
+      const _totalPhases = (typeof PHASES!=='undefined' && PHASES && PHASES.length)
+        ? PHASES.length : 1;
+      const _denom = Math.max(1, _totalPhases - 1);
+      const _intensity = Math.max(0, Math.min(1, (this.#waveIdx|0) / _denom));
+      window._defenseBedSetWaveIntensity?.(_intensity);
+    }catch(_){}
 
     this.#pBullets       = [];
     this.#aBullets       = [];
@@ -25861,8 +26521,13 @@ class Game{
     this.#parts.bossExplode(LW/2, LH/2)
     this.#socFeed.stop();
     this.#deathCtx=getDeathContext(this.#currentPhase,this.#modulesCollected);
+    this.#prevHi=this.#hi|0;
     this.#goT=0;this.#state=STATE.GAME_OVER;this.#saveHi();
     markCampaignBeat('defense');
+    // Zimmer v2: defense loss — "The Fire Rises" descending-piano + sub-drop.
+    // Layered ON TOP of the existing gameOver() cue so we keep the legacy
+    // alarm transient while adding cinematic weight underneath.
+    try{ if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('loss_chord'); }catch(_){}
     const phase=localizeDefensePhase(this.#currentPhase);
     FalconRanking.onGameEnd({
       score:     this.#score,
@@ -25881,8 +26546,12 @@ class Game{
     this.#fx.flash(224,0,60,0.65);this.#socFeed.stop();
     if(this.#waveIdx>=PHASES.length-1){
       this.#state=STATE.YOU_WIN;
+      this.#prevHi=this.#hi|0;
       this.#saveHi();
       markCampaignBeat('defense');
+      // Zimmer v2: defense boss-kill victory — same "Watchful Guardian" cadence
+      // as #nextWave final wave. Two code paths, one sonic identity.
+      try{ if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('win_chord'); }catch(_){}
       FalconRanking.onGameEnd({
         score:     this.#score,
         phase:     T('def_all_waves_complete'),
@@ -26373,11 +27042,29 @@ class Game{
   }
 
   #bumpCombo(){
+    const prev=this.#combo;
     this.#combo=Math.min(8,this.#combo+1);
     this.#comboT=CFG.COMBO_WINDOW/1000;
     if(this.#combo>this.#maxCombo) this.#maxCombo=this.#combo;
+    // Closure pass 5.A: track session kill count for end-state breakdown.
+    this.#kills++;
+    // Closure pass 3.A: punch on crossing prestige thresholds (3/5/8).
+    // Uses strict equality on the NEW value to fire exactly once per tier.
+    if(prev<this.#combo && (this.#combo===3||this.#combo===5||this.#combo===8)){
+      this.#comboPunchT=340;
+      try{ window.SoundEngine?.stinger?.fire('combo_punch'); }catch(_){}
+    }
   }
-  #tickCombo(dt){if(this.#combo>1){this.#comboT-=dt;if(this.#comboT<=0)this.#combo=1;}}
+  #tickCombo(dt){
+    if(this.#combo>1){this.#comboT-=dt;if(this.#comboT<=0)this.#combo=1;}
+    if(this.#comboPunchT>0) this.#comboPunchT=Math.max(0,this.#comboPunchT-dt*1000);
+    // Closure pass 4.B: near-death heartbeat gate. Defense has integer lives,
+    // not continuous HP — "last life" maps to HP<0.30 in the spec; exit when
+    // the player picks up a life-up (lives >= 2). Integer lives cannot
+    // oscillate mid-beat, so no float dead-zone is required; the hysteresis
+    // naturally falls out of the 1→2 jump on life-up.
+    this.#audio.setLowHPHeartbeat(this.#lives===1);
+  }
   #tickMods(dt){
     for(const k of["PREVENT","INSIGHT","IDENTITY","EXP","COMPLETE","CHARLOTTE_AIM","CLOUD"])
       if(this.#mods[k]>0)this.#mods[k]=Math.max(0,this.#mods[k]-dt);
@@ -26692,7 +27379,8 @@ class Game{
     this.#fx.restoreShake(ctx);
     this.#hud.setState(this.#score,this.#hi,this.#lives,this.#waveIdx+1,
       this.#combo,this.#mods,this.#pangeaT,localizeDefensePhase(this.#currentPhase)?.environment??"",
-      this.#waveGraceT,this.#boss?.alive?this.#currentPhase?.incidentReport?.moduleHighlight:"");
+      this.#waveGraceT,this.#boss?.alive?this.#currentPhase?.incidentReport?.moduleHighlight:"",
+      this.#comboPunchT);
     this.#hud.draw(ctx,W);
     this.#notify.draw(ctx,W);
     this.#socFeed.draw(ctx,W,H);
@@ -27469,6 +28157,42 @@ class Game{
       ctx.fillStyle=CS.GREEN;ctx.shadowColor=CS.GREEN;ctx.shadowBlur=8;
       ctx.fillText(`🦅 ${dc.cta}`,w/2,py+ph-14);
     }
+    // ═══════════ Closure Pass 5.A: Replay breakdown chips ═══════════
+    // Honest session totals — WAVES (waveIdx+1) / PEAK CHAIN (maxCombo) / KILLS
+    // (incremented once per #bumpCombo). No fabricated time windows.
+    {
+      const sbP = Math.min(1, Math.max(0, (this.#goT-0.5)/0.6));
+      if(sbP>0.01){
+        const sbY = h*0.555;
+        const cells = [
+          [T('def_sb_waves'), String((this.#waveIdx|0)+1)],
+          [T('def_sb_combo'), String(this.#maxCombo|0)],
+          [T('def_sb_kills'), String(this.#kills|0)],
+        ];
+        const cellW=118, cellH=32, gap=12;
+        const totalW = cellW*3+gap*2;
+        const sbX0 = (w-totalW)/2;
+        ctx.save();
+        ctx.globalAlpha = sbP;
+        ctx.textAlign='center';
+        for(let i=0;i<3;i++){
+          const cx = sbX0 + i*(cellW+gap);
+          ctx.fillStyle='rgba(12,18,28,0.72)';
+          ctx.strokeStyle='rgba(255,120,120,0.32)';
+          ctx.lineWidth=1;
+          ctx.shadowColor='rgba(255,80,80,0.22)';ctx.shadowBlur=8;
+          ctx.beginPath();ctx.roundRect(cx,sbY,cellW,cellH,5);ctx.fill();ctx.stroke();
+          ctx.shadowBlur=0;
+          ctx.font='bold 9px "Courier New"';
+          ctx.fillStyle='rgba(180,200,230,0.62)';
+          ctx.fillText(cells[i][0], cx+cellW/2, sbY+12);
+          ctx.font='bold 15px "Courier New"';
+          ctx.fillStyle=CS.WHITE;
+          ctx.fillText(cells[i][1], cx+cellW/2, sbY+27);
+        }
+        ctx.restore();
+      }
+    }
     ctx.font=FONT3_BOLD_16_CN;
     ctx.fillStyle=CS.YELLOW;ctx.shadowColor=CS.YELLOW;ctx.shadowBlur=10;
     ctx.fillText(`${T('def_breach_score')}:  ${formatLocaleNumber(this.#score)}`,w/2,h*0.74);
@@ -27478,6 +28202,55 @@ class Game{
     }else{
       ctx.fillStyle=CS.ORANGE;ctx.shadowColor=CS.ORANGE;
       ctx.fillText(`${T('def_record')}: ${formatLocaleNumber(this.#hi)}`,w/2,h*0.81);
+    }
+    // ═══════════ Closure Pass 5.B: PB delta + rank chip ═══════════
+    // PB delta reads #prevHi (cached at #gameOver() BEFORE #saveHi()). Rank
+    // chip reads the live ranking array from Store.load('falcon_defense') and
+    // shows a medal badge only if this session lands in top 3.
+    {
+      const rdP = Math.min(1, Math.max(0, (this.#goT-0.9)/0.5));
+      if(rdP>0.01){
+        const rowY = h*0.855;
+        const chips = [];
+        const delta = (this.#score|0) - (this.#prevHi|0);
+        if(this.#prevHi>0 && delta>0){
+          chips.push({ label: TF('def_pb_delta', {delta:formatLocaleNumber(delta)}), color:'#74ff88' });
+        }
+        try{
+          const rankArr = (window.FalconArcade && FalconArcade.Store && FalconArcade.Store.load) ? FalconArcade.Store.load('falcon_defense') : [];
+          const sorted = rankArr.slice().sort((a,b)=>(Number(b.score)|0)-(Number(a.score)|0));
+          let rankIdx = -1;
+          for(let i=0;i<sorted.length && i<10;i++){
+            if((Number(sorted[i].score)|0)===(this.#score|0)){ rankIdx=i; break; }
+          }
+          if(rankIdx>=0 && rankIdx<3){
+            const keys = ['rank_local_1','rank_local_2','rank_local_3'];
+            chips.push({ label: T(keys[rankIdx]), color:'#ffd84d' });
+          }
+        }catch(_){}
+        if(chips.length>0){
+          ctx.save();
+          ctx.globalAlpha=rdP;
+          ctx.textAlign='center';
+          ctx.font='bold 11px "Courier New"';
+          const pads=10, chipH=18, gap=8;
+          const widths = chips.map(c=>ctx.measureText(c.label).width + pads*2);
+          const totalW = widths.reduce((a,b)=>a+b,0) + gap*Math.max(0,chips.length-1);
+          let cx = (w-totalW)/2;
+          for(let i=0;i<chips.length;i++){
+            const cw = widths[i];
+            ctx.fillStyle='rgba(14,20,30,0.80)';
+            ctx.strokeStyle=chips[i].color;ctx.lineWidth=1;
+            ctx.shadowColor=chips[i].color;ctx.shadowBlur=10;
+            ctx.beginPath();ctx.roundRect(cx, rowY-chipH/2, cw, chipH, 4);ctx.fill();ctx.stroke();
+            ctx.shadowBlur=0;
+            ctx.fillStyle=chips[i].color;
+            ctx.fillText(chips[i].label, cx+cw/2, rowY+4);
+            cx += cw + gap;
+          }
+          ctx.restore();
+        }
+      }
     }
     // ═══════════ Phase 4: pulsing REDEPLOY CTA (amber, blink-gated) ═══════════
     {
@@ -27549,6 +28322,52 @@ class Game{
     }else{
       ctx.fillStyle=CS.ORANGE;ctx.shadowColor=CS.ORANGE;
       ctx.fillText(`${T('def_record')}: ${formatLocaleNumber(this.#hi)}`,w/2,h*0.65);
+    }
+    // ═══════════ Closure Pass 5.B: PB delta + rank chip (win parity) ═══════════
+    {
+      const rdP = Math.min(1, Math.max(0, (wt-0.7)/0.5));
+      if(rdP>0.01){
+        const rowY = h*0.71;
+        const chips = [];
+        const delta = (this.#score|0) - (this.#prevHi|0);
+        if(this.#prevHi>0 && delta>0){
+          chips.push({ label: TF('def_pb_delta', {delta:formatLocaleNumber(delta)}), color:'#74ff88' });
+        }
+        try{
+          const rankArr = (window.FalconArcade && FalconArcade.Store && FalconArcade.Store.load) ? FalconArcade.Store.load('falcon_defense') : [];
+          const sorted = rankArr.slice().sort((a,b)=>(Number(b.score)|0)-(Number(a.score)|0));
+          let rankIdx = -1;
+          for(let i=0;i<sorted.length && i<10;i++){
+            if((Number(sorted[i].score)|0)===(this.#score|0)){ rankIdx=i; break; }
+          }
+          if(rankIdx>=0 && rankIdx<3){
+            const keys = ['rank_local_1','rank_local_2','rank_local_3'];
+            chips.push({ label: T(keys[rankIdx]), color:'#ffd84d' });
+          }
+        }catch(_){}
+        if(chips.length>0){
+          ctx.save();
+          ctx.globalAlpha=rdP;
+          ctx.textAlign='center';
+          ctx.font='bold 11px "Courier New"';
+          const pads=10, chipH=18, gap=8;
+          const widths = chips.map(c=>ctx.measureText(c.label).width + pads*2);
+          const totalW = widths.reduce((a,b)=>a+b,0) + gap*Math.max(0,chips.length-1);
+          let cx = (w-totalW)/2;
+          for(let i=0;i<chips.length;i++){
+            const cw = widths[i];
+            ctx.fillStyle='rgba(14,20,30,0.80)';
+            ctx.strokeStyle=chips[i].color;ctx.lineWidth=1;
+            ctx.shadowColor=chips[i].color;ctx.shadowBlur=10;
+            ctx.beginPath();ctx.roundRect(cx, rowY-chipH/2, cw, chipH, 4);ctx.fill();ctx.stroke();
+            ctx.shadowBlur=0;
+            ctx.fillStyle=chips[i].color;
+            ctx.fillText(chips[i].label, cx+cw/2, rowY+4);
+            cx += cw + gap;
+          }
+          ctx.restore();
+        }
+      }
     }
     // ═══════════ Phase 4: TURNING POINTS strip (3 cells) ═══════════
     {
@@ -35461,7 +36280,14 @@ function drawIntercept(dt){
   const adv=getAdvLocale(selectedCase);
   const ui = huntUiScale();
   // Phase 4: fire hunt victory release stinger once per case end
-  if(!_ph4_winStingerFired){ _ph4_winStingerFired = true; _ph4_fireHuntVictory(); }
+  if(!_ph4_winStingerFired){
+    _ph4_winStingerFired = true;
+    _ph4_fireHuntVictory();
+    // Zimmer v2: unified "Watchful Guardian" cadence across all three games.
+    // Fires AFTER the hunt-specific release so Hunt keeps its own identity
+    // while gaining the campaign-wide Zimmer chord resolution.
+    try{ if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('win_chord'); }catch(_){}
+  }
   ctx.save(); ctx.globalAlpha=Math.min(1, interceptT/0.55);
   ctx.fillStyle='#020308'; ctx.fillRect(0,0,LW,LH); drawStars();
   // World map in background
@@ -35555,7 +36381,13 @@ function drawBreach(dt){
     HUNT_SFX.breachAlarm();
     flash(255,23,68,0.7);
     // Phase 4: fire hunt loss weight stinger once per breach
-    if(!_ph4_loseStingerFired){ _ph4_loseStingerFired = true; _ph4_fireHuntLoss(); }
+    if(!_ph4_loseStingerFired){
+      _ph4_loseStingerFired = true;
+      _ph4_fireHuntLoss();
+      // Zimmer v2: unified "Fire Rises" descending-piano + sub-drop across
+      // all three games. Layered after the hunt-specific weight cue.
+      try{ if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('loss_chord'); }catch(_){}
+    }
   }
 
   // Solid dark bg — NO drawWorldMap() here so labels never bleed through
@@ -36413,6 +37245,11 @@ function frame(ts){
 
     case STATE.BRIEFING:
       briefingT+=dt;
+      // HOTFIX 2026-04-19: start Zimmer Hunt bed on BRIEFING entry so the player
+      // hears the noir bed from the first moment of the case — not only after
+      // reaching WORLD_MAP. Previously the bed only started in WORLD_MAP/INVESTIGATION
+      // and could miss on case 0 (see below).
+      if(!_huntAmbientRunning) startHuntAmbient();
       if(hk('Space')||briefingT>6){gameState=STATE.WORLD_MAP;}
       if(hk('Escape')){gameState=STATE.CASE_SELECT;FalconRanking.startIdleWatch();}
       break;
@@ -36420,8 +37257,11 @@ function frame(ts){
     case STATE.WORLD_MAP:
       updStars(dt); updPackets(dt); updCyberParts(dt);
       // Ensure ambient audio is running in world map
-      // FIX 4: Gate ambient audio by visual intensity threshold
-      if(!_huntAmbientRunning&&gameState===STATE.WORLD_MAP&&_huntVisualIntensity>0.4) startHuntAmbient();
+      // HOTFIX 2026-04-19: removed `_huntVisualIntensity>0.4` gate. The ramp
+      // [0.25, 0.5, 0.75, 1.0, ...] meant case 0 never passed the gate, so the
+      // Zimmer Hunt bed was permanently silent for the first adversary (user's
+      // booth feedback). Intensity still governs VISUAL desat/glow — just not audio.
+      if(!_huntAmbientRunning&&gameState===STATE.WORLD_MAP) startHuntAmbient();
       if(advMoving){advMoveT+=dt;if(advMoveT>=advMoveDur){advMoving=false;advMoveT=0;}}
       if(hk('Space')){
         // Start investigation
@@ -36438,8 +37278,8 @@ function frame(ts){
     case STATE.INVESTIGATION:
       window._boothPing?.();
       // Maintain ambient audio during investigation
-      // FIX 4: Gate ambient audio by visual intensity threshold
-      if(!_huntAmbientRunning&&gameState===STATE.INVESTIGATION&&_huntVisualIntensity>0.4) startHuntAmbient();
+      // HOTFIX 2026-04-19: removed `_huntVisualIntensity>0.4` gate (see WORLD_MAP above).
+      if(!_huntAmbientRunning&&gameState===STATE.INVESTIGATION) startHuntAmbient();
       investigationTimer+=dt;
       // 5-second warning sound — fires once
       if(!_invTimerWarnFired&&investigationMaxTime-investigationTimer<=5){
