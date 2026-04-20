@@ -26330,52 +26330,34 @@ class SOCFeed{
     const fadeOut=t>this.#showT?Math.max(0,1-(t-this.#showT)/0.8):1;
     const alpha=fadeIn*fadeOut;if(alpha<0.01)return;
     // 2026-04-20: reshape from green-bordered pill to hardware receiver via
-    // window.HardwareRadio (shared facade defined in block 1). Drops antenna,
-    // grille, opName, waveform — this is a HUD strip, not a full receiver.
-    // Keeps dial + VU6 + morse + message so it reads as a comm module, not
-    // a text banner. Falls back to legacy pill if facade missing (dev-time
-    // safety).
-    // 2026-04-20 (blade pass): per user, previous placements (centered above
-    // shields, then above shields but centered) read as "in front of the
-    // gameplay" — the centered mass competed with ships/combat. New silhouette
-    // is a bottom-left BLADE: anchored to the (0, h) corner, angled right edge
-    // sweeping up-right like a pen nib / sword edge, with reduced opacity so
-    // it reads as chrome, not as a gameplay object.
-    //   - x=14 left padding, RW=340, RH=44  → ends at x=354, leaves 186px
-    //     clearance from the centered ship/shield stack.
-    //   - y=h-58 → sits BELOW shields (y<=536) and to the LEFT of the ship
-    //     column (x=528..552), so zero overlap with playable surfaces.
-    //   - custom housing (parallelogram-ish) + HardwareRadio content layers
-    //     only (housing/bezel/screws off), so the HW receiver internals still
-    //     drive dial/VU/callsign/message/morse.
-    const RW = 340;
-    const RH = 44;
+    // window.HardwareRadio (shared facade defined in block 1). Keeps full
+    // receiver chrome (housing + bezel + screws + dial + VU + morse + etc.).
+    // Falls back to legacy pill if facade missing (dev-time safety).
+    // 2026-04-20 (placement pass): anchored to the bottom-left corner, below
+    // the shield row and left of the centered ship column, so the receiver
+    // never overlaps playable surfaces (ship x=528..552, shield row y<=536).
+    // Blade silhouette + extra transparency were reverted per user request —
+    // back to the standard rounded rect at full opacity.
+    const RW = 360;
+    const RH = 50;
     const RX = 14;
-    const RY = h - RH - 14; // ≈ 562 at LH=620
-    const bladeAlpha = alpha * 0.72; // user: "increase transparency a little bit"
+    const RY = h - RH - 14; // ≈ 556 at LH=620
 
     if(!window.HardwareRadio){
-      ctx.save();ctx.globalAlpha=bladeAlpha;
-      // Legacy blade fallback — same silhouette, stripped content.
-      ctx.beginPath();
-      ctx.moveTo(RX, RY);
-      ctx.lineTo(RX + RW, RY);
-      ctx.lineTo(RX + RW - 22, RY + RH);
-      ctx.lineTo(RX, RY + RH);
-      ctx.closePath();
-      ctx.fillStyle="rgba(8,10,14,0.72)";
-      ctx.strokeStyle=CS.GREEN;ctx.lineWidth=1.2;
-      ctx.shadowColor=CS.GREEN;ctx.shadowBlur=10;
-      ctx.fill();ctx.stroke();ctx.shadowBlur=0;
+      ctx.save();ctx.globalAlpha=alpha;
+      const barW=RW,barH=28,bx=RX,by=RY+(RH-barH)/2;
+      ctx.fillStyle="rgba(4,1,18,0.90)";ctx.strokeStyle=CS.GREEN;ctx.lineWidth=1;
+      ctx.shadowColor=CS.GREEN;ctx.shadowBlur=8;
+      ctx.beginPath();ctx.roundRect(bx,by,barW,barH,4);ctx.fill();ctx.stroke();
       ctx.font=FONT3_BOLD_10_CN;ctx.textAlign="left";
-      ctx.fillStyle=CS.GREEN;
-      ctx.fillText(T('def_soc_label'),RX+10,RY+17);
-      const maxMsgW=RW-90;ctx.font=FONT3_10_CN;
+      ctx.fillStyle=CS.GREEN;ctx.shadowColor=CS.GREEN;ctx.shadowBlur=6;
+      ctx.fillText(T('def_soc_label'),bx+10,by+18);
+      const maxMsgW=barW-82;ctx.font=FONT3_10_CN;
       let msg=this.#current;
       while(msg.length>0&&ctx.measureText(msg).width>maxMsgW)msg=msg.slice(0,-1);
       if(msg.length<this.#current.length)msg=msg.slice(0,-1)+"…";
       ctx.fillStyle=CS.WHITE;ctx.shadowBlur=0;
-      ctx.fillText(msg,RX+54,RY+30);
+      ctx.fillText(msg,bx+60,by+18);
       ctx.restore();
       return;
     }
@@ -26383,80 +26365,29 @@ class SOCFeed{
     let state='showing', stateT=t;
     if(t < 0.4){ state='incoming'; stateT = t; }
     else if(t > this.#showT){ state='fading'; stateT = t - this.#showT; }
-
-    // ─── Custom blade housing (bottom-left anchored, angled right edge) ───
-    ctx.save();
-    ctx.globalAlpha = bladeAlpha;
-    // Incoming slide-in from the left edge (first 0.4s)
-    const bladeSlide = state==='incoming' ? (1 - Math.min(1, stateT/0.4)) * -16 : 0;
-    if(bladeSlide) ctx.translate(bladeSlide, 0);
-
-    // Blade silhouette path
-    const bladePath = () => {
-      ctx.beginPath();
-      ctx.moveTo(RX, RY);
-      ctx.lineTo(RX + RW, RY);
-      ctx.lineTo(RX + RW - 22, RY + RH);
-      ctx.lineTo(RX, RY + RH);
-      ctx.closePath();
-    };
-
-    // Housing fill — transparent gradient so map/shield glow bleeds through
-    const _bhg = ctx.createLinearGradient(RX, RY, RX, RY + RH);
-    _bhg.addColorStop(0, 'rgba(18,22,28,0.74)');
-    _bhg.addColorStop(1, 'rgba(6,8,12,0.68)');
-    ctx.fillStyle = _bhg;
-    ctx.shadowColor = CS.GREEN; ctx.shadowBlur = 14;
-    bladePath(); ctx.fill();
-    ctx.shadowBlur = 0;
-
-    // Outer border (muted green, all around)
-    ctx.strokeStyle = 'rgba(116,255,136,0.55)';
-    ctx.lineWidth = 1;
-    bladePath(); ctx.stroke();
-
-    // Bright blade edge — the angled right diagonal gets a brighter stroke
-    // plus a soft glow, selling the "blade" metaphor.
-    ctx.beginPath();
-    ctx.moveTo(RX + RW, RY);
-    ctx.lineTo(RX + RW - 22, RY + RH);
-    ctx.strokeStyle = 'rgba(170,255,200,0.85)';
-    ctx.lineWidth = 1.4;
-    ctx.shadowColor = CS.GREEN; ctx.shadowBlur = 8;
-    ctx.stroke();
-    ctx.shadowBlur = 0;
-
-    // Thin left accent stripe (where the blade "emerges" from)
-    ctx.fillStyle = 'rgba(116,255,136,0.5)';
-    ctx.fillRect(RX, RY, 2, RH);
-    ctx.restore();
-
-    // ─── Content layers via HardwareRadio (housing/bezel/screws OFF) ───
-    // Content rect is narrower than the blade so text/VU don't spill into
-    // the angled tip zone (last ~22px on the bottom-right).
     window.HardwareRadio.draw(ctx, {
-      rect:{x: RX + 6 + bladeSlide, y: RY, w: RW - 30, h: RH},
+      rect:{x:RX, y:RY, w:RW, h:RH},
       col: CS.GREEN,
       state,
       t: stateT,
       op: '',
       cs: 'SOC',
       msg: this.#current,
-      alpha: bladeAlpha,
+      alpha,
       layers:{
-        antenna:false, housing:false, bezel:false, screws:false,
-        grille:false, waveform:false, scanLine:false, opName:false,
-        dial:true, vuMeter:true, header:true, callsign:true,
-        frequency:false, status:false, morse:true, message:true
+        antenna:false, grille:false, opName:false, waveform:false, scanLine:false,
+        housing:true, bezel:true, screws:true, dial:true,
+        vuMeter:true, header:true, callsign:true, status:true, frequency:true,
+        morse:true, message:true
       },
-      vuBars: 5,
+      vuBars: 6,
       maxLines: 2,
       compact: true,
-      uiScale: 0.82,
-      fontFn: (px, weight) => `${weight?weight+' ':''}${Math.max(9, Math.round(px*0.82))}px monospace`,
+      uiScale: 0.92,
+      fontFn: (px, weight) => `${weight?weight+' ':''}${Math.max(9, Math.round(px*0.92))}px monospace`,
       seed: this.#current,
-      statusIncoming: '▶',
-      statusLive: '◉'
+      statusIncoming: '▶ SOC',
+      statusLive: '◉ LIVE'
     });
   }
 }
