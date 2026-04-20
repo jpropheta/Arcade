@@ -6429,14 +6429,41 @@ function showDeployOverlay(callback) {
 // ── Navigation ──
 function returnToDashboard() {
   _missionBriefController?.close?.();
+
+  // AUDIO-TRANSITIONS FIX (spec-audio-transitions.md, Change C):
+  // Before the hard resetArcadeRuntime() tears down the active game bed, start
+  // the crossfade. Active game bed's setVolume(0) schedules the ZimmerBed's
+  // internal 0.4s linearRamp — so by the time resetArcadeRuntime's hard-stop
+  // lands (synchronously, microseconds later), the bed is already fading. The
+  // fadeIn side starts the menu bed near-silent (0.01) then ramps to 0.5 via
+  // _menuBedSetVolume's own 0.4s linearRamp — overlap with the old bed's tail
+  // gives a true crossfade, not a cut. If _audioCrossfade failed to expose
+  // (regression of 6th-pass fix), the else-branch falls back to the original
+  // instant-start behavior — safe degradation, still audible.
+  const _prevActiveGame = _activeGameId;
+  if(typeof window._audioCrossfade === 'function'){
+    window._audioCrossfade({
+      fadeOut: () => {
+        try{ if(_prevActiveGame==='defense') window._defenseBedSetVolume?.(0); }catch(_){}
+        try{ if(_prevActiveGame==='hunt') window._huntBedSetVolume?.(0); }catch(_){}
+      },
+      fadeIn: () => {
+        try{ window._startMenuBed?.(0.01); }catch(_){}
+        try{ window._menuBedSetVolume?.(0.5); }catch(_){}
+      },
+      durMs: 500,
+      overlapMs: 250
+    });
+  } else {
+    try{ window._startMenuBed?.(0.5); }catch(_){}
+  }
+
   resetArcadeRuntime();
   _arcadeDashVisible = true;
   _activeGameId = null;
   _dashboardAttract?.stop?.('return');
   ArcadeSonic.return();
   closeDashboardRankings();
-  // Menu bed: start HQ atmosphere when returning to dashboard from any game
-  try{ window._startMenuBed?.(0.5); }catch(_){}
 
   // Create fade-out overlay for game container
   const overlay = document.createElement('div');
@@ -6479,11 +6506,28 @@ function returnToDashboard() {
 }
 
 function _launchGameRuntime(containerId, initFn) {
+  // AUDIO-TRANSITIONS FIX (spec-audio-transitions.md, Change C):
+  // Fade menu bed down BEFORE _stopMenuBed's hard teardown — _menuBedSetVolume
+  // schedules the Zimmer bed's internal 0.4s linearRamp, so the hard stop that
+  // _stopMenuBed triggers (called by the crossfade's fadeIn side after the
+  // 250ms overlap) lands on near-silent audio. No click, no audible cut.
+  // Game-bed fade-in is intentionally omitted here: game-specific scene audio
+  // is orchestrated by each game's own boot sequence (Defense's #beginWave,
+  // Hunt's scene handler, IZ's attract) — touching that here would overreach.
+  if(typeof window._audioCrossfade === 'function'){
+    window._audioCrossfade({
+      fadeOut: () => { try{ window._menuBedSetVolume?.(0); }catch(_){} },
+      fadeIn:  () => { try{ window._stopMenuBed?.(); }catch(_){} },
+      durMs: 500,
+      overlapMs: 350
+    });
+  } else {
+    try{ window._stopMenuBed?.(); }catch(_){}
+  }
+
   resetArcadeRuntime();
   _dashboardAttract?.stop?.('launch');
   _arcadeDashVisible = false;
-  // Menu bed: stop HQ atmosphere on game entry — game's own scene takes over
-  try{ window._stopMenuBed?.(); }catch(_){}
   _activeGameId = containerId === 'game-zero-container' ? 'zero'
                : containerId === 'game-defense-container' ? 'defense'
                : containerId === 'game-hunt-container' ? 'hunt' : null;
@@ -10061,11 +10105,42 @@ const ZIMMER_PALETTES = {
     // across the whole bed. Prior gains (sub 0.12, pad 0.05, motif 0.09) sat at
     // River-ambient baseline which meant the bed existed but didn't announce
     // itself against SFX. JP's ear is calibrated to River's combat-bed loudness.
+    //
+    // v3 (2026-04-19 late, spec-audio-transitions): JP reports "defense sounds
+    // like a broken record". Root cause: the bed had ONE dynamic element (the
+    // foreground motif on a predictable 9s loop). Hunt had five (rain, bells,
+    // piano, distant perc, motif). Defense now mirrors Hunt's density with
+    // Defense-flavored voicings: lower, harder, more combat-brooding.
     sub:            { f: 32.7, gain: 0.22, breathLfoHz: 0.08, breathAmt: 0.10 },
     pad:            { freqs: [110.00, 146.83, 220.00], detune: 9,
                       filter: 'lowpass', fc: 380, Q: 1.4,
                       fcLfoHz: 0.07, fcLfoDepth: 160, gain: 0.10 },
     shimmer:        { centerHz: 2400, Q: 1.0, gain: 0.016, panLfoHz: 0.11 },
+
+    // v3: gated-noise bandpass — Defense's industrial night ambience. Centered
+    // at 3200Hz (drier, more "rusted metal corridor") vs Hunt's 4800Hz
+    // (wet-street noir). Gain 0.18 — slightly below Hunt's 0.20 because Defense
+    // already has a busy foregroundMotif that the rain would otherwise mask.
+    rainShimmer:    { durSec: 8, gateChance: 0.0016,
+                      centerHz: 3200, Q: 1.8, gain: 0.18 },
+
+    // v3: FM bells as industrial anvil hits through reverb. Every 14-26s.
+    // Ratio 2.0 (octave) for a harder struck-metal timbre vs Hunt's 1.414
+    // (tritone bell). Freqs A3/C4/E4/A4 — an octave below Hunt's C5-G5 bells.
+    // Lands as a background "forge" pulse, not a chime.
+    bellFM:         { freqs: [220.00, 261.63, 329.63, 440.00], ratio: 2.0,
+                      minMs: 14000, maxMs: 26000, peakGain: 0.055, tail: 2.8 },
+
+    // v3: piano chord pairs every 32-52s. D minor (D2/F2/A2) → B♭ major
+    // (B♭1/D2/F2) — a brooding Dark-Knight cadence. Lower than Hunt's piano
+    // (Hunt uses G minor → F major in 80-230Hz); Defense drops an octave.
+    // Peak 0.038 — quieter than Hunt (0.050) because Defense has more
+    // competing SFX during combat.
+    pianoMotif:     { chordA: [73.42, 87.31, 110.00],
+                      chordB: [58.27, 73.42, 87.31],
+                      interChordS: 3.2, minMs: 32000, maxMs: 52000,
+                      peakGain: 0.038 },
+
     distantPerc:    { minMs: 7000, maxMs: 13000 },
     shepardRiser:   { bases: [55, 87.31, 138.59], sweepSec: 16, busGain: 0.030 },
     tensionLayer:   { freqs: [220.00, 329.63], filter: 'lowpass', fc: 500, Q: 1.2,
@@ -21449,6 +21524,44 @@ window.__zeroSim = {
 resetWorld();
 requestAnimationFrame(t=>{ LAST=t; requestAnimationFrame(frame); });
 
+// ═════════════════════════════════════════════════════════════════════════
+//  AUDIO CROSSFADE HELPER  (v3 — 2026-04-19 late, spec-audio-transitions)
+//  Small, safe facade for coordinated bed transitions. Use this instead of
+//  stop-then-start whenever two beds need to hand off without an audible gap.
+//
+//  Usage patterns:
+//    _audioCrossfade({ fadeOut: _stopMenuBed, fadeIn: () => _startDefenseBed(0.55),
+//                       durMs: 600, overlapMs: 300 })
+//    _audioCrossfade({ fadeOut: () => window._stopMenuBed?.(), fadeIn: null,
+//                       durMs: 600, overlapMs: 0 })
+//    _audioCrossfade({ fadeOut: null, fadeIn: () => window._startMenuBed?.(0.5),
+//                       durMs: 900, overlapMs: 300 })
+//
+//  Contract:
+//   - fadeOut runs immediately; it already contains its own internal linearRamp
+//     to 0 (the ZimmerBed stop() fades over 0.9s).
+//   - fadeIn runs after `overlapMs` ms — BEFORE fadeOut completes. The two beds
+//     overlap briefly, creating a real crossfade instead of gap + fresh ramp.
+//   - durMs is informational only (caller's expected total transition length).
+//   - Safe to call with either arg as null — the null branch is skipped.
+//   - Never throws. All inner errors go to console.warn; no outer consumer
+//     needs a try/catch wrapper (though they're cheap and OK to keep as belts).
+// ═════════════════════════════════════════════════════════════════════════
+function _audioCrossfade(args){
+  try{
+    const { fadeOut, fadeIn, durMs, overlapMs } = args || {};
+    if(typeof fadeOut === 'function'){
+      try{ fadeOut(); }catch(e){ try{ console.warn('[arcade] _audioCrossfade fadeOut threw:', e); }catch(_){} }
+    }
+    if(typeof fadeIn === 'function'){
+      const delay = Math.max(0, Math.min(overlapMs|0, (durMs|0) || 800));
+      setTimeout(() => {
+        try{ fadeIn(); }catch(e){ try{ console.warn('[arcade] _audioCrossfade fadeIn threw:', e); }catch(_){} }
+      }, delay);
+    }
+  }catch(e){ try{ console.warn('[arcade] _audioCrossfade outer threw:', e); }catch(_){} }
+}
+
 // ── SDD spec-river-cinematic-audio v1.1 §A3 — Cross-block exports ────────────
 // 2026-04-19 hotfix: This block was previously OUTSIDE the IIFE (after `})();`)
 // so every reference to SoundEngine/SFX/AC/_startXxxBed was out of scope and
@@ -21486,7 +21599,10 @@ try{
   window._huntSfxRecipe = (name,opts)=>{ try{ _huntSfxRecipe(name,opts||{}); }catch(_){ } };
   window._playEnemyDestruction = (type)=>{ try{ return _playEnemyDestruction(type); }catch(_){ return false; } };
   window._playAdversaryDefeat  = (name)=>{ try{ _playAdversaryDefeat(name); }catch(_){ } };
-  try{ console.log('[arcade] window.* audio exposures landed — AC, SoundEngine, _startMenuBed/_startDefenseBed/_startHuntBed now global'); }catch(_){}
+  // v3 (spec-audio-transitions): unified crossfade helper for game-to-game and
+  // wave transitions. Replaces stop-then-start hard cuts with overlapped fades.
+  window._audioCrossfade = _audioCrossfade;
+  try{ console.log('[arcade] window.* audio exposures landed — AC, SoundEngine, _startMenuBed/_startDefenseBed/_startHuntBed, _audioCrossfade now global'); }catch(_){}
 }catch(e){ try{ console.warn('[arcade] window.* audio exposure block threw:', e); }catch(_){ } }
   })();
 }
@@ -21614,6 +21730,12 @@ try{
     'arcade-facade': [
       ['FalconArcade','object'],
       ['ArcadeConfig','object']
+    ],
+    // v3 (spec-audio-transitions, 2026-04-19): unified crossfade helper for
+    // game-to-game + wave transitions. If absent, callers fall through to the
+    // legacy stop-then-start hard-cut path via their own try/catch fallbacks.
+    'audio-transitions': [
+      ['_audioCrossfade','function']
     ]
   };
 
@@ -26072,7 +26194,7 @@ class Game{
         if(this.#modChoice.confirmed){
           const chosen=this.#modChoice.chosenModule;
           if(chosen){this.#collectMod(chosen);}  // ← moduleUp() already inside #collectMod
-          this.#state=this.#bannerBoss?STATE.BOSS_WARNING:STATE.WAVE_BANNER;
+          this.#leaveModuleChoice();
           this.#bannerT=0;
           // Phase 4: fire boss arrival stinger on state transition (primary path)
           if(this.#bannerBoss){ _ph4_fireBossArrival(); }
@@ -26399,7 +26521,16 @@ class Game{
       return;
     }
     this.#waveIdx=Math.min(this.#waveIdx+1,PHASES.length-1);
-    this.#dir=1;this.#audio.stopBGM();this.#audio.startBGM();this.#beginWave();
+    // AUDIO-TRANSITIONS FIX: prior behavior hard-cut BGM (stopBGM+startBGM) at every
+    // wave transition — audible gap because stopBGM() tears down nodes that startBGM()
+    // must rebuild. Zimmer bed is continuous, so instead we duck it briefly, clear the
+    // low-HP heartbeat that stopBGM() used to clear as a side-effect, then let #beginWave
+    // restore full volume via #leaveModuleChoice on the NEXT module-choice exit. The
+    // bed itself stays live — no re-construction, no gap.
+    this.#dir=1;
+    try{ window._defenseBedSetVolume?.(0.30); }catch(_){}
+    try{ this.#audio.stopLowHPHeartbeat?.(); }catch(_){}
+    this.#beginWave();
   }
 
   #beginWave(){
@@ -26470,8 +26601,21 @@ class Game{
     }
 
     this.#modChoice.prepare(phase, this.#waveIdx);
-    this.#input.flushAll(); 
+    this.#input.flushAll();
     this.#state = STATE.MODULE_CHOICE;
+  }
+
+  // v3 (spec-audio-transitions, 2026-04-19): shared exit path for MODULE_CHOICE.
+  // Called from BOTH the normal confirm/timeout path (~line 26080) AND the
+  // keyboard-shortcut path (~line 26565). Restores the Defense bed volume from
+  // the ducked 0.30 back to 0.55 (the #nextWave duck pairs with this restore).
+  // _defenseBedSetVolume already runs a 0.4s linearRamp, so there's no click.
+  // If the window.* exposure didn't land (regression of the 6th-pass fix), the
+  // optional chain silently no-ops and the bed stays at 0.30 — not silent,
+  // still clearly audible, just quieter. Safe degradation.
+  #leaveModuleChoice(){
+    try{ window._defenseBedSetVolume?.(0.55); }catch(_){}
+    this.#state = this.#bannerBoss ? STATE.BOSS_WARNING : STATE.WAVE_BANNER;
   }
 
   #buildAttackers(){
@@ -26556,7 +26700,7 @@ class Game{
     if(this.#state===STATE.MODULE_CHOICE){
       const chosen=this.#modChoice.chosenModule;
       if(chosen) this.#collectMod(chosen);
-      this.#state=this.#bannerBoss?STATE.BOSS_WARNING:STATE.WAVE_BANNER;
+      this.#leaveModuleChoice();
       this.#bannerT=0;
       // Phase 4: fire boss arrival stinger on secondary state transition (skip path)
       if(this.#bannerBoss){ _ph4_fireBossArrival(); }
