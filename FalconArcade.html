@@ -10654,55 +10654,75 @@ const ZIMMER_PALETTES = {
   // Intensity (0..1) crossfades a second saw pair a 5th above the pad — the
   // bed blooms with wave progression without ever becoming a beat loop.
   'darkknight-combat': {
-    // v2 (2026-04-19 post-JP "still sounds the same" report): gains lifted ~1.7x
-    // across the whole bed. Prior gains (sub 0.12, pad 0.05, motif 0.09) sat at
-    // River-ambient baseline which meant the bed existed but didn't announce
-    // itself against SFX. JP's ear is calibrated to River's combat-bed loudness.
+    // v4 (2026-04-20, spec-defense-reshape-v4): JP reported the bed is "too loud
+    // and still sounds like a broken record" despite v3. Root-cause audit found
+    // that the foregroundMotif was firing on a fixed setInterval(9000) with an
+    // identical pitch/filter/gain envelope every cycle — the v3 added peripheral
+    // texture but never removed this clockwork. Steady-layer gain sum was also
+    // 1.6x Hunt's at 0.79 vs 0.49.
     //
-    // v3 (2026-04-19 late, spec-audio-transitions): JP reports "defense sounds
-    // like a broken record". Root cause: the bed had ONE dynamic element (the
-    // foreground motif on a predictable 9s loop). Hunt had five (rain, bells,
-    // piano, distant perc, motif). Defense now mirrors Hunt's density with
-    // Defense-flavored voicings: lower, harder, more combat-brooding.
-    sub:            { f: 32.7, gain: 0.22, breathLfoHz: 0.08, breathAmt: 0.10 },
+    // v4 changes:
+    //  - DELETE foregroundMotif (the clockwork) and distantPerc (colliding with
+    //    motif's 9s cadence at 7-13s rate, crowding the bed).
+    //  - REDUCE all steady-layer gains ~35% so the bed sits below River rather
+    //    than above it. Steady sum drops 0.79 -> 0.41.
+    //  - ADD celloSwells: irregular cello-saw swells at 22-48s random intervals,
+    //    random pitch from {D3,F3,A3,C4}, random rise 4-8s, random peak — no two
+    //    swells sound identical. Keeps the cello character but kills the loop.
+    //  - ADD lowBrassStabs: rare 1.2s lowpassed brass stabs at 18-36s intervals
+    //    on D-phrygian roots (F2/E2/G2 + fifth). Fills the punctuation role that
+    //    distantPerc used to fill, but musically coherent with the piano's D-
+    //    minor cadence.
+    //  - Intensity (wave progression) compresses scheduler intervals — events
+    //    get more frequent as waves climb, giving the bed a narrative arc
+    //    without ever looping.
+    sub:            { f: 32.7, gain: 0.13, breathLfoHz: 0.08, breathAmt: 0.10 },
     pad:            { freqs: [110.00, 146.83, 220.00], detune: 9,
                       filter: 'lowpass', fc: 380, Q: 1.4,
-                      fcLfoHz: 0.07, fcLfoDepth: 160, gain: 0.10 },
+                      fcLfoHz: 0.07, fcLfoDepth: 160, gain: 0.08 },
     shimmer:        { centerHz: 2400, Q: 1.0, gain: 0.016, panLfoHz: 0.11 },
 
-    // v3: gated-noise bandpass — Defense's industrial night ambience. Centered
-    // at 3200Hz (drier, more "rusted metal corridor") vs Hunt's 4800Hz
-    // (wet-street noir). Gain 0.18 — slightly below Hunt's 0.20 because Defense
-    // already has a busy foregroundMotif that the rain would otherwise mask.
+    // v4: softer sizzle (Q 1.8 -> 1.4) and ~40% lower gain. Still provides the
+    // industrial "rusted metal corridor" color but no longer competes with the
+    // cello swells + brass stabs for presence.
     rainShimmer:    { durSec: 8, gateChance: 0.0016,
-                      centerHz: 3200, Q: 1.8, gain: 0.18 },
+                      centerHz: 3200, Q: 1.4, gain: 0.11 },
 
-    // v3: FM bells as industrial anvil hits through reverb. Every 14-26s.
-    // Ratio 2.0 (octave) for a harder struck-metal timbre vs Hunt's 1.414
-    // (tritone bell). Freqs A3/C4/E4/A4 — an octave below Hunt's C5-G5 bells.
-    // Lands as a background "forge" pulse, not a chime.
+    // v4: same voicing as v3 but peak trimmed to 0.045 so the anvil doesn't
+    // punch above the new cello swells — bells should sit BEHIND the swells
+    // in the depth field, not ahead.
     bellFM:         { freqs: [220.00, 261.63, 329.63, 440.00], ratio: 2.0,
-                      minMs: 14000, maxMs: 26000, peakGain: 0.055, tail: 2.8 },
+                      minMs: 14000, maxMs: 26000, peakGain: 0.045, tail: 2.8 },
 
-    // v3: piano chord pairs every 32-52s. D minor (D2/F2/A2) → B♭ major
-    // (B♭1/D2/F2) — a brooding Dark-Knight cadence. Lower than Hunt's piano
-    // (Hunt uses G minor → F major in 80-230Hz); Defense drops an octave.
-    // Peak 0.038 — quieter than Hunt (0.050) because Defense has more
-    // competing SFX during combat.
     pianoMotif:     { chordA: [73.42, 87.31, 110.00],
                       chordB: [58.27, 73.42, 87.31],
                       interChordS: 3.2, minMs: 32000, maxMs: 52000,
-                      peakGain: 0.038 },
+                      peakGain: 0.032 },
 
-    distantPerc:    { minMs: 7000, maxMs: 13000 },
-    shepardRiser:   { bases: [55, 87.31, 138.59], sweepSec: 16, busGain: 0.030 },
+    shepardRiser:   { bases: [55, 87.31, 138.59], sweepSec: 16, busGain: 0.020 },
     tensionLayer:   { freqs: [220.00, 329.63], filter: 'lowpass', fc: 500, Q: 1.2,
-                      gainAt1: 0.10 },
-    // Motif shifted up an octave (A3→A4 equivalent saws with fifth doubling
-    // handled by the pad). Filter opens further and the gain is higher so the
-    // crescendo LANDS instead of whispering in the background.
-    foregroundMotif:{ f0: 146.83, f1: 293.66, riseDur: 7.0, cycleMs: 9000,
-                      gain: 0.16, fcStart: 900, fcEnd: 3400, Q: 3.8 }
+                      gainAt1: 0.07 },
+
+    // v4: irregular cello swells in place of the old foregroundMotif. Each
+    // scheduler tick picks a random tone from D-minor (D3/F3/A3/C4), a random
+    // rise duration 4-8s, and a random peak 0.060-0.095. Next tick is 22-48s
+    // away. intensityRateMul compresses interval down to 0.5x at full wave
+    // intensity — more frequent swells when the screen is crowded.
+    celloSwells:    { tones: [146.83, 174.61, 220.00, 261.63],
+                      riseMin: 4.0, riseMax: 8.0,
+                      fcStart: 600, fcEnd: 2400, Q: 2.6,
+                      peakGainMin: 0.060, peakGainMax: 0.095,
+                      minMs: 22000, maxMs: 48000,
+                      intensityRateMul: 0.5 },
+
+    // v4: sparse low-brass stabs. Replaces distantPerc. D-phrygian roots paired
+    // with a perfect fifth on top, 1.2s lowpassed stab. Adds threat punctuation
+    // that's musically coherent with the piano motif's D-minor/B♭-major cadence.
+    lowBrassStabs:  { pairs: [[87.31, 130.81], [82.41, 123.47], [98.00, 146.83]],
+                      fc: 420, Q: 1.4, stabDur: 1.2,
+                      peakGain: 0.050,
+                      minMs: 18000, maxMs: 36000,
+                      intensityRateMul: 0.55 }
   },
 
   // ── HUNT ───────────────────────────────────────────────────────────────────
@@ -11102,6 +11122,121 @@ function createZimmerBed(paletteName, options){
     }, cycleMs));
   }
 
+  // v4 (spec-defense-reshape-v4, 2026-04-20): irregular cello-saw swell that
+  // replaces the fixed-cycle foregroundMotif for Defense. Every scheduler tick
+  // picks a random tone, random rise duration, random peak gain, and random
+  // pan — no two swells sound identical. Next-tick interval is compressed by
+  // wave intensity (0..1) so swells bloom in frequency as the player's screen
+  // gets crowded, giving the bed a narrative arc without a loop.
+  function _buildCelloSwells(ac, now, cfg){
+    const tones   = cfg.tones   || [146.83, 174.61, 220.00, 261.63];
+    const riseMin = cfg.riseMin != null ? cfg.riseMin : 4.0;
+    const riseMax = cfg.riseMax != null ? cfg.riseMax : 8.0;
+    const pkMin   = cfg.peakGainMin != null ? cfg.peakGainMin : 0.060;
+    const pkMax   = cfg.peakGainMax != null ? cfg.peakGainMax : 0.095;
+    const fcStart = cfg.fcStart || 600;
+    const fcEnd   = cfg.fcEnd   || 2400;
+    const Q       = cfg.Q       || 2.6;
+    const rateMul = cfg.intensityRateMul != null ? cfg.intensityRateMul : 0.5;
+    const schedule = () => {
+      if(!_active) return;
+      try{
+        const tac = AC(); const t0 = tac.currentTime;
+        const rise = riseMin + Math.random() * (riseMax - riseMin);
+        const peak = pkMin + Math.random() * (pkMax - pkMin);
+        const f0   = tones[(Math.random() * tones.length) | 0];
+        const filt = tac.createBiquadFilter();
+        filt.type='lowpass'; filt.frequency.value = fcStart; filt.Q.value = Q;
+        const g = tac.createGain(); g.gain.value = 0.0001;
+        filt.connect(g);
+        if(typeof tac.createStereoPanner === 'function'){
+          const pan = tac.createStereoPanner();
+          pan.pan.value = Math.random() * 0.5 - 0.25;
+          g.connect(pan); pan.connect(_sink());
+        } else {
+          g.connect(_sink());
+        }
+        const oA = tac.createOscillator(); oA.type='sawtooth';
+        const oB = tac.createOscillator(); oB.type='sawtooth';
+        oA.detune.value = -7; oB.detune.value = +7;
+        oA.frequency.setValueAtTime(f0,           t0);
+        oB.frequency.setValueAtTime(f0 * 1.008,   t0);
+        oA.connect(filt); oB.connect(filt);
+        const rampTop = t0 + rise * 0.75;
+        const tEnd    = t0 + rise + 0.8;
+        const peakSafe = Math.max(0.0005, peak);
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(peakSafe, rampTop);
+        g.gain.setValueAtTime(peakSafe, rampTop + 0.35);
+        g.gain.exponentialRampToValueAtTime(0.0001, tEnd);
+        filt.frequency.setValueAtTime(fcStart, t0);
+        filt.frequency.exponentialRampToValueAtTime(fcEnd, rampTop);
+        filt.frequency.exponentialRampToValueAtTime(Math.max(200, fcStart * 0.8), tEnd);
+        oA.start(t0); oB.start(t0);
+        oA.stop(tEnd + 0.1); oB.stop(tEnd + 0.1);
+      }catch(_){}
+      const minMs = cfg.minMs || 22000;
+      const maxMs = cfg.maxMs || 48000;
+      let x = 0;
+      try{ x = Math.max(0, Math.min(1, intensityFn() || 0)); }catch(_){}
+      const mul  = 1 - x * (1 - rateMul);
+      const next = (minMs + Math.random() * (maxMs - minMs)) * mul;
+      _trackTimer(setTimeout(schedule, next));
+    };
+    _trackTimer(setTimeout(schedule, 7000));
+  }
+
+  // v4 (spec-defense-reshape-v4, 2026-04-20): sparse low-brass stab. Lowpassed
+  // saw pair (root + perfect fifth) with fast attack, 1.2s decay. Musically
+  // coherent with the piano motif's D-minor cadence; replaces distantPerc's
+  // punctuation role without clashing with the 9s clockwork that caused the
+  // broken-record perception in v3.
+  function _buildLowBrassStabs(ac, now, cfg){
+    const pairs   = cfg.pairs || [[87.31, 130.81], [82.41, 123.47], [98.00, 146.83]];
+    const fc      = cfg.fc || 420;
+    const Q       = cfg.Q || 1.4;
+    const dur     = cfg.stabDur || 1.2;
+    const peak    = cfg.peakGain != null ? cfg.peakGain : 0.050;
+    const rateMul = cfg.intensityRateMul != null ? cfg.intensityRateMul : 0.55;
+    const schedule = () => {
+      if(!_active) return;
+      try{
+        const tac = AC(); const t0 = tac.currentTime;
+        const pair = pairs[(Math.random() * pairs.length) | 0];
+        const filt = tac.createBiquadFilter();
+        filt.type='lowpass'; filt.frequency.value = fc; filt.Q.value = Q;
+        const g = tac.createGain(); g.gain.value = 0.0001;
+        filt.connect(g);
+        if(typeof tac.createStereoPanner === 'function'){
+          const pan = tac.createStereoPanner();
+          pan.pan.value = Math.random() * 0.6 - 0.3;
+          g.connect(pan); pan.connect(_sink());
+        } else {
+          g.connect(_sink());
+        }
+        pair.forEach((f, i) => {
+          const o = tac.createOscillator(); o.type='sawtooth';
+          o.frequency.value = f;
+          o.detune.value = (i === 0) ? -4 : +4;
+          o.connect(filt);
+          o.start(t0); o.stop(t0 + dur + 0.1);
+        });
+        const peakSafe = Math.max(0.0005, peak);
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(peakSafe, t0 + 0.08);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      }catch(_){}
+      const minMs = cfg.minMs || 18000;
+      const maxMs = cfg.maxMs || 36000;
+      let x = 0;
+      try{ x = Math.max(0, Math.min(1, intensityFn() || 0)); }catch(_){}
+      const mul  = 1 - x * (1 - rateMul);
+      const next = (minMs + Math.random() * (maxMs - minMs)) * mul;
+      _trackTimer(setTimeout(schedule, next));
+    };
+    _trackTimer(setTimeout(schedule, 11000));
+  }
+
   function _buildTensionLayer(ac, now, cfg){
     // Intensity-driven saw pair sitting above the pad. setIntensity() ramps
     // _tensionGainNode from 0 up to cfg.gainAt1 over 2s.
@@ -11165,6 +11300,8 @@ function createZimmerBed(paletteName, options){
     try{ if(palette.distantHqPulse)  _buildDistantHqPulse(ac, now, palette.distantHqPulse); }catch(_){}
     try{ if(palette.shepardRiser)    _buildShepardRiser(ac, now, palette.shepardRiser); }catch(_){}
     try{ if(palette.foregroundMotif) _buildForegroundMotif(ac, now, palette.foregroundMotif); }catch(_){}
+    try{ if(palette.celloSwells)     _buildCelloSwells(ac, now, palette.celloSwells); }catch(_){}
+    try{ if(palette.lowBrassStabs)   _buildLowBrassStabs(ac, now, palette.lowBrassStabs); }catch(_){}
     try{ if(palette.tensionLayer)    _buildTensionLayer(ac, now, palette.tensionLayer); }catch(_){}
   }
 
