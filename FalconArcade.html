@@ -129,20 +129,28 @@ html, body { width:100%; height:100%; background:#020308; overflow:hidden; font-
   .card:hover .cta-arrow { opacity:1; transform:translateX(0); }
 }
 .footer { margin-top:16px; text-align:center; }
-.footer-event { font-size:8px; letter-spacing:3px; color:#6a7f8a; text-transform:uppercase; margin-bottom:4px; }
+/* Recomposed 2026-04-20: hint is now PRIMARY CTA (top), buttons next, brand last.
+   Hierarchy reads CTA → ops controls → brand signature instead of brand → hint+shortcuts → buttons. */
 .footer-hint {
   display:block;
-  margin-top:10px;
-  color:#8a9aaa;
-  font:700 10px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:1px;
+  margin-top:6px;
+  margin-bottom:14px;
+  color:#e6edf3;
+  font:700 12px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:2px;
+  text-transform:uppercase;
 }
+.footer-hint .blink { color:#ffd84d; }
 .dashboard-actions {
   display:flex;
   flex-wrap:wrap;
   gap:10px;
   justify-content:center;
-  margin-top:14px;
+  margin-top:0;
+}
+.footer-event {
+  font-size:8px; letter-spacing:3px; color:#5a6975;
+  text-transform:uppercase; margin-top:14px; margin-bottom:0;
 }
 .dashboard-action-btn {
   display:inline-flex; align-items:center; justify-content:center;
@@ -164,7 +172,32 @@ html, body { width:100%; height:100%; background:#020308; overflow:hidden; font-
   }
 }
 .dashboard-action-btn:active { transform:scale(0.97); }
+/* Keyboard-only focus ring — invisible on mouse click (Emil rule:
+   focus-visible must be visible but not shouty, never appears on pointer). */
+.dashboard-action-btn:focus-visible {
+  outline:2px solid rgba(255,216,77,0.85);
+  outline-offset:3px;
+  box-shadow:0 0 18px rgba(255,216,77,0.22);
+}
+.dashboard-action-btn:focus:not(:focus-visible) { outline:none; }
 .dashboard-action-btn strong { color:#ffd84d; margin-right:8px; font-weight:700; }
+/* Mute toggle — variant of dashboard-action-btn. Two visual states, driven by
+   aria-pressed so the active/inactive color comes from one attribute, not
+   class toggling. Pressed state (muted) reads as warning amber. */
+.dashboard-action-btn.dashboard-mute-btn[aria-pressed="true"] {
+  border-color:rgba(255,122,0,0.55);
+  color:#ffd6a8;
+  background:rgba(255,122,0,0.06);
+}
+.dashboard-action-btn.dashboard-mute-btn[aria-pressed="true"] strong {
+  color:#ff7a00;
+}
+@media (hover: hover) and (pointer: fine) {
+  .dashboard-action-btn.dashboard-mute-btn[aria-pressed="true"]:hover {
+    border-color:rgba(255,122,0,0.85);
+    box-shadow:0 0 24px rgba(255,122,0,0.22);
+  }
+}
 .ops-strip { display:none; }
 .ops-chip { border:1px solid rgba(255,255,255,0.08); background:linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02)); padding:10px 12px; text-align:left; min-height:58px; }
 .ops-chip-k { color:#ffd84d; font:700 9px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; }
@@ -441,13 +474,9 @@ body.arcade-loader-active { overflow:hidden; }
   .campaign-status { flex-direction:column; align-items:flex-start; }
   .campaign-status-tracks { justify-content:flex-start; }
 }
-.attract-mode-btn {
-  position:absolute; right:16px; bottom:16px; z-index:120;
-  border:1px solid rgba(255,255,255,0.12); background:rgba(4,8,12,0.82);
-  color:#d5dde5; padding:8px 12px; cursor:pointer;
-  font:700 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:2px; text-transform:uppercase;
-}
-.attract-mode-btn strong { color:#ffd84d; margin-right:8px; }
+/* .attract-mode-btn deleted 2026-04-20 — the floating bottom-right duplicate of
+   dashboard-attract-inline-btn was removed as visual noise. Operational row is
+   the single source of truth for this affordance. */
 #dashboard-attract-overlay {
   position:fixed; inset:0; z-index:13000; display:none; align-items:center; justify-content:center;
   background:rgba(2,3,8,0.92); backdrop-filter:blur(10px);
@@ -1189,17 +1218,20 @@ body.arcade-loader-active { overflow:hidden; }
       </a>
     </div>
     <div class="footer">
-      <div class="footer-event">CrowdStrike Arcade · 2026</div>
-      <div class="footer-hint" data-i18n="dash_footer_hint">L global rankings · Ctrl+Shift+E export all · Ctrl+Shift+R clear all · <span class="blink">▶ SELECT A MISSION</span></div>
+      <!-- Recomposition 2026-04-20: primary CTA first, ops row next, brand signature last.
+           The floating .attract-mode-btn and the shortcut list in dash_footer_hint were
+           deleted as redundant — the ops buttons already document every hotkey inline. -->
+      <div class="footer-hint" data-i18n="dash_footer_hint"><span class="blink">▶ SELECT A MISSION</span></div>
       <div class="dashboard-actions">
         <button class="dashboard-action-btn" id="dashboard-rankings-btn" data-i18n="dash_rankings_btn" type="button"><strong>[L]</strong> Global Rankings</button>
         <button class="dashboard-action-btn" id="dashboard-attract-inline-btn" data-i18n="dash_attract_btn" type="button"><strong>[A]</strong> Attract Mode</button>
         <button class="dashboard-action-btn" id="dashboard-export-btn" data-i18n="dash_export_btn" type="button"><strong>[Ctrl+Shift+E]</strong> Export Rankings</button>
         <button class="dashboard-action-btn" id="dashboard-reset-btn" data-i18n="dash_reset_btn" type="button"><strong>[Ctrl+Shift+R]</strong> Reset Rankings</button>
+        <button class="dashboard-action-btn dashboard-mute-btn" id="dashboard-mute-btn" data-i18n="dash_mute_on" type="button" aria-pressed="false"><strong>[M]</strong> Sound On</button>
       </div>
+      <div class="footer-event">CrowdStrike Arcade · 2026</div>
     </div>
     <div id="global-podium"></div>
-    <button class="attract-mode-btn" id="dashboard-attract-btn" type="button"><strong>[A]</strong> Attract Mode</button>
   </div>
 </div>
 
@@ -1233,17 +1265,384 @@ body.arcade-loader-active { overflow:hidden; }
 // exportAllRankingsCSV, FalconRanking, setScene, etc.) remain in place and
 // continue to be the authoritative implementations. Methods added under
 // FalconArcade.* must WRAP those, never duplicate them.
+//
+// ── Public surface typedefs (JSDoc) ──
+// These let IDEs / tsserver surface hints on FalconArcade.* without pulling
+// in a build step. The typedefs describe the FROZEN public shape of each
+// facade. Private helpers remain intentionally outside this surface.
+//
+// @typedef {object} FalconArcadeStoreAPI
+// @property {function(string): Array<object>}        loadRanking
+// @property {function(string, Array<object>): boolean} saveRanking
+// @property {function(string, number): boolean}      saveNumber
+// @property {function(string, number=): number}      loadNumber
+// @property {function(): {json:string, byGame:object}} exportSnapshot
+// @property {function(): void}                       clearAll
+// @property {function(): string}                     exportCSV
+//
+// @typedef {object} FalconArcadeOverlayAPI
+// @property {function(string|HTMLElement): boolean}  open
+// @property {function(string|HTMLElement): boolean}  close
+// @property {function(string|HTMLElement): boolean}  isOpen
+// @property {function(): ?string}                    activeId
+// @property {function(string, function): void}       onClose
+//
+// @typedef {object} FalconArcadeAudioAPI
+// @property {function(string): void}                 startBGM
+// @property {function(): void}                       stopBGM
+// @property {function(string, object=): void}        play
+// @property {function(string, object=): void}        stinger
+// @property {function(number): void}                 setMasterVolume
+// @property {function(boolean): void}                setMuted
+//
+// @typedef {object} FalconArcadeScenesAPI
+// @property {function(string): void}                 set
+// @property {function(): string}                     get
+// @property {function(string): boolean}              is
+// @property {function(): string}                     active
+// @property {function(string): boolean}              has
+//
+// @typedef {object} FalconArcadeLifecycleAPI
+// @property {function(string, function, number): number} setTimeoutNS
+// @property {function(string, function, number): number} setIntervalNS
+// @property {function(string, function): number}        rafNS
+// @property {function(string, EventTarget, string, function, (object|boolean)=): void} onNS
+// @property {function(string): void}                    cancelNamespace
+// @property {function(): {timeouts:number, intervals:number, rafs:number, listeners:number, namespaces:number}} stats
+//
+// @typedef {object} FalconArcadeTelemetryAPI
+// @property {function(string, (Error|null)=, object=): void} report
+// @property {function(): Array<object>}              entries
+// @property {function(): object}                     counts
+// @property {function(): void}                       clear
+// @property {function(boolean): void}                setDevMode
+// @property {function(): boolean}                    isDevMode
+// @property {function(number=): void}                startStatsLogging
+// @property {function(): void}                       stopStatsLogging
+//
+// @typedef {object} FalconArcadeRoot
+// @property {FalconArcadeStoreAPI}     Store
+// @property {FalconArcadeOverlayAPI}   Overlay
+// @property {object}                   FX
+// @property {FalconArcadeAudioAPI}     Audio
+// @property {object}                   Input
+// @property {object}                   Text
+// @property {object}                   Draw
+// @property {FalconArcadeScenesAPI}    Scenes
+// @property {FalconArcadeLifecycleAPI} Lifecycle
+// @property {FalconArcadeTelemetryAPI} Telemetry
 // ─────────────────────────────────────────────────────────────────────────────
+/** @type {FalconArcadeRoot} */
 window.FalconArcade = window.FalconArcade || {
-  Store:   {},  // Task 2 — leaderboards, persistence, CSV export
-  Overlay: {},  // reserved — overlay factory + z-index registry
-  FX:      {},  // reserved — shared visual/canvas effects
-  Audio:   {},  // reserved — SoundEngine facade (River/Defense/Hunt beds)
-  Input:   {},  // reserved — keyboard + JP IME + attract idle watch
-  Text:    {},  // reserved — T()/TF()/wrapTextPx helpers
-  Draw:    {},  // reserved — panel/roundRect/label primitives
-  Scenes:  {}   // reserved — setScene + scene-bound lifecycle hooks
+  Store:     {},  // Task 2 — leaderboards, persistence, CSV export
+  Overlay:   {},  // reserved — overlay factory + z-index registry
+  FX:        {},  // reserved — shared visual/canvas effects
+  Audio:     {},  // reserved — SoundEngine facade (River/Defense/Hunt beds)
+  Input:     {},  // reserved — keyboard + JP IME + attract idle watch
+  Text:      {},  // reserved — T()/TF()/wrapTextPx helpers
+  Draw:      {},  // reserved — panel/roundRect/label primitives
+  Scenes:    {},  // reserved — setScene + scene-bound lifecycle hooks
+  Lifecycle: {},  // timer/listener registry + visibility pause (2026-04-19)
+  Telemetry: {}   // error ring + opt-in stats heartbeat (2026-04-20)
 };
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FalconArcade.Lifecycle — timer + listener registry (hardening pass)
+//
+// WHY THIS EXISTS. The booth runs for many hours at an event. The raw counts
+// in this file were 163 setTimeouts vs 15 clearTimeouts, 78 addEventListener
+// vs 26 removeEventListener, and only ONE visibilitychange handler. Most of
+// those mismatches are deliberate fire-and-forget cinematic beats that never
+// need cancelling — but the minority that SHOULD be cancellable (attract
+// director handles, overlay auto-dismiss, ranking loops, etc.) have no
+// uniform way to register for teardown or for a pause-when-hidden signal.
+//
+// This facade is ADDITIVE. It never monkey-patches `window.setTimeout` or
+// any DOM prototype, so every legacy call keeps working unchanged. Callers
+// that WANT lifecycle safety opt in by going through `FalconArcade.Lifecycle`
+// and optionally tagging their registration with a namespace. Future refactors
+// can migrate hot paths one at a time without a big-bang rewrite.
+//
+// Pause model. On `document.hidden`, Lifecycle fires a DOM CustomEvent
+// `arcade:pause` on document; on re-show, it fires `arcade:resume`. That gives
+// every game loop / overlay / audio bed a single well-named pause signal they
+// can subscribe to (or ignore) at their own pace. Lifecycle itself does NOT
+// stop timers on pause — stopping tracked intervals/rAFs across the entire
+// app would break cinematic beats that are supposed to resume from where
+// they were. The pause is a notification; enforcement is per-caller.
+// ─────────────────────────────────────────────────────────────────────────────
+(function _installFalconArcadeLifecycle(){
+  if (!window.FalconArcade) return;
+  const _timers    = new Map();   // id → { type, ns }
+  const _rafs      = new Map();   // id → { ns }
+  const _listeners = new Set();   // entry objects
+  let   _isPaused  = false;
+  let   _nextSynthId = 1;
+
+  function _ns(ns){ return (typeof ns === 'string' && ns) ? ns : 'default'; }
+
+  function setTimeoutNS(fn, ms, ns){
+    const id = window.setTimeout(function(){ _timers.delete(id); try{ fn(); }catch(_){ } }, ms);
+    _timers.set(id, { type:'timeout', ns:_ns(ns) });
+    return id;
+  }
+  function clearTimeoutNS(id){
+    if (_timers.has(id)) _timers.delete(id);
+    window.clearTimeout(id);
+  }
+  function setIntervalNS(fn, ms, ns){
+    const id = window.setInterval(function(){ try{ fn(); }catch(_){ } }, ms);
+    _timers.set(id, { type:'interval', ns:_ns(ns) });
+    return id;
+  }
+  function clearIntervalNS(id){
+    if (_timers.has(id)) _timers.delete(id);
+    window.clearInterval(id);
+  }
+  function rafNS(fn, ns){
+    const synth = _nextSynthId++;
+    const realId = window.requestAnimationFrame(function(ts){
+      _rafs.delete(synth);
+      try{ fn(ts); }catch(_){ }
+    });
+    _rafs.set(synth, { realId, ns:_ns(ns) });
+    return synth;
+  }
+  function cancelRafNS(synth){
+    const entry = _rafs.get(synth);
+    if (!entry) return;
+    _rafs.delete(synth);
+    try{ window.cancelAnimationFrame(entry.realId); }catch(_){ }
+  }
+  function on(target, event, handler, opts, ns){
+    if (!target || !event || typeof handler !== 'function') return function(){};
+    const entry = { target, event, handler, opts, ns:_ns(ns) };
+    try{ target.addEventListener(event, handler, opts); }catch(_){ return function(){}; }
+    _listeners.add(entry);
+    return function dispose(){
+      if (!_listeners.has(entry)) return;
+      _listeners.delete(entry);
+      try{ target.removeEventListener(event, handler, opts); }catch(_){ }
+    };
+  }
+  function off(target, event, handler, opts){
+    for (const entry of _listeners){
+      if (entry.target === target && entry.event === event && entry.handler === handler){
+        _listeners.delete(entry);
+        try{ target.removeEventListener(event, handler, opts); }catch(_){ }
+        return true;
+      }
+    }
+    try{ target.removeEventListener(event, handler, opts); }catch(_){ }
+    return false;
+  }
+  function cancelNamespace(ns){
+    const target = _ns(ns);
+    let n = 0;
+    for (const [id, e] of _timers){
+      if (e.ns !== target) continue;
+      if (e.type === 'interval') { try{ window.clearInterval(id); }catch(_){ } }
+      else                       { try{ window.clearTimeout(id);  }catch(_){ } }
+      _timers.delete(id); n++;
+    }
+    for (const [synth, e] of _rafs){
+      if (e.ns !== target) continue;
+      try{ window.cancelAnimationFrame(e.realId); }catch(_){ }
+      _rafs.delete(synth); n++;
+    }
+    for (const entry of Array.from(_listeners)){
+      if (entry.ns !== target) continue;
+      try{ entry.target.removeEventListener(entry.event, entry.handler, entry.opts); }catch(_){ }
+      _listeners.delete(entry); n++;
+    }
+    return n;
+  }
+  function cancelAll(){
+    let n = 0;
+    for (const [id, e] of _timers){
+      if (e.type === 'interval') { try{ window.clearInterval(id); }catch(_){ } }
+      else                       { try{ window.clearTimeout(id);  }catch(_){ } }
+      n++;
+    }
+    _timers.clear();
+    for (const [, e] of _rafs){
+      try{ window.cancelAnimationFrame(e.realId); }catch(_){ }
+      n++;
+    }
+    _rafs.clear();
+    for (const entry of _listeners){
+      try{ entry.target.removeEventListener(entry.event, entry.handler, entry.opts); }catch(_){ }
+      n++;
+    }
+    _listeners.clear();
+    return n;
+  }
+  function stats(){
+    return {
+      timers:    _timers.size,
+      rafs:      _rafs.size,
+      listeners: _listeners.size,
+      paused:    _isPaused
+    };
+  }
+  function isPaused(){ return _isPaused; }
+  function _fire(name, detail){
+    try{
+      const evt = new CustomEvent(name, { detail: detail || {} });
+      document.dispatchEvent(evt);
+    }catch(_){ }
+  }
+  function pauseAll(reason){
+    if (_isPaused) return;
+    _isPaused = true;
+    _fire('arcade:pause', { reason: reason || 'api' });
+  }
+  function resumeAll(reason){
+    if (!_isPaused) return;
+    _isPaused = false;
+    _fire('arcade:resume', { reason: reason || 'api' });
+  }
+
+  // Wire a single visibilitychange handler. We deliberately do NOT rely on
+  // `blur`/`focus` — those fire far too often on desktop (devtools focus,
+  // overlay focus shifts, etc.) to be a reliable pause signal.
+  try{
+    document.addEventListener('visibilitychange', function(){
+      if (document.hidden) pauseAll('visibilitychange');
+      else                 resumeAll('visibilitychange');
+    }, { passive:true });
+  }catch(_){ }
+
+  // Synthetic keyup on window blur (sticky-key defense, 2026-04-20).
+  // Problem: if the operator Alt-Tabs away with a gameplay key held down, the
+  // `keyup` never fires, so the game thinks the key is still pressed. On return
+  // the plane keeps drifting, shield stays on, etc. We dispatch a synthetic
+  // `keyup` for a known set of gameplay keys when the window blurs; any game
+  // that listens for `keyup` on document/window releases its held state.
+  // This is purely defensive — games whose input model is `keydown`-only (rare
+  // in this codebase) see no behavior change because nothing listens.
+  try{
+    const _stickyKeyCodes = [
+      'ArrowUp','ArrowDown','ArrowLeft','ArrowRight',
+      'Space','Enter','Escape',
+      'KeyW','KeyA','KeyS','KeyD',
+      'ShiftLeft','ShiftRight','ControlLeft','ControlRight'
+    ];
+    window.addEventListener('blur', function(){
+      for (let i=0;i<_stickyKeyCodes.length;i++){
+        try{
+          const ev = new KeyboardEvent('keyup', {
+            code: _stickyKeyCodes[i], key: _stickyKeyCodes[i],
+            bubbles:true, cancelable:true
+          });
+          document.dispatchEvent(ev);
+        }catch(_){ }
+      }
+    }, { passive:true });
+  }catch(_){ }
+
+  window.FalconArcade.Lifecycle = Object.freeze({
+    setTimeout:    setTimeoutNS,
+    clearTimeout:  clearTimeoutNS,
+    setInterval:   setIntervalNS,
+    clearInterval: clearIntervalNS,
+    raf:           rafNS,
+    cancelRaf:     cancelRafNS,
+    on, off,
+    cancelNamespace, cancelAll,
+    pauseAll, resumeAll, isPaused,
+    stats
+  });
+})();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FalconArcade.Telemetry — error + stats surface (hardening pass, 2026-04-20)
+//
+// WHY THIS EXISTS. The file uses many `catch(_){}` blocks to keep cinematic
+// beats silent in front of spectators. Good for the booth, bad for the
+// operator: silent swallow means nobody knows when something went wrong.
+// Telemetry gives callers a single opt-in report() surface that:
+//   • Always records to an in-memory ring (capped at 64 entries so it can't
+//     grow without bound over long sessions).
+//   • Calls `console.warn` only when `FalconArcade.Telemetry.devMode` is true
+//     (default: `false` in booth, the booth operator can flip it from devtools).
+//   • Never throws on its own — safe to call from inside other catches.
+//
+// Usage:
+//   const T = window.FalconArcade && window.FalconArcade.Telemetry;
+//   try { risky(); } catch(e){ T && T.report('zimmer.defense.start', e); }
+//
+// The buckets + stats() output feed Lifecycle.startStatsLogging() so operators
+// can `FalconArcade.Lifecycle.startStatsLogging(60000)` from devtools and watch
+// for slow growth during an 8-hour booth session.
+// ─────────────────────────────────────────────────────────────────────────────
+(function _installFalconArcadeTelemetry(){
+  if (!window.FalconArcade) return;
+  const MAX_ENTRIES = 64;
+  const _ring = [];
+  const _counts = Object.create(null);
+  let _devMode = false;
+
+  function _now(){ try { return Date.now(); } catch(_){ return 0; } }
+
+  function report(tag, err, detail){
+    try{
+      const msg = (err && err.message) ? err.message : (err ? String(err) : '');
+      const stack = (err && err.stack) ? String(err.stack).split('\n').slice(0,3).join(' | ') : '';
+      const entry = { t:_now(), tag:String(tag||'unknown'), msg, stack, detail: detail||null };
+      _ring.push(entry);
+      if (_ring.length > MAX_ENTRIES) _ring.shift();
+      _counts[entry.tag] = (_counts[entry.tag]|0) + 1;
+      if (_devMode){
+        try{ console.warn('[arcade][telemetry]', entry.tag, entry.msg || '', entry.detail || ''); }catch(_){ }
+      }
+    }catch(_){ /* never throw from telemetry */ }
+    return true;
+  }
+
+  function entries(){ return _ring.slice(); }
+  function counts(){ return Object.assign({}, _counts); }
+  function clear(){ _ring.length = 0; for (const k in _counts) delete _counts[k]; }
+  function setDevMode(on){ _devMode = !!on; }
+  function isDevMode(){ return _devMode; }
+
+  // Opt-in heartbeat (on Telemetry — Lifecycle is frozen and cannot be extended).
+  // Operator runs from devtools:
+  //   FalconArcade.Telemetry.startStatsLogging(60000)   // 60s interval
+  //   FalconArcade.Telemetry.stopStatsLogging()
+  // Writes a compact line that can be eyeballed for monotonic growth.
+  let _heartbeatId = 0;
+  function startStatsLogging(intervalMs){
+    if (_heartbeatId) return _heartbeatId;
+    const LC = window.FalconArcade && window.FalconArcade.Lifecycle;
+    const ms = Math.max(5000, intervalMs|0 || 60000);
+    _heartbeatId = window.setInterval(function(){
+      try{
+        const s = (LC && LC.stats) ? LC.stats() : {};
+        const c = counts();
+        let cs = '';
+        for (const k in c){ cs += k + ':' + c[k] + ' '; }
+        try{ console.info('[arcade][stats]',
+          'timeouts='+(s.timeouts||0), 'intervals='+(s.intervals||0),
+          'rafs='+(s.rafs||0), 'listeners='+(s.listeners||0),
+          'paused='+(s.isPaused||false),
+          'errors=' + cs.trim()); }catch(_){ }
+      }catch(_){ }
+    }, ms);
+    return _heartbeatId;
+  }
+  function stopStatsLogging(){
+    if (!_heartbeatId) return;
+    try{ window.clearInterval(_heartbeatId); }catch(_){ }
+    _heartbeatId = 0;
+  }
+
+  window.FalconArcade.Telemetry = Object.freeze({
+    report, entries, counts, clear, setDevMode, isDevMode,
+    startStatsLogging, stopStatsLogging,
+    get devMode(){ return _devMode; }
+  });
+})();
 
 // ── Event/Marketing Config — set BEFORE page load by booth operator ──────────
 // Example: window.ArcadeConfig={eventName:'RSA 2026',ctaUrl:'https://crowdstrike.com/trial',ctaLabel:'START YOUR FALCON TRIAL'};
@@ -1265,12 +1664,35 @@ window._showPostGameCTA = function(onClose) {
   overlay.innerHTML = `<div style="max-width:min(440px,calc(100vw - 40px));width:100%;border:2px solid #39FF14;border-radius:7px;background:rgba(4,8,14,0.99);padding:30px 30px 22px;text-align:center;box-shadow:0 0 40px rgba(57,255,20,0.22);"><div style="font-size:17px;font-weight:700;color:#39FF14;letter-spacing:1.5px;margin-bottom:10px;">${headline}</div><div style="font-size:12px;color:#aabcd0;line-height:1.7;margin-bottom:22px;">${subtitle}</div><button id="fr-cta-btn" style="display:block;width:100%;background:#39FF14;color:#000;border:none;border-radius:4px;padding:15px 24px;font-family:inherit;font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer;text-transform:uppercase;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">${cfg.ctaLabel||'TRY FALCON NOW'}</button><div style="margin-top:12px;font-size:9px;color:#2a3a4a;letter-spacing:1.5px;">ESC · ENTER · SPACE TO CLOSE</div></div>`;
   document.body.appendChild(overlay);
   let closed = false;
-  function closeCTA() { if(closed)return; closed=true; overlay.remove(); document.removeEventListener('keydown',kd); onClose(); }
+  let _autoCloseId = 0;
+  let _disposeKd   = null;
+  // Lifecycle-aware: auto-close timer + keydown listener are tracked under the
+  // 'cta' namespace so a global cancelNamespace('cta') can tear them down,
+  // and the listener never leaks if the overlay is removed by another path.
+  const LC = (window.FalconArcade && window.FalconArcade.Lifecycle) || null;
+  function closeCTA() {
+    if (closed) return;
+    closed = true;
+    if (_autoCloseId){
+      if (LC) LC.clearTimeout(_autoCloseId);
+      else    clearTimeout(_autoCloseId);
+      _autoCloseId = 0;
+    }
+    if (_disposeKd){ try{ _disposeKd(); }catch(_){ } _disposeKd = null; }
+    else           { document.removeEventListener('keydown', kd); }
+    overlay.remove();
+    onClose();
+  }
   document.getElementById('fr-cta-btn').addEventListener('click', () => { window.open(cfg.ctaUrl,'_blank'); });
   overlay.addEventListener('click', (e) => { if(e.target===overlay) closeCTA(); });
   const kd = (e) => { if(['Escape','Space','Enter'].includes(e.code)){ e.preventDefault(); closeCTA(); } };
-  document.addEventListener('keydown', kd);
-  setTimeout(closeCTA, 7000);
+  if (LC) {
+    _disposeKd  = LC.on(document, 'keydown', kd, false, 'cta');
+    _autoCloseId = LC.setTimeout(closeCTA, 7000, 'cta');
+  } else {
+    document.addEventListener('keydown', kd);
+    _autoCloseId = setTimeout(closeCTA, 7000);
+  }
 };
 
 // Unique booth identifier — persists in localStorage, included in all CSV exports
@@ -1314,11 +1736,13 @@ const TRANSLATIONS = {
     dash_return:'◈ MISSION SELECT',
     deploy_overlay_text:'DEPLOYING...',
     dash_clear_all_confirm:'Clear all leaderboard entries for every game? This cannot be undone.',
-    dash_footer_hint:'L global rankings · Ctrl+Shift+E export all · Ctrl+Shift+R clear all · <span class="blink">▶ SELECT A MISSION</span>',
+    dash_footer_hint:'<span class="blink">▶ SELECT A MISSION</span>',
     dash_rankings_btn:'<strong>[L]</strong> Global Rankings',
     dash_attract_btn:'<strong>[A]</strong> Attract Mode',
     dash_export_btn:'<strong>[Ctrl+Shift+E]</strong> Export Rankings',
     dash_reset_btn:'<strong>[Ctrl+Shift+R]</strong> Reset Rankings',
+    dash_mute_on:'<strong>[M]</strong> Sound On',
+    dash_mute_off:'<strong>[M]</strong> Sound Off',
     dash_rankings_title:'GLOBAL RANKINGS',
     dash_rankings_agent:'Agent',
     dash_rankings_score:'Score',
@@ -1944,11 +2368,13 @@ const TRANSLATIONS = {
     dash_return:'◈ SELEÇÃO DE MISSÃO',
     deploy_overlay_text:'ATIVANDO...',
     dash_clear_all_confirm:'Limpar todas as entradas do placar de todos os jogos? Isso não pode ser desfeito.',
-    dash_footer_hint:'L ranking global · Ctrl+Shift+E exportar tudo · Ctrl+Shift+R limpar tudo · <span class="blink">▶ SELECIONE UMA MISSÃO</span>',
+    dash_footer_hint:'<span class="blink">▶ SELECIONE UMA MISSÃO</span>',
     dash_rankings_btn:'<strong>[L]</strong> Ranking Global',
     dash_attract_btn:'<strong>[A]</strong> Modo Atrativo',
     dash_export_btn:'<strong>[Ctrl+Shift+E]</strong> Exportar Rankings',
     dash_reset_btn:'<strong>[Ctrl+Shift+R]</strong> Limpar Rankings',
+    dash_mute_on:'<strong>[M]</strong> Som Ligado',
+    dash_mute_off:'<strong>[M]</strong> Som Desligado',
     dash_rankings_title:'RANKING GLOBAL',
     dash_rankings_agent:'Agente',
     dash_rankings_score:'Pontos',
@@ -2570,11 +2996,13 @@ const TRANSLATIONS = {
     dash_return:'◈ SELECCIÓN DE MISIÓN',
     deploy_overlay_text:'DESPLEGANDO...',
     dash_clear_all_confirm:'¿Borrar todas las entradas del ranking de todos los juegos? Esto no se puede deshacer.',
-    dash_footer_hint:'L ranking global · Ctrl+Shift+E exportar todo · Ctrl+Shift+R borrar todo · <span class="blink">▶ SELECCIONA UNA MISIÓN</span>',
+    dash_footer_hint:'<span class="blink">▶ SELECCIONA UNA MISIÓN</span>',
     dash_rankings_btn:'<strong>[L]</strong> Ranking Global',
     dash_attract_btn:'<strong>[A]</strong> Modo Atracción',
     dash_export_btn:'<strong>[Ctrl+Shift+E]</strong> Exportar Rankings',
     dash_reset_btn:'<strong>[Ctrl+Shift+R]</strong> Reiniciar Rankings',
+    dash_mute_on:'<strong>[M]</strong> Sonido Activado',
+    dash_mute_off:'<strong>[M]</strong> Sonido Silenciado',
     dash_rankings_title:'RANKING GLOBAL',
     dash_rankings_agent:'Agente',
     dash_rankings_score:'Puntos',
@@ -3196,11 +3624,13 @@ const TRANSLATIONS = {
     dash_return:'◈ ミッション選択',
     deploy_overlay_text:'デプロイ中...',
     dash_clear_all_confirm:'全ゲームのランキング記録をすべて削除しますか？この操作は元に戻せません。',
-    dash_footer_hint:'L グローバルランキング · Ctrl+Shift+E ですべて書き出し · Ctrl+Shift+R ですべて消去 · <span class="blink">▶ ミッションを選択</span>',
+    dash_footer_hint:'<span class="blink">▶ ミッションを選択</span>',
     dash_rankings_btn:'<strong>[L]</strong> グローバルランキング',
     dash_attract_btn:'<strong>[A]</strong> アトラクトモード',
     dash_export_btn:'<strong>[Ctrl+Shift+E]</strong> ランキングを書き出し',
     dash_reset_btn:'<strong>[Ctrl+Shift+R]</strong> ランキングを消去',
+    dash_mute_on:'<strong>[M]</strong> サウンド オン',
+    dash_mute_off:'<strong>[M]</strong> サウンド オフ',
     dash_rankings_title:'グローバルランキング',
     dash_rankings_agent:'エージェント',
     dash_rankings_score:'スコア',
@@ -4670,8 +5100,14 @@ function _saveStoredArray(key, entries) {
     sessionStorage.setItem(key, serialized);
     delete ARCADE_FALLBACK_STORAGE[key];
     return true;
-  } catch (_) {
+  } catch (e) {
+    // Quota or privacy mode — record so operators can see fallback engaged
+    // before rankings silently stop persisting across reloads.
     ARCADE_FALLBACK_STORAGE[key] = serialized;
+    try {
+      const T = window.FalconArcade && window.FalconArcade.Telemetry;
+      if (T) T.report('store.session.quota', e, { key, bytes:serialized.length });
+    } catch(_) {}
     return false;
   }
 }
@@ -4700,8 +5136,14 @@ function _saveStoredNumber(key, value) {
     localStorage.setItem(key, String(safeValue));
     delete ARCADE_FALLBACK_VALUES[key];
     return true;
-  } catch (_) {
+  } catch (e) {
+    // Quota or privacy mode on localStorage — record so operators can see
+    // high-score persistence has fallen back to in-memory only.
     ARCADE_FALLBACK_VALUES[key] = safeValue;
+    try {
+      const T = window.FalconArcade && window.FalconArcade.Telemetry;
+      if (T) T.report('store.local.quota', e, { key, value:safeValue });
+    } catch(_) {}
     return false;
   }
 }
@@ -5122,12 +5564,32 @@ function clearAllRankings() {
     if (e && typeof e.isOpen === 'function') {
       try { return !!e.isOpen(); } catch (_) { return false; }
     }
-    // Fallback: element presence + 'is-open' class OR just presence for
-    // transient overlays (deploy, return-to-menu, dash-disclaimer, cta).
+    // Fallback strategy:
+    // - Persistent-DOM overlays (classList toggles 'is-open') → trust the class.
+    // - Transient overlays whose controller removes the node on hide (deploy,
+    //   return-to-menu, dash-disclaimer, cta) → presence IS openness.
+    // Previous implementation `.contains('is-open') || true` always returned
+    // true for any existing node — that shadowed real state and caused callers
+    // like scene-swap guards to no-op unexpectedly. We now distinguish the two
+    // classes: if the node carries any is-open-family class, trust it;
+    // otherwise treat bare presence as a transient-open signal only if the
+    // node has no other state class we recognise (e.g. 'is-closing').
     const tries = [name, name + '-overlay'];
     for (const id of tries) {
       const el = document.getElementById(id);
-      if (el) return el.classList.contains('is-open') || true;
+      if (!el) continue;
+      if (el.classList.contains('is-closing')) return false;
+      if (el.classList.contains('is-open'))    return true;
+      // Transient overlays that don't use is-open — node presence == open.
+      // Anchor this list so we don't silently report "open" for every
+      // unrelated element that shares the id shape.
+      const transientIds = new Set([
+        'deploy-overlay', 'deploy',
+        'return-to-menu-overlay', 'return-to-menu',
+        'dash-disclaimer-overlay', 'dash-disclaimer',
+        'cta-overlay', 'cta'
+      ]);
+      if (transientIds.has(id)) return true;
     }
     return false;
   }
@@ -5960,6 +6422,15 @@ function clearAllRankings() {
   function _current(){ return _scenesCurrent; }
   function _list(){ return Object.keys(_scenesRegistry); }
 
+  // Sugar — explicit-state helpers added 2026-04-20 hardening pass.
+  // `is(name)` and `active()` give callers a positive-assertion API instead of
+  // forcing them to compare against `current()` directly. `has(name)` lets call
+  // sites soft-check a registration before attempting a `change(name)` that
+  // would otherwise silently no-op.
+  function _is(name){ return typeof name === 'string' && name === _scenesCurrent; }
+  function _active(){ return _scenesCurrent; }
+  function _has(name){ return typeof name === 'string' && !!_scenesRegistry[name]; }
+
   const Scenes = Object.freeze({
     register: _register,
     change:   _change,
@@ -5967,6 +6438,9 @@ function clearAllRankings() {
     render:   _render,
     current:  _current,
     list:     _list,
+    is:       _is,
+    active:   _active,
+    has:      _has,
   });
 
   window.FalconArcade = window.FalconArcade || {};
@@ -6457,6 +6931,14 @@ function returnToDashboard() {
   }
 
   resetArcadeRuntime();
+  // shutdownIncidentZeroRuntime (and some legacy reset paths) force MUTED=false
+  // to hand the next game full audio — but that silently overrides the booth-
+  // operator's dashboard mute preference. Re-apply the persisted state here so
+  // the dashboard button and audio stay coherent on every return-to-dash hop.
+  try{
+    const _wantMute = _loadStoredNumber('cs_muted_v1', 0) ? true : false;
+    if(typeof window._applyDashboardMute === 'function') window._applyDashboardMute(_wantMute);
+  }catch(_){}
   _arcadeDashVisible = true;
   _activeGameId = null;
   _dashboardAttract?.stop?.('return');
@@ -7718,6 +8200,22 @@ function _createDashboardAttractDirector() {
   ['keydown','mousedown','touchstart'].forEach(ev => {
     document.addEventListener(ev, dismissOnInput, { passive:true });
   });
+  // ── Lifecycle hook — pause attract while tab is hidden ─────────────────────
+  // Problem this solves: the attract director schedules many timers and rAF
+  // callbacks per scene (sim motion, fire, watchdog, advance, breath, hero-
+  // word stagger, etc.). If the booth tab is hidden for a long stretch, those
+  // kept churning against an invisible DOM and built up timer pressure that
+  // could cascade on re-show. The Lifecycle facade fires `arcade:pause` on
+  // `document.hidden` — we fully stop on pause and restart the idle timer on
+  // resume. `resetIdle()` re-arms the same 5-minute countdown the user would
+  // see if they had just walked up to a fresh dashboard.
+  try {
+    const LC = window.FalconArcade && window.FalconArcade.Lifecycle;
+    if (LC) {
+      LC.on(document, 'arcade:pause',  function(){ if (active) stop('visibility'); }, false, 'attract');
+      LC.on(document, 'arcade:resume', function(){ resetIdle(); },                     false, 'attract');
+    }
+  } catch (_) {}
   return { start, stop, toggle, resetIdle, isActive:() => active };
 }
 
@@ -7813,10 +8311,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ArcadeSonic.focus();
     _dashboardAttract?.toggle();
   });
-  document.getElementById('dashboard-attract-btn')?.addEventListener('click', () => {
-    ArcadeSonic.focus();
-    _dashboardAttract?.toggle();
-  });
+  // dashboard-attract-btn (floating bottom-right) was removed 2026-04-20 as a
+  // duplicate of the inline ops-row button above. Handler intentionally gone.
   document.getElementById('dashboard-export-btn')?.addEventListener('click', () => {
     ArcadeSonic.focus();
     exportAllRankingsCSV() && ArcadeSonic.confirm();
@@ -7828,11 +8324,54 @@ document.addEventListener('DOMContentLoaded', () => {
       ArcadeSonic.warning();
     }
   });
+  // ── Dashboard mute toggle (2026-04-20) ──
+  // Canonical mute path is window.SoundEngine.setMuted(bool). The button's
+  // aria-pressed attribute is the single source of truth for dashboard UI;
+  // the underlying MUTED flag (block-2-local `let`) is synced through setMuted.
+  // Persisted via localStorage key 'cs_muted_v1' so the preference survives
+  // reloads, matching the pattern used by other dashboard preferences.
+  const _muteBtn = document.getElementById('dashboard-mute-btn');
+  function _syncDashboardMuteBtn(muted){
+    if(!_muteBtn) return;
+    const on = !!muted;
+    _muteBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    const key = on ? 'dash_mute_off' : 'dash_mute_on';
+    _muteBtn.setAttribute('data-i18n', key);
+    try{ _muteBtn.innerHTML = T(key); }catch(_){ /* T() may not be ready pre-boot */ }
+  }
+  window._syncDashboardMuteBtn = _syncDashboardMuteBtn;
+  function _applyDashboardMute(on){
+    const want = !!on;
+    try{ window.SoundEngine?.setMuted?.(want); }catch(_){}
+    try{ _saveStoredNumber('cs_muted_v1', want ? 1 : 0); }catch(_){}
+    _syncDashboardMuteBtn(want);
+  }
+  window._applyDashboardMute = _applyDashboardMute;
+  // Boot-time restore: honor the user's saved mute preference. Defaults to 0
+  // (unmuted) for first-run / missing key, matching pre-feature behavior.
+  try{
+    const _savedMute = _loadStoredNumber('cs_muted_v1', 0) ? true : false;
+    if (_savedMute) _applyDashboardMute(true);
+    else _syncDashboardMuteBtn(false);
+  }catch(_){ _syncDashboardMuteBtn(false); }
+  _muteBtn?.addEventListener('click', () => {
+    ArcadeSonic.focus();
+    const nowOn = _muteBtn.getAttribute('aria-pressed') === 'true';
+    _applyDashboardMute(!nowOn);
+  });
   document.addEventListener('keydown', e => {
     if (!_arcadeDashVisible) return;
     if (_missionBriefController?.isOpen?.()) return;
     if (e.code === 'KeyA') {
       _dashboardAttract?.toggle();
+      e.preventDefault();
+      return;
+    }
+    if (e.code === 'KeyM') {
+      // Mirror the in-game [M] hotkey while on the dashboard. Source-of-truth
+      // is the button's aria-pressed so dashboard + game stay coherent.
+      const nowOn = _muteBtn?.getAttribute('aria-pressed') === 'true';
+      _applyDashboardMute(!nowOn);
       e.preventDefault();
       return;
     }
@@ -8383,6 +8922,14 @@ const FalconRanking = (function () {
         }
       }
       .fr-btn-secondary:active { transform: scale(0.97); }
+      /* Keyboard-only focus rings on the rank-form submit/skip buttons —
+         invisible on mouse click, visible when user tabs in with a keyboard. */
+      .fr-btn:focus-visible {
+        outline: 2px solid rgba(255,216,77,0.85);
+        outline-offset: 2px;
+        box-shadow: 0 0 16px rgba(255,216,77,0.22);
+      }
+      .fr-btn:focus:not(:focus-visible) { outline: none; }
 
       /* Consent line — demoted to subordinate the CTA (legal text required, but volume reduced) */
       .fr-consent {
@@ -9312,6 +9859,11 @@ const S = Object.freeze({
   PLAYING:           'PLAYING',
   BOSS_INTRO:        'BOSS_INTRO',
   BOSS_FIGHT:        'BOSS_FIGHT',
+  // WORLD_COLLAPSE: authored boss-kill cinematic — short (≤5.4s, ≤2.2s in RM)
+  // cinematic that plays between the final boss of a phase dying and PHASE_END
+  // opening. Gameplay is fully frozen; audio / particle / shake beats run from
+  // _updWorldCollapse + drawWorldCollapse. Terminated explicitly by endPhase().
+  WORLD_COLLAPSE:    'WORLD_COLLAPSE',
   PHASE_END:         'PHASE_END',
   GAME_OVER:         'GAME_OVER',
   WIN:               'WIN',
@@ -9455,7 +10007,10 @@ function AC(){
 }
 function _buildMasterChain(){
   const ac=AC_CTX;
-  _masterGain=ac.createGain(); _masterGain.gain.value=0.82;
+  // Honor persisted MUTED (set via dashboard mute button on boot, before
+  // AudioContext exists). Without this, muted sessions would wake up audible
+  // on first user gesture until setMuted was re-applied.
+  _masterGain=ac.createGain(); _masterGain.gain.value = MUTED ? 0 : 0.82;
   _compressor=ac.createDynamicsCompressor();
   _compressor.threshold.value=-18; _compressor.knee.value=8;
   _compressor.ratio.value=4; _compressor.attack.value=0.004;
@@ -12209,6 +12764,75 @@ function _playAdversaryDefeat(name){
 // ══════════════════════════════════════════════════════════════════════
 function _stingerRecipe(name,opts){
   switch(name){
+    // ── River boss-kill "world collapse" cinematic beats ─────────────
+    // Four beats designed to read in order, each with a clear sonic role.
+    // Recipes reuse _playLayered already defined below. No new bus.
+    case 'boss_world_lock': {
+      // Beat 1 — IMPACT LOCK: short choked thud + high sine pinch.
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:2.6,
+        transient:{ noise:true, d:0.025, g:0.55, filt:{type:'bandpass',f:2600,Q:0.9} },
+        body:{ type:'sine', f:2200, d:0.14, g:0.08, filt:{type:'bandpass',f:2200,Q:4.0} },
+        sub:{ type:'sine', f:41, d:0.5, g:0.14, attack:0.02 },
+        reverbWet:0.35
+      });
+      break;
+    }
+    case 'boss_world_detonate': {
+      // Beat 2 — CORE DETONATION: white-hot sub slam + brass air + long tail.
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:4.0,
+        transient:{ noise:true, d:0.06, g:0.95, filt:{type:'bandpass',f:1400,Q:0.4} },
+        body:{ type:'sawtooth', f:110, toF:36, d:1.6, g:0.2, filt:{type:'lowpass',f:520,Q:3.0}, filtEnvTo:140 },
+        subs:[
+          { type:'sawtooth', f:112, toF:38, d:1.6, g:0.17, filt:{type:'lowpass',f:520,Q:3.0}, filtEnvTo:140 },
+          { type:'sine',     f:55,  toF:27, d:2.2, g:0.22, attack:0.05 }
+        ],
+        sub:{ type:'sine', f:27, toF:19, d:2.6, g:0.22, attack:0.08 },
+        grit:{ d:1.4, g:0.32, filtType:'bandpass', f:3400, Q:0.6 },
+        reverbWet:0.75
+      });
+      // Layered brass stab on top — fan-out of tension
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:-1.2, gainDb:2.4,
+        body:{ type:'sawtooth', f:220, toF:82, d:0.7, g:0.14, filt:{type:'lowpass',f:780,Q:3.2}, filtEnvTo:260 },
+        subs:[{ type:'sawtooth', f:222, toF:84, d:0.7, g:0.12, filt:{type:'lowpass',f:780,Q:3.2}, filtEnvTo:260 }],
+        reverbWet:0.6
+      }),70);
+      break;
+    }
+    case 'boss_world_shear': {
+      // Beat 3 — WORLD SHEAR: metal-tear grit + slow downward glide + pad.
+      _playLayered({
+        bus:'stinger', pan:-2, gainDb:2.2,
+        transient:{ noise:true, d:0.04, g:0.55, filt:{type:'bandpass',f:5200,Q:0.8} },
+        body:{ type:'sawtooth', f:880, toF:180, d:1.1, g:0.09, filt:{type:'bandpass',f:1800,Q:2.6}, filtEnvTo:420 },
+        subs:[{ type:'sawtooth', f:660, toF:140, d:1.1, g:0.07, filt:{type:'bandpass',f:1800,Q:2.6} }],
+        grit:{ d:1.1, g:0.30, filtType:'bandpass', f:3800, Q:0.7 },
+        reverbWet:0.55
+      });
+      setTimeout(()=>_playLayered({
+        bus:'stinger', pan:2, gainDb:1.8,
+        body:{ type:'sawtooth', f:147, toF:74, d:1.4, g:0.11, filt:{type:'lowpass',f:600,Q:3.0}, filtEnvTo:220 },
+        subs:[{ type:'sine', f:49, d:1.6, g:0.14, attack:0.08 }],
+        reverbWet:0.62
+      }),120);
+      break;
+    }
+    case 'boss_world_void': {
+      // Beat 4 — VOID / ASHFALL: cold breath, distant sub bloom, no transient.
+      _playLayered({
+        bus:'stinger', pan:0, gainDb:1.0,
+        body:{ type:'sine', f:98, d:1.6, g:0.08, filt:{type:'lowpass',f:440,Q:1.6}, attack:0.35 },
+        subs:[
+          { type:'sine', f:49, d:1.8, g:0.10, attack:0.4 },
+          { type:'sine', f:24, d:2.2, g:0.11, attack:0.5 }
+        ],
+        grit:{ d:1.4, g:0.08, filtType:'bandpass', f:6800, Q:1.2 },
+        reverbWet:0.72
+      });
+      break;
+    }
     case 'boss_alert': {
       // BRAAAM — detuned low brass stab, sub drop, noise bloom, long tail.
       _playLayered({
@@ -14023,6 +14647,9 @@ const AMODS=Object.create(null);
 // ARCH: Removed MINE_WARN — it was declared globally but never read.
 // Mine proximity is tracked on individual enemy objects via e.proxWarn.
 let BOSS=null, BQUEUE=[];
+// WORLD_COLLAPSE cinematic state — captured from defeatBoss() just before BOSS=null,
+// consumed by _updWorldCollapse / drawWorldCollapse, cleared by endPhase().
+let _collapse=null;
 let OBJ=[], NARR=[];
 const STARS=Array.from({length:110},()=>({x:rnd(0,VW),y:rnd(0,VH),s:rnd(1,2.8),v:rnd(8,30)}));
 
@@ -15350,7 +15977,321 @@ function defeatBoss(){
   addPickup(W.scroll+280,bx,'module',dropK);
   const dn=bn; BOSS=null;
   if(BQUEUE.length){ setTimeout(()=>spawnBoss(BQUEUE.shift()),1600); BANNER(TF('def_boss_second_contact',{name:dn}),2.6,'#ffd84d'); }
-  else { BANNER(TF('def_boss_corridor_secured',{name:dn}),2.4,'#74ff88'); COMMS(TF('def_boss_report_filed',{name:dn}),bc); endPhase(); }
+  else {
+    BANNER(TF('def_boss_corridor_secured',{name:dn}),2.4,'#74ff88');
+    COMMS(TF('def_boss_report_filed',{name:dn}),bc);
+    // River boss-kill cinematic — the phase-end information screen used to
+    // arrive immediately after the burst loop. Now we insert a short authored
+    // world-destroyed cinematic between the burst and the scorecard. No-op
+    // boss data is captured before this (bx/by/bc/bn) and fed in here.
+    _enterWorldCollapse(bx, by, bc, dn);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  WORLD_COLLAPSE — 5-beat River boss-kill cinematic
+//  Sits between defeatBoss() (end-of-queue) and endPhase(). Freezes
+//  gameplay, drives hand-authored audio + FX, then calls endPhase() which
+//  flips STATE to PHASE_END and the existing scorecard opens.
+//
+//  Beats (full-motion, total 5.4s):
+//    0.00 – 0.50  IMPACT LOCK      vignette closes on kill point + lock tone
+//    0.50 – 1.60  CORE DETONATION  white-hot core + concentric shock rings
+//    1.60 – 3.20  WORLD SHEAR      horizontal/vertical tear bands across map
+//    3.20 – 4.50  AFTERIMAGE / ASH shear settles, ash drifts, air glows warm
+//    4.50 – 5.40  WHITEOUT HANDOFF short white bloom into black — hands off
+//  Reduced-motion (total 2.2s): just lock + shock ring + whiteout. Same audio
+//  cadence, tighter spacing. Both branches terminate via endPhase().
+// ══════════════════════════════════════════════════════════════════════
+function _enterWorldCollapse(bx, by, bc, bn){
+  const rm = !!window._reduceMotion;
+  // Capture everything that drives the cinematic — boss object is about to
+  // be null, so no late binding. Accent is the boss color; everything else
+  // is geometric.
+  _collapse = {
+    bx: (typeof bx === 'number') ? bx : VW/2,
+    by: (typeof by === 'number') ? by : VH*0.42,
+    bc: bc || '#ffd84d',
+    bn: bn || '',
+    t: 0,
+    total: rm ? 2.2 : 5.4,
+    rm,
+    // Deterministic shear-band seeds (so the "tear the world" pattern is
+    // stable across one playthrough of a single kill; a new kill re-seeds).
+    bands: (function(){
+      const out=[];
+      for(let i=0;i<12;i++){
+        out.push({
+          y:   Math.random()*VH,
+          off: (Math.random()*2-1) * (rm?40:160),
+          dur: 0.35 + Math.random()*0.45,
+          dly: Math.random()*0.55,
+          h:   12 + Math.random()*28,
+        });
+      }
+      return out;
+    })(),
+    // Pre-chosen ash particles, scheduled during beat 4.
+    ash: (function(){
+      const out=[];
+      const n = rm ? 18 : 64;
+      for(let i=0;i<n;i++){
+        out.push({
+          x: (typeof bx==='number'?bx:VW/2) + (Math.random()*2-1) * (rm?180:420),
+          y: (typeof by==='number'?by:VH*0.42) + (Math.random()*2-1) * (rm?90:240),
+          vy: 12 + Math.random()*28,
+          vx: (Math.random()*2-1)*18,
+          r:  0.8 + Math.random()*1.6,
+          life: 1.2 + Math.random()*1.2,
+          born: 0,
+        });
+      }
+      return out;
+    })(),
+    // Audio/FX fire-once gates (one bit per beat).
+    fired: {lock:false, detonate:false, shear:false, void_:false, whiteout:false},
+  };
+  // Opening hit — louder shake, slower slow-mo than the prior burst loop.
+  _slowMoFactor = 0.12;
+  SHAKE(14, 0.6);
+  // Wipe any stale banner/COMMS animation state from lingering over the
+  // cinematic would feel cluttered; leave BANNER/COMMS as-is (they already
+  // fade on their own).
+  STATE = S.WORLD_COLLAPSE;
+}
+
+function _updWorldCollapse(dt){
+  if(!_collapse){ endPhase(); return; }
+  const c = _collapse;
+  c.t += dt;
+  const t = c.t;
+  const rm = c.rm;
+  const tLock     = rm ? 0.00 : 0.00;
+  const tDetonate = rm ? 0.35 : 0.55;
+  const tShear    = rm ? 0.90 : 1.60;
+  const tVoid     = rm ? 1.50 : 3.20;
+  const tWhite    = rm ? 1.90 : 4.50;
+
+  // Beat 1 — IMPACT LOCK (always fires)
+  if(!c.fired.lock && t >= tLock){
+    c.fired.lock = true;
+    try{ window.SoundEngine?.stinger?.fire('boss_world_lock'); }catch(_){}
+    // Short tight shake already applied on entry; nothing extra here.
+  }
+
+  // Beat 2 — CORE DETONATION
+  if(!c.fired.detonate && t >= tDetonate){
+    c.fired.detonate = true;
+    try{ window.SoundEngine?.stinger?.fire('boss_world_detonate'); }catch(_){}
+    SHAKE(rm?10:22, rm?0.35:0.9);
+    FLASH('#ffffff', rm?0.30:0.55);
+    try{
+      // Concentric shock rings off the kill point — colour grades from
+      // white → boss accent → warm ember so the ring keeps reading against
+      // both day and night frames.
+      ring(c.bx, c.by, '#ffffff', rm?180:420, rm?0.45:0.9);
+      ring(c.bx, c.by, c.bc,      rm?240:560, rm?0.55:1.1);
+      ring(c.bx, c.by, '#ff7a00', rm?300:680, rm?0.65:1.3);
+      burst(c.bx, c.by, rm?18:44, ['#fff','#ffd84d',c.bc,'#ff7a00'], rm?260:520, rm?0.7:1.4);
+    }catch(_){}
+  }
+
+  // Beat 3 — WORLD SHEAR (skipped in reduced motion)
+  if(!c.fired.shear && t >= tShear){
+    c.fired.shear = true;
+    if(!rm){
+      try{ window.SoundEngine?.stinger?.fire('boss_world_shear'); }catch(_){}
+      SHAKE(16, 1.2);
+      // Secondary rings that spread outward from the kill point during shear
+      try{
+        ring(c.bx, c.by, '#ffffff', 900, 1.4);
+        ring(c.bx, c.by, c.bc,      1200, 1.6);
+      }catch(_){}
+    } else {
+      // RM still wants an audio cue at this beat, but no shake/shear chaos.
+      try{ window.SoundEngine?.stinger?.fire('boss_world_shear'); }catch(_){}
+    }
+  }
+
+  // Beat 4 — AFTERIMAGE / ASH / VOID
+  if(!c.fired.void_ && t >= tVoid){
+    c.fired.void_ = true;
+    try{ window.SoundEngine?.stinger?.fire('boss_world_void'); }catch(_){}
+    SHAKE(rm?3:6, 0.4);
+  }
+
+  // Beat 5 — WHITEOUT HANDOFF
+  if(!c.fired.whiteout && t >= tWhite){
+    c.fired.whiteout = true;
+    FLASH('#ffffff', rm?0.5:0.7);
+    // No stinger here — we want the PHASE_END scorecard's entry to feel
+    // like the only sound after the whiteout. Deliberate silence cue.
+  }
+
+  // Handoff to the scorecard.
+  if(t >= c.total){
+    _collapse = null;
+    endPhase();
+  }
+}
+
+function drawWorldCollapse(){
+  if(!_collapse){ return; }
+  const c = _collapse;
+  const t = c.t;
+  const rm = c.rm;
+
+  // Under-layer: frozen frame of the world at the moment of kill. Don't
+  // advance dt so the world doesn't keep rolling under the cinematic.
+  drawWorld(0);
+  drawGround();
+  drawBillboards();
+  drawAmbient();
+  drawBridges();
+  drawFuelBarges();
+  drawPickups();
+  drawEnemies();
+  drawPlayer();
+  drawRings();
+  drawParts();
+
+  const W = VW, H = VH;
+
+  // ── Beat 1 — IMPACT LOCK vignette closing on kill point ──────────────
+  const lockEnd = rm ? 0.35 : 0.55;
+  if(t <= lockEnd + 0.05){
+    const k = Math.min(1, t / Math.max(0.001, lockEnd));
+    const innerR = Math.max(40, (1 - k) * Math.max(W, H) * 0.65);
+    const outerR = innerR + Math.max(W, H);
+    const grad = CX.createRadialGradient(c.bx, c.by, innerR, c.bx, c.by, outerR);
+    grad.addColorStop(0, 'rgba(0,0,0,0)');
+    grad.addColorStop(0.6, 'rgba(0,0,0,'+(0.45 + 0.35*k).toFixed(3)+')');
+    grad.addColorStop(1, 'rgba(0,0,0,'+(0.75 + 0.2*k).toFixed(3)+')');
+    CX.save();
+    CX.fillStyle = grad;
+    CX.fillRect(0, 0, W, H);
+    // Lock reticle — 4 corner ticks shrinking toward the kill point
+    CX.globalAlpha = Math.min(1, k*1.2);
+    CX.strokeStyle = c.bc;
+    CX.lineWidth = 1.5;
+    const rr = 56 - k*32;
+    CX.beginPath();
+    CX.moveTo(c.bx-rr, c.by-rr+10); CX.lineTo(c.bx-rr, c.by-rr); CX.lineTo(c.bx-rr+10, c.by-rr);
+    CX.moveTo(c.bx+rr, c.by-rr+10); CX.lineTo(c.bx+rr, c.by-rr); CX.lineTo(c.bx+rr-10, c.by-rr);
+    CX.moveTo(c.bx-rr, c.by+rr-10); CX.lineTo(c.bx-rr, c.by+rr); CX.lineTo(c.bx-rr+10, c.by+rr);
+    CX.moveTo(c.bx+rr, c.by+rr-10); CX.lineTo(c.bx+rr, c.by+rr); CX.lineTo(c.bx+rr-10, c.by+rr);
+    CX.stroke();
+    CX.restore();
+  }
+
+  // ── Beat 2 — CORE DETONATION white-hot bloom ─────────────────────────
+  const detStart = rm ? 0.35 : 0.55;
+  const detEnd   = rm ? 0.90 : 1.60;
+  if(t >= detStart - 0.02 && t <= detEnd + 0.1){
+    const k = Math.max(0, Math.min(1, (t - detStart) / Math.max(0.001, detEnd - detStart)));
+    const bloomR = 30 + k * (rm?260:560);
+    CX.save();
+    CX.globalCompositeOperation = 'lighter';
+    const g = CX.createRadialGradient(c.bx, c.by, 0, c.bx, c.by, bloomR);
+    g.addColorStop(0,   'rgba(255,255,255,'+(0.9*(1-k)).toFixed(3)+')');
+    g.addColorStop(0.25,'rgba(255,240,190,'+(0.75*(1-k*0.85)).toFixed(3)+')');
+    g.addColorStop(0.6, 'rgba(255,122,0,'+(0.4*(1-k)).toFixed(3)+')');
+    g.addColorStop(1,   'rgba(0,0,0,0)');
+    CX.fillStyle = g;
+    CX.fillRect(0, 0, W, H);
+    CX.restore();
+  }
+
+  // ── Beat 3 — WORLD SHEAR horizontal tear bands (full-motion only) ────
+  if(!rm){
+    const shearStart = 1.60;
+    const shearEnd   = 3.20;
+    if(t >= shearStart - 0.02 && t <= shearEnd + 0.2){
+      const localT = t - shearStart;
+      CX.save();
+      for(const b of c.bands){
+        const lt = localT - b.dly;
+        if(lt < 0 || lt > b.dur) continue;
+        const k = lt / b.dur;
+        // Offset peaks mid-duration then relaxes back to 0 — "tear then snap back"
+        const envelope = Math.sin(k * Math.PI);
+        const dx = b.off * envelope;
+        const alpha = 0.85 * (1 - k*0.5);
+        CX.globalAlpha = alpha;
+        CX.fillStyle = 'rgba(10,14,22,0.7)';
+        CX.fillRect(0, b.y, W, b.h);
+        CX.fillStyle = c.bc;
+        CX.globalAlpha = 0.28 * envelope;
+        CX.fillRect(dx*0.2, b.y - 1, W, 1);
+        CX.fillRect(-dx*0.2, b.y + b.h, W, 1);
+      }
+      // A thin chromatic glint centered on the kill point during shear
+      CX.globalAlpha = 0.22 * Math.max(0, 1 - Math.abs((localT - (shearEnd-shearStart)*0.5) / ((shearEnd-shearStart)*0.5)));
+      CX.fillStyle = '#ffffff';
+      CX.fillRect(0, c.by - 1, W, 2);
+      CX.restore();
+    }
+  }
+
+  // ── Beat 4 — AFTERIMAGE / ASH / VOID ─────────────────────────────────
+  const voidStart = rm ? 1.50 : 3.20;
+  const voidEnd   = rm ? 1.90 : 4.50;
+  if(t >= voidStart - 0.02){
+    const k = Math.max(0, Math.min(1, (t - voidStart) / Math.max(0.001, voidEnd - voidStart)));
+    // Dim the underlying world to a cold void
+    CX.save();
+    CX.fillStyle = 'rgba(0,0,0,'+(0.35 + 0.35*k).toFixed(3)+')';
+    CX.fillRect(0,0,W,H);
+    // Warm afterglow circle where the boss was — fades as void deepens
+    const glowR = (rm?140:260) * (1 - k*0.5);
+    const g2 = CX.createRadialGradient(c.bx, c.by, 0, c.bx, c.by, glowR);
+    const gA = (0.55 * (1 - k)).toFixed(3);
+    g2.addColorStop(0, 'rgba(255,180,80,'+gA+')');
+    g2.addColorStop(1, 'rgba(255,180,80,0)');
+    CX.globalCompositeOperation = 'lighter';
+    CX.fillStyle = g2;
+    CX.fillRect(0,0,W,H);
+    CX.globalCompositeOperation = 'source-over';
+    // Ash drift (full-motion renders more; RM renders a sparse version)
+    CX.fillStyle = 'rgba(220,200,180,0.75)';
+    for(const p of c.ash){
+      if(p.born === 0) p.born = t;
+      const age = t - p.born;
+      if(age < 0 || age > p.life) continue;
+      const ax = p.x + p.vx * age;
+      const ay = p.y + p.vy * age;
+      const af = 1 - (age/p.life);
+      CX.globalAlpha = Math.max(0, af * 0.8);
+      CX.beginPath();
+      CX.arc(ax, ay, p.r, 0, TAU);
+      CX.fill();
+    }
+    CX.restore();
+  }
+
+  // ── Beat 5 — WHITEOUT HANDOFF ────────────────────────────────────────
+  const whiteStart = rm ? 1.90 : 4.50;
+  const whiteEnd   = rm ? 2.20 : 5.40;
+  if(t >= whiteStart - 0.02){
+    const k = Math.max(0, Math.min(1, (t - whiteStart) / Math.max(0.001, whiteEnd - whiteStart)));
+    CX.save();
+    // Front half: bright bloom. Back half: slam to near-black for handoff.
+    if(k < 0.5){
+      CX.fillStyle = 'rgba(255,255,255,'+(k*2*0.92).toFixed(3)+')';
+    } else {
+      const k2 = (k - 0.5) * 2;
+      // Ramp from white → black
+      const v = Math.floor(255 * (1 - k2));
+      CX.fillStyle = 'rgba('+v+','+v+','+v+','+(0.92).toFixed(3)+')';
+    }
+    CX.fillRect(0,0,W,H);
+    CX.restore();
+  }
+
+  // Banner/COMMS overlays (fade naturally) so the tail-end corridor-secured
+  // text can keep reading during the cinematic if it's still alive.
+  try{ drawBanner && drawBanner(); }catch(_){}
+  try{ drawComms && drawComms(); }catch(_){}
 }
 
 // ── Collision Detection ───────────────────────────────────────────────
@@ -19865,6 +20806,11 @@ function ezInExpo(p){ if(p<=0)return 0; if(p>=1)return 1; return Math.pow(2,10*p
     if(mq.addEventListener) mq.addEventListener('change', e=>{ window._reduceMotion = !!e.matches; });
     else if(mq.addListener) mq.addListener(e=>{ window._reduceMotion = !!e.matches; });
   }catch(_){ window._reduceMotion = false; }
+  // Callable form used by Defense + Hunt score-flash gates. Without this the
+  // `!(window._prefersReducedMotion && window._prefersReducedMotion())` checks
+  // would always pass (undefined short-circuits), so score-flash chroma fired
+  // regardless of the user's OS preference. Now the preference is honored.
+  window._prefersReducedMotion = function(){ return !!window._reduceMotion; };
 })();
 // Clamp progress to 1 when the user prefers reduced motion — cinematic reveals
 // collapse to their settled state instead of animating in.
@@ -21196,6 +22142,7 @@ function render(dt){
     case S.PHASE_INTRO:      drawDeployCinematic(); break; // PHASE_INTRO absorbed into cinematic
     case S.DEPLOY_CINEMATIC: drawDeployCinematic(); break;
     case S.BOSS_INTRO:       drawBossIntro();       break;
+    case S.WORLD_COLLAPSE: drawWorldCollapse(); break;
     case S.PHASE_END:   drawPhaseEnd();   break;
     case S.GAME_OVER:   drawGameOver();   break;
     case S.WIN:         drawWin();        break;
@@ -21307,6 +22254,20 @@ function frame(ts){
       if(hk('KeyP')||(PAUSED&&hk('Space'))) _setPaused(!PAUSED);
       if(hk('Escape')){ _setPaused(true); if(confirm(T('g_exit_confirm'))){ _setPaused(false); STATE=S.TITLE; } else { _setPaused(false); } }
       if(!PAUSED){ update(dt); window._boothPing?.(); }
+      break;
+
+    case S.WORLD_COLLAPSE:
+      // Gameplay is frozen; only the FX systems + the cinematic driver tick.
+      // Banner/COMMS keep fading so "corridor secured" can still read.
+      updShake(dt); updAmbient(dt); updParts(dt); updRings(dt); updBanner(dt); updComms(dt); updActAnn(dt);
+      _updWorldCollapse(dt);
+      // Sanctioned skip — Escape jumps straight to the scorecard. Space also
+      // fast-forwards once at least 0.6s has elapsed so the player has seen
+      // the kill-moment impact beat.
+      if(hk('Escape')||(hk('Space')&&_collapse&&_collapse.t>0.6)){
+        _collapse=null;
+        endPhase();
+      }
       break;
 
     case S.PHASE_END:
@@ -21737,6 +22698,14 @@ try{
     // legacy stop-then-start hard-cut path via their own try/catch fallbacks.
     'audio-transitions': [
       ['_audioCrossfade','function']
+    ],
+    // 2026-04-20: dashboard mute toggle. _applyDashboardMute is called from
+    // returnToDashboard (block 2) to re-apply the persisted mute preference
+    // after resetArcadeRuntime clears MUTED=false. _syncDashboardMuteBtn
+    // is exposed for future callers that want to refresh UI without toggling.
+    'dashboard-mute': [
+      ['_applyDashboardMute','function'],
+      ['_syncDashboardMuteBtn','function']
     ]
   };
 
@@ -22219,6 +23188,14 @@ const FalconRanking = (function () {
         }
       }
       .fr-btn-secondary:active { transform: scale(0.97); }
+      /* Keyboard-only focus rings on the rank-form submit/skip buttons —
+         invisible on mouse click, visible when user tabs in with a keyboard. */
+      .fr-btn:focus-visible {
+        outline: 2px solid rgba(255,216,77,0.85);
+        outline-offset: 2px;
+        box-shadow: 0 0 16px rgba(255,216,77,0.22);
+      }
+      .fr-btn:focus:not(:focus-visible) { outline: none; }
 
       /* Consent line — demoted to subordinate the CTA (legal text required, but volume reduced) */
       .fr-consent {
