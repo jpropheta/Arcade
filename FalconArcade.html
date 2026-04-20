@@ -753,10 +753,18 @@ body.arcade-loader-active { overflow:hidden; }
    "text flash" mid-transition the user reported when returning to
    the dashboard.
    ══════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════
+   Mission Brief — redesigned 2026-04-20
+   Legal-Disclaimer grammar: centered 580px card, kicker + title +
+   gradient underline + body + optional edge + single CTA + hint.
+   Single entrance (opacity + scale 0.97→1), 5.5s auto-countdown.
+   ══════════════════════════════════════════════════════════════════ */
 #mission-brief-overlay {
   position:fixed; inset:0; z-index:12500; display:none;
-  align-items:center; justify-content:center; padding:24px;
-  background:rgba(2,3,8,0.82); backdrop-filter:blur(14px);
+  align-items:center; justify-content:center;
+  padding:24px;
+  background:rgba(2,3,8,0.97);
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   opacity:0;
   transition:opacity 200ms cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -764,354 +772,134 @@ body.arcade-loader-active { overflow:hidden; }
 #mission-brief-overlay.is-closing { opacity:0; pointer-events:none; }
 
 .mission-brief-shell {
-  --brief-accent:#e0003c;
-  position:relative; width:min(1240px,95vw); min-height:0; max-height:min(96vh,940px);
-  border:1px solid color-mix(in srgb, var(--brief-accent) 26%, rgba(255,255,255,0.08));
-  background:
-    radial-gradient(circle at 50% -10%, color-mix(in srgb, var(--brief-accent) 14%, transparent), transparent 34%),
-    linear-gradient(180deg, rgba(9,11,18,0.98), rgba(3,6,12,0.98));
+  --brief-accent:#ff1744;
+  position:relative;
+  max-width:580px; width:90%;
+  border:1px solid color-mix(in srgb, var(--brief-accent) 65%, rgba(255,255,255,0.1));
+  border-radius:8px;
+  background:rgba(8,10,18,0.99);
+  padding:40px 44px 44px;
   box-shadow:
-    0 26px 90px rgba(0,0,0,0.52),
-    inset 0 0 0 1px rgba(255,255,255,0.03),
-    inset 0 0 72px color-mix(in srgb, var(--brief-accent) 8%, transparent);
+    0 0 40px color-mix(in srgb, var(--brief-accent) 28%, transparent),
+    0 0 80px color-mix(in srgb, var(--brief-accent) 10%, transparent);
+  text-align:center;
+  opacity:1;
+  transform:scale(1);
+  transition:transform 220ms cubic-bezier(0.23, 1, 0.32, 1),
+             opacity   200ms cubic-bezier(0.23, 1, 0.32, 1);
   overflow:hidden;
-  display:flex; flex-direction:column;
-  transform:translateY(0) scale(1);
-  filter:blur(0);
-  transition:transform 200ms cubic-bezier(0.23, 1, 0.32, 1),
-             filter 200ms cubic-bezier(0.23, 1, 0.32, 1);
 }
+#mission-brief-overlay:not(.is-open) .mission-brief-shell,
 #mission-brief-overlay.is-closing .mission-brief-shell {
-  transform:translateY(4px) scale(.985);
-  filter:blur(6px);
+  opacity:0;
+  transform:scale(0.97);
 }
 
-/* Head — two-column grid (kicker | exit) */
-.mission-brief-head {
-  position:relative; z-index:1;
-  display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:16px;
-  padding:16px 24px;
-  border-bottom:1px solid rgba(255,255,255,0.06);
-}
-/* Footer — single focal axis (CTA above tiny helper hint), mirrors legal-ack */
-.mission-brief-footer {
-  position:relative; z-index:1;
-  display:flex; flex-direction:column; align-items:center; gap:12px;
-  padding:16px 24px;
-  border-top:1px solid rgba(255,255,255,0.06);
-}
-.mission-brief-kicker,
-.mission-brief-exit,
-.mission-brief-status,
-.mission-brief-scene-pill,
-.mission-brief-card-k {
-  font:700 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:2px; text-transform:uppercase;
-}
 .mission-brief-kicker {
-  min-width:0;
-  color:color-mix(in srgb, var(--brief-accent) 76%, #fff);
+  font-size:10px; letter-spacing:3.5px; text-transform:uppercase;
+  color:var(--brief-accent);
+  margin-bottom:18px;
+  font-weight:700;
+  line-height:1.4;
   text-wrap:balance;
 }
-.mission-brief-exit {
-  appearance:none; cursor:pointer;
-  color:#7f8b96; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03);
-  padding:8px 12px;
-  transition:background 180ms cubic-bezier(0.23, 1, 0.32, 1),
-             color 180ms cubic-bezier(0.23, 1, 0.32, 1),
-             border-color 180ms cubic-bezier(0.23, 1, 0.32, 1),
-             transform 140ms cubic-bezier(0.23, 1, 0.32, 1);
-  will-change:transform;
+
+.mission-brief-title {
+  font-size:22px; font-weight:700; letter-spacing:2px;
+  color:#dce8ff;
+  margin-bottom:6px;
+  text-transform:uppercase;
+  line-height:1.25;
+  text-wrap:balance;
 }
-@media (hover: hover) and (pointer: fine) {
-  .mission-brief-exit:hover {
-    color:#dce7ef; border-color:rgba(255,255,255,0.18); background:rgba(255,255,255,0.06);
-  }
+
+.mission-brief-underline {
+  width:60px; height:2px;
+  background:linear-gradient(90deg, transparent, var(--brief-accent), transparent);
+  margin:0 auto 22px;
 }
-.mission-brief-exit:active { transform:scale(0.97); }
 
 .mission-brief-body {
-  position:relative; z-index:1;
-  display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,0.9fr);
-  gap:20px; padding:24px; min-height:0; flex:1 1 auto; overflow:auto;
-  align-items:start;
-}
-
-/* Stage — no polaroid visual, no inset second border, no ambient grid-shift */
-.mission-brief-stage {
-  position:relative;
-  display:flex; flex-direction:column; gap:clamp(14px,1.3vw,18px);
-  min-height:0;
-  padding:24px 28px;
-  border:1px solid color-mix(in srgb, var(--brief-accent) 20%, rgba(255,255,255,0.08));
-  background:
-    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--brief-accent) 10%, transparent), transparent 44%),
-    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-  box-shadow:inset 0 0 50px rgba(0,0,0,0.22);
-}
-.mission-brief-stage > * { min-width:0; }
-
-/* Meta row: OP plate + threat vector status plate */
-.mission-brief-meta {
-  display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px;
-}
-.mission-brief-status {
-  padding:7px 10px;
-  border:1px solid color-mix(in srgb, var(--brief-accent) 18%, rgba(255,255,255,0.1));
-  background:rgba(4,8,14,0.58);
-  min-width:0;
-  line-height:1.35;
-  white-space:normal;
-  text-wrap:balance;
-  color:#89a8bb; text-align:right;
-}
-
-/* Title + subtitle — one hero per view */
-.mission-brief-title {
-  max-width:22ch;
-  color:#f2fbff;
-  font:700 clamp(26px,3.2vw,48px)/1.0 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:-0.04em;
-  text-shadow:0 0 38px color-mix(in srgb, var(--brief-accent) 16%, transparent);
-  text-wrap:balance;
-}
-.mission-brief-subtitle {
-  max-width:60ch; color:#9db3c2;
-  font:700 14px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  text-wrap:pretty;
-}
-
-/* Numbered story strip — three chips, self-labeling via pill numerals */
-.mission-brief-scene-rail {
-  display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px;
-}
-.mission-brief-scene-pill {
-  appearance:none; cursor:pointer;
-  display:flex; align-items:center; justify-content:flex-start; gap:10px;
-  width:100%;
-  min-width:0; min-height:32px;
-  padding:0 14px;
+  font-size:11.5px; line-height:1.78;
+  color:#7a93bb;
   text-align:left;
-  line-height:1.1;
+  margin-bottom:20px;
+}
+.mission-brief-body p { margin:0 0 12px 0; }
+.mission-brief-body p:last-child { margin-bottom:0; }
+
+.mission-brief-edge {
+  font-size:10.5px; font-style:italic;
+  color:color-mix(in srgb, var(--brief-accent) 52%, #9db3c2);
+  line-height:1.6;
+  margin:0 0 24px 0;
+  letter-spacing:0.5px;
   text-wrap:balance;
-  color:#6f8596;
-  border:1px solid color-mix(in srgb, var(--brief-accent) 16%, rgba(255,255,255,0.08));
-  background:rgba(4,8,14,0.58);
-  transition:transform 180ms cubic-bezier(0.23, 1, 0.32, 1),
-             color 180ms cubic-bezier(0.23, 1, 0.32, 1),
-             border-color 180ms cubic-bezier(0.23, 1, 0.32, 1),
-             background 180ms cubic-bezier(0.23, 1, 0.32, 1);
-  will-change: transform;
-}
-.mission-brief-scene-pill::before {
-  content:attr(data-idx);
-  display:inline-block;
-  color:color-mix(in srgb, var(--brief-accent) 62%, #89a8bb);
-  font-variant-numeric:tabular-nums;
-  opacity:.78;
-}
-.mission-brief-scene-pill.is-active {
-  color:#eef7ff;
-  border-color:color-mix(in srgb, var(--brief-accent) 52%, rgba(255,255,255,0.14));
-  background:color-mix(in srgb, var(--brief-accent) 14%, rgba(255,255,255,0.02));
-  box-shadow:inset 0 0 20px color-mix(in srgb, var(--brief-accent) 14%, transparent);
-  transform:translateY(-1px);
-}
-.mission-brief-scene-pill.is-active::before {
-  color:color-mix(in srgb, var(--brief-accent) 90%, #fff);
-  opacity:1;
-}
-@media (hover: hover) and (pointer: fine) {
-  .mission-brief-scene-pill:hover {
-    color:#eef7ff;
-    border-color:color-mix(in srgb, var(--brief-accent) 30%, rgba(255,255,255,0.14));
-  }
-}
-.mission-brief-scene-pill:active { transform:scale(0.97); }
-
-/* Scene body — single paragraph, neutral color (no red mid-title duplicate) */
-.mission-brief-scene-body {
-  max-width:56ch;
-  color:#eef7ff;
-  font:700 15px/1.8 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  text-wrap:pretty;
-  opacity:1;
-  transform:translateY(0);
-  filter:blur(0);
-  transition:opacity 180ms cubic-bezier(0.23, 1, 0.32, 1),
-             transform 180ms cubic-bezier(0.23, 1, 0.32, 1),
-             filter 180ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-.mission-brief-stage.is-swapping .mission-brief-scene-body {
-  opacity:0;
-  transform:translateY(6px);
-  filter:blur(2px);
 }
 
-.mission-brief-progress {
-  margin-top:auto; width:100%; height:4px; overflow:hidden; border-radius:999px;
-  background:rgba(255,255,255,0.08);
-}
-.mission-brief-progress > span {
-  display:block; height:100%; width:0%;
-  background:linear-gradient(90deg, color-mix(in srgb, var(--brief-accent) 78%, #fff), #ffd84d);
-  box-shadow:0 0 18px color-mix(in srgb, var(--brief-accent) 28%, transparent);
-  transition:width .18s linear;
-}
-
-/* Sidebar cards */
-.mission-brief-sidebar {
-  display:grid; gap:14px; align-content:start; min-width:0;
-}
-.mission-brief-card {
-  position:relative; overflow:hidden;
-  border:1px solid rgba(255,255,255,0.08);
-  background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-  padding:16px 18px;
-}
-.mission-brief-card::before {
-  content:""; position:absolute; inset:auto 0 0 0; height:2px;
-  background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--brief-accent) 78%, #fff), transparent);
-  opacity:.36;
-}
-.mission-brief-card-k { color:#89a8bb; margin-bottom:12px; }
-.mission-brief-command-list,
-.mission-brief-objective-list {
-  display:grid; gap:10px;
-}
-.mission-brief-command,
-.mission-brief-objective {
-  display:grid; gap:5px; min-width:0;
-}
-.mission-brief-command-key {
-  color:color-mix(in srgb, var(--brief-accent) 74%, #fff);
-  font:700 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:2px; text-transform:uppercase;
-}
-.mission-brief-command-text,
-.mission-brief-objective-text,
-.mission-brief-card-v {
-  color:#dce7ef; font:700 13px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-}
-/* Footer helper hint — demoted to 9.5px (legal-ack parity), sits BENEATH the DEPLOY CTA */
-.mission-brief-footer-copy {
-  color:#6b7684;
-  font:700 9.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:1.5px; text-transform:uppercase;
-  min-width:0; max-width:100%;
-  overflow-wrap:anywhere; text-wrap:pretty;
-  text-align:center;
-}
-.mission-brief-objective {
-  grid-template-columns:auto 1fr; align-items:flex-start; column-gap:10px;
-}
-.mission-brief-objective-mark {
-  color:#ffd84d; font:700 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  padding-top:2px;
-}
 .mission-brief-confirm {
-  border:none; cursor:pointer;
-  padding:12px 22px;
-  background:linear-gradient(90deg, color-mix(in srgb, var(--brief-accent) 92%, #fff), color-mix(in srgb, var(--brief-accent) 74%, #ffd84d));
+  background:linear-gradient(135deg,
+    color-mix(in srgb, var(--brief-accent) 60%, #000),
+    color-mix(in srgb, var(--brief-accent) 92%, #fff));
+  border:1px solid color-mix(in srgb, var(--brief-accent) 45%, rgba(255,255,255,0.12));
   color:#fff;
-  font:700 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:2px; text-transform:uppercase;
-  box-shadow:0 0 24px color-mix(in srgb, var(--brief-accent) 26%, transparent);
-  transition:transform 140ms cubic-bezier(0.23, 1, 0.32, 1),
-             box-shadow 180ms cubic-bezier(0.23, 1, 0.32, 1),
-             filter 180ms cubic-bezier(0.23, 1, 0.32, 1);
+  padding:13px 52px;
+  font-family:inherit;
+  font-size:13px; letter-spacing:2.5px; font-weight:700;
+  border-radius:5px;
+  cursor:pointer;
+  text-transform:uppercase;
+  transition:box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1),
+             transform  140ms cubic-bezier(0.23, 1, 0.32, 1);
   will-change:transform;
 }
 @media (hover: hover) and (pointer: fine) {
   .mission-brief-confirm:hover {
-    filter:brightness(1.08);
-    box-shadow:0 0 32px color-mix(in srgb, var(--brief-accent) 36%, transparent);
+    box-shadow:0 0 18px color-mix(in srgb, var(--brief-accent) 70%, transparent);
   }
 }
 .mission-brief-confirm:active { transform:scale(0.97); }
 
-/* ── Enter stagger ── (Emil: 40–80ms between items; total ≤ 360ms) */
-@keyframes mb-enter {
-  from { opacity:0; transform:translateY(6px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-#mission-brief-overlay.is-open .mission-brief-head,
-#mission-brief-overlay.is-open .mission-brief-meta,
-#mission-brief-overlay.is-open .mission-brief-title,
-#mission-brief-overlay.is-open .mission-brief-subtitle,
-#mission-brief-overlay.is-open .mission-brief-scene-rail,
-#mission-brief-overlay.is-open .mission-brief-scene-body,
-#mission-brief-overlay.is-open .mission-brief-sidebar > *,
-#mission-brief-overlay.is-open .mission-brief-footer {
-  animation:mb-enter 320ms cubic-bezier(0.23, 1, 0.32, 1) both;
-}
-#mission-brief-overlay.is-open .mission-brief-head          { animation-delay: 0ms;   }
-#mission-brief-overlay.is-open .mission-brief-meta          { animation-delay: 40ms;  }
-#mission-brief-overlay.is-open .mission-brief-title         { animation-delay: 80ms;  }
-#mission-brief-overlay.is-open .mission-brief-subtitle      { animation-delay: 120ms; }
-#mission-brief-overlay.is-open .mission-brief-scene-rail    { animation-delay: 180ms; }
-#mission-brief-overlay.is-open .mission-brief-scene-body    { animation-delay: 220ms; }
-#mission-brief-overlay.is-open .mission-brief-sidebar > *:nth-child(1) { animation-delay: 180ms; }
-#mission-brief-overlay.is-open .mission-brief-sidebar > *:nth-child(2) { animation-delay: 220ms; }
-#mission-brief-overlay.is-open .mission-brief-sidebar > *:nth-child(3) { animation-delay: 260ms; }
-#mission-brief-overlay.is-open .mission-brief-footer        { animation-delay: 300ms; }
-
-/* Responsive */
-@media (max-width: 1120px) {
-  .mission-brief-body { grid-template-columns:minmax(0,1fr); }
-  .mission-brief-title { max-width:none; }
-}
-@media (max-width: 980px) {
-  .mission-brief-head {
-    grid-template-columns:minmax(0,1fr);
-    align-items:flex-start;
-  }
-  .mission-brief-confirm { width:auto; max-width:480px; }
-  .dash-attract-panel { height:min(84vh,920px); }
-}
-@media (max-height: 900px) {
-  .mission-brief-shell { max-height:min(98vh,960px); }
-  .mission-brief-stage { padding:20px 22px; }
-  .mission-brief-title { font-size:clamp(24px,3vw,40px); }
-  .mission-brief-body { gap:14px; padding:16px; }
-}
-@media (max-height: 820px) {
-  .mission-brief-shell { width:min(1120px,96vw); max-height:96vh; }
-  .mission-brief-body { grid-template-columns:minmax(0,1fr); padding:14px; gap:12px; }
-  .mission-brief-stage { padding:16px 18px; gap:10px; }
-  .mission-brief-title { font-size:clamp(22px,2.6vw,36px); }
-}
-@media (max-width: 720px) {
-  #mission-brief-overlay { padding:12px; }
-  .mission-brief-head, .mission-brief-footer, .mission-brief-body { padding:16px; }
-  .mission-brief-stage { padding:18px 16px; }
-  .mission-brief-title { font-size:clamp(26px,8vw,38px); }
-  .mission-brief-scene-pill { padding:0 10px; gap:8px; }
-  .mission-brief-subtitle, .mission-brief-scene-body { font-size:13px; }
-  .mission-brief-confirm { width:100%; }
+.mission-brief-hint {
+  margin-top:14px;
+  font-size:9.5px; letter-spacing:1.5px; text-transform:uppercase;
+  color:#344a60;
+  text-wrap:balance;
 }
 
-/* Reduced motion: collapse to opacity-only; no translate/scale/blur */
+.mission-brief-progress {
+  position:absolute; left:0; right:0; bottom:0;
+  height:2px;
+  background:rgba(255,255,255,0.04);
+  overflow:hidden;
+}
+.mission-brief-progress > span {
+  display:block; height:100%; width:0%;
+  background:linear-gradient(90deg,
+    color-mix(in srgb, var(--brief-accent) 70%, #fff),
+    var(--brief-accent));
+  box-shadow:0 0 8px color-mix(in srgb, var(--brief-accent) 60%, transparent);
+  transition:width 120ms linear;
+}
+
+@media (max-width: 640px) {
+  .mission-brief-shell { padding:32px 26px 36px; width:94%; }
+  .mission-brief-title { font-size:19px; letter-spacing:1.5px; }
+  .mission-brief-confirm { padding:12px 30px; width:100%; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   #mission-brief-overlay,
-  #mission-brief-overlay.is-closing .mission-brief-shell,
-  .mission-brief-scene-body,
-  .mission-brief-scene-pill,
-  .mission-brief-exit,
+  .mission-brief-shell,
   .mission-brief-confirm,
-  .mission-brief-progress > span,
-  #mission-brief-overlay.is-open .mission-brief-head,
-  #mission-brief-overlay.is-open .mission-brief-meta,
-  #mission-brief-overlay.is-open .mission-brief-title,
-  #mission-brief-overlay.is-open .mission-brief-subtitle,
-  #mission-brief-overlay.is-open .mission-brief-scene-rail,
-  #mission-brief-overlay.is-open .mission-brief-scene-body,
-  #mission-brief-overlay.is-open .mission-brief-sidebar > *,
-  #mission-brief-overlay.is-open .mission-brief-footer {
-    animation:none !important;
+  .mission-brief-progress > span {
     transition:opacity 160ms linear !important;
+    animation:none !important;
+  }
+  #mission-brief-overlay:not(.is-open) .mission-brief-shell,
+  #mission-brief-overlay.is-closing .mission-brief-shell,
+  #mission-brief-overlay.is-open .mission-brief-shell {
     transform:none !important;
-    filter:none !important;
   }
 }
 /* ── FADE-IN ── */
@@ -4685,42 +4473,19 @@ function _ensureMissionBriefOverlay() {
   const overlay = document.createElement('div');
   overlay.id = 'mission-brief-overlay';
   overlay.setAttribute('aria-hidden', 'true');
+  // Redesigned 2026-04-20 — Legal Disclaimer grammar. Single centered card:
+  // kicker / title / underline / body (1-2 paragraphs) / optional edge /
+  // single DEPLOY CTA / hint / bottom progress bar. No sidebar, no rail.
   overlay.innerHTML = `
     <div class="mission-brief-shell" role="dialog" aria-modal="true" aria-labelledby="mission-brief-title" tabindex="-1">
-      <div class="mission-brief-head">
-        <div class="mission-brief-kicker" id="mission-brief-kicker"></div>
-        <button class="mission-brief-exit" id="mission-brief-exit" type="button"></button>
-      </div>
-      <div class="mission-brief-body">
-        <section class="mission-brief-stage" id="mission-brief-stage">
-          <div class="mission-brief-meta">
-            <div class="mission-brief-status" id="mission-brief-status"></div>
-          </div>
-          <div class="mission-brief-title" id="mission-brief-title"></div>
-          <div class="mission-brief-subtitle" id="mission-brief-subtitle"></div>
-          <div class="mission-brief-scene-rail" id="mission-brief-scene-rail"></div>
-          <div class="mission-brief-scene-body" id="mission-brief-scene-body"></div>
-          <div class="mission-brief-progress"><span id="mission-brief-progress-bar"></span></div>
-        </section>
-        <aside class="mission-brief-sidebar">
-          <section class="mission-brief-card">
-            <div class="mission-brief-card-k" id="mission-brief-controls-label"></div>
-            <div class="mission-brief-command-list" id="mission-brief-command-list"></div>
-          </section>
-          <section class="mission-brief-card">
-            <div class="mission-brief-card-k" id="mission-brief-objectives-label"></div>
-            <div class="mission-brief-objective-list" id="mission-brief-objective-list"></div>
-          </section>
-          <section class="mission-brief-card">
-            <div class="mission-brief-card-k" id="mission-brief-edge-label"></div>
-            <div class="mission-brief-card-v" id="mission-brief-edge"></div>
-          </section>
-        </aside>
-      </div>
-      <div class="mission-brief-footer">
-        <button class="mission-brief-confirm" id="mission-brief-confirm" type="button"></button>
-        <div class="mission-brief-footer-copy" id="mission-brief-continue"></div>
-      </div>
+      <div class="mission-brief-kicker" id="mission-brief-kicker"></div>
+      <div class="mission-brief-title" id="mission-brief-title"></div>
+      <div class="mission-brief-underline" aria-hidden="true"></div>
+      <div class="mission-brief-body" id="mission-brief-body"></div>
+      <div class="mission-brief-edge" id="mission-brief-edge" hidden></div>
+      <button class="mission-brief-confirm" id="mission-brief-confirm" type="button"></button>
+      <div class="mission-brief-hint" id="mission-brief-hint"></div>
+      <div class="mission-brief-progress" aria-hidden="true"><span id="mission-brief-progress-bar"></span></div>
     </div>
   `;
   document.body.appendChild(overlay);
@@ -4728,115 +4493,56 @@ function _ensureMissionBriefOverlay() {
   const refs = {
     overlay,
     shell:overlay.querySelector('.mission-brief-shell'),
-    stage:overlay.querySelector('#mission-brief-stage'),
     kicker:overlay.querySelector('#mission-brief-kicker'),
-    exit:overlay.querySelector('#mission-brief-exit'),
-    status:overlay.querySelector('#mission-brief-status'),
     title:overlay.querySelector('#mission-brief-title'),
-    subtitle:overlay.querySelector('#mission-brief-subtitle'),
-    rail:overlay.querySelector('#mission-brief-scene-rail'),
-    sceneBody:overlay.querySelector('#mission-brief-scene-body'),
-    progress:overlay.querySelector('#mission-brief-progress-bar'),
-    controlsLabel:overlay.querySelector('#mission-brief-controls-label'),
-    commandList:overlay.querySelector('#mission-brief-command-list'),
-    objectivesLabel:overlay.querySelector('#mission-brief-objectives-label'),
-    objectiveList:overlay.querySelector('#mission-brief-objective-list'),
-    edgeLabel:overlay.querySelector('#mission-brief-edge-label'),
+    body:overlay.querySelector('#mission-brief-body'),
     edge:overlay.querySelector('#mission-brief-edge'),
-    continue:overlay.querySelector('#mission-brief-continue'),
-    confirm:overlay.querySelector('#mission-brief-confirm')
+    confirm:overlay.querySelector('#mission-brief-confirm'),
+    hint:overlay.querySelector('#mission-brief-hint'),
+    progress:overlay.querySelector('#mission-brief-progress-bar')
   };
 
   let pendingLaunch = null;
   let currentData = null;
-  let sceneIndex = 0;
-  let sceneTimer = null;
   let progressRaf = 0;
   let cycleStartedAt = 0;
-  // Phase 2: last whole-second remaining that fired a heartbeat tick.
   // Sentinel 99 means "no tick fired yet this cycle" (resets on open/close).
   let countdownLastTick = 99;
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const BASE_SCENE_MS = reduceMotion ? 3600 : 3000;
-  let sceneMs = BASE_SCENE_MS;
+  // Fixed 5.5s countdown (spec — simpler than the old per-scene compute).
+  const COUNTDOWN_MS = 5500;
 
   function stopTimer() {
-    if (sceneTimer) clearInterval(sceneTimer);
-    sceneTimer = null;
     if (progressRaf) cancelAnimationFrame(progressRaf);
     progressRaf = 0;
   }
 
-  function computeSceneMs(data) {
-    const longestScene = Math.max(...data.scenes.map(scene => `${scene.title} ${scene.body}`.length), 0);
-    return Math.max(
-      BASE_SCENE_MS,
-      Math.min(reduceMotion ? 5600 : 4600, 2200 + longestScene * 11)
-    );
+  function _escHtml(s) {
+    return String(s || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
   }
 
-  function renderCommands(commands) {
-    refs.commandList.innerHTML = '';
-    commands.forEach(command => {
-      const row = document.createElement('div');
-      row.className = 'mission-brief-command';
-      const key = document.createElement('div');
-      key.className = 'mission-brief-command-key';
-      key.textContent = command.key;
-      const text = document.createElement('div');
-      text.className = 'mission-brief-command-text';
-      text.textContent = command.text;
-      row.append(key, text);
-      refs.commandList.appendChild(row);
-    });
-  }
-
-  function renderObjectives(objectives) {
-    refs.objectiveList.innerHTML = '';
-    objectives.forEach(objective => {
-      const row = document.createElement('div');
-      row.className = 'mission-brief-objective';
-      const mark = document.createElement('div');
-      mark.className = 'mission-brief-objective-mark';
-      mark.textContent = '◆';
-      const text = document.createElement('div');
-      text.className = 'mission-brief-objective-text';
-      text.textContent = objective;
-      row.append(mark, text);
-      refs.objectiveList.appendChild(row);
-    });
-  }
-
-  function applyScene(nextIndex) {
-    if (!currentData) return;
-    const scene = currentData.scenes[nextIndex];
-    sceneIndex = nextIndex;
-    // Interruptible crossfade: retrigger class via rAF so rapid rail clicks retarget.
-    refs.stage.classList.add('is-swapping');
-    requestAnimationFrame(() => {
-      refs.sceneBody.textContent = scene.body;
-      refs.status.textContent = `${currentData.shared.status} · ${nextIndex + 1}/${currentData.scenes.length}`;
-      Array.from(refs.rail.children).forEach((node, idx) => node.classList.toggle('is-active', idx === nextIndex));
-      // Release the blur/opacity on the next frame, so the transition plays.
-      requestAnimationFrame(() => refs.stage.classList.remove('is-swapping'));
-    });
+  function _bodyParagraphs(data) {
+    // Body grammar: subtitle is para 1. If the game has a first objective
+    // that's short enough to read, use it as para 2. Cap para length so the
+    // card never blows past ≈240 chars per paragraph.
+    const paras = [];
+    if (data.subtitle) paras.push(String(data.subtitle).trim());
+    if (Array.isArray(data.objectives) && data.objectives[0]) {
+      const s = String(data.objectives[0]).trim();
+      if (s && s.length <= 240) paras.push(s);
+    }
+    return paras;
   }
 
   function tickProgress() {
     if (!currentData || !pendingLaunch) return;
-    const totalMs = currentData.scenes.length * sceneMs;
     const elapsed = performance.now() - cycleStartedAt;
-    refs.progress.style.width = `${Math.min(100, (elapsed / totalMs) * 100)}%`;
-    const remainingSec = Math.max(0, Math.ceil((totalMs - elapsed) / 1000));
-    // JP needs 秒 suffix; EN/PT/ES use plain "s". Keep the composed shape stable across languages.
-    {
-      const _secSuffix = (window._currentLangCode === 'jp') ? '秒' : 's';
-      refs.continue.textContent = `${currentData.shared.continue} · ${T('brief_auto_deploy')} ${remainingSec}${_secSuffix}`;
-    }
-    // Phase 2: heartbeat tick on each of the final 3 whole seconds. The
-    // stinger rises in brightness toward t=0 (step 0=3s rem, 2=1s rem).
-    // Fires once per second-boundary crossing; countdownLastTick holds
-    // the last-seen value so rAF rate doesn't spam the stinger.
+    refs.progress.style.width = `${Math.min(100, (elapsed / COUNTDOWN_MS) * 100)}%`;
+    const remainingSec = Math.max(0, Math.ceil((COUNTDOWN_MS - elapsed) / 1000));
+    // Heartbeat tick on each of the final 3 whole seconds.
+    // step 0 = 3s remaining (faintest), step 2 = 1s remaining (brightest).
     if (remainingSec <= 3 && remainingSec >= 1 && remainingSec !== countdownLastTick) {
       countdownLastTick = remainingSec;
       try{
@@ -4845,38 +4551,35 @@ function _ensureMissionBriefOverlay() {
         }
       }catch(_){}
     }
-    if (elapsed >= totalMs) {
+    if (elapsed >= COUNTDOWN_MS) {
       confirmLaunch();
       return;
     }
     progressRaf = requestAnimationFrame(tickProgress);
   }
 
-  function render(activeIndex = 0) {
+  function render() {
     if (!currentData) return;
-    refs.overlay.style.setProperty('--brief-accent', currentData.color);
-    refs.kicker.textContent = currentData.eyebrow;
-    refs.exit.textContent = currentData.shared.cancel;
-    refs.title.textContent = currentData.title;
-    refs.subtitle.textContent = currentData.subtitle;
-    refs.controlsLabel.textContent = currentData.shared.controls;
-    refs.objectivesLabel.textContent = currentData.shared.objectives;
-    refs.edgeLabel.textContent = currentData.shared.edge;
-    refs.edge.textContent = currentData.edge;
-    refs.confirm.textContent = currentData.confirm;
-    refs.rail.innerHTML = '';
-    currentData.scenes.forEach((scene, idx) => {
-      const pill = document.createElement('button');
-      pill.type = 'button';
-      pill.className = 'mission-brief-scene-pill';
-      pill.dataset.idx = String(idx + 1).padStart(2, '0');
-      pill.textContent = scene.pill;
-      pill.addEventListener('click', () => applyScene(idx));
-      refs.rail.appendChild(pill);
-    });
-    renderCommands(currentData.commands);
-    renderObjectives(currentData.objectives);
-    applyScene(Math.min(activeIndex, currentData.scenes.length - 1));
+    // Accent drives kicker color, underline gradient, CTA gradient, progress fill.
+    refs.shell.style.setProperty('--brief-accent', currentData.color || '#ff1744');
+    refs.kicker.textContent = currentData.eyebrow || '';
+    refs.title.textContent = currentData.title || '';
+    // Body: 1-2 <p> tags built from trimmed text (escaped for safety).
+    const paras = _bodyParagraphs(currentData);
+    refs.body.innerHTML = paras.map(p => `<p>${_escHtml(p)}</p>`).join('');
+    // Edge: single italic line above CTA (optional per game).
+    if (currentData.edge) {
+      refs.edge.textContent = currentData.edge;
+      refs.edge.hidden = false;
+    } else {
+      refs.edge.textContent = '';
+      refs.edge.hidden = true;
+    }
+    refs.confirm.textContent = currentData.confirm || T('brief_confirm_now');
+    // Hint: "SPACE · ENTER · CLICK · ESC to cancel" — derived from shared.
+    const cont = currentData.shared?.continue || '';
+    const canc = currentData.shared?.cancel || '';
+    refs.hint.textContent = [cont, canc].filter(Boolean).join(' · ');
   }
 
   function close() {
@@ -4887,8 +4590,9 @@ function _ensureMissionBriefOverlay() {
     countdownLastTick = 99;
     pendingLaunch = null;
     currentData = null;
-    // Fade+blur exit so the dashboard never flashes overlapping text.
-    // Total ≤ 200ms — transition defined on #mission-brief-overlay and .mission-brief-shell.
+    // Fade+scale exit. Total ≤ 200ms — transition defined on the overlay
+    // and .mission-brief-shell. Safety timeout always wins if transitionend
+    // is dropped (e.g. when the tab is backgrounded mid-close).
     if (!refs.overlay.classList.contains('is-open')) {
       _dashboardAttract?.resetIdle?.();
       return;
@@ -4905,17 +4609,14 @@ function _ensureMissionBriefOverlay() {
       refs.overlay.removeEventListener('transitionend', handler);
       finishOnce();
     });
-    // Safety: always finish even if transitionend is dropped.
     setTimeout(finishOnce, 240);
   }
 
   function confirmLaunch() {
     if (!pendingLaunch) return;
     const launch = pendingLaunch;
-    // Phase 2 Zimmer DEPLOY commit — taiko + 180ms silence + braam + sub.
-    // Fire BEFORE close() so the stinger rides under the brief's fade-out
-    // and lands at full volume as the overlay clears. Fallback to
-    // ArcadeSonic.confirm() when SoundEngine isn't available.
+    // Zimmer DEPLOY commit — fire BEFORE close() so the stinger rides
+    // under the brief's fade-out and lands as the overlay clears.
     try{
       if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('brief_deploy_commit');
       else ArcadeSonic.confirm();
@@ -4930,10 +4631,6 @@ function _ensureMissionBriefOverlay() {
     if (e.target === overlay) {
       confirmLaunch();
     }
-  });
-  refs.exit.addEventListener('click', () => {
-    ArcadeSonic.uiClose();
-    close();
   });
   refs.confirm.addEventListener('click', confirmLaunch);
 
@@ -4961,23 +4658,16 @@ function _ensureMissionBriefOverlay() {
       _dashboardAttract?.stop?.('briefing');
       pendingLaunch = { containerId, initFn };
       currentData = _buildMissionBriefData(containerId);
-      sceneMs = computeSceneMs(currentData);
-      sceneIndex = 0;
-      render(sceneIndex);
+      render();
       refs.overlay.classList.add('is-open');
       refs.overlay.setAttribute('aria-hidden', 'false');
       refs.shell.focus({ preventScroll:true });
       stopTimer();
       cycleStartedAt = performance.now();
       countdownLastTick = 99;
-      sceneTimer = setInterval(() => {
-        if (!currentData) return;
-        applyScene((sceneIndex + 1) % currentData.scenes.length);
-      }, sceneMs);
       progressRaf = requestAnimationFrame(tickProgress);
-      // Phase 2 Zimmer brief-open: orchestral swell replaces the Atari uiOpen.
-      // Fallback to ArcadeSonic.uiOpen() if SoundEngine isn't available yet
-      // (e.g. first render before the audio graph initialises).
+      // Zimmer brief-open swell. Fallback to ArcadeSonic.uiOpen() if the
+      // SoundEngine stinger bus isn't initialised yet.
       try{
         if (window.SoundEngine?.stinger) window.SoundEngine.stinger.fire('brief_enter');
         else ArcadeSonic.uiOpen();
@@ -4987,8 +4677,7 @@ function _ensureMissionBriefOverlay() {
     refresh() {
       if (!pendingLaunch) return;
       currentData = _buildMissionBriefData(pendingLaunch.containerId);
-      sceneMs = computeSceneMs(currentData);
-      render(sceneIndex);
+      render();
     },
     isOpen() {
       return refs.overlay.classList.contains('is-open');
@@ -7649,6 +7338,10 @@ function _createDashboardAttractDirector() {
   function clearSimTimers() {
     clearTimeout(simTimer); clearTimeout(simReleaseTimer); clearInterval(simMotionTimer); clearInterval(simFireTimer); clearInterval(simWatchdogTimer); clearInterval(simAdvanceTimer);
     simTimer = null; simReleaseTimer = null; simMotionTimer = null; simFireTimer = null; simWatchdogTimer = null; simAdvanceTimer = null;
+    // Cancel the 420 ms post-startAttractDemo mute reassert too — otherwise a
+    // scene-swap that lands right before a game launch leaves a stale timer
+    // that fires 420 ms into the game and re-mutes the player.
+    try{ if(typeof _cancelReapplyMute === 'function') _cancelReapplyMute(); }catch(_){}
   }
   function clearRankingHeroTimer() {
     if (rankingHeroTimer) clearInterval(rankingHeroTimer);
@@ -7710,12 +7403,44 @@ function _createDashboardAttractDirector() {
     });
     simContainerId = id;
   }
+  // Re-assert the operator's dashboard mute preference. Scope: dashboard /
+  // attract / rankings ONLY. Persisted mute (cs_muted_v1) must NEVER leak
+  // into an actual game session — games always start unmuted so the player
+  // hears the soundtrack, and each game owns an in-game M key to toggle
+  // audio locally without touching cs_muted_v1. Callers: renderScene()
+  // (attract scene swap), stop(reason) gated by reason!=='launch' (attract
+  // exit to dashboard), and a scheduled post-sim-startAttractDemo reassert.
+  function _reapplyPersistedMute(){
+    try{
+      const _want = _loadStoredNumber('cs_muted_v1', 0) ? true : false;
+      if(typeof window._applyDashboardMute === 'function') window._applyDashboardMute(_want);
+    }catch(_){}
+  }
+  // Tracked version of the 420 ms post-startAttractDemo reassert so we can
+  // cancel it on game launch — otherwise a stale timer from the last attract
+  // scene fires 420 ms into the game session and re-mutes the player.
+  let _attractMuteReapplyTimer = null;
+  function _scheduleReapplyMute(ms){
+    try{ if(_attractMuteReapplyTimer){ clearTimeout(_attractMuteReapplyTimer); _attractMuteReapplyTimer=null; } }catch(_){}
+    _attractMuteReapplyTimer = setTimeout(() => {
+      _attractMuteReapplyTimer = null;
+      _reapplyPersistedMute();
+    }, ms);
+  }
+  function _cancelReapplyMute(){
+    try{ if(_attractMuteReapplyTimer){ clearTimeout(_attractMuteReapplyTimer); _attractMuteReapplyTimer=null; } }catch(_){}
+  }
   function stopRuntimeSim() {
     clearSimTimers();
     releaseSimKeys();
     simContainerId = null;
     _activeGameId = null;
     resetArcadeRuntime();
+    // NOTE: No _reapplyPersistedMute() here. stopRuntimeSim also runs on the
+    // game-launch path (via _dashboardAttract.stop('launch') → stopFrame),
+    // and re-asserting persisted mute here would re-mute the game the
+    // operator just entered. Re-apply is scoped to renderScene() + stop()
+    // with reason!=='launch' + the tracked post-startAttractDemo schedule.
     ['game-zero-container','game-defense-container','game-hunt-container'].forEach(cid => {
       const el = document.getElementById(cid);
       if (!el) return;
@@ -7733,6 +7458,11 @@ function _createDashboardAttractDirector() {
   }
   function startRuntimeSim(scene) {
     stopRuntimeSim();
+    // stopRuntimeSim() above ran resetArcadeRuntime() which unmutes. We're
+    // still in attract mode here, so immediately re-assert persisted mute
+    // to cover the 0→startAttractDemo gap (120–260 ms before sim resets its
+    // own flag). The tracked 420 ms schedule below covers AFTER startAttractDemo.
+    _reapplyPersistedMute();
     _arcadeDashVisible = false;
     _activeGameId = scene.key; // allow the matching game loop to run for attract rendering
     if (scene.key === 'zero') {
@@ -7779,6 +7509,16 @@ function _createDashboardAttractDirector() {
       }, 900);
     }
     setTimeout(() => window.dispatchEvent(new Event('resize')), 80);
+    // Each sim's own startAttractDemo scheduled above unilaterally resets its
+    // internal mute flag (Zero: MUTED=false ~L23296; Hunt: HUNT_MUTED=false
+    // ~L40422) so the demo can render with internal audio logic. That's fine
+    // for the sim, but it overrides the operator's dashboard mute choice. The
+    // 420 ms delay here lands AFTER the 120–260 ms startAttractDemo timeouts,
+    // so we reassert the persisted preference last and the booth stays silent
+    // during attract when the operator muted before walking away.
+    // Tracked via _scheduleReapplyMute so we can cancel on game launch —
+    // otherwise a stale timer fires 420 ms into the game session and re-mutes.
+    _scheduleReapplyMute(420);
   }
   function rankingRowsForAttract() {
     const t = window._currentLang || TRANSLATIONS.en;
@@ -8158,6 +7898,12 @@ function _createDashboardAttractDirector() {
   }
   function renderScene() {
     stopFrame();
+    // stopFrame → stopRuntimeSim → resetArcadeRuntime() unmutes (it forces
+    // MUTED=false + _masterGain=0.82 to hand the next session full audio).
+    // We're still in attract mode here, so re-assert the operator's persisted
+    // mute immediately. The 420 ms tracked schedule in startRuntimeSim
+    // covers the sim's own startAttractDemo override AFTER this point.
+    _reapplyPersistedMute();
     cycle = sceneDefs();
     const scene = cycle[sceneIdx % cycle.length];
     if (!scene) return;
@@ -8206,6 +7952,12 @@ function _createDashboardAttractDirector() {
     // swap stinger on the opener.
     firstRender = true;
     stopFrame();
+    // Re-assert persisted mute UNLESS we're stopping because a game is being
+    // launched. On 'launch', resetArcadeRuntime correctly unmuted the session
+    // for the game — re-muting here would silence the player immediately.
+    // On any other reason ('return','toggle','manual','idle',...), we're
+    // heading back to the dashboard, so respect the operator's stored choice.
+    if(reason !== 'launch') _reapplyPersistedMute();
     overlayEl()?.classList.remove('is-open');
     const stage = stageEl();
     if (stage) stage.innerHTML = '';
@@ -8278,6 +8030,329 @@ function _createDashboardAttractDirector() {
   } catch (_) {}
   return { start, stop, toggle, resetIdle, isActive:() => active };
 }
+
+// ─────────────────────────────────────────────────────────────────────
+//  HardwareRadio — shared hardware-receiver facade (2026-04-20)
+//  Lifted from Hunt's drawRadio into a cross-block reusable surface.
+//  Used by: Zero drawComms, Defense SocComms.draw, Hunt drawRadio.
+//  The facade owns ONLY the draw; state (which message, what phase,
+//  slide offset, alpha) stays with the caller so each game can keep its
+//  own cadence rules. Every layer is opt-in so compact presets (Zero
+//  bottom-left, Defense bottom-center) can drop the busy hardware bits.
+// ─────────────────────────────────────────────────────────────────────
+window.HardwareRadio = (function(){
+  const _defaultLayers = {
+    antenna:true, housing:true, bezel:true, screws:true,
+    dial:true, grille:true, vuMeter:true,
+    header:true, callsign:true, status:true, frequency:true,
+    opName:true, morse:true, waveform:true, message:true, scanLine:true
+  };
+  function _hashSeed(seed){
+    if(typeof seed === 'number') return Math.abs(seed|0);
+    const s = String(seed||'');
+    let h=0; for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))|0;
+    return Math.abs(h);
+  }
+  function _wrap(ctx, msg, maxW){
+    if(!msg) return [''];
+    const words=String(msg).split(' ');
+    let line='', lines=[];
+    for(const w of words){
+      const test=line+w+' ';
+      if(ctx.measureText(test).width>maxW && line!==''){ lines.push(line.trim()); line=w+' '; }
+      else line=test;
+    }
+    if(line.trim()) lines.push(line.trim());
+    return lines.length?lines:[''];
+  }
+  function draw(ctx, opts){
+    if(!ctx || !opts) return;
+    const rect = opts.rect || {x:opts.x||0, y:opts.y||0, w:opts.w||380, h:opts.h||0};
+    const col = opts.col || '#74ff88';
+    const state = opts.state || 'showing';
+    const t = typeof opts.t === 'number' ? opts.t : 0;
+    const op = opts.op || '';
+    const cs = opts.cs || '';
+    const msg = opts.msg || '';
+    const layers = Object.assign({}, _defaultLayers, opts.layers||{});
+    const uiScale = typeof opts.uiScale === 'number' ? opts.uiScale : 1;
+    const fontFn = typeof opts.fontFn === 'function'
+      ? opts.fontFn
+      : (px, weight) => `${weight?weight+' ':''}${Math.max(9,Math.round(px*uiScale))}px monospace`;
+    const reduceMotion = 'reduceMotion' in opts ? !!opts.reduceMotion : !!window._reduceMotion;
+    const baseAlpha = typeof opts.alpha === 'number' ? opts.alpha : 1;
+    const slideOff = typeof opts.slideOff === 'number' ? opts.slideOff : 0;
+    const seed = _hashSeed(opts.seed != null ? opts.seed : (op||msg));
+    const vuBars = Math.max(4, Math.min(16, opts.vuBars || 10));
+    const maxLines = opts.maxLines || 0; // 0 = unlimited
+    const compact = !!opts.compact;
+
+    const rx = rect.x, ryStart = rect.y;
+    const RW = rect.w;
+    const _rp = Math.max(6, Math.round(10*uiScale));
+    const _rlh = Math.max(11, Math.round(15*uiScale));
+    const _sbW = (layers.dial || layers.grille) ? Math.max(28, Math.round(42*uiScale)) : 0;
+    const _headerH = layers.header ? Math.max(18, Math.round(30*uiScale)) : 0;
+    const _opH = layers.opName ? Math.max(14, Math.round(24*uiScale)) : 0;
+    const _waveH = layers.waveform ? Math.max(10, Math.round(14*uiScale)) : 0;
+
+    // Wrap message to the text column (post-sidebar)
+    ctx.save();
+    ctx.font = fontFn(compact?10:11);
+    const _textMaxW = RW - _sbW - 16;
+    let _lines = layers.message ? _wrap(ctx, msg, _textMaxW) : [];
+    if(maxLines > 0 && _lines.length > maxLines){
+      _lines = _lines.slice(0, maxLines);
+      // Add ellipsis to last line if clipped
+      if(_lines.length){
+        const last = _lines[_lines.length-1];
+        _lines[_lines.length-1] = last.replace(/[\s.,]+$/,'') + '…';
+      }
+    }
+    ctx.restore();
+
+    // Compute content height if rect.h was 0 — caller can pass 0 and let us grow.
+    let RH = rect.h;
+    if(!RH){
+      RH = _headerH + _opH + _waveH + _lines.length*_rlh + _rp*2 + 4;
+    }
+    const ry = ryStart;
+
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, Math.min(1, baseAlpha));
+    if(slideOff) ctx.translate(slideOff, 0);
+
+    // 1. Antenna
+    if(layers.antenna){
+      const _ax0=rx+RW-Math.round(18*uiScale), _ay0=ry+4;
+      const _ax1=rx+RW+Math.round(12*uiScale), _ay1=ry-Math.round(26*uiScale);
+      ctx.save();
+      ctx.strokeStyle=col+'aa'; ctx.lineWidth=1.2;
+      ctx.shadowColor=col; ctx.shadowBlur=4;
+      ctx.beginPath(); ctx.moveTo(_ax0,_ay0); ctx.lineTo(_ax1,_ay1); ctx.stroke();
+      const _tipGlow=reduceMotion?0.8:(0.55+Math.sin(t*8+seed*0.01)*0.45);
+      ctx.fillStyle=col; ctx.shadowBlur=10*_tipGlow;
+      ctx.beginPath(); ctx.arc(_ax1,_ay1,2.2,0,Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+
+    // 2. Housing
+    if(layers.housing){
+      const _hg=ctx.createLinearGradient(rx,ry,rx,ry+RH);
+      _hg.addColorStop(0,'rgba(20,24,30,0.97)');
+      _hg.addColorStop(0.5,'rgba(28,32,40,0.97)');
+      _hg.addColorStop(1,'rgba(14,16,22,0.97)');
+      ctx.fillStyle=_hg;
+      ctx.strokeStyle=col; ctx.lineWidth=2;
+      ctx.shadowColor=col; ctx.shadowBlur=16;
+      ctx.beginPath(); ctx.roundRect(rx,ry,RW,RH,6); ctx.fill(); ctx.stroke();
+      ctx.shadowBlur=0;
+    }
+
+    // 3. Inner bezel
+    if(layers.bezel){
+      ctx.fillStyle='rgba(4,5,9,0.55)';
+      ctx.strokeStyle=col+'33'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.roundRect(rx+3,ry+3,RW-6,RH-6,4); ctx.fill(); ctx.stroke();
+    }
+
+    // 4. Corner screws
+    if(layers.screws){
+      const _scr=[[rx+10,ry+10],[rx+RW-10,ry+10],[rx+10,ry+RH-10],[rx+RW-10,ry+RH-10]];
+      ctx.fillStyle='rgba(60,70,85,0.85)';
+      ctx.strokeStyle='rgba(180,200,220,0.45)'; ctx.lineWidth=0.8;
+      for(let i=0;i<4;i++){
+        const _sx=_scr[i][0], _sy=_scr[i][1];
+        ctx.beginPath(); ctx.arc(_sx,_sy,2.4,0,Math.PI*2); ctx.fill(); ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(_sx-1.6,_sy); ctx.lineTo(_sx+1.6,_sy);
+        ctx.moveTo(_sx,_sy-1.6); ctx.lineTo(_sx,_sy+1.6);
+        ctx.stroke();
+      }
+    }
+
+    // 5. Left sidebar — dial + grille
+    const _sbX = rx+6;
+    if(layers.dial){
+      const _dcx=_sbX+_sbW/2, _dcy=ry+Math.max(_headerH+Math.round(6*uiScale), Math.round(RH*0.32)), _dr=Math.max(8, Math.round(14*uiScale));
+      ctx.save();
+      const _dg=ctx.createRadialGradient(_dcx-2,_dcy-2,1,_dcx,_dcy,_dr);
+      _dg.addColorStop(0,'rgba(70,80,95,0.95)');
+      _dg.addColorStop(1,'rgba(16,18,24,0.95)');
+      ctx.fillStyle=_dg;
+      ctx.beginPath(); ctx.arc(_dcx,_dcy,_dr,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle=col+'77'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.arc(_dcx,_dcy,_dr,0,Math.PI*2); ctx.stroke();
+      ctx.strokeStyle=col+'55'; ctx.lineWidth=0.8;
+      for(let i=0;i<12;i++){
+        const _ta=-Math.PI/2+i*(Math.PI*2/12);
+        ctx.beginPath();
+        ctx.moveTo(_dcx+Math.cos(_ta)*(_dr-1),_dcy+Math.sin(_ta)*(_dr-1));
+        ctx.lineTo(_dcx+Math.cos(_ta)*(_dr-3),_dcy+Math.sin(_ta)*(_dr-3));
+        ctx.stroke();
+      }
+      const _baseA=-Math.PI/2+((seed%360)*Math.PI/180);
+      const _sway=(reduceMotion||state!=='showing')?0:Math.sin(t*3)*0.08;
+      const _pa=_baseA+_sway;
+      ctx.strokeStyle=col; ctx.shadowColor=col; ctx.shadowBlur=6; ctx.lineWidth=1.6;
+      ctx.beginPath();
+      ctx.moveTo(_dcx+Math.cos(_pa)*2,_dcy+Math.sin(_pa)*2);
+      ctx.lineTo(_dcx+Math.cos(_pa)*(_dr-2),_dcy+Math.sin(_pa)*(_dr-2));
+      ctx.stroke();
+      ctx.fillStyle=col; ctx.shadowBlur=0;
+      ctx.beginPath(); ctx.arc(_dcx,_dcy,1.6,0,Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+    if(layers.grille && _sbW>0){
+      const _sgY0 = ry + (layers.dial ? (_headerH + Math.round(26*uiScale)) : Math.round(RH*0.18));
+      const _sgY1 = ry + RH - Math.round(10*uiScale);
+      const _sgX0 = _sbX+4, _sgX1 = _sbX+_sbW-4;
+      const _cols = 4, _rows = Math.max(3, Math.floor((_sgY1-_sgY0)/5));
+      if(_rows>1 && _sgY1>_sgY0){
+        const _dxStep=(_sgX1-_sgX0)/(_cols-1);
+        const _dyStep=(_sgY1-_sgY0)/(_rows-1);
+        ctx.fillStyle=col+'44';
+        for(let rr=0;rr<_rows;rr++){
+          for(let cc=0;cc<_cols;cc++){
+            ctx.beginPath();
+            ctx.arc(_sgX0+cc*_dxStep,_sgY0+rr*_dyStep,0.9,0,Math.PI*2);
+            ctx.fill();
+          }
+        }
+      }
+    }
+
+    const _contentX = rx + (_sbW ? _sbW+8 : _rp);
+
+    // 6. Header separator + VU + callsign + status + frequency
+    if(layers.header){
+      ctx.strokeStyle=col+'44'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(rx+6,ry+_headerH); ctx.lineTo(rx+RW-6,ry+_headerH); ctx.stroke();
+    }
+    let _vuEndX = _contentX;
+    if(layers.vuMeter){
+      const _bsp = Math.max(3, Math.round(6*uiScale));
+      const _vuX = _contentX, _vuY = ry + (layers.header ? Math.round(_headerH*0.5) : Math.round(RH*0.4));
+      const _bw = Math.max(2, Math.round(3*uiScale));
+      for(let i=0;i<vuBars;i++){
+        let _amp;
+        if(reduceMotion){ _amp = 0.28 + (i*0.03); }
+        else if(state==='incoming'){ _amp = Math.min(1, t*2.0)*(0.35 + ((i*13+seed)%70)/100); }
+        else if(state==='showing'){
+          _amp = 0.45 + Math.sin(t*6 + i*0.6 + seed*0.01)*0.35 + Math.sin(t*3+i)*0.12;
+          _amp = Math.max(0.15, Math.min(1, _amp));
+        } else { _amp = Math.max(0, 0.5 - t*0.6); }
+        const _bh = 2 + _amp*12;
+        const _bx2 = _vuX + i*_bsp, _by2 = _vuY - _bh/2;
+        let _barCol;
+        const _hot = Math.ceil(vuBars*0.8), _warm = Math.ceil(vuBars*0.6);
+        if(i>=_hot) _barCol = _amp>0.75 ? '#ff5a4c' : col+'55';
+        else if(i>=_warm) _barCol = _amp>0.55 ? '#ffd84d' : col+'55';
+        else _barCol = _amp>0.35 ? col : col+'55';
+        ctx.fillStyle = _barCol;
+        ctx.fillRect(_bx2, _by2, _bw, _bh);
+      }
+      _vuEndX = _vuX + vuBars*_bsp;
+    }
+    if(layers.callsign && cs){
+      ctx.font = fontFn(11,'bold');
+      ctx.fillStyle = col;
+      ctx.textAlign = 'left';
+      ctx.fillText(`◈ ${cs}`, _vuEndX + 10, ry + (layers.header?Math.round(_headerH*0.62):Math.round(RH*0.45)));
+    }
+    if(layers.status){
+      ctx.font = fontFn(9,'bold');
+      ctx.textAlign = 'right';
+      const _statusY = ry + (layers.header?Math.round(_headerH*0.40):Math.round(RH*0.30));
+      if(state==='incoming' && Math.floor(t*5)%2===0){
+        ctx.fillStyle = col;
+        ctx.fillText(opts.statusIncoming || '▶ INCOMING', rx+RW-_rp, _statusY);
+      } else {
+        ctx.fillStyle = '#555';
+        ctx.fillText(opts.statusLive || '◉ LIVE', rx+RW-_rp, _statusY);
+      }
+    }
+    if(layers.frequency){
+      const _freqInt=(430+(seed%170)).toString();
+      const _freqFrac=((seed*7)%1000).toString().padStart(3,'0');
+      const _freqMHz=_freqInt+'.'+_freqFrac+' MHz';
+      ctx.font = fontFn(9);
+      ctx.fillStyle = col+'99';
+      ctx.textAlign = 'right';
+      ctx.fillText(_freqMHz, rx+RW-_rp, ry + (layers.header?Math.round(_headerH*0.82):Math.round(RH*0.60)));
+    }
+
+    // 7. Operator name + morse underline
+    if(layers.opName && op){
+      ctx.font = fontFn(12,'bold');
+      ctx.fillStyle = col;
+      ctx.textAlign = 'left';
+      ctx.shadowColor = col; ctx.shadowBlur = 8;
+      ctx.fillText(op, _contentX, ry + _headerH + Math.round(_opH*0.70));
+      ctx.shadowBlur = 0;
+    }
+    if(layers.morse){
+      const _mX=_contentX, _mY = ry + _headerH + _opH - 3;
+      const _mW = Math.min(RW - _sbW - 2*_rp - 8, Math.round(240*uiScale));
+      const _syms = 18, _step = _mW/_syms;
+      ctx.fillStyle = col+'77';
+      let _s = seed;
+      for(let i=0;i<_syms;i++){
+        _s = (_s*1103515245+12345)|0;
+        const _isDash = (Math.abs(_s)%10) < 4;
+        const _len = _isDash ? _step*0.7 : _step*0.22;
+        ctx.fillRect(_mX + i*_step, _mY, _len, 1.5);
+      }
+    }
+
+    // 8. Voice waveform
+    if(layers.waveform){
+      const _wX = _contentX, _wY = ry + _headerH + _opH + Math.round(_waveH*0.5);
+      const _wW = Math.min(RW - _sbW - 2*_rp - 8, Math.round(280*uiScale));
+      ctx.strokeStyle = col+'aa'; ctx.lineWidth = 1.1;
+      if(state==='showing' && !reduceMotion){
+        ctx.beginPath();
+        const _samples = 32;
+        for(let i=0;i<_samples;i++){
+          const _sx = _wX + i*(_wW/(_samples-1));
+          const _tw = t*2.5 + i*0.37 + seed*0.0007;
+          const _amp = Math.sin(_tw)*0.35 + Math.sin(_tw*2.3 + seed*0.003)*0.25 + Math.sin(_tw*4.7)*0.18;
+          const _sy = _wY + _amp*(_waveH-4)*0.55;
+          if(i===0){ ctx.beginPath(); ctx.moveTo(_sx,_sy); }
+          else ctx.lineTo(_sx,_sy);
+        }
+        ctx.stroke();
+      } else {
+        const _savedA = ctx.globalAlpha;
+        ctx.globalAlpha = _savedA*0.45;
+        ctx.beginPath();
+        ctx.moveTo(_wX,_wY); ctx.lineTo(_wX+_wW,_wY);
+        ctx.stroke();
+        ctx.globalAlpha = _savedA;
+      }
+    }
+
+    // 9. Message body
+    if(layers.message && _lines.length){
+      ctx.font = fontFn(compact?10:11);
+      ctx.fillStyle = '#c8d8e8';
+      ctx.textAlign = 'left';
+      let ly = ry + _headerH + _opH + _waveH + Math.round(_rp*0.4);
+      _lines.forEach(l => { ctx.fillText(l, _contentX, ly); ly += _rlh; });
+    }
+
+    // 10. CRT scan line
+    if(layers.scanLine && !reduceMotion){
+      const scanY = ((t*55) % RH);
+      ctx.fillStyle = 'rgba(255,255,255,0.022)';
+      ctx.fillRect(rx+4, ry+scanY, RW-8, 2);
+    }
+
+    ctx.restore();
+    ctx.textAlign = 'left';
+  }
+  return { draw };
+})();
 
 // ── User gesture tracker — gates AudioContext creation everywhere ──
 window._userHasGestured = false;
@@ -10382,10 +10457,15 @@ function _startDistantPercussion(){
         if(!_ambientRunning||!AC_CTX||window._simMuted||window._pausedAmbientLock) { scheduleNext(); return; }
         _playLayered({
           bus:'sfx', gainDb:-8, pan:(Math.random()*1.4-0.7), reverbWet:0.55,
-          transient:{ type:'noise', dur:0.045, gainDb:-6, filter:{type:'highpass',freq:1200,Q:0.7} },
+          // Field-name shape matches _playLayered (L11707): d (duration),
+          // g (linear gain), filt ({type,f,Q}), noise:true for noise branch.
+          // Previously used the wrong shape (dur/gainDb/filter + type:'noise'),
+          // which triggered "'noise' is not a valid OscillatorType" warnings and
+          // silently degraded to a 6kHz sine tone instead of a filtered noise burst.
+          transient:{ noise:true, d:0.045, g:0.5, filt:{type:'highpass',f:1200,Q:0.7} },
           body:    { type:'sine', f0:80, f1:30, dur:0.9, gainDb:-4, attack:0.005, release:0.85 },
           sub:     { type:'sine', f0:45, f1:24, dur:1.2, gainDb:-3, attack:0.008, release:1.1 },
-          grit:    { type:'noise', dur:0.35, gainDb:-12, filter:{type:'bandpass',freq:2200,Q:1.4} }
+          grit:    { noise:true, d:0.35, g:0.25, filt:{type:'bandpass',f:2200,Q:1.4} }
         });
       }catch(_){}
       scheduleNext();
@@ -11785,10 +11865,40 @@ function _rnd(a,b){ return a+Math.random()*(b-a); }
 const SoundEngine={
   init(){ _initSoundEngine(); },
   resume(){ try{ if(AC_CTX&&AC_CTX.state!=='running') AC_CTX.resume(); }catch(_){} },
-  setMuted(on){ MUTED=!!on; if(_masterGain&&AC_CTX){
-      const t=AC_CTX.currentTime; _masterGain.gain.cancelScheduledValues(t);
-      _masterGain.gain.linearRampToValueAtTime(on?0:0.82,t+0.12);
-  } },
+  setMuted(on){
+    MUTED=!!on;
+    if(_masterGain&&AC_CTX){
+      // 2026-04-20 reload-unmute fix: (1) force AC out of 'suspended' — a
+      // session that booted with persisted mute may have AC suspended after
+      // _bootAudioCtx because some browsers don't auto-resume fresh contexts.
+      // Without this, master ramps to 0.82 but no samples are ever clocked
+      // out, so the dashboard stays silent. (2) anchor the ramp with an
+      // explicit setValueAtTime — `linearRampToValueAtTime` needs a
+      // preceding scheduled event or the ramp can no-op on some engines.
+      try{ if(AC_CTX.state !== 'running') AC_CTX.resume(); }catch(_){}
+      const t=AC_CTX.currentTime;
+      const cur=_masterGain.gain.value;
+      _masterGain.gain.cancelScheduledValues(t);
+      _masterGain.gain.setValueAtTime(cur, t);
+      _masterGain.gain.linearRampToValueAtTime(on?0:0.82, t+0.12);
+    }
+    // If the menu bed was started silent while MUTED was true, it's already
+    // spinning behind master=0. After unmute the ramp above revives it.
+    // We also poke the menu bed volume in case it short-circuited on start.
+    if(!on){
+      try{
+        if(typeof window._menuBedSetVolume === 'function' && _menuBedActive){
+          window._menuBedSetVolume(0.5);
+        } else if(typeof window._startMenuBed === 'function' && !_menuBedActive){
+          window._startMenuBed(0.5);
+        }
+      }catch(_){}
+    }
+  },
+  // Read current global mute state. Needed by block-3/4 games (Defense,
+  // Hunt) whose in-game M key toggles MUTED without access to the block-2
+  // local `let MUTED`. Cross-block accessor, safe to call before AC init.
+  isMuted(){ return !!MUTED; },
   setPaused(on){ try{ _setPaused(!!on); }catch(_){} },
   setReducedMotion(on){ _reducedAudio=!!on; if(on) _pauseLFOs(); else _resumeLFOs(); },
   setBusVolume(busName,v){
@@ -13766,6 +13876,7 @@ const FONT_BOLD_11='bold 11px monospace';
 const FONT_BOLD_12='bold 12px monospace';
 const FONT_BOLD_6='bold 6px monospace';
 const FONT_5='5px monospace';
+const FONT_BOLD_13='bold 13px monospace';
 const FONT_BOLD_14='bold 14px monospace';
 const FONT_BOLD_16='bold 16px monospace';
 
@@ -14413,10 +14524,55 @@ function updComms(dt){
 }
 function drawComms(){
   if(!commsMsg||commsTime<=0) return;
-  const a=Math.min(1,commsTime*0.6)*0.70;
-  CX.save(); CX.globalAlpha=a; CX.fillStyle='rgba(0,0,0,0.50)'; CX.fillRect(0,VH-54,VW,22);
-  CX.fillStyle=commsCol; CX.font=FONT_10; CX.textAlign='left';
-  CX.fillText('▶ '+commsMsg.slice(0,110),14,VH-38); CX.restore();
+  // 2026-04-20: reshape from 22px black strip to hardware receiver (compact
+  // preset — housing + screws + VU6 + morse + waveform + message, no
+  // antenna/dial/grille/opName). Delegates to window.HardwareRadio.draw.
+  if(!window.HardwareRadio){
+    // Safety fallback — should never happen once the facade is defined in block 1.
+    const a=Math.min(1,commsTime*0.6)*0.70;
+    CX.save(); CX.globalAlpha=a; CX.fillStyle='rgba(0,0,0,0.50)'; CX.fillRect(0,VH-54,VW,22);
+    CX.fillStyle=commsCol; CX.font=FONT_10; CX.textAlign='left';
+    CX.fillText('▶ '+commsMsg.slice(0,110),14,VH-38); CX.restore();
+    return;
+  }
+  // State model: fade in over first 0.4s, hold, fade out over last 0.6s.
+  const totalT = 3.8; // matches commsTime init in updComms
+  const elapsed = totalT - commsTime;
+  let state='showing', stateT=elapsed;
+  if(elapsed < 0.4){ state='incoming'; stateT = elapsed; }
+  else if(commsTime < 0.6){ state='fading'; stateT = 0.6 - commsTime; }
+  const alpha = state==='incoming' ? Math.min(1, elapsed/0.35)
+               : state==='fading' ? Math.max(0, commsTime/0.6)
+               : 1;
+  const RW = Math.min(520, Math.max(360, VW * 0.36));
+  const RH = 64;
+  const RX = 16;
+  const RY = VH - RH - 28;
+  window.HardwareRadio.draw(CX, {
+    rect:{x:RX, y:RY, w:RW, h:RH},
+    col: commsCol,
+    state,
+    t: stateT,
+    op: '',
+    cs: 'SOC',
+    msg: commsMsg,
+    alpha,
+    layers:{
+      antenna:false, dial:false, grille:false,
+      opName:false, waveform:false, scanLine:false,
+      housing:true, bezel:true, screws:true,
+      vuMeter:true, header:true, callsign:true, status:true, frequency:true,
+      morse:true, message:true
+    },
+    vuBars: 6,
+    maxLines: 2,
+    compact: true,
+    uiScale: 0.95,
+    fontFn: (px, weight) => `${weight?weight+' ':''}${Math.max(9, Math.round(px*0.95))}px monospace`,
+    seed: commsMsg,
+    statusIncoming: '▶ SIGNAL',
+    statusLive: '◉ LIVE'
+  });
 }
 let actAnnT=0,actAnnText='',actAnnSub='',actAnnCol='#fff';
 function showActAnn(num,title,sub,col){ actAnnT=3.5; actAnnText=T('g_act')+num+' — '+title; actAnnSub=sub; actAnnCol=col; SFX.act(num-1); }
@@ -23536,6 +23692,11 @@ try{
     try{
       if(typeof window.AC === 'function'){
         const ctx = window.AC(); // creates AudioContext + master chain + kicks _initSoundEngine
+        // 2026-04-20 reload-unmute fix: some browsers keep a freshly created
+        // AudioContext in 'suspended' state even when AC() is invoked inside a
+        // real user gesture. Explicitly resume so that later setMuted(false)
+        // ramps produce audible samples. Idempotent if already running.
+        try{ if(ctx && ctx.state !== 'running') ctx.resume(); }catch(_){}
         try{ console.log('[arcade] AudioContext bootstrapped on first user gesture — state:', ctx ? ctx.state : 'null-returned'); }catch(_){}
         try{ if(typeof window._initSoundEngine === 'function') window._initSoundEngine(); }catch(_){}
         // Start the dashboard menu bed now that the audio graph exists.
@@ -26168,26 +26329,71 @@ class SOCFeed{
     const fadeIn=Math.min(1,t/0.4);
     const fadeOut=t>this.#showT?Math.max(0,1-(t-this.#showT)/0.8):1;
     const alpha=fadeIn*fadeOut;if(alpha<0.01)return;
-    ctx.save();ctx.globalAlpha=alpha;
-    const barW=380,barH=28,bx=(w-barW)/2,by=h-42;
-    ctx.fillStyle="rgba(4,1,18,0.90)";ctx.strokeStyle=CS.GREEN;ctx.lineWidth=1;
-    ctx.shadowColor=CS.GREEN;ctx.shadowBlur=8;
-    ctx.beginPath();ctx.roundRect(bx,by,barW,barH,4);ctx.fill();ctx.stroke();
-    const blink=Math.sin(performance.now()*0.015)>0;
-    if(blink){
-      ctx.fillStyle=CS.GREEN;ctx.shadowBlur=0;
-      ctx.beginPath();ctx.arc(bx+12,by+14,4,0,Math.PI*2);ctx.fill();
+    // 2026-04-20: reshape from green-bordered pill to hardware receiver via
+    // window.HardwareRadio (shared facade defined in block 1). Drops antenna,
+    // grille, opName, waveform — this is a HUD strip, not a full receiver.
+    // Keeps dial + VU6 + morse + message so it reads as a comm module, not
+    // a text banner. Falls back to legacy pill if facade missing (dev-time
+    // safety).
+    if(!window.HardwareRadio){
+      ctx.save();ctx.globalAlpha=alpha;
+      // 2026-04-20: legacy fallback also anchors above shield row so it
+      // doesn't clip the ship/box if HardwareRadio facade ever fails to load.
+      const barW=380,barH=28,bx=(w-barW)/2,by=Math.max(96,(h-108)-barH-10);
+      ctx.fillStyle="rgba(4,1,18,0.90)";ctx.strokeStyle=CS.GREEN;ctx.lineWidth=1;
+      ctx.shadowColor=CS.GREEN;ctx.shadowBlur=8;
+      ctx.beginPath();ctx.roundRect(bx,by,barW,barH,4);ctx.fill();ctx.stroke();
+      ctx.font=FONT3_BOLD_10_CN;ctx.textAlign="left";
+      ctx.fillStyle=CS.GREEN;ctx.shadowColor=CS.GREEN;ctx.shadowBlur=6;
+      ctx.fillText(T('def_soc_label'),bx+22,by+18);
+      const maxMsgW=barW-82;ctx.font=FONT3_10_CN;
+      let msg=this.#current;
+      while(msg.length>0&&ctx.measureText(msg).width>maxMsgW)msg=msg.slice(0,-1);
+      if(msg.length<this.#current.length)msg=msg.slice(0,-1)+"…";
+      ctx.fillStyle=CS.WHITE;ctx.shadowBlur=0;
+      ctx.fillText(msg,bx+72,by+18);
+      ctx.restore();
+      return;
     }
-    ctx.font=FONT3_BOLD_10_CN;ctx.textAlign="left";
-    ctx.fillStyle=CS.GREEN;ctx.shadowColor=CS.GREEN;ctx.shadowBlur=6;
-    ctx.fillText(T('def_soc_label'),bx+22,by+18);
-    const maxMsgW=barW-82;ctx.font=FONT3_10_CN;
-    let msg=this.#current;
-    while(msg.length>0&&ctx.measureText(msg).width>maxMsgW)msg=msg.slice(0,-1);
-    if(msg.length<this.#current.length)msg=msg.slice(0,-1)+"…";
-    ctx.fillStyle=CS.WHITE;ctx.shadowBlur=0;
-    ctx.fillText(msg,bx+72,by+18);
-    ctx.restore();
+    // State mapping: first 0.4s → incoming, hold → showing, tail → fading.
+    let state='showing', stateT=t;
+    if(t < 0.4){ state='incoming'; stateT = t; }
+    else if(t > this.#showT){ state='fading'; stateT = t - this.#showT; }
+    // 2026-04-20: reposition above the shield row. Previously anchored at
+    // h-78 which clipped both the shield blocks (y = LH-108..LH-84) and the
+    // player ship (y = LH-56..LH-32). New band sits 10px above shield top
+    // so the ship and the "box" (shield blocks) stay fully visible. Enemies
+    // may briefly pass behind the radio mid-wave — acceptable since the
+    // radio is a cosmetic HUD surface and auto-hides after ~5.5s anyway.
+    const RW = Math.min(520, Math.max(400, w * 0.42));
+    const RH = 54; // slightly shorter to open up the band around shields
+    const RX = (w - RW) / 2;
+    const SHIELD_TOP_Y = h - 108; // mirrors Block spawn at LH-108 (L29287)
+    const RY = Math.max(96, SHIELD_TOP_Y - RH - 10);
+    window.HardwareRadio.draw(ctx, {
+      rect:{x:RX, y:RY, w:RW, h:RH},
+      col: CS.GREEN,
+      state,
+      t: stateT,
+      op: '',
+      cs: 'SOC',
+      msg: this.#current,
+      alpha,
+      layers:{
+        antenna:false, grille:false, opName:false, waveform:false, scanLine:false,
+        housing:true, bezel:true, screws:true, dial:true,
+        vuMeter:true, header:true, callsign:true, status:true, frequency:true,
+        morse:true, message:true
+      },
+      vuBars: 6,
+      maxLines: 2,
+      compact: true,
+      uiScale: 0.95,
+      fontFn: (px, weight) => `${weight?weight+' ':''}${Math.max(9, Math.round(px*0.95))}px monospace`,
+      seed: this.#current,
+      statusIncoming: '▶ SOC',
+      statusLive: '◉ LIVE'
+    });
   }
 }
 
@@ -28560,6 +28766,19 @@ class Game{
     const inCombat=(this.#state===STATE.PLAYING||this.#state===STATE.BOSS);
     if((this.#input.consumePressed?.("p")||this.#input.consumePressed?.("P")) && (inCombat||this.#paused)){
       this.#setPaused(!this.#paused);
+    }
+    // M toggles in-game mute. Persistent dashboard mute (cs_muted_v1) is
+    // intentionally NOT touched here — operator's dashboard preference is a
+    // separate scope (dashboard / attract / rankings). In-game mute is a
+    // per-session control: when the player returns to the dashboard, the
+    // persisted preference is re-applied by the attract director / nav code.
+    // Routes through window.SoundEngine because Defense lives in script
+    // block 3 and cannot reach block-2's MUTED / _masterGain directly.
+    if(this.#input.consumePressed?.("m")||this.#input.consumePressed?.("M")){
+      try{
+        const _next = !(window.SoundEngine?.isMuted?.());
+        window.SoundEngine?.setMuted?.(_next);
+      }catch(_){}
     }
     if(this.#paused){
       // While paused: skip gameplay update but keep ambient FX (stars/blink) moving so the screen feels alive.
@@ -40596,7 +40815,7 @@ function frame(ts){
         if(!sessionStorage.getItem('arcade_tutorialCompleted')){_tutorialActive=true;_tutorialT=0;}
       }
       if(hk('KeyL'))FalconRanking.showAttract?.();
-      if(hk('KeyM'))HUNT_MUTED=!HUNT_MUTED;
+      if(hk('KeyM')){HUNT_MUTED=!HUNT_MUTED;try{window.SoundEngine?.setMuted?.(HUNT_MUTED);}catch(_){}}
       break;
 
     case STATE.CASE_SELECT:
@@ -40643,7 +40862,7 @@ function frame(ts){
         HUNT_SFX.click();
       }
       if(hk('Escape')){gameState=STATE.CASE_SELECT;stopHuntAmbient();}
-      if(hk('KeyM'))HUNT_MUTED=!HUNT_MUTED;
+      if(hk('KeyM')){HUNT_MUTED=!HUNT_MUTED;try{window.SoundEngine?.setMuted?.(HUNT_MUTED);}catch(_){}}
       break;
 
     case STATE.INVESTIGATION:
@@ -40679,7 +40898,7 @@ function frame(ts){
       // Allow manual advance to deduction
       if(hk('Space')&&collectedClues.length>=2){buildDeductionChoices();startDeductionTimer();gameState=STATE.DEDUCTION;HUNT_SFX.click();}
       if(hk('Escape')){if(confirm(T('g_exit_confirm'))){gameState=STATE.CASE_SELECT;FalconRanking.startIdleWatch();stopHuntAmbient();}}
-      if(hk('KeyM'))HUNT_MUTED=!HUNT_MUTED;
+      if(hk('KeyM')){HUNT_MUTED=!HUNT_MUTED;try{window.SoundEngine?.setMuted?.(HUNT_MUTED);}catch(_){}}
       break;
 
     case STATE.EVIDENCE_CARD:
@@ -40694,7 +40913,7 @@ function frame(ts){
         }
       }
       if(hk('Escape')){gameState=STATE.CASE_SELECT;FalconRanking.startIdleWatch();}
-      if(hk('KeyM'))HUNT_MUTED=!HUNT_MUTED;
+      if(hk('KeyM')){HUNT_MUTED=!HUNT_MUTED;try{window.SoundEngine?.setMuted?.(HUNT_MUTED);}catch(_){}}
       break;
 
     case STATE.DEDUCTION:
@@ -40710,7 +40929,7 @@ function frame(ts){
       if(deductionTimeLeft<=0&&!deductionLocked) deductionTimeout();
       if(MOUSE.clicked&&!deductionLocked) handleDeductionClick();
       if(hk('Escape')){if(confirm(T('g_exit_confirm'))){gameState=STATE.CASE_SELECT;caseSel=0;caseSelectEntryT=0;score=0;}}
-      if(hk('KeyM'))HUNT_MUTED=!HUNT_MUTED;
+      if(hk('KeyM')){HUNT_MUTED=!HUNT_MUTED;try{window.SoundEngine?.setMuted?.(HUNT_MUTED);}catch(_){}}
       break;
 
     case STATE.INTERCEPT:
