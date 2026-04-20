@@ -757,22 +757,23 @@ body.arcade-loader-active { overflow:hidden; }
   filter:blur(6px);
 }
 
-/* Head + footer — consistent rhythm with rest of UI */
-.mission-brief-head,
-.mission-brief-footer {
+/* Head — two-column grid (kicker | exit) */
+.mission-brief-head {
   position:relative; z-index:1;
   display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:16px;
   padding:16px 24px;
   border-bottom:1px solid rgba(255,255,255,0.06);
 }
+/* Footer — single focal axis (CTA above tiny helper hint), mirrors legal-ack */
 .mission-brief-footer {
-  border-bottom:none;
+  position:relative; z-index:1;
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+  padding:16px 24px;
   border-top:1px solid rgba(255,255,255,0.06);
 }
 .mission-brief-kicker,
 .mission-brief-exit,
 .mission-brief-status,
-.mission-brief-op,
 .mission-brief-scene-pill,
 .mission-brief-card-k {
   font:700 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -825,7 +826,6 @@ body.arcade-loader-active { overflow:hidden; }
 .mission-brief-meta {
   display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px;
 }
-.mission-brief-op,
 .mission-brief-status {
   padding:7px 10px;
   border:1px solid color-mix(in srgb, var(--brief-accent) 18%, rgba(255,255,255,0.1));
@@ -834,9 +834,8 @@ body.arcade-loader-active { overflow:hidden; }
   line-height:1.35;
   white-space:normal;
   text-wrap:balance;
+  color:#89a8bb; text-align:right;
 }
-.mission-brief-op { color:#dce7ef; }
-.mission-brief-status { color:#89a8bb; text-align:right; }
 
 /* Title + subtitle — one hero per view */
 .mission-brief-title {
@@ -853,15 +852,7 @@ body.arcade-loader-active { overflow:hidden; }
   text-wrap:pretty;
 }
 
-/* Story strip label */
-.mission-brief-strip-label {
-  color:#89a8bb;
-  font:700 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:2px; text-transform:uppercase;
-  margin-bottom:-6px;
-}
-
-/* Numbered story strip — three chips, cohesive with .mission-brief-op weight */
+/* Numbered story strip — three chips, self-labeling via pill numerals */
 .mission-brief-scene-rail {
   display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px;
 }
@@ -970,15 +961,17 @@ body.arcade-loader-active { overflow:hidden; }
 }
 .mission-brief-command-text,
 .mission-brief-objective-text,
-.mission-brief-card-v,
-.mission-brief-footer-copy {
+.mission-brief-card-v {
   color:#dce7ef; font:700 13px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 }
+/* Footer helper hint — demoted to 9.5px (legal-ack parity), sits BENEATH the DEPLOY CTA */
 .mission-brief-footer-copy {
-  min-width:0;
-  max-width:100%;
-  overflow-wrap:anywhere;
-  text-wrap:pretty;
+  color:#6b7684;
+  font:700 9.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:1.5px; text-transform:uppercase;
+  min-width:0; max-width:100%;
+  overflow-wrap:anywhere; text-wrap:pretty;
+  text-align:center;
 }
 .mission-brief-objective {
   grid-template-columns:auto 1fr; align-items:flex-start; column-gap:10px;
@@ -1017,7 +1010,6 @@ body.arcade-loader-active { overflow:hidden; }
 #mission-brief-overlay.is-open .mission-brief-meta,
 #mission-brief-overlay.is-open .mission-brief-title,
 #mission-brief-overlay.is-open .mission-brief-subtitle,
-#mission-brief-overlay.is-open .mission-brief-strip-label,
 #mission-brief-overlay.is-open .mission-brief-scene-rail,
 #mission-brief-overlay.is-open .mission-brief-scene-body,
 #mission-brief-overlay.is-open .mission-brief-sidebar > *,
@@ -1028,7 +1020,6 @@ body.arcade-loader-active { overflow:hidden; }
 #mission-brief-overlay.is-open .mission-brief-meta          { animation-delay: 40ms;  }
 #mission-brief-overlay.is-open .mission-brief-title         { animation-delay: 80ms;  }
 #mission-brief-overlay.is-open .mission-brief-subtitle      { animation-delay: 120ms; }
-#mission-brief-overlay.is-open .mission-brief-strip-label   { animation-delay: 160ms; }
 #mission-brief-overlay.is-open .mission-brief-scene-rail    { animation-delay: 180ms; }
 #mission-brief-overlay.is-open .mission-brief-scene-body    { animation-delay: 220ms; }
 #mission-brief-overlay.is-open .mission-brief-sidebar > *:nth-child(1) { animation-delay: 180ms; }
@@ -1042,12 +1033,11 @@ body.arcade-loader-active { overflow:hidden; }
   .mission-brief-title { max-width:none; }
 }
 @media (max-width: 980px) {
-  .mission-brief-head,
-  .mission-brief-footer {
+  .mission-brief-head {
     grid-template-columns:minmax(0,1fr);
     align-items:flex-start;
   }
-  .mission-brief-confirm { width:100%; }
+  .mission-brief-confirm { width:auto; max-width:480px; }
   .dash-attract-panel { height:min(84vh,920px); }
 }
 @media (max-height: 900px) {
@@ -1085,7 +1075,6 @@ body.arcade-loader-active { overflow:hidden; }
   #mission-brief-overlay.is-open .mission-brief-meta,
   #mission-brief-overlay.is-open .mission-brief-title,
   #mission-brief-overlay.is-open .mission-brief-subtitle,
-  #mission-brief-overlay.is-open .mission-brief-strip-label,
   #mission-brief-overlay.is-open .mission-brief-scene-rail,
   #mission-brief-overlay.is-open .mission-brief-scene-body,
   #mission-brief-overlay.is-open .mission-brief-sidebar > *,
@@ -1403,7 +1392,6 @@ const TRANSLATIONS = {
     ph4_tp_hunt_clues:'CLUES GATHERED',
     ph4_tp_hunt_time:'TIME (s)',
     ph4_tp_hunt_adv:'FINAL ADVERSARY',
-    ph4_press_retry:'PRESS R TO TRY AGAIN',
     ph4_press_redeploy:'PRESS R TO REDEPLOY',
     ph4_boss_contact:'▲ CONTACT DETECTED',
     ph4_boss_counter:'RECOMMENDED COUNTER',
@@ -1487,7 +1475,7 @@ const TRANSLATIONS = {
     g_controls_scan:'S — scan pulse (costs 10% fuel, reveals all stealth threats)',
     g_controls_intel:'I — intel panel (adversary TTPs, active modules, objectives)',
     g_controls_leaderboard:'L — view leaderboard   Ctrl+Shift+E — export CSV',
-    brief_auto_deploy:'AUTO-DEPLOY IN',
+    brief_auto_deploy:'auto-deploys in',
     brief_confirm_now:'DEPLOY NOW',
     g_begin_hunt_nav:'[ SPACE ] BEGIN HUNT    ← → ↑ ↓ SELECT    [ ESC ] BACK',
     iz_subtitle:'Breach Response Protocol  ·  Adversary Intelligence Edition  ·  2026',
@@ -1514,6 +1502,9 @@ const TRANSLATIONS = {
     iz_report_line4:'Unified Falcon platform reduces mean time to respond from hours to minutes.',
     iz_report_line5:'Named adversary intelligence turns reactive defence into proactive hunting.',
     iz_report_line6:'crowdstrike.com/adversary-universe  ·  falcon.crowdstrike.com',
+    iz_gameover_intel_line:'{adversary} ran their op. Falcon {module} would have broken the chain earlier.',
+    iz_gameover_intel_fallback:'Open-field breach — no detection fired. Resume the deployment.',
+    iz_generic_module:'module',
     iz_loading_title:'THREAT INTELLIGENCE INITIALIZING',
     iz_loading_assets:'{loaded} / {total} assets loaded',
     iz_loading_ready:'✅  ALL SYSTEMS READY',
@@ -2030,7 +2021,6 @@ const TRANSLATIONS = {
     ph4_tp_hunt_clues:'PISTAS REUNIDAS',
     ph4_tp_hunt_time:'TEMPO (s)',
     ph4_tp_hunt_adv:'ADVERSÁRIO FINAL',
-    ph4_press_retry:'PRESSIONE R PARA TENTAR',
     ph4_press_redeploy:'PRESSIONE R PARA IMPLANTAR',
     ph4_boss_contact:'▲ CONTATO DETECTADO',
     ph4_boss_counter:'CONTRA RECOMENDADO',
@@ -2113,7 +2103,7 @@ const TRANSLATIONS = {
     g_controls_scan:'S — pulso de varredura (custa 10% de combustível, revela todas as ameaças furtivas)',
     g_controls_intel:'I — painel intel (TTPs do adversário, módulos ativos, objetivos)',
     g_controls_leaderboard:'L — ver placar   Ctrl+Shift+E — exportar CSV',
-    brief_auto_deploy:'ACIONAMENTO AUTOMÁTICO EM',
+    brief_auto_deploy:'acionamento automático em',
     brief_confirm_now:'ATIVAR AGORA',
     g_begin_hunt_nav:'[ ESPAÇO ] INICIAR CAÇA    ← → ↑ ↓ SELECIONAR    [ ESC ] VOLTAR',
     iz_subtitle:'Protocolo de Resposta a Violações  ·  Edição de Inteligência Adversária  ·  2026',
@@ -2140,6 +2130,9 @@ const TRANSLATIONS = {
     iz_report_line4:'A plataforma Falcon unificada reduz o tempo médio de resposta de horas para minutos.',
     iz_report_line5:'A inteligência sobre adversários transforma defesa reativa em caça proativa.',
     iz_report_line6:'crowdstrike.com/adversary-universe  ·  falcon.crowdstrike.com',
+    iz_gameover_intel_line:'{adversary} executou a operação. Falcon {module} teria interrompido a cadeia antes.',
+    iz_gameover_intel_fallback:'Brecha em campo aberto — nenhuma detecção disparou. Retome a implantação.',
+    iz_generic_module:'módulo',
     iz_loading_title:'INTELIGÊNCIA DE AMEAÇAS INICIALIZANDO',
     iz_loading_assets:'{loaded} / {total} recursos carregados',
     iz_loading_ready:'✅  TODOS OS SISTEMAS PRONTOS',
@@ -2654,7 +2647,6 @@ const TRANSLATIONS = {
     ph4_tp_hunt_clues:'PISTAS REUNIDAS',
     ph4_tp_hunt_time:'TIEMPO (s)',
     ph4_tp_hunt_adv:'ADVERSARIO FINAL',
-    ph4_press_retry:'R PARA REINTENTAR',
     ph4_press_redeploy:'R PARA REDESPLEGAR',
     ph4_boss_contact:'▲ CONTACTO DETECTADO',
     ph4_boss_counter:'CONTRA RECOMENDADO',
@@ -2737,7 +2729,7 @@ const TRANSLATIONS = {
     g_controls_scan:'S — pulso de exploración (cuesta 10% de combustible, revela todas las amenazas ocultas)',
     g_controls_intel:'I — panel intel (TTPs del adversario, módulos activos, objetivos)',
     g_controls_leaderboard:'L — ver marcador   Ctrl+Shift+E — exportar CSV',
-    brief_auto_deploy:'DESPLIEGUE AUTOMÁTICO EN',
+    brief_auto_deploy:'despliegue automático en',
     brief_confirm_now:'DESPLEGAR AHORA',
     g_begin_hunt_nav:'[ ESPACIO ] INICIAR CAZA    ← → ↑ ↓ SELECCIONAR    [ ESC ] ATRÁS',
     iz_subtitle:'Protocolo de Respuesta a Brechas  ·  Edición de Inteligencia Adversaria  ·  2026',
@@ -2764,6 +2756,9 @@ const TRANSLATIONS = {
     iz_report_line4:'La plataforma Falcon unificada reduce el tiempo medio de respuesta de horas a minutos.',
     iz_report_line5:'La inteligencia de adversarios convierte la defensa reactiva en caza proactiva.',
     iz_report_line6:'crowdstrike.com/adversary-universe  ·  falcon.crowdstrike.com',
+    iz_gameover_intel_line:'{adversary} ejecutó la operación. Falcon {module} habría detenido la cadena antes.',
+    iz_gameover_intel_fallback:'Brecha en campo abierto — no saltó ninguna detección. Reanuda el despliegue.',
+    iz_generic_module:'módulo',
     iz_loading_title:'INICIALIZANDO INTELIGENCIA DE AMENAZAS',
     iz_loading_assets:'{loaded} / {total} recursos cargados',
     iz_loading_ready:'✅  TODOS LOS SISTEMAS LISTOS',
@@ -3278,7 +3273,6 @@ const TRANSLATIONS = {
     ph4_tp_hunt_clues:'収集した手掛かり',
     ph4_tp_hunt_time:'時間（秒）',
     ph4_tp_hunt_adv:'最終敵対者',
-    ph4_press_retry:'Rキーで再挑戦',
     ph4_press_redeploy:'Rキーで再展開',
     ph4_boss_contact:'▲ 接触検出',
     ph4_boss_counter:'推奨対策',
@@ -3388,6 +3382,9 @@ const TRANSLATIONS = {
     iz_report_line4:'統合Falconプラットフォームは平均対応時間を数時間から数分へ短縮します。',
     iz_report_line5:'敵対者インテリジェンスは受動的防御を能動的ハンティングへ変えます。',
     iz_report_line6:'crowdstrike.com/adversary-universe  ·  falcon.crowdstrike.com',
+    iz_gameover_intel_line:'{adversary} は作戦を実行。Falcon {module} で連鎖を早期に遮断できたはず。',
+    iz_gameover_intel_fallback:'オープンフィールド侵害 — 検知未発火。展開を再開せよ。',
+    iz_generic_module:'モジュール',
     iz_loading_title:'脅威インテリジェンスを初期化中',
     iz_loading_assets:'{loaded} / {total} アセット読み込み済み',
     iz_loading_ready:'✅  すべてのシステム準備完了',
@@ -3858,7 +3855,7 @@ const MISSION_BRIEF_COPY = Object.freeze({
       controls:'Command deck',
       objectives:'Mission path',
       edge:'Falcon edge',
-      continue:'Press Space or Enter or click to deploy',
+      continue:'SPACE · ENTER · CLICK',
       cancel:'ESC to cancel'
     },
     missions: {
@@ -3938,7 +3935,7 @@ const MISSION_BRIEF_COPY = Object.freeze({
       controls:'Deck de comandos',
       objectives:'Rota da missao',
       edge:'Vantagem Falcon',
-      continue:'Pressione ESPAÇO ou Enter ou clique para implantar',
+      continue:'ESPAÇO · ENTER · CLIQUE',
       cancel:'ESC para cancelar'
     },
     missions: {
@@ -4018,7 +4015,7 @@ const MISSION_BRIEF_COPY = Object.freeze({
       controls:'Deck de mandos',
       objectives:'Ruta de la mision',
       edge:'Ventaja Falcon',
-      continue:'Pulsa Espacio o Enter o haz clic para desplegar',
+      continue:'ESPACIO · ENTER · CLIC',
       cancel:'ESC para cancelar'
     },
     missions: {
@@ -4098,7 +4095,7 @@ const MISSION_BRIEF_COPY = Object.freeze({
       controls:'コマンドデッキ',
       objectives:'ミッションルート',
       edge:'Falcon優位',
-      continue:'スペース または Enter、またはクリックで展開',
+      continue:'スペース · ENTER · クリック',
       cancel:'ESCでキャンセル'
     },
     missions: {
@@ -4207,12 +4204,10 @@ function _ensureMissionBriefOverlay() {
       <div class="mission-brief-body">
         <section class="mission-brief-stage" id="mission-brief-stage">
           <div class="mission-brief-meta">
-            <div class="mission-brief-op" id="mission-brief-op"></div>
             <div class="mission-brief-status" id="mission-brief-status"></div>
           </div>
           <div class="mission-brief-title" id="mission-brief-title"></div>
           <div class="mission-brief-subtitle" id="mission-brief-subtitle"></div>
-          <div class="mission-brief-strip-label" id="mission-brief-strip-label"></div>
           <div class="mission-brief-scene-rail" id="mission-brief-scene-rail"></div>
           <div class="mission-brief-scene-body" id="mission-brief-scene-body"></div>
           <div class="mission-brief-progress"><span id="mission-brief-progress-bar"></span></div>
@@ -4233,8 +4228,8 @@ function _ensureMissionBriefOverlay() {
         </aside>
       </div>
       <div class="mission-brief-footer">
-        <div class="mission-brief-footer-copy" id="mission-brief-continue"></div>
         <button class="mission-brief-confirm" id="mission-brief-confirm" type="button"></button>
+        <div class="mission-brief-footer-copy" id="mission-brief-continue"></div>
       </div>
     </div>
   `;
@@ -4246,11 +4241,9 @@ function _ensureMissionBriefOverlay() {
     stage:overlay.querySelector('#mission-brief-stage'),
     kicker:overlay.querySelector('#mission-brief-kicker'),
     exit:overlay.querySelector('#mission-brief-exit'),
-    op:overlay.querySelector('#mission-brief-op'),
     status:overlay.querySelector('#mission-brief-status'),
     title:overlay.querySelector('#mission-brief-title'),
     subtitle:overlay.querySelector('#mission-brief-subtitle'),
-    stripLabel:overlay.querySelector('#mission-brief-strip-label'),
     rail:overlay.querySelector('#mission-brief-scene-rail'),
     sceneBody:overlay.querySelector('#mission-brief-scene-body'),
     progress:overlay.querySelector('#mission-brief-progress-bar'),
@@ -4345,7 +4338,11 @@ function _ensureMissionBriefOverlay() {
     const elapsed = performance.now() - cycleStartedAt;
     refs.progress.style.width = `${Math.min(100, (elapsed / totalMs) * 100)}%`;
     const remainingSec = Math.max(0, Math.ceil((totalMs - elapsed) / 1000));
-    refs.continue.textContent = `${currentData.shared.continue} · ${T('brief_auto_deploy')} ${remainingSec}s`;
+    // JP needs 秒 suffix; EN/PT/ES use plain "s". Keep the composed shape stable across languages.
+    {
+      const _secSuffix = (window._currentLangCode === 'jp') ? '秒' : 's';
+      refs.continue.textContent = `${currentData.shared.continue} · ${T('brief_auto_deploy')} ${remainingSec}${_secSuffix}`;
+    }
     // Phase 2: heartbeat tick on each of the final 3 whole seconds. The
     // stinger rises in brightness toward t=0 (step 0=3s rem, 2=1s rem).
     // Fires once per second-boundary crossing; countdownLastTick holds
@@ -4370,10 +4367,8 @@ function _ensureMissionBriefOverlay() {
     refs.overlay.style.setProperty('--brief-accent', currentData.color);
     refs.kicker.textContent = currentData.eyebrow;
     refs.exit.textContent = currentData.shared.cancel;
-    refs.op.textContent = currentData.shared.kicker;
     refs.title.textContent = currentData.title;
     refs.subtitle.textContent = currentData.subtitle;
-    refs.stripLabel.textContent = currentData.shared.story;
     refs.controlsLabel.textContent = currentData.shared.controls;
     refs.objectivesLabel.textContent = currentData.shared.objectives;
     refs.edgeLabel.textContent = currentData.shared.edge;
@@ -6120,6 +6115,7 @@ function _dashboardRankingMarkup() {
     const entries = _rankingEntriesFor(group.key).sort((a, b) => Number(b.score || 0) - Number(a.score || 0)).slice(0, 8);
     const hero = entries[0] || { name: t.dash_rankings_empty || 'Open field', company: t.dash_rankings_waiting || 'Awaiting first run', score: 0 };
     const medals = ['🥇','🥈','🥉'];
+    const isEmpty = !entries.length;
     const rows = entries.length ? entries.map((entry, idx) => `
       <div class="dash-rank-row ${idx === 0 ? 'is-top' : ''}"${idx < 3 ? ` data-podium="${idx + 1}"` : ''}>
         <span class="dash-rank-row-rank">${medals[idx] || (idx + 1)}</span>
@@ -6127,22 +6123,22 @@ function _dashboardRankingMarkup() {
         <span>${Number(entry.score || 0).toLocaleString()}</span>
       </div>
     `).join('') : `
-      <div class="dash-rank-row dash-rank-empty">
-        <span>—</span><span>${_esc(t.dash_rankings_empty || 'Open field')}</span><span>0</span>
-      </div>
+      <div class="dash-rank-empty-note">${_esc(t.dash_rankings_waiting || 'Awaiting first run')}</div>
     `;
     return `
-      <section class="dash-rank-card" data-rank-card data-rank-key="${_esc(group.key)}" style="--dash-rank-color:${group.color}">
+      <section class="dash-rank-card${isEmpty ? ' is-empty' : ''}" data-rank-card data-rank-key="${_esc(group.key)}" style="--dash-rank-color:${group.color}">
         <div class="dash-rank-title">${group.icon} ${_esc(group.title)}</div>
         <div class="dash-rank-hero" data-rank-hero>
-          <div class="dash-rank-hero-score">${Number(hero.score || 0).toLocaleString()}</div>
-          <div class="dash-rank-hero-meta" data-rank-hero-meta>${group.icon} ${_esc(hero.name || '—')}<span>${_esc(hero.company || t.dash_rankings_field_team || 'Falcon field team')}</span></div>
-          <div class="dash-rank-hero-track">
-            <span class="is-live"></span>
-            <span data-rank-hero-label>${_esc(entries.length > 1 ? (t.dash_rankings_top_agents || 'Top agents') : (t.dash_rankings_signal_live || t.dash_rankings_signal_lock || 'Live signal locked'))}</span>
-          </div>
+          ${isEmpty
+            ? `<div class="dash-rank-hero-empty">${_esc(t.dash_rankings_empty || 'Open field')}</div>`
+            : `<div class="dash-rank-hero-score">${Number(hero.score || 0).toLocaleString()}</div>
+               <div class="dash-rank-hero-meta" data-rank-hero-meta>${group.icon} ${_esc(hero.name || '—')}<span>${_esc(hero.company || t.dash_rankings_field_team || 'Falcon field team')}</span></div>
+               <div class="dash-rank-hero-track">
+                 <span class="is-live"></span>
+                 <span data-rank-hero-label>${_esc(entries.length > 1 ? (t.dash_rankings_top_agents || 'Top agents') : (t.dash_rankings_signal_live || t.dash_rankings_signal_lock || 'Live signal locked'))}</span>
+               </div>`}
         </div>
-        <div class="dash-rank-head"><span>#</span><span>${_esc(t.dash_rankings_agent || 'Agent')}</span><span>${_esc(t.dash_rankings_score || 'Score')}</span></div>
+        ${isEmpty ? '' : `<div class="dash-rank-head"><span>#</span><span>${_esc(t.dash_rankings_agent || 'Agent')}</span><span>${_esc(t.dash_rankings_score || 'Score')}</span></div>`}
         <div class="dash-rank-rows">${rows}</div>
       </section>
     `;
@@ -6226,7 +6222,9 @@ function _ensureDashboardRankingOverlay() {
     .dash-rank-row.is-top { border-color:color-mix(in srgb, var(--dash-rank-color) 48%, transparent); box-shadow:0 0 18px color-mix(in srgb, var(--dash-rank-color) 10%, transparent); }
     .dash-rank-row span:nth-child(2) { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .dash-rank-row span:last-child { text-align:right; color:#ffd84d; }
-    .dash-rank-empty span { color:#556270; }
+    .dash-rank-card.is-empty .dash-rank-hero { min-height:0; padding:14px 18px; border-color:rgba(255,255,255,0.06); box-shadow:none; }
+    .dash-rank-hero-empty { color:#556270; font:700 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:2px; text-transform:uppercase; text-align:center; padding:6px 0; }
+    .dash-rank-empty-note { color:#556270; font:700 10.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:1.8px; text-transform:uppercase; text-align:center; padding:18px 8px; border:1px dashed rgba(255,255,255,0.06); background:transparent; }
     .dash-rank-carousel-in { animation:dashRankIn .42s cubic-bezier(.22,1,.36,1) both; }
     @keyframes dashRankIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
     .dash-rank-fade-out { opacity:0 !important; transform:translateY(-5px) !important; transition:opacity .18s ease, transform .18s ease; }
@@ -8386,10 +8384,10 @@ const FalconRanking = (function () {
       }
       .fr-btn-secondary:active { transform: scale(0.97); }
 
-      /* Consent line */
+      /* Consent line — demoted to subordinate the CTA (legal text required, but volume reduced) */
       .fr-consent {
-        padding: 0 28px 20px;
-        font-size: 9px; color: #555; line-height: 1.6;
+        padding: 0 28px 18px;
+        font-size: 8.5px; color: #4a5560; line-height: 1.45;
         text-align: center;
       }
 
@@ -20876,18 +20874,21 @@ function drawGameOver(){
   CX.strokeStyle='rgba(255,255,255,0.05)'; CX.lineWidth=1;
   CX.beginPath(); CX.moveTo(VW/2-290,312); CX.lineTo(VW/2+290,312); CX.stroke();
 
-  // ── Threat report text with faint chromatic aberration ───────────────
-  // 1px RGB shift on the narrative body reads as damaged telemetry.
-  CX.fillStyle='#ffd84d'; CX.font=FONT_BOLD_11;
+  // ── Threat-report intel line (single authored line, replaces 5-line filler) ─
+  // Surface-parity pass: the legal-ack overlay subordinates helper copy to ONE
+  // de-emphasized line below the dominant content. The old 5-line filler block
+  // (THREAT REPORT title + 5 lines + URL) competed with the verdict + score box
+  // above. One adversary-specific intel line below the divider preserves the
+  // narrative beat without repeating it.
+  {
+    const _adv = (PHASES[phIdx] && PHASES[phIdx].adversary) ? PHASES[phIdx].adversary : null;
+    const _mod = (PHASES[phIdx] && PHASES[phIdx].module) ? PHASES[phIdx].module : T('iz_generic_module');
+    const _intelStr = _adv
+      ? TF('iz_gameover_intel_line', { adversary: _adv, module: _mod })
+      : T('iz_gameover_intel_fallback');
+    drawChromaticText(CX, _intelStr, VW/2, 360, '#42d9ff', FONT_10, 1);
+  }
   CX.textAlign='center';
-  CX.fillText(T('iz_report_title'),VW/2,332);
-  drawChromaticText(CX, T('iz_report_line1'), VW/2, 352, '#d5dde5', FONT_10, 1);
-  drawChromaticText(CX, T('iz_report_line2'), VW/2, 370, '#d5dde5', FONT_10, 1);
-  drawChromaticText(CX, T('iz_report_line3'), VW/2, 388, '#d5dde5', FONT_10, 1);
-  drawChromaticText(CX, T('iz_report_line4'), VW/2, 408, '#42d9ff', FONT_10, 1);
-  drawChromaticText(CX, T('iz_report_line5'), VW/2, 426, '#74ff88', FONT_10, 1);
-  CX.fillStyle='#555'; CX.font=FONT_9;
-  CX.fillText(T('iz_report_line6'),VW/2,446);
 
   // ═══════════ Closure Pass 5.B: Replay prestige chip row ═══════════
   // PHASE REACHED (always shown) + PB delta (when SCORE exceeds pre-run PB)
@@ -22219,10 +22220,10 @@ const FalconRanking = (function () {
       }
       .fr-btn-secondary:active { transform: scale(0.97); }
 
-      /* Consent line */
+      /* Consent line — demoted to subordinate the CTA (legal text required, but volume reduced) */
       .fr-consent {
-        padding: 0 28px 20px;
-        font-size: 9px; color: #555; line-height: 1.6;
+        padding: 0 28px 18px;
+        font-size: 8.5px; color: #4a5560; line-height: 1.45;
         text-align: center;
       }
 
@@ -28563,6 +28564,19 @@ class Game{
       }
     }
     ctx.fillStyle=CS.GREEN;ctx.fillRect(0,0,w,4);ctx.fillRect(0,h-4,w,4);
+    // ── Victory container (parity with FD GAME_OVER red-variant container) ──────
+    // Elevates YOU_WIN to match the weight of the loss screen; single focal axis.
+    {
+      const _boxPx=50,_boxPy=h*0.15,_boxPw=w-100,_boxPh=h*0.75;
+      ctx.save();
+      ctx.fillStyle="rgba(10,20,30,0.55)";
+      ctx.strokeStyle="rgba(116,255,136,0.28)";
+      ctx.lineWidth=1.5;
+      ctx.shadowColor="rgba(116,255,136,0.55)";
+      ctx.shadowBlur=14;
+      ctx.beginPath();ctx.roundRect(_boxPx,_boxPy,_boxPw,_boxPh,6);ctx.fill();ctx.stroke();
+      ctx.restore();
+    }
     ctx.save();ctx.textAlign="center";
     ctx.font="bold 44px 'Courier New'";
     ctx.fillStyle=CS.GREEN;ctx.shadowColor=CS.GREEN;ctx.shadowBlur=32;
@@ -36762,29 +36776,22 @@ function drawBreach(dt){
   ctx.fillText(`${T('g_score')}: ${formatLocaleNumber(score)}`,_cx,R(282),_mw);
 
   // ═══════════ Phase 4: pulsing TRY AGAIN CTA (amber, blink-gated) ═══════════
+  // Deletion-first: dropped redundant subtitle — h_breach_retry already names [R] inline.
   {
     const blinkOn = (Math.floor(Date.now()/380)%2===0);
     const ctaSize = Math.round(15*Math.min(ui,1));
-    const subSize = Math.round(11*Math.min(ui,1));
     if(blinkOn){
       ctx.font=huntFont(ctaSize,'bold');
       ctx.fillStyle='#ffd68a';
       ctx.shadowColor='#ffb347';
       ctx.shadowBlur=14;
-      ctx.fillText(T('h_breach_retry'),_cx,R(336),_mw);
-      ctx.font=huntFont(subSize,'bold');
-      ctx.fillStyle='rgba(255,214,138,0.82)';
-      ctx.shadowBlur=8;
-      ctx.fillText(T('ph4_press_retry'),_cx,R(354),_mw);
+      ctx.fillText(T('h_breach_retry'),_cx,R(342),_mw);
       ctx.shadowBlur=0;
     } else {
       ctx.font=huntFont(ctaSize,'bold');
       ctx.fillStyle='rgba(255,214,138,0.38)';
       ctx.shadowBlur=0;
-      ctx.fillText(T('h_breach_retry'),_cx,R(336),_mw);
-      ctx.font=huntFont(subSize,'bold');
-      ctx.fillStyle='rgba(255,214,138,0.28)';
-      ctx.fillText(T('ph4_press_retry'),_cx,R(354),_mw);
+      ctx.fillText(T('h_breach_retry'),_cx,R(342),_mw);
     }
   }
 
