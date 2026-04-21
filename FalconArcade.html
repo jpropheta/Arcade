@@ -4839,13 +4839,18 @@ function _loadStoredArray(key) {
     if (raw == null || raw === '') return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
-  } catch (_) {
+  } catch (e) {
+    // 2026-04-21 (release-gate must-fix #3): surface corruption. Previously
+    // silent — a malformed sessionStorage entry for a ranking key would
+    // degrade to empty array with zero signal. Booth ops need this log.
+    try{ console.warn('[Arcade] sessionStorage parse failed for key:', key, e?.message||e); }catch(_){}
     try {
       const raw = ARCADE_FALLBACK_STORAGE[key];
       if (!raw) return [];
       const parsed = JSON.parse(raw);
       return Array.isArray(parsed) ? parsed : [];
-    } catch (_) {
+    } catch (e2) {
+      try{ console.warn('[Arcade] ARCADE_FALLBACK_STORAGE parse failed for key:', key, e2?.message||e2); }catch(_){}
       return [];
     }
   }
@@ -6315,8 +6320,21 @@ function clearAllRankings() {
         if (restored > 0) console.log(`[Arcade] Restored ${restored} ranking entries from backup (${new Date(backup.ts).toLocaleString()})`);
       }
     }
-  } catch(_){}
-  setInterval(_doBackup, INTERVAL_MS);
+  } catch(e){
+    // 2026-04-21 (release-gate must-fix #3): surface ranking backup
+    // corruption instead of eating it silently. Booth ops will now see
+    // a console.warn if localStorage['cs_arcade_ranking_backup'] is
+    // malformed — which was previously invisible.
+    try{ console.warn('[Arcade] Ranking backup restore parse failed — corrupt cs_arcade_ranking_backup:', e?.message||e); }catch(_){}
+  }
+  // 2026-04-21 (release-gate must-fix #2): expose interval ID so the
+  // always-on ranking backup can be cancelled in an emergency (hotpatch,
+  // test harness, admin shutdown). The timer is intentionally app-lifetime;
+  // this just removes the "unstoppable timer" smell.
+  try{
+    const _id = setInterval(_doBackup, INTERVAL_MS);
+    if(typeof window !== 'undefined'){ window.__arcadeRankingBackupTimer = _id; }
+  }catch(e){ try{ console.warn('[Arcade] Ranking backup setInterval failed:', e); }catch(_){} }
   // Also backup on visibility change (tab about to close)
   document.addEventListener('visibilitychange', () => { if (document.hidden) _doBackup(); });
 })();
@@ -6878,12 +6896,16 @@ function _loadCampaignProgress() {
       defense: !!parsed.defense,
       threat_hunt: !!parsed.threat_hunt,
     };
-  } catch (_) {
+  } catch (e) {
+    // 2026-04-21 (release-gate must-fix #3): surface campaign progress
+    // corruption. Previously silent.
+    try{ console.warn('[Arcade] Campaign progress parse failed — corrupt ' + _CAMPAIGN_PROGRESS_KEY + ':', e?.message||e); }catch(_){}
     return fallback;
   }
 }
 function _saveCampaignProgress(state) {
-  try { localStorage.setItem(_CAMPAIGN_PROGRESS_KEY, JSON.stringify(state)); } catch (_) {}
+  try { localStorage.setItem(_CAMPAIGN_PROGRESS_KEY, JSON.stringify(state)); }
+  catch (e) { try{ console.warn('[Arcade] Campaign progress save failed:', e?.message||e); }catch(_){} }
 }
 function markCampaignBeat(gameId) {
   if (!gameId) return;
@@ -26880,26 +26902,41 @@ class Starfield{
 }
 
 // ─── INPUT ───────────────────────────────────────────────────────
+// 2026-04-21 (release-gate must-fix #1): listener leak fix.
+// Input previously bound window keydown/keyup with no tear-down. On each
+// Defense re-launch the old handlers would keep their stale #down Set alive
+// in closure, compounding with the new instance. Now: handlers are bound
+// methods, stored as fields, removed in dispose(). DefenseGame.shutdown
+// calls dispose() so repeated launches cost O(1) listeners, not O(n).
 class Input{
   #down=new Set();#pressed=new Set();
+  #onKeyDown=null;#onKeyUp=null;
   constructor(){
-    window.addEventListener("keydown",e=>{
+    this.#onKeyDown = e => {
       if(_arcadeDashVisible) return;
       if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA"||e.target.isContentEditable)return;
       if(!this.#down.has(e.key))this.#pressed.add(e.key);
       this.#down.add(e.key);
       if([" ","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","a","A","d","D","w","W"].includes(e.key))
         e.preventDefault();
-    });
-    window.addEventListener("keyup",e=>{
+    };
+    this.#onKeyUp = e => {
       if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA"||e.target.isContentEditable)return;
       this.#down.delete(e.key);
-    });
+    };
+    window.addEventListener("keydown", this.#onKeyDown);
+    window.addEventListener("keyup",   this.#onKeyUp);
   }
   isDown(k){return this.#down.has(k);}
   consume(k){const had=this.#pressed.has(k)||this.#down.has(k);this.#pressed.delete(k);return had;}
   consumePressed(k){const had=this.#pressed.has(k);this.#pressed.delete(k);return had;}
   flushAll(){this.#pressed.clear();this.#down.clear();}
+  dispose(){
+    try{ if(this.#onKeyDown) window.removeEventListener("keydown", this.#onKeyDown); }catch(e){ try{ console.warn('[Arcade] Input.dispose keydown remove failed:', e); }catch(_){} }
+    try{ if(this.#onKeyUp)   window.removeEventListener("keyup",   this.#onKeyUp);   }catch(e){ try{ console.warn('[Arcade] Input.dispose keyup remove failed:', e); }catch(_){} }
+    this.#onKeyDown=null;this.#onKeyUp=null;
+    this.#down.clear();this.#pressed.clear();
+  }
 }
 
 // ─── MODULE NOTIFICATION ─────────────────────────────────────────
@@ -28483,7 +28520,15 @@ class Game{
 
     // ─── KONAMI SETUP ──────────────────────────────────────────────
   #setupKonami(){
-    window.addEventListener("keydown", e => {
+    // 2026-04-21 (release-gate must-fix #1b): stored handler + idempotent
+    // guard. If #setupKonami is called twice (re-launch), the previous
+    // handler is removed first so at most one listener exists per game
+    // instance.
+    if(this.#konamiHandler){
+      try{ window.removeEventListener("keydown", this.#konamiHandler); }catch(e){ try{ console.warn('[Arcade] Konami re-bind remove failed:', e); }catch(_){} }
+      this.#konamiHandler = null;
+    }
+    this.#konamiHandler = e => {
       this.#konamiBuffer.push(e.key);
       if(this.#konamiBuffer.length > KONAMI_SEQ.length)
         this.#konamiBuffer.shift();
@@ -28494,7 +28539,15 @@ class Game{
         this.#konamiBuffer = [];
         this.#activateKonami();
       }
-    });
+    };
+    window.addEventListener("keydown", this.#konamiHandler);
+  }
+  #teardownKonami(){
+    if(this.#konamiHandler){
+      try{ window.removeEventListener("keydown", this.#konamiHandler); }catch(e){ try{ console.warn('[Arcade] Konami teardown failed:', e); }catch(_){} }
+      this.#konamiHandler = null;
+    }
+    this.#konamiBuffer = [];
   }
 
   // ─── KONAMI ACTIVATION ─────────────────────────────────────────
@@ -28762,6 +28815,11 @@ class Game{
   #konamiPhase   = 0;   // 0=idle 1=radio 2=nuke 3=fatality 4=cooldown
   #konamiT       = 0;
   #konamiUsed    = false; // one activation per wave
+  // 2026-04-21 (release-gate must-fix #1b): store konami handler so it can
+  // be removed on shutdown. Previously the window keydown binding at
+  // #setupKonami had no tear-down — a re-entered Defense game leaked a
+  // handler per launch.
+  #konamiHandler = null;
 
 
   async init(){
@@ -29463,6 +29521,12 @@ class Game{
     this.#audio.shutdown();
     this.#socFeed.stop();
     this.#input.flushAll();
+    // 2026-04-21 (release-gate must-fix #1): dispose input + konami listeners
+    // so re-launching Defense doesn't compound window handlers. Guarded so
+    // existing shutdown semantics (called from attract tear-down, from exit
+    // flow, from resetter registry) remain safe if already disposed.
+    try{ this.#input?.dispose?.(); }catch(e){ try{ console.warn('[Arcade] DefenseGame.shutdown input.dispose failed:', e); }catch(_){} }
+    try{ this.#teardownKonami(); }catch(e){ try{ console.warn('[Arcade] DefenseGame.shutdown konami teardown failed:', e); }catch(_){} }
     this.#canShoot=true;
     try{ctx.globalAlpha=1;ctx.shadowBlur=0;}catch(_){}
     this.#state=STATE.TITLE;
