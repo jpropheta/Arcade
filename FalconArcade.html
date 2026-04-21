@@ -275,25 +275,33 @@ body.arcade-loader-active { overflow:hidden; }
   display:block; position:absolute; inset:0; margin:auto; image-rendering:pixelated;
 }
 /* ── DASHBOARD RETURN BUTTON ── */
+/* 2026-04-20 (consolidation pass P7): demoted from bright red 140×28 cap-label
+   to compact ghost chrome. The old button sat at top:12 right:12 with z-index
+   10000 and physically covered the River INTEGRITY label + all 5 hearts,
+   because HTML overlay beats canvas on z-stack. New design: ~50×16px at
+   top:4 right:6, opacity 0.55 at rest → 1.0 on hover, muted color. The button
+   remains fully clickable and readable as chrome, but no longer fights the
+   canvas HUD for attention. Label also shortened ("MISSION SELECT" → "EXIT"). */
 .dashboard-btn-cls {
-  position:absolute; top:12px; right:12px; z-index:10000;
-  background:rgba(4,1,18,0.62); border:1px solid rgba(224,0,60,0.5);
-  color:#e0003c; font:bold 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:2px; padding:7px 14px; cursor:pointer; text-transform:uppercase;
-  border-radius:2px;
+  position:absolute; top:4px; right:6px; z-index:10000;
+  background:rgba(4,1,18,0.32); border:1px solid rgba(224,0,60,0.28);
+  color:rgba(224,0,60,0.82); font:bold 9px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:1.2px; padding:3px 7px; cursor:pointer; text-transform:uppercase;
+  border-radius:2px; opacity:0.58;
   /* Emil: strong ease-out; press is fastest (<150ms) */
   transition:background 180ms cubic-bezier(0.23, 1, 0.32, 1),
              border-color 180ms cubic-bezier(0.23, 1, 0.32, 1),
              color 180ms cubic-bezier(0.23, 1, 0.32, 1),
              box-shadow 180ms cubic-bezier(0.23, 1, 0.32, 1),
+             opacity 180ms cubic-bezier(0.23, 1, 0.32, 1),
              transform 140ms cubic-bezier(0.23, 1, 0.32, 1);
   text-decoration:none; display:inline-block;
-  will-change: transform;
+  will-change: transform, opacity;
 }
 @media (hover: hover) and (pointer: fine) {
   .dashboard-btn-cls:hover {
-    background:rgba(224,0,60,0.18); border-color:#e0003c; color:#fff;
-    box-shadow:0 0 16px rgba(224,0,60,0.35);
+    background:rgba(224,0,60,0.22); border-color:#e0003c; color:#fff;
+    opacity:1; box-shadow:0 0 14px rgba(224,0,60,0.4);
   }
 }
 .dashboard-btn-cls:active { transform:scale(0.97); }
@@ -1026,15 +1034,15 @@ body.arcade-loader-active { overflow:hidden; }
 <!-- ═══ GAME CONTAINERS ═══ -->
 <div id="game-zero-container">
   <canvas id="g-zero"></canvas>
-  <a class="dashboard-btn-cls" data-i18n="dash_return" href="#" onclick="returnToDashboard();return false;">◈ MISSION SELECT</a>
+  <a class="dashboard-btn-cls" data-i18n="dash_return" href="#" onclick="returnToDashboard();return false;" title="Return to mission select (ESC)">◈ EXIT</a>
 </div>
 <div id="game-defense-container">
   <canvas id="g-defense"></canvas>
-  <a class="dashboard-btn-cls" data-i18n="dash_return" href="#" onclick="returnToDashboard();return false;">◈ MISSION SELECT</a>
+  <a class="dashboard-btn-cls" data-i18n="dash_return" href="#" onclick="returnToDashboard();return false;" title="Return to mission select (ESC)">◈ EXIT</a>
 </div>
 <div id="game-hunt-container">
   <canvas id="g-hunt"></canvas>
-  <a class="dashboard-btn-cls" data-i18n="dash_return" href="#" onclick="returnToDashboard();return false;">◈ MISSION SELECT</a>
+  <a class="dashboard-btn-cls" data-i18n="dash_return" href="#" onclick="returnToDashboard();return false;" title="Return to mission select (ESC)">◈ EXIT</a>
 </div>
 
 <script>
@@ -1521,7 +1529,7 @@ const TRANSLATIONS = {
     dash_campaign_complete_body:'All three operations have been completed. The full Falcon response story now reads end-to-end from breach to pursuit.',
     dash_campaign_pending:'Awaiting completion',
     dash_campaign_done:'Operation complete',
-    dash_return:'◈ MISSION SELECT',
+    dash_return:'◈ EXIT',
     deploy_overlay_text:'DEPLOYING...',
     dash_clear_all_confirm:'Clear all leaderboard entries for every game? This cannot be undone.',
     dash_footer_hint:'<span class="blink">▶ SELECT A MISSION</span>',
@@ -2168,7 +2176,7 @@ const TRANSLATIONS = {
     dash_campaign_complete_body:'As três operações foram concluídas. A história completa da resposta Falcon agora vai da violação até a perseguição final.',
     dash_campaign_pending:'Aguardando conclusão',
     dash_campaign_done:'Operação concluída',
-    dash_return:'◈ SELEÇÃO DE MISSÃO',
+    dash_return:'◈ SAIR',
     deploy_overlay_text:'ATIVANDO...',
     dash_clear_all_confirm:'Limpar todas as entradas do placar de todos os jogos? Isso não pode ser desfeito.',
     dash_footer_hint:'<span class="blink">▶ SELECIONE UMA MISSÃO</span>',
@@ -2811,7 +2819,7 @@ const TRANSLATIONS = {
     dash_campaign_complete_body:'Las tres operaciones fueron completadas. La historia completa de respuesta Falcon ahora se lee de extremo a extremo, desde la brecha hasta la caza.',
     dash_campaign_pending:'Pendiente de completar',
     dash_campaign_done:'Operación completada',
-    dash_return:'◈ SELECCIÓN DE MISIÓN',
+    dash_return:'◈ SALIR',
     deploy_overlay_text:'DESPLEGANDO...',
     dash_clear_all_confirm:'¿Borrar todas las entradas del ranking de todos los juegos? Esto no se puede deshacer.',
     dash_footer_hint:'<span class="blink">▶ SELECCIONA UNA MISIÓN</span>',
@@ -3454,7 +3462,7 @@ const TRANSLATIONS = {
     dash_campaign_complete_body:'3つの作戦をすべて完了しました。Falconの対応ストーリーが侵害から追跡まで一続きで読める状態です。',
     dash_campaign_pending:'未完了',
     dash_campaign_done:'作戦完了',
-    dash_return:'◈ ミッション選択',
+    dash_return:'◈ 戻る',
     deploy_overlay_text:'デプロイ中...',
     dash_clear_all_confirm:'全ゲームのランキング記録をすべて削除しますか？この操作は元に戻せません。',
     dash_footer_hint:'<span class="blink">▶ ミッションを選択</span>',
@@ -13868,6 +13876,7 @@ function drawFlash(dt){
 // ── Font Cache (Block 2) ──────────────────────────────────────────────
 const FONT_BOLD_9='bold 9px monospace';
 const FONT_9='9px monospace';
+const FONT_MONO_9='9px monospace'; // 2026-04-20 crash fix: drawEnemies + morse binding referenced FONT_MONO_9 but it was never defined
 const FONT_10='10px monospace';
 const FONT_BOLD_8='bold 8px monospace';
 const FONT_BOLD_10='bold 10px monospace';
@@ -14473,18 +14482,23 @@ function updObjPulse(dt){ _objPulse=Math.max(0,_objPulse-dt); }
 function drawBanner(){
   if(bnTime<=0) return;
   const a=Math.min(1,bnTime*2.2)*Math.min(1,bnTime*0.9);
+  // 2026-04-20 (consolidation pass): stagger banner y when boss is alive so it
+  // doesn't collide with boss HP strip (backing y=32, bar y=50, ends y=62).
+  // Default y=48 keeps non-boss screens unchanged. Boss y=90 sits 8px below
+  // the HP bar's bottom edge. Text-center y updates from y+23 (=71) to by+23.
+  const by = (typeof BOSS !== 'undefined' && BOSS && BOSS.alive) ? 90 : 48;
   CX.save();
   // Banner backing panel: 620x38, dark semi-transparent
   CX.globalAlpha=a*0.62;
   CX.fillStyle='rgba(0,0,0,0.62)';
-  CX.fillRect(VW/2-310,48,620,38);
+  CX.fillRect(VW/2-310,by,620,38);
   // Left colored tab (8px inset)
   CX.globalAlpha=a*0.8;
   CX.fillStyle=bnCol;
-  CX.fillRect(VW/2-310,48,8,38);
+  CX.fillRect(VW/2-310,by,8,38);
   // Right caution-tape stripes (2 small diagonal 12x2 at 8° rotation)
   CX.save();
-  CX.translate(VW/2+310-16,48+10);
+  CX.translate(VW/2+310-16,by+10);
   CX.rotate(8*Math.PI/180);
   CX.fillStyle=bnCol;
   CX.globalAlpha=a*0.5;
@@ -14496,13 +14510,13 @@ function drawBanner(){
   CX.globalAlpha=a*0.8;
   CX.strokeStyle=bnCol;
   CX.lineWidth=1.5;
-  CX.strokeRect(VW/2-310,48,620,38);
+  CX.strokeRect(VW/2-310,by,620,38);
   // Banner text (upgraded to FONT_BOLD_13)
   CX.globalAlpha=a*0.80;
   CX.fillStyle=bnCol;
   CX.font=FONT_BOLD_13;
   CX.textAlign='center';
-  CX.fillText(bnText,VW/2,71);
+  CX.fillText(bnText,VW/2,by+23);
   CX.textAlign='left';
   CX.restore();
 }
@@ -14544,10 +14558,24 @@ function drawComms(){
   const alpha = state==='incoming' ? Math.min(1, elapsed/0.35)
                : state==='fading' ? Math.max(0, commsTime/0.6)
                : 1;
-  const RW = Math.min(520, Math.max(360, VW * 0.36));
-  const RH = 64;
-  const RX = 16;
-  const RY = VH - RH - 28;
+  // 2026-04-20 (pass 3): relocated from bottom-left (was covering fuel bar +
+  // campaign progress). Top-left under the HUD strip AND under the BANNER
+  // strip. Render order is drawComms → drawBanner → drawActAnn (line ~21855),
+  // so banner draws over us — but banner is centered (VW/2-310, 48, 620×38)
+  // ending at y=86, and events like TELEMETRY FALLING fire both drawBanner
+  // and pushComms simultaneously (see line 16327-16328). So we anchor below
+  // the banner's y=86 bottom edge with an 8px air-gap → RY=94. Width kept
+  // generous (380-520) so long SOC messages don't truncate; height is 0 so
+  // HardwareRadio auto-sizes to header + maxLines (~81px for 2-line messages,
+  // header 29px + 2*14px lines + 20px padding + 4). At RY=94 radio ends near
+  // y=175, well above VH-56 bottom HUD. Boss HP bar (centered 220px at y=50)
+  // clears the radio column at common viewports: at VW=1366 the boss bar
+  // starts at x=573, so a 520px-wide radio at x=12 ends at x=532 with a 41px
+  // gap. At smaller VW, max(380, VW*0.36) keeps the gap positive.
+  const RW = Math.min(520, Math.max(380, VW * 0.36));
+  const RH = 0; // auto-size — grows to fit exactly 2 lines
+  const RX = 12;
+  const RY = 94;
   window.HardwareRadio.draw(CX, {
     rect:{x:RX, y:RY, w:RW, h:RH},
     col: commsCol,
@@ -16313,22 +16341,25 @@ function updFuel(dt){
 
   if(nextStage!==fuelStage){
     fuelStage=nextStage;
+    // 2026-04-20 (consolidation pass): fuel threshold used to fire BANNER + COMMS
+    // at each stage. Bar flash + BANNER is already a full message; the COMMS
+    // duplicated the same semantic content on a second surface. Dropped the
+    // fuel-state COMMS calls — SOC channel is now reserved for NON-duplicate
+    // intel (phase flavor, module pickups, boss taunt). Bar + BANNER = 2 cues,
+    // one per visible state.
     if(fuelStage===1){
       fuelWarn=3.0;
       BANNER(T('iz_banner_telemetry_falling'),2.2,'#ffd84d');
-      COMMS(T('iz_comms_telemetry_falling'),'#ffd84d');
       SFX.alarm(1);
       fuelSirenT=2.4;
     } else if(fuelStage===2){
       fuelWarn=3.2;
       BANNER(T('iz_banner_low_telemetry'),2.4,'#ff7a00');
-      COMMS(T('iz_comms_low_telemetry'),'#ff7a00');
       SFX.alarm(2);
       fuelSirenT=1.3;
     } else if(fuelStage===3){
       fuelWarn=3.6;
       BANNER(T('iz_banner_telemetry_emergency'),2.8,'#ff5a4d');
-      COMMS(T('iz_comms_telemetry_emergency'),'#ff5a4d');
       SFX.alarm(3);
       fuelSirenT=0.7;
       SHAKE(8,0.4);
@@ -21361,7 +21392,15 @@ function drawHUD(){
   CX.textAlign='right'; CX.fillStyle='#e0003c'; CX.font=FONT_BOLD_10; CX.fillText(T('g_hud_integrity'),VW-12,13);
   CX.textAlign='left';
   for(let i=0;i<5;i++){ CX.fillStyle=i<LIVES?'#ff335d':'#2a1015'; CX.font='17px monospace'; CX.fillText('♥',VW-150+i*28,32); }
-  CX.fillStyle='#555'; CX.font=FONT_10; CX.fillText(T('g_hi')+String(HISCORE).padStart(8,'0'),VW-150,13);
+  // HI SCORE label — 2026-04-21: shortened prefix + nudged left to clear INTEGRITY.
+  // Prior `T('g_hi')+padStart(8)` at x=VW-150 = 16 chars × 6px ≈ 96px, ending at x=1026.
+  // INTEGRITY (bold 10px mono, right-aligned at VW-12=1068) occupies ~1009-1068, so the
+  // old HI SCORE ran the last ~17px UNDER the INTEGRITY label on the same y=13 row.
+  // Fix: use `g_hi_short` (HI / RECORDE / RÉCORD / 最高) and start at VW-180. Worst-case
+  // PT "RECORDE " + 8 digits = 96px from x=900 → ends at x=996; INTEGRITY starts at ~1009.
+  // 13+ px gap in all 4 langs. Phase subtitle (centered at VW/2=540) ends ≤ x=740, so
+  // moving HI SCORE start to x=900 still leaves >160px clearance from the subtitle.
+  CX.fillStyle='#555'; CX.font=FONT_10; CX.fillText(T('g_hi_short')+' '+String(HISCORE).padStart(8,'0'),VW-180,13);
 
   // ── Boss health bar ─────────────────────────────────────────────────
   if(BOSS&&BOSS.alive){
@@ -21420,56 +21459,31 @@ function drawHUD(){
     CX.restore();
   }
 
-  // Fuel bar
+  // Fuel bar — trimmed 2026-04-20 (consolidation pass).
+  // Kept: label, track, fill, border, % readout. Emergency pulse only at stage >=3.
+  // Removed: per-stage state text ("CAUTION/CRITICAL/EMERGENCY" — color does the job),
+  // side-panel glow stripe, quarter-tick strokes, double-outline pulse rect at stage 2.
+  // Rule: one focal axis per value. Color = state; flash = emergency only.
   const fc=FUEL>55?'#74ff88':FUEL>25?'#ffd84d':'#ff7a00', fuelBarW=244;
-  const fuelTone=fuelStage>=3?'#ff5a4d':fuelStage===2?'#ff7a00':fuelStage===1?'#ffd84d':'#74ff88';
-  const fuelLabel=fuelStage>=3?T('iz_fuel_emergency'):fuelStage===2?T('iz_fuel_critical'):fuelStage===1?T('iz_fuel_caution'):T('iz_fuel_stable');
-  const fuelFlash=(fuelStage>=2&&Math.floor(Date.now()/(fuelStage>=3?80:110))%2===0);
+  const fuelFlash=(fuelStage>=3&&Math.floor(Date.now()/80)%2===0);
   CX.fillStyle='#7f8b96'; CX.font=FONT_9; CX.fillText(T('g_hud_telemetry'),12,VH-42);
-  if(fuelStage>0){
-    CX.fillStyle=fuelTone; CX.font=FONT_BOLD_9; CX.fillText(fuelLabel,98,VH-42);
-  }
   CX.fillStyle='#0c1115'; CX.fillRect(12,VH-36,fuelBarW,14);
-  if(fuelStage>0){
-    // Increased emergency glow opacity for better visibility
-    const glowAlpha=fuelStage>=3?0.65:0.16+(fuelStage*0.05);
-    CX.globalAlpha=glowAlpha;
-    CX.fillStyle=fuelTone;
-    CX.fillRect(8,VH-40,fuelBarW+8,22);
-    CX.globalAlpha=1;
-  }
   CX.fillStyle=fuelFlash?'#ffffff':fc; CX.fillRect(12,VH-36,fuelBarW*(FUEL/100),14);
-  CX.strokeStyle='rgba(0,0,0,0.4)'; CX.lineWidth=1;
-  for(let t=1;t<4;t++){ CX.beginPath(); CX.moveTo(12+fuelBarW*t*0.25,VH-36); CX.lineTo(12+fuelBarW*t*0.25,VH-22); CX.stroke(); }
-  CX.strokeStyle=fuelStage>0?fuelTone:'#445566'; CX.lineWidth=fuelStage>=2?1.5:1; CX.strokeRect(12,VH-36,fuelBarW,14);
+  CX.strokeStyle=fuelStage>=3?'#ff5a4d':fuelStage>=2?'#ff7a00':'#445566';
+  CX.lineWidth=fuelStage>=3?1.5:1;
+  CX.strokeRect(12,VH-36,fuelBarW,14);
   CX.fillStyle=FUEL<25?'#ff7a00':'#d5dde5'; CX.font=FONT_9; CX.fillText(Math.floor(FUEL)+'%',fuelBarW+18,VH-25);
-  if(fuelStage>=2){
-    const pulse=0.3+0.2*Math.sin(Date.now()*0.015);
-    CX.save();
-    CX.globalAlpha=pulse;
-    CX.strokeStyle=fuelTone;
-    CX.lineWidth=2;
-    CX.strokeRect(9,VH-39,fuelBarW+6,20);
-    CX.restore();
-  }
 
-  // Progress bar
+  // Progress bar — trimmed 2026-04-20 (consolidation pass).
+  // Kept: label, track, fill, border, % readout.
+  // Removed: red 4%-end "danger zone" overlay, milestone tick strokes + triangle
+  // arrows at 33%/67%. Act-boundary feedback is already delivered by drawActAnn
+  // on transition; the extra ticks were visual duplication.
   const prog=clamp(W.scroll/W.progressMax,0,1), pbx=VW/2-158;
   CX.fillStyle='#7f8b96'; CX.font=FONT_9; CX.textAlign='center'; CX.fillText(T('g_campaign_progress'),VW/2,VH-42);
   CX.fillStyle='#0c1115'; CX.fillRect(pbx,VH-36,316,14);
   CX.fillStyle=ph.col; CX.fillRect(pbx,VH-36,316*prog,14);
-  CX.fillStyle='rgba(255,90,60,0.55)'; CX.fillRect(pbx+316*0.96,VH-36,316*0.04,14);
   CX.strokeStyle='#445566'; CX.lineWidth=1; CX.strokeRect(pbx,VH-36,316,14);
-  // Progress bar Act milestone tick marks at 33% and 67%
-  CX.strokeStyle='#ffffff'; CX.lineWidth=1.5; CX.globalAlpha=0.8;
-  [0.33,0.67].forEach(milestone=>{
-    const tickX=pbx+316*milestone;
-    CX.beginPath(); CX.moveTo(tickX,VH-40); CX.lineTo(tickX,VH-32); CX.stroke();
-    // Small triangle above bar pointing down
-    CX.fillStyle='#ffffff'; CX.beginPath();
-    CX.moveTo(tickX,VH-42); CX.lineTo(tickX-2.5,VH-38); CX.lineTo(tickX+2.5,VH-38); CX.closePath(); CX.fill();
-  });
-  CX.globalAlpha=1;
   CX.fillStyle='#d5dde5'; CX.font=FONT_9; CX.fillText(Math.floor(prog*100)+'%',VW/2,VH-24);
   CX.textAlign='left';
   if(STREAK>=1){
@@ -21489,7 +21503,13 @@ function drawHUD(){
   }
 
   // ── Streak/Combo HUD Counter ───────────────────────────────────────
-  if(STREAK>=1){
+  // 2026-04-20 (consolidation pass): gated at STREAK>=3 instead of >=1.
+  // Streak of 1-2 is transient noise (single-kill blip resets fast) and this
+  // pill competes with HI SCORE/hearts column at (VW-150..VW-12). Showing it
+  // only at >=3 cuts on-screen time roughly 60% without losing the momentum
+  // signal that matters (a "real" streak). The bottom crescendo at pbx+324
+  // still fires from STREAK=1 so the player still sees every kill feedback.
+  if(STREAK>=3){
     CX.save();
     const sx=VW-232, sy=52;
     const _sk=STREAK;
@@ -26302,7 +26322,7 @@ class AudioEngine{
 
 // ─── SOC FEED ────────────────────────────────────────────────────
 class SOCFeed{
-  #lines=[];#current=null;#t=0;#showT=5.5;#idx=0;#active=false;
+  #lines=[];#current=null;#t=0;#showT=5.5;#idx=0;#active=false;#paused=false;
   start(phaseId){
     this.#lines=[...defenseSocLines(phaseId)];
     // shuffle so lines appear in different order each playthrough
@@ -26310,9 +26330,16 @@ class SOCFeed{
       const j=Math.floor(Math.random()*(i+1));
       [this.#lines[i],this.#lines[j]]=[this.#lines[j],this.#lines[i]];
     }
-    this.#idx=0;this.#t=0;this.#active=true;this.#next();
+    this.#idx=0;this.#t=0;this.#active=true;this.#paused=false;this.#next();
   }
-  stop(){this.#active=false;this.#current=null;}
+  stop(){this.#active=false;this.#current=null;this.#paused=false;}
+  // 2026-04-20 (consolidation pass): arbitration with ModuleNotification.
+  // Both share the (w-298, 96, 290x112) slot; previously the notification
+  // fully occluded an in-flight SOC line, stealing intel. Now pause()/resume()
+  // let the notification ask the feed to hold its current line while the
+  // module card shows, then resume the same line when the card expires.
+  pause(){ this.#paused=true; }
+  resume(){ this.#paused=false; }
   #next(){
     if(!this.#active||!this.#lines.length)return;
     this.#current=this.#lines[this.#idx%this.#lines.length];
@@ -26320,33 +26347,44 @@ class SOCFeed{
   }
   update(dt){
     if(!this.#active||!this.#current)return;
+    if(this.#paused)return; // hold current line while ModuleNotification owns the slot
     this.#t+=dt;
     if(this.#t>this.#showT+CFG.SOC_COMMS_INTERVAL/1000)this.#next();
   }
   draw(ctx,w,h){
     if(!this.#active||!this.#current)return;
+    if(this.#paused)return; // slot is occupied by ModuleNotification — yield render
     const t=this.#t;
-    const fadeIn=Math.min(1,t/0.4);
-    const fadeOut=t>this.#showT?Math.max(0,1-(t-this.#showT)/0.8):1;
-    const alpha=fadeIn*fadeOut;if(alpha<0.01)return;
-    // 2026-04-20 (slot-share pass): match ModuleNotification's slot exactly
-    // (CW=290, CH=112, cy=96, right-edge slide in/out). Both panels now live
-    // in the same top-right card and take turns via draw order — notification
-    // renders AFTER socfeed in the parent, so when they collide the module
-    // activation card wins visually ("intermit"). Entry slides in from
-    // off-screen right over 0.22s; exit slides out over 0.28s.
+    // 2026-04-20 (polish pass): slot-share with ModuleNotification.
+    // CW/CH/cy match ModuleNotification exactly so both panels occupy the same
+    // top-right card. Pure slide-based enter/exit using easeOutCubic (entry)
+    // and easeInQuad (exit) — no alpha fade, so the card is NEVER translucent
+    // at rest. Hides entirely outside the [0, showT] window so the slot is
+    // free for the module notification during the 7s interval between lines.
     const CW = 290;
     const CH = 112;
     const cy = 96;
-    const si = 0.22;                     // slide-in duration — matches ModuleNotification
-    const so = this.#showT - 0.28;       // slide-out starts 0.28s before showT ends
+    const si = 0.22;                     // slide-in duration
+    const sDur = 0.28;                   // slide-out duration
+    const so = this.#showT - sDur;
+    if(t >= this.#showT) return;         // card is fully off-screen past this point
+    const offX = w + 20;                 // off-screen right
+    const onX  = w - CW - 8;             // resting position
     let sx;
-    if(t < si)       sx = w + (1 - t/si) * (CW + 20);
-    else if(t > so)  sx = w - CW + Math.min(1, (t - so) / 0.28) * (CW + 20);
-    else             sx = w - CW - 8;
+    if(t < si){
+      const p = t / si;
+      const eased = 1 - Math.pow(1 - p, 3);   // easeOutCubic — fast start, soft settle
+      sx = offX + (onX - offX) * eased;
+    } else if(t > so){
+      const p = Math.min(1, (t - so) / sDur);
+      const eased = p * p;                    // easeInQuad — gentle pickup, clean exit
+      sx = onX + (offX - onX) * eased;
+    } else {
+      sx = onX;
+    }
 
     if(!window.HardwareRadio){
-      ctx.save();ctx.globalAlpha=alpha;
+      ctx.save();
       ctx.fillStyle="rgba(4,1,18,0.90)";ctx.strokeStyle=CS.GREEN;ctx.lineWidth=1.6;
       ctx.shadowColor=CS.GREEN;ctx.shadowBlur=16;
       ctx.beginPath();ctx.roundRect(sx,cy,CW,CH,6);ctx.fill();ctx.stroke();
@@ -26368,10 +26406,10 @@ class SOCFeed{
       ctx.restore();
       return;
     }
-    // State mapping: first 0.4s → incoming, hold → showing, tail → fading.
+    // State mapping: first 0.4s → incoming, hold → showing, last 0.5s → fading (internal pulse only, no card opacity change).
     let state='showing', stateT=t;
     if(t < 0.4){ state='incoming'; stateT = t; }
-    else if(t > this.#showT){ state='fading'; stateT = t - this.#showT; }
+    else if(t > this.#showT - 0.5){ state='fading'; stateT = t - (this.#showT - 0.5); }
     window.HardwareRadio.draw(ctx, {
       rect:{x:sx, y:cy, w:CW, h:CH},
       col: CS.GREEN,
@@ -26380,15 +26418,15 @@ class SOCFeed{
       op: '',
       cs: 'SOC',
       msg: this.#current,
-      alpha,
+      alpha: 1,
       layers:{
-        antenna:false, grille:false, opName:false, waveform:false, scanLine:true,
+        antenna:false, grille:false, opName:false, waveform:true, scanLine:true,
         housing:true, bezel:true, screws:true, dial:true,
         vuMeter:true, header:true, callsign:true, status:true, frequency:true,
         morse:true, message:true
       },
       vuBars: 6,
-      maxLines: 3,
+      maxLines: 4,
       compact: false,
       uiScale: 0.88,
       fontFn: (px, weight) => `${weight?weight+' ':''}${Math.max(9, Math.round(px*0.88))}px monospace`,
@@ -26582,11 +26620,23 @@ function drawIncidentReport(ctx,w,h,phase,score,modulesCollected,t,totalT,skipBl
     ctx.textAlign="center";
     ctx.font=FONT3_BOLD_9_CN;ctx.fillStyle=CS.GREY;ctx.shadowBlur=0;
     ctx.fillText(T('def_modules_wave')+':',w/2,cy+128);
-    let mx=w/2-(collected.length*44)/2;
-    collected.forEach(m=>{
-      ctx.font="16px serif";ctx.fillText(m.emoji,mx+16,cy+148);
+    // spec-defense-summary-screens-overlap (2026-04-21): was a fixed 44-px slot
+    // with `mx+16` centering, which was too narrow for 'INSIGHT XDR' (~60 px) and
+    // under-centered 8-9 char labels (CHARLOTTE, OVERWATCH, CLOUD SEC). Adjacent
+    // centered labels read as "IDENTITYNSIGHT XDR". Now measure each shortName
+    // at the drawing font and give it `measuredWidth + 16` with a 56-px floor so
+    // PANGEA-size labels keep a legible emoji+label column.
+    ctx.font=FONT3_BOLD_9_CN;
+    const MIN_SLOT=56, SLOT_PAD=16;
+    const slots=collected.map(m=>Math.max(MIN_SLOT, ctx.measureText(m.shortName).width + SLOT_PAD));
+    const totalW=slots.reduce((a,b)=>a+b,0);
+    let mx=w/2 - totalW/2;
+    collected.forEach((m,i)=>{
+      const cxSlot=mx + slots[i]/2;
+      ctx.font="16px serif";ctx.fillText(m.emoji,cxSlot,cy+148);
       ctx.font=FONT3_BOLD_9_CN;ctx.fillStyle=m.color;
-      ctx.fillText(m.shortName,mx+16,cy+160);mx+=44;
+      ctx.fillText(m.shortName,cxSlot,cy+160);
+      mx+=slots[i];
     });
   }
   ctx.font=FONT3_BOLD_16_CN;
@@ -26835,6 +26885,10 @@ class ModuleNotification{
   #queue=[];#current=null;#t=0;
   static SHOW=3.2;
   push(mod,isBonus=false){this.#queue.push({mod,isBonus});}
+  // 2026-04-20 (consolidation pass): exposed for SOCFeed slot-arbitration.
+  // Game-loop checks isShowing() each tick and calls socFeed.pause()/resume()
+  // so the module card never clobbers an in-flight SOC line.
+  isShowing(){ return this.#current!==null; }
   update(dt){
     if(this.#current){
       this.#t+=dt;
@@ -27998,22 +28052,29 @@ class HUD{
         this.#lbl(ctx,`🔥 x${this.#combo} ${T('def_chain')}`,10,46,12,_comboCol);
       }
     }
-    if(this.#env){
+    // 2026-04-20 (consolidation pass): environment chip yields to the boss
+    // counter-hint when a boss is active. The counter-hint now occupies y=54-70
+    // (moved from y=70-82 to clear the badges row), so env at y=54-68 would
+    // collide. Counter-hint is higher-priority (actionable) — env is ambient.
+    if(this.#env && !this.#bossModId){
       ctx.save();ctx.font=FONT3_BOLD_9_CN;ctx.textAlign="center";
       ctx.fillStyle="rgba(4,1,18,0.90)";ctx.fillRect(w/2-140,54,280,14);
       ctx.fillStyle=CS.GREY;ctx.shadowBlur=0;
       ctx.fillText(`${T('def_defending')}: ${this.#env}`,w/2,64);ctx.restore();
     }
     // Boss counter-module hint
+    // 2026-04-20 (consolidation pass): moved from y=70-82 (overlapped module
+    // badges row at y=72+) up to y=54-66. Sits between boss HP bar (y=40) and
+    // badges (y=72) with ~6px breathing room each side.
     if(this.#bossModId){
       const bm=localizeDefenseModule(MODULES[this.#bossModId]);
       if(bm){
         ctx.save();ctx.font=FONT3_BOLD_10_CN;ctx.textAlign="center";
-        ctx.fillStyle="rgba(4,1,18,0.92)";ctx.fillRect(w/2-160,70,320,16);
-        ctx.strokeStyle=bm.color;ctx.lineWidth=1;ctx.strokeRect(w/2-160,70,320,16);
+        ctx.fillStyle="rgba(4,1,18,0.92)";ctx.fillRect(w/2-160,54,320,16);
+        ctx.strokeStyle=bm.color;ctx.lineWidth=1;ctx.strokeRect(w/2-160,54,320,16);
         const blink=Math.sin(performance.now()*0.005)>0?1:0.5;
         ctx.globalAlpha=blink;ctx.fillStyle=bm.color;ctx.shadowColor=bm.color;ctx.shadowBlur=8;
-        ctx.fillText(`⚡ ${TF('def_boss_counter_hint',{mod:bm.shortName})} ⚡`,w/2,82);
+        ctx.fillText(`⚡ ${TF('def_boss_counter_hint',{mod:bm.shortName})} ⚡`,w/2,66);
         ctx.restore();
       }
     }
@@ -28855,6 +28916,7 @@ class Game{
         if(!this.#overwatch.isActive){
           this.#state=this.#boss?.alive?STATE.BOSS:STATE.PLAYING;
           if(this.#countAlive()===0&&!this.#boss?.alive){
+            this.#bonusDrop.collect(); // despawn any airborne ally before state change (prevents mid-fall freeze)
             this.#state=STATE.INCIDENT_REPORT;this.#bannerT=0;
           }
         }
@@ -28887,6 +28949,9 @@ class Game{
       this.#updateKonami(dt);
       return;
     }
+    // Slot arbitration: if the module card is showing, pause SOC feed so the
+    // current line holds instead of being clobbered; resume when card clears.
+    if(this.#notify.isShowing()) this.#socFeed.pause(); else this.#socFeed.resume();
     this.#socFeed.update(dt);
     this.#handleInput(dt);
     this.#tickGrace(dt);
@@ -28915,6 +28980,8 @@ class Game{
     }
     // Don't trigger boss-end while Konami nuke is still animating
     if(!this.#boss?.alive && this.#konamiPhase === 0){this.#endBoss();return;}
+    // Slot arbitration (same rule as #updatePlaying)
+    if(this.#notify.isShowing()) this.#socFeed.pause(); else this.#socFeed.resume();
     this.#socFeed.update(dt);
     this.#handleInput(dt);
     this.#tickGrace(dt);
@@ -29420,6 +29487,11 @@ class Game{
     this.#audio.stopBGM();this.#audio.gameOver();this.#fx.flash(224,0,60,0.9);this.#fx.shake(1);
     this.#parts.bossExplode(LW/2, LH/2)
     this.#socFeed.stop();
+    // 2026-04-20 bugfix: BonusModuleDrop update only runs during PLAYING/BOSS,
+    // but draw runs in every #renderGame state — so an airborne ally would
+    // freeze mid-fall during GAME_OVER/INCIDENT_REPORT/YOU_WIN. Despawn on
+    // every combat-exit so the ally never appears stuck.
+    this.#bonusDrop.collect();
     this.#deathCtx=getDeathContext(this.#currentPhase,this.#modulesCollected);
     this.#prevHi=this.#hi|0;
     this.#goT=0;this.#state=STATE.GAME_OVER;this.#saveHi();
@@ -29444,6 +29516,7 @@ class Game{
   #endBoss(){
     this.#audio.levelUp();this.#fx.startWarp(LW,LH);
     this.#fx.flash(224,0,60,0.65);this.#socFeed.stop();
+    this.#bonusDrop.collect(); // despawn any airborne ally before state change (prevents mid-fall freeze)
     if(this.#waveIdx>=PHASES.length-1){
       this.#state=STATE.YOU_WIN;
       this.#prevHi=this.#hi|0;
@@ -29474,6 +29547,7 @@ class Game{
     if(this.#countAlive()===0&&this.#sideEnemies.length===0){
       this.#audio.levelUp();this.#fx.startWarp(LW,LH);
       this.#fx.flash(0,229,255,0.35);this.#socFeed.stop();
+      this.#bonusDrop.collect(); // despawn any airborne ally before state change (prevents mid-fall freeze)
       this.#state=STATE.INCIDENT_REPORT;this.#bannerT=0;return;
     }
     for(let c=0;c<CFG.COLS;c++)
@@ -29496,6 +29570,7 @@ class Game{
   #afterFC(){
     this.#state=this.#boss?.alive?STATE.BOSS:STATE.PLAYING;
     if(this.#countAlive()===0&&this.#sideEnemies.length===0&&!this.#boss?.alive){
+      this.#bonusDrop.collect(); // despawn any airborne ally before state change (prevents mid-fall freeze)
       this.#state=STATE.INCIDENT_REPORT;this.#bannerT=0;
     }
   }
@@ -30424,8 +30499,15 @@ class Game{
     this.#drawShockRings(ctx);
     this.#parts.draw(ctx);this.#floats.draw(ctx);
     if(this.#fx.chromaAmt>0.005){
+      // spec-defense-chroma-ghost-fix (2026-04-21): the multiplier was LW (1080),
+      // which at chromaAmt=0.04 (player hit) produced a 43 px shift — large
+      // enough that the screen-blend self-draw looked like a "big faded
+      // adversary ghost" on the bottom half of the field. Real chromatic
+      // aberration is a few pixels, not a frame duplicate. Clamped to 120
+      // so the worst case (chroma(0.09) boss stinger) is ≤ 11 px and the
+      // player-hit case is ≈ 5 px — reads as an RGB split, not double-vision.
       ctx.save();ctx.globalAlpha=0.26;ctx.globalCompositeOperation="screen";
-      ctx.drawImage(canvas,this.#fx.chromaAmt*LW,0);
+      ctx.drawImage(canvas,this.#fx.chromaAmt*120,0);
       ctx.globalCompositeOperation="source-over";ctx.globalAlpha=1;ctx.restore();
     }
     if(this.#pangeaT>0){
@@ -31586,7 +31668,10 @@ class Game{
     {
       const rdP = Math.min(1, Math.max(0, (this.#goT-0.9)/0.5));
       if(rdP>0.01){
-        const rowY = h*0.855;
+        // spec-defense-summary-screens-overlap (2026-04-21): chip rowY moved
+        // from h*0.855 to h*0.83 to clear the REDEPLOY CTA (was overlapping by
+        // ~9 px because chip bottom 539 sat inside CTA text top at 531).
+        const rowY = h*0.83;
         const chips = [];
         const delta = (this.#score|0) - (this.#prevHi|0);
         if(this.#prevHi>0 && delta>0){
@@ -31631,7 +31716,10 @@ class Game{
     // ═══════════ Phase 4: pulsing REDEPLOY CTA (amber, blink-gated) ═══════════
     {
       const blinkOn = (Math.floor(Date.now()/380)%2===0);
-      const ctaY = h*0.88;
+      // spec-defense-summary-screens-overlap (2026-04-21): CTA moved down from
+      // h*0.88 to h*0.895 to pair with the chip moving up to h*0.83; combined
+      // effect is ~19 px clear between chip bottom and REDEPLOY text top.
+      const ctaY = h*0.895;
       if(blinkOn){
         ctx.font = 'bold 15px "Courier New"';
         ctx.fillStyle = '#ffd68a';
@@ -31654,7 +31742,10 @@ class Game{
     }
     ctx.font=FONT3_BOLD_10_CN;
     ctx.fillStyle=CS.RED;ctx.shadowColor=CS.RED;ctx.shadowBlur=8;
-    ctx.fillText(T('g_crowdstrike_tagline_short'),w/2,h*0.95);
+    // spec-defense-summary-screens-overlap (2026-04-21): tagline moved from
+    // h*0.95 to h*0.965 to absorb the CTA's downward shift while keeping
+    // ~22 px of breathing room to the canvas bottom.
+    ctx.fillText(T('g_crowdstrike_tagline_short'),w/2,h*0.965);
     ctx.restore(); // close textAlign save
     ctx.restore(); // close fade-in globalAlpha
   }
@@ -39024,10 +39115,12 @@ function drawFalconWonCard(dt){
     ctx.shadowBlur=0;
   });
 
-  // Industry compare — 47 min average detection stat
-  ctx.font=huntFont(11,'italic'); ctx.fillStyle='#4488ff'; ctx.textAlign='center';
-  const _avgMsg=`Industry avg detection: 47 min — Falcon stops it before damage occurs.`;
-  ctx.fillText(_avgMsg,LW/2,_cy+_band+Math.round(142*ui),_cw-Math.round(40*ui));
+  // Industry compare removed 2026-04-20 (consolidation pass).
+  // The hardcoded "Industry avg detection: 47 min" factoid was a marketing
+  // line buried in the Hunt win screen. It broke tone (celebratory reveal
+  // → statistic), was never localized (bare English), and duplicated a claim
+  // users don't need on the podium surface. Clues/Score/Multiplier/Rank
+  // already carry the reward message. Line removed; no replacement.
 
   // Divider
   ctx.strokeStyle='rgba(57,255,20,0.12)'; ctx.lineWidth=1;
