@@ -1178,7 +1178,7 @@ window.FalconArcade = window.FalconArcade || {
   function _ns(ns){ return (typeof ns === 'string' && ns) ? ns : 'default'; }
 
   function setTimeoutNS(fn, ms, ns){
-    const id = window.setTimeout(function(){ _timers.delete(id); try{ fn(); }catch(_){ } }, ms);
+    const id = window.setTimeout(function(){ _timers.delete(id); try{ fn(); }catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('lifecycle.setTimeout.user_fn', e, { ns:_ns(ns) }); }catch(_){ } } }, ms);
     _timers.set(id, { type:'timeout', ns:_ns(ns) });
     return id;
   }
@@ -1187,7 +1187,7 @@ window.FalconArcade = window.FalconArcade || {
     window.clearTimeout(id);
   }
   function setIntervalNS(fn, ms, ns){
-    const id = window.setInterval(function(){ try{ fn(); }catch(_){ } }, ms);
+    const id = window.setInterval(function(){ try{ fn(); }catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('lifecycle.setInterval.user_fn', e, { ns:_ns(ns) }); }catch(_){ } } }, ms);
     _timers.set(id, { type:'interval', ns:_ns(ns) });
     return id;
   }
@@ -1199,7 +1199,7 @@ window.FalconArcade = window.FalconArcade || {
     const synth = _nextSynthId++;
     const realId = window.requestAnimationFrame(function(ts){
       _rafs.delete(synth);
-      try{ fn(ts); }catch(_){ }
+      try{ fn(ts); }catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('lifecycle.raf.user_fn', e, { ns:_ns(ns) }); }catch(_){ } }
     });
     _rafs.set(synth, { realId, ns:_ns(ns) });
     return synth;
@@ -4875,7 +4875,7 @@ function _saveStoredArray(key, entries) {
 }
 
 function _removeStoredKey(key) {
-  try { sessionStorage.removeItem(key); } catch (_) {}
+  try { sessionStorage.removeItem(key); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('storage.session.remove', e, { key:String(key||'') }); }catch(_){} }
   delete ARCADE_FALLBACK_STORAGE[key];
   delete ARCADE_FALLBACK_VALUES[key];
 }
@@ -4973,7 +4973,7 @@ async function _checkAdminPin() {
 
 function clearAllRankings() {
   ARCADE_RANKING_KEYS.forEach(key => _removeStoredKey(key));
-  try { localStorage.removeItem('cs_arcade_ranking_backup'); } catch(_){}
+  try { localStorage.removeItem('cs_arcade_ranking_backup'); } catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('storage.ranking.backup_clear', e); }catch(_){} }
   _refreshPodium();
 }
 
@@ -5294,13 +5294,13 @@ function clearAllRankings() {
     const e = _registry[name];
     if (!e || typeof e.show !== 'function') return false;
     const args = Array.prototype.slice.call(arguments, 1);
-    try { e.show.apply(null, args); return true; } catch (_) { return false; }
+    try { e.show.apply(null, args); return true; } catch (err) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('overlay.dispatch.show', err, { name:String(name||'') }); }catch(_){} return false; }
   }
   function hide(name /* , ...args */) {
     const e = _registry[name];
     if (!e || typeof e.hide !== 'function') return false;
     const args = Array.prototype.slice.call(arguments, 1);
-    try { e.hide.apply(null, args); return true; } catch (_) { return false; }
+    try { e.hide.apply(null, args); return true; } catch (err) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('overlay.dispatch.hide', err, { name:String(name||'') }); }catch(_){} return false; }
   }
   function clear(name) {
     // Close first (if the controller has a hide), then remove any residual
@@ -5308,7 +5308,7 @@ function clearAllRankings() {
     // and state-style overlays (which just toggle classes).
     const e = _registry[name];
     if (e && typeof e.hide === 'function') {
-      try { e.hide(); } catch (_) {}
+      try { e.hide(); } catch (err) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('overlay.clear.hide', err, { name:String(name||'') }); }catch(_){} }
     }
     // Candidate ids to clean up — try the name and a few common suffixes.
     const tries = [name, name + '-overlay'];
@@ -5316,7 +5316,7 @@ function clearAllRankings() {
     for (const id of tries) {
       const el = document.getElementById(id);
       if (el && el.parentNode) {
-        try { el.parentNode.removeChild(el); removed = true; } catch (_) {}
+        try { el.parentNode.removeChild(el); removed = true; } catch (err) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('overlay.clear.dom_remove', err, { id:String(id||''), name:String(name||'') }); }catch(_){} }
       }
     }
     return removed || !!e;
@@ -6299,7 +6299,7 @@ function clearAllRankings() {
     });
     if (!hasData) return;
     try { localStorage.setItem(BACKUP_KEY, JSON.stringify({ts:Date.now(),booth:_BOOTH_ID,data:snapshot})); }
-    catch(_){}
+    catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('ranking.backup.write', e, { booth:_BOOTH_ID }); }catch(_){} }
   }
   // Restore from backup on load if sessionStorage is empty (e.g. after tab crash)
   try {
@@ -7499,8 +7499,8 @@ function _createDashboardAttractDirector() {
       setSimContainer('game-zero-container');
       initGameZero?.();
       simTimer = setTimeout(() => {
-        try { window.__zeroSim?.forceResize?.(); } catch (_) {}
-        try { window.__zeroSim?.startAttractDemo?.(); } catch (_) {}
+        try { window.__zeroSim?.forceResize?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.zero.force_resize', e); }catch(_){} }
+        try { window.__zeroSim?.startAttractDemo?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.zero.start_demo', e); }catch(_){} }
       }, 260);
       simAdvanceTimer = setInterval(() => {
         try { window.__zeroSim?.tickAttractDemo?.(); } catch (_) {}
@@ -7509,8 +7509,8 @@ function _createDashboardAttractDirector() {
       setSimContainer('game-defense-container');
       initGameDefense?.();
       simTimer = setTimeout(() => {
-        try { window.__defenseSim?.forceResize?.(); } catch (_) {}
-        try { window.__defenseSim?.startAttractDemo?.(); } catch (_) {}
+        try { window.__defenseSim?.forceResize?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.defense.force_resize', e); }catch(_){} }
+        try { window.__defenseSim?.startAttractDemo?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.defense.start_demo', e); }catch(_){} }
       }, 120);
       simAdvanceTimer = setInterval(() => {
         try { window.__defenseSim?.tickAttractDemo?.(); } catch (_) {}
@@ -7519,9 +7519,9 @@ function _createDashboardAttractDirector() {
       setSimContainer('game-hunt-container');
       initGameHunt?.();
       simTimer = setTimeout(() => {
-        try { window.__huntSim?.resetForLaunch?.(); } catch (_) {}
-        try { window.__huntSim?.forceResize?.(); } catch (_) {}
-        try { window.__huntSim?.startAttractDemo?.(); } catch (_) {}
+        try { window.__huntSim?.resetForLaunch?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.hunt.reset_for_launch', e); }catch(_){} }
+        try { window.__huntSim?.forceResize?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.hunt.force_resize', e); }catch(_){} }
+        try { window.__huntSim?.startAttractDemo?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.hunt.start_demo', e); }catch(_){} }
         try { window.__huntSim?.forceResize?.(); } catch (_) {}
       }, 260);
       simAdvanceTimer = setInterval(() => {
@@ -8002,8 +8002,8 @@ function _createDashboardAttractDirector() {
     // Safety net: silence any ambient drones still running from a prior game session.
     // This does NOT touch _masterGain, MUTED, or AudioEngine#bgm — so gameplay audio
     // recovers cleanly the next time the user enters a real game (startGame calls startAmbient).
-    try { window.stopAmbient?.(); } catch (_) {}
-    try { window.stopHuntAmbient?.(); } catch (_) {}
+    try { window.stopAmbient?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.audio.stop_ambient', e); }catch(_){} }
+    try { window.stopHuntAmbient?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.audio.stop_hunt_ambient', e); }catch(_){} }
     // Attract mode: menu bed plays at reduced volume (0.3) for ambience without overpowering
     try{ window._startMenuBed?.(0.3); }catch(_){}
     try{ window._menuBedSetVolume?.(0.3); }catch(_){}
@@ -8507,8 +8507,8 @@ document.addEventListener('DOMContentLoaded', () => {
   window._syncDashboardMuteBtn = _syncDashboardMuteBtn;
   function _applyDashboardMute(on){
     const want = !!on;
-    try{ window.SoundEngine?.setMuted?.(want); }catch(_){}
-    try{ _saveStoredNumber('cs_muted_v1', want ? 1 : 0); }catch(_){}
+    try{ window.SoundEngine?.setMuted?.(want); }catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('audio.engine.set_muted', e, { want:want }); }catch(_){} }
+    try{ _saveStoredNumber('cs_muted_v1', want ? 1 : 0); }catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('storage.mute.save', e); }catch(_){} }
     _syncDashboardMuteBtn(want);
   }
   window._applyDashboardMute = _applyDashboardMute;
@@ -11480,7 +11480,7 @@ function createZimmerBed(paletteName, options){
     try{ _aTrace('zimmer:stop:'+paletteName); }catch(_){}
     _active = false;
     const ac = AC(); const now = ac ? ac.currentTime : 0;
-    try{ if(_bedGain){ _bedGain.gain.cancelScheduledValues(now); _bedGain.gain.linearRampToValueAtTime(0, now + 0.9); } }catch(_){}
+    try{ if(_bedGain){ _bedGain.gain.cancelScheduledValues(now); _bedGain.gain.linearRampToValueAtTime(0, now + 0.9); } }catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('audio.zimmer.bed_fade', e, { palette:paletteName }); }catch(_){} }
     // Clear all schedulers immediately so they cannot fire during the fadeout.
     _timers.splice(0).forEach(id => { try{ clearTimeout(id); clearInterval(id); }catch(_){} });
     // Snapshot before the delayed teardown so a re-entrant start() gets fresh slots.
