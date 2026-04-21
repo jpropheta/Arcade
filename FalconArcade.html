@@ -29521,12 +29521,16 @@ class Game{
     this.#audio.shutdown();
     this.#socFeed.stop();
     this.#input.flushAll();
-    // 2026-04-21 (release-gate must-fix #1): dispose input + konami listeners
-    // so re-launching Defense doesn't compound window handlers. Guarded so
-    // existing shutdown semantics (called from attract tear-down, from exit
-    // flow, from resetter registry) remain safe if already disposed.
-    try{ this.#input?.dispose?.(); }catch(e){ try{ console.warn('[Arcade] DefenseGame.shutdown input.dispose failed:', e); }catch(_){} }
-    try{ this.#teardownKonami(); }catch(e){ try{ console.warn('[Arcade] DefenseGame.shutdown konami teardown failed:', e); }catch(_){} }
+    // 2026-04-21 (release-gate smoke-validation correction): DO NOT call
+    // this.#input.dispose() or this.#teardownKonami() here. shutdown() runs
+    // on every game-switch via returnToDashboard→resetArcadeRuntime, but
+    // Game is a singleton (see `const game=new Game()` at bottom of block).
+    // initGameDefense is _initGameDefense_initialized-guarded, so game.init
+    // is never re-called. Disposing the window listeners here would leave
+    // the next Defense launch with no keyboard input and no Konami.
+    // The dispose()/teardownKonami() methods remain available as primitives
+    // for a future refactor where Game becomes non-singleton. The idempotent
+    // guard inside #setupKonami also remains — still correct hardening.
     this.#canShoot=true;
     try{ctx.globalAlpha=1;ctx.shadowBlur=0;}catch(_){}
     this.#state=STATE.TITLE;
