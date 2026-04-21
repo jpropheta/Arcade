@@ -1178,7 +1178,7 @@ window.FalconArcade = window.FalconArcade || {
   function _ns(ns){ return (typeof ns === 'string' && ns) ? ns : 'default'; }
 
   function setTimeoutNS(fn, ms, ns){
-    const id = window.setTimeout(function(){ _timers.delete(id); try{ fn(); }catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('lifecycle.setTimeout.user_fn', e, { ns:_ns(ns) }); }catch(_){ } } }, ms);
+    const id = window.setTimeout(function(){ _timers.delete(id); try{ fn(); }catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('lifecycle.setTimeout.user_fn', e, { ns:_ns(ns) }); } }, ms);
     _timers.set(id, { type:'timeout', ns:_ns(ns) });
     return id;
   }
@@ -1187,7 +1187,7 @@ window.FalconArcade = window.FalconArcade || {
     window.clearTimeout(id);
   }
   function setIntervalNS(fn, ms, ns){
-    const id = window.setInterval(function(){ try{ fn(); }catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('lifecycle.setInterval.user_fn', e, { ns:_ns(ns) }); }catch(_){ } } }, ms);
+    const id = window.setInterval(function(){ try{ fn(); }catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('lifecycle.setInterval.user_fn', e, { ns:_ns(ns) }); } }, ms);
     _timers.set(id, { type:'interval', ns:_ns(ns) });
     return id;
   }
@@ -1199,7 +1199,7 @@ window.FalconArcade = window.FalconArcade || {
     const synth = _nextSynthId++;
     const realId = window.requestAnimationFrame(function(ts){
       _rafs.delete(synth);
-      try{ fn(ts); }catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('lifecycle.raf.user_fn', e, { ns:_ns(ns) }); }catch(_){ } }
+      try{ fn(ts); }catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('lifecycle.raf.user_fn', e, { ns:_ns(ns) }); }
     });
     _rafs.set(synth, { realId, ns:_ns(ns) });
     return synth;
@@ -1381,14 +1381,30 @@ window.FalconArcade = window.FalconArcade || {
 
   function _now(){ try { return Date.now(); } catch(_){ return 0; } }
 
+  // Rate-limit state: dedupe identical {tag,msg} pairs arriving within
+  // DEDUPE_WINDOW_MS. Counts still increment (so heartbeat totals stay
+  // accurate), but the ring and the dev-mode console.warn are suppressed
+  // for repeats. Prevents a single broken stinger / hot-loop source from
+  // flushing the 64-entry ring before an operator can read it.
+  const DEDUPE_WINDOW_MS = 1000;
+  const _lastSeen = Object.create(null);
   function report(tag, err, detail){
     try{
       const msg = (err && err.message) ? err.message : (err ? String(err) : '');
+      const tagStr = String(tag||'unknown');
+      _counts[tagStr] = (_counts[tagStr]|0) + 1;
+      const dedupeKey = tagStr + '\x1f' + msg;
+      const now = _now();
+      const prev = _lastSeen[dedupeKey] || 0;
+      if (now - prev < DEDUPE_WINDOW_MS){
+        // Repeat within window — count-only, skip ring push + console spam.
+        return true;
+      }
+      _lastSeen[dedupeKey] = now;
       const stack = (err && err.stack) ? String(err.stack).split('\n').slice(0,3).join(' | ') : '';
-      const entry = { t:_now(), tag:String(tag||'unknown'), msg, stack, detail: detail||null };
+      const entry = { t:now, tag:tagStr, msg, stack, detail: detail||null };
       _ring.push(entry);
       if (_ring.length > MAX_ENTRIES) _ring.shift();
-      _counts[entry.tag] = (_counts[entry.tag]|0) + 1;
       if (_devMode){
         try{ console.warn('[arcade][telemetry]', entry.tag, entry.msg || '', entry.detail || ''); }catch(_){ }
       }
@@ -1398,7 +1414,7 @@ window.FalconArcade = window.FalconArcade || {
 
   function entries(){ return _ring.slice(); }
   function counts(){ return Object.assign({}, _counts); }
-  function clear(){ _ring.length = 0; for (const k in _counts) delete _counts[k]; }
+  function clear(){ _ring.length = 0; for (const k in _counts) delete _counts[k]; for (const k in _lastSeen) delete _lastSeen[k]; }
   function setDevMode(on){ _devMode = !!on; }
   function isDevMode(){ return _devMode; }
 
@@ -1438,6 +1454,17 @@ window.FalconArcade = window.FalconArcade || {
     startStatsLogging, stopStatsLogging,
     get devMode(){ return _devMode; }
   });
+
+  // ── Global shorthand: window._safeTelemetryReport ─────────────────────────
+  // Each telemetry call site used to be ~60 chars of defensive guard chain:
+  //   try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('tag', e, {…}); }catch(_){}
+  // That collapses to a single call via this helper:
+  //   window._safeTelemetryReport('tag', e, {…});
+  // Never throws (double-wrapped). No-op if anything in the chain is absent.
+  // Lives on `window` so all 4 script blocks can call it without re-exposing.
+  window._safeTelemetryReport = function(tag, err, detail){
+    try{ report(tag, err, detail); }catch(_){ /* never throw from telemetry */ }
+  };
 })();
 
 // ── Event/Marketing Config — set BEFORE page load by booth operator ──────────
@@ -1504,6 +1531,7 @@ let _cyberLoaderDone = false;
 // ── Translation dictionary ──
 const TRANSLATIONS = {
   en: {
+    // 2026-04-21 sanitization pass #5 (Row #8 prefix sweep): removed 38 orphan keys (def_boss_incoming, def_high_threat, g_press_space, g_how_to_hunt, g_active_cases, g_begin_hunt_nav, g_overwatch_stands_down, g_hunt_type_{credential,malware,network,timing,lateral,phishing,cloud,social,staging,identity,exfil,behavioral}, g_evid_{cmd,postinstall,handle,downloads}, h_case_counter, iz_deploy_{init,go}, iz_act{1-4}_{title,subtitle}, iz_comms_{telemetry_falling,low_telemetry,telemetry_emergency}, iz_bshot_lolbin_label) — 4-mechanism verified zero consumers.
     eyebrow:'◈ CrowdStrike Arcade Series 2026', title:'MISSION SELECT',
     subtitle:'Choose your operation · Real adversary intelligence · Unified Falcon platform',
     deploy:'DEPLOY NOW',
@@ -1522,13 +1550,9 @@ const TRANSLATIONS = {
     dash_story_1t:'Detect the breach', dash_story_1b:'Incident Zero turns telemetry, fuel pressure, and Falcon modules into the first response fight.',
     dash_story_2t:'Hold the line', dash_story_2b:'Arcade Defense proves platform breadth under pressure as attack vectors stack and named adversaries escalate.',
     dash_story_3t:'Hunt the operator', dash_story_3b:'Threat Hunt closes the arc by turning intelligence, evidence, and module decisions into analyst-grade pursuit.',
-    dash_campaign_kicker:'Falcon campaign memory',
-    dash_campaign_in_progress:'Continue the Falcon arc',
-    dash_campaign_in_progress_body:'Each completed operation locks one permanent story beat for this browser session and return visit.',
-    dash_campaign_complete:'Campaign arc unlocked',
-    dash_campaign_complete_body:'All three operations have been completed. The full Falcon response story now reads end-to-end from breach to pursuit.',
-    dash_campaign_pending:'Awaiting completion',
-    dash_campaign_done:'Operation complete',
+    // 2026-04-21 sanitization: `dash_campaign_*` cluster removed from all 4 language sections.
+    // Proof-of-unused: zero hits via T()/TF(), data-i18n, t.KEY, or string-literal payload lookup.
+    // The arc-progress feature that consumed these keys was retired from the dashboard UI.
     dash_return:'◈ EXIT',
     deploy_overlay_text:'DEPLOYING...',
     dash_clear_all_confirm:'Clear all leaderboard entries for every game? This cannot be undone.',
@@ -1624,7 +1648,6 @@ const TRANSLATIONS = {
     g_mission:'MISSION',         g_objectives:'OBJECTIVES',
     g_controls:'CONTROLS',       g_mute:'MUTE',
     g_deploy:'DEPLOY MODULE',    g_deployed:'MODULE DEPLOYED ✓',
-    g_press_space:'PRESS SPACE TO PLAY',
     g_press_retry:'PRESS SPACE TO RETRY',
     g_press_again:'PRESS SPACE TO PLAY AGAIN',
     g_press_engage:'PRESS SPACE TO ENGAGE',
@@ -1638,7 +1661,6 @@ const TRANSLATIONS = {
     g_threat_debrief:'THREAT DEBRIEF',
     g_situation:'SITUATION REPORT',
     g_select_case:'SELECT YOUR CASE — CHOOSE YOUR ADVERSARY',
-    g_how_to_hunt:'HOW TO HUNT:',
     g_click_anomaly:'CLICK THE GLOWING ANOMALY NODES TO COLLECT EVIDENCE',
     g_collected:'COLLECTED EVIDENCE',
     g_clue_matches:'CLUE MATCHES:',
@@ -1671,7 +1693,6 @@ const TRANSLATIONS = {
     g_contact_detected:'⚠  ADVERSARY CONTACT DETECTED  ⚠',
     g_neutralised:'🦅 ADVERSARY NEUTRALISED',
     g_what_falcon:'WHAT FALCON WOULD HAVE CAUGHT THIS:',
-    g_active_cases:'◈ ACTIVE THREAT CASES',
     g_incoming:'▶ INCOMING TRANSMISSION',
     g_click_collect:'Click to collect',
     g_click_confirm:'CLICK TO CONFIRM',
@@ -1697,7 +1718,6 @@ const TRANSLATIONS = {
     g_controls_leaderboard:'L — view leaderboard   Ctrl+Shift+E — export CSV',
     brief_auto_deploy:'auto-deploys in',
     brief_confirm_now:'DEPLOY NOW',
-    g_begin_hunt_nav:'[ SPACE ] BEGIN HUNT    ← → ↑ ↓ SELECT    [ ESC ] BACK',
     iz_subtitle:'Breach Response Protocol  ·  Adversary Intelligence Edition  ·  2026',
     iz_title_line1:'You pilot Falcon through 10 real adversary campaigns built from CrowdStrike Global Threat Intelligence.',
     iz_title_line2:'Detect · Contain · Mitigate · Eliminate. Every TTP, every module, every boss is drawn from named adversary research.',
@@ -1715,11 +1735,7 @@ const TRANSLATIONS = {
     iz_next_phase:'PRESS SPACE — NEXT PHASE',
     iz_final_phase:'PRESS SPACE — FINAL PHASE',
     iz_loss_line:'Adversary objective achieved. The threat vector has been lost.',
-    iz_report_title:'CrowdStrike 2024 Global Threat Report — Key Findings',
-    iz_report_line1:'Average adversary breakout time: 62 minutes in 2024. Fastest observed: 2 min 7 sec.',
-    iz_report_line2:'79% of attacks to gain initial access are malware-free — identity and LOLBin abuse dominate.',
-    iz_report_line3:'Cloud environment intrusions increased 75% year-over-year.',
-    iz_report_line4:'Unified Falcon platform reduces mean time to respond from hours to minutes.',
+    // 2026-04-21 sanitization pass #4: removed iz_report_title + iz_report_line1-4 (4-mechanism-verified orphans; only _line5/_line6 are rendered at L23231/L23233).
     iz_report_line5:'Named adversary intelligence turns reactive defence into proactive hunting.',
     iz_report_line6:'crowdstrike.com/adversary-universe  ·  falcon.crowdstrike.com',
     iz_gameover_intel_line:'{adversary} ran their op. Falcon {module} would have broken the chain earlier.',
@@ -1748,12 +1764,8 @@ const TRANSLATIONS = {
     iz_module_validated:'MODULE VALIDATED',
     iz_module_validated_sub:'Falcon platform · cross-domain correlation held',
     g_operation_delivered:'OPERATION DELIVERED — {actor} · PHASE {n}',
-    iz_deploy_init:'FALCON DEPLOYMENT INITIATING',
     iz_deploy_asset:'ASSET ASSIGNED · FALCON VESSEL ARMED',
     iz_deploy_weapons:'WEAPONS FREE · ENGAGE ADVERSARY',
-    iz_deploy_go:'GO DARK',
-    iz_act1_title:'DETECT',
-    iz_act1_subtitle:'Anomaly detected. Sensors active. Adversary in the threat vector.',
     iz_phase0_key:'OPERATION IRON FOREST',
     iz_phase0_season:'Eastern Europe · 2024 · ACT I: DETECT',
     iz_phase0_summary:'GRU Unit 26165 launches coordinated spear-phishing against NATO defense contractors. X-Agent payloads delivered via trojanized conference invites.',
@@ -1772,7 +1784,6 @@ const TRANSLATIONS = {
     h_title_signal:'LIVE SIGNAL',
     h_case_board:'◈ OVERWATCH CASE SELECTION BOARD',
     h_case_brief:'MISSION BRIEF',
-    h_case_counter:'RECOMMENDED COUNTER MODULE',
     h_case_evidence:'LIKELY EVIDENCE TRAIL',
     h_case_pressure:'PRESSURE WINDOW',
     h_case_target:'TARGET PROFILE',
@@ -1828,7 +1839,7 @@ const TRANSLATIONS = {
     g_hunt_correct_close:'✓ CORRECT — PURSUIT CLOSES',
     iz_hud_streak:'STREAK',
     iz_hud_multiplier:'×',
-    iz_hud_module_timer:'MODULE TIME',
+    // 2026-04-21 sanitization: `iz_hud_module_timer` removed — 4-mechanism verified orphan (dictionary-only, no T/TF/data-i18n/t.KEY/payload hits).
     g_hunt_correct_bonus:'+{score} CORRECT DEDUCTION',
     g_hunt_was_correct:'← THIS WAS CORRECT',
     g_hunt_wrong_lost:'WRONG — PURSUIT LOST',
@@ -1863,8 +1874,6 @@ const TRANSLATIONS = {
     def_rank:'RANK',
     def_modules_wave:'MODULES DEPLOYED THIS WAVE',
     def_threat_analysis:'⚠  THREAT ANALYSIS — WHAT HAPPENED',
-    def_boss_incoming:'INCOMING!',
-    def_high_threat:'HIGH-PRIORITY THREAT — CROWDSTRIKE RESPONDING',
     def_falcon_deployed:'FALCON DEPLOYED — DEFEND THE NETWORK',
     def_neutralized:'10 named adversaries. 10 real threats. All stopped. The network held.',
     def_falcon_breadth:'CrowdStrike Falcon unified endpoint, identity, cloud, and data —',
@@ -1944,10 +1953,9 @@ const TRANSLATIONS = {
     def_module_activated:'🦅 MODULE ACTIVATED',
     g_leaderboard:'LEADERBOARD',
     // ── Incident Zero operational HUD/intel keys ──
-    iz_fuel_emergency:'EMERGENCY',
-    iz_fuel_critical:'CRITICAL',
-    iz_fuel_caution:'CAUTION',
-    iz_fuel_stable:'STABLE',
+    // 2026-04-21 sanitization: `iz_fuel_*` (emergency/critical/caution/stable) removed from all 4 lang sections.
+    // Proof: zero hits via T()/TF(), data-i18n, t.KEY, or string-literal payload in the entire file.
+    // Fuel state rendering now uses inline color tiers without label strings (see drawFuelGauge).
     iz_ttps:'TTPs:',
     iz_counter_module:'COUNTER MODULE: ',
     def_wave_phase:'Wave {wave} — {name}',
@@ -1969,12 +1977,6 @@ const TRANSLATIONS = {
     def_ally_assist_bonus:'✨ ALLY ASSIST +{bonus}',
     def_wiper_protect_blocks:'WIPER ENGAGED — PROTECT YOUR BLOCKS',
     def_shadow_attacks:'BOSS GONE STEALTH — ATTACKS FROM SHADOW',
-    iz_act2_title:'CONTAIN',
-    iz_act2_subtitle:'Lateral movement blocked. Perimeter holding. Push them back.',
-    iz_act3_title:'MITIGATE',
-    iz_act3_subtitle:'Payload neutralised. Damage limited. Counter-operations active.',
-    iz_act4_title:'ELIMINATE',
-    iz_act4_subtitle:'Adversary eviction in progress. Breach contained. Hunt active.',
     iz_act_phase_complete:'{act}{num}: {title} — PHASE {phase} COMPLETE',
     iz_intel_header:'◈ CROWDSTRIKE INTEL',
     iz_module_time_remaining:'▶ {name} ({time}s remaining)',
@@ -2024,11 +2026,8 @@ const TRANSLATIONS = {
     iz_banner_telemetry_full:'TELEMETRY FULLY RECHARGED',
     iz_banner_scan_pulse:'SCAN PULSE — all threats revealed',
     iz_banner_telemetry_falling:'⚠ TELEMETRY FALLING — green FUEL barges are now mission-critical',
-    iz_comms_telemetry_falling:'Telemetry reserve dropping. Plot your next refuel run now.',
     iz_banner_low_telemetry:'⚠ LOW TELEMETRY — refuel immediately or integrity loss will begin',
-    iz_comms_low_telemetry:'Telemetry critical. Intercept supply now.',
     iz_banner_telemetry_emergency:'⚠ TELEMETRY EMERGENCY — final reserve active',
-    iz_comms_telemetry_emergency:'Reserve active. Next lapse = damage.',
     iz_comms_emergency_supply_final:'Emergency telemetry supply deployed — last reserve window',
     iz_comms_emergency_supply_critical:'Emergency telemetry supply deployed — critical level',
     iz_comms_fuel_critical:'FUEL CRITICAL — emergency supply barge deployed',
@@ -2038,23 +2037,10 @@ const TRANSLATIONS = {
     g_incident_report_title:'🦅  CROWDSTRIKE INCIDENT REPORT',
     g_ally_label:'ALLY',
     g_threats_eliminated:'✅  THREATS ELIMINATED — OVERWATCH STANDS DOWN',
-    g_overwatch_stands_down:'✅  THREATS ELIMINATED — OVERWATCH STANDS DOWN',
     g_crowdstrike_tagline:'🦅  crowdstrike.com  |  We Stop Breaches — Guaranteed.',
     g_crowdstrike_tagline_short:'🦅  crowdstrike.com  |  We Stop Breaches',
     g_apt_label:'⚠APT',
     g_falcon_defense_title:'🦅  FALCON ARCADE DEFENSE',
-    g_hunt_type_credential:'CREDENTIAL',
-    g_hunt_type_malware:'MALWARE',
-    g_hunt_type_network:'NETWORK',
-    g_hunt_type_timing:'TIMING',
-    g_hunt_type_lateral:'LATERAL',
-    g_hunt_type_phishing:'PHISHING',
-    g_hunt_type_cloud:'CLOUD',
-    g_hunt_type_social:'SOCIAL',
-    g_hunt_type_staging:'STAGING',
-    g_hunt_type_identity:'IDENTITY',
-    g_hunt_type_exfil:'EXFIL',
-    g_hunt_type_behavioral:'BEHAVIORAL',
     g_hunt_threat_high:'HIGH',
     g_hunt_threat_critical:'CRITICAL',
     g_hunt_new_evidence:'NEW EVIDENCE!',
@@ -2073,16 +2059,13 @@ const TRANSLATIONS = {
     g_evid_seen:'FIRST SEEN:',
     g_evid_registrar:'REGISTRAR:',
     g_evid_event_id:'EVENT ID:',
-    g_evid_cmd:'COMMAND LINE:',
     g_evid_deadline:'DEADLINE:',
     g_evid_caller:'CALLER:',
     g_evid_duration:'DURATION:',
     g_evid_sleep:'SLEEP:',
     g_evid_jitter:'JITTER:',
-    g_evid_postinstall:'POSTINSTALL:',
     g_evid_published:'PUBLISHED:',
     g_evid_platform:'PLATFORM:',
-    g_evid_handle:'HANDLE:',
     g_evid_language:'LANGUAGE:',
     g_evid_external:'EXTERNAL',
     g_evid_copy:'COPY',
@@ -2092,7 +2075,6 @@ const TRANSLATIONS = {
     g_evid_protocol:'PROTOCOL',
     g_evid_firmware:'FIRMWARE',
     g_evid_device:'DEVICE',
-    g_evid_downloads:'DOWNLOADS/WK',
     g_evid_takedown:'TAKEDOWN',
     disc_banner:'⚠&nbsp;&nbsp;CLASSIFIED — AUTHORIZED PERSONNEL ONLY&nbsp;&nbsp;⚠',
     disc_title:'LEGAL DISCLAIMER',
@@ -2101,18 +2083,23 @@ const TRANSLATIONS = {
     disc_btn:'[ ACKNOWLEDGE ]',
     disc_hint:'SPACE &nbsp;/&nbsp; ENTER TO ACKNOWLEDGE',
     // ── Cutscene overlay keys ──
+    // 2026-04-21 sanitization pass #3: removed g_cut_phase/g_cut_pivot/g_cut_cluster (4-mechanism-verified orphans; no T()/TF/data-i18n/t.KEY/label-payload hit).
     g_cut_banner:'>>> INTELLIGENCE CUTSCENE — PHASE {n} COMPLETE <<<',
     g_cut_skip:'PRESS SPACE TO SKIP',
-    g_cut_phase:'PHASE',
     g_cut_coord:'COORDINATION',
-    g_cut_pivot:'PIVOT',
     g_cut_transmit:'TRANSMISSION',
-    g_cut_cluster:'ADVERSARY CLUSTER',
     g_cut_intercept:'COMMS INTERCEPT',
     // ── Missing / new keys ──
     boot_acquiring:'SIGNAL ACQUISITION INITIALIZING...',
     boot_skip_hint:'[ SPACE ]  SKIP',
     iz_ir_label:'INCIDENT RESPONSE',
+    // 2026-04-21 (telemetry rec #5): bare-English fillText stamps migrated to T() keys.
+    // Covers 5 of the 39 audit sites — the ones that are actual English words, not glyph acronyms.
+    iz_stamp_fake:'FAKE',
+    iz_stamp_ransom:'RANSOM',
+    iz_stamp_wipe:'WIPE',
+    iz_stamp_locked:'LOCKED',
+    iz_stamp_it_support:'IT SUPPORT',
     def_marquinhos:"Let's call Marquinhos! 🇧🇷",
     g_evid_source:'SOURCE:',
     g_evid_process:'PROCESS:',
@@ -2148,9 +2135,9 @@ const TRANSLATIONS = {
     iz_bshot_prompt_reset:'> reset',
     iz_bshot_prompt_call:'> call',
     iz_bshot_prompt_swap:'> swap',
-    iz_bshot_lolbin_label:'.exe'
   },
   pt: {
+    // 2026-04-21 sanitization pass #5 (Row #8 prefix sweep): removed 38 orphan keys (def_boss_incoming, def_high_threat, g_press_space, g_how_to_hunt, g_active_cases, g_begin_hunt_nav, g_overwatch_stands_down, g_hunt_type_{credential,malware,network,timing,lateral,phishing,cloud,social,staging,identity,exfil,behavioral}, g_evid_{cmd,postinstall,handle,downloads}, h_case_counter, iz_deploy_{init,go}, iz_act{1-4}_{title,subtitle}, iz_comms_{telemetry_falling,low_telemetry,telemetry_emergency}, iz_bshot_lolbin_label) — 4-mechanism verified zero consumers.
     eyebrow:'◈ CrowdStrike Série Arcade 2026', title:'SELEÇÃO DE MISSÃO',
     subtitle:'Escolha sua operação · Inteligência real de adversários · Plataforma Falcon unificada',
     deploy:'ATIVAR AGORA',
@@ -2169,13 +2156,7 @@ const TRANSLATIONS = {
     dash_story_1t:'Detecte a violação', dash_story_1b:'Incident Zero transforma telemetria, pressão de combustível e módulos Falcon na primeira luta de resposta.',
     dash_story_2t:'Segure a linha', dash_story_2b:'Arcade Defense prova a amplitude da plataforma sob pressão enquanto vetores de ataque e adversários nomeados escalam.',
     dash_story_3t:'Cace o operador', dash_story_3b:'Threat Hunt fecha o arco ao transformar inteligência, evidências e decisões de módulo em perseguição digna de analista.',
-    dash_campaign_kicker:'Memória da campanha Falcon',
-    dash_campaign_in_progress:'Continue o arco Falcon',
-    dash_campaign_in_progress_body:'Cada operação concluída fixa um marco permanente da história para esta sessão e para o retorno ao navegador.',
-    dash_campaign_complete:'Arco da campanha liberado',
-    dash_campaign_complete_body:'As três operações foram concluídas. A história completa da resposta Falcon agora vai da violação até a perseguição final.',
-    dash_campaign_pending:'Aguardando conclusão',
-    dash_campaign_done:'Operação concluída',
+    // 2026-04-21 sanitization: `dash_campaign_*` cluster removed — see EN block for rationale.
     dash_return:'◈ SAIR',
     deploy_overlay_text:'ATIVANDO...',
     dash_clear_all_confirm:'Limpar todas as entradas do placar de todos os jogos? Isso não pode ser desfeito.',
@@ -2269,7 +2250,6 @@ const TRANSLATIONS = {
     g_mission:'MISSÃO',          g_objectives:'OBJETIVOS',
     g_controls:'CONTROLES',      g_mute:'MUDO',
     g_deploy:'ACIONAR MÓDULO', g_deployed:'MÓDULO ACIONADO ✓',
-    g_press_space:'ESPAÇO PARA JOGAR',
     g_press_retry:'ESPAÇO PARA TENTAR NOVAMENTE',
     g_press_again:'ESPAÇO PARA JOGAR NOVAMENTE',
     g_press_engage:'ESPAÇO PARA INICIAR',
@@ -2283,7 +2263,6 @@ const TRANSLATIONS = {
     g_threat_debrief:'RELATÓRIO DE AMEAÇA',
     g_situation:'RELATÓRIO DE SITUAÇÃO',
     g_select_case:'SELECIONE SEU CASO — ESCOLHA O ADVERSÁRIO',
-    g_how_to_hunt:'COMO CAÇAR:',
     g_click_anomaly:'CLIQUE NOS NÓS ANÔMALOS BRILHANTES PARA COLETAR EVIDÊNCIAS',
     g_collected:'EVIDÊNCIAS COLETADAS',
     g_clue_matches:'CORRESPONDÊNCIAS:',
@@ -2316,7 +2295,6 @@ const TRANSLATIONS = {
     g_contact_detected:'⚠  CONTATO COM ADVERSÁRIO DETECTADO  ⚠',
     g_neutralised:'🦅 ADVERSÁRIO NEUTRALIZADO',
     g_what_falcon:'O QUE O FALCON TERIA INTERCEPTADO:',
-    g_active_cases:'◈ CASOS ATIVOS',
     g_incoming:'▶ TRANSMISSÃO RECEBIDA',
     g_click_collect:'Clique para coletar',
     g_click_confirm:'CLIQUE PARA CONFIRMAR',
@@ -2342,7 +2320,6 @@ const TRANSLATIONS = {
     g_controls_leaderboard:'L — ver placar   Ctrl+Shift+E — exportar CSV',
     brief_auto_deploy:'acionamento automático em',
     brief_confirm_now:'ATIVAR AGORA',
-    g_begin_hunt_nav:'[ ESPAÇO ] INICIAR CAÇA    ← → ↑ ↓ SELECIONAR    [ ESC ] VOLTAR',
     iz_subtitle:'Protocolo de Resposta a Violações  ·  Edição de Inteligência Adversária  ·  2026',
     iz_title_line1:'Você pilota o Falcon por 10 campanhas reais de adversários baseadas na Inteligência Global de Ameaças da CrowdStrike.',
     iz_title_line2:'Detectar · Conter · Mitigar · Eliminar. Cada TTP, módulo e chefe vem de pesquisas sobre adversários nomeados.',
@@ -2360,11 +2337,7 @@ const TRANSLATIONS = {
     iz_next_phase:'ESPAÇO — PRÓXIMA FASE',
     iz_final_phase:'ESPAÇO — FASE FINAL',
     iz_loss_line:'O adversário alcançou o objetivo. O vetor de ameaça foi perdido.',
-    iz_report_title:'Relatório Global de Ameaças CrowdStrike 2024 — Destaques',
-    iz_report_line1:'Tempo médio de movimentação lateral: 62 minutos em 2024. Mais rápido observado: 2 min 7 s.',
-    iz_report_line2:'79% dos ataques de acesso inicial não usam malware — identidade e LOLBins dominam.',
-    iz_report_line3:'As intrusões em ambientes de nuvem cresceram 75% ano a ano.',
-    iz_report_line4:'A plataforma Falcon unificada reduz o tempo médio de resposta de horas para minutos.',
+    // 2026-04-21 sanitization pass #4: removed iz_report_title + iz_report_line1-4 (4-mechanism-verified orphans).
     iz_report_line5:'A inteligência sobre adversários transforma defesa reativa em caça proativa.',
     iz_report_line6:'crowdstrike.com/adversary-universe  ·  falcon.crowdstrike.com',
     iz_gameover_intel_line:'{adversary} executou a operação. Falcon {module} teria interrompido a cadeia antes.',
@@ -2393,12 +2366,8 @@ const TRANSLATIONS = {
     iz_module_validated:'MÓDULO VALIDADO',
     iz_module_validated_sub:'Plataforma Falcon · correlação multi-domínio sustentou',
     g_operation_delivered:'OPERAÇÃO ENTREGUE — {actor} · FASE {n}',
-    iz_deploy_init:'IMPLANTAÇÃO FALCON INICIANDO',
     iz_deploy_asset:'ATIVO DESIGNADO · FALCON VESSEL ARMADO',
     iz_deploy_weapons:'ARMAS LIVRES · ENGAJAR ADVERSÁRIO',
-    iz_deploy_go:'MODO SOMBRA ATIVADO',
-    iz_act1_title:'DETECTAR',
-    iz_act1_subtitle:'Anomalia detectada. Sensores ativos. O adversário está no vetor de ameaça.',
     iz_phase0_key:'OPERAÇÃO FLORESTA DE FERRO',
     iz_phase0_season:'Leste Europeu · 2024 · ATO I: DETECTAR',
     iz_phase0_summary:'A unidade GRU 26165 lança spear-phishing coordenado contra contratantes de defesa da OTAN. Cargas X-Agent são entregues por convites de conferência trojanizados.',
@@ -2417,7 +2386,6 @@ const TRANSLATIONS = {
     h_title_signal:'SINAL AO VIVO',
     h_case_board:'◈ PAINEL DE SELEÇÃO DE CASOS OVERWATCH',
     h_case_brief:'RESUMO DA MISSÃO',
-    h_case_counter:'MÓDULO DE RESPOSTA RECOMENDADO',
     h_case_evidence:'TRILHA DE EVIDÊNCIAS PROVÁVEIS',
     h_case_pressure:'JANELA DE PRESSÃO',
     h_case_target:'PERFIL DO ALVO',
@@ -2473,7 +2441,7 @@ const TRANSLATIONS = {
     g_hunt_correct_close:'✓ CERTO — A PERSEGUIÇÃO FECHA',
     iz_hud_streak:'SEQUÊNCIA',
     iz_hud_multiplier:'×',
-    iz_hud_module_timer:'TEMPO DO MÓDULO',
+    // 2026-04-21 sanitization: `iz_hud_module_timer` removed — see EN block.
     g_hunt_correct_bonus:'+{score} DEDUÇÃO CORRETA',
     g_hunt_was_correct:'← ESTE ERA O CORRETO',
     g_hunt_wrong_lost:'ERRADO — PERSEGUIÇÃO PERDIDA',
@@ -2507,8 +2475,6 @@ const TRANSLATIONS = {
     def_rank:'CLASSIFICAÇÃO',
     def_modules_wave:'MÓDULOS ACIONADOS NESTA ONDA',
     def_threat_analysis:'⚠  ANÁLISE DE AMEAÇA — O QUE ACONTECEU',
-    def_boss_incoming:'CHEGANDO!',
-    def_high_threat:'AMEAÇA CRÍTICA — CROWDSTRIKE RESPONDENDO',
     def_falcon_deployed:'FALCON ACIONADO — DEFENDER A REDE',
     def_neutralized:'10 adversários reais. 10 ameaças reais. Todos detidos. A rede resistiu.',
     def_falcon_breadth:'O CrowdStrike Falcon unificou endpoint, identidade, cloud e dados —',
@@ -2587,10 +2553,7 @@ const TRANSLATIONS = {
     def_bonus_module:'✨ SUPORTE ALIADO — MÓDULO BÔNUS',
     def_module_activated:'🦅 MÓDULO ATIVADO',
     g_leaderboard:'PLACAR',
-    iz_fuel_emergency:'EMERGÊNCIA',
-    iz_fuel_critical:'CRÍTICO',
-    iz_fuel_caution:'ATENÇÃO',
-    iz_fuel_stable:'ESTÁVEL',
+    // 2026-04-21 sanitization: `iz_fuel_*` cluster removed — see EN block.
     iz_ttps:'TTPs:',
     iz_counter_module:'MÓDULO DE RESPOSTA: ',
     def_wave_phase:'Onda {wave} — {name}',
@@ -2612,12 +2575,6 @@ const TRANSLATIONS = {
     def_ally_assist_bonus:'✨ SUPORTE ALIADO +{bonus}',
     def_wiper_protect_blocks:'WIPER ENGAJADO — PROTEJA SEUS BLOCOS',
     def_shadow_attacks:'CHEFE EM FURTIVIDADE — ATAQUES DAS SOMBRAS',
-    iz_act2_title:'CONTER',
-    iz_act2_subtitle:'Movimento lateral bloqueado. Perímetro sustentado. Empurre o adversário de volta.',
-    iz_act3_title:'MITIGAR',
-    iz_act3_subtitle:'Payload neutralizado. Dano limitado. Contraoperação ativa.',
-    iz_act4_title:'ELIMINAR',
-    iz_act4_subtitle:'Expulsão do adversário em andamento. Violação contida. Caça ativa.',
     iz_act_phase_complete:'{act}{num}: {title} — FASE {phase} CONCLUÍDA',
     iz_intel_header:'◈ INTEL CROWDSTRIKE',
     iz_module_time_remaining:'▶ {name} ({time}s restantes)',
@@ -2667,11 +2624,8 @@ const TRANSLATIONS = {
     iz_banner_telemetry_full:'TELEMETRIA TOTALMENTE RECARREGADA',
     iz_banner_scan_pulse:'PULSO DE VARREDURA — todas as ameaças reveladas',
     iz_banner_telemetry_falling:'⚠ TELEMETRIA CAINDO — barcaças verdes de COMBUSTÍVEL agora são críticas',
-    iz_comms_telemetry_falling:'Reserva de telemetria caindo. Planeje sua próxima rota de reabastecimento agora.',
     iz_banner_low_telemetry:'⚠ TELEMETRIA BAIXA — reabasteça agora ou a perda de integridade vai começar',
-    iz_comms_low_telemetry:'Telemetria crítica. Intercepte suprimento agora.',
     iz_banner_telemetry_emergency:'⚠ EMERGÊNCIA DE TELEMETRIA — reserva final ativa',
-    iz_comms_telemetry_emergency:'Reserva ativa. Próxima falha = dano.',
     iz_comms_emergency_supply_final:'Suprimento emergencial de telemetria lançado — janela final de reserva',
     iz_comms_emergency_supply_critical:'Suprimento emergencial de telemetria lançado — nível crítico',
     iz_comms_fuel_critical:'COMBUSTÍVEL CRÍTICO — barcaça de suprimento emergencial lançada',
@@ -2681,23 +2635,10 @@ const TRANSLATIONS = {
     g_incident_report_title:'🦅  RELATÓRIO DE INCIDENTE CROWDSTRIKE',
     g_ally_label:'ALIADO',
     g_threats_eliminated:'✅  AMEAÇAS ELIMINADAS — OVERWATCH ENCERRA OPERAÇÃO',
-    g_overwatch_stands_down:'✅  AMEAÇAS ELIMINADAS — OVERWATCH ENCERRA OPERAÇÃO',
     g_crowdstrike_tagline:'🦅  crowdstrike.com  |  Paramos Violações — Garantido.',
     g_crowdstrike_tagline_short:'🦅  crowdstrike.com  |  Paramos Violações',
     g_apt_label:'⚠APT',
     g_falcon_defense_title:'🦅  FALCON ARCADE DEFESA',
-    g_hunt_type_credential:'CREDENCIAL',
-    g_hunt_type_malware:'MALWARE',
-    g_hunt_type_network:'REDE',
-    g_hunt_type_timing:'TEMPO',
-    g_hunt_type_lateral:'LATERAL',
-    g_hunt_type_phishing:'PHISHING',
-    g_hunt_type_cloud:'NUVEM',
-    g_hunt_type_social:'SOCIAL',
-    g_hunt_type_staging:'STAGING',
-    g_hunt_type_identity:'IDENTIDADE',
-    g_hunt_type_exfil:'EXFIL',
-    g_hunt_type_behavioral:'COMPORTAMENTO',
     g_hunt_threat_high:'ALTA',
     g_hunt_threat_critical:'CRÍTICA',
     g_hunt_new_evidence:'NOVA EVIDÊNCIA!',
@@ -2716,16 +2657,13 @@ const TRANSLATIONS = {
     g_evid_seen:'PRIMEIRO VISTO:',
     g_evid_registrar:'REGISTRADOR:',
     g_evid_event_id:'ID DO EVENTO:',
-    g_evid_cmd:'LINHA DE COMANDO:',
     g_evid_deadline:'PRAZO:',
     g_evid_caller:'CHAMADOR:',
     g_evid_duration:'DURAÇÃO:',
     g_evid_sleep:'ESPERA:',
     g_evid_jitter:'JITTER:',
-    g_evid_postinstall:'PÓS-INSTALAÇÃO:',
     g_evid_published:'PUBLICADO:',
     g_evid_platform:'PLATAFORMA:',
-    g_evid_handle:'IDENTIFICADOR:',
     g_evid_language:'IDIOMA:',
     g_evid_external:'EXTERNA',
     g_evid_copy:'COPIAR',
@@ -2735,7 +2673,6 @@ const TRANSLATIONS = {
     g_evid_protocol:'PROTOCOLO',
     g_evid_firmware:'FIRMWARE',
     g_evid_device:'DISPOSITIVO',
-    g_evid_downloads:'DOWNLOADS/SEM',
     g_evid_takedown:'REMOÇÃO',
     disc_banner:'⚠&nbsp;&nbsp;CLASSIFICADO — SOMENTE PESSOAL AUTORIZADO&nbsp;&nbsp;⚠',
     disc_title:'AVISO LEGAL',
@@ -2744,18 +2681,22 @@ const TRANSLATIONS = {
     disc_btn:'[ RECONHECER ]',
     disc_hint:'ESPAÇO &nbsp;/&nbsp; ENTER PARA RECONHECER',
     // ── Cutscene overlay keys ──
+    // 2026-04-21 sanitization pass #3: removed g_cut_phase/g_cut_pivot/g_cut_cluster (4-mechanism-verified orphans).
     g_cut_banner:'>>> CIÊNCIA DE INTELIGÊNCIA — FASE {n} COMPLETA <<<',
     g_cut_skip:'PRESSIONE ESPAÇO PARA PULAR',
-    g_cut_phase:'FASE',
     g_cut_coord:'COORDENAÇÃO',
-    g_cut_pivot:'MUDANÇA DE ALVO',
     g_cut_transmit:'TRANSMISSÃO',
-    g_cut_cluster:'CLUSTER DE ADVERSÁRIOS',
     g_cut_intercept:'INTERCEPTAÇÃO DE COMMS',
     // ── Missing / new keys ──
     boot_acquiring:'INICIALIZANDO AQUISIÇÃO DE SINAL...',
     boot_skip_hint:'[ ESPAÇO ]  PULAR',
     iz_ir_label:'RESPOSTA A INCIDENTES',
+    // PT translations for rec #5 stamp keys.
+    iz_stamp_fake:'FAKE',
+    iz_stamp_ransom:'RESGATE',
+    iz_stamp_wipe:'APAGAR',
+    iz_stamp_locked:'BLOQUEADO',
+    iz_stamp_it_support:'SUPORTE TI',
     def_marquinhos:'Vamos chamar o Marquinhos! 🇧🇷',
     g_evid_source:'ORIGEM:',
     g_evid_process:'PROCESSO:',
@@ -2791,9 +2732,9 @@ const TRANSLATIONS = {
     iz_bshot_prompt_reset:'> redefinir',
     iz_bshot_prompt_call:'> ligar',
     iz_bshot_prompt_swap:'> trocar',
-    iz_bshot_lolbin_label:'.exe'
   },
   es: {
+    // 2026-04-21 sanitization pass #5 (Row #8 prefix sweep): removed 38 orphan keys (def_boss_incoming, def_high_threat, g_press_space, g_how_to_hunt, g_active_cases, g_begin_hunt_nav, g_overwatch_stands_down, g_hunt_type_{credential,malware,network,timing,lateral,phishing,cloud,social,staging,identity,exfil,behavioral}, g_evid_{cmd,postinstall,handle,downloads}, h_case_counter, iz_deploy_{init,go}, iz_act{1-4}_{title,subtitle}, iz_comms_{telemetry_falling,low_telemetry,telemetry_emergency}, iz_bshot_lolbin_label) — 4-mechanism verified zero consumers.
     eyebrow:'◈ Serie Arcade CrowdStrike 2026', title:'SELECCIÓN DE MISIÓN',
     subtitle:'Elige tu operación · Inteligencia real de adversarios · Plataforma Falcon unificada',
     deploy:'DESPLEGAR AHORA',
@@ -2812,13 +2753,7 @@ const TRANSLATIONS = {
     dash_story_1t:'Detecta la brecha', dash_story_1b:'Incident Zero convierte telemetría, presión de combustible y módulos Falcon en la primera lucha de respuesta.',
     dash_story_2t:'Sostén la línea', dash_story_2b:'Arcade Defense demuestra la amplitud de la plataforma bajo presión mientras los vectores de ataque y los adversarios nombrados escalan.',
     dash_story_3t:'Caza al operador', dash_story_3b:'Threat Hunt cierra el arco convirtiendo inteligencia, evidencia y decisiones de módulo en una persecución de nivel analista.',
-    dash_campaign_kicker:'Memoria de campaña Falcon',
-    dash_campaign_in_progress:'Continúa el arco Falcon',
-    dash_campaign_in_progress_body:'Cada operación completada fija un hito permanente de la historia para esta sesión del navegador y su regreso.',
-    dash_campaign_complete:'Arco de campaña desbloqueado',
-    dash_campaign_complete_body:'Las tres operaciones fueron completadas. La historia completa de respuesta Falcon ahora se lee de extremo a extremo, desde la brecha hasta la caza.',
-    dash_campaign_pending:'Pendiente de completar',
-    dash_campaign_done:'Operación completada',
+    // 2026-04-21 sanitization: `dash_campaign_*` cluster removed — see EN block for rationale.
     dash_return:'◈ SALIR',
     deploy_overlay_text:'DESPLEGANDO...',
     dash_clear_all_confirm:'¿Borrar todas las entradas del ranking de todos los juegos? Esto no se puede deshacer.',
@@ -2912,7 +2847,6 @@ const TRANSLATIONS = {
     g_mission:'MISIÓN',          g_objectives:'OBJETIVOS',
     g_controls:'CONTROLES',      g_mute:'SILENCIO',
     g_deploy:'DESPLEGAR MÓDULO', g_deployed:'MÓDULO DESPLEGADO ✓',
-    g_press_space:'ESPACIO PARA JUGAR',
     g_press_retry:'ESPACIO PARA REINTENTAR',
     g_press_again:'ESPACIO PARA JUGAR DE NUEVO',
     g_press_engage:'ESPACIO PARA COMENZAR',
@@ -2926,7 +2860,6 @@ const TRANSLATIONS = {
     g_threat_debrief:'INFORME DE AMENAZA',
     g_situation:'INFORME DE SITUACIÓN',
     g_select_case:'SELECCIONA TU CASO — ELIGE EL ADVERSARIO',
-    g_how_to_hunt:'CÓMO CAZAR:',
     g_click_anomaly:'HAZ CLIC EN LOS NODOS ANÓMALOS BRILLANTES PARA RECOPILAR EVIDENCIA',
     g_collected:'EVIDENCIA RECOPILADA',
     g_clue_matches:'COINCIDENCIAS:',
@@ -2959,7 +2892,6 @@ const TRANSLATIONS = {
     g_contact_detected:'⚠  CONTACTO CON ADVERSARIO DETECTADO  ⚠',
     g_neutralised:'🦅 ADVERSARIO NEUTRALIZADO',
     g_what_falcon:'¿QUÉ HABRÍA INTERCEPTADO FALCON?',
-    g_active_cases:'◈ CASOS ACTIVOS',
     g_incoming:'▶ TRANSMISIÓN ENTRANTE',
     g_click_collect:'Clic para recopilar',
     g_click_confirm:'CLIC PARA CONFIRMAR',
@@ -2985,7 +2917,6 @@ const TRANSLATIONS = {
     g_controls_leaderboard:'L — ver marcador   Ctrl+Shift+E — exportar CSV',
     brief_auto_deploy:'despliegue automático en',
     brief_confirm_now:'DESPLEGAR AHORA',
-    g_begin_hunt_nav:'[ ESPACIO ] INICIAR CAZA    ← → ↑ ↓ SELECCIONAR    [ ESC ] ATRÁS',
     iz_subtitle:'Protocolo de Respuesta a Brechas  ·  Edición de Inteligencia Adversaria  ·  2026',
     iz_title_line1:'Pilotas Falcon a través de 10 campañas reales de adversarios basadas en la Inteligencia Global de Amenazas de CrowdStrike.',
     iz_title_line2:'Detectar · Contener · Mitigar · Eliminar. Cada TTP, módulo y jefe proviene de investigación sobre adversarios nombrados.',
@@ -3003,11 +2934,7 @@ const TRANSLATIONS = {
     iz_next_phase:'ESPACIO — SIGUIENTE FASE',
     iz_final_phase:'ESPACIO — FASE FINAL',
     iz_loss_line:'El adversario logró su objetivo. El vector de amenaza se ha perdido.',
-    iz_report_title:'Informe Global de Amenazas CrowdStrike 2024 — Hallazgos clave',
-    iz_report_line1:'Tiempo medio de movimiento lateral: 62 minutos en 2024. El más rápido observado: 2 min 7 s.',
-    iz_report_line2:'El 79% de los ataques para acceso inicial no usan malware — identidad y LOLBins dominan.',
-    iz_report_line3:'Las intrusiones en entornos cloud aumentaron un 75% interanual.',
-    iz_report_line4:'La plataforma Falcon unificada reduce el tiempo medio de respuesta de horas a minutos.',
+    // 2026-04-21 sanitization pass #4: removed iz_report_title + iz_report_line1-4 (4-mechanism-verified orphans).
     iz_report_line5:'La inteligencia de adversarios convierte la defensa reactiva en caza proactiva.',
     iz_report_line6:'crowdstrike.com/adversary-universe  ·  falcon.crowdstrike.com',
     iz_gameover_intel_line:'{adversary} ejecutó la operación. Falcon {module} habría detenido la cadena antes.',
@@ -3036,12 +2963,8 @@ const TRANSLATIONS = {
     iz_module_validated:'MÓDULO VALIDADO',
     iz_module_validated_sub:'Plataforma Falcon · correlación multidominio sostenida',
     g_operation_delivered:'OPERACIÓN ENTREGADA — {actor} · FASE {n}',
-    iz_deploy_init:'DESPLIEGUE FALCON INICIANDO',
     iz_deploy_asset:'ACTIVO ASIGNADO · FALCON VESSEL ARMADO',
     iz_deploy_weapons:'ARMAS LIBRES · COMPROMETER ADVERSARIO',
-    iz_deploy_go:'MODO OSCURO ACTIVADO',
-    iz_act1_title:'DETECTAR',
-    iz_act1_subtitle:'Anomalía detectada. Sensores activos. El adversario está en el vector de amenaza.',
     iz_phase0_key:'OPERACIÓN BOSQUE DE HIERRO',
     iz_phase0_season:'Europa del Este · 2024 · ACTO I: DETECTAR',
     iz_phase0_summary:'La unidad GRU 26165 lanza spear-phishing coordinado contra contratistas de defensa de la OTAN. Las cargas X-Agent llegan mediante invitaciones de conferencia troyanizadas.',
@@ -3060,7 +2983,6 @@ const TRANSLATIONS = {
     h_title_signal:'SEÑAL EN VIVO',
     h_case_board:'◈ PANEL DE SELECCION DE CASOS OVERWATCH',
     h_case_brief:'RESUMEN DE LA MISION',
-    h_case_counter:'MODULO DE RESPUESTA RECOMENDADO',
     h_case_evidence:'RUTA DE EVIDENCIA PROBABLE',
     h_case_pressure:'VENTANA DE PRESION',
     h_case_target:'PERFIL DEL OBJETIVO',
@@ -3116,7 +3038,7 @@ const TRANSLATIONS = {
     g_hunt_correct_close:'✓ CORRECTO — LA PERSECUCIÓN SE CIERRA',
     iz_hud_streak:'RACHA',
     iz_hud_multiplier:'×',
-    iz_hud_module_timer:'TIEMPO DEL MÓDULO',
+    // 2026-04-21 sanitization: `iz_hud_module_timer` removed — see EN block.
     g_hunt_correct_bonus:'+{score} DEDUCCIÓN CORRECTA',
     g_hunt_was_correct:'← ESTA ERA LA CORRECTA',
     g_hunt_wrong_lost:'INCORRECTO — PERSECUCIÓN PERDIDA',
@@ -3150,8 +3072,6 @@ const TRANSLATIONS = {
     def_rank:'RANGO',
     def_modules_wave:'MÓDULOS DESPLEGADOS EN ESTA OLA',
     def_threat_analysis:'⚠  ANÁLISIS DE AMENAZA — QUÉ OCURRIÓ',
-    def_boss_incoming:'¡EN CAMINO!',
-    def_high_threat:'AMENAZA CRÍTICA — CROWDSTRIKE RESPONDIENDO',
     def_falcon_deployed:'FALCON DESPLEGADO — DEFENDER LA RED',
     def_neutralized:'10 adversarios reales. 10 amenazas reales. Todos detenidos. La red resistió.',
     def_falcon_breadth:'CrowdStrike Falcon unificó endpoint, identidad, nube y datos —',
@@ -3230,10 +3150,7 @@ const TRANSLATIONS = {
     def_bonus_module:'✨ APOYO ALIADO — MÓDULO BONO',
     def_module_activated:'🦅 MÓDULO ACTIVADO',
     g_leaderboard:'CLASIFICACIÓN',
-    iz_fuel_emergency:'EMERGENCIA',
-    iz_fuel_critical:'CRÍTICO',
-    iz_fuel_caution:'PRECAUCIÓN',
-    iz_fuel_stable:'ESTABLE',
+    // 2026-04-21 sanitization: `iz_fuel_*` cluster removed — see EN block.
     iz_ttps:'TTPs:',
     iz_counter_module:'MÓDULO DE RESPUESTA: ',
     def_wave_phase:'Oleada {wave} — {name}',
@@ -3255,12 +3172,6 @@ const TRANSLATIONS = {
     def_ally_assist_bonus:'✨ APOYO ALIADO +{bonus}',
     def_wiper_protect_blocks:'WIPER ACTIVADO — PROTEGE TUS BLOQUES',
     def_shadow_attacks:'EL JEFE ENTRÓ EN SIGILO — ATAQUES DESDE LA SOMBRA',
-    iz_act2_title:'CONTENER',
-    iz_act2_subtitle:'Movimiento lateral bloqueado. Perímetro firme. Empújalos hacia atrás.',
-    iz_act3_title:'MITIGAR',
-    iz_act3_subtitle:'Payload neutralizado. Daño limitado. Contraoperaciones activas.',
-    iz_act4_title:'ELIMINAR',
-    iz_act4_subtitle:'Expulsión del adversario en curso. Brecha contenida. Caza activa.',
     iz_act_phase_complete:'{act}{num}: {title} — FASE {phase} COMPLETADA',
     iz_intel_header:'◈ INTEL CROWDSTRIKE',
     iz_module_time_remaining:'▶ {name} ({time}s restantes)',
@@ -3310,11 +3221,8 @@ const TRANSLATIONS = {
     iz_banner_telemetry_full:'TELEMETRÍA COMPLETAMENTE RECARGADA',
     iz_banner_scan_pulse:'PULSO DE ESCANEO — todas las amenazas reveladas',
     iz_banner_telemetry_falling:'⚠ TELEMETRÍA BAJANDO — las barcazas verdes de COMBUSTIBLE ahora son críticas',
-    iz_comms_telemetry_falling:'La reserva de telemetría está bajando. Planea ahora tu próxima ruta de recarga.',
     iz_banner_low_telemetry:'⚠ TELEMETRÍA BAJA — recarga ya o comenzará la pérdida de integridad',
-    iz_comms_low_telemetry:'Telemetría crítica. Intercepta suministro ahora.',
     iz_banner_telemetry_emergency:'⚠ EMERGENCIA DE TELEMETRÍA — reserva final activa',
-    iz_comms_telemetry_emergency:'Reserva activa. Próximo fallo = daño.',
     iz_comms_emergency_supply_final:'Suministro de telemetría de emergencia desplegado — ventana final de reserva',
     iz_comms_emergency_supply_critical:'Suministro de telemetría de emergencia desplegado — nivel crítico',
     iz_comms_fuel_critical:'COMBUSTIBLE CRÍTICO — barcaza de suministro de emergencia desplegada',
@@ -3324,23 +3232,10 @@ const TRANSLATIONS = {
     g_incident_report_title:'🦅  INFORME DE INCIDENTE CROWDSTRIKE',
     g_ally_label:'ALIADO',
     g_threats_eliminated:'✅  AMENAZAS ELIMINADAS — OVERWATCH SE RETIRA',
-    g_overwatch_stands_down:'✅  AMENAZAS ELIMINADAS — OVERWATCH SE RETIRA',
     g_crowdstrike_tagline:'🦅  crowdstrike.com  |  Detenemos Brechas — Garantizado.',
     g_crowdstrike_tagline_short:'🦅  crowdstrike.com  |  Detenemos Brechas',
     g_apt_label:'⚠APT',
     g_falcon_defense_title:'🦅  FALCON ARCADE DEFENSA',
-    g_hunt_type_credential:'CREDENCIAL',
-    g_hunt_type_malware:'MALWARE',
-    g_hunt_type_network:'RED',
-    g_hunt_type_timing:'TIEMPO',
-    g_hunt_type_lateral:'LATERAL',
-    g_hunt_type_phishing:'PHISHING',
-    g_hunt_type_cloud:'CLOUD',
-    g_hunt_type_social:'SOCIAL',
-    g_hunt_type_staging:'STAGING',
-    g_hunt_type_identity:'IDENTIDAD',
-    g_hunt_type_exfil:'EXFIL',
-    g_hunt_type_behavioral:'CONDUCTA',
     g_hunt_threat_high:'ALTA',
     g_hunt_threat_critical:'CRÍTICA',
     g_hunt_new_evidence:'¡NUEVA EVIDENCIA!',
@@ -3359,16 +3254,13 @@ const TRANSLATIONS = {
     g_evid_seen:'VISTO POR PRIMERA VEZ:',
     g_evid_registrar:'REGISTRADOR:',
     g_evid_event_id:'ID DE EVENTO:',
-    g_evid_cmd:'LÍNEA DE COMANDOS:',
     g_evid_deadline:'PLAZO:',
     g_evid_caller:'LLAMANTE:',
     g_evid_duration:'DURACIÓN:',
     g_evid_sleep:'SUEÑO:',
     g_evid_jitter:'JITTER:',
-    g_evid_postinstall:'POST INSTALAR:',
     g_evid_published:'PUBLICADO:',
     g_evid_platform:'PLATAFORMA:',
-    g_evid_handle:'IDENTIFICADOR:',
     g_evid_language:'IDIOMA:',
     g_evid_external:'EXTERNO',
     g_evid_copy:'COPIAR',
@@ -3378,7 +3270,6 @@ const TRANSLATIONS = {
     g_evid_protocol:'PROTOCOLO',
     g_evid_firmware:'FIRMWARE',
     g_evid_device:'DISPOSITIVO',
-    g_evid_downloads:'DESC./SEM',
     g_evid_takedown:'RETIRADO',
     disc_banner:'⚠&nbsp;&nbsp;CLASIFICADO — SOLO PERSONAL AUTORIZADO&nbsp;&nbsp;⚠',
     disc_title:'AVISO LEGAL',
@@ -3387,18 +3278,22 @@ const TRANSLATIONS = {
     disc_btn:'[ RECONOCER ]',
     disc_hint:'ESPACIO &nbsp;/&nbsp; ENTER PARA RECONOCER',
     // ── Cutscene overlay keys ──
+    // 2026-04-21 sanitization pass #3: removed g_cut_phase/g_cut_pivot/g_cut_cluster (4-mechanism-verified orphans).
     g_cut_banner:'>>> CORTE DE INTELIGENCIA — FASE {n} COMPLETA <<<',
     g_cut_skip:'PRESIONE ESPACIO PARA OMITIR',
-    g_cut_phase:'FASE',
     g_cut_coord:'COORDINACIÓN',
-    g_cut_pivot:'CAMBIO DE OBJETIVO',
     g_cut_transmit:'TRANSMISIÓN',
-    g_cut_cluster:'CLÚSTER DE ADVERSARIOS',
     g_cut_intercept:'INTERCEPTACIÓN DE COMUNICACIONES',
     // ── Missing / new keys ──
     boot_acquiring:'INICIALIZANDO ADQUISICIÓN DE SEÑAL...',
     boot_skip_hint:'[ ESPACIO ]  OMITIR',
     iz_ir_label:'RESPUESTA A INCIDENTES',
+    // ES translations for rec #5 stamp keys.
+    iz_stamp_fake:'FALSO',
+    iz_stamp_ransom:'RESCATE',
+    iz_stamp_wipe:'BORRAR',
+    iz_stamp_locked:'BLOQUEADO',
+    iz_stamp_it_support:'SOPORTE TI',
     def_marquinhos:'¡Llamemos a Marquinhos! 🇧🇷',
     g_evid_source:'ORIGEN:',
     g_evid_process:'PROCESO:',
@@ -3434,9 +3329,9 @@ const TRANSLATIONS = {
     iz_bshot_prompt_reset:'> restablecer',
     iz_bshot_prompt_call:'> llamar',
     iz_bshot_prompt_swap:'> cambiar',
-    iz_bshot_lolbin_label:'.exe'
   },
   jp: {
+    // 2026-04-21 sanitization pass #5 (Row #8 prefix sweep): removed 38 orphan keys (def_boss_incoming, def_high_threat, g_press_space, g_how_to_hunt, g_active_cases, g_begin_hunt_nav, g_overwatch_stands_down, g_hunt_type_{credential,malware,network,timing,lateral,phishing,cloud,social,staging,identity,exfil,behavioral}, g_evid_{cmd,postinstall,handle,downloads}, h_case_counter, iz_deploy_{init,go}, iz_act{1-4}_{title,subtitle}, iz_comms_{telemetry_falling,low_telemetry,telemetry_emergency}, iz_bshot_lolbin_label) — 4-mechanism verified zero consumers.
     eyebrow:'◈ CrowdStrike アーケードシリーズ 2026', title:'ミッション選択',
     subtitle:'オペレーションを選択 · 実際の攻撃者のインテリジェンス · 統合Falconプラットフォーム',
     deploy:'今すぐ展開',
@@ -3455,13 +3350,7 @@ const TRANSLATIONS = {
     dash_story_1t:'侵害を検知する', dash_story_1b:'Incident Zeroはテレメトリ、燃料圧力、Falconモジュールを初動対応の戦いへ変えます。',
     dash_story_2t:'防衛線を維持する', dash_story_2b:'Arcade Defenseは攻撃ベクトルと命名済み敵対者が激化する中で、プラットフォームの広さを示します。',
     dash_story_3t:'攻撃者を追う', dash_story_3b:'Threat Huntはインテリジェンス、証拠、モジュール判断を分析者級の追跡へ変え、物語を締めくくります。',
-    dash_campaign_kicker:'Falconキャンペーン記録',
-    dash_campaign_in_progress:'Falconアークを進める',
-    dash_campaign_in_progress_body:'完了した各作戦は、このブラウザの現セッションと再訪時に恒久的な物語の進行として記録されます。',
-    dash_campaign_complete:'キャンペーンアーク解放',
-    dash_campaign_complete_body:'3つの作戦をすべて完了しました。Falconの対応ストーリーが侵害から追跡まで一続きで読める状態です。',
-    dash_campaign_pending:'未完了',
-    dash_campaign_done:'作戦完了',
+    // 2026-04-21 sanitization: `dash_campaign_*` cluster removed — see EN block for rationale.
     dash_return:'◈ 戻る',
     deploy_overlay_text:'デプロイ中...',
     dash_clear_all_confirm:'全ゲームのランキング記録をすべて削除しますか？この操作は元に戻せません。',
@@ -3555,7 +3444,6 @@ const TRANSLATIONS = {
     g_mission:'ミッション',        g_objectives:'目標',
     g_controls:'操作方法',         g_mute:'ミュート',
     g_deploy:'モジュール展開',     g_deployed:'モジュール展開済み ✓',
-    g_press_space:'スペースでプレイ',
     g_press_retry:'スペースでリトライ',
     g_press_again:'スペースでもう一度',
     g_press_engage:'スペースで開始',
@@ -3569,7 +3457,6 @@ const TRANSLATIONS = {
     g_threat_debrief:'脅威レポート',
     g_situation:'状況報告',
     g_select_case:'ケースを選択 — 敵対者を選んでください',
-    g_how_to_hunt:'ハント方法：',
     g_click_anomaly:'光っている異常ノードをクリックして証拠を収集',
     g_collected:'収集した証拠',
     g_clue_matches:'一致する手がかり：',
@@ -3602,7 +3489,6 @@ const TRANSLATIONS = {
     g_contact_detected:'⚠  敵対者との接触を検出  ⚠',
     g_neutralised:'🦅 敵対者を無力化しました',
     g_what_falcon:'FALCONが検出したもの：',
-    g_active_cases:'◈ アクティブケース',
     g_incoming:'▶ 受信中の送信',
     g_click_collect:'クリックして収集',
     g_click_confirm:'クリックして確認',
@@ -3628,7 +3514,6 @@ const TRANSLATIONS = {
     g_controls_leaderboard:'L — リーダーボード   Ctrl+Shift+E — CSV出力',
     brief_auto_deploy:'自動展開まで',
     brief_confirm_now:'今すぐ展開',
-    g_begin_hunt_nav:'[ スペース ] ハント開始    ← → ↑ ↓ 選択    [ ESC ] 戻る',
     iz_subtitle:'侵害対応プロトコル  ·  敵対者インテリジェンス版  ·  2026',
     iz_title_line1:'CrowdStrikeグローバル脅威インテリジェンスに基づく10件の実在キャンペーンを、Falconで突破します。',
     iz_title_line2:'検知 · 封じ込め · 緩和 · 排除。すべてのTTP、モジュール、ボスは実在の敵対者調査に基づいています。',
@@ -3646,11 +3531,7 @@ const TRANSLATIONS = {
     iz_next_phase:'スペース — 次のフェーズ',
     iz_final_phase:'スペース — 最終フェーズ',
     iz_loss_line:'敵対者が目的を達成しました。脅威ベクトルは失われました。',
-    iz_report_title:'CrowdStrike 2024 グローバル脅威レポート — 主要ポイント',
-    iz_report_line1:'平均ブレイクアウト時間は2024年で62分。最速観測は2分7秒。',
-    iz_report_line2:'初期侵入攻撃の79%はマルウェア不要 — ID悪用とLOLBinsが主流です。',
-    iz_report_line3:'クラウド環境への侵入は前年比75%増加しました。',
-    iz_report_line4:'統合Falconプラットフォームは平均対応時間を数時間から数分へ短縮します。',
+    // 2026-04-21 sanitization pass #4: removed iz_report_title + iz_report_line1-4 (4-mechanism-verified orphans).
     iz_report_line5:'敵対者インテリジェンスは受動的防御を能動的ハンティングへ変えます。',
     iz_report_line6:'crowdstrike.com/adversary-universe  ·  falcon.crowdstrike.com',
     iz_gameover_intel_line:'{adversary} は作戦を実行。Falcon {module} で連鎖を早期に遮断できたはず。',
@@ -3679,12 +3560,8 @@ const TRANSLATIONS = {
     iz_module_validated:'モジュール検証済み',
     iz_module_validated_sub:'Falcon プラットフォーム · クロスドメイン相関が保持',
     g_operation_delivered:'作戦完了 — {actor} · フェーズ {n}',
-    iz_deploy_init:'FALCONデプロイメント開始中',
     iz_deploy_asset:'アセット指定済 · FALCONベッセル武装',
     iz_deploy_weapons:'武器解放 · 敵対者と交戦せよ',
-    iz_deploy_go:'暗闇へ突入',
-    iz_act1_title:'検知',
-    iz_act1_subtitle:'異常を検知。センサー稼働中。敵対者が脅威ベクトルに侵入しています。',
     iz_phase0_key:'オペレーション・アイアンフォレスト',
     iz_phase0_season:'東ヨーロッパ · 2024 · ACT I: 検知',
     iz_phase0_summary:'GRU Unit 26165 が NATO 防衛請負業者に対して連携したスピアフィッシングを開始。X-Agent ペイロードは改ざんされた会議招待経由で配信されています。',
@@ -3703,7 +3580,6 @@ const TRANSLATIONS = {
     h_title_signal:'ライブシグナル',
     h_case_board:'◈ OVERWATCH ケース選択ボード',
     h_case_brief:'ミッション概要',
-    h_case_counter:'推奨カウンターモジュール',
     h_case_evidence:'想定される証拠の流れ',
     h_case_pressure:'緊迫時間帯',
     h_case_target:'標的プロファイル',
@@ -3759,7 +3635,7 @@ const TRANSLATIONS = {
     g_hunt_correct_close:'✓ 正解 — 追跡が詰まる',
     iz_hud_streak:'コンボ',
     iz_hud_multiplier:'×',
-    iz_hud_module_timer:'モジュール時間',
+    // 2026-04-21 sanitization: `iz_hud_module_timer` removed — see EN block.
     g_hunt_correct_bonus:'+{score} 正しい推理',
     g_hunt_was_correct:'← これが正解',
     g_hunt_wrong_lost:'不正解 — 追跡喪失',
@@ -3790,8 +3666,6 @@ const TRANSLATIONS = {
     def_rank:'ランク',
     def_modules_wave:'このウェーブで展開したモジュール',
     def_threat_analysis:'⚠  脅威分析 — 何が起きたか',
-    def_boss_incoming:'接近中！',
-    def_high_threat:'最優先脅威 — CrowdStrike対応中',
     def_falcon_deployed:'FALCON展開済み — ネットワークを防衛',
     def_neutralized:'10の実在する敵対者。10の実際の脅威。全て阻止。ネットワークは持ちこたえた。',
     def_falcon_breadth:'CrowdStrike Falconはエンドポイント、ID、クラウド、データを統合 —',
@@ -3870,10 +3744,7 @@ const TRANSLATIONS = {
     def_bonus_module:'✨ 味方支援 — ボーナスモジュール',
     def_module_activated:'🦅 モジュール起動',
     g_leaderboard:'ランキング',
-    iz_fuel_emergency:'緊急',
-    iz_fuel_critical:'危機的',
-    iz_fuel_caution:'注意',
-    iz_fuel_stable:'安定',
+    // 2026-04-21 sanitization: `iz_fuel_*` cluster removed — see EN block.
     iz_ttps:'既知のTTP:',
     iz_counter_module:'カウンターモジュール: ',
     def_wave_phase:'ウェーブ {wave} — {name}',
@@ -3895,12 +3766,6 @@ const TRANSLATIONS = {
     def_ally_assist_bonus:'✨ 味方支援 +{bonus}',
     def_wiper_protect_blocks:'ワイパー起動 — ブロックを防御',
     def_shadow_attacks:'ボスがステルス化 — 影から攻撃',
-    iz_act2_title:'封じ込め',
-    iz_act2_subtitle:'横移動を阻止。境界線を維持。押し返せ。',
-    iz_act3_title:'軽減',
-    iz_act3_subtitle:'ペイロードを無力化。被害を限定。対抗作戦が稼働中。',
-    iz_act4_title:'排除',
-    iz_act4_subtitle:'敵対者排除を実行中。侵害は封じ込め済み。ハント継続。',
     iz_act_phase_complete:'{act}{num}: {title} — フェーズ {phase} 完了',
     iz_intel_header:'◈ CROWDSTRIKE インテル',
     iz_module_time_remaining:'▶ {name}（残り {time} 秒）',
@@ -3950,11 +3815,8 @@ const TRANSLATIONS = {
     iz_banner_telemetry_full:'テレメトリ完全回復',
     iz_banner_scan_pulse:'スキャンパルス — 全脅威を可視化',
     iz_banner_telemetry_falling:'⚠ テレメトリ低下 — 緑のFUELバージが最重要',
-    iz_comms_telemetry_falling:'テレメトリ備蓄が低下中。次の補給ルートを今すぐ計画してください。',
     iz_banner_low_telemetry:'⚠ 低テレメトリ — 直ちに補給しないと整合性損失が始まります',
-    iz_comms_low_telemetry:'テレメトリ危機。補給を迎撃せよ。',
     iz_banner_telemetry_emergency:'⚠ テレメトリ緊急 — 最終予備が有効',
-    iz_comms_telemetry_emergency:'予備稼働中。次の失陥=損傷。',
     iz_comms_emergency_supply_final:'緊急テレメトリ補給を展開 — 最終予備ウィンドウ',
     iz_comms_emergency_supply_critical:'緊急テレメトリ補給を展開 — 危機レベル',
     iz_comms_fuel_critical:'燃料危機 — 緊急補給バージを展開',
@@ -3964,23 +3826,10 @@ const TRANSLATIONS = {
     g_incident_report_title:'🦅  CROWDSTRIKEインシデントレポート',
     g_ally_label:'味方',
     g_threats_eliminated:'✅  脅威排除 — OVERWATCHが撤退',
-    g_overwatch_stands_down:'✅  脅威排除 — OVERWATCHが撤退',
     g_crowdstrike_tagline:'🦅  crowdstrike.com  |  侵害を阻止 — 保証付き',
     g_crowdstrike_tagline_short:'🦅  crowdstrike.com  |  侵害を阻止',
     g_apt_label:'⚠APT',
     g_falcon_defense_title:'🦅  FALCONアーケードディフェンス',
-    g_hunt_type_credential:'認証情報',
-    g_hunt_type_malware:'マルウェア',
-    g_hunt_type_network:'ネットワーク',
-    g_hunt_type_timing:'タイミング',
-    g_hunt_type_lateral:'横移動',
-    g_hunt_type_phishing:'フィッシング',
-    g_hunt_type_cloud:'クラウド',
-    g_hunt_type_social:'ソーシャル',
-    g_hunt_type_staging:'ステージング',
-    g_hunt_type_identity:'アイデンティティ',
-    g_hunt_type_exfil:'流出',
-    g_hunt_type_behavioral:'振る舞い',
     g_hunt_threat_high:'高',
     g_hunt_threat_critical:'重大',
     g_hunt_new_evidence:'新証拠!',
@@ -3999,16 +3848,13 @@ const TRANSLATIONS = {
     g_evid_seen:'FIRST SEEN:',
     g_evid_registrar:'REGISTRAR:',
     g_evid_event_id:'EVENT ID:',
-    g_evid_cmd:'COMMAND LINE:',
     g_evid_deadline:'DEADLINE:',
     g_evid_caller:'CALLER:',
     g_evid_duration:'DURATION:',
     g_evid_sleep:'SLEEP:',
     g_evid_jitter:'JITTER:',
-    g_evid_postinstall:'POSTINSTALL:',
     g_evid_published:'PUBLISHED:',
     g_evid_platform:'PLATFORM:',
-    g_evid_handle:'HANDLE:',
     g_evid_language:'LANGUAGE:',
     g_evid_external:'外部',
     g_evid_copy:'コピー',
@@ -4018,7 +3864,6 @@ const TRANSLATIONS = {
     g_evid_protocol:'プロトコル',
     g_evid_firmware:'FIRMWARE',
     g_evid_device:'デバイス',
-    g_evid_downloads:'週DL数',
     g_evid_takedown:'削除',
     disc_banner:'⚠&nbsp;&nbsp;機密 — 許可された担当者のみ&nbsp;&nbsp;⚠',
     disc_title:'法的免責事項',
@@ -4030,18 +3875,24 @@ const TRANSLATIONS = {
     g_operation_phase_escalation:'◈ ◈ ◈  作戦フェーズ エスカレーション  ◈ ◈ ◈',
     g_phase_number:'フェーズ {num} / 3',
     // ── Cutscene overlay keys ──
+    // 2026-04-21 sanitization pass #3: removed g_cut_phase/g_cut_pivot/g_cut_cluster (4-mechanism-verified orphans).
     g_cut_banner:'>>> インテリジェンス映像 — フェーズ {n} 完了 <<<',
     g_cut_skip:'スペースキーを押してスキップ',
-    g_cut_phase:'フェーズ',
     g_cut_coord:'調整',
-    g_cut_pivot:'ピボット',
     g_cut_transmit:' 転送',
-    g_cut_cluster:'敵対者クラスター',
     g_cut_intercept:'通信傍受',
     // ── Missing / new keys ──
     boot_acquiring:'信号取得を初期化中...',
     boot_skip_hint:'[ SPACE ]  スキップ',
     iz_ir_label:'インシデント対応',
+    // JP translations for rec #5 stamp keys. Stamps stay short English-derived
+    // tokens in JP booths — `FAKE/RANSOM/WIPE/LOCKED` are industry-standard
+    // threat-actor overlays, `IT SUPPORT` keeps the tech-support scam recognizable.
+    iz_stamp_fake:'偽物',
+    iz_stamp_ransom:'身代金',
+    iz_stamp_wipe:'消去',
+    iz_stamp_locked:'ロック',
+    iz_stamp_it_support:'ITサポート',
     def_marquinhos:'マルキーニョスに連絡! 🇧🇷',
     g_evid_source:'発信元:',
     g_evid_process:'プロセス:',
@@ -4077,7 +3928,6 @@ const TRANSLATIONS = {
     iz_bshot_prompt_reset:'> 再設定',
     iz_bshot_prompt_call:'> 通話',
     iz_bshot_prompt_swap:'> 交換',
-    iz_bshot_lolbin_label:'.exe'
   }
 };
 
@@ -4866,16 +4716,13 @@ function _saveStoredArray(key, entries) {
     // Quota or privacy mode — record so operators can see fallback engaged
     // before rankings silently stop persisting across reloads.
     ARCADE_FALLBACK_STORAGE[key] = serialized;
-    try {
-      const T = window.FalconArcade && window.FalconArcade.Telemetry;
-      if (T) T.report('store.session.quota', e, { key, bytes:serialized.length });
-    } catch(_) {}
+    window._safeTelemetryReport && window._safeTelemetryReport('storage.set.array', e, { key, bytes:serialized.length });
     return false;
   }
 }
 
 function _removeStoredKey(key) {
-  try { sessionStorage.removeItem(key); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('storage.session.remove', e, { key:String(key||'') }); }catch(_){} }
+  try { sessionStorage.removeItem(key); } catch (e) { window._safeTelemetryReport && window._safeTelemetryReport('storage.session.remove', e, { key:String(key||'') }); }
   delete ARCADE_FALLBACK_STORAGE[key];
   delete ARCADE_FALLBACK_VALUES[key];
 }
@@ -4902,10 +4749,7 @@ function _saveStoredNumber(key, value) {
     // Quota or privacy mode on localStorage — record so operators can see
     // high-score persistence has fallen back to in-memory only.
     ARCADE_FALLBACK_VALUES[key] = safeValue;
-    try {
-      const T = window.FalconArcade && window.FalconArcade.Telemetry;
-      if (T) T.report('store.local.quota', e, { key, value:safeValue });
-    } catch(_) {}
+    window._safeTelemetryReport && window._safeTelemetryReport('storage.set.number', e, { key, value:safeValue });
     return false;
   }
 }
@@ -4973,7 +4817,7 @@ async function _checkAdminPin() {
 
 function clearAllRankings() {
   ARCADE_RANKING_KEYS.forEach(key => _removeStoredKey(key));
-  try { localStorage.removeItem('cs_arcade_ranking_backup'); } catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('storage.ranking.backup_clear', e); }catch(_){} }
+  try { localStorage.removeItem('cs_arcade_ranking_backup'); } catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('storage.ranking.backup_clear', e); }
   _refreshPodium();
 }
 
@@ -5294,13 +5138,13 @@ function clearAllRankings() {
     const e = _registry[name];
     if (!e || typeof e.show !== 'function') return false;
     const args = Array.prototype.slice.call(arguments, 1);
-    try { e.show.apply(null, args); return true; } catch (err) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('overlay.dispatch.show', err, { name:String(name||'') }); }catch(_){} return false; }
+    try { e.show.apply(null, args); return true; } catch (err) { window._safeTelemetryReport && window._safeTelemetryReport('overlay.dispatch.show', err, { name:String(name||'') }); return false; }
   }
   function hide(name /* , ...args */) {
     const e = _registry[name];
     if (!e || typeof e.hide !== 'function') return false;
     const args = Array.prototype.slice.call(arguments, 1);
-    try { e.hide.apply(null, args); return true; } catch (err) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('overlay.dispatch.hide', err, { name:String(name||'') }); }catch(_){} return false; }
+    try { e.hide.apply(null, args); return true; } catch (err) { window._safeTelemetryReport && window._safeTelemetryReport('overlay.dispatch.hide', err, { name:String(name||'') }); return false; }
   }
   function clear(name) {
     // Close first (if the controller has a hide), then remove any residual
@@ -5308,7 +5152,7 @@ function clearAllRankings() {
     // and state-style overlays (which just toggle classes).
     const e = _registry[name];
     if (e && typeof e.hide === 'function') {
-      try { e.hide(); } catch (err) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('overlay.clear.hide', err, { name:String(name||'') }); }catch(_){} }
+      try { e.hide(); } catch (err) { window._safeTelemetryReport && window._safeTelemetryReport('overlay.clear.hide', err, { name:String(name||'') }); }
     }
     // Candidate ids to clean up — try the name and a few common suffixes.
     const tries = [name, name + '-overlay'];
@@ -5316,7 +5160,7 @@ function clearAllRankings() {
     for (const id of tries) {
       const el = document.getElementById(id);
       if (el && el.parentNode) {
-        try { el.parentNode.removeChild(el); removed = true; } catch (err) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('overlay.clear.dom_remove', err, { id:String(id||''), name:String(name||'') }); }catch(_){} }
+        try { el.parentNode.removeChild(el); removed = true; } catch (err) { window._safeTelemetryReport && window._safeTelemetryReport('overlay.clear.dom_remove', err, { id:String(id||''), name:String(name||'') }); }
       }
     }
     return removed || !!e;
@@ -5324,7 +5168,7 @@ function clearAllRankings() {
   function isOpen(name) {
     const e = _registry[name];
     if (e && typeof e.isOpen === 'function') {
-      try { return !!e.isOpen(); } catch (_) { return false; }
+      try { return !!e.isOpen(); } catch (err) { window._safeTelemetryReport && window._safeTelemetryReport('overlay.dispatch.is_open', err, { name:String(name||'') }); return false; }
     }
     // Fallback strategy:
     // - Persistent-DOM overlays (classList toggles 'is-open') → trust the class.
@@ -6299,7 +6143,7 @@ function clearAllRankings() {
     });
     if (!hasData) return;
     try { localStorage.setItem(BACKUP_KEY, JSON.stringify({ts:Date.now(),booth:_BOOTH_ID,data:snapshot})); }
-    catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('ranking.backup.write', e, { booth:_BOOTH_ID }); }catch(_){} }
+    catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('ranking.backup.write', e, { booth:_BOOTH_ID }); }
   }
   // Restore from backup on load if sessionStorage is empty (e.g. after tab crash)
   try {
@@ -6321,11 +6165,12 @@ function clearAllRankings() {
       }
     }
   } catch(e){
-    // 2026-04-21 (release-gate must-fix #3): surface ranking backup
-    // corruption instead of eating it silently. Booth ops will now see
-    // a console.warn if localStorage['cs_arcade_ranking_backup'] is
-    // malformed — which was previously invisible.
-    try{ console.warn('[Arcade] Ranking backup restore parse failed — corrupt cs_arcade_ranking_backup:', e?.message||e); }catch(_){}
+    // 2026-04-21 (release-gate must-fix #3 → telemetry rec #7): ranking backup
+    // corruption is surfaced via the telemetry ring under `ranking.backup.restore`.
+    // Booth ops in dev mode see it live via `FalconArcade.Telemetry.setDevMode(true)`;
+    // operators pull history via `FalconArcade.Telemetry.entries()`. Prior duplicate
+    // `console.warn` removed to keep the two channels from double-logging the same event.
+    window._safeTelemetryReport && window._safeTelemetryReport('ranking.backup.restore', e);
   }
   // 2026-04-21 (release-gate must-fix #2): expose interval ID so the
   // always-on ranking backup can be cancelled in an emergency (hotpatch,
@@ -7444,7 +7289,7 @@ function _createDashboardAttractDirector() {
     try{
       const _want = _loadStoredNumber('cs_muted_v1', 0) ? true : false;
       if(typeof window._applyDashboardMute === 'function') window._applyDashboardMute(_want);
-    }catch(_){}
+    }catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('attract.mute.reapply', e); }
   }
   // Tracked version of the 420 ms post-startAttractDemo reassert so we can
   // cancel it on game launch — otherwise a stale timer from the last attract
@@ -7499,8 +7344,8 @@ function _createDashboardAttractDirector() {
       setSimContainer('game-zero-container');
       initGameZero?.();
       simTimer = setTimeout(() => {
-        try { window.__zeroSim?.forceResize?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.zero.force_resize', e); }catch(_){} }
-        try { window.__zeroSim?.startAttractDemo?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.zero.start_demo', e); }catch(_){} }
+        try { window.__zeroSim?.forceResize?.(); } catch (e) { window._safeTelemetryReport && window._safeTelemetryReport('attract.zero.force_resize', e); }
+        try { window.__zeroSim?.startAttractDemo?.(); } catch (e) { window._safeTelemetryReport && window._safeTelemetryReport('attract.zero.start_demo', e); }
       }, 260);
       simAdvanceTimer = setInterval(() => {
         try { window.__zeroSim?.tickAttractDemo?.(); } catch (_) {}
@@ -7509,8 +7354,8 @@ function _createDashboardAttractDirector() {
       setSimContainer('game-defense-container');
       initGameDefense?.();
       simTimer = setTimeout(() => {
-        try { window.__defenseSim?.forceResize?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.defense.force_resize', e); }catch(_){} }
-        try { window.__defenseSim?.startAttractDemo?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.defense.start_demo', e); }catch(_){} }
+        try { window.__defenseSim?.forceResize?.(); } catch (e) { window._safeTelemetryReport && window._safeTelemetryReport('attract.defense.force_resize', e); }
+        try { window.__defenseSim?.startAttractDemo?.(); } catch (e) { window._safeTelemetryReport && window._safeTelemetryReport('attract.defense.start_demo', e); }
       }, 120);
       simAdvanceTimer = setInterval(() => {
         try { window.__defenseSim?.tickAttractDemo?.(); } catch (_) {}
@@ -7519,9 +7364,9 @@ function _createDashboardAttractDirector() {
       setSimContainer('game-hunt-container');
       initGameHunt?.();
       simTimer = setTimeout(() => {
-        try { window.__huntSim?.resetForLaunch?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.hunt.reset_for_launch', e); }catch(_){} }
-        try { window.__huntSim?.forceResize?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.hunt.force_resize', e); }catch(_){} }
-        try { window.__huntSim?.startAttractDemo?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.hunt.start_demo', e); }catch(_){} }
+        try { window.__huntSim?.resetForLaunch?.(); } catch (e) { window._safeTelemetryReport && window._safeTelemetryReport('attract.hunt.reset_for_launch', e); }
+        try { window.__huntSim?.forceResize?.(); } catch (e) { window._safeTelemetryReport && window._safeTelemetryReport('attract.hunt.force_resize', e); }
+        try { window.__huntSim?.startAttractDemo?.(); } catch (e) { window._safeTelemetryReport && window._safeTelemetryReport('attract.hunt.start_demo', e); }
         try { window.__huntSim?.forceResize?.(); } catch (_) {}
       }, 260);
       simAdvanceTimer = setInterval(() => {
@@ -7886,6 +7731,7 @@ function _createDashboardAttractDirector() {
     // Word wipes in via clip-path; subline + rule fade after.
     const variant = scene.variant || 'infiltrate';
     const eyebrow = T('attract_hero_eyebrow');
+    // i18n-bind: dynamic — attract_hero_{variant}_word / _sub keys built via concat. Live variants: 'infiltrate','defend','hunt' (see scene.variant assignment upstream). Keep these keys live in all 4 langs.
     const word = T('attract_hero_' + variant + '_word');
     const sub = T('attract_hero_' + variant + '_sub');
     const layer = mountLayer(`
@@ -8002,8 +7848,8 @@ function _createDashboardAttractDirector() {
     // Safety net: silence any ambient drones still running from a prior game session.
     // This does NOT touch _masterGain, MUTED, or AudioEngine#bgm — so gameplay audio
     // recovers cleanly the next time the user enters a real game (startGame calls startAmbient).
-    try { window.stopAmbient?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.audio.stop_ambient', e); }catch(_){} }
-    try { window.stopHuntAmbient?.(); } catch (e) { try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('attract.audio.stop_hunt_ambient', e); }catch(_){} }
+    try { window.stopAmbient?.(); } catch (e) { window._safeTelemetryReport && window._safeTelemetryReport('attract.audio.stop_ambient', e); }
+    try { window.stopHuntAmbient?.(); } catch (e) { window._safeTelemetryReport && window._safeTelemetryReport('attract.audio.stop_hunt_ambient', e); }
     // Attract mode: menu bed plays at reduced volume (0.3) for ambience without overpowering
     try{ window._startMenuBed?.(0.3); }catch(_){}
     try{ window._menuBedSetVolume?.(0.3); }catch(_){}
@@ -8500,6 +8346,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(!_muteBtn) return;
     const on = !!muted;
     _muteBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    // i18n-bind: ternary — dash_mute_off / dash_mute_on. Both keys are live; also re-bound via data-i18n attribute resolver on lang-switch.
     const key = on ? 'dash_mute_off' : 'dash_mute_on';
     _muteBtn.setAttribute('data-i18n', key);
     try{ _muteBtn.innerHTML = T(key); }catch(_){ /* T() may not be ready pre-boot */ }
@@ -8507,8 +8354,8 @@ document.addEventListener('DOMContentLoaded', () => {
   window._syncDashboardMuteBtn = _syncDashboardMuteBtn;
   function _applyDashboardMute(on){
     const want = !!on;
-    try{ window.SoundEngine?.setMuted?.(want); }catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('audio.engine.set_muted', e, { want:want }); }catch(_){} }
-    try{ _saveStoredNumber('cs_muted_v1', want ? 1 : 0); }catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('storage.mute.save', e); }catch(_){} }
+    try{ window.SoundEngine?.setMuted?.(want); }catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('audio.engine.set_muted', e, { want:want }); }
+    try{ _saveStoredNumber('cs_muted_v1', want ? 1 : 0); }catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('storage.mute.save', e); }
     _syncDashboardMuteBtn(want);
   }
   window._applyDashboardMute = _applyDashboardMute;
@@ -8518,7 +8365,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const _savedMute = _loadStoredNumber('cs_muted_v1', 0) ? true : false;
     if (_savedMute) _applyDashboardMute(true);
     else _syncDashboardMuteBtn(false);
-  }catch(_){ _syncDashboardMuteBtn(false); }
+  }catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('storage.mute.boot_restore', e); _syncDashboardMuteBtn(false); }
   _muteBtn?.addEventListener('click', () => {
     ArcadeSonic.focus();
     const nowOn = _muteBtn.getAttribute('aria-pressed') === 'true';
@@ -8785,7 +8632,12 @@ const FalconRanking = (function () {
     },
     save(entries) {
       if (!_saveStoredArray(CFG.storageKey, entries)) {
+        // 2026-04-21 (telemetry rec #4): ranking write fell back to in-memory.
+        // `storage.set.array` already fired from inside `_saveStoredArray`; this
+        // tag adds the FalconRanking-layer semantics (rank-submission impact)
+        // so operators can grep `ranking.write` specifically during a booth run.
         console.warn('[FalconRanking] localStorage write failed, using in-memory fallback');
+        window._safeTelemetryReport && window._safeTelemetryReport('ranking.write', null, { key:CFG.storageKey, count:(entries && entries.length)|0 });
       }
     },
     add(entry) {
@@ -9824,13 +9676,20 @@ const FalconRanking = (function () {
     let half = 0; // computed on first frame after layout
 
     function scrollStep(ts) {
-      if (half === 0) half = scrollEl.scrollHeight / 2; // defer until layout
-      const dt = Math.min(0.05, (ts - lastT) / 1000 || 0.016);
-      lastT = ts;
-      if (!isEmpty) {
-        _attractY += CFG.attractSpeed * dt;
-        if (half > 0 && _attractY >= half) _attractY = 0;
-        scrollEl.style.transform = `translateY(${-_attractY}px)`;
+      try{
+        if (half === 0) half = scrollEl.scrollHeight / 2; // defer until layout
+        const dt = Math.min(0.05, (ts - lastT) / 1000 || 0.016);
+        lastT = ts;
+        if (!isEmpty) {
+          _attractY += CFG.attractSpeed * dt;
+          if (half > 0 && _attractY >= half) _attractY = 0;
+          scrollEl.style.transform = `translateY(${-_attractY}px)`;
+        }
+      }catch(e){
+        // 2026-04-21 (telemetry rec #6): attract-RAF tick instrumentation.
+        // Can't migrate to Lifecycle.rafNS without breaking the native cancel
+        // semantics used at _closeAttract, so wrap the body inline instead.
+        window._safeTelemetryReport && window._safeTelemetryReport('attract.tick.scroll', e, { loc:'block1' });
       }
       _attractAF = requestAnimationFrame(scrollStep);
     }
@@ -11480,7 +11339,7 @@ function createZimmerBed(paletteName, options){
     try{ _aTrace('zimmer:stop:'+paletteName); }catch(_){}
     _active = false;
     const ac = AC(); const now = ac ? ac.currentTime : 0;
-    try{ if(_bedGain){ _bedGain.gain.cancelScheduledValues(now); _bedGain.gain.linearRampToValueAtTime(0, now + 0.9); } }catch(e){ try{ window.FalconArcade && window.FalconArcade.Telemetry && window.FalconArcade.Telemetry.report('audio.zimmer.bed_fade', e, { palette:paletteName }); }catch(_){} }
+    try{ if(_bedGain){ _bedGain.gain.cancelScheduledValues(now); _bedGain.gain.linearRampToValueAtTime(0, now + 0.9); } }catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('audio.zimmer.bed_fade', e, { palette:paletteName }); }
     // Clear all schedulers immediately so they cannot fire during the fadeout.
     _timers.splice(0).forEach(id => { try{ clearTimeout(id); clearInterval(id); }catch(_){} });
     // Snapshot before the delayed teardown so a re-entrant start() gets fresh slots.
@@ -12011,8 +11870,13 @@ const SoundEngine={
     },
     _update(){ _recalcMusicIntensity(); }
   },
-  sfx:{ play(name,opts){ _sfxRecipe(name,opts||{}); } },
-  stinger:{ fire(name,opts){ _stingerRecipe(name,opts||{}); } },
+  // 2026-04-21 (telemetry rec #3): sfx + stinger entry points wrapped.
+  // Previously a broken recipe (undefined pitch, missing bus) threw silently
+  // because every call site uses optional chaining (`?.stinger?.fire(...)`).
+  // Now routes to `audio.stinger.fire` / `audio.sfx.play` telemetry tags with
+  // the recipe name in `detail` so operators see which recipe broke.
+  sfx:{ play(name,opts){ try{ _sfxRecipe(name,opts||{}); }catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('audio.sfx.play', e, { name:String(name||'') }); } } },
+  stinger:{ fire(name,opts){ try{ _stingerRecipe(name,opts||{}); }catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('audio.stinger.fire', e, { name:String(name||'') }); } } },
   ambient:{
     start(){ startAmbient(); },
     stop(){ stopAmbient(); },
@@ -17277,7 +17141,10 @@ function drawIR(){
   CX.shadowColor='#ff2200'; CX.shadowBlur=14;
   CX.fillText('IR',0,0);
   // "INCIDENT RESPONSE" label
-  CX.font="7px 'Courier New'"; CX.fillStyle='rgba(255,180,160,0.88)'; CX.shadowBlur=0;
+  // 2026-04-21 (telemetry rec #2 font-floor): raised 7px→9px to satisfy
+  // CLAUDE.md minimum. Label sits at r*0.52; node radius r is always ≥18
+  // so the 2px bump stays inside the pictogram's lower hemisphere.
+  CX.font="9px 'Courier New'"; CX.fillStyle='rgba(255,180,160,0.88)'; CX.shadowBlur=0;
   CX.fillText(T('iz_ir_label'),0,Math.round(r*0.52));
   // Three operator silhouette dots
   const dotX=[-9,0,9];
@@ -18136,8 +18003,8 @@ function drawEnemies(){
           if(gTime===2) CX.fillRect(-14,2,28,2);
           CX.strokeStyle=fc||'#c050ff'; CX.lineWidth=2;
           CX.beginPath(); CX.arc(0,0,14,0,TAU); CX.stroke();
-          // "FAKE" label with static noise
-          CX.fillStyle='#fff'; CX.font=FONT_BOLD_7; CX.textAlign='center'; CX.fillText('FAKE',0,3);
+          // "FAKE" label with static noise (rec #5: T() migration)
+          CX.fillStyle='#fff'; CX.font=FONT_BOLD_7; CX.textAlign='center'; CX.fillText(T('iz_stamp_fake'),0,3);
           CX.fillStyle='rgba(200,80,255,0.3)'; CX.font=FONT_5;
           CX.fillText('AI',0,-5);
         }
@@ -18213,7 +18080,8 @@ function drawEnemies(){
           // Skull hidden inside (trojan payload — visible only when near player)
           const md=Math.hypot(e.x-PL.x,0);
           if(md<80){
-            CX.fillStyle='rgba(255,50,50,0.6)'; CX.font='8px monospace'; CX.textAlign='center';
+            // 2026-04-21 (telemetry rec #2 font-floor): 8px→9px per CLAUDE.md min.
+            CX.fillStyle='rgba(255,50,50,0.6)'; CX.font='9px monospace'; CX.textAlign='center';
             CX.fillText('☠',0,2);
           } else {
             CX.fillStyle='#aaddaa'; CX.font=FONT_BOLD_7; CX.textAlign='center';
@@ -18424,7 +18292,7 @@ function drawEnemies(){
         CX.beginPath(); CX.arc(0,0,4,Math.PI,0); CX.stroke();
         CX.shadowBlur=0;
         CX.fillStyle='#ffd84d'; CX.font='bold 5px monospace'; CX.textAlign='center';
-        CX.fillText('RANSOM',0,8); break;
+        CX.fillText(T('iz_stamp_ransom'),0,8); break; /* rec #5: T() migration */
       }
 
       case 'mine': {
@@ -18748,7 +18616,7 @@ function drawGround(){
         // Screen display
         CX.fillStyle='#1a0a00'; CX.fillRect(-11,-20,22,16);
         CX.fillStyle='#ff8d39'; CX.font=FONT_BOLD_9; CX.textAlign='center';
-        CX.fillText('CERT',0,-10); CX.font='8px monospace'; CX.fillStyle='#ffcc88';
+        CX.fillText('CERT',0,-10); CX.font='9px monospace'; CX.fillStyle='#ffcc88'; /* rec#2 font-floor: 8→9 */
         CX.fillText(vis?'.EV SIGNED':'.SELF-SIGN',0,-2);
         CX.shadowBlur=0; break;
       }
@@ -18871,7 +18739,7 @@ function drawGround(){
         }
         CX.globalAlpha=vis?1:0.13;
         CX.fillStyle='#e090ff'; CX.font=FONT_BOLD_10; CX.textAlign='center';
-        CX.fillText('WIPE',0,2);
+        CX.fillText(T('iz_stamp_wipe'),0,2); /* rec #5: T() migration */
         CX.fillStyle='rgba(200,80,255,0.7)'; CX.font=FONT_9;
         CX.fillText(vis?'MBR OVERWRITE':'???',0,13);
         CX.shadowBlur=0; break;
@@ -18935,12 +18803,16 @@ function drawGround(){
         CX.fillStyle='#100808'; CX.fillRect(-12,-40,24,22);
         CX.strokeStyle='#440000'; CX.lineWidth=1; CX.strokeRect(-12,-40,24,22);
         if(vis){
-          CX.fillStyle='#e0003c'; CX.font='6px monospace'; CX.textAlign='left';
+          // 2026-04-21 (telemetry rec #2 font-floor): 6px→9px. Terminal screen
+          // is 24×22 at (-12,-40). 3 lines at 7px spacing no longer fit — dropped
+          // to 2 lines at 10px spacing (y=-32,-22). Lines stay inside box bottom (-18).
+          // substring(0,9) stays wide enough to fill the 24px box.
+          CX.fillStyle='#e0003c'; CX.font='9px monospace'; CX.textAlign='left';
           const off=(g._proc||0)*18;
-          for(let li=0;li<3;li++){
+          for(let li=0;li<2;li++){
             const pi=(pidx+li)%PROCS.length;
-            CX.globalAlpha=1-li*0.3;
-            CX.fillText(PROCS[pi].substring(0,9),-11,-32+li*7);
+            CX.globalAlpha=1-li*0.35;
+            CX.fillText(PROCS[pi].substring(0,9),-11,-32+li*10);
           }
           CX.globalAlpha=1;
           // Scanning cursor
@@ -19390,13 +19262,13 @@ function drawBillboards(){
     CX.beginPath(); CX.moveTo(txtX0,bbY+27); CX.lineTo(bbX+bbW-6,bbY+27); CX.stroke();
 
     // Subline
-    CX.fillStyle='#42d9ff'; CX.font='8px monospace';
+    CX.fillStyle='#42d9ff'; CX.font='9px monospace'; /* rec#2 font-floor: 8→9 */
     CX.shadowBlur=4; CX.shadowColor='rgba(66,217,255,0.7)';
     CX.fillText(line2, txtX0, bbY+40);
     CX.shadowBlur=0;
 
     // GTR footer tag
-    CX.fillStyle='rgba(200,200,180,0.55)'; CX.font='7px monospace';
+    CX.fillStyle='rgba(200,200,180,0.55)'; CX.font='9px monospace'; /* rec#2 font-floor: 7→9 */
     CX.fillText('globalthreatrep.com · GTR 2025', txtX0, bbY+57);
 
     CX.restore(); // end text clip
@@ -20677,6 +20549,7 @@ function drawEBullet(b){
       // Boss prompt text bullet: rotated text with tumble + trails
       const _t=(b.age!==undefined?b.age:(performance.now()*0.001+(b.seed||0)));
       const _promptTxt=b.txt!==undefined?b.txt:0;
+      // i18n-bind: array — 13 keys below are consumed via T(_pText) below. ALL keep-live in all 4 langs.
       const _promptKeys=['iz_bshot_prompt_exec','iz_bshot_prompt_beacon','iz_bshot_prompt_exfil','iz_bshot_prompt_recon','iz_bshot_prompt_pivot','iz_bshot_prompt_implant','iz_bshot_prompt_c2','iz_bshot_prompt_cred','iz_bshot_prompt_drop','iz_bshot_prompt_sms','iz_bshot_prompt_reset','iz_bshot_prompt_call','iz_bshot_prompt_swap'];
       const _pText=_promptKeys[_promptTxt%_promptKeys.length];
       // Tumble rotation
@@ -20966,9 +20839,9 @@ function drawBoss(){
       CX.fillStyle='#fff';
       CX.beginPath(); CX.moveTo(-6,22); CX.lineTo(-9,32); CX.lineTo(-3,22); CX.closePath(); CX.fill();
       CX.beginPath(); CX.moveTo(6,22);  CX.lineTo(9,32);  CX.lineTo(3,22);  CX.closePath(); CX.fill();
-      // Label
+      // Label (rec #5: T() migration)
       CX.fillStyle='rgba(0,0,0,0.7)'; CX.fillRect(-24,-11,48,20);
-      CX.fillStyle=c; CX.font=FONT_BOLD_9; CX.textAlign='center'; CX.fillText('IT SUPPORT',0,2);
+      CX.fillStyle=c; CX.font=FONT_BOLD_9; CX.textAlign='center'; CX.fillText(T('iz_stamp_it_support'),0,2);
       break;
     }
 
@@ -21122,9 +20995,9 @@ function drawBoss(){
       // Keyhole
       CX.fillStyle='#ffd84d'; CX.beginPath(); CX.arc(0,7,5,0,TAU); CX.fill();
       CX.fillStyle='#2a1800'; CX.fillRect(-2.5,7,5,8);
-      // "LOCKED" inside lock body
+      // "LOCKED" inside lock body (rec #5: T() migration)
       CX.fillStyle='#8a0000'; CX.font=FONT_BOLD_6; CX.textAlign='center';
-      CX.fillText('LOCKED',0,28);
+      CX.fillText(T('iz_stamp_locked'),0,28);
       // 6 mechanical legs (3 per side), angular joints
       CX.strokeStyle=c; CX.lineWidth=3.5+BOSS.phase;
       for(let s=-1;s<=1;s+=2){
@@ -21585,7 +21458,7 @@ function drawHUD(){
 
     // Label + value with multiplier
     CX.globalAlpha=1;
-    CX.fillStyle='#7f8b96'; CX.font='8px monospace'; CX.textAlign='right';
+    CX.fillStyle='#7f8b96'; CX.font='9px monospace'; CX.textAlign='right'; /* rec#2 font-floor: 8→9 */
     CX.fillText(T('iz_hud_streak'),sx+60,sy-2);
 
     CX.globalAlpha=_skAlpha;
@@ -21631,6 +21504,7 @@ function drawHUD(){
     CX.restore();
   }
   CX.fillStyle='#444'; CX.font=FONT_9; CX.textAlign='right';
+  // i18n-bind: inline ternary — iz_hud_shortcuts_unmute / iz_hud_shortcuts_mute. Both keys are live.
   CX.fillText(T(MUTED?'iz_hud_shortcuts_unmute':'iz_hud_shortcuts_mute'),VW-12,VH-42);
   if(PL.scanCd>0){ CX.fillStyle='#42d9ff'; CX.fillText(T('g_scan')+PL.scanCd.toFixed(1)+'s',VW-12,VH-24); }
   else            { CX.fillStyle='#74ff88'; CX.fillText(T('g_scan_ready'),VW-12,VH-24); }
@@ -22249,7 +22123,7 @@ function drawDeployCinematic(){
       }
       CX.fillStyle=a.col; CX.font=FONT_BOLD_8; CX.textAlign='left';
       CX.fillText(T('g_act')+a.num+': '+locA.title.toUpperCase(),aX+6,actRowY+13);
-      CX.fillStyle='#777'; CX.font='7px monospace';
+      CX.fillStyle='#777'; CX.font='9px monospace'; /* rec#2 font-floor: 7→9 */
       CX.fillText(locA.subtitle.slice(0,22),aX+6,actRowY+24);
       CX.textAlign='center';
       CX.restore();
@@ -22271,7 +22145,7 @@ function drawDeployCinematic(){
     CX.strokeStyle='rgba(66,217,255,0.22)'; CX.strokeRect(cx-340,262,680,30);
     CX.fillStyle='#d5dde5'; CX.font=FONT_9;
     CX.fillText(T('g_controls_full'),cx,273);
-    CX.fillStyle='#42d9ff'; CX.font='8px monospace';
+    CX.fillStyle='#42d9ff'; CX.font='9px monospace'; /* rec#2 font-floor: 8→9 */
     CX.fillText(T('iz_tip_fuel'),cx,284);
 
     // Adversary icons row
@@ -22279,7 +22153,7 @@ function drawDeployCinematic(){
     CX.fillStyle='rgba(0,0,0,0.44)'; CX.fillRect(cx-340,302,680,34);
     CX.fillStyle='#ffd84d'; CX.font=FONT_BOLD_8;
     CX.fillText(T('iz_named_adv'),cx,317);
-    CX.font='7px monospace';
+    CX.font='9px monospace'; /* rec#2 font-floor: 7→9 */
     Object.keys(ADV).forEach((n,i)=>{
       const advX=cx-330+(i%Object.keys(ADV).length)*74;
       CX.fillStyle=ADV[n].color;
@@ -22531,7 +22405,7 @@ function drawDeployCinematic(){
       CX.textAlign='left';
       CX.strokeStyle='rgba(255,255,255,0.05)'; CX.lineWidth=1;
       CX.beginPath(); CX.moveTo(panX+7,tBase-3); CX.lineTo(panX+pw-7,tBase-3); CX.stroke();
-      CX.fillStyle='#555'; CX.font='8px monospace';
+      CX.fillStyle='#555'; CX.font='9px monospace'; /* rec#2 font-floor: 8→9 */
       CX.fillText(T('iz_known_ttps')+ad.ttp.slice(0,54),panX+7,tBase+8);
       CX.fillStyle='rgba(66,217,255,0.08)'; CX.fillRect(panX+7,tBase+12,pw-14,32);
       CX.strokeStyle='rgba(66,217,255,0.18)'; CX.strokeRect(panX+7,tBase+12,pw-14,32);
@@ -23014,6 +22888,7 @@ function drawGameOver(){
           if((Number(sorted[i].score)|0)===(SCORE|0)){ rankIdx=i; break; }
         }
         if(rankIdx>=0 && rankIdx<3){
+          // i18n-bind: array — rank_local_1/2/3 keep-live; consumed via T(keys[rankIdx]).
           const keys = ['rank_local_1','rank_local_2','rank_local_3'];
           chips.push({ label: T(keys[rankIdx]), color:'#ffd84d' });
         }
@@ -23213,6 +23088,7 @@ function drawWin(){
           if((Number(sorted[i].score)|0)===(SCORE|0)){ rankIdx=i; break; }
         }
         if(rankIdx>=0 && rankIdx<3){
+          // i18n-bind: array — rank_local_1/2/3 keep-live; consumed via T(keys[rankIdx]).
           const keys = ['rank_local_1','rank_local_2','rank_local_3'];
           chips.push({ label: T(keys[rankIdx]), color:'#ffd84d' });
         }
@@ -24046,7 +23922,12 @@ const FalconRanking = (function () {
     },
     save(entries) {
       if (!_saveStoredArray(CFG.storageKey, entries)) {
+        // 2026-04-21 (telemetry rec #4): ranking write fell back to in-memory.
+        // `storage.set.array` already fired from inside `_saveStoredArray`; this
+        // tag adds the FalconRanking-layer semantics (rank-submission impact)
+        // so operators can grep `ranking.write` specifically during a booth run.
         console.warn('[FalconRanking] localStorage write failed, using in-memory fallback');
+        window._safeTelemetryReport && window._safeTelemetryReport('ranking.write', null, { key:CFG.storageKey, count:(entries && entries.length)|0 });
       }
     },
     add(entry) {
@@ -25087,13 +24968,18 @@ const FalconRanking = (function () {
     let half = 0;
 
     function scrollStep(ts) {
-      if (half === 0) half = scrollEl.scrollHeight / 2;
-      const dt = Math.min(0.05, (ts - lastT) / 1000 || 0.016);
-      lastT = ts;
-      if (!isEmpty) {
-        _attractY += CFG.attractSpeed * dt;
-        if (half > 0 && _attractY >= half) _attractY = 0;
-        scrollEl.style.transform = `translateY(${-_attractY}px)`;
+      try{
+        if (half === 0) half = scrollEl.scrollHeight / 2;
+        const dt = Math.min(0.05, (ts - lastT) / 1000 || 0.016);
+        lastT = ts;
+        if (!isEmpty) {
+          _attractY += CFG.attractSpeed * dt;
+          if (half > 0 && _attractY >= half) _attractY = 0;
+          scrollEl.style.transform = `translateY(${-_attractY}px)`;
+        }
+      }catch(e){
+        // 2026-04-21 (telemetry rec #6): attract-RAF tick instrumentation (block 2 twin).
+        window._safeTelemetryReport && window._safeTelemetryReport('attract.tick.scroll', e, { loc:'block2' });
       }
       _attractAF = requestAnimationFrame(scrollStep);
     }
@@ -26975,9 +26861,16 @@ class Input{
   consume(k){const had=this.#pressed.has(k)||this.#down.has(k);this.#pressed.delete(k);return had;}
   consumePressed(k){const had=this.#pressed.has(k);this.#pressed.delete(k);return had;}
   flushAll(){this.#pressed.clear();this.#down.clear();}
+  // dead-code-path: singleton.
+  // 2026-04-21 (telemetry rec #8): Game is instantiated once per page (singleton
+  // per comment at ~L29608). shutdown() deliberately does NOT call #input.dispose()
+  // — disposing here would strip keyboard from the next Defense launch. This method
+  // is retained as a PRIMITIVE for a future refactor where Game becomes non-singleton.
+  // Its telemetry tags (`defense.input.dispose_keydown/keyup`) are forward-looking
+  // and currently inert. Do not delete without also removing shutdown()'s comment.
   dispose(){
-    try{ if(this.#onKeyDown) window.removeEventListener("keydown", this.#onKeyDown); }catch(e){ try{ console.warn('[Arcade] Input.dispose keydown remove failed:', e); }catch(_){} }
-    try{ if(this.#onKeyUp)   window.removeEventListener("keyup",   this.#onKeyUp);   }catch(e){ try{ console.warn('[Arcade] Input.dispose keyup remove failed:', e); }catch(_){} }
+    try{ if(this.#onKeyDown) window.removeEventListener("keydown", this.#onKeyDown); }catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('defense.input.dispose_keydown', e); }
+    try{ if(this.#onKeyUp)   window.removeEventListener("keyup",   this.#onKeyUp);   }catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('defense.input.dispose_keyup', e); }
     this.#onKeyDown=null;this.#onKeyUp=null;
     this.#down.clear();this.#pressed.clear();
   }
@@ -28586,9 +28479,15 @@ class Game{
     };
     window.addEventListener("keydown", this.#konamiHandler);
   }
+  // dead-code-path: singleton.
+  // 2026-04-21 (telemetry rec #8): shutdown() deliberately does NOT call this
+  // (see `const game=new Game()` singleton comment at ~L29608). Only callsite
+  // today is #setupKonami() itself during re-bind guard (idempotent hardening).
+  // Retained as a PRIMITIVE for a future non-singleton Game refactor. The
+  // `defense.konami.teardown` telemetry tag is forward-looking and currently inert.
   #teardownKonami(){
     if(this.#konamiHandler){
-      try{ window.removeEventListener("keydown", this.#konamiHandler); }catch(e){ try{ console.warn('[Arcade] Konami teardown failed:', e); }catch(_){} }
+      try{ window.removeEventListener("keydown", this.#konamiHandler); }catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('defense.konami.teardown', e); }
       this.#konamiHandler = null;
     }
     this.#konamiBuffer = [];
@@ -29258,7 +29157,7 @@ class Game{
     ctx.shadowColor='#ff2200'; ctx.shadowBlur=14;
     ctx.fillText('IR',0,0);
     // "INCIDENT RESPONSE" label
-    ctx.font="7px 'Courier New'"; ctx.fillStyle='rgba(255,180,160,0.88)'; ctx.shadowBlur=0;
+    ctx.font="9px 'Courier New'"; ctx.fillStyle='rgba(255,180,160,0.88)'; ctx.shadowBlur=0; /* rec#2 font-floor: 7→9 */
     ctx.fillText(T('iz_ir_label'),0,Math.round(r*0.52));
     // Three operator silhouette dots
     const dotX=[-9,0,9];
@@ -31892,6 +31791,7 @@ class Game{
             if((Number(sorted[i].score)|0)===(this.#score|0)){ rankIdx=i; break; }
           }
           if(rankIdx>=0 && rankIdx<3){
+            // i18n-bind: array — rank_local_1/2/3 keep-live; consumed via T(keys[rankIdx]).
             const keys = ['rank_local_1','rank_local_2','rank_local_3'];
             chips.push({ label: T(keys[rankIdx]), color:'#ffd84d' });
           }
@@ -32028,6 +31928,7 @@ class Game{
             if((Number(sorted[i].score)|0)===(this.#score|0)){ rankIdx=i; break; }
           }
           if(rankIdx>=0 && rankIdx<3){
+            // i18n-bind: array — rank_local_1/2/3 keep-live; consumed via T(keys[rankIdx]).
             const keys = ['rank_local_1','rank_local_2','rank_local_3'];
             chips.push({ label: T(keys[rankIdx]), color:'#ffd84d' });
           }
@@ -32459,7 +32360,7 @@ const FalconRanking=(function(){'use strict';
   let _idleTimer=null,_attractAF=null,_matrixAF=null,_overlayEl=null,_matrixCanvas=null,_matrixCtx=null,_attractY=0,_formOpen=false,_attractOpen=false,_initialized=false;
   const Store={
     load(){return _loadStoredArray(CFG.storageKey);},
-    save(e){_saveStoredArray(CFG.storageKey,e);},
+    save(e){if(!_saveStoredArray(CFG.storageKey,e)){window._safeTelemetryReport&&window._safeTelemetryReport('ranking.write',null,{key:CFG.storageKey,count:(e&&e.length)|0});}},
     add(entry){const deduped=dedupeEntriesByEmail(Store.load(),entry);const entries=deduped.entries;if(!deduped.accepted&&deduped.kept)return entries.findIndex(e=>e.id===deduped.kept.id)+1;entry.id=Date.now()+'_'+Math.random().toString(36).slice(2,7);entry.timestamp=new Date().toISOString();entries.push(entry);entries.sort((a,b)=>b.score-a.score);if(entries.length>CFG.maxEntries)entries.splice(CFG.maxEntries);Store.save(entries);return entries.findIndex(e=>e.id===entry.id)+1;},
     topN(n){return Store.load().slice(0,n);},
     clear(){_removeStoredKey(CFG.storageKey);}
@@ -32488,7 +32389,7 @@ const FalconRanking=(function(){'use strict';
   function _fieldError(inputId,hintId,msg){const inp=document.getElementById(inputId),hint=document.getElementById(hintId);if(inp){inp.classList.add('fr-error');setTimeout(()=>inp.classList.remove('fr-error'),500);}if(hint)hint.textContent=msg;}
   function _showRankConfirm(panel,rank,name,score,difficulty,multiplier){const tier=_getPrizeTier(rank),div=document.createElement('div');div.id='fr-rank-confirm';div.style.setProperty('--fr-confirm-color',tier.color);const _db=(difficulty>0&&difficulty!=null)?`<div style="font-size:10px;letter-spacing:1.5px;color:${tier.color};opacity:0.85;margin:2px 0 8px;font-weight:700;">TIER ${difficulty} · ×${(multiplier||1).toFixed(1)}x</div>`:'';div.innerHTML=`<div class="fr-rank-card"><div class="fr-rank-pos">#${rank}</div><div class="fr-rank-label">${T('lb_your_rank')}</div>${_db}<div class="fr-rank-name">${_esc(name)}</div><div class="fr-rank-score">${score.toLocaleString()} pts</div><div class="fr-rank-prize">${_esc(tier.label)}</div><canvas id="fr-qr-rank-canvas" width="88" height="88" style="display:block;margin:16px auto 4px;image-rendering:pixelated;border:2px solid currentColor;border-radius:2px;opacity:0.85;"></canvas><span class="fr-rank-dismiss">${T('lb_press_continue')}</span></div>`;panel.appendChild(div);try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'){const _mat=window.generateQRMatrix(HUNT_SHARE_URL),_N=_mat.length,_mod=_N<=25?3:2,_qz=2,_qx=_qc.getContext('2d');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<_N;r++)for(let c=0;c<_N;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){}setTimeout(()=>{const dismiss=()=>{_closeForm();div.removeEventListener('click',dismiss);document.removeEventListener('keydown',kd);};const kd=()=>{_closeForm();div.removeEventListener('click',dismiss);document.removeEventListener('keydown',kd);};div.addEventListener('click',dismiss);document.addEventListener('keydown',kd);},2000);if(window._showPostGameCTA){setTimeout(()=>{window._showPostGameCTA(()=>_closeForm());},40000);}}
   function _closeForm(){_formOpen=false;_clearContent();_hideOverlay();if(CFG.onFormClose)CFG.onFormClose();}
-  function showAttract(){if(_formOpen||_attractOpen)return;_attractOpen=true;_clearContent();_showOverlay();const top=Store.topN(CFG.topN),isEmpty=top.length===0;const attract=document.createElement('div');attract.id='fr-attract';attract.innerHTML=`<div class="fr-attract-header"><div class="fr-cs-logo">◈ CrowdStrike OverWatch</div><h1>${_esc(CFG.gameName)}</h1><div class="fr-event-name">${_esc(CFG.eventName)} ${isEmpty?' — '+T('lb_first_board'):'— '+T('lb_top_agents')}</div></div><div class="fr-divider"></div><div class="fr-lb-header"><span>${T('lb_rank')}</span><span>${T('lb_agent')}</span><span style="text-align:right">${T('lb_score')}</span><span style="text-align:right">${T('lb_grade_short')}</span></div><div class="fr-lb-viewport" id="fr-lb-viewport"><div class="fr-lb-scroll" id="fr-lb-scroll">${_renderEntries(top)}${_renderEntries(top)}</div></div><div class="fr-divider"></div><div class="fr-attract-footer"><span class="fr-cta">${T('lb_press_begin')}</span><span style="font-size:8px;color:#2a3a4a;letter-spacing:1px">${T('lb_admin_hint')}</span></div>`;_overlayEl.appendChild(attract);_attractY=0;const scrollEl=document.getElementById('fr-lb-scroll');let lastT=0;let half=0;function scrollStep(ts){if(half===0)half=scrollEl.scrollHeight/2;const dt=Math.min(0.05,(ts-lastT)/1000||0.016);lastT=ts;if(!isEmpty){_attractY+=CFG.attractSpeed*dt;if(half>0&&_attractY>=half)_attractY=0;scrollEl.style.transform=`translateY(${-_attractY}px)`;}  _attractAF=requestAnimationFrame(scrollStep);}_attractAF=requestAnimationFrame(scrollStep);const kd=(e)=>{if(['Control','Shift','Alt','Meta'].includes(e.key))return;document.removeEventListener('keydown',kd);_closeAttract();};const dismiss=()=>{document.removeEventListener('keydown',kd);_closeAttract();};document.addEventListener('keydown',kd);attract.addEventListener('click',dismiss);}
+  function showAttract(){if(_formOpen||_attractOpen)return;_attractOpen=true;_clearContent();_showOverlay();const top=Store.topN(CFG.topN),isEmpty=top.length===0;const attract=document.createElement('div');attract.id='fr-attract';attract.innerHTML=`<div class="fr-attract-header"><div class="fr-cs-logo">◈ CrowdStrike OverWatch</div><h1>${_esc(CFG.gameName)}</h1><div class="fr-event-name">${_esc(CFG.eventName)} ${isEmpty?' — '+T('lb_first_board'):'— '+T('lb_top_agents')}</div></div><div class="fr-divider"></div><div class="fr-lb-header"><span>${T('lb_rank')}</span><span>${T('lb_agent')}</span><span style="text-align:right">${T('lb_score')}</span><span style="text-align:right">${T('lb_grade_short')}</span></div><div class="fr-lb-viewport" id="fr-lb-viewport"><div class="fr-lb-scroll" id="fr-lb-scroll">${_renderEntries(top)}${_renderEntries(top)}</div></div><div class="fr-divider"></div><div class="fr-attract-footer"><span class="fr-cta">${T('lb_press_begin')}</span><span style="font-size:8px;color:#2a3a4a;letter-spacing:1px">${T('lb_admin_hint')}</span></div>`;_overlayEl.appendChild(attract);_attractY=0;const scrollEl=document.getElementById('fr-lb-scroll');let lastT=0;let half=0;function scrollStep(ts){try{if(half===0)half=scrollEl.scrollHeight/2;const dt=Math.min(0.05,(ts-lastT)/1000||0.016);lastT=ts;if(!isEmpty){_attractY+=CFG.attractSpeed*dt;if(half>0&&_attractY>=half)_attractY=0;scrollEl.style.transform=`translateY(${-_attractY}px)`;}}catch(e){window._safeTelemetryReport&&window._safeTelemetryReport('attract.tick.scroll',e,{loc:'block4'});}  _attractAF=requestAnimationFrame(scrollStep);}_attractAF=requestAnimationFrame(scrollStep);const kd=(e)=>{if(['Control','Shift','Alt','Meta'].includes(e.key))return;document.removeEventListener('keydown',kd);_closeAttract();};const dismiss=()=>{document.removeEventListener('keydown',kd);_closeAttract();};document.addEventListener('keydown',kd);attract.addEventListener('click',dismiss);}
   function _renderEntries(entries){if(!entries.length)return Array.from({length:10},(_,i)=>`<div class="fr-entry" data-rank="${i+1}" style="--fr-entry-color:#1a2a3a"><div class="fr-rank">${i+1}</div><div class="fr-player"><div class="fr-player-name">———</div><div class="fr-player-company">${T('lb_first_player')}</div></div><div class="fr-entry-score">—</div><div class="fr-entry-grade">—</div></div>`).join('');return entries.map((e,i)=>{const rank=i+1,tier=_getPrizeTier(rank);return`<div class="fr-entry" data-rank="${rank}" style="--fr-entry-color:${tier.color}"><div class="fr-rank">${rank}</div><div class="fr-player"><div class="fr-player-name">${_esc(e.name)}</div><div class="fr-player-company">${_esc(e.company)}</div></div><div class="fr-entry-score">${Number(e.score).toLocaleString()}</div><div class="fr-entry-grade">${_esc(e.grade||'—')}</div></div>`;}).join('');}
   function _closeAttract(){_attractOpen=false;if(_attractAF){cancelAnimationFrame(_attractAF);_attractAF=null;}_clearContent();_hideOverlay();if(CFG.onAttractClose)CFG.onAttractClose();}
   let _idleKeyListener=null;
@@ -33533,6 +33434,9 @@ const ADVERSARIES=[
       'You\'re reading our tracks. The wire window is open.\nApproval in four minutes.',
       'Four minutes. That\'s all we need.\nCan you stop it in four minutes?'
     ],
+    // i18n-bind: beat.label payloads across all cutscenes[] blocks below are T() keys,
+    // consumed at drawMovementBeat/drawTransmissionBeat/drawContactBeat via `beat.label?T(beat.label):beat.label`.
+    // Live beat-label keys: 'g_cut_transmit','g_cut_coord'. Keep these live in all 4 langs.
     cutscenes:[
       {afterPhase:0,duration:4500,beats:[
         {kind:'transmission',fromNode:'dark_web',toNode:'london',t0:200,t1:2200,label:'g_cut_transmit'},
