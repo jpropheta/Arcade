@@ -14584,17 +14584,61 @@ function drawComms(){
   // campaign progress). Top-left under the HUD strip AND under the BANNER
   // strip. Render order is drawComms → drawBanner → drawActAnn (line ~21855),
   // so banner draws over us — but banner is centered (VW/2-310, 48, 620×38)
-  // ending at y=86, and events like TELEMETRY FALLING fire both drawBanner
-  // and pushComms simultaneously (see line 16327-16328). So we anchor below
-  // the banner's y=86 bottom edge with an 8px air-gap → RY=94. Width kept
-  // generous (380-520) so long SOC messages don't truncate; height is 0 so
-  // HardwareRadio auto-sizes to header + maxLines (~81px for 2-line messages,
-  // header 29px + 2*14px lines + 20px padding + 4). At RY=94 radio ends near
-  // y=175, well above VH-56 bottom HUD. Boss HP bar (centered 220px at y=50)
-  // clears the radio column at common viewports: at VW=1366 the boss bar
-  // starts at x=573, so a 520px-wide radio at x=12 ends at x=532 with a 41px
-  // gap. At smaller VW, max(380, VW*0.36) keeps the gap positive.
-  const RW = Math.min(520, Math.max(380, VW * 0.36));
+  // ending at y=86, so we anchor below the banner with an 8px air-gap → RY=94.
+  // At RY=94 the radio's auto-height ends near y=175 (header 30 + 2*15 lines +
+  // padding 20 + 4), well above VH-56 bottom HUD. Boss HP bar (bpx=VW/2-160,
+  // width 320) lives at y=42-62 — vertically separated from the radio
+  // (y≥94), so horizontal-extent collisions are moot.
+  //
+  // spec-iz-soc-width (2026-04-21): RW is now content-measured. We pre-wrap
+  // commsMsg at 10px-monospace against _softMax, then size RW to the widest
+  // actual line + padding + side gutter, clamped to [310, 440].
+  // This hugs content: short messages → ~310 card; long PHASES narratives
+  // (87-114 chars, audited empirically) → 374-434 card. Replaces the prior
+  // static clamp min(520, max(380, VW*0.36)) which left 180-200px of empty
+  // whitespace on short messages at VW=1440. Facade _wrap(8086-8097) sees
+  // the same font and greedy algorithm, so its wrap yields identical lines.
+  //
+  // hardMax is a flat 440 (not VW-scaled): at VW=1440 the card cannot grow
+  // past 440 so "too wide" is solved; at VW=980 the card also caps at 440
+  // so long PHASES narratives (up to 114 chars) still fit in 2 lines without
+  // ellipsis. Viewports below ~460 VW fall outside IZ's design range.
+  const _rp_iz = 10;
+  const _pad_iz = 16;
+  const _headerMin_iz = 310;
+  const _hardMax_iz = 440;
+  const _softMax_iz = _hardMax_iz - (_pad_iz + 2 * _rp_iz);
+  let _widest_iz = 0;
+  CX.save();
+  CX.font = Math.max(9, Math.round(10 * 0.95)) + 'px monospace';
+  // Greedy-pack — byte-mirror of HardwareRadio._wrap at 8086-8097.
+  const _words_iz = String(commsMsg || '').split(' ');
+  let _line_iz = '', _lines_iz = [];
+  for (const _w of _words_iz) {
+    const _test_iz = _line_iz + _w + ' ';
+    if (CX.measureText(_test_iz).width > _softMax_iz && _line_iz !== '') {
+      _lines_iz.push(_line_iz.trim());
+      _line_iz = _w + ' ';
+    } else {
+      _line_iz = _test_iz;
+    }
+  }
+  if (_line_iz.trim()) _lines_iz.push(_line_iz.trim());
+  if (!_lines_iz.length) _lines_iz = [''];
+  // Match facade maxLines:2 clipping behaviour so our measurement matches
+  // what the facade will actually render.
+  if (_lines_iz.length > 2) {
+    _lines_iz = _lines_iz.slice(0, 2);
+    _lines_iz[1] = _lines_iz[1].replace(/[\s.,]+$/, '') + '…';
+  }
+  for (const _l_iz of _lines_iz) {
+    _widest_iz = Math.max(_widest_iz, CX.measureText(_l_iz).width);
+  }
+  CX.restore();
+  const RW = Math.max(
+    _headerMin_iz,
+    Math.min(_hardMax_iz, Math.ceil(_widest_iz + _pad_iz + 2 * _rp_iz))
+  );
   const RH = 0; // auto-size — grows to fit exactly 2 lines
   const RX = 12;
   const RY = 94;
