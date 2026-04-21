@@ -26323,6 +26323,12 @@ class AudioEngine{
 // ─── SOC FEED ────────────────────────────────────────────────────
 class SOCFeed{
   #lines=[];#current=null;#t=0;#showT=5.5;#idx=0;#active=false;#paused=false;
+  // spec-defense-message-overlap-structural (2026-04-21): safe-anchor system.
+  // #lockAnchor caches the {cy,ch} anchor object for the current card lifecycle.
+  // Locked on first frame of each new line (t<0.02); cleared on #next/start/stop
+  // so the NEXT line can re-pick based on fresh formation state. No mid-life
+  // flipping → no jitter, no relocation spam.
+  #lockAnchor=null;
   start(phaseId){
     this.#lines=[...defenseSocLines(phaseId)];
     // shuffle so lines appear in different order each playthrough
@@ -26330,9 +26336,9 @@ class SOCFeed{
       const j=Math.floor(Math.random()*(i+1));
       [this.#lines[i],this.#lines[j]]=[this.#lines[j],this.#lines[i]];
     }
-    this.#idx=0;this.#t=0;this.#active=true;this.#paused=false;this.#next();
+    this.#idx=0;this.#t=0;this.#active=true;this.#paused=false;this.#lockAnchor=null;this.#next();
   }
-  stop(){this.#active=false;this.#current=null;this.#paused=false;}
+  stop(){this.#active=false;this.#current=null;this.#paused=false;this.#lockAnchor=null;}
   // 2026-04-20 (consolidation pass): arbitration with ModuleNotification.
   // Both share the (w-298, 96, 290x112) slot; previously the notification
   // fully occluded an in-flight SOC line, stealing intel. Now pause()/resume()
@@ -26343,7 +26349,7 @@ class SOCFeed{
   #next(){
     if(!this.#active||!this.#lines.length)return;
     this.#current=this.#lines[this.#idx%this.#lines.length];
-    this.#idx++;this.#t=0;
+    this.#idx++;this.#t=0;this.#lockAnchor=null;
   }
   update(dt){
     if(!this.#active||!this.#current)return;
@@ -26351,19 +26357,35 @@ class SOCFeed{
     this.#t+=dt;
     if(this.#t>this.#showT+CFG.SOC_COMMS_INTERVAL/1000)this.#next();
   }
-  draw(ctx,w,h){
+  draw(ctx,w,h,anchor){
     if(!this.#active||!this.#current)return;
     if(this.#paused)return; // slot is occupied by ModuleNotification — yield render
     const t=this.#t;
     // 2026-04-20 (polish pass): slot-share with ModuleNotification.
-    // CW/CH/cy match ModuleNotification exactly so both panels occupy the same
-    // top-right card. Pure slide-based enter/exit using easeOutCubic (entry)
-    // and easeInQuad (exit) — no alpha fade, so the card is NEVER translucent
-    // at rest. Hides entirely outside the [0, showT] window so the slot is
-    // free for the module notification during the 7s interval between lines.
+    // CW/CH match ModuleNotification exactly so both panels occupy the same
+    // card slot. Pure slide-based enter/exit using easeOutCubic (entry) and
+    // easeInQuad (exit) — no alpha fade, so the card is NEVER translucent at
+    // rest. Hides entirely outside the [0, showT] window so the slot is free
+    // for the module notification during the 7s interval between lines.
+    //
+    // spec-defense-message-overlap-structural (2026-04-21): SAFE-ANCHOR
+    // SYSTEM. `cy` is now sourced from a caller-provided anchor ({cy,ch})
+    // instead of a hardcoded literal. DefenseGame.#pickAnchor() picks BOTTOM
+    // (cy=500) by default and TOP (cy=96) once the attacker formation has
+    // descended past y=400 (formation_bottom ≥ 480). The anchor is LOCKED in
+    // #lockAnchor on the first frame of each new line and held stable for
+    // that line's lifetime — no jitter, no mid-life relocation. The next
+    // line re-picks from fresh state at #next() time. Animation x-anchors
+    // (onX=w-CW-8, offX=w+20) are IDENTICAL in both slots — slide-in-from-
+    // right is preserved verbatim. Fallback to BOTTOM if anchor is missing.
+    if(!this.#lockAnchor){
+      this.#lockAnchor = (anchor && typeof anchor.cy==='number')
+        ? {cy:anchor.cy, ch:anchor.ch||112}
+        : {cy:500, ch:112};
+    }
     const CW = 290;
-    const CH = 112;
-    const cy = 96;
+    const CH = this.#lockAnchor.ch;
+    const cy = this.#lockAnchor.cy;
     const si = 0.22;                     // slide-in duration
     const sDur = 0.28;                   // slide-out duration
     const so = this.#showT - sDur;
@@ -26383,29 +26405,11 @@ class SOCFeed{
       sx = onX;
     }
 
-    if(!window.HardwareRadio){
-      ctx.save();
-      ctx.fillStyle="rgba(4,1,18,0.90)";ctx.strokeStyle=CS.GREEN;ctx.lineWidth=1.6;
-      ctx.shadowColor=CS.GREEN;ctx.shadowBlur=16;
-      ctx.beginPath();ctx.roundRect(sx,cy,CW,CH,6);ctx.fill();ctx.stroke();
-      ctx.shadowBlur=0;
-      ctx.fillStyle=CS.GREEN;
-      ctx.beginPath();ctx.roundRect(sx,cy,CW,24,[6,6,0,0]);ctx.fill();
-      ctx.font=FONT3_BOLD_9_CN;ctx.fillStyle=CS.WHITE;ctx.textAlign="left";
-      ctx.fillText(T('def_soc_label'),sx+8,cy+16);
-      ctx.font=FONT3_10_CN;ctx.fillStyle=CS.WHITE;
-      const maxMsgW=CW-16;
-      const words=this.#current.split(" ");let line="",ly=cy+44;
-      for(const word of words){
-        const test=line+word+" ";
-        if(ctx.measureText(test).width>maxMsgW&&line!==""){
-          ctx.fillText(line,sx+8,ly);line=word+" ";ly+=14;
-        }else line=test;
-      }
-      ctx.fillText(line,sx+8,ly);
-      ctx.restore();
-      return;
-    }
+    // spec-defense-message-overlap-structural (2026-04-21): non-HardwareRadio
+    // fallback branch REMOVED. Sanitization gate passed: window.HardwareRadio
+    // is assigned at line ~8051 as a top-level IIFE at module parse time,
+    // unconditionally, before any SOCFeed instance can be constructed. The
+    // fallback was provably unreachable dead code (22 lines).
     // State mapping: first 0.4s → incoming, hold → showing, last 0.5s → fading (internal pulse only, no card opacity change).
     let state='showing', stateT=t;
     if(t < 0.4){ state='incoming'; stateT = t; }
@@ -26883,6 +26887,10 @@ class Input{
 // ─── MODULE NOTIFICATION ─────────────────────────────────────────
 class ModuleNotification{
   #queue=[];#current=null;#t=0;
+  // spec-defense-message-overlap-structural (2026-04-21): safe-anchor lock.
+  // Mirrors SOCFeed.#lockAnchor — cached on first frame of each push, cleared
+  // when the current push expires so the NEXT notification re-picks fresh.
+  #lockAnchor=null;
   static SHOW=3.2;
   push(mod,isBonus=false){this.#queue.push({mod,isBonus});}
   // 2026-04-20 (consolidation pass): exposed for SOCFeed slot-arbitration.
@@ -26892,16 +26900,28 @@ class ModuleNotification{
   update(dt){
     if(this.#current){
       this.#t+=dt;
-      if(this.#t>ModuleNotification.SHOW){this.#current=null;this.#t=0;}
+      if(this.#t>ModuleNotification.SHOW){this.#current=null;this.#t=0;this.#lockAnchor=null;}
     }
-    if(!this.#current&&this.#queue.length){this.#current=this.#queue.shift();this.#t=0;}
+    if(!this.#current&&this.#queue.length){this.#current=this.#queue.shift();this.#t=0;this.#lockAnchor=null;}
   }
-  draw(ctx,w){
+  draw(ctx,w,anchor){
     if(!this.#current)return;
     const {mod,isBonus}=this.#current;
     const viewMod=localizeDefenseModule(mod);
     const dur=ModuleNotification.SHOW,t=this.#t;
-    const CW=290,CH=112,cy=96;let sx;
+    // spec-defense-message-overlap-structural (2026-04-21): SAFE-ANCHOR
+    // SYSTEM. `cy` is now sourced from a caller-provided anchor ({cy,ch})
+    // instead of a hardcoded literal. Locked on first frame via #lockAnchor,
+    // held stable for the push's lifetime, cleared on expiry. See SOCFeed.draw
+    // for full rationale. Slot size + slide animation + pause/resume
+    // arbitration unchanged. Fallback to BOTTOM (cy=500) if anchor missing.
+    if(!this.#lockAnchor){
+      this.#lockAnchor = (anchor && typeof anchor.cy==='number')
+        ? {cy:anchor.cy, ch:anchor.ch||112}
+        : {cy:500, ch:112};
+    }
+    const CW=290, CH=this.#lockAnchor.ch, cy=this.#lockAnchor.cy;
+    let sx;
     const si=0.22,so=dur-0.28;
     if(t<si)sx=w+(1-t/si)*(CW+20);
     else if(t>so)sx=w-CW+((t-so)/0.28)*(CW+20);
@@ -29367,6 +29387,41 @@ class Game{
 
   }
 
+  // spec-defense-message-overlap-structural (2026-04-21): safe-anchor selector.
+  // Returns {cy,ch} for the SOC/Notify card slot. BOTTOM (cy=500) is preferred;
+  // TOP (cy=96) is chosen once the attacker formation descends past y=400 so
+  // the card never sits inside the formation's current y-band.
+  //
+  // Why two anchors are sufficient: formation height is fixed at 80px
+  // (ROWS=3, ATK_H=28, ATK_SY=26 → (ROWS-1)*SY+H = 80). So `formation_top` and
+  // `formation_bottom` are always 80px apart. When formation_bottom < 480,
+  // BOTTOM slot (y=500..612) has ≥20px gap. When formation_bottom ≥ 480,
+  // formation_top is ≥400 > 220, so TOP slot (y=96..208) has ≥192px gap.
+  // These two states partition the state space cleanly — exactly one slot is
+  // always safe. No third anchor needed.
+  //
+  // Callers (see #renderGame) pass this into socFeed.draw + notify.draw each
+  // frame. The cards cache the anchor in #lockAnchor on their first frame and
+  // hold it for the whole card lifecycle (no jitter). Next card re-picks.
+  #pickAnchor(){
+    let maxY = 0, anyAlive = false;
+    for(let c=0;c<CFG.COLS;c++)
+      for(let r=0;r<CFG.ROWS;r++){
+        const a = this.#attackers[c]?.[r];
+        if(a?.alive && !a.isHidden){
+          anyAlive = true;
+          const ay = a.y + CFG.ATK_H;
+          if(ay > maxY) maxY = ay;
+        }
+      }
+    // No live visible attackers → default to BOTTOM (same as spawn state).
+    if(!anyAlive) return {cy:500, ch:112};
+    // Formation low enough → BOTTOM slot clear.
+    if(maxY < 480) return {cy:500, ch:112};
+    // Formation has descended past y=400 → TOP slot is clear.
+    return {cy:96, ch:112};
+  }
+
   #backToTitle(){
     this.#cloudCancelToken++;
     this.#paused=false;
@@ -30486,6 +30541,20 @@ class Game{
     this.#drawLaneScan(ctx,W,H);
     this.#fx.applyShake(ctx);
     this.#blocks.forEach(b=>b.draw(ctx));
+    // spec-defense-message-overlap-structural (2026-04-21): render-order shift.
+    // SOC/Notify cards moved from end-of-chain (after HUD) to HERE (before
+    // gameplay) so they become ambient background. Attackers, bullets, boss,
+    // player, particles, HUD all now render ON TOP of the card — gameplay
+    // detail always wins the z-order fight. No critical info is ever hidden
+    // behind the card. Anchor is recomputed each frame; cards cache it per-
+    // lifecycle via #lockAnchor so there's no jitter. Draws BEFORE attackers
+    // (not after blocks-and-lane-scan alone) so attackers visibly overlay the
+    // card in the rare anchor-transition edge case. Konami draw stays at end.
+    {
+      const _cardAnchor = this.#pickAnchor();
+      this.#socFeed.draw(ctx,W,H,_cardAnchor);
+      this.#notify.draw(ctx,W,_cardAnchor);
+    }
     this.#drawAttackers();
     this.#boss?.draw(ctx,this.#assets.get(`act${this.#boss.imgIdx??0}`));
     this.#drawSideEnemies();
@@ -30523,11 +30592,13 @@ class Game{
       // spec-defense-hud-phase2 (2026-04-20): append boss handle + milestone state.
       this.#boss,this.#scoreMilestoneT,this.#scoreMilestoneLabel);
     this.#hud.draw(ctx,W);
-    // 2026-04-20: SOCFeed and ModuleNotification share the top-right card slot
-    // (same size, same slide animation). Draw socfeed first so the module
-    // activation card wins visually when both try to occupy the slot at once.
-    this.#socFeed.draw(ctx,W,H);
-    this.#notify.draw(ctx,W);
+    // spec-defense-message-overlap-structural (2026-04-21): SOCFeed and
+    // ModuleNotification draws MOVED UP to the ambient-background layer (see
+    // the `#pickAnchor` block earlier in this method, right after `blocks`).
+    // They now render BEFORE gameplay so all active elements — attackers,
+    // bullets, boss, player, HUD — draw on top and are never occluded by the
+    // message card. The cards arbitrate among themselves via pause/resume as
+    // before; that logic is unchanged.
     this.#drawKonami(W,H);
   }
 
