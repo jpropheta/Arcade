@@ -198,25 +198,11 @@ html, body { width:100%; height:100%; background:#020308; overflow:hidden; font-
     box-shadow:0 0 24px rgba(255,122,0,0.22);
   }
 }
-.ops-strip { display:none; }
-.ops-chip { border:1px solid rgba(255,255,255,0.08); background:linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02)); padding:10px 12px; text-align:left; min-height:58px; }
-.ops-chip-k { color:#ffd84d; font:700 9px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; }
-.ops-chip-v { color:#f4f7fa; font:700 12px/1.35 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
-.ops-marquee { display:none; }
-.campaign-rail { display:none; }
-.campaign-node { border:1px solid rgba(255,255,255,0.08); background:rgba(4,8,12,0.72); padding:10px 12px; min-height:64px; }
-.campaign-node strong { display:block; color:#f4f7fa; font:700 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:1px; margin-bottom:5px; text-transform:uppercase; }
-.campaign-node span { display:block; color:#7f8b96; font:700 10px/1.35 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
-.campaign-node.red strong { color:#e0003c; }
-.campaign-node.orange strong { color:#ff8d39; }
-.campaign-node.purple strong { color:#aa00ff; }
-.campaign-link { color:#ffd84d; font:700 18px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; text-align:center; opacity:0.75; }
+/* .ops-strip / .ops-chip* / .ops-marquee / .campaign-rail / .campaign-node* / .campaign-link removed 2026-04-21 — dashboard-era markup retired. */
 .blink { animation:blink-cta 1.1s step-end infinite; }
 @keyframes blink-cta { 0%,49%{opacity:1} 50%,100%{opacity:0} }
 @media (max-width:1050px) { .cards { flex-direction:column; align-items:center; } .card { width:min(420px,92vw); } .card-preview { height:110px; } }
-@media (max-width:960px) { .ops-strip { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-@media (max-width:960px) { .campaign-rail { grid-template-columns:1fr; } .campaign-link { display:none; } }
-@media (max-width:640px) { .ops-strip { grid-template-columns:1fr; } }
+/* ops-strip / campaign-rail media queries removed 2026-04-21 with their markup. */
 @media (max-height:640px) { .header { margin-bottom:10px; } .divider { margin-bottom:10px; } .card-preview { height:90px; } .card-body { padding:10px 14px 14px; } }
 
 /* ── PHASE 1 POLISH: Dashboard one-shot entrance ──
@@ -436,52 +422,7 @@ body.arcade-loader-active { overflow:hidden; }
   .p1 { transform:none; }
   .podium-step { min-height:180px; }
 }
-.campaign-status {
-  display:none;
-  margin:16px auto 0; max-width:860px; min-height:64px; padding:12px 16px;
-  border:1px solid rgba(66,217,255,0.22);
-  background:linear-gradient(180deg,rgba(5,10,18,0.84),rgba(2,4,8,0.92));
-  box-shadow:0 0 28px rgba(0,0,0,0.22), inset 0 0 24px rgba(66,217,255,0.04);
-  justify-content:space-between; align-items:center; gap:16px;
-}
-.campaign-status-copy { display:flex; flex-direction:column; gap:4px; }
-.campaign-status-kicker {
-  font:700 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:2px; text-transform:uppercase; color:#42d9ff;
-}
-.campaign-status-title {
-  font:700 16px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  color:#f4f7fa; text-shadow:0 0 18px rgba(66,217,255,0.18);
-}
-.campaign-status-body {
-  font:400 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  color:#9fb1c1; line-height:1.4;
-}
-.campaign-status-tracks { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
-.campaign-track {
-  min-width:146px; padding:8px 10px; border:1px solid rgba(255,255,255,0.08);
-  background:rgba(255,255,255,0.03); border-radius:2px;
-}
-.campaign-track strong {
-  display:block; font:700 9px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  letter-spacing:1.6px; text-transform:uppercase; color:#e5edf5;
-}
-.campaign-track span {
-  display:block; margin-top:4px;
-  font:400 9px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  color:#8393a2;
-}
-.campaign-track.is-done {
-  border-color:rgba(116,255,136,0.4);
-  background:linear-gradient(180deg,rgba(20,62,34,0.42),rgba(10,20,14,0.3));
-  box-shadow:0 0 18px rgba(116,255,136,0.08);
-}
-.campaign-track.is-done strong { color:#74ff88; }
-.campaign-track.is-done span { color:#cfe8d6; }
-@media (max-width: 980px) {
-  .campaign-status { flex-direction:column; align-items:flex-start; }
-  .campaign-status-tracks { justify-content:flex-start; }
-}
+/* .campaign-status + .campaign-status-* + .campaign-track + media query removed 2026-04-21 — the #campaign-status div was never populated by any JS. */
 /* .attract-mode-btn deleted 2026-04-20 — the floating bottom-right duplicate of
    dashboard-attract-inline-btn was removed as visual noise. Operational row is
    the single source of truth for this affordance. */
@@ -942,42 +883,7 @@ body.arcade-loader-active { overflow:hidden; }
       <div id="arcade-event-eyebrow" style="display:none;font-size:11px;font-style:italic;color:#7f8b96;opacity:0.65;text-align:center;margin-top:6px;letter-spacing:1.5px;"></div>
     </div>
     <div class="divider"></div>
-    <div class="ops-strip">
-      <div class="ops-chip">
-        <div class="ops-chip-k" data-i18n="dash_chip1_k">Watch</div>
-        <div class="ops-chip-v" data-i18n="dash_chip1_v">Spectators can read the action in seconds.</div>
-      </div>
-      <div class="ops-chip">
-        <div class="ops-chip-k" data-i18n="dash_chip2_k">Play</div>
-        <div class="ops-chip-v" data-i18n="dash_chip2_v">Three fast demos, one Falcon platform story.</div>
-      </div>
-      <div class="ops-chip">
-        <div class="ops-chip-k" data-i18n="dash_chip3_k">Learn</div>
-        <div class="ops-chip-v" data-i18n="dash_chip3_v">Real adversaries, real TTPs, clear module value.</div>
-      </div>
-      <div class="ops-chip">
-        <div class="ops-chip-k" data-i18n="dash_chip4_k">Rank</div>
-        <div class="ops-chip-v" data-i18n="dash_chip4_v">Global rankings persist across the full booth session.</div>
-      </div>
-    </div>
-    <div class="ops-marquee" data-i18n="dash_booth_line">Built for live demos, spectator appeal, and lightweight corporate lead capture without slowing the line.</div>
-    <div class="campaign-rail">
-      <div class="campaign-node red">
-        <strong data-i18n="dash_story_1t">Detect the breach</strong>
-        <span data-i18n="dash_story_1b">Incident Zero turns telemetry, fuel pressure, and Falcon modules into the first response fight.</span>
-      </div>
-      <div class="campaign-link">→</div>
-      <div class="campaign-node orange">
-        <strong data-i18n="dash_story_2t">Hold the line</strong>
-        <span data-i18n="dash_story_2b">Arcade Defense proves platform breadth under pressure as attack vectors stack and named adversaries escalate.</span>
-      </div>
-      <div class="campaign-link">→</div>
-      <div class="campaign-node purple">
-        <strong data-i18n="dash_story_3t">Hunt the operator</strong>
-        <span data-i18n="dash_story_3b">Threat Hunt closes the arc by turning intelligence, evidence, and module decisions into analyst-grade pursuit.</span>
-      </div>
-    </div>
-    <div class="campaign-status" id="campaign-status" aria-live="polite"></div>
+    <!-- ops-strip / ops-marquee / campaign-rail / campaign-status removed 2026-04-21 — dashboard-era surfaces (all display:none + never populated). -->
     <div class="cards">
       <a class="card" id="card-zero" href="#" style="--card-color:#e0003c">
         <div class="card-accent"></div>
@@ -1542,14 +1448,7 @@ const TRANSLATIONS = {
     c3eye:'Operation 03 · Global Network Hunt', c3name:'CrowdStrike:<br>Threat Hunt',
     c3desc:'You ARE the hunter. Chase nine adversaries across a live global network.',
     podZero:'INCIDENT ZERO', podDef:'DEFENSE', podHunt:'THREAT HUNT',
-    dash_chip1_k:'Watch', dash_chip1_v:'Spectators can read the action in seconds.',
-    dash_chip2_k:'Play', dash_chip2_v:'Three rapid-response ops, one Falcon platform story.',
-    dash_chip3_k:'Learn', dash_chip3_v:'Real adversaries, real TTPs, clear module value.',
-    dash_chip4_k:'Rank', dash_chip4_v:'Global rankings persist across the full booth session.',
-    dash_booth_line:'Built for live demos, spectator appeal, and lightweight corporate lead capture without slowing the line.',
-    dash_story_1t:'Detect the breach', dash_story_1b:'Incident Zero turns telemetry, fuel pressure, and Falcon modules into the first response fight.',
-    dash_story_2t:'Hold the line', dash_story_2b:'Arcade Defense proves platform breadth under pressure as attack vectors stack and named adversaries escalate.',
-    dash_story_3t:'Hunt the operator', dash_story_3b:'Threat Hunt closes the arc by turning intelligence, evidence, and module decisions into analyst-grade pursuit.',
+    // dash_chip*/dash_booth_line/dash_story_* removed 2026-04-21 — dashboard ops-strip/campaign-rail markup retired.
     // 2026-04-21 sanitization: `dash_campaign_*` cluster removed from all 4 language sections.
     // Proof-of-unused: zero hits via T()/TF(), data-i18n, t.KEY, or string-literal payload lookup.
     // The arc-progress feature that consumed these keys was retired from the dashboard UI.
@@ -1641,12 +1540,13 @@ const TRANSLATIONS = {
     ph4_boss_counter:'RECOMMENDED COUNTER',
     // ── Game UI keys (used by T() in canvas rendering) ──
     g_score:'SCORE',             g_hi:'HI SCORE',
-    g_phase:'PHASE',             g_lives:'LIVES',
+    g_phase:'PHASE',
     g_paused:'PAUSED',           g_fuel:'FUEL',
     g_resume_hint:'PRESS P TO RESUME',
     g_scan:'SCAN',               g_scan_ready:'SCAN ready [S]',
     g_mission:'MISSION',         g_objectives:'OBJECTIVES',
-    g_controls:'CONTROLS',       g_mute:'MUTE',
+    g_controls:'CONTROLS',
+    // g_lives / g_mute removed 2026-04-21 — 4-mechanism orphan audit passed.
     g_deploy:'DEPLOY MODULE',    g_deployed:'MODULE DEPLOYED ✓',
     g_press_retry:'PRESS SPACE TO RETRY',
     g_press_again:'PRESS SPACE TO PLAY AGAIN',
@@ -2110,17 +2010,7 @@ const TRANSLATIONS = {
     g_evid_gateway:'GATEWAY:',
     hunt_artifact_unavailable:'Artifact data unavailable',
     hunt_controls_end:'SPACE — New Case    R — Replay    ESC — Menu',
-    hunt_disclaimer_title:'IMPORTANT — BEFORE YOU PROCEED',
-    hunt_disc_1:'This is a FICTIONAL training simulation for entertainment purposes only.',
-    hunt_disc_2:'All adversary names, operations and scenarios depicted are based on',
-    hunt_disc_3:'publicly released CrowdStrike threat intelligence reports.',
-    hunt_disc_4:'This game does NOT represent real active operations or real individuals,',
-    hunt_disc_5:'or classified information. No actual malware, exploits or attack tools',
-    hunt_disc_6:'are present. All data is simulated.',
-    hunt_disc_7:'CrowdStrike® and Falcon® are registered trademarks of CrowdStrike, Inc.',
-    hunt_disc_8:'For official security information visit: www.crowdstrike.com',
-    hunt_disc_ack:'[ ACKNOWLEDGE & CONTINUE ]',
-    hunt_disc_hint:'Press  SPACE  or  ENTER  to continue',
+    // hunt_disclaimer_title + hunt_disc_1..8 + hunt_disc_ack + hunt_disc_hint removed 2026-04-21 (canvas drawDisclaimer retired; HTML overlay uses disc_title).
     // ── Boss prompt + LOLBin bullet text ──
     iz_bshot_prompt_exec:'> exec',
     iz_bshot_prompt_beacon:'> beacon',
@@ -2148,14 +2038,7 @@ const TRANSLATIONS = {
     c3eye:'Operação 03 · Caça na Rede Global', c3name:'CrowdStrike:<br>Threat Hunt',
     c3desc:'Você É o caçador. Persiga nove adversários em uma rede global ao vivo.',
     podZero:'INCIDENTE ZERO', podDef:'DEFESA', podHunt:'CAÇA A AMEAÇAS',
-    dash_chip1_k:'Assistir', dash_chip1_v:'Quem está perto entende a ação em poucos segundos.',
-    dash_chip2_k:'Jogar', dash_chip2_v:'Três operações rápidas de resposta, uma história única da plataforma Falcon.',
-    dash_chip3_k:'Aprender', dash_chip3_v:'Adversários reais, TTPs reais e valor claro de cada módulo.',
-    dash_chip4_k:'Ranking', dash_chip4_v:'O ranking global persiste durante toda a sessão do estande.',
-    dash_booth_line:'Projetado para demos ao vivo, apelo para espectadores e captura leve de leads corporativos sem travar a fila.',
-    dash_story_1t:'Detecte a violação', dash_story_1b:'Incident Zero transforma telemetria, pressão de combustível e módulos Falcon na primeira luta de resposta.',
-    dash_story_2t:'Segure a linha', dash_story_2b:'Arcade Defense prova a amplitude da plataforma sob pressão enquanto vetores de ataque e adversários nomeados escalam.',
-    dash_story_3t:'Cace o operador', dash_story_3b:'Threat Hunt fecha o arco ao transformar inteligência, evidências e decisões de módulo em perseguição digna de analista.',
+    // dash_chip*/dash_booth_line/dash_story_* removed 2026-04-21.
     // 2026-04-21 sanitization: `dash_campaign_*` cluster removed — see EN block for rationale.
     dash_return:'◈ SAIR',
     deploy_overlay_text:'ATIVANDO...',
@@ -2243,12 +2126,13 @@ const TRANSLATIONS = {
     ph4_boss_contact:'▲ CONTATO DETECTADO',
     ph4_boss_counter:'CONTRA RECOMENDADO',
     g_score:'PONTOS',            g_hi:'RECORDE',
-    g_phase:'FASE',              g_lives:'VIDAS',
+    g_phase:'FASE',
     g_paused:'PAUSADO',          g_fuel:'COMBUSTÍVEL',
     g_resume_hint:'PRESSIONE P PARA RETOMAR',
     g_scan:'VARREDURA',          g_scan_ready:'VARREDURA pronta [S]',
     g_mission:'MISSÃO',          g_objectives:'OBJETIVOS',
-    g_controls:'CONTROLES',      g_mute:'MUDO',
+    g_controls:'CONTROLES',
+    // g_lives / g_mute removed 2026-04-21.
     g_deploy:'ACIONAR MÓDULO', g_deployed:'MÓDULO ACIONADO ✓',
     g_press_retry:'ESPAÇO PARA TENTAR NOVAMENTE',
     g_press_again:'ESPAÇO PARA JOGAR NOVAMENTE',
@@ -2707,17 +2591,7 @@ const TRANSLATIONS = {
     g_evid_gateway:'GATEWAY:',
     hunt_artifact_unavailable:'Dados do artefato indisponíveis',
     hunt_controls_end:'ESPAÇO — Novo Caso    R — Repetir    ESC — Menu',
-    hunt_disclaimer_title:'IMPORTANTE — ANTES DE PROSSEGUIR',
-    hunt_disc_1:'Esta é uma simulação de treinamento FICTÍCIA apenas para entretenimento.',
-    hunt_disc_2:'Todos os nomes de adversários, operações e cenários são baseados em',
-    hunt_disc_3:'relatórios de inteligência de ameaças publicados pela CrowdStrike.',
-    hunt_disc_4:'Este jogo NÃO representa operações reais ou indivíduos reais,',
-    hunt_disc_5:'nem informações classificadas. Sem malware, exploits ou ferramentas de ataque',
-    hunt_disc_6:'reais. Todos os dados são simulados.',
-    hunt_disc_7:'CrowdStrike® e Falcon® são marcas registradas da CrowdStrike, Inc.',
-    hunt_disc_8:'Para informações oficiais acesse: www.crowdstrike.com',
-    hunt_disc_ack:'[ RECONHECER & CONTINUAR ]',
-    hunt_disc_hint:'ESPAÇO  ou  ENTER  para continuar',
+    // hunt_disc_* / hunt_disclaimer_title removed 2026-04-21.
     // ── Boss prompt + LOLBin bullet text ──
     iz_bshot_prompt_exec:'> executar',
     iz_bshot_prompt_beacon:'> baliza',
@@ -2745,14 +2619,7 @@ const TRANSLATIONS = {
     c3eye:'Operación 03 · Caza de Red Global', c3name:'CrowdStrike:<br>Threat Hunt',
     c3desc:'Tú ERES el cazador. Persigue nueve adversarios en una red global en vivo.',
     podZero:'INCIDENTE CERO', podDef:'DEFENSA', podHunt:'CAZA DE AMENAZAS',
-    dash_chip1_k:'Ver', dash_chip1_v:'Los espectadores entienden la acción en segundos.',
-    dash_chip2_k:'Jugar', dash_chip2_v:'Tres operaciones rápidas de respuesta, una sola historia de la plataforma Falcon.',
-    dash_chip3_k:'Aprender', dash_chip3_v:'Adversarios reales, TTP reales y valor claro de cada módulo.',
-    dash_chip4_k:'Ranking', dash_chip4_v:'El ranking global permanece durante toda la sesión del stand.',
-    dash_booth_line:'Diseñado para demos en vivo, atractivo para espectadores y captura ligera de leads corporativos sin frenar la fila.',
-    dash_story_1t:'Detecta la brecha', dash_story_1b:'Incident Zero convierte telemetría, presión de combustible y módulos Falcon en la primera lucha de respuesta.',
-    dash_story_2t:'Sostén la línea', dash_story_2b:'Arcade Defense demuestra la amplitud de la plataforma bajo presión mientras los vectores de ataque y los adversarios nombrados escalan.',
-    dash_story_3t:'Caza al operador', dash_story_3b:'Threat Hunt cierra el arco convirtiendo inteligencia, evidencia y decisiones de módulo en una persecución de nivel analista.',
+    // dash_chip*/dash_booth_line/dash_story_* removed 2026-04-21.
     // 2026-04-21 sanitization: `dash_campaign_*` cluster removed — see EN block for rationale.
     dash_return:'◈ SALIR',
     deploy_overlay_text:'DESPLEGANDO...',
@@ -2840,12 +2707,13 @@ const TRANSLATIONS = {
     ph4_boss_contact:'▲ CONTACTO DETECTADO',
     ph4_boss_counter:'CONTRA RECOMENDADO',
     g_score:'PUNTOS',            g_hi:'RÉCORD',
-    g_phase:'FASE',              g_lives:'VIDAS',
+    g_phase:'FASE',
     g_paused:'PAUSADO',          g_fuel:'COMBUSTIBLE',
     g_resume_hint:'PULSA P PARA REANUDAR',
     g_scan:'EXPLORACIÓN',        g_scan_ready:'EXPLORACIÓN lista [S]',
     g_mission:'MISIÓN',          g_objectives:'OBJETIVOS',
-    g_controls:'CONTROLES',      g_mute:'SILENCIO',
+    g_controls:'CONTROLES',
+    // g_lives / g_mute removed 2026-04-21.
     g_deploy:'DESPLEGAR MÓDULO', g_deployed:'MÓDULO DESPLEGADO ✓',
     g_press_retry:'ESPACIO PARA REINTENTAR',
     g_press_again:'ESPACIO PARA JUGAR DE NUEVO',
@@ -3304,17 +3172,7 @@ const TRANSLATIONS = {
     g_evid_gateway:'PUERTA DE ENLACE:',
     hunt_artifact_unavailable:'Datos del artefacto no disponibles',
     hunt_controls_end:'ESPACIO — Nuevo caso    R — Repetir    ESC — Menú',
-    hunt_disclaimer_title:'IMPORTANTE — ANTES DE CONTINUAR',
-    hunt_disc_1:'Esta es una simulación de entrenamiento FICTICIA solo para entretenimiento.',
-    hunt_disc_2:'Todos los nombres de adversarios, operaciones y escenarios están basados en',
-    hunt_disc_3:'informes de inteligencia de amenazas publicados por CrowdStrike.',
-    hunt_disc_4:'Este juego NO representa operaciones activas reales ni individuos reales,',
-    hunt_disc_5:'ni información clasificada. No hay malware, exploits ni herramientas de ataque',
-    hunt_disc_6:'reales. Todos los datos son simulados.',
-    hunt_disc_7:'CrowdStrike® y Falcon® son marcas registradas de CrowdStrike, Inc.',
-    hunt_disc_8:'Para información oficial de seguridad visite: www.crowdstrike.com',
-    hunt_disc_ack:'[ RECONOCER Y CONTINUAR ]',
-    hunt_disc_hint:'ESPACIO  o  ENTER  para continuar',
+    // hunt_disc_* / hunt_disclaimer_title removed 2026-04-21.
     // ── Boss prompt + LOLBin bullet text ──
     iz_bshot_prompt_exec:'> ejecutar',
     iz_bshot_prompt_beacon:'> baliza',
@@ -3342,14 +3200,7 @@ const TRANSLATIONS = {
     c3eye:'オペレーション 03 · グローバルネットワークハント', c3name:'CrowdStrike:<br>Threat Hunt',
     c3desc:'あなたがハンターだ。9人の攻撃者をグローバルネットワークで追跡せよ。',
     podZero:'インシデントゼロ', podDef:'ディフェンス', podHunt:'スレットハント',
-    dash_chip1_k:'観戦', dash_chip1_v:'観客は数秒で状況を理解できます。',
-    dash_chip2_k:'体験', dash_chip2_v:'3つの即応オペレーションでFalconプラットフォームの物語を伝えます。',
-    dash_chip3_k:'学習', dash_chip3_v:'実在の敵対者、実際のTTP、明確なモジュール価値。',
-    dash_chip4_k:'順位', dash_chip4_v:'グローバルランキングはブースのセッション中ずっと保持されます。',
-    dash_booth_line:'ライブデモ、観客への訴求、そして列を止めない軽量な法人向けリード獲得のために設計されています。',
-    dash_story_1t:'侵害を検知する', dash_story_1b:'Incident Zeroはテレメトリ、燃料圧力、Falconモジュールを初動対応の戦いへ変えます。',
-    dash_story_2t:'防衛線を維持する', dash_story_2b:'Arcade Defenseは攻撃ベクトルと命名済み敵対者が激化する中で、プラットフォームの広さを示します。',
-    dash_story_3t:'攻撃者を追う', dash_story_3b:'Threat Huntはインテリジェンス、証拠、モジュール判断を分析者級の追跡へ変え、物語を締めくくります。',
+    // dash_chip*/dash_booth_line/dash_story_* removed 2026-04-21.
     // 2026-04-21 sanitization: `dash_campaign_*` cluster removed — see EN block for rationale.
     dash_return:'◈ 戻る',
     deploy_overlay_text:'デプロイ中...',
@@ -3437,12 +3288,13 @@ const TRANSLATIONS = {
     ph4_boss_contact:'▲ 接触検出',
     ph4_boss_counter:'推奨対策',
     g_score:'スコア',              g_hi:'ハイスコア',
-    g_phase:'フェーズ',            g_lives:'ライフ',
+    g_phase:'フェーズ',
     g_paused:'一時停止',           g_fuel:'燃料',
     g_resume_hint:'Pキーで再開',
     g_scan:'スキャン',             g_scan_ready:'スキャン準備完了 [S]',
     g_mission:'ミッション',        g_objectives:'目標',
-    g_controls:'操作方法',         g_mute:'ミュート',
+    g_controls:'操作方法',
+    // g_lives / g_mute removed 2026-04-21.
     g_deploy:'モジュール展開',     g_deployed:'モジュール展開済み ✓',
     g_press_retry:'スペースでリトライ',
     g_press_again:'スペースでもう一度',
@@ -3903,17 +3755,7 @@ const TRANSLATIONS = {
     g_evid_gateway:'ゲートウェイ:',
     hunt_artifact_unavailable:'アーティファクトデータ利用不可',
     hunt_controls_end:'スペース — 新ケース    R — 再挑戦    ESC — メニュー',
-    hunt_disclaimer_title:'重要 — 続行する前に',
-    hunt_disc_1:'これは娯楽目的のみのフィクションのトレーニングシミュレーションです。',
-    hunt_disc_2:'描写されている攻撃者名、作戦、シナリオはすべて以下に基づいています',
-    hunt_disc_3:'CrowdStrikeが公開した脅威インテリジェンスレポート。',
-    hunt_disc_4:'このゲームは実際の進行中の作戦、実在の個人、',
-    hunt_disc_5:'または機密情報を表しません。実際のマルウェア、エクスプロイト、',
-    hunt_disc_6:'攻撃ツールは含まれていません。すべてのデータはシミュレーションです。',
-    hunt_disc_7:'CrowdStrike®およびFalcon®はCrowdStrike, Inc.の登録商標です。',
-    hunt_disc_8:'公式セキュリティ情報は www.crowdstrike.com をご覧ください',
-    hunt_disc_ack:'[ 確認して続行 ]',
-    hunt_disc_hint:'スペース または ENTER で続行',
+    // hunt_disc_* / hunt_disclaimer_title removed 2026-04-21.
     // ── Boss prompt + LOLBin bullet text ──
     iz_bshot_prompt_exec:'> 実行',
     iz_bshot_prompt_beacon:'> 標識',
@@ -4881,24 +4723,7 @@ function clearAllRankings() {
     if (ARCADE_RANKING_KEYS.indexOf(id) !== -1) return id;
     return RANKING_KEY[id] || null;
   }
-  // Resolve any accepted form → canonical gameId (or null)
-  function _resolveGameId(id) {
-    if (!id) return null;
-    if (GAME_IDS.indexOf(id) !== -1) return id;
-    // reverse-lookup alias
-    const full = RANKING_KEY[id];
-    if (full) {
-      for (let i = 0; i < GAME_IDS.length; i++) {
-        if (RANKING_KEY[GAME_IDS[i]] === full) return GAME_IDS[i];
-      }
-    }
-    // full storage key → gameId
-    for (let i = 0; i < GAME_IDS.length; i++) {
-      if (RANKING_KEY[GAME_IDS[i]] === id) return GAME_IDS[i];
-    }
-    return null;
-  }
-
+  // _resolveGameId() removed 2026-04-21 — zero callers.
   function load(gameId) {
     if (gameId === undefined) {
       // Aggregate snapshot (spec: Store.load() with no args)
@@ -7222,25 +7047,8 @@ function _createDashboardAttractDirector() {
     if (rankingHeroTimer) clearInterval(rankingHeroTimer);
     rankingHeroTimer = null;
   }
-  function dispatchSimKey(code, hold = false, duration = 260) {
-    const key = code === 'Space' ? ' ' : code.replace('Arrow', 'Arrow');
-    window.dispatchEvent(new KeyboardEvent('keydown', { code, key, bubbles:true }));
-    if (hold) {
-      simKeyHolds.add(code);
-      clearTimeout(simReleaseTimer);
-      simReleaseTimer = setTimeout(() => releaseSimKeys(), duration);
-    } else {
-      setTimeout(() => window.dispatchEvent(new KeyboardEvent('keyup', { code, key, bubbles:true })), 48);
-    }
-  }
-  function pulseSimKey(code, holdFor = 90) {
-    const key = code === 'Space' ? ' ' : code.replace('Arrow', 'Arrow');
-    window.dispatchEvent(new KeyboardEvent('keydown', { code, key, bubbles:true }));
-    setTimeout(() => {
-      window.dispatchEvent(new KeyboardEvent('keyup', { code, key, bubbles:true }));
-      simKeyHolds.delete(code);
-    }, holdFor);
-  }
+  // dispatchSimKey / pulseSimKey removed 2026-04-21 — zero callers.
+  // The attract director dispatches KeyboardEvent directly inline.
   function releaseSimKeys(filterCodes = null) {
     const codes = filterCodes ? Array.from(filterCodes) : Array.from(simKeyHolds);
     codes.forEach(code => {
@@ -8013,11 +7821,14 @@ window.HardwareRadio = (function(){
     }
 
     // 2. Housing
+    // 2026-04-21 transparency pass: lowered housing alpha 0.97 → 0.78 so the
+    // card no longer occludes gameplay beneath. Border stroke + glow are
+    // unchanged so the colored frame still reads as a hardware bezel.
     if(layers.housing){
       const _hg=ctx.createLinearGradient(rx,ry,rx,ry+RH);
-      _hg.addColorStop(0,'rgba(20,24,30,0.97)');
-      _hg.addColorStop(0.5,'rgba(28,32,40,0.97)');
-      _hg.addColorStop(1,'rgba(14,16,22,0.97)');
+      _hg.addColorStop(0,'rgba(20,24,30,0.78)');
+      _hg.addColorStop(0.5,'rgba(28,32,40,0.78)');
+      _hg.addColorStop(1,'rgba(14,16,22,0.78)');
       ctx.fillStyle=_hg;
       ctx.strokeStyle=col; ctx.lineWidth=2;
       ctx.shadowColor=col; ctx.shadowBlur=16;
@@ -8026,8 +7837,10 @@ window.HardwareRadio = (function(){
     }
 
     // 3. Inner bezel
+    // 2026-04-21: inner bezel alpha 0.55 → 0.38 so the map/gameplay reads
+    // through the recessed glass area without washing out the message.
     if(layers.bezel){
-      ctx.fillStyle='rgba(4,5,9,0.55)';
+      ctx.fillStyle='rgba(4,5,9,0.38)';
       ctx.strokeStyle=col+'33'; ctx.lineWidth=1;
       ctx.beginPath(); ctx.roundRect(rx+3,ry+3,RW-6,RH-6,4); ctx.fill(); ctx.stroke();
     }
@@ -8209,12 +8022,23 @@ window.HardwareRadio = (function(){
     }
 
     // 9. Message body
+    // 2026-04-21: defensive clip to the bezel rect so no font/measurement
+    // mismatch can ever let a line escape the card horizontally. Before the
+    // clip, a long COMMS() payload (e.g. "CHARLOTTE AI: LOLBINTOWER · ANALYZED
+    // · NEUTRALIZED") could render past the left/right border when the
+    // caller's pre-wrap measurement differed from the facade's render-time
+    // char width. Cheap cost (one save/clip/restore); guarantees containment.
     if(layers.message && _lines.length){
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(rx+4, ry+_headerH, RW-8, Math.max(0, RH-_headerH-4));
+      ctx.clip();
       ctx.font = fontFn(compact?10:11);
       ctx.fillStyle = '#c8d8e8';
       ctx.textAlign = 'left';
       let ly = ry + _headerH + _opH + _waveH + Math.round(_rp*0.4);
       _lines.forEach(l => { ctx.fillText(l, _contentX, ly); ly += _rlh; });
+      ctx.restore();
     }
 
     // 10. CRT scan line
@@ -10092,19 +9916,8 @@ function noise(d=0.15,g=0.10,lpf=4000){
     src.start();
   }catch(_){}
 }
-function phrase(notes,baseTime=0){
-  if(MUTED||window._simMuted) return;
-  if (_activeGameId !== 'zero') return;
-  const ac=AC(); let t=ac.currentTime+0.02+baseTime;
-  for(const n of notes){
-    const o=ac.createOscillator(),gn=ac.createGain();
-    o.type=n.type||'sine'; o.frequency.value=n.f||440;
-    gn.gain.setValueAtTime(n.g||0.04,t);
-    gn.gain.exponentialRampToValueAtTime(0.0001,t+n.d);
-    o.connect(gn); gn.connect(_dest()); o.start(t); o.stop(t+n.d);
-    t+=n.d+(n.gap||0.01);
-  }
-}
+// phrase() removed 2026-04-21 — superseded by Zimmer audio rollout.
+// Grep-confirmed zero callers before deletion.
 let _bossOsc=null,_bossGain=null,_bossLFO=null;
 function startBossMusic(){
   if(MUTED||window._simMuted||!_masterGain) return;
@@ -21822,8 +21635,7 @@ function izFont(size, weight=''){
 // (smooth) or ease-out-expo (snappy). No ease-in on entries. No bounce.
 function ezOutExpo(p){ if(p<=0)return 0; if(p>=1)return 1; return 1-Math.pow(2,-10*p); }
 function ezOutQuart(p){ if(p<=0)return 0; if(p>=1)return 1; return 1-Math.pow(1-p,4); }
-function ezOutQuint(p){ if(p<=0)return 0; if(p>=1)return 1; return 1-Math.pow(1-p,5); }
-function ezInExpo(p){ if(p<=0)return 0; if(p>=1)return 1; return Math.pow(2,10*p-10); }
+// ezOutQuint / ezInExpo removed 2026-04-21 — zero callers.
 // ── prefers-reduced-motion — global flag for canvas cinematics ──
 // When set, signature moments (boss intro, phase end, win, loss) skip their
 // exponential reveal and render at final state. Respects user OS setting and
@@ -21918,93 +21730,12 @@ function drawTitle(){
   CX.textAlign='left';
 }
 
-// ── Screen: Phase Intro ───────────────────────────────────────────────
-function drawPhaseIntro(){
-  const ui = izUiScale();
-  drawWorld(0.06);
-  CX.save(); CX.globalAlpha=Math.min(1, phTime/0.55);
-  const ph=PHASES[phIdx], ad=ph.adversary?ADV[ph.adversary]:null, act=getAct(phIdx);
-  const phaseKey=ph.id===0?T('iz_phase0_key'):ph.key;
-  const phaseSeason=ph.id===0?T('iz_phase0_season'):ph.season;
-  const phaseSummary=ph.id===0?T('iz_phase0_summary'):ph.summary;
-  const phaseMission=ph.id===0?T('iz_phase0_mission'):ph.mission;
-  const phaseObjectives=ph.id===0
-    ? [{text:T('iz_phase0_obj1')},{text:T('iz_phase0_obj2')}]
-    : ph.objectives;
-  const locAct=localizeIZAct(act);
-  const actTitle=locAct.title;
-  const actSubtitle=locAct.subtitle;
-  const panX=48, panY=42, panW=VW-96, panH=VH-84;
-  CX.fillStyle='rgba(0,0,0,0.92)'; CX.fillRect(panX,panY,panW,panH);
-  CX.strokeStyle=ph.col; CX.lineWidth=2.5; CX.strokeRect(panX,panY,panW,panH);
-
-  // Act badge
-  CX.fillStyle='rgba(0,0,0,0.85)'; CX.fillRect(48,42,VW-96,22);
-  CX.strokeStyle=act.col; CX.lineWidth=1; CX.strokeRect(48,42,VW-96,22);
-  CX.fillStyle=act.col; CX.font=izFont(10,'bold'); CX.textAlign='center';
-  CX.fillText(T('g_act')+act.num+': '+actTitle.toUpperCase()+'  —  '+actSubtitle,VW/2,57);
-
-  CX.fillStyle='#7f8b96'; CX.font=izFont(10);
-  CX.fillText(T('g_phase')+(phIdx+1)+'/10  ·  '+phaseSeason,VW/2,80);
-
-  CX.shadowBlur=22; CX.shadowColor=ph.col;
-  CX.fillStyle=ph.col; CX.font=izFont(22,'bold'); CX.fillText(phaseKey,VW/2,110); CX.shadowBlur=0;
-
-  if(ad){
-    CX.shadowBlur=12; CX.shadowColor=ad.color;
-    CX.fillStyle=ad.color; CX.font=izFont(14,'bold');
-    CX.fillText(T('g_adversary_prefix')+ph.adversary,VW/2,134); CX.shadowBlur=0;
-    CX.fillStyle='#aaaaaa'; CX.font=izFont(11); CX.fillText(ad.nation,VW/2,152);
-  }
-
-  CX.strokeStyle='rgba(255,255,255,0.07)'; CX.lineWidth=1;
-  CX.beginPath(); CX.moveTo(88,162); CX.lineTo(VW-88,162); CX.stroke();
-
-  CX.fillStyle='#ffd84d'; CX.font=izFont(10,'bold'); CX.fillText(T('g_situation'),VW/2,178);
-  const sumLines=wrapTextPx(CX, phaseSummary, 500);
-  CX.fillStyle='#d5dde5'; CX.font=izFont(10);
-  sumLines.forEach((l,i)=>CX.fillText(l,VW/2,192+i*14));
-
-  const mBase=192+sumLines.length*14+10;
-  CX.fillStyle='#ffd84d'; CX.font=izFont(10,'bold'); CX.fillText(T('g_mission'),VW/2,mBase);
-  CX.fillStyle='#74ff88'; CX.font=izFont(10);
-  wrapTextPx(CX, phaseMission, 500).forEach((l,i)=>CX.fillText(l,VW/2,mBase+15+i*14));
-
-  const oBase=mBase+15+Math.ceil(phaseMission.length/74)*14+12;
-  CX.fillStyle='#ffd84d'; CX.font=izFont(10,'bold'); CX.fillText(T('g_objectives'),VW/2,oBase);
-  phaseObjectives.forEach((o,i)=>{
-    CX.fillStyle='#42d9ff'; CX.font=izFont(10);
-    CX.fillText('○ '+o.text,VW/2,oBase+14+i*15);
-  });
-
-  if(ad){
-    const tBase=oBase+phaseObjectives.length*15+22;
-    CX.strokeStyle='rgba(255,255,255,0.05)'; CX.lineWidth=1;
-    CX.beginPath(); CX.moveTo(88,tBase-8); CX.lineTo(VW-88,tBase-8); CX.stroke();
-    CX.fillStyle='#7f8b96'; CX.font=izFont(10);
-    CX.fillText(T('iz_known_ttps')+ad.ttp.slice(0,88),VW/2,tBase+6);
-    CX.fillStyle='rgba(66,217,255,0.10)'; CX.fillRect(VW/2-264,tBase+12,528,42);
-    CX.strokeStyle='rgba(66,217,255,0.20)'; CX.strokeRect(VW/2-264,tBase+12,528,42);
-    CX.fillStyle='#42d9ff'; CX.font=izFont(10,'bold');
-    CX.fillText(T('g_counter')+ad.counter.slice(0,72),VW/2,tBase+28);
-    CX.fillStyle='#74ff88'; CX.font=izFont(10,'bold');
-    CX.fillText(T('g_featured_module')+ph.module,VW/2,tBase+44);
-  }
-
-  if(ph.boss){
-    CX.fillStyle='rgba(255,90,60,0.15)'; CX.fillRect(48,VH-96,VW-96,32);
-    CX.strokeStyle='rgba(255,90,60,0.4)'; CX.strokeRect(48,VH-96,VW-96,32);
-    CX.fillStyle='#ff5a4d'; CX.font=izFont(11,'bold');
-    CX.fillText(T('g_boss_encounter')+ph.boss+'  —  '+ADV[ph.boss]?.nation,VW/2,VH-75);
-  }
-
-  if(Math.floor(Date.now()/380)%2===0){
-    CX.fillStyle='#fff'; CX.font=izFont(14,'bold');
-    CX.fillText(T('g_press_deploy'),VW/2,VH-46);
-  }
-  CX.textAlign='left';
-  CX.restore();
-}
+// ── Screen: Phase Intro — REMOVED 2026-04-21 ─────────────────────────
+// drawPhaseIntro() was superseded by the unified deploy cinematic:
+//   case S.PHASE_INTRO: drawDeployCinematic(); break;  // PHASE_INTRO absorbed
+// The S.PHASE_INTRO state constant is still referenced as a pass-through
+// for hot-reload safety (see PLAYING transition logic). Only the draw
+// body is deleted; the state constant remains live.
 
 // ── Screen: Deploy Cinematic — Unified Intro + Briefing + Insertion ───
 // ARCH: Single cinematic combining all three former screens:
@@ -23825,7 +23556,7 @@ function initGameDefense() {
 // closure-local to initGameZero. These copies live inside the Defense
 // IIFE; no window pollution. See studio/spec-phase4.md section 4.
 function _ph4_ezOutQuart(p){ if(p<=0)return 0; if(p>=1)return 1; return 1-Math.pow(1-p,4); }
-function _ph4_cinOvershoot(p){ if(p<=0)return 0; if(p>=1)return 1; const s=1.35; return 1+(s+1)*Math.pow(p-1,3)+s*Math.pow(p-1,2); }
+// _ph4_cinOvershoot removed 2026-04-21 — zero callers (IZ copy).
 function _ph4_cinStagger(p, i, step, ramp){
   const start = i*step;
   return Math.max(0, Math.min(1, (p - start) / Math.max(0.001, ramp)));
@@ -32313,7 +32044,7 @@ function initGameHunt() {
   (function() {
 // ─── Phase 4 cinematic helpers (Hunt IIFE-private, portable copies) ─────
 function _ph4_ezOutQuart(p){ if(p<=0)return 0; if(p>=1)return 1; return 1-Math.pow(1-p,4); }
-function _ph4_cinOvershoot(p){ if(p<=0)return 0; if(p>=1)return 1; const s=1.35; return 1+(s+1)*Math.pow(p-1,3)+s*Math.pow(p-1,2); }
+// _ph4_cinOvershoot removed 2026-04-21 — zero callers.
 function _ph4_cinStagger(p, i, step, ramp){
   const start = i*step;
   return Math.max(0, Math.min(1, (p - start) / Math.max(0.001, ramp)));
@@ -33011,11 +32742,13 @@ function drawRadio(){
   }
 
   // 2. Housing — metal-brushed gradient + color-matched border glow
+  // 2026-04-21 transparency pass: 0.97 → 0.78 so the card reads over gameplay
+  // without occluding it. Matches window.HardwareRadio.draw.
   {
     const _hg=ctx.createLinearGradient(rx,ry,rx,ry+RH);
-    _hg.addColorStop(0,'rgba(20,24,30,0.97)');
-    _hg.addColorStop(0.5,'rgba(28,32,40,0.97)');
-    _hg.addColorStop(1,'rgba(14,16,22,0.97)');
+    _hg.addColorStop(0,'rgba(20,24,30,0.78)');
+    _hg.addColorStop(0.5,'rgba(28,32,40,0.78)');
+    _hg.addColorStop(1,'rgba(14,16,22,0.78)');
     ctx.fillStyle=_hg;
     ctx.strokeStyle=col; ctx.lineWidth=2;
     ctx.shadowColor=col; ctx.shadowBlur=16;
@@ -33024,8 +32757,9 @@ function drawRadio(){
   }
 
   // 3. Inner bezel (darker inset panel — reads as recessed glass)
+  // 2026-04-21: 0.55 → 0.38 to match facade.
   {
-    ctx.fillStyle='rgba(4,5,9,0.55)';
+    ctx.fillStyle='rgba(4,5,9,0.38)';
     ctx.strokeStyle=col+'33'; ctx.lineWidth=1;
     ctx.beginPath(); ctx.roundRect(rx+3,ry+3,RW-6,RH-6,4); ctx.fill(); ctx.stroke();
   }
@@ -33188,9 +32922,16 @@ function drawRadio(){
   }
 
   // 9. Wrapped message body
+  // 2026-04-21: defensive clip matches the facade — guarantees a long/unusual
+  // voice line can never render past the bezel border.
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(rx+4, ry+_rheaderH, RW-8, Math.max(0, RH-_rheaderH-4));
+  ctx.clip();
   ctx.font=huntFont(11); ctx.fillStyle='#c8d8e8'; ctx.textAlign='left';
   let ly2=ry+_rheaderH+_ropNameH+_rwaveH+Math.round(_rp*0.4);
   _rlines.forEach(l=>{ ctx.fillText(l,_contentX,ly2); ly2+=_rlh; });
+  ctx.restore();
 
   // 10. Soft CRT scan line (preserved — slightly softer alpha)
   if(!_rm){
@@ -37170,8 +36911,7 @@ function _isLand(lon,lat){
   return typeof LAND_ROWS!=='undefined'&&LAND_ROWS[row]?.[col]==='1';
 }
 
-function _buildContinents(){return [];}
-
+// _buildContinents() stub removed 2026-04-21 — zero callers.
 function _renderContinentToCache(){
   const mapTop=52, mapBot=LH-55;
   const oc=document.createElement('canvas');
@@ -39273,58 +39013,13 @@ function drawFalconWonCard(dt){
 }
 
 // ════════════════════════════════════════════════════════════════
-//  LEGAL DISCLAIMER OVERLAY
+//  LEGAL DISCLAIMER OVERLAY — REMOVED 2026-04-21 (canvas variant)
+//  The canvas drawDisclaimer() renderer was superseded by the HTML
+//  overlay that uses T('disc_title') (see id="disclaimer-overlay").
+//  Removal audit: grep confirmed zero callers prior to deletion.
+//  Keys removed with it: hunt_disclaimer_title, hunt_disc_1..8,
+//  hunt_disc_ack, hunt_disc_hint (all 4 langs).
 // ════════════════════════════════════════════════════════════════
-function drawDisclaimer(){
-  const ui=huntTitleScale();
-  const pw=Math.min(LW-80, Math.round(680*ui)), ph=Math.round(400*ui);
-  const px=(LW-pw)/2, py=(LH-ph)/2;
-  ctx.save();
-  // Dim background
-  ctx.fillStyle='rgba(0,0,0,0.82)'; ctx.fillRect(0,0,LW,LH);
-  // Panel
-  ctx.shadowColor='#AA00FF'; ctx.shadowBlur=32;
-  ctx.fillStyle='rgba(4,6,18,0.97)'; ctx.strokeStyle='#AA00FF'; ctx.lineWidth=2;
-  ctx.beginPath(); ctx.roundRect(px,py,pw,ph,8); ctx.fill(); ctx.stroke();
-  ctx.shadowBlur=0;
-  // Falcon header line
-  ctx.font=huntFont(11,'bold'); ctx.fillStyle='#AA00FF'; ctx.textAlign='center';
-  ctx.fillText('━━━━━━━━━━━━  CLASSIFIED  ━━━━━━━━━━━━',LW/2,py+Math.round(28*ui));
-  // Title
-  ctx.font=huntFont(18,'bold'); ctx.fillStyle='#FFD700'; ctx.shadowColor='#FFD700'; ctx.shadowBlur=10;
-  ctx.fillText(T('hunt_disclaimer_title'),LW/2,py+Math.round(60*ui)); ctx.shadowBlur=0;
-  // Body text — wrapped manually, all keys localised
-  const lines=[
-    T('hunt_disc_1'),
-    T('hunt_disc_2'),
-    T('hunt_disc_3'),
-    '',
-    T('hunt_disc_4'),
-    T('hunt_disc_5'),
-    T('hunt_disc_6'),
-    '',
-    T('hunt_disc_7'),
-    T('hunt_disc_8')
-  ];
-  ctx.font=huntFont(12); ctx.fillStyle='#b0bec5'; ctx.textAlign='center';
-  lines.forEach((ln,i)=>ctx.fillText(ln,LW/2,py+Math.round((95+i*20)*ui)));
-  // Acknowledge button
-  const _bw=Math.round(260*ui), _bh=Math.round(44*ui);
-  const _bx=LW/2-_bw/2, _by=py+Math.round(330*ui);
-  const _bhov=MOUSE.x>_bx&&MOUSE.x<_bx+_bw&&MOUSE.y>_by&&MOUSE.y<_by+_bh;
-  ctx.shadowColor='#39FF14'; ctx.shadowBlur=_bhov?18:8;
-  ctx.fillStyle=_bhov?'rgba(57,255,20,0.22)':'rgba(57,255,20,0.1)';
-  ctx.strokeStyle='#39FF14'; ctx.lineWidth=_bhov?2:1;
-  ctx.beginPath(); ctx.roundRect(_bx,_by,_bw,_bh,6); ctx.fill(); ctx.stroke();
-  ctx.shadowBlur=0;
-  ctx.font=huntFont(14,'bold'); ctx.fillStyle='#39FF14'; ctx.textAlign='center';
-  ctx.shadowColor='#39FF14'; ctx.shadowBlur=_bhov?12:0;
-  ctx.fillText(T('hunt_disc_ack'),LW/2,_by+Math.round(27*ui));
-  ctx.shadowBlur=0;
-  ctx.font=huntFont(10); ctx.fillStyle='#555'; ctx.textAlign='center';
-  ctx.fillText(T('hunt_disc_hint'),LW/2,py+ph-Math.round(14*ui));
-  ctx.restore();
-}
 
 // ════════════════════════════════════════════════════════════════
 //  HUD (world map + investigation)
