@@ -214,15 +214,23 @@ html, body { width:100%; height:100%; background:#020308; overflow:hidden; font-
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0);   }
 }
-#dashboard-container.is-revealed .cs-eyebrow { animation: dashEyebrowFade 520ms cubic-bezier(0.23, 1, 0.32, 1) 80ms both, pulse-opacity 2.2s ease-in-out 680ms infinite; }
-@keyframes dashEyebrowFade { from { opacity: 0; letter-spacing: 10px; } to { opacity: 1; letter-spacing: 5px; } }
+/* 2026-04-23: letter-spacing removed from dashboard-entrance keyframes.
+   Animating letter-spacing triggers layout on every frame (it re-measures
+   every glyph's box). Replaced with transform: scaleX() — the visual
+   effect (letters settling from wide to tight) is preserved, but scale
+   runs on the GPU compositor with zero layout/paint cost. The CSS
+   resting values (letter-spacing: 5px on .cs-eyebrow, -1px on .cs-title)
+   are untouched, so the element lands at exactly the same final state. */
+#dashboard-container.is-revealed .cs-eyebrow { animation: dashEyebrowFade 520ms cubic-bezier(0.23, 1, 0.32, 1) 80ms both, pulse-opacity 2.2s ease-in-out 680ms infinite; transform-origin: center; }
+@keyframes dashEyebrowFade { from { opacity: 0; transform: scaleX(1.08); } to { opacity: 1; transform: scaleX(1); } }
 #dashboard-container.is-revealed .cs-title {
   animation: dashTitleIgnite 820ms cubic-bezier(0.23, 1, 0.32, 1) 180ms both;
+  transform-origin: center;
 }
 @keyframes dashTitleIgnite {
-  0%   { opacity: 0; letter-spacing: 8px;   text-shadow: 0 0 0 rgba(224,0,60,0),   0 0 0 rgba(224,0,60,0); }
-  35%  { opacity: 0.7; letter-spacing: 2px; text-shadow: 0 0 28px rgba(255,216,77,0.55), 0 0 56px rgba(224,0,60,0.25); }
-  100% { opacity: 1; letter-spacing: -1px;  text-shadow: 0 0 40px rgba(224,0,60,0.55), 0 0 80px rgba(224,0,60,0.22); }
+  0%   { opacity: 0;   transform: scaleX(1.12); text-shadow: 0 0 0 rgba(224,0,60,0),   0 0 0 rgba(224,0,60,0); }
+  35%  { opacity: 0.7; transform: scaleX(1.03); text-shadow: 0 0 28px rgba(255,216,77,0.55), 0 0 56px rgba(224,0,60,0.25); }
+  100% { opacity: 1;   transform: scaleX(1);    text-shadow: 0 0 40px rgba(224,0,60,0.55), 0 0 80px rgba(224,0,60,0.22); }
 }
 #dashboard-container.is-revealed .cs-subtitle { animation: dashSubFade 540ms cubic-bezier(0.23, 1, 0.32, 1) 420ms both; }
 @keyframes dashSubFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
@@ -5076,6 +5084,107 @@ function clearAllRankings() {
   function showAttract() { return show('attract'); }
   function hideAttract(reason) { return hide('attract', reason || 'api'); }
 
+  // ── Phase 1 facade migration (2026-04-23) ────────────────────────────────
+  // mountFor / registerAdminHandlers / showRankConfirm collapse
+  // Zero+Defense _mountOverlay + _showRankConfirm duplicates.
+  // See .claude/studio/spec-overlay-facade-migration.md.
+  // Hunt retains its own variant (different QR URL + palette); Phase 2.
+  const _gameDOMs = {};
+  const _adminHandlers = {};
+  let _adminKeysBound = false;
+
+  function _adminKeyHandler(e) {
+    if (!e.ctrlKey || !e.shiftKey) return;
+    for (const gid in _gameDOMs) {
+      const dom = _gameDOMs[gid];
+      if (!dom) continue;
+      const c = document.getElementById(dom.containerId);
+      if (!c || c.style.display === 'none') continue;
+      const h = _adminHandlers[gid];
+      if (!h) return;
+      if (h.exportKey && e.code === h.exportKey && typeof h.exportCSV === 'function') {
+        h.exportCSV();
+      } else if (h.clearKey && e.code === h.clearKey && typeof h.clearStore === 'function') {
+        h.clearStore();
+      }
+      return; // dispatch only to first visible game
+    }
+  }
+
+  function mountFor(gameId) {
+    if (!gameId) return null;
+    if (_gameDOMs[gameId]) return _gameDOMs[gameId].overlayEl;
+    const containerId = `game-${gameId}-container`;
+    const overlayId = `fr-overlay-${gameId}`;
+    const toastId = `fr-toast-${gameId}`;
+    const host = document.getElementById(containerId) || document.body;
+    const el = document.createElement('div');
+    el.id = overlayId;
+    el.innerHTML = `
+      <canvas id="fr-matrix"></canvas>
+      <div class="fr-backdrop"></div>
+      <div class="fr-grid"></div>
+      <div class="fr-scanlines"></div>
+    `;
+    host.appendChild(el);
+    const toast = document.createElement('div');
+    toast.id = toastId;
+    host.appendChild(toast);
+    _gameDOMs[gameId] = { overlayEl: el, toastEl: toast, containerId };
+    if (!_adminKeysBound) {
+      document.addEventListener('keydown', _adminKeyHandler);
+      _adminKeysBound = true;
+    }
+    return el;
+  }
+
+  function registerAdminHandlers(gameId, handlers) {
+    if (!gameId) return false;
+    _adminHandlers[gameId] = handlers || {};
+    return true;
+  }
+
+  function showRankConfirm(opts) {
+    if (!opts || !opts.panel || !opts.tier) return null;
+    const { panel, rank, name, score, difficulty, multiplier, tier, qrUrl } = opts;
+    const esc = (typeof opts.esc === 'function') ? opts.esc : (s => String(s == null ? '' : s));
+    const onDismiss = (typeof opts.onDismiss === 'function') ? opts.onDismiss : (()=>{});
+    const div = document.createElement('div');
+    div.id = 'fr-rank-confirm';
+    div.style.setProperty('--fr-confirm-color', tier.color);
+    const _diffBadge = (difficulty > 0 && difficulty != null)
+      ? `<div style="font-size:10px;letter-spacing:1.5px;color:${tier.color};opacity:0.85;margin:2px 0 8px;font-weight:700;">TIER ${difficulty} · ×${(multiplier||1).toFixed(1)}x</div>`
+      : '';
+    div.innerHTML = `
+      <div class="fr-rank-card">
+        <div class="fr-rank-pos">#${rank}</div>
+        <div class="fr-rank-label">${T('lb_your_rank')}</div>
+        ${_diffBadge}
+        <div class="fr-rank-name">${esc(name)}</div>
+        <div class="fr-rank-score">${score.toLocaleString()} pts</div>
+        <div class="fr-rank-prize">${esc(tier.label)}</div>
+        <canvas id="fr-qr-rank-canvas" width="88" height="88"
+          style="display:block;margin:16px auto 4px;image-rendering:pixelated;
+                 border:2px solid currentColor;border-radius:2px;opacity:0.85;"></canvas>
+        <span class="fr-rank-dismiss">${T('lb_press_continue')}</span>
+      </div>
+    `;
+    panel.appendChild(div);
+    try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'&&qrUrl){const _mat=window.generateQRMatrix(qrUrl),_N=_mat.length,_mod=_N<=25?3:2,_qz=2,_qx=_qc.getContext('2d');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<_N;r++)for(let c=0;c<_N;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){}
+
+    // Dismiss on click/key after short anti-bounce delay; CTA overlay after 40s if configured
+    setTimeout(() => {
+      const dismiss = () => { onDismiss(); div.removeEventListener('click',dismiss); document.removeEventListener('keydown',kd); };
+      const kd = () => { onDismiss(); div.removeEventListener('click',dismiss); document.removeEventListener('keydown',kd); };
+      div.addEventListener('click', dismiss);
+      document.addEventListener('keydown', kd);
+    }, 2000);
+    if (window._showPostGameCTA) {
+      setTimeout(() => { window._showPostGameCTA(() => onDismiss()); }, 40000);
+    }
+    return div;
+  }
+
   window.FalconArcade.Overlay = Object.freeze({
     // Spec public API
     show, hide, clear,
@@ -5086,6 +5195,8 @@ function clearAllRankings() {
     registerForm, registerToast,
     hasForm,
     hideAttract,
+    // Phase 1 facade migration (spec-overlay-facade-migration.md)
+    mountFor, registerAdminHandlers, showRankConfirm,
   });
 })();
 
@@ -8856,9 +8967,11 @@ const FalconRanking = (function () {
         font-size: 10px; color: #7f8b96; margin-top: 4px;
         animation: fr-event-in 0.6s cubic-bezier(0.22,1,0.36,1) 0.58s both;
       }
+      /* 2026-04-23: letter-spacing swapped for scaleX — same subtle settle,
+         no layout reflow. Mirrored in the other script block. */
       @keyframes fr-event-in {
-        from { opacity: 0; letter-spacing: 0.02em; }
-        to   { opacity: 1; letter-spacing: normal; }
+        from { opacity: 0; transform: scaleX(1.02); }
+        to   { opacity: 1; transform: scaleX(1); }
       }
 
       /* Divider — background drifts 22s so motion is felt more than seen */
@@ -9136,35 +9249,21 @@ const FalconRanking = (function () {
   }
 
   // ── OVERLAY MOUNT ────────────────────────────────────────────────────
+  // 2026-04-23 facade migration: delegates to FalconArcade.Overlay.mountFor
+  // and registerAdminHandlers. The prior 32-line in-line body (DOM creation
+  // + toast creation + per-game document.addEventListener keydown) is
+  // collapsed into the shared facade. See .claude/studio/spec-overlay-facade-migration.md.
   function _mountOverlay() {
     if (_overlayEl) return;
-    const el = document.createElement('div');
-    el.id = 'fr-overlay-zero';
-    el.innerHTML = `
-      <canvas id="fr-matrix"></canvas>
-      <div class="fr-backdrop"></div>
-      <div class="fr-grid"></div>
-      <div class="fr-scanlines"></div>
-    `;
-    (document.getElementById('game-zero-container')||document.body).appendChild(el);
-    _overlayEl = el;
-
-    // Toast element (outside overlay so it survives panel switches)
-    const toast = document.createElement('div');
-    toast.id = 'fr-toast-zero';
-    (document.getElementById('game-zero-container')||document.body).appendChild(toast);
-
-    // Admin keyboard shortcuts — only fire when this game's container is visible
-    document.addEventListener('keydown', e => {
-      const c = document.getElementById('game-zero-container');
-      if (!c || c.style.display === 'none') return;
-      if (e.ctrlKey && e.shiftKey && e.code === CFG.adminKey) exportCSV();
-      if (e.ctrlKey && e.shiftKey && e.code === CFG.clearKey) {
-        (async () => {
-          if (await _checkAdminPin() && confirm(T('lb_clear_all_confirm'))) {
-            Store.clear(); _toast(T('lb_cleared'),'#ff5a4d');
-          }
-        })();
+    _overlayEl = window.FalconArcade.Overlay.mountFor('zero');
+    window.FalconArcade.Overlay.registerAdminHandlers('zero', {
+      exportKey: CFG.adminKey,
+      clearKey:  CFG.clearKey,
+      exportCSV: exportCSV,
+      clearStore: async () => {
+        if (await _checkAdminPin() && confirm(T('lb_clear_all_confirm'))) {
+          Store.clear(); _toast(T('lb_cleared'),'#ff5a4d');
+        }
       }
     });
   }
@@ -9427,41 +9526,17 @@ const FalconRanking = (function () {
     if (hint) hint.textContent = msg;
   }
 
+  // 2026-04-23 facade migration: delegates to FalconArcade.Overlay.showRankConfirm.
+  // Prior 36-line body (card creation + QR gen + dismiss/CTA scheduling) now
+  // lives in the shared facade. See spec-overlay-facade-migration.md.
   function _showRankConfirm(panel, rank, name, score, difficulty, multiplier) {
-    const tier = _getPrizeTier(rank);
-    const div  = document.createElement('div');
-    div.id = 'fr-rank-confirm';
-    div.style.setProperty('--fr-confirm-color', tier.color);
-    const _diffBadge = (difficulty > 0 && difficulty != null)
-      ? `<div style="font-size:10px;letter-spacing:1.5px;color:${tier.color};opacity:0.85;margin:2px 0 8px;font-weight:700;">TIER ${difficulty} · ×${(multiplier||1).toFixed(1)}x</div>`
-      : '';
-    div.innerHTML = `
-      <div class="fr-rank-card">
-        <div class="fr-rank-pos">#${rank}</div>
-        <div class="fr-rank-label">${T('lb_your_rank')}</div>
-        ${_diffBadge}
-        <div class="fr-rank-name">${_esc(name)}</div>
-        <div class="fr-rank-score">${score.toLocaleString()} pts</div>
-        <div class="fr-rank-prize">${_esc(tier.label)}</div>
-        <canvas id="fr-qr-rank-canvas" width="88" height="88"
-          style="display:block;margin:16px auto 4px;image-rendering:pixelated;
-                 border:2px solid currentColor;border-radius:2px;opacity:0.85;"></canvas>
-        <span class="fr-rank-dismiss">${T('lb_press_continue')}</span>
-      </div>
-    `;
-    panel.appendChild(div);
-    try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'){const _mat=window.generateQRMatrix('https://www.crowdstrike.com/en-us/global-threat-report/'),_N=_mat.length,_mod=_N<=25?3:2,_qz=2,_qx=_qc.getContext('2d');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<_N;r++)for(let c=0;c<_N;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){}
-
-    // Dismiss on click/key after short anti-bounce delay; CTA overlay after 40s if configured
-    setTimeout(() => {
-      const dismiss = () => { _closeForm(); div.removeEventListener('click',dismiss); document.removeEventListener('keydown',kd); };
-      const kd = () => { _closeForm(); div.removeEventListener('click',dismiss); document.removeEventListener('keydown',kd); };
-      div.addEventListener('click', dismiss);
-      document.addEventListener('keydown', kd);
-    }, 2000);
-    if (window._showPostGameCTA) {
-      setTimeout(() => { window._showPostGameCTA(() => _closeForm()); }, 40000);
-    }
+    return window.FalconArcade.Overlay.showRankConfirm({
+      panel, rank, name, score, difficulty, multiplier,
+      tier: _getPrizeTier(rank),
+      qrUrl: 'https://www.crowdstrike.com/en-us/global-threat-report/',
+      esc: _esc,
+      onDismiss: _closeForm
+    });
   }
 
   function _closeForm() {
@@ -9987,8 +10062,17 @@ function startBossMusic(){
 }
 function stopBossMusic(){
   if (_activeGameId !== 'zero') return;
-  try{ if(_bossOsc){_bossOsc.stop();_bossOsc=null;}
-       if(_bossLFO){_bossLFO.stop();_bossLFO=null;} }catch(_){}
+  // 2026-04-23: parity with stopAmbient — add .disconnect() + null _bossGain so
+  // the full boss node chain drops out of the graph cleanly. Pre-fix: .stop()
+  // alone leaves _bossGain connected to _dest(), and the oscillators' internal
+  // nodes stay in the graph until GC walks the whole chain (which it can't do
+  // while _bossGain is still wired). Over a session with multiple boss fights,
+  // each stopBossMusic left a stopped-but-connected chain that the next
+  // startBossMusic overwrote — the old chain then hung around until context
+  // teardown.
+  try{ if(_bossOsc){_bossOsc.stop();_bossOsc.disconnect();_bossOsc=null;}
+       if(_bossLFO){_bossLFO.stop();_bossLFO.disconnect();_bossLFO=null;}
+       if(_bossGain){_bossGain.disconnect();_bossGain=null;} }catch(_){}
   // SOUND DESIGN: Restore ambient when boss dies
   _ambBossActive=false;
   try{
@@ -10410,6 +10494,48 @@ function _nextIRBuffer(){
   const name=_IR_POOL_NAMES[_irIdx%_IR_POOL_NAMES.length];
   _irIdx++;
   return _getIR(name);
+}
+
+// 2026-04-23 native-memory-leak fix pass 3: Chrome's audio engine allocates
+// partitioned-convolution state buffers (~1 MB of native C++ memory) for
+// every ConvolverNode that has a non-null .buffer. Those buffers are NOT
+// released by .disconnect() — they're only freed when the JS wrapper is
+// finalized by GC, which can lag significantly behind when the tab is
+// active. Pass 2 (JS-heap fix) reduced the JS heap from 1.2 GB to 25 MB,
+// but the Chrome tab process was still climbing to ~1 GB because every
+// reverb-enabled _playLayered call created a fresh ConvolverNode, leaking
+// ~1 MB of native audio state per call. At 11 calls/sec over 10 min,
+// that's 6600 orphan convolvers ≈ 6 GB of native memory — throttled to
+// the observed ~1-2 GB by macOS paging pressure.
+//
+// Fix: maintain a fixed pool of THREE shared convolvers (one per IR
+// preset name), pre-wired to _sfxBus via a permanent wet GainNode. Per-
+// event we only create a cheap input-side GainNode (evWet) that routes
+// into the shared convolver. The convolver's native FIR state is
+// allocated once per preset and reused forever. evWet is severed in the
+// main cleanup setTimeout so the per-event input gate is removed after
+// the event completes.
+let _sharedConvolvers=null;
+function _getSharedConvolver(name){
+  if(!_sharedConvolvers) _sharedConvolvers={};
+  // Key includes reduced-audio mode so we never mix reduced and full IRs.
+  const key=(_reducedAudio?'r:':'f:')+name;
+  if(_sharedConvolvers[key]) return _sharedConvolvers[key];
+  const buf=_getIR(name);
+  if(!buf) return null;
+  try{
+    const ac=AC();
+    if(!_sfxBus) return null;
+    const conv=ac.createConvolver();
+    conv.normalize=true;
+    conv.buffer=buf;
+    const wetOut=ac.createGain();
+    wetOut.gain.value=1.0;
+    conv.connect(wetOut);
+    wetOut.connect(_sfxBus);
+    _sharedConvolvers[key]={conv,wetOut,buf};
+    return _sharedConvolvers[key];
+  }catch(_){ return null; }
 }
 
 function _initSoundEngine(){
@@ -11505,6 +11631,25 @@ function _playLayered(opts){
     }else{
       evGain.connect(busNode);
     }
+    // 2026-04-23 memory-leak fix pass 2: the first pass (grit-stop) only
+    // fixed the BufferSource orphans. Smoke test after pass 1 plateaued at
+    // 914 MB — still leaking ~70 % of baseline. Root cause: Web Audio will
+    // NOT garbage-collect a node that has a live path to ac.destination,
+    // even when no source is feeding it. Each _playLayered call creates
+    // ~6-9 intermediate nodes (evGain, panNode, per-layer filter/gain
+    // pairs) and connects them through _sfxBus → _masterGain → destination.
+    // The source Osc/BufferSource stops correctly, but the intermediate
+    // routing stays wired to a live bus forever. At 11 calls/sec this
+    // accumulates tens of thousands of orphan nodes in ~10 min.
+    // Fix: track the latest stop-time across all layers and schedule a
+    // single disconnect at the event-chain root (evGain) + panner. Once
+    // those two links are severed, the entire upstream chain (per-layer
+    // filters/gains) loses its path to destination and becomes eligible
+    // for GC, along with their local `const` references which are already
+    // unreachable after the function returns.
+    // `_maxStop` is tracked in AudioContext time, converted to ms later.
+    let _maxStop=now;
+    const _track=(t)=>{ if(t>_maxStop) _maxStop=t; };
     // Helper: connect a mono voice to the event mix
     const connectVoice=(node)=>node.connect(evGain);
 
@@ -11527,6 +11672,7 @@ function _playLayered(opts){
         g.gain.exponentialRampToValueAtTime(0.0001,now+tDur);
         src.connect(filt); filt.connect(g); connectVoice(g);
         src.start(now); src.stop(now+tDur+0.02);
+        _track(now+tDur+0.02);
       }else{
         const o=ac.createOscillator(); o.type=T.type||'triangle';
         o.frequency.value=T.f||6000;
@@ -11539,6 +11685,7 @@ function _playLayered(opts){
         g.gain.exponentialRampToValueAtTime(0.0001,now+tDur);
         o.connect(filt); filt.connect(g); connectVoice(g);
         o.start(now); o.stop(now+tDur+0.02);
+        _track(now+tDur+0.02);
       }
     }
     // Tonal body (optionally with pitch sweep)
@@ -11570,6 +11717,7 @@ function _playLayered(opts){
       g.gain.exponentialRampToValueAtTime(0.0001,now+bDur);
       outNode.connect(g); connectVoice(g);
       o.start(now); o.stop(now+bDur+0.05);
+      _track(now+bDur+0.05);
     }
     // Sub-bass layer
     if(opts.sub){
@@ -11585,6 +11733,7 @@ function _playLayered(opts){
       g.gain.exponentialRampToValueAtTime(0.0001,now+sDur);
       o.connect(g); connectVoice(g);
       o.start(now); o.stop(now+sDur+0.05);
+      _track(now+sDur+0.05);
     }
     // Noise/grit layer
     // 2026-04-23 memory-leak fix: sibling layers (transient L11487, body
@@ -11616,19 +11765,42 @@ function _playLayered(opts){
       g.gain.exponentialRampToValueAtTime(0.0001,now+gDur);
       src.connect(filt); filt.connect(g); connectVoice(g);
       src.start(now); src.stop(now+gDur+0.05);
+      _track(now+gDur+0.05);
     }
-    // Reverb tail — connect event mix to rotating IR convolver
+    // Reverb tail — route event into SHARED convolver (pass 3 fix).
+    // evWet is the only new node per event: it gates this event's input
+    // into a permanently-allocated convolver whose native FIR state is
+    // shared across all events. See `_getSharedConvolver` above for the
+    // rationale — each per-event ConvolverNode was leaking ~1 MB of
+    // native audio engine memory that .disconnect() did not release.
+    let evWet=null;
     if(opts.reverbWet&&opts.reverbWet>0 && !_reducedAudio){
-      const irBuf=_nextIRBuffer();
-      if(irBuf){
-        const conv=ac.createConvolver(); conv.normalize=true; conv.buffer=irBuf;
-        const wet=ac.createGain(); wet.gain.value=Math.min(0.9,opts.reverbWet);
-        (panNode||evGain).connect(conv); conv.connect(wet); wet.connect(busNode);
-        // Auto-disconnect after tail decays (buf duration + a safety margin)
-        const tailMs=(irBuf.duration||2)*1000+180;
-        setTimeout(()=>{ try{ conv.disconnect(); wet.disconnect(); }catch(_){} }, tailMs);
+      const irName=_IR_POOL_NAMES[_irIdx%_IR_POOL_NAMES.length]; _irIdx++;
+      const shared=_getSharedConvolver(irName);
+      if(shared){
+        evWet=ac.createGain();
+        evWet.gain.value=Math.min(0.9,opts.reverbWet);
+        (panNode||evGain).connect(evWet);
+        evWet.connect(shared.conv);
+        // The shared convolver continues processing its internal FIR tail
+        // after we sever the input below — output fades naturally, we
+        // don't need to wait for the full tail before disconnecting evWet.
       }
     }
+    // 2026-04-23 memory-leak fix pass 2: sever the event-chain root after
+    // all sources have stopped. Without this, evGain + panNode + every
+    // per-layer filter/gain + evWet stays wired to the live _sfxBus
+    // forever, pinning ~6-9 nodes per call × ~11 calls/sec. Disconnecting
+    // these three links breaks the path to destination; the upstream
+    // nodes (local `const`s whose references die when the function
+    // returns) become unreachable and GC-eligible. The shared convolver
+    // is NOT disconnected here — it is permanent by design.
+    const _cleanupDelayMs=Math.max(60,(_maxStop-now)*1000+80);
+    setTimeout(()=>{
+      try{ if(panNode) panNode.disconnect(); }catch(_){}
+      try{ evGain.disconnect(); }catch(_){}
+      try{ if(evWet) evWet.disconnect(); }catch(_){}
+    }, _cleanupDelayMs);
   }catch(_){}
 }
 
@@ -24107,9 +24279,11 @@ const FalconRanking = (function () {
         font-size: 10px; color: #7f8b96; margin-top: 4px;
         animation: fr-event-in 0.6s cubic-bezier(0.22,1,0.36,1) 0.58s both;
       }
+      /* 2026-04-23: letter-spacing swapped for scaleX — same subtle settle,
+         no layout reflow. Mirrored in the other script block. */
       @keyframes fr-event-in {
-        from { opacity: 0; letter-spacing: 0.02em; }
-        to   { opacity: 1; letter-spacing: normal; }
+        from { opacity: 0; transform: scaleX(1.02); }
+        to   { opacity: 1; transform: scaleX(1); }
       }
 
       /* Divider — background drifts 22s so motion is felt more than seen */
@@ -24387,35 +24561,20 @@ const FalconRanking = (function () {
   }
 
   // ── OVERLAY MOUNT ────────────────────────────────────────────────────
+  // 2026-04-23 facade migration: delegates to FalconArcade.Overlay.mountFor
+  // and registerAdminHandlers. Prior 32-line in-line body collapsed into the
+  // shared facade. See .claude/studio/spec-overlay-facade-migration.md.
   function _mountOverlay() {
     if (_overlayEl) return;
-    const el = document.createElement('div');
-    el.id = 'fr-overlay-defense';
-    el.innerHTML = `
-      <canvas id="fr-matrix"></canvas>
-      <div class="fr-backdrop"></div>
-      <div class="fr-grid"></div>
-      <div class="fr-scanlines"></div>
-    `;
-    (document.getElementById('game-defense-container')||document.body).appendChild(el);
-    _overlayEl = el;
-
-    // Toast element (outside overlay so it survives panel switches)
-    const toast = document.createElement('div');
-    toast.id = 'fr-toast-defense';
-    (document.getElementById('game-defense-container')||document.body).appendChild(toast);
-
-    // Admin keyboard shortcuts — only fire when this game's container is visible
-    document.addEventListener('keydown', e => {
-      const c = document.getElementById('game-defense-container');
-      if (!c || c.style.display === 'none') return;
-      if (e.ctrlKey && e.shiftKey && e.code === CFG.adminKey) exportCSV();
-      if (e.ctrlKey && e.shiftKey && e.code === CFG.clearKey) {
-        (async () => {
-          if (await _checkAdminPin() && confirm(T('lb_clear_all_confirm'))) {
-            Store.clear(); _toast(T('lb_cleared'),'#ff5a4d');
-          }
-        })();
+    _overlayEl = window.FalconArcade.Overlay.mountFor('defense');
+    window.FalconArcade.Overlay.registerAdminHandlers('defense', {
+      exportKey: CFG.adminKey,
+      clearKey:  CFG.clearKey,
+      exportCSV: exportCSV,
+      clearStore: async () => {
+        if (await _checkAdminPin() && confirm(T('lb_clear_all_confirm'))) {
+          Store.clear(); _toast(T('lb_cleared'),'#ff5a4d');
+        }
       }
     });
   }
@@ -24680,41 +24839,17 @@ const FalconRanking = (function () {
     if (hint) hint.textContent = msg;
   }
 
+  // 2026-04-23 facade migration: delegates to FalconArcade.Overlay.showRankConfirm.
+  // Prior 36-line body (card creation + QR gen + dismiss/CTA scheduling) now
+  // lives in the shared facade. See spec-overlay-facade-migration.md.
   function _showRankConfirm(panel, rank, name, score, difficulty, multiplier) {
-    const tier = _getPrizeTier(rank);
-    const div  = document.createElement('div');
-    div.id = 'fr-rank-confirm';
-    div.style.setProperty('--fr-confirm-color', tier.color);
-    const _diffBadge = (difficulty > 0 && difficulty != null)
-      ? `<div style="font-size:10px;letter-spacing:1.5px;color:${tier.color};opacity:0.85;margin:2px 0 8px;font-weight:700;">TIER ${difficulty} · ×${(multiplier||1).toFixed(1)}x</div>`
-      : '';
-    div.innerHTML = `
-      <div class="fr-rank-card">
-        <div class="fr-rank-pos">#${rank}</div>
-        <div class="fr-rank-label">${T('lb_your_rank')}</div>
-        ${_diffBadge}
-        <div class="fr-rank-name">${_esc(name)}</div>
-        <div class="fr-rank-score">${score.toLocaleString()} pts</div>
-        <div class="fr-rank-prize">${_esc(tier.label)}</div>
-        <canvas id="fr-qr-rank-canvas" width="88" height="88"
-          style="display:block;margin:16px auto 4px;image-rendering:pixelated;
-                 border:2px solid currentColor;border-radius:2px;opacity:0.85;"></canvas>
-        <span class="fr-rank-dismiss">${T('lb_press_continue')}</span>
-      </div>
-    `;
-    panel.appendChild(div);
-    try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'){const _mat=window.generateQRMatrix('https://www.crowdstrike.com/en-us/global-threat-report/'),_N=_mat.length,_mod=_N<=25?3:2,_qz=2,_qx=_qc.getContext('2d');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<_N;r++)for(let c=0;c<_N;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){}
-
-    // Dismiss on click/key after short anti-bounce delay; CTA overlay after 40s if configured
-    setTimeout(() => {
-      const dismiss = () => { _closeForm(); div.removeEventListener('click',dismiss); document.removeEventListener('keydown',kd); };
-      const kd = () => { _closeForm(); div.removeEventListener('click',dismiss); document.removeEventListener('keydown',kd); };
-      div.addEventListener('click', dismiss);
-      document.addEventListener('keydown', kd);
-    }, 2000);
-    if (window._showPostGameCTA) {
-      setTimeout(() => { window._showPostGameCTA(() => _closeForm()); }, 40000);
-    }
+    return window.FalconArcade.Overlay.showRankConfirm({
+      panel, rank, name, score, difficulty, multiplier,
+      tier: _getPrizeTier(rank),
+      qrUrl: 'https://www.crowdstrike.com/en-us/global-threat-report/',
+      esc: _esc,
+      onDismiss: _closeForm
+    });
   }
 
   function _closeForm() {
