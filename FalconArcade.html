@@ -1081,6 +1081,28 @@ window.FalconArcade = window.FalconArcade || {
 // app would break cinematic beats that are supposed to resume from where
 // they were. The pause is a notification; enforcement is per-caller.
 // ─────────────────────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SILENT CATCH POLICY (spec-silent-catch-sweep, 2026-04-23)
+//
+// Bare `try{...}catch(_){}` is a deliberate pattern in this file for:
+//   A. Cleanup / teardown — cancelAnimationFrame, removeEventListener,
+//      clearInterval, oscillator.stop(), gain.disconnect(). Target may
+//      be destroyed / listener may not be attached / AudioNode may
+//      already be disconnected. Expected failure mode.
+//   B. Feature-detect / capability probing — SFX[name]?.(o) and audio
+//      dispatch fallback chains. The next fallback is the signal; the
+//      missing function is expected on this build.
+//   C. Dev-mode logging that must not throw — try{ console.warn(...) }
+//      catch(_){}. console itself can throw on some kiosk OSes; the
+//      telemetry ring is the real logging surface.
+//
+// If a catch is NOT one of these three patterns and can silently regress
+// a user-visible capability, it MUST route through:
+//     window._safeTelemetryReport(tag, err, detail?)
+//
+// See ARCHITECTURE.md §8 and .claude/studio/spec-silent-catch-sweep.md
+// ─────────────────────────────────────────────────────────────────────────────
 (function _installFalconArcadeLifecycle(){
   if (!window.FalconArcade) return;
   const _timers    = new Map();   // id → { type, ns }
@@ -5170,7 +5192,7 @@ function clearAllRankings() {
       </div>
     `;
     panel.appendChild(div);
-    try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'&&qrUrl){const _mat=window.generateQRMatrix(qrUrl),_N=_mat.length,_mod=_N<=25?3:2,_qz=2,_qx=_qc.getContext('2d');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<_N;r++)for(let c=0;c<_N;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){}
+    try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'&&qrUrl){const _mat=window.generateQRMatrix(qrUrl),_N=_mat.length,_mod=_N<=25?3:2,_qz=2,_qx=_qc.getContext('2d');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<_N;r++)for(let c=0;c<_N;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('overlay.rank.qr_render', e, { qrUrl }); }
 
     // Dismiss on click/key after short anti-bounce delay; CTA overlay after 40s if configured
     setTimeout(() => {
@@ -32327,7 +32349,7 @@ const FalconRanking=(function(){'use strict';
     document.getElementById('fr-submit').addEventListener('click',function(){const _sb=this;if(_sb.disabled)return;_sb.disabled=true;const _ccb=document.getElementById('fr-consent-cb'),_chn=document.getElementById('fr-consent-hint');if(!_ccb?.checked){if(_chn)_chn.textContent=T('lb_consent_required');_ccb?.focus();_sb.disabled=false;return;}if(_chn)_chn.textContent='';const validation=validateLeadCaptureEntry({name:document.getElementById('fr-name').value,company:document.getElementById('fr-company').value,email:document.getElementById('fr-email').value});if(validation.errors.name)_fieldError('fr-name','fr-name-hint',validation.errors.name);if(validation.errors.company)_fieldError('fr-company','fr-company-hint',validation.errors.company);if(validation.errors.email)_fieldError('fr-email','fr-email-hint',validation.errors.email);if(!validation.ok){_sb.disabled=false;return;}const { name, company, email }=validation.cleaned;const finalRank=Store.add({name,company,email,score:data.score,phase:data.phase||'',adversary:data.adversary||'',grade:data.grade||'',maxStreak:data.maxStreak||0,lives:data.lives||0,gameId:CFG.gameName,event:CFG.eventName});_burstParticles(panel);panel.querySelectorAll('input,button').forEach(el=>el.disabled=true);setTimeout(()=>_showRankConfirm(panel,finalRank,name,data.score,data.difficulty,data.multiplier),700);});
     document.getElementById('fr-skip').addEventListener('click',()=>_closeForm());}
   function _fieldError(inputId,hintId,msg){const inp=document.getElementById(inputId),hint=document.getElementById(hintId);if(inp){inp.classList.add('fr-error');setTimeout(()=>inp.classList.remove('fr-error'),500);}if(hint)hint.textContent=msg;}
-  function _showRankConfirm(panel,rank,name,score,difficulty,multiplier){const tier=_getPrizeTier(rank),div=document.createElement('div');div.id='fr-rank-confirm';div.style.setProperty('--fr-confirm-color',tier.color);const _db=(difficulty>0&&difficulty!=null)?`<div style="font-size:10px;letter-spacing:1.5px;color:${tier.color};opacity:0.85;margin:2px 0 8px;font-weight:700;">TIER ${difficulty} · ×${(multiplier||1).toFixed(1)}x</div>`:'';div.innerHTML=`<div class="fr-rank-card"><div class="fr-rank-pos">#${rank}</div><div class="fr-rank-label">${T('lb_your_rank')}</div>${_db}<div class="fr-rank-name">${_esc(name)}</div><div class="fr-rank-score">${score.toLocaleString()} pts</div><div class="fr-rank-prize">${_esc(tier.label)}</div><canvas id="fr-qr-rank-canvas" width="88" height="88" style="display:block;margin:16px auto 4px;image-rendering:pixelated;border:2px solid currentColor;border-radius:2px;opacity:0.85;"></canvas><span class="fr-rank-dismiss">${T('lb_press_continue')}</span></div>`;panel.appendChild(div);try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'){const _mat=window.generateQRMatrix(HUNT_SHARE_URL),_N=_mat.length,_mod=_N<=25?3:2,_qz=2,_qx=_qc.getContext('2d');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<_N;r++)for(let c=0;c<_N;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){}setTimeout(()=>{const dismiss=()=>{_closeForm();div.removeEventListener('click',dismiss);document.removeEventListener('keydown',kd);};const kd=()=>{_closeForm();div.removeEventListener('click',dismiss);document.removeEventListener('keydown',kd);};div.addEventListener('click',dismiss);document.addEventListener('keydown',kd);},2000);if(window._showPostGameCTA){setTimeout(()=>{window._showPostGameCTA(()=>_closeForm());},40000);}}
+  function _showRankConfirm(panel,rank,name,score,difficulty,multiplier){const tier=_getPrizeTier(rank),div=document.createElement('div');div.id='fr-rank-confirm';div.style.setProperty('--fr-confirm-color',tier.color);const _db=(difficulty>0&&difficulty!=null)?`<div style="font-size:10px;letter-spacing:1.5px;color:${tier.color};opacity:0.85;margin:2px 0 8px;font-weight:700;">TIER ${difficulty} · ×${(multiplier||1).toFixed(1)}x</div>`:'';div.innerHTML=`<div class="fr-rank-card"><div class="fr-rank-pos">#${rank}</div><div class="fr-rank-label">${T('lb_your_rank')}</div>${_db}<div class="fr-rank-name">${_esc(name)}</div><div class="fr-rank-score">${score.toLocaleString()} pts</div><div class="fr-rank-prize">${_esc(tier.label)}</div><canvas id="fr-qr-rank-canvas" width="88" height="88" style="display:block;margin:16px auto 4px;image-rendering:pixelated;border:2px solid currentColor;border-radius:2px;opacity:0.85;"></canvas><span class="fr-rank-dismiss">${T('lb_press_continue')}</span></div>`;panel.appendChild(div);try{const _qc=document.getElementById('fr-qr-rank-canvas');if(_qc&&typeof window.generateQRMatrix==='function'){const _mat=window.generateQRMatrix(HUNT_SHARE_URL),_N=_mat.length,_mod=_N<=25?3:2,_qz=2,_qx=_qc.getContext('2d');_qx.fillStyle='#fff';_qx.fillRect(0,0,88,88);_qx.fillStyle='#111';for(let r=0;r<_N;r++)for(let c=0;c<_N;c++){if(_mat[r][c])_qx.fillRect(_qz*_mod+c*_mod,_qz*_mod+r*_mod,_mod,_mod);}}}catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('hunt.rank.qr_render', e, { qrUrl: HUNT_SHARE_URL }); }setTimeout(()=>{const dismiss=()=>{_closeForm();div.removeEventListener('click',dismiss);document.removeEventListener('keydown',kd);};const kd=()=>{_closeForm();div.removeEventListener('click',dismiss);document.removeEventListener('keydown',kd);};div.addEventListener('click',dismiss);document.addEventListener('keydown',kd);},2000);if(window._showPostGameCTA){setTimeout(()=>{window._showPostGameCTA(()=>_closeForm());},40000);}}
   function _closeForm(){_formOpen=false;_clearContent();_hideOverlay();if(CFG.onFormClose)CFG.onFormClose();}
   function showAttract(){if(_formOpen||_attractOpen)return;_attractOpen=true;_clearContent();_showOverlay();const top=Store.topN(CFG.topN),isEmpty=top.length===0;const attract=document.createElement('div');attract.id='fr-attract';attract.innerHTML=`<div class="fr-attract-header"><div class="fr-cs-logo">◈ CrowdStrike OverWatch</div><h1>${_esc(CFG.gameName)}</h1><div class="fr-event-name">${_esc(CFG.eventName)} ${isEmpty?' — '+T('lb_first_board'):'— '+T('lb_top_agents')}</div></div><div class="fr-divider"></div><div class="fr-lb-header"><span>${T('lb_rank')}</span><span>${T('lb_agent')}</span><span style="text-align:right">${T('lb_score')}</span><span style="text-align:right">${T('lb_grade_short')}</span></div><div class="fr-lb-viewport" id="fr-lb-viewport"><div class="fr-lb-scroll" id="fr-lb-scroll">${_renderEntries(top)}${_renderEntries(top)}</div></div><div class="fr-divider"></div><div class="fr-attract-footer"><span class="fr-cta">${T('lb_press_begin')}</span><span style="font-size:8px;color:#2a3a4a;letter-spacing:1px">${T('lb_admin_hint')}</span></div>`;_overlayEl.appendChild(attract);_attractY=0;const scrollEl=document.getElementById('fr-lb-scroll');let lastT=0;let half=0;function scrollStep(ts){try{if(half===0)half=scrollEl.scrollHeight/2;const dt=Math.min(0.05,(ts-lastT)/1000||0.016);lastT=ts;if(!isEmpty){_attractY+=CFG.attractSpeed*dt;if(half>0&&_attractY>=half)_attractY=0;scrollEl.style.transform=`translateY(${-_attractY}px)`;}}catch(e){window._safeTelemetryReport&&window._safeTelemetryReport('attract.tick.scroll',e,{loc:'block4'});}  _attractAF=requestAnimationFrame(scrollStep);}_attractAF=requestAnimationFrame(scrollStep);const kd=(e)=>{if(['Control','Shift','Alt','Meta'].includes(e.key))return;document.removeEventListener('keydown',kd);_closeAttract();};const dismiss=()=>{document.removeEventListener('keydown',kd);_closeAttract();};document.addEventListener('keydown',kd);attract.addEventListener('click',dismiss);}
   function _renderEntries(entries){if(!entries.length)return Array.from({length:10},(_,i)=>`<div class="fr-entry" data-rank="${i+1}" style="--fr-entry-color:#1a2a3a"><div class="fr-rank">${i+1}</div><div class="fr-player"><div class="fr-player-name">———</div><div class="fr-player-company">${T('lb_first_player')}</div></div><div class="fr-entry-score">—</div><div class="fr-entry-grade">—</div></div>`).join('');return entries.map((e,i)=>{const rank=i+1,tier=_getPrizeTier(rank);return`<div class="fr-entry" data-rank="${rank}" style="--fr-entry-color:${tier.color}"><div class="fr-rank">${rank}</div><div class="fr-player"><div class="fr-player-name">${_esc(e.name)}</div><div class="fr-player-company">${_esc(e.company)}</div></div><div class="fr-entry-score">${Number(e.score).toLocaleString()}</div><div class="fr-entry-grade">${_esc(e.grade||'—')}</div></div>`;}).join('');}
@@ -32488,7 +32510,7 @@ function startHuntAmbient(){
     _huntAmbientGain=gain;
     _huntAmbientFilter=filter;
     _huntAmbientRunning=true;
-  }catch(e){}
+  }catch(e){ window._safeTelemetryReport && window._safeTelemetryReport('hunt.ambient.start', e); }
 }
 function stopHuntAmbient(){
   if(!_huntAmbientRunning) return;
@@ -32505,7 +32527,7 @@ function stopHuntAmbient(){
     }
     if(_huntAmbientFilter) _huntAmbientFilter.disconnect();
     if(_huntAmbientGain) _huntAmbientGain.disconnect();
-  }catch(e){}
+  }catch(e){ /* intentional: teardown best-effort — oscillator/gain may already be disconnected */ }
   _huntAmbientRunning=false;
   _huntAmbientOscillator=null;
   _huntAmbientGain=null;
