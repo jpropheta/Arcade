@@ -7980,7 +7980,11 @@ window.HardwareRadio = (function(){
       ctx.fillText(op, _contentX, ry + _headerH + Math.round(_opH*0.70));
       ctx.shadowBlur = 0;
     }
-    if(layers.morse){
+    // 2026-04-23 (message-clipping fix): morse is a visual UNDERLINE for the
+    // operator name. When opName is off (Defense SOC), _opH=0 and the morse
+    // y collapses to ry+_headerH-3, drawing INSIDE the header row on top of
+    // the frequency readout. Gate morse on opName presence.
+    if(layers.morse && layers.opName && op){
       const _mX=_contentX, _mY = ry + _headerH + _opH - 3;
       const _mW = Math.min(RW - _sbW - 2*_rp - 8, Math.round(240*uiScale));
       const _syms = 18, _step = _mW/_syms;
@@ -8028,6 +8032,19 @@ window.HardwareRadio = (function(){
     // · NEUTRALIZED") could render past the left/right border when the
     // caller's pre-wrap measurement differed from the facade's render-time
     // char width. Cheap cost (one save/clip/restore); guarantees containment.
+    //
+    // 2026-04-23 (message-clipping fix): two changes to stop the glyph tops
+    // from colliding with the waveform and header-separator when opName is
+    // off (Defense SOC).
+    //   (a) textBaseline='top' — ly is now the TOP of the text, not the
+    //       alphabetic baseline. Positioning is deterministic and not
+    //       dependent on font-ascent metrics.
+    //   (b) _rp*0.4 → _rp*0.9 for the post-header spacer, and an extra
+    //       _rp*0.5 gutter specifically when waveform is drawn (its
+    //       amplitude envelope reaches ±waveH*0.275 beyond its midline and
+    //       was dipping into the alphabetic-baseline text top).
+    //   Restore textBaseline to 'alphabetic' on exit so nothing else in the
+    //   frame inherits the change.
     if(layers.message && _lines.length){
       ctx.save();
       ctx.beginPath();
@@ -8036,8 +8053,11 @@ window.HardwareRadio = (function(){
       ctx.font = fontFn(compact?10:11);
       ctx.fillStyle = '#c8d8e8';
       ctx.textAlign = 'left';
-      let ly = ry + _headerH + _opH + _waveH + Math.round(_rp*0.4);
+      ctx.textBaseline = 'top';
+      const _waveGutter = layers.waveform ? Math.round(_rp*0.5) : 0;
+      let ly = ry + _headerH + _opH + _waveH + Math.round(_rp*0.9) + _waveGutter;
       _lines.forEach(l => { ctx.fillText(l, _contentX, ly); ly += _rlh; });
+      ctx.textBaseline = 'alphabetic';
       ctx.restore();
     }
 
@@ -9835,6 +9855,11 @@ let _pingInterval=null, _blipInterval=null, _ambBossActive=false;
 let _serverHumOsc=null, _harmOvertoneOsc=null, _coolingFanNoise=null, _serverHumLfo=null;
 let _dataStreamNoise=null, _dataStreamFilt=null, _packetGateLfo=null;
 let _dataStream2Noise=null, _dataStream2Filt=null, _packetGate2Lfo=null;
+// 2026-04-23: _overGateLfo was previously a local `const overGateLfo` that
+// escaped stopAmbient()'s teardown — the oscillator played forever, and every
+// River session started a new one on top of the orphan. Hoisted to module
+// scope so the teardown below can stop+disconnect it like the other LFOs.
+let _overGateLfo=null;
 let _tensOscA=null, _tensOscB=null, _tensFilt=null, _tensFilterLfo=null;
 let _ambLastBoss=false, _ambLastFuelStage=-1;
 
@@ -9913,7 +9938,13 @@ function noise(d=0.15,g=0.10,lpf=4000){
     src.buffer=buf; src.connect(filt); filt.connect(gn); gn.connect(_dest());
     gn.gain.setValueAtTime(g,ac.currentTime);
     gn.gain.exponentialRampToValueAtTime(0.0001,ac.currentTime+d);
-    src.start();
+    // 2026-04-23: dormant twin of the grit-layer leak (see L11547 tombstone).
+    // Currently no callers (grep confirms), but the pattern is identical:
+    // src.start() with no src.stop() → Web Audio pins the BufferSource + its
+    // filter + gain chain indefinitely. Fixing proactively so this helper
+    // stays safe if anyone re-wires it. Margin matches sibling layers.
+    const now=ac.currentTime;
+    src.start(now); src.stop(now+d+0.05);
   }catch(_){}
 }
 // phrase() removed 2026-04-21 — superseded by Zimmer audio rollout.
@@ -10098,12 +10129,14 @@ function startAmbient(){
     // ─ LAYER 4: High brass overtone — 440Hz, gated by slow LFO, adds air ─
     _packetGate2Lfo=ac.createOscillator(); _packetGate2Lfo.type='sine'; _packetGate2Lfo.frequency.value=440;
     const overGain=ac.createGain(); overGain.gain.value=0.004;
-    const overGateLfo=ac.createOscillator(); overGateLfo.type='sine'; overGateLfo.frequency.value=0.04;
+    // 2026-04-23: was `const overGateLfo` (local escape → never stopped).
+    // Now on module var _overGateLfo so stopAmbient's teardown can clean it.
+    _overGateLfo=ac.createOscillator(); _overGateLfo.type='sine'; _overGateLfo.frequency.value=0.04;
     const overGateAmt=ac.createGain(); overGateAmt.gain.value=0.003;
-    overGateLfo.connect(overGateAmt); overGateAmt.connect(overGain.gain);
+    _overGateLfo.connect(overGateAmt); overGateAmt.connect(overGain.gain);
     _packetGate2Lfo.connect(overGain); overGain.connect(_ambientGain);
-    _packetGate2Lfo.start(); overGateLfo.start();
-    _regLFO(overGateLfo, 0.04);
+    _packetGate2Lfo.start(); _overGateLfo.start();
+    _regLFO(_overGateLfo, 0.04);
 
     // ─ LAYER 5: Tension pad — kept as intensity-driven bed, recolored minor 6th ─
     _tensionGain=ac.createGain(); _tensionGain.gain.value=0;
@@ -10192,19 +10225,32 @@ function stopAmbient(){
     try{if(_tensionGain) _tensionGain.disconnect();}catch(_){}
     // Null out gain nodes immediately so startAmbient() guard works on next session
     _ambientGain=null; _tensionGain=null; _ambBossActive=false; _ambLastFuelStage=-1; _ambLastBoss=false;
+    // 2026-04-23: drain the _activeLFOs registry of this subsystem's LFOs BEFORE
+    // the setTimeout nulls them. Without this drain, _activeLFOs keeps growing
+    // by 5 stale refs per River session (stopped oscillators that can't be GC'd
+    // because the array still references them). Combat bed does this in its own
+    // stop path (L10492); Zimmer beds do it in their factory stop() (L11193).
+    // Ambient was the only registered bed missing this drain.
+    try{
+      const _ambientLfos = [_serverHumLfo, _dataStream2Noise, _packetGateLfo, _overGateLfo, _tensFilterLfo];
+      _activeLFOs = _activeLFOs.filter(l => _ambientLfos.indexOf(l) === -1);
+    }catch(_){}
     // Stop oscillators with tiny delay (browser needs a tick to release audio graph)
     setTimeout(()=>{
-      try{if(_serverHumOsc){_serverHumOsc.stop();_serverHumOsc=null;}}catch(_){}
-      try{if(_harmOvertoneOsc){_harmOvertoneOsc.stop();_harmOvertoneOsc=null;}}catch(_){}
-      try{if(_serverHumLfo){_serverHumLfo.stop();_serverHumLfo=null;}}catch(_){}
-      try{if(_coolingFanNoise){_coolingFanNoise.stop();_coolingFanNoise=null;}}catch(_){}
-      try{if(_dataStreamNoise){_dataStreamNoise.stop();_dataStreamNoise=null;}}catch(_){}
-      try{if(_packetGateLfo){_packetGateLfo.stop();_packetGateLfo=null;}}catch(_){}
-      try{if(_dataStream2Noise){_dataStream2Noise.stop();_dataStream2Noise=null;}}catch(_){}
-      try{if(_packetGate2Lfo){_packetGate2Lfo.stop();_packetGate2Lfo=null;}}catch(_){}
-      try{if(_tensOscA){_tensOscA.stop();_tensOscA=null;}}catch(_){}
-      try{if(_tensOscB){_tensOscB.stop();_tensOscB=null;}}catch(_){}
-      try{if(_tensFilterLfo){_tensFilterLfo.stop();_tensFilterLfo=null;}}catch(_){}
+      try{if(_serverHumOsc){_serverHumOsc.stop();_serverHumOsc.disconnect();_serverHumOsc=null;}}catch(_){}
+      try{if(_harmOvertoneOsc){_harmOvertoneOsc.stop();_harmOvertoneOsc.disconnect();_harmOvertoneOsc=null;}}catch(_){}
+      try{if(_serverHumLfo){_serverHumLfo.stop();_serverHumLfo.disconnect();_serverHumLfo=null;}}catch(_){}
+      try{if(_coolingFanNoise){_coolingFanNoise.stop();_coolingFanNoise.disconnect();_coolingFanNoise=null;}}catch(_){}
+      try{if(_dataStreamNoise){_dataStreamNoise.stop();_dataStreamNoise.disconnect();_dataStreamNoise=null;}}catch(_){}
+      try{if(_packetGateLfo){_packetGateLfo.stop();_packetGateLfo.disconnect();_packetGateLfo=null;}}catch(_){}
+      try{if(_dataStream2Noise){_dataStream2Noise.stop();_dataStream2Noise.disconnect();_dataStream2Noise=null;}}catch(_){}
+      try{if(_packetGate2Lfo){_packetGate2Lfo.stop();_packetGate2Lfo.disconnect();_packetGate2Lfo=null;}}catch(_){}
+      // 2026-04-23: was missing — local `const overGateLfo` escaped cleanup
+      // and the oscillator ran forever. Hoisted to _overGateLfo module var.
+      try{if(_overGateLfo){_overGateLfo.stop();_overGateLfo.disconnect();_overGateLfo=null;}}catch(_){}
+      try{if(_tensOscA){_tensOscA.stop();_tensOscA.disconnect();_tensOscA=null;}}catch(_){}
+      try{if(_tensOscB){_tensOscB.stop();_tensOscB.disconnect();_tensOscB=null;}}catch(_){}
+      try{if(_tensFilterLfo){_tensFilterLfo.stop();_tensFilterLfo.disconnect();_tensFilterLfo=null;}}catch(_){}
       // SDD spec-river-cinematic-audio v1.1: tear down combat bed alongside ambient
       try{ _stopCombatBed(); }catch(_){}
       // SDD spec-cinematic-v2: tear down distant percussion scheduler
@@ -10237,6 +10283,22 @@ function updateAmbientMix(){
 
 function shutdownIncidentZeroRuntime(){
   stopBossMusic(); stopAmbient();
+  // 2026-04-23: defensive backstop. stopAmbient drains its own LFOs and
+  // _stopCombatBed drains its own. If any future code path registers an LFO
+  // through _regLFO but doesn't pair it with a drain in its stop handler,
+  // the registry can still grow. Prune any stopped/disconnected LFOs here so
+  // River exits always leave _activeLFOs with only live references. Cheap
+  // check — an LFO whose `.context.state === 'closed'` or which throws on a
+  // no-op setValueAtTime has already been torn down.
+  try{
+    if(AC_CTX){
+      const t=AC_CTX.currentTime;
+      _activeLFOs = _activeLFOs.filter(l => {
+        try{ l.frequency.setValueAtTime(l.frequency.value, t); return true; }
+        catch(_){ return false; }
+      });
+    }
+  }catch(_){}
   // commsQ was a legacy message queue that has since been removed from this
   // game runtime. A bare reference here throws ReferenceError and aborts the
   // whole shutdown — which leaves Zimmer beds + key state zombied across
@@ -11525,6 +11587,18 @@ function _playLayered(opts){
       o.start(now); o.stop(now+sDur+0.05);
     }
     // Noise/grit layer
+    // 2026-04-23 memory-leak fix: sibling layers (transient L11487, body
+    // L11530, sub L11545) all schedule `.stop(now+dur+margin)` so their
+    // BufferSource/Oscillator nodes drop out of the audio graph once the
+    // sample finishes. This layer was missing its stop() — every call left
+    // an orphan BufferSource + its attached filter + gain nodes pinned in
+    // memory (Web Audio won't GC a BufferSource that was .start()ed but
+    // never .stop()ed, because the engine has no way to know the caller is
+    // done with it). Held fire in River at ~11 shots/sec, plus hit/explode
+    // recipes triggered by ITDR kills, accumulated ~20 orphan nodes/sec
+    // and climbed the tab to 1.2GB in under 10 minutes. Matching the
+    // transient layer's `+0.05` margin gives the exponential gain ramp
+    // enough time to reach zero before the node is stopped.
     if(opts.grit){
       const G=opts.grit;
       const gDur=G.d||0.1;
@@ -11541,7 +11615,7 @@ function _playLayered(opts){
       g.gain.setValueAtTime(G.g||0.1,now);
       g.gain.exponentialRampToValueAtTime(0.0001,now+gDur);
       src.connect(filt); filt.connect(g); connectVoice(g);
-      src.start(now);
+      src.start(now); src.stop(now+gDur+0.05);
     }
     // Reverb tail — connect event mix to rotating IR convolver
     if(opts.reverbWet&&opts.reverbWet>0 && !_reducedAudio){
@@ -32924,13 +32998,21 @@ function drawRadio(){
   // 9. Wrapped message body
   // 2026-04-21: defensive clip matches the facade — guarantees a long/unusual
   // voice line can never render past the bezel border.
+  //
+  // 2026-04-23 (message-clipping fix, mirror of facade at ~L8041):
+  // textBaseline='top' + larger header gutter + waveform gutter to stop the
+  // waveform's amplitude envelope from dipping into the text ascenders.
+  // Hunt always draws opName so _ropNameH>0, but the gutter still helps
+  // readability and keeps the two code paths byte-consistent.
   ctx.save();
   ctx.beginPath();
   ctx.rect(rx+4, ry+_rheaderH, RW-8, Math.max(0, RH-_rheaderH-4));
   ctx.clip();
   ctx.font=huntFont(11); ctx.fillStyle='#c8d8e8'; ctx.textAlign='left';
-  let ly2=ry+_rheaderH+_ropNameH+_rwaveH+Math.round(_rp*0.4);
+  ctx.textBaseline='top';
+  let ly2=ry+_rheaderH+_ropNameH+_rwaveH+Math.round(_rp*0.9)+Math.round(_rp*0.5);
   _rlines.forEach(l=>{ ctx.fillText(l,_contentX,ly2); ly2+=_rlh; });
+  ctx.textBaseline='alphabetic';
   ctx.restore();
 
   // 10. Soft CRT scan line (preserved — slightly softer alpha)
